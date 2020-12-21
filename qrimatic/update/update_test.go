@@ -8,7 +8,7 @@ import (
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
-	"github.com/qri-io/scheduler/cron"
+	"github.com/qri-io/qrimatic/cron"
 )
 
 func TestJobFromDataset(t *testing.T) {

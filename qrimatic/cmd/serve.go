@@ -7,7 +7,7 @@ import (
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/api"
 	"github.com/qri-io/qri/lib"
-	"github.com/qri-io/scheduler/update"
+	"github.com/qri-io/qrimatic/update"
 	"github.com/spf13/cobra"
 )
 
@@ -41,7 +41,7 @@ func NewServeCommand(ctx context.Context, streams ioes.IOStreams, repoPath strin
 			}
 
 			s := api.New(inst)
-			svc.AddRoutes(s.Mux)
+			svc.AddRoutes(s.Mux, s.Middleware)
 
 			go func() {
 				if err := s.Serve(ctx); err != nil {

@@ -17,7 +17,7 @@ import (
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qri/lib"
-	"github.com/qri-io/scheduler/cron"
+	"github.com/qri-io/qrimatic/cron"
 )
 
 var log = golog.Logger("update")
@@ -117,8 +117,8 @@ func NewService(inst *lib.Instance) (*Service, error) {
 }
 
 // AddRoutes registers cron routes with an *http.Mux.
-func (s *Service) AddRoutes(m *http.ServeMux) {
-	cron.AddCronRoutes(m, s.cron)
+func (s *Service) AddRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
+	cron.AddCronRoutes(m, s.cron, mw)
 }
 
 // Start runs the cron service, blocking until an error occurs

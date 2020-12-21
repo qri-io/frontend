@@ -6,7 +6,7 @@ import (
 	"time"
 
 	flatbuffers "github.com/google/flatbuffers/go"
-	cronfb "github.com/qri-io/scheduler/cron/cron_fbs"
+	cronfb "github.com/qri-io/qrimatic/cron/cron_fbs"
 )
 
 func TestDatasetOptionsFlatbuffer(t *testing.T) {

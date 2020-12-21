@@ -11,7 +11,7 @@ package update
 // 	"github.com/qri-io/ioes"
 // 	"github.com/qri-io/qri/config"
 // 	reporef "github.com/qri-io/qri/repo/ref"
-// 	"github.com/qri-io/scheduler/cron"
+// 	"github.com/qri-io/qrimatic/cron"
 // )
 
 // func TestUpdateMethods(t *testing.T) {

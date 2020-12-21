@@ -9,7 +9,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
-	"github.com/qri-io/scheduler/cron"
+	"github.com/qri-io/qrimatic/cron"
 )
 
 // StringerLocation is the function to retrieve the timezone location

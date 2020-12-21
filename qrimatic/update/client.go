@@ -10,7 +10,7 @@ import (
 	"github.com/qri-io/qfs"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
-	"github.com/qri-io/scheduler/cron"
+	"github.com/qri-io/qrimatic/cron"
 )
 
 // Client enapsulates logic for scheduled updates

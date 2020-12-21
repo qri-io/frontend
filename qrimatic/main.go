@@ -7,7 +7,7 @@
 package main
 
 import (
-	"github.com/qri-io/scheduler/cmd"
+	"github.com/qri-io/qrimatic/cmd"
 )
 
 func main() {

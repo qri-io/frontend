@@ -9,7 +9,7 @@ import (
 	"github.com/qri-io/qri/errors"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
-	"github.com/qri-io/scheduler/update"
+	"github.com/qri-io/qrimatic/update"
 	"github.com/spf13/cobra"
 )
 

@@ -2,7 +2,7 @@ package cron
 
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
-	cronfb "github.com/qri-io/scheduler/cron/cron_fbs"
+	cronfb "github.com/qri-io/qrimatic/cron/cron_fbs"
 )
 
 // jobs is a list of jobs that implements the sort.Interface, sorting a list
