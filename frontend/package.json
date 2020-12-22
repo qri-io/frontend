@@ -9,21 +9,28 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
+    "@types/jest": "^26.0.19",
     "@types/node": "^12.0.0",
+    "@types/node-fetch": "^2.5.7",
+    "@types/puppeteer": "^5.4.2",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
+    "@types/rimraf": "^3.0.0",
     "autoprefixer": "^9",
     "connected-react-router": "^6.8.0",
     "history": "^4.10.1",
+    "install": "^0.13.0",
+    "node-fetch": "^2.6.1",
     "postcss": "^7",
+    "puppeteer": "^5.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "sleep-promise": "^9.0.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "typescript": "~3.8.2"
   },
@@ -31,6 +38,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
+    "test-e2e": "NODE_ENV=test && npm run build && jest ./test/e2e/* --detectOpenHandles",
+    "test-e2e-no-build": "NODE_ENV=test && jest ./test/* --detectOpenHandles",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -49,6 +58,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.6"
+    "@types/react-router-dom": "^5.1.6",
+    "ts-jest": "^26.4.4"
   }
 }
