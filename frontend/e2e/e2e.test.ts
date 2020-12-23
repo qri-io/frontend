@@ -1,8 +1,8 @@
 import { ChildProcess } from 'child_process'
 import puppeteer from 'puppeteer'
 
-import { startupBackendApp, startUpFrontendApp } from '../utils/specHelpers'
-import TestQrimaticBackend from '../utils/testQrimaticServe'
+import { startupBackendApp, startUpFrontendApp } from './utils/specHelpers'
+import TestQrimaticBackend from './utils/testQrimaticServe'
 
 let backend: TestQrimaticBackend
 let frontend: ChildProcess

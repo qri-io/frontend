@@ -38,8 +38,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "test-e2e": "NODE_ENV=test && npm run build && jest ./test/e2e/* --detectOpenHandles",
-    "test-e2e-no-build": "NODE_ENV=test && jest ./test/* --detectOpenHandles",
+    "test-e2e": "NODE_ENV=test && npm run build && jest ./e2e/* --detectOpenHandles",
+    "test-e2e-no-build": "NODE_ENV=test && jest ./e2e/* --detectOpenHandles",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

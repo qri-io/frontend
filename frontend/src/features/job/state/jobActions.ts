@@ -1,5 +1,13 @@
+import { AnyAction } from '@reduxjs/toolkit'
 import { CALL_API, ApiActionThunk } from '../../../store/api'
-import { Job, newJob } from './jobState'
+import { 
+  Job,
+  newJob,
+  JOB_SCHEDULED,
+  JOB_UNSCHEDULED,
+  JOB_STARTED,
+  JOB_STOPPED,
+ } from './jobState'
 
 export function mapJobs(data: Record<string, any>[]): Job[] {
   return data.map(newJob)
@@ -46,5 +54,38 @@ export function unscheduleJob(name: string): ApiActionThunk {
         query: { name }
       }
     })
+  }
+}
+
+export interface JobAction extends AnyAction {
+  type: string
+  data: Job
+}
+
+export function jobScheduled(job: Record<string,any>): JobAction {
+  return {
+    type: JOB_SCHEDULED,
+    data: newJob(job)
+  }
+}
+
+export function jobUnscheduled(job: Record<string,any>): JobAction {
+  return {
+    type: JOB_UNSCHEDULED,
+    data: newJob(job)
+  }
+}
+
+export function jobStarted(job: Record<string,any>): JobAction {
+  return {
+    type: JOB_STARTED,
+    data: newJob(job)
+  }
+}
+
+export function jobStopped(job: Record<string,any>): JobAction {
+  return {
+    type: JOB_STOPPED,
+    data: newJob(job)
   }
 }

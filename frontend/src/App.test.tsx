@@ -5,11 +5,11 @@ import { configureStore } from './store/store';
 import App from './App';
 
 test('renders learn react link', () => {
-  // const { getByText } = render(
-  //   <Provider store={configureStore()}>
-  //     <App />
-  //   </Provider>
-  // );
+  const { getByText } = render(
+    <Provider store={configureStore()}>
+      <App />
+    </Provider>
+  );
 
-  // expect(getByText(/qri/i)).toBeInTheDocument();
+  expect(getByText(/qri/i)).toBeInTheDocument();
 });

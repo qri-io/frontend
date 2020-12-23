@@ -1,5 +1,11 @@
-import { Reducer, AnyAction } from 'redux'
 import { RootState } from '../../../store/store';
+import { createReducer } from '@reduxjs/toolkit'
+import { JobAction } from './jobActions';
+
+export const JOB_STARTED = 'JOB_STARTED'
+export const JOB_STOPPED = 'JOB_STOPPED'
+export const JOB_SCHEDULED = 'JOB_SCHEDULED'
+export const JOB_UNSCHEDULED = 'JOB_UNSCHEDULED'
 
 export interface Job {
   name: string
@@ -38,7 +44,11 @@ export function newJob(d: Record<string, any>): Job {
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectJobs = (state: RootState): Job[] => state.jobs.jobs
 
-const initialState = {
+export interface JobState {
+  jobs: Job[]
+}
+
+const initialState: JobState = {
   jobs: [
     newJob({
       name: 'testJob',
@@ -49,20 +59,22 @@ const initialState = {
   ],
 }
 
-export interface JobState {
-  jobs: Job[]
-}
+export const jobsReducer = createReducer(initialState, {
+  'API_JOB_SUCCESS': (state, action) => {
+    state.jobs = action.payload.data
+  },
+  JOB_STARTED: updateJob,
+  JOB_STOPPED: updateJob,
+  JOB_SCHEDULED: updateJob,
+  JOB_UNSCHEDULED: updateJob,
+})
 
-export const jobsReducer: Reducer = (state = initialState, action: AnyAction): JobState => {
-  switch (action.type) {
-    case 'API_JOB_FAILURE':
-      return state
-    case 'API_JOB_SUCCESS':
-      console.log(action);
-      return {
-        jobs: action.payload.data
-      }
-    default:
-      return state
+function updateJob(state: JobState, action: JobAction) {
+  const i = state.jobs.findIndex((j) => j.name === action.data.name)
+  if (i === -1) {
+    state.jobs.push(action.data)
+    return
   }
+
+  state.jobs[i] = action.data
 }

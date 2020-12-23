@@ -4,13 +4,16 @@ import { ThunkAction, Action } from '@reduxjs/toolkit';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router'
 import { createBrowserHistory, History } from 'history'
 import { JobState, jobsReducer } from '../features/job/state/jobState';
-import { apiMiddleware } from './api'
+import transfersReducer from '../features/transfer/state/transferState';
+import { apiMiddleware } from './api';
+import { RemoteEvents, websocketMiddleware } from '../features/websocket/middleware/websocket';
 
 export const history = createBrowserHistory()
 
 export interface RootState {
   router: RouterState
   jobs: JobState
+  transfers: RemoteEvents
 }
 
 const rootReducer = (h: History) => combineReducers({
@@ -19,6 +22,7 @@ const rootReducer = (h: History) => combineReducers({
   // router: connectRouter(h) as any as Reducer<RouterState>, 
   router: connectRouter(h), 
   jobs: jobsReducer,
+  transfers: transfersReducer,
 })
 
 export function configureStore(preloadedState?: any) {
@@ -30,7 +34,8 @@ export function configureStore(preloadedState?: any) {
       applyMiddleware(
         thunk,
         routerMiddleware(history),
-        apiMiddleware
+        apiMiddleware,
+        websocketMiddleware as any,
       ),
     ),
   )
