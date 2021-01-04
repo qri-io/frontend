@@ -8,34 +8,34 @@ export const JOB_SCHEDULED = 'JOB_SCHEDULED'
 export const JOB_UNSCHEDULED = 'JOB_UNSCHEDULED'
 
 export interface Job {
+  id: string
+  datasetId: string
+  ownerId: string
   name: string
-  alias: string
+  created: string
   type: 'dataset' | 'shell'
-  periodicity: RepeatingInterval
-  prevRunStart?: string // actually a date
-  
-  runNumber?: number
-  runStart?: string // actually a date
-  runStop?: string // actually a date
-  runError?: string
-  logFilePath?: string
-}
+  periodicity: string
+  runCount: number
+  paused?: boolean
+  latestRunStart?: string // actually a date
+  nextRunStart?: string // actually a date
 
-export type RepeatingInterval = Record<string, any>
+  // CurrentRun     *Run       `json:"currentRun,omitempty"` // optional currently executing run
+}
 
 export function newJob(d: Record<string, any>): Job {
   return {
+    id: d.id,
+    datasetId: d.datasetId,
+    ownerId: d.ownerId,
     name: d.name,
-    alias: d.alias,
+    created: d.created,
     type: d.type,
     periodicity: d.periodicity,
-    prevRunStart: d.prevRunStart,
-
-    runNumber: d.runNumber,
-    runStart: d.runStart,
-    runStop: d.runStop,
-    runError: d.runError,
-    logFilePath: d.logFilePath,
+    runCount: d.runCount,
+    latestRunStart: d.prevRunStart,
+    nextRunStart: d.nextRunStart,
+    paused: d.paused
   }
 }
 

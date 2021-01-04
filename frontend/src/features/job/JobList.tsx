@@ -15,7 +15,7 @@ export function JobList() {
       <button onClick={() => dispatch(fetchJobs(1, 50))}>Fetch Them Jobs</button>
       {jobs.map((j, i) => (
         <div key={i}>
-          <span>{j.runNumber} {j.name} | {j.alias} | {j.periodicity}</span>
+          <span>{j.runCount} {j.name} | {j.nextRunStart} | {j.periodicity}</span>
           <button onClick={() => dispatch(unscheduleJob(j.name))}>remove</button>
         </div>)
       )}

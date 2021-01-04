@@ -3,19 +3,21 @@ package cron
 import (
 	"context"
 	"testing"
-	"time"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qfs"
 )
 
 func TestMemStore(t *testing.T) {
-	newStore := func() JobStore {
-		return &MemJobStore{}
+	newStore := func() Store {
+		return NewMemStore()
 	}
 	RunJobStoreTests(t, newStore)
 }
 
-func RunJobStoreTests(t *testing.T, newStore func() JobStore) {
+func RunJobStoreTests(t *testing.T, newStore func() Store) {
 	ctx := context.Background()
 
 	t.Run("JobStoreTest", func(t *testing.T) {
@@ -30,8 +32,10 @@ func RunJobStoreTests(t *testing.T, newStore func() JobStore) {
 
 		jobOne := &Job{
 			Name:        "job_one",
+			DatasetID:   "dsID1",
 			Periodicity: mustRepeatingInterval("R/PT1H"),
 			Type:        JTDataset,
+			ID:          "jobID",
 		}
 		if err = store.PutJob(ctx, jobOne); err != nil {
 			t.Errorf("putting job one: %s", err)
@@ -43,15 +47,18 @@ func RunJobStoreTests(t *testing.T, newStore func() JobStore) {
 		if len(jobs) != 1 {
 			t.Fatal("expected default get to return inserted job")
 		}
-		if err := CompareJobs(jobOne, jobs[0]); err != nil {
-			t.Errorf("stored job mistmatch: %s", err)
+		if diff := compareJob(jobOne, jobs[0]); diff != "" {
+			t.Errorf("stored job mismatch (-want +got):\n%s", diff)
 		}
 
+		// d2 := time.Date(2001, 1, 1, 1, 1, 1, 1, time.UTC)
 		jobTwo := &Job{
+			ID:          "job2",
 			Name:        "job two",
+			DatasetID:   "dsID2",
 			Periodicity: mustRepeatingInterval("R/P3M"),
 			Type:        JTShellScript,
-			RunStart:    time.Date(2001, 1, 1, 1, 1, 1, 1, time.UTC),
+			// RunStart:    &d2,
 		}
 		if err = store.PutJob(ctx, jobTwo); err != nil {
 			t.Errorf("putting job one: %s", err)
@@ -61,8 +68,8 @@ func RunJobStoreTests(t *testing.T, newStore func() JobStore) {
 			t.Fatal(err)
 		}
 		expect := []*Job{jobTwo, jobOne}
-		if err := CompareJobSlices(expect, jobs); err != nil {
-			t.Error(err)
+		if diff := cmp.Diff(expect, jobs, cmpopts.IgnoreUnexported(iso8601.Duration{})); diff != "" {
+			t.Errorf("job slice mismatch (-want +got):\n%s", diff)
 		}
 
 		jobThree := &Job{
@@ -76,19 +83,20 @@ func RunJobStoreTests(t *testing.T, newStore func() JobStore) {
 		if err = store.PutJob(ctx, jobThree); err != nil {
 			t.Errorf("putting job three: %s", err)
 		}
-		gotJobThree, err := store.Job(ctx, jobThree.Name)
+		gotJobThree, err := store.GetJob(ctx, jobThree.ID)
 		if err != nil {
 			t.Errorf("getting jobThree: %s", err)
 		}
-		if err := CompareJobs(jobThree, gotJobThree); err != nil {
-			t.Error(err)
+		if diff := compareJob(jobThree, gotJobThree); diff != "" {
+			t.Errorf("jobThree mismatch (-want +got):\n%s", diff)
 		}
 
+		// d3 := time.Date(2002, 1, 1, 1, 1, 1, 1, time.UTC)
 		updatedJobOne := &Job{
 			Name:        jobOne.Name,
 			Periodicity: jobOne.Periodicity,
 			Type:        jobOne.Type,
-			RunStart:    time.Date(2002, 1, 1, 1, 1, 1, 1, time.UTC),
+			// RunStart:    &d3,
 		}
 		if err = store.PutJob(ctx, updatedJobOne); err != nil {
 			t.Errorf("putting job one: %s", err)
@@ -100,16 +108,16 @@ func RunJobStoreTests(t *testing.T, newStore func() JobStore) {
 		if len(jobs) != 1 {
 			t.Fatal("expected limit 1 length to equal 1")
 		}
-		if err = CompareJobs(jobTwo, jobs[0]); err != nil {
-			t.Error(err)
+		if diff := compareJob(jobTwo, jobs[0]); diff != "" {
+			t.Errorf("jobTwo mismatch (-want +got):\n%s", diff)
 		}
 
-		job, err := store.Job(ctx, updatedJobOne.Name)
+		job, err := store.GetJob(ctx, updatedJobOne.ID)
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err = CompareJobs(updatedJobOne, job); err != nil {
-			t.Error(err)
+		if diff := compareJob(updatedJobOne, job); diff != "" {
+			t.Errorf("updated jobOne mismatch (-want +got):\n%s", diff)
 		}
 
 		if err = store.DeleteJob(ctx, updatedJobOne.Name); err != nil {

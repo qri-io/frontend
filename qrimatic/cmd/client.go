@@ -200,7 +200,7 @@ update.
 	`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return client.Logs(ctx, args)
+			return client.Runs(ctx, args)
 		},
 	}
 
@@ -263,7 +263,7 @@ func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err 
 		return err
 	}
 
-	fmt.Fprintf(client.ErrOut, "update scheduled, next update: %s\n", res.NextExec())
+	fmt.Fprintf(client.ErrOut, "update scheduled, next update: %s\n", res.NextRunStart)
 	return nil
 }
 
@@ -311,8 +311,8 @@ func (client *ClientCommands) List(ctx context.Context) (err error) {
 	return
 }
 
-// Logs shows a history of job events
-func (client *ClientCommands) Logs(ctx context.Context, args []string) (err error) {
+// Runs shows a history of job events
+func (client *ClientCommands) Runs(ctx context.Context, args []string) (err error) {
 	if len(args) == 1 {
 		return client.LogFile(ctx, args[0])
 	}
@@ -324,14 +324,14 @@ func (client *ClientCommands) Logs(ctx context.Context, args []string) (err erro
 		Limit:  page.Limit(),
 	}
 
-	res := []*update.Job{}
-	if err = client.updates.Logs(ctx, p, &res); err != nil {
+	res := []*update.Run{}
+	if err = client.updates.Runs(ctx, p, &res); err != nil {
 		return
 	}
 
 	items := make([]fmt.Stringer, len(res))
 	for i, r := range res {
-		items[i] = finishedJobStringer(*r)
+		items[i] = runStringer(*r)
 	}
 	printItems(client.Out, items, page.Offset())
 	return
@@ -339,13 +339,14 @@ func (client *ClientCommands) Logs(ctx context.Context, args []string) (err erro
 
 // LogFile prints a log output file
 func (client *ClientCommands) LogFile(ctx context.Context, logName string) error {
-	data := []byte{}
-	if err := client.updates.LogFile(ctx, &logName, &data); err != nil {
-		return err
-	}
+	// data := []byte{}
+	// if err := client.updates.LogFile(ctx, &logName, &data); err != nil {
+	// 	return err
+	// }
 
-	client.Out.Write(data)
-	return nil
+	// client.Out.Write(data)
+	// return nil
+	return fmt.Errorf("unfinished: LogFile command")
 }
 
 // ServiceStatus gets the current status of the update daemon

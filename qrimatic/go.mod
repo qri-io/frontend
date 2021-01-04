@@ -8,8 +8,11 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.9.0
 	github.com/google/flatbuffers v1.12.1-0.20200706154056-969d0f7a6317
+	github.com/google/go-cmp v0.5.3
+	github.com/ipfs/go-cid v0.0.7
 	github.com/ipfs/go-log v1.0.4
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/multiformats/go-multihash v0.0.14
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/qri-io/apiutil v0.2.0
 	github.com/qri-io/dataset v0.2.1-0.20201201155506-9b4fc79ffde8

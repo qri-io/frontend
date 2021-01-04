@@ -15,12 +15,16 @@ import (
 	golog "github.com/ipfs/go-log"
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
-	"github.com/qri-io/iso8601"
+	"github.com/qri-io/qri/event"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qrimatic/cron"
 )
 
 var log = golog.Logger("update")
+
+func init() {
+	golog.SetLogLevel("update", "debug")
+}
 
 // RepoDirName is the directory within repo to store update data
 // using the default path, it'll work out to $HOME/.qri/update
@@ -56,19 +60,20 @@ func start(ctx context.Context, repoPath string, cfg *Config) error {
 		return err
 	}
 
-	var jobStore, logStore cron.JobStore
+	var store cron.Store
 	switch cfg.Type {
 	case "fs":
-		jobStore = cron.NewFlatbufferJobStore(filepath.Join(path, "jobs.qfb"))
-		logStore = cron.NewFlatbufferJobStore(filepath.Join(path, "logs.qfb"))
+		store, err = cron.NewFileStore(filepath.Join(path, "cron.json"))
+		if err != nil {
+			return err
+		}
 	case "mem":
-		jobStore = &cron.MemJobStore{}
-		logStore = &cron.MemJobStore{}
+		store = cron.NewMemStore()
 	default:
 		return fmt.Errorf("unknown cron type: %q", cfg.Type)
 	}
 
-	svc := cron.NewCron(jobStore, logStore, Factory)
+	svc := cron.NewCron(store, Factory, event.NilBus)
 	log.Debug("starting update service")
 	go func() {
 		if err := svc.ServeHTTP(cfg.Addr); err != nil {
@@ -90,19 +95,18 @@ func NewService(inst *lib.Instance) (*Service, error) {
 		return nil, err
 	}
 
-	var jobStore, logStore cron.JobStore
+	var store cron.Store
 	// switch cfg.Type {
 	// case "fs":
-	jobStore = cron.NewFlatbufferJobStore(filepath.Join(path, "jobs.qfb"))
-	logStore = cron.NewFlatbufferJobStore(filepath.Join(path, "logs.qfb"))
+	store, err = cron.NewFileStore(filepath.Join(path, "jobs.json"))
 	// case "mem":
-	// 	jobStore = &cron.MemJobStore{}
-	// 	logStore = &cron.MemJobStore{}
+	// 	jobStore = cron.NewMemStore()
+	// 	logStore = cron.NewMemStore()
 	// default:
 	// 	return fmt.Errorf("unknown cron type: %q", cfg.Type)
 	// }
 
-	svc := cron.NewCron(jobStore, logStore, Factory)
+	svc := cron.NewCron(store, Factory, inst.Bus())
 	log.Debug("starting update service")
 	// go func() {
 	// 	if err := svc.ServeHTTP(cfg.Addr); err != nil {
@@ -167,10 +171,6 @@ func JobToCmd(streams ioes.IOStreams, job *cron.Job) *exec.Cmd {
 // wiring operating system in/out/errout to the provided iostreams.
 func datasetSaveCmd(streams ioes.IOStreams, job *cron.Job) *exec.Cmd {
 	args := []string{"save", job.Name}
-
-	if job.RepoPath != "" {
-		args = append(args, fmt.Sprintf(`--repo=%s`, job.RepoPath))
-	}
 
 	if o, ok := job.Options.(*cron.DatasetOptions); ok {
 		if o.Title != "" {
@@ -244,44 +244,35 @@ func DatasetToJob(ds *dataset.Dataset, periodicity string, opts *cron.DatasetOpt
 		return nil, fmt.Errorf("scheduling dataset updates requires a meta component with accrualPeriodicity set")
 	}
 
-	p, err := iso8601.ParseRepeatingInterval(periodicity)
+	name := fmt.Sprintf("%s/%s", ds.Peername, ds.Name)
+	job, err = cron.NewJob(name, "ownerID", name, cron.JTDataset, periodicity)
 	if err != nil {
+		log.Debugw("creating new job", "error", err)
 		return nil, err
 	}
-
-	job = &cron.Job{
-		// TODO (b5) - dataset.Dataset needs an Alias() method:
-		Name:         fmt.Sprintf("%s/%s", ds.Peername, ds.Name),
-		Periodicity:  p,
-		Type:         cron.JTDataset,
-		PrevRunStart: ds.Commit.Timestamp,
+	if ds.Commit != nil {
+		job.LatestRunStart = &ds.Commit.Timestamp
 	}
 	if opts != nil {
 		job.Options = opts
 	}
-	err = job.Validate()
+	// err = job.Validate()
 
 	return
 }
 
 // ShellScriptToJob turns a shell script into cron.Job
 func ShellScriptToJob(path string, periodicity string, opts *cron.ShellScriptOptions) (job *cron.Job, err error) {
-	p, err := iso8601.ParseRepeatingInterval(periodicity)
+	// TODO (b5) - confirm file exists & is executable
+
+	job, err = cron.NewJob(path, "foo", path, cron.JTShellScript, periodicity)
 	if err != nil {
 		return nil, err
 	}
 
-	// TODO (b5) - confirm file exists & is executable
-
-	job = &cron.Job{
-		Name:        path,
-		Periodicity: p,
-		Type:        cron.JTShellScript,
-	}
 	if opts != nil {
 		job.Options = opts
 	}
-	err = job.Validate()
 	return
 }
 
