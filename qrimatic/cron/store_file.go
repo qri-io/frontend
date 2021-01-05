@@ -185,7 +185,6 @@ func (s *FileStore) PutRun(ctx context.Context, run *Run) error {
 	}
 
 	s.lock.Lock()
-	defer s.lock.Unlock()
 	if jobRuns, ok := s.jobRuns[run.JobID]; ok {
 		jobRuns.Add(run)
 	} else {
@@ -194,6 +193,7 @@ func (s *FileStore) PutRun(ctx context.Context, run *Run) error {
 		s.jobRuns[run.JobID] = jobRuns
 	}
 	s.runs.Add(run)
+	s.lock.Unlock()
 	return s.writeToFile()
 }
 
@@ -253,9 +253,15 @@ func (s *FileStore) loadFromFile() (err error) {
 		return err
 	}
 
-	s.jobs = state.Jobs
-	s.jobRuns = state.JobRuns
-	s.runs = state.Runs
+	if state.Jobs != nil {
+		s.jobs = state.Jobs
+	}
+	if state.JobRuns != nil {
+		s.jobRuns = state.JobRuns
+	}
+	if state.Runs != nil {
+		s.runs = state.Runs
+	}
 	return nil
 }
 

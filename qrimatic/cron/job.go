@@ -179,6 +179,11 @@ func (js JobSet) Less(i, j int) bool {
 func (js JobSet) Swap(i, j int) { js.set[i], js.set[j] = js.set[j], js.set[i] }
 
 func (js *JobSet) Add(j *Job) {
+	if js == nil {
+		*js = JobSet{set: []*Job{j}}
+		return
+	}
+
 	for i, job := range js.set {
 		if job.ID == j.ID {
 			js.set[i] = j

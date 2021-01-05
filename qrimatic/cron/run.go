@@ -94,6 +94,11 @@ func (rs RunSet) Less(i, j int) bool {
 func (rs RunSet) Swap(i, j int) { rs.set[i], rs.set[j] = rs.set[j], rs.set[i] }
 
 func (rs *RunSet) Add(r *Run) {
+	if rs == nil {
+		*rs = RunSet{set: []*Run{r}}
+		return
+	}
+
 	for i, run := range rs.set {
 		if run.ID == r.ID {
 			rs.set[i] = r
@@ -127,7 +132,7 @@ func (rs RunSet) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON deserializes from a JSON array
 func (rs *RunSet) UnmarshalJSON(data []byte) error {
 	set := []*Run{}
-	if err := json.Unmarshal(data, set); err != nil {
+	if err := json.Unmarshal(data, &set); err != nil {
 		return err
 	}
 	rs.set = set

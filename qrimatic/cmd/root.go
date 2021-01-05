@@ -11,13 +11,16 @@ import (
 func NewRootCommand(ctx context.Context, streams ioes.IOStreams, repoPath string) *cobra.Command {
 
 	cmd := &cobra.Command{
-		Use:  "scheduler",
+		Use:  "qrimatic",
 		Long: ``,
 	}
 
 	cmd.AddCommand(NewServeCommand(ctx, streams, repoPath))
 
-	client := NewClientCommands(streams, repoPath)
+	client, err := NewClientCommands(streams, repoPath)
+	if err != nil {
+		panic(err)
+	}
 	for _, sub := range client.Commands(ctx) {
 		cmd.AddCommand(sub)
 	}

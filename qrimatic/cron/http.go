@@ -287,8 +287,6 @@ func (c *Cron) statusHandler(w http.ResponseWriter, r *http.Request) {
 
 func (c *Cron) jobsHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case http.MethodOptions:
-		apiutil.EmptyOkHandler(w, r)
 	case http.MethodGet:
 		offset := apiutil.ReqParamInt(r, "offset", 0)
 		limit := apiutil.ReqParamInt(r, "limit", 25)

@@ -44,11 +44,12 @@ type ClientCommands struct {
 }
 
 // NewClientCommands creates a client commands
-func NewClientCommands(streams ioes.IOStreams, repoPath string) *ClientCommands {
+func NewClientCommands(streams ioes.IOStreams, repoPath string) (*ClientCommands, error) {
+	updateClient, err := update.NewClient(repoPath)
 	return &ClientCommands{
 		IOStreams: streams,
-		updates:   update.NewClient(":2503"),
-	}
+		updates:   updateClient,
+	}, err
 }
 
 func (client *ClientCommands) Commands(ctx context.Context) []*cobra.Command {

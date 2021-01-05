@@ -3,10 +3,12 @@ package update
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qfs"
+	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
 	"github.com/qri-io/qrimatic/cron"
@@ -14,14 +16,20 @@ import (
 
 // Client enapsulates logic for scheduled updates
 type Client struct {
-	sch cron.Service
+	repoPath string
+	sch      cron.Service
 }
 
 // NewClient creates a new HTTP client from an address
-func NewClient(addr string) *Client {
-	return &Client{
-		sch: cron.HTTPClient{Addr: addr},
+func NewClient(repoPath string) (*Client, error) {
+	cfg, err := config.ReadFromFile(filepath.Join(repoPath, "config.yaml"))
+	if err != nil {
+		return nil, err
 	}
+	return &Client{
+		repoPath: repoPath,
+		sch:      cron.HTTPClient{Addr: cfg.API.Address},
+	}, nil
 }
 
 // Job aliases a cron.Job, removing the need to import the cron package.
@@ -75,7 +83,7 @@ func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (
 	}
 
 	// TODO (b5) - finish
-	inst, err := lib.NewInstance(ctx, "/Users/b5/.qri")
+	inst, err := lib.NewInstance(ctx, c.repoPath)
 	if err != nil {
 		log.Debugw("creating new instance to resolve ref")
 		return nil, err
