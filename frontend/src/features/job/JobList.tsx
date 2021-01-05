@@ -5,7 +5,7 @@ import { fetchJobs, unscheduleJob } from './state/jobActions'
 import { selectJobs } from './state/jobState'
 import ScheduleJob from './ScheduleJob'
 
-export function JobList() {
+export default function JobList() {
   const jobs = useSelector(selectJobs);
   const dispatch = useDispatch();
 
