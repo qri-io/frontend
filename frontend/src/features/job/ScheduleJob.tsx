@@ -7,7 +7,9 @@ const ScheduleJob: React.FC<any> = () => {
   const dispatch = useDispatch()
   const [job, setJob] = useState(newJob({
     type: 'dataset',
-    periodicity: "R2/P1H"
+    periodicity: "R2/P1H",
+    ownerId: "foo",
+    datasetId: "bar"
   }))
 
   const fieldSetter = (field: string) => {

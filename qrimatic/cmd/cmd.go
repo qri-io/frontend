@@ -15,7 +15,7 @@ var log = golog.Logger("cmd")
 
 // Execute runs the qri command line program
 func Execute() {
-	if os.Getenv("QRIMATIC_BACKTRACE") == "" {
+	if os.Getenv("QRIMATIC_BACKTRACE") != "" {
 		// Catch errors & pretty-print.
 		defer func() {
 			if r := recover(); r != nil {

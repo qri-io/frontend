@@ -37,41 +37,35 @@ type jobStringer cron.Job
 func (j jobStringer) String() string {
 	w := &bytes.Buffer{}
 	name := color.New(color.Bold).SprintFunc()
-	t := j.Periodicity.After(j.PrevRunStart)
-	relTime := humanize.RelTime(time.Now().In(time.UTC), t, "", "")
-	fmt.Fprintf(w, "%s\nin %sat %s | %s\n", name(j.Name), relTime, t.In(StringerLocation).Format(time.Kitchen), j.Type)
-	if j.RepoPath != "" {
-		fmt.Fprintf(w, "\nrepo: %s\n", j.RepoPath)
+	if j.NextRunStart != nil {
+		t := j.Periodicity.After(*j.NextRunStart)
+		relTime := humanize.RelTime(time.Now().In(time.UTC), t, "", "")
+		fmt.Fprintf(w, "%s\nin %sat %s | %s\n", name(j.Name), relTime, t.In(StringerLocation).Format(time.Kitchen), j.Type)
+	} else {
+		fmt.Fprintf(w, "%s\nin paused | %s\n", name(j.Name), j.Type)
 	}
 	fmt.Fprintf(w, "\n")
 	return w.String()
 }
 
-type finishedJobStringer cron.Job
+type runStringer cron.Run
 
 // String assumes Name, Type, PrevRunStart and ExitStatus are present
-func (j finishedJobStringer) String() string {
+func (j runStringer) String() string {
 	w := &bytes.Buffer{}
 	name := color.New(color.Bold, color.FgGreen).SprintFunc()
 	msg := ""
-	if j.RunError != "" {
-		msg = oneLiner(j.RunError, 40)
+	if j.Error != "" {
+		msg = oneLiner(j.Error, 40)
 		name = color.New(color.Bold, color.FgRed).SprintFunc()
-		if j.RunError == "no changes to save" {
+		if j.Error == "no changes to save" {
 			name = color.New(color.Bold, color.Faint).SprintFunc()
 		}
 	} else {
-		if j.Type == cron.JTDataset {
-			msg = "dataset updated"
-		} else if j.Type == cron.JTShellScript {
-			msg = "script ran successfully"
-		}
+		msg = "dataset updated"
 	}
 
-	fmt.Fprintf(w, "%s\n%s | %s\n", name(j.Name), humanize.Time(j.PrevRunStart), msg)
-	if j.RepoPath != "" {
-		fmt.Fprintf(w, "\nrepo: %s\n", j.RepoPath)
-	}
+	fmt.Fprintf(w, "%s\n%s | %s\n", name(j.Error), humanize.Time(*j.Start), msg)
 	fmt.Fprintf(w, "\n")
 	return w.String()
 }

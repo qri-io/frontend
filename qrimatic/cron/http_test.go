@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/qri-io/ioes"
+	"github.com/qri-io/qri/event"
 )
 
 func TestCronHTTP(t *testing.T) {
-	s := &MemJobStore{}
-	l := &MemJobStore{}
+	store := NewMemStore()
 
 	factory := func(context.Context) RunJobFunc {
 		return func(ctx context.Context, streams ioes.IOStreams, job *Job) error {
@@ -24,7 +24,7 @@ func TestCronHTTP(t *testing.T) {
 		t.Error("expected ping to server that is off to return ErrUnreachable")
 	}
 
-	cr := NewCron(s, l, factory)
+	cr := NewCron(store, factory, event.NilBus)
 	// TODO (b5) - how do we keep this from being a leaking goroutine?
 	go cr.ServeHTTP(":7897")
 
@@ -41,11 +41,12 @@ func TestCronHTTP(t *testing.T) {
 		t.Error("expected 0 jobs")
 	}
 
+	// d := time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)
 	dsJob := &Job{
 		Name:        "b5/libp2p_node_count",
 		Type:        JTDataset,
 		Periodicity: mustRepeatingInterval("R/P1W"),
-		RunStart:    time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC),
+		// RunStart:    &d,
 	}
 
 	if err = cli.Schedule(cliCtx, dsJob); err != nil {

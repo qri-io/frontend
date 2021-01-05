@@ -3,11 +3,12 @@ package update
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"path/filepath"
 	"time"
 
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qfs"
+	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
 	"github.com/qri-io/qrimatic/cron"
@@ -15,19 +16,27 @@ import (
 
 // Client enapsulates logic for scheduled updates
 type Client struct {
-	sch cron.Scheduler
+	repoPath string
+	sch      cron.Service
 }
 
 // NewClient creates a new HTTP client from an address
-func NewClient(addr string) *Client {
-	return &Client{
-		sch: cron.HTTPClient{Addr: addr},
+func NewClient(repoPath string) (*Client, error) {
+	cfg, err := config.ReadFromFile(filepath.Join(repoPath, "config.yaml"))
+	if err != nil {
+		return nil, err
 	}
+	return &Client{
+		repoPath: repoPath,
+		sch:      cron.HTTPClient{Addr: cfg.API.Address},
+	}, nil
 }
 
-// Job aliases a cron.Job, removing the need to import the cron package to work
-// with lib.Client
+// Job aliases a cron.Job, removing the need to import the cron package.
 type Job = cron.Job
+
+// Run aliase a cron.Run, removing the need to import the cron package.
+type Run = cron.Run
 
 // ScheduleParams encapsulates parameters for scheduling updates
 type ScheduleParams struct {
@@ -54,12 +63,18 @@ func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *cron.Job
 
 	job, err := c.jobFromScheduleParams(ctx, in)
 	if err != nil {
+		log.Debugw("creating job from schedule params", "error", err)
 		return err
 	}
 
-	err = c.sch.Schedule(ctx, job)
+	log.Debugw("scheduling job", "job", job)
+	if err = c.sch.Schedule(ctx, job); err != nil {
+		log.Debugw("scheduling job", "error", err)
+		return err
+	}
+
 	*out = *job
-	return err
+	return nil
 }
 
 func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (job *cron.Job, err error) {
@@ -67,19 +82,15 @@ func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (
 		return ShellScriptToJob(p.Name, p.Periodicity, nil)
 	}
 
-	// ref, err := dsref.Parse(p.Name)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// return nil, fmt.Errorf("not finished")
-
-	inst, err := lib.NewInstance(ctx, "/Users/b5/.qri")
+	// TODO (b5) - finish
+	inst, err := lib.NewInstance(ctx, c.repoPath)
 	if err != nil {
+		log.Debugw("creating new instance to resolve ref")
 		return nil, err
 	}
 	res := &lib.GetResult{}
 	if err := lib.NewDatasetMethods(inst).Get(&lib.GetParams{Refstr: p.Name}, res); err != nil {
+		log.Debugw("resolving dataset", "error", err)
 		return nil, err
 	}
 
@@ -110,9 +121,9 @@ func (c *Client) Unschedule(ctx context.Context, name *string, unscheduled *bool
 func (c *Client) List(ctx context.Context, p *lib.ListParams, jobs *[]*Job) error {
 	list, err := c.sch.ListJobs(ctx, p.Offset, p.Limit)
 	if err != nil {
+		log.Debugw("listing jobs", "error", err)
 		return err
 	}
-
 	*jobs = list
 	return nil
 }
@@ -128,30 +139,30 @@ func (c *Client) Job(ctx context.Context, name *string, job *Job) error {
 	return nil
 }
 
-// Logs shows the history of job execution
-func (c *Client) Logs(ctx context.Context, p *lib.ListParams, res *[]*Job) error {
-	jobs, err := c.sch.ListLogs(ctx, p.Offset, p.Limit)
+// Runs shows the history of job execution
+func (c *Client) Runs(ctx context.Context, p *lib.ListParams, res *[]*Run) error {
+	runs, err := c.sch.Runs(ctx, p.Offset, p.Limit)
 	if err != nil {
 		return err
 	}
 
-	*res = jobs
+	*res = runs
 	return nil
 }
 
-// LogFile reads log file data for a given logName
-func (c *Client) LogFile(ctx context.Context, logName *string, data *[]byte) error {
-	f, err := c.sch.LogFile(ctx, *logName)
-	if err != nil {
-		return err
-	}
+// // LogFile reads log file data for a given logName
+// func (c *Client) LogFile(ctx context.Context, logName *string, data *[]byte) error {
+// 	f, err := c.sch.LogFile(ctx, *logName)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	defer f.Close()
-	res, err := ioutil.ReadAll(f)
-	*data = res
+// 	defer f.Close()
+// 	res, err := ioutil.ReadAll(f)
+// 	*data = res
 
-	return err
-}
+// 	return err
+// }
 
 // ServiceStatus describes the current state of a service
 type ServiceStatus struct {

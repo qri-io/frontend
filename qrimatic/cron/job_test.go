@@ -1,15 +1,15 @@
 package cron
 
 import (
-	"fmt"
+	"encoding/json"
 	"testing"
-	"time"
 
-	flatbuffers "github.com/google/flatbuffers/go"
-	cronfb "github.com/qri-io/qrimatic/cron/cron_fbs"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/qri-io/iso8601"
 )
 
-func TestDatasetOptionsFlatbuffer(t *testing.T) {
+func TestDatasetOptionsJSON(t *testing.T) {
 	src := &DatasetOptions{
 		Title:     "A_Title",
 		Message:   "A_Message",
@@ -27,182 +27,79 @@ func TestDatasetOptionsFlatbuffer(t *testing.T) {
 		Secrets: map[string]string{"b": "b"},
 	}
 
-	builder := flatbuffers.NewBuilder(0)
-	off := src.MarshalFlatbuffer(builder)
-	if off == 0 {
-		t.Errorf("expected returned offset to not equal zero")
+	data, err := json.Marshal(src)
+	if err != nil {
+		t.Fatal(err)
 	}
-	builder.Finish(off)
-
-	cronOpts := cronfb.GetRootAsDatasetOptions(builder.FinishedBytes(), 0)
 
 	got := &DatasetOptions{}
-	got.UnmarshalFlatbuffer(cronOpts)
+	if err := json.Unmarshal(data, got); err != nil {
+		t.Fatal(err)
+	}
 
-	if err := CompareDatasetOptions(src, got); err != nil {
-		t.Error(err)
+	if diff := cmp.Diff(src, got); diff != "" {
+		t.Errorf("result mismatch. (-wnt +got):\n%s", diff)
 	}
 }
 
 func TestJobCopy(t *testing.T) {
+	// now := time.Now()
 	a := &Job{
-		Name:         "name",
-		Alias:        "alias",
-		Type:         JobType("FOO"),
-		Periodicity:  mustRepeatingInterval("R/P1W"),
-		PrevRunStart: time.Now(),
-		RunNumber:    1234567890,
-		RunStart:     time.Now(),
-		RunStop:      time.Now(),
-		RunError:     "oh noes it broke",
-		LogFilePath:  "such filepath",
-		RepoPath:     "such repo path",
+		ID:          "id",
+		Name:        "name",
+		Type:        JobType("FOO"),
+		Periodicity: mustRepeatingInterval("R/P1W"),
+		// PrevRunStart: &now,
+		// RunNumber:    1234567890,
+		// RunStart:     &now,
+		// RunStop:      &now,
+		// RunError:     "oh noes it broke",
+		// LogFilePath:  "such filepath",
+		// RepoPath:     "such repo path",
 		Options: &DatasetOptions{
 			FilePaths: []string{"the", "file", "paths"},
 		},
 	}
 
-	if err := CompareJobs(a, a.Copy()); err != nil {
-		t.Errorf("copy mismatch: %s", err)
+	if diff := compareJob(a, a.Copy()); diff != "" {
+		t.Errorf("copy mismatch (-want +got):\n%s", diff)
 	}
 }
 
-func CompareJobs(a, b *Job) error {
-	if a.Name != b.Name {
-		return fmt.Errorf("Name mismatch. %s != %s", a.Name, b.Name)
-	}
-	if a.Alias != b.Alias {
-		return fmt.Errorf("Alias: %s != %s", a.Alias, b.Alias)
-	}
-	if a.Periodicity != b.Periodicity {
-		return fmt.Errorf("Periodicity mismatch. %s != %s", a.Name, b.Name)
-	}
-	// use unix comparisons to ignore millisecond & nanosecond precision errors
-	if a.PrevRunStart.Unix() != b.PrevRunStart.Unix() {
-		return fmt.Errorf("RunStart mismatch. %s != %s", a.PrevRunStart, b.PrevRunStart)
-	}
-
-	if a.RunNumber != b.RunNumber {
-		return fmt.Errorf("RunNumber mismatch. %d != %d", a.RunNumber, b.RunNumber)
-	}
-	// use unix comparisons to ignore millisecond & nanosecond precision errors
-	if a.RunStart.Unix() != b.RunStart.Unix() {
-		return fmt.Errorf("RunStart mismatch. %s != %s", a.RunStart, b.RunStart)
-	}
-	if a.RunStop.Unix() != b.RunStop.Unix() {
-		return fmt.Errorf("RunStop mismatch. %s != %s", a.RunStop, b.RunStop)
-	}
-	if a.RunError != b.RunError {
-		return fmt.Errorf("RunError mismatch. %s != %s", a.RunError, b.RunError)
-	}
-
-	if a.Type != b.Type {
-		return fmt.Errorf("Type mistmatch. %s != %s", a.Type, b.Type)
-	}
-
-	if a.RepoPath != b.RepoPath {
-		return fmt.Errorf("RepoPath mistmatch. %s != %s", a.RepoPath, b.RepoPath)
-	}
-
-	if err := CompareOptions(a.Options, b.Options); err != nil {
-		return fmt.Errorf("Options: %s", err)
-	}
-
-	return nil
+func compareJob(a, b *Job) string {
+	return cmp.Diff(a, b, cmpopts.IgnoreUnexported(iso8601.Duration{}))
 }
 
-func CompareOptions(a, b Options) error {
-	if a == nil && b != nil || a != nil && b == nil {
-		return fmt.Errorf("nil mismatch: %v != %v", a, b)
-	} else if a == nil && b == nil {
-		return nil
+func TestJobsJSON(t *testing.T) {
+	jobs := NewJobSet()
+	jobs.Add(&Job{
+		ID:          "job1",
+		Name:        "job_one",
+		Periodicity: mustRepeatingInterval("R/PT1H"),
+		Type:        JTDataset,
+		Options:     &DatasetOptions{Title: "Yus"},
+	})
+	jobs.Add(&Job{
+		ID:          "job2",
+		Name:        "job_two",
+		Periodicity: mustRepeatingInterval("R/PT1D"),
+		Type:        JTShellScript,
+	})
+
+	data, err := json.Marshal(jobs)
+	if err != nil {
+		t.Fatal(err)
 	}
 
-	aDso, aOk := a.(*DatasetOptions)
-	bDso, bOk := b.(*DatasetOptions)
-	if aOk && bOk {
-		err := CompareDatasetOptions(aDso, bDso)
-		if err != nil {
-			return fmt.Errorf("DatasetOptions: %s", err)
-		}
-		return nil
+	got := []*Job{}
+	if err := json.Unmarshal(data, got); err != nil {
+		t.Fatal(err)
 	}
 
-	// TODO (b5) - more option comparison
-	return fmt.Errorf("TODO - can't compare option types: %#v %#v", a, b)
-}
-
-func CompareDatasetOptions(a, b *DatasetOptions) error {
-	if a == nil && b != nil || a != nil && b == nil {
-		return fmt.Errorf("nil mismatch: %v != %v", a, b)
-	} else if a == nil && b == nil {
-		return nil
-	}
-
-	if a.Title != b.Title {
-		return fmt.Errorf("Title: '%s' != '%s'", a.Title, b.Title)
-	}
-	if a.Message != b.Message {
-		return fmt.Errorf("Message: '%s' != '%s'", a.Message, b.Message)
-	}
-	if a.Recall != b.Recall {
-		return fmt.Errorf("Recall: '%s' != '%s'", a.Recall, b.Recall)
-	}
-	if a.BodyPath != b.BodyPath {
-		return fmt.Errorf("BodyPath: '%s' != '%s'", a.BodyPath, b.BodyPath)
-	}
-
-	if len(a.FilePaths) != len(b.FilePaths) {
-		return fmt.Errorf("FilePaths length: %d != %d", len(a.FilePaths), len(b.FilePaths))
-	}
-	for i, ai := range a.FilePaths {
-		if b.FilePaths[i] != ai {
-			return fmt.Errorf("FilePaths index %d: %s != %s", i, ai, b.FilePaths[i])
+	for i, j := range got {
+		if diff := compareJob(jobs.set[i], j); diff != "" {
+			t.Errorf("job %d mismatch (-want +got):\n%s", i, diff)
 		}
 	}
 
-	if a.Publish != b.Publish {
-		return fmt.Errorf("Publish: %t != %t", a.Publish, b.Publish)
-	}
-	if a.Strict != b.Strict {
-		return fmt.Errorf("Strict: %t != %t", a.Strict, b.Strict)
-	}
-	if a.Force != b.Force {
-		return fmt.Errorf("ConvertFormatToPrev: %t != %t", a.Force, b.Force)
-	}
-	if a.ConvertFormatToPrev != b.ConvertFormatToPrev {
-		return fmt.Errorf("ConvertFormatToPrev: %t != %t", a.ConvertFormatToPrev, b.ConvertFormatToPrev)
-	}
-	if a.ShouldRender != b.ShouldRender {
-		return fmt.Errorf("ShouldRender: %t != %t", a.ShouldRender, b.ShouldRender)
-	}
-
-	if err := compareMapStringString(a.Config, b.Config); err != nil {
-		return fmt.Errorf("Config: %s", err)
-	}
-	if err := compareMapStringString(a.Secrets, b.Secrets); err != nil {
-		return fmt.Errorf("Secrets: %s", err)
-	}
-
-	return nil
-}
-
-func compareMapStringString(a, b map[string]string) error {
-	if a == nil && b != nil || a != nil && b == nil {
-		return fmt.Errorf("nil mismatch: %v != %v", a, b)
-	} else if a == nil && b == nil {
-		return nil
-	}
-
-	if len(a) != len(b) {
-		return fmt.Errorf("length: %d != %d", len(a), len(b))
-	}
-
-	for k, v := range a {
-		if v != b[k] {
-			return fmt.Errorf("map key %s: %s != %s", k, v, b[k])
-		}
-	}
-
-	return nil
 }
