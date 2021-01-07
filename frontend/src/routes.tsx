@@ -7,6 +7,7 @@ import TemplateList from './features/template/TemplateList';
 import DatasetEditor from './features/editor/DatasetEditor';
 import ChangeReport from './features/changes/ChangeReport';
 import NotificationList from './features/notification/NotificationList';
+import NotificationSettings from './features/notification/NotificationSettings';
 import Login from './features/session/Login';
 import Signup from './features/session/Signup';
 import Splash from './features/splash/Splash';
@@ -32,6 +33,7 @@ export default function Routes () {
         <Route path='/changes'><ChangeReport /></Route>
 
         <Route path='/notifications'><NotificationList /></Route>
+        <Route path='/notification_settings'><NotificationSettings /></Route>
 
         <Route path='/'><Splash /></Route>
       </Switch>
