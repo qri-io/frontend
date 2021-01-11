@@ -73,6 +73,10 @@ workflows:
       - frontend-image-push:
           requires:
             - frontend-test
+          filters:
+            branches:
+              only:
+                - master
       - frontend-prod-deploy:
           requires:
             - frontend-image-push
