@@ -1,82 +1,26 @@
-version: 2.1
-orbs:
-  gke: circleci/gcp-gke@1.1.0
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
 jobs:
-  frontend-test:
+  build:
     docker:
-      - image: circleci/node:14.15
+      # specify the version
+      - image: circleci/golang:1.15
 
-    working_directory: ~/repo/frontend
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
 
-    steps:
-    - checkout:
-        path: ~/repo
-    - run:
-        name: Check for changes
-        command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo/frontend
-    - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-    - run:
-        name: Install Dependencies
-        command: yarn install
-    - save_cache:
-        paths:
-          - node_modules
-        key: v1-dependencies-{{ checksum "package.json" }}
-    # compile typescript
-    - run:
-        name: Compile Typescript
-        command: yarn build
-    # run tests!
-    - run:
-        name: Run Test Suite
-        command: yarn test
-
-  frontend-image-push:
-    docker:
-      - image: google/cloud-sdk
-
-    working_directory: /root/project/frontend
-
-    steps:
-    - checkout:
-        path: /root/project
-    - run:
-        name: Install node
-        command: curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -y nodejs build-essential
-      # allows docker commands
-    - setup_remote_docker
-    - run:
-        name: Build docker image
-        command: docker build --rm=false -t gcr.io/qri-io/qrimatic-fe:$CIRCLE_SHA1 .
-    - run:
-        name: Push image to Google Container Registry, add 'latest' tag
-        command: ../.circleci/publish_to_gcr.sh gcr.io/qri-io/qrimatic-fe $CIRCLE_SHA1
-  
-  frontend-prod-deploy:
+    #### TEMPLATE_NOTE: go expects specific checkout path representing url
+    #### expecting it in the form of
+    ####   /go/src/github.com/circleci/go-tool
+    ####   /go/src/bitbucket.org/circleci/go-tool
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     steps:
       - checkout
-      - gke/install
-      - gke/init
-      - gke/rollout-image:
-            deployment: qm-prod-qrimatic-fe
-            container: qrimatic-fe
-            image: gcr.io/qri-io/qrimatic-fe:$CIRCLE_SHA1
 
-workflows:
-  frontend:
-    jobs:
-      - frontend-test
-      - frontend-image-push:
-          requires:
-            - frontend-test
-      - frontend-prod-deploy:
-          requires:
-            - frontend-image-push
-          filters:
-            branches:
-              only:
-                - master
+      # specify any bash command here prefixed with `run: `
+      - run: go get -v -t -d ./...
+      - run: go test -v ./...
