@@ -12,9 +12,9 @@ jobs:
     steps:
     - checkout:
         path: ~/repo
-    # - run:
-    #     name: Check for changes
-    #     command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo/frontend
+    - run:
+        name: Check for changes
+        command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo/frontend
     - restore_cache:
         keys:
           - v1-dependencies-{{ checksum "package.json" }}
@@ -62,8 +62,12 @@ jobs:
     steps:
       - checkout
       - gcp-gke/install
-      - run: gcp-gke/update-kubeconfig-with-credentials
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: qri-cloud-prod-cluster
+          install-kubectl: true
+          perform-login: true
       - gcp-gke/rollout-image:
+          namespace: qrimatic
           cluster: qri-cloud-prod-cluster
           deployment: qm-prod-qrimatic-fe
           container: qrimatic-fe
