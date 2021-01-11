@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
-  gke: circleci/gcp-gke@1.1.0
+  gcp-gke: circleci/gcp-gke@1.1.0
+
 jobs:
   frontend-test:
     docker:
@@ -57,14 +58,16 @@ jobs:
         command: ../.circleci/publish_to_gcr.sh gcr.io/qri-io/qrimatic-fe $CIRCLE_SHA1
   
   frontend-prod-deploy:
+    machine: true
     steps:
       - checkout
-      - gke/install
-      - gke/init
-      - gke/rollout-image:
-            deployment: qm-prod-qrimatic-fe
-            container: qrimatic-fe
-            image: gcr.io/qri-io/qrimatic-fe:$CIRCLE_SHA1
+      - gcp-gke/install
+      - gcp-gke/rollout-image:
+          cluster: qri-cloud-prod-cluster
+          deployment: qm-prod-qrimatic-fe
+          container: qrimatic-fe
+          image: gcr.io/qri-io/qrimatic-fe
+          tag: $CIRCLE_SHA1
 
 workflows:
   frontend:
