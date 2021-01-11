@@ -12,9 +12,9 @@ jobs:
     steps:
     - checkout:
         path: ~/repo
-    - run:
-        name: Check for changes
-        command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo/frontend
+    # - run:
+    #     name: Check for changes
+    #     command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo/frontend
     - restore_cache:
         keys:
           - v1-dependencies-{{ checksum "package.json" }}
