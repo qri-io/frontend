@@ -62,6 +62,7 @@ jobs:
     steps:
       - checkout
       - gcp-gke/install
+      - run: gcp-gke/update-kubeconfig-with-credentials
       - gcp-gke/rollout-image:
           cluster: qri-cloud-prod-cluster
           deployment: qm-prod-qrimatic-fe
