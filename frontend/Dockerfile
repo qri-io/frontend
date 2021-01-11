@@ -1,4 +1,4 @@
-FROM node:14.15-alpine as build
+FROM node:14.8-alpine as build
 
 # create app directory
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN yarn install
 
 # distribution image, must be the same architecture & OS as build
 # or else node-sass gets angry
-FROM node:14.15-alpine
+FROM node:14.8-alpine
 COPY --from=build /app /
 EXPOSE 8080
 CMD ["yarn", "start"]
