@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import JobList from './features/job/JobList';
 import DatasetList from './features/dataset/DatasetList';
 import TemplateList from './features/template/TemplateList';
-import DatasetEditor from './features/editor/DatasetEditor';
+import WorkflowEditor from './features/workflow/WorkflowEditor';
 import ChangeReport from './features/changes/ChangeReport';
 import NotificationList from './features/notification/NotificationList';
 import NotificationSettings from './features/notification/NotificationSettings';
@@ -22,7 +22,7 @@ export default function Routes () {
         <Route path='/signup'><Signup /></Route>
         <Route path='/login/forgot'><ForgotPassword /></Route>
 
-        <Route path='/datasets/edit'><DatasetEditor /></Route>
+        <Route path='/datasets/workflow'><WorkflowEditor /></Route>
         <Route path='/datasets/new'><TemplateList /></Route>
         <Route path='/datasets'><DatasetList /></Route>
 
