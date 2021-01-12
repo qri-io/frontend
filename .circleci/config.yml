@@ -147,12 +147,12 @@ jobs:
         command: ../.circleci/exit_if_path_not_changed.sh ~/qm/qrimatic
 
   engine-image-push:
-    working_directory: ~/cloud/backend
+    working_directory: ~/qm/qrimatic
     docker:
     - image: google/cloud-sdk
     steps:
     - checkout:
-        path: ~/cloud
+        path: ~/qm/qrimatic
     - setup_remote_docker
     - run:
         name: Build docker image
