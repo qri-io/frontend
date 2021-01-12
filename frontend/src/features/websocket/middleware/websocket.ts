@@ -1,11 +1,11 @@
 import { Dispatch, AnyAction, Store } from 'redux'
 
 import { QriRef } from '../../../qri/ref'
+import { NewEventLogLine } from '../../../qrimatic/eventLog'
 import { RootState } from '../../../store/store'
-// import { fetchWorkingDatasetDetails } from '../actions/api'
 import { jobScheduled, jobUnscheduled, jobStarted, jobStopped } from '../../job/state/jobActions'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
-// import { resetMutationsDataset, resetMutationsStatus } from '../actions/mutations'
+import { runEventLog } from '../../workflow/state/workflowActions'
 
 type DagCompletion = number[]
 
@@ -110,7 +110,12 @@ const middleware = () => {
   const onMessage = (dispatch: Dispatch) => (e: MessageEvent) => {
     try {
       const event = JSON.parse(e.data)
-      console.log(event)
+
+      if (event.type.startsWith("transform:")) {
+        dispatch(runEventLog(NewEventLogLine(event)))
+        return
+      }
+
       switch (event.type) {
         case ETCreatedNewFile:
         case ETModifiedFile:
@@ -163,7 +168,7 @@ const middleware = () => {
           dispatch(jobStopped(event.data))
           break
         default:
-          console.log(`received websocket event: ${event.type}`)
+          // console.log(`received websocket event: ${event.type}`)
       }
     } catch (e) {
       console.log(`error parsing websocket message: ${e}`)

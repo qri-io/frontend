@@ -15,44 +15,48 @@
 // ]
 
 export enum EventLogLineType {
-  LTPrint,
-  LTReference,
-  LTDataset,
-  LTChangeReport,
-  LTHistory,
-  LTProfile,
+  ETDebug = "transform:Debug",
+  ETPrint = "transform:Print",
+  ETWarn = "transform:Warn",
+  ETError = "transform:Error",
+  ETReference = "transform:Reference",
+  ETDataset = "transform:Dataset",
+  ETChangeReport = "transform:ChangeReport",
+  ETHistory = "transform:History",
+  ETProfile = "transform:Profile",
 
-  LTVersionPulled,
-  LTVersionPushed,
-  LTHistoryChanged,
+  ETVersionSaved = "transform:VersionSaved",
+  ETVersionPulled = "transform:VersionPulled",
+  ETVersionPushed = "transform:VersionPushed",
+  ETHistoryChanged = "transform:HistoryChanged",
+  
+  ETTransformStart = "transform:TransformStart",
+  ETTransformStop = "transform:TransformStop",
+  ETTransformSkip = "transform:TransformSkip",
+  ETTransformStepStart = "transform:TransformStepStart",
+  ETTransformStepStop = "transform:TransformStepStop",
+  ETTransformStepSkip = "transform:TransformStepSkip",
 
-  LTTransformStart,
-  LTTransformStop,
-  LTTransformSkip,
-  LTTransformStepStart,
-  LTTransformStepStop,
-  LTTransformStepSkip,
-
-  LTHttpRequestStart,
-  LTHttpRequestStop,
+  ETHttpRequestStart = "transform:HttpRequestStart",
+  ETHttpRequestStop = "transform:HttpRequestStop",
 }
 
 export interface EventLogLine {
-  t: EventLogLineType
-  ts: Date
+  type: EventLogLineType
+  ts: number
   sid: string
-  p: Record<string,any>
+  data: Record<string,any>
 }
 
-export function NewLogEvent(data: Record<string,any>): EventLogLine {
+export function NewEventLogLine(data: Record<string,any>): EventLogLine {
   return {
-    t: data.t,
-    ts: new Date(data.ts),
+    type: data.type,
+    ts: data.ts,
     sid: data.sid,
-    p: data.p
+    data: data.data
   }
 }
 
-export function NewLogEvents(data: Record<string,any>[]): EventLogLine[] {
-  return data.map(NewLogEvent)
+export function NewEventLogLines(data: Record<string,any>[]): EventLogLine[] {
+  return data.map(NewEventLogLine)
 }

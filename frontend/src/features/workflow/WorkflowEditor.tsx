@@ -1,52 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import WorkflowCell from './WorkflowCell';
-import { NewRunFromEventLog, NewRunStep, Run, RunState, RunStep } from '../../qrimatic/run';
-import { NewWorkflow, Workflow, WorkflowStep } from '../../qrimatic/workflow';
-import { EventLogLineType, NewLogEvents } from '../../qrimatic/eventLog';
-
-const initialState: WorkflowEditorProps = {
-  workflow: NewWorkflow({
-    datasetID: 'fake_id',
-    triggers: [
-      { type: 'cron', value: 'R/PT1H' }
-    ],
-    steps: [
-      { type: 'starlark', name: 'setup', value: `load("http", "http")\nds_presidents = load_ds("rico/famous_presidents")` },
-      { type: 'starlark', name: 'download', value: `def download(ctx):\n\treturn http.get("https://fed.gov/presidents").json` },
-      { type: 'starlark', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body(ctx.download)' },
-      { type: 'save', name: 'save', value: '' }
-    ],
-    onCompletion: [
-      { type: 'push', value: 'https://registry.qri.cloud' },
-    ]
-  })
-}
-
-const logLines = NewLogEvents([
-  { "t": EventLogLineType.LTTransformStart,        "ts": "2021-01-01T00:00:00Z", "sid": "aaaa", "p": {"id": "aaaa" }},
-  { "t": EventLogLineType.LTTransformStepStart,   "ts": "2021-01-01T00:00:01Z", "sid": "aaaa", "p": {"name": "setup" }},
-  { "t": EventLogLineType.LTVersionPulled,           "ts": "2021-01-01T00:00:10Z", "sid": "aaaa", "p": {"refstring": "rico/presidents@QmFoo", "remote": "https://registy.qri.cloud" }},
-  { "t": EventLogLineType.LTTransformStepStop,     "ts": "2021-01-01T00:00:01Z", "sid": "aaaa", "p": {"name": "setup", "status": "succeeded" }},
-  { "t": EventLogLineType.LTTransformStepStart,   "ts": "2021-01-01T00:00:01Z", "sid": "aaaa", "p": {"name": "download" }},
-  { "t": EventLogLineType.LTPrint,                   "ts": "2021-01-01T00:00:20Z", "sid": "aaaa", "p": {"msg": "oh hai there" }},
-  { "t": EventLogLineType.LTHttpRequestStop, "ts": "2021-01-01T00:00:20Z", "sid": "aaaa", "p": {"size": 230409, "method": "GET", "url": "https://registy.qri.cloud" }},
-  { "t": EventLogLineType.LTTransformStepStop,    "ts": "2021-01-01T00:00:21Z", "sid": "aaaa", "p": {"name": "download", "status": "succeeded" }},
-  { "t": EventLogLineType.LTTransformStepStart,   "ts": "2021-01-01T00:00:21Z", "sid": "aaaa", "p": {"name": "transform" }},
-  { "t": EventLogLineType.LTTransformStepStop,    "ts": "2021-01-01T00:00:22Z", "sid": "aaaa", "p": {"name": "transform", "status": "failed", "error": "oh shit. it broke." }},
-  { "t": EventLogLineType.LTTransformStepSkip,   "ts": "2021-01-01T00:00:22Z", "sid": "aaaa", "p": {"name": "save" }},
-  { "t": EventLogLineType.LTTransformStop,        "ts": "2021-01-01T00:01:00Z", "sid": "aaaa", "p": {"status": "failed" }}
-])
-
-export interface WorkflowEditorProps {
-  workflow: Workflow
-  run?: Run
-}
+import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
+import { WorkflowStep } from '../../qrimatic/workflow';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLatestRun, selectWorkflow } from './state/workflowState';
+import { changeWorkflowStep, runWorkflow } from './state/workflowActions';
 
 const WorkflowEditor: React.FC<any> = () => {
-  const [state, setState] = useState(initialState)
-  const [running, setRunning] = useState(false)
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
+  const workflow = useSelector(selectWorkflow)
+  const latestRun = useSelector(selectLatestRun)
+  const dispatch = useDispatch()
+  const running = latestRun ? (latestRun.status === 'running') : false
 
   const collapseState = (step: WorkflowStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
     if (collapseStates[step.name]) {
@@ -68,25 +34,6 @@ const WorkflowEditor: React.FC<any> = () => {
     return 'all'
   }
 
-  useEffect(() => {
-    if (running) {
-      let i = 0
-      const timer = setInterval(() => {
-        i++
-        setState({
-          workflow: state.workflow,
-          run: NewRunFromEventLog("aaaa", logLines.slice(0,i)),
-        })
-        if (i === logLines.length) {
-          console.log('done running')
-          clearInterval(timer)
-          setRunning(false)
-          i = 0
-        }
-      }, 1000)
-    }
-  }, [running, state.workflow])
-
   return (
     <div className='container mx-auto py-10 text-left'>
       <hr className='border-solid border-gray-200 mx-4' />
@@ -101,13 +48,14 @@ const WorkflowEditor: React.FC<any> = () => {
       <section className='py-5'>
         <h2 className='text-2xl font-semibold text-gray-600'>Script</h2>
         <div>
-          {state.workflow.steps && state.workflow.steps.map((step, i) => {
+          {workflow.steps && workflow.steps.map((step, i) => {
             let run
-            if (state.run) {
-              run = (state.run.steps && state.run.steps.length >= i) ? state.run.steps[i] : NewRunStep({ status: RunState.waiting })
+            if (latestRun) {
+              run = (latestRun?.steps && latestRun?.steps.length >= i) ? latestRun.steps[i] : NewRunStep({ status: RunState.waiting })
             }
             return (<WorkflowCell 
               key={i}
+              index={i}
               step={step}
               run={run}
               collapseState={collapseState(step, run)}
@@ -116,6 +64,11 @@ const WorkflowEditor: React.FC<any> = () => {
                 update[step.name] = v
                 console.log(update)
                 setCollapseStates(update)
+              }}
+              onChangeValue={(i:number, v:string) => {
+                if (workflow && workflow.steps) {
+                  dispatch(changeWorkflowStep(i,v))
+                }
               }}
             />)
           })}
@@ -132,7 +85,11 @@ const WorkflowEditor: React.FC<any> = () => {
             if (!running) {
               setCollapseStates({})
             }
-            setRunning(!running)
+            if (!running) {
+              dispatch(runWorkflow(workflow))
+            } else {
+              alert('cancelling a workflow isn\'t wired up yet')
+            }
           }}
         >{running ? 'Cancel' : 'Run' }</button>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { EventLogLine } from '../../qrimatic/eventLog'
+import { EventLogLine, EventLogLineType } from '../../qrimatic/eventLog'
+import LogLinePrint from './LogLinePrint'
 
 export interface OutputProps {
   data?: EventLogLine[]
@@ -11,10 +12,19 @@ const Output: React.FC<OutputProps> = ({ data }) => {
   }
 
   return (
-    <div className='text-sm font-mono mt-2 py-3 px-3 rounded-sm bg-gray-100'>
-      {JSON.stringify(data, undefined, 2)}
-    </div>
-  )
+  <div className='text-sm font-mono mt-2 py-3 px-3 rounded-sm bg-gray-100'>
+    {data.map((line, i) => {
+      switch (line.type) {
+        case EventLogLineType.ETPrint:
+        case EventLogLineType.ETDebug:
+        case EventLogLineType.ETError:
+        case EventLogLineType.ETWarn:
+          return <LogLinePrint key={i} line={line} />
+        default:
+          return <p key={i}>{JSON.stringify(line, undefined, 2)}</p>
+      }
+    })}
+  </div>)
 }
 
 export default Output
