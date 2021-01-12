@@ -152,7 +152,7 @@ jobs:
     - image: google/cloud-sdk
     steps:
     - checkout:
-        path: ~/qm/qrimatic
+        path: ~/qm
     - setup_remote_docker
     - run:
         name: Build docker image
