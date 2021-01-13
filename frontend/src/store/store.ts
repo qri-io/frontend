@@ -8,6 +8,7 @@ import transfersReducer from '../features/transfer/state/transferState';
 import { apiMiddleware } from './api';
 import { RemoteEvents, websocketMiddleware } from '../features/websocket/middleware/websocket';
 import { workflowReducer, WorkflowState } from '../features/workflow/state/workflowState';
+import { AppState, appReducer } from '../features/app/state/appState';
 
 export const history = createBrowserHistory()
 
@@ -16,6 +17,7 @@ export interface RootState {
   jobs: JobState
   workflow: WorkflowState
   transfers: RemoteEvents
+  app: AppState
 }
 
 const rootReducer = (h: History) => combineReducers({
@@ -26,6 +28,7 @@ const rootReducer = (h: History) => combineReducers({
   jobs: jobsReducer,
   transfers: transfersReducer,
   workflow: workflowReducer,
+  app: appReducer,
 })
 
 export function configureStore(preloadedState?: any) {

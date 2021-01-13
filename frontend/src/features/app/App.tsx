@@ -1,15 +1,17 @@
 import React from 'react';
 import { ConnectedRouter } from 'connected-react-router'
 
-import { history } from './store/store'
-import Routes from './routes'
+import { history } from '../../store/store'
+import Routes from '../../routes'
 import './App.css';
-import NavBar from './chrome/NavBar'
+import NavBar from '../../chrome/NavBar'
+import Modal from './Modal'
 
 function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <ConnectedRouter history={history}>
+        <Modal />
         <NavBar />
         <Routes />
       </ConnectedRouter>

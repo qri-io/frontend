@@ -6,8 +6,9 @@ import { WorkflowStep } from '../../qrimatic/workflow';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
 import { changeWorkflowStep, runWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
-
 import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
+import { showModal } from '../app/state/appActions';
+import { AppModalType } from '../app/state/appState';
 
 const WorkflowEditor: React.FC<any> = () => {
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
@@ -42,7 +43,7 @@ const WorkflowEditor: React.FC<any> = () => {
       <section className='py-5'>
         <h2 className='text-2xl font-semibold text-gray-600'>Triggers</h2>
         <div className='py-5 grid grid-cols-5'>
-          <div className='bg-gray-200 px-3 py-3 rounded-md'>
+          <div className='bg-gray-200 px-3 py-3 rounded-md' onClick={() => { dispatch(showModal(AppModalType.schedulePicker)) }}>
             <p>Every night at 11:30pm</p>
           </div>
         </div>
