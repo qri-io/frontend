@@ -53,3 +53,16 @@ export function NewWorkflowHook(data: Record<string,any>): WorkflowHook {
     value: data.value
   }
 }
+
+export function workflowScriptString(w: Workflow): string {
+  if (!w.steps) { 
+    return ''
+  }
+
+  return w.steps.reduce((str, step) => {
+    if (step.type === 'starlark') {
+      return str + `${step.value}\n`
+    }
+    return str
+  }, '')
+}

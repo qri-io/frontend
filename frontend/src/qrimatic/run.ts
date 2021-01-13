@@ -26,7 +26,12 @@ export function NewRun(data: Record<string,any>): Run {
   }
 }
 
+export function NewRunFromEventLog(runID: string, log: EventLogLine[]): Run {
+  return log.reduce(runAddLogStep, NewRun({ id: runID }))
+}
+
 export interface RunStep {
+  name: string
   status: RunState
   startTime?: Date
   stopTime?: Date
@@ -36,6 +41,7 @@ export interface RunStep {
 
 export function NewRunStep(data: Record<string, any>): RunStep {
   return {
+    name: data.name,
     status: data.status,
     startTime: data.started,
     stopTime: data.stopped,
@@ -44,56 +50,59 @@ export function NewRunStep(data: Record<string, any>): RunStep {
   }
 }
 
-export function NewRunFromEventLog(runID: string, log: EventLogLine[]): Run {
-  return log.reduce(runAddLogStep, NewRun({ id: runID }))
-}
 
 export function runAddLogStep(run: Run, line: EventLogLine): Run {
   if (run.id !== line.sid) {
     return run
   }
 
-  switch (line.t) {
-    case EventLogLineType.LTTransformStart:
+  switch (line.type) {
+    case EventLogLineType.ETTransformStart:
       run.status = RunState.running
-      run.startTime = line.ts
-      run.id = line.p && line.p.id
+      run.startTime = new Date(line.ts / 1000)
       break;
-    case EventLogLineType.LTTransformStop:
-      run.status = line.p.status || RunState.failed
-      run.stopTime = line.ts
+    case EventLogLineType.ETTransformStop:
+      run.status = line.data.status || RunState.failed
+      run.stopTime = new Date(line.ts / 1000)
       break;
-    case EventLogLineType.LTTransformSkip:
+    case EventLogLineType.ETTransformSkip:
       // TODO (b5)
       break;
 
-    case EventLogLineType.LTTransformStepStart:
+    case EventLogLineType.ETTransformStepStart:
       if (run.steps === undefined) {
         run.steps = []
       }
-      const s = NewRunStep(line.p)
+      const s = NewRunStep(line.data)
       s.status = RunState.running
-      s.startTime = line.ts
+      s.startTime = new Date(line.ts / 1000)
       run.steps.push(s)
       break;
-    case EventLogLineType.LTTransformStepStop:
+    case EventLogLineType.ETTransformStepStop:
       const step = lastStep(run)
       if (step) {
-        step.stopTime = line.ts
-        step.status = line.p.status || RunState.failed
+        step.stopTime = new Date(line.ts / 1000)
+        step.status = line.data.status || RunState.failed
       }
       break;
-    case EventLogLineType.LTTransformStepSkip:
+    case EventLogLineType.ETTransformStepSkip:
       if (run.steps === undefined) {
         run.steps = []
       }
-      run.steps.push(NewRunStep(line.p))
+      run.steps.push(NewRunStep(line.data))
       break;
 
-    case EventLogLineType.LTPrint:
-    case EventLogLineType.LTDataset:
-    case EventLogLineType.LTHttpRequestStop:
-    case EventLogLineType.LTVersionPulled:
+    case EventLogLineType.ETDebug:
+    case EventLogLineType.ETPrint:
+    case EventLogLineType.ETWarn:
+    case EventLogLineType.ETError:
+    case EventLogLineType.ETReference:
+    case EventLogLineType.ETDataset:
+    case EventLogLineType.ETChangeReport:
+    case EventLogLineType.ETHistory:
+    case EventLogLineType.ETProfile:
+    case EventLogLineType.ETHttpRequestStop:
+    case EventLogLineType.ETVersionPulled:
       appendStepOutputLog(run, line)
       break;
   }
