@@ -9,7 +9,7 @@ interface RelativeTimestampProps {
 const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({ timestamp }) => (
   <span
     className='relative-timestamp'
-    title={format(timestamp, 'MMM D YYYY, h:mm A zz')}
+    title={format(timestamp, 'MMM d yyyy, h:mm zz')}
   >
     {formatDistanceToNow(timestamp)}
   </span>

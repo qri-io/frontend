@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
 import ReactTooltip from 'react-tooltip'
+import { Link } from 'react-router-dom'
 
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 // import StatusIcons from './StatusIcons'
@@ -80,7 +81,7 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       selector: 'name',
       sortable: true,
       grow: 2,
-      cell: (row: VersionInfo) => `${row.username}/${row.name}`
+      cell: (row: VersionInfo) => <Link to={`/ds/${row.username}/${row.name}`}>{row.username}/{row.name}</Link>
     },
     {
       name: 'updated',

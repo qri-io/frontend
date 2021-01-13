@@ -38,8 +38,7 @@ const WorkflowEditor: React.FC<any> = () => {
   }
 
   return (
-    <div className='container mx-auto py-10 text-left'>
-      <hr className='border-solid border-gray-200 mx-4' />
+    <div className='container mx-auto pt-5 pb-10 text-left'>
       <section className='py-5'>
         <h2 className='text-2xl font-semibold text-gray-600'>Triggers</h2>
         <div className='py-5 grid grid-cols-5'>

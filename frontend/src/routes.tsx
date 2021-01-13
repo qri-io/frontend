@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom'
 
 import JobList from './features/job/JobList';
 import TemplateList from './features/template/TemplateList';
-import WorkflowEditor from './features/workflow/WorkflowEditor';
 import ChangeReport from './features/changes/ChangeReport';
 import NotificationList from './features/notification/NotificationList';
 import NotificationSettings from './features/notification/NotificationSettings';
@@ -13,6 +12,7 @@ import Splash from './features/splash/Splash';
 import ForgotPassword from './features/session/ForgotPassword';
 import Run from './features/run/Run';
 import Collection from './features/collection/Collection';
+import Dataset from './features/dataset/Dataset';
 
 export default function Routes () {
   return (
@@ -22,14 +22,13 @@ export default function Routes () {
         <Route path='/signup'><Signup /></Route>
         <Route path='/login/forgot'><ForgotPassword /></Route>
 
-        <Route path='/datasets/workflow'><WorkflowEditor /></Route>
-        <Route path='/datasets/new'><TemplateList /></Route>
         <Route path='/collection'><Collection /></Route>
 
+        <Route path='/ds/new'><TemplateList /></Route>
+        <Route path='/ds/:username/:name'><Dataset /></Route>
+
         <Route path='/run'><Run /></Route>
-
         <Route path='/jobs'><JobList /></Route>
-
         <Route path='/changes'><ChangeReport /></Route>
 
         <Route path='/notifications'><NotificationList /></Route>
