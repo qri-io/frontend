@@ -5,7 +5,9 @@ import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
 import { WorkflowStep } from '../../qrimatic/workflow';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
-import { changeWorkflowStep, runWorkflow } from './state/workflowActions';
+import { changeWorkflowStep, runWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
+
+import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
 
 const WorkflowEditor: React.FC<any> = () => {
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
@@ -92,6 +94,32 @@ const WorkflowEditor: React.FC<any> = () => {
             }
           }}
         >{running ? 'Cancel' : 'Run' }</button>
+        <button
+          className='py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-300'
+          onClick={() => { 
+            if (!running) {
+              setCollapseStates({})
+            }
+            if (!running) {
+              dispatch(tempSetWorkflowEvents("aaaa", NewEventLogLines(eventLogWithError)))
+            } else {
+              alert('cancelling a workflow isn\'t wired up yet')
+            }
+          }}
+        >{running ? 'Cancel' : 'Run with Errors' }</button>
+        <button
+          className='py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-300'
+          onClick={() => { 
+            if (!running) {
+              setCollapseStates({})
+            }
+            if (!running) {
+              dispatch(tempSetWorkflowEvents("bbbb", NewEventLogLines(eventLogSuccess)))
+            } else {
+              alert('cancelling a workflow isn\'t wired up yet')
+            }
+          }}
+        >{running ? 'Cancel' : 'Run with dataset' }</button>
       </div>
     </div>
   )

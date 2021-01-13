@@ -9,6 +9,10 @@ import { stat } from 'fs';
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_STEP = 'WORKFLOW_CHANGE_STEP'
 
+// temp action used to work around the api, auto sets the events
+// of the workflow without having to have a working api
+export const TEMP_SET_WORKFLOW_EVENTS = 'TEMP_SET_WORKFLOW_EVENTS'
+
 export const selectLatestRun = (state: RootState): Run | undefined => {
   if (state.workflow.lastRunID) {
     console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
@@ -49,6 +53,12 @@ export const workflowReducer = createReducer(initialState, {
   'API_RUN_WORKFLOW_SUCCESS': (state, action) => {
     const runID = action.payload.data.runID
     state.lastRunID = runID
+  },
+  // temp action used to work around the api, auto sets the events
+  // of the workflow without having to have a working api
+  TEMP_SET_WORKFLOW_EVENTS: (state, action) => {
+    state.events = action.events
+    state.lastRunID = action.id
   },
   WORKFLOW_CHANGE_STEP: changeWorkflowStep,
   RUN_EVENT_LOG: addRunEvent,
