@@ -2,7 +2,6 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import JobList from './features/job/JobList';
-import DatasetList from './features/dataset/DatasetList';
 import TemplateList from './features/template/TemplateList';
 import WorkflowEditor from './features/workflow/WorkflowEditor';
 import ChangeReport from './features/changes/ChangeReport';
@@ -13,6 +12,7 @@ import Signup from './features/session/Signup';
 import Splash from './features/splash/Splash';
 import ForgotPassword from './features/session/ForgotPassword';
 import Run from './features/run/Run';
+import Collection from './features/collection/Collection';
 
 export default function Routes () {
   return (
@@ -24,7 +24,7 @@ export default function Routes () {
 
         <Route path='/datasets/workflow'><WorkflowEditor /></Route>
         <Route path='/datasets/new'><TemplateList /></Route>
-        <Route path='/datasets'><DatasetList /></Route>
+        <Route path='/collection'><Collection /></Route>
 
         <Route path='/run'><Run /></Route>
 
