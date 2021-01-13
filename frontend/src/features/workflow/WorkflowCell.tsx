@@ -30,6 +30,9 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
     case 'starlark':
       editor = <CodeEditor value={value} onChange={(v) => { onChangeValue(index, v) }} disabled={!!run} />
       break;
+    case 'save':
+      editor = <></>
+      break;
     default:
       editor = <p>unknown editor for '{type}' workflow step</p>
   }

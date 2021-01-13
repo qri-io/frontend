@@ -92,8 +92,15 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
       run.steps.push(NewRunStep(line.data))
       break;
 
+    case EventLogLineType.ETDebug:
     case EventLogLineType.ETPrint:
+    case EventLogLineType.ETWarn:
+    case EventLogLineType.ETError:
+    case EventLogLineType.ETReference:
     case EventLogLineType.ETDataset:
+    case EventLogLineType.ETChangeReport:
+    case EventLogLineType.ETHistory:
+    case EventLogLineType.ETProfile:
     case EventLogLineType.ETHttpRequestStop:
     case EventLogLineType.ETVersionPulled:
       appendStepOutputLog(run, line)
