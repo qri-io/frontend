@@ -1,30 +1,39 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+const templates = [
+  {
+    name: 'CSV Download'
+  },
+  {
+    name: 'API Call'
+  },
+  {
+    name: 'Database Query'
+  },
+  {
+    name: 'Web Scrape'
+  }
+]
+
 const TemplateList: React.FC<any> = () => {
   return (
-    <div className='text-left p-10'>
+    <div className='text-left p-10 max-w-screen-md mx-auto'>
       <h1 className='text-black text-xl'>New Dataset</h1>
-      <p>Choose a template:</p>
+      <p>Choose a template</p>
       <br />
-      <div className='w-16 text-lg text-bold flex flex-col'>
-        <div>
-          <Link to='/datasets/edit'>
-            <h3>API Call</h3>
-          </Link>
-        </div>
-        <br />
-        <div>
-          <Link to='/datasets/edit'>
-            <h3>Database Query</h3>
-          </Link>
-        </div>
-        <br />
-        <div>
-          <Link to='/datasets/edit'>
-            <h3>Web Scrape</h3>
-          </Link>
-        </div>
+      <div className='text-lg text-bold flex flex-wrap -mx-2 overflow-hidden'>
+        {
+          templates.map(({ name }) => (
+            <div className='my-2 px-2 overflow-hidden w-full md:w-1/2 lg:w-1/3 xl:w-1/3'>
+              <Link to='/datasets/edit'>
+                <div className='border border-gray-300 hover:border-blue-500 rounded bg-white text-sm p-10 text-center'>
+                    <h3>{name}</h3>
+                </div>
+              </Link>
+            </div>
+          ))
+        }
       </div>
     </div>
   )
