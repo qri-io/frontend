@@ -9,6 +9,8 @@ import { apiMiddleware } from './api';
 import { RemoteEvents, websocketMiddleware } from '../features/websocket/middleware/websocket';
 import { workflowReducer, WorkflowState } from '../features/workflow/state/workflowState';
 import { AppState, appReducer } from '../features/app/state/appState';
+import { CollectionState, collectionReducer } from '../features/collection/state/collectionState';
+import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
 
 export const history = createBrowserHistory()
 
@@ -18,6 +20,8 @@ export interface RootState {
   workflow: WorkflowState
   transfers: RemoteEvents
   app: AppState
+  collection: CollectionState
+  dataset: DatasetState
 }
 
 const rootReducer = (h: History) => combineReducers({
@@ -29,6 +33,8 @@ const rootReducer = (h: History) => combineReducers({
   transfers: transfersReducer,
   workflow: workflowReducer,
   app: appReducer,
+  collection: collectionReducer,
+  dataset: datasetReducer,
 })
 
 export function configureStore(preloadedState?: any) {

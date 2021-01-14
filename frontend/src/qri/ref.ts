@@ -36,8 +36,6 @@
 // 1. an alias reference string: [username]/[name]/at[path]/[selector]
 // 2. an "identifier reference string: [identifier]/at[path]/[selector]
 export interface QriRef {
-  // string this ref parsed from
-  location?: string
   // human-readble name of the owner of this dataset
   username: string
   // user identifier
@@ -50,6 +48,17 @@ export interface QriRef {
   component?: string
   // address into dataset structure
   selector?: string
+}
+
+export function newQriRef(d: Record<string,any>): QriRef {
+  return {
+    username: d.username || d.peername,
+    profileId: d.profileId,
+    name: d.name,
+    path: d.path,
+    component: d.component,
+    selector: d.selector,
+  }
 }
 
 // // qriRefFromRoute parses route props into a Ref
@@ -89,11 +98,12 @@ export function refStringFromQriRef (qriRef: QriRef, useAtSymbol?: boolean): str
 // based on two possible formats for the ref strings:
 // [username]/[name]@/[network]/[path]
 // [username]/[name]
-// if the string does not follow either strict formatting, we return `undefined`
-export function qriRefFromString (refString: string): QriRef | undefined {
+// if the string does not follow either strict formatting, return an empty
+// reference
+export function qriRefFromString (refString: string): QriRef {
   let parts = refString.split('/')
   if (parts.length === 0) {
-    return undefined
+    return { username: '', name: '', }
   }
   if (parts[0] === '/') {
     parts = parts.slice(1)
@@ -108,12 +118,12 @@ export function qriRefFromString (refString: string): QriRef | undefined {
   if (refString.includes('/at/') && parts.length === 5) {
     return { username: parts[0], name: parts[1], path: `/${parts[3]}/${parts[4]}` }
   }
-  return undefined
+  return { username: '', name: '', }
 }
 
 // checks if qriRef has location, username, and name
 export function qriRefIsEmpty (qriRef: QriRef): boolean {
-  return !qriRef.location || qriRef.location === '' || !qriRef.username || qriRef.username === '' || !qriRef.name || qriRef.name === ''
+  return !qriRef.username || qriRef.username === '' || !qriRef.name || qriRef.name === ''
 }
 
 // checks if the two given qriRefs refer to the same dataset
