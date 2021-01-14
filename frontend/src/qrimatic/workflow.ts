@@ -1,7 +1,10 @@
 
 
 export interface Workflow {
+  // id of the workflow
+  id: string
   triggers?: WorkflowTrigger[]
+  // init id of the dataset
   datasetID?: string
   steps?: WorkflowStep[]
   onCompletion?: WorkflowHook[]
@@ -9,6 +12,8 @@ export interface Workflow {
 
 export function NewWorkflow(data: Record<string,any>): Workflow {
   return {
+    // TODO (ramfox): where/when do we get an id?
+    id: data.id || 'temp_id',
     datasetID: data.datasetID,
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
     steps: data.steps && data.steps.map(NewWorkflowStep),

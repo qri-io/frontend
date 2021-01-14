@@ -1,6 +1,6 @@
 import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import { EventLogAction, SetWorkflowAction, WorkflowAction } from './workflowActions';
+import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
 import { NewWorkflow, Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qrimatic/eventLog';
@@ -15,7 +15,7 @@ export const TEMP_SET_WORKFLOW_EVENTS = 'TEMP_SET_WORKFLOW_EVENTS'
 
 export const selectLatestRun = (state: RootState): Run | undefined => {
   if (state.workflow.lastRunID) {
-    console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
+    // console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
     return NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events)
   }
   return undefined
@@ -65,7 +65,7 @@ export const workflowReducer = createReducer(initialState, {
   RUN_EVENT_LOG: addRunEvent,
 })
 
-function changeWorkflowStep(state: WorkflowState, action: WorkflowAction) {
+function changeWorkflowStep(state: WorkflowState, action: SetWorkflowStepAction) {
   if (state.workflow.steps) {
     state.workflow.steps[action.index].value = action.value
   }

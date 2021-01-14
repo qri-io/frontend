@@ -1,20 +1,9 @@
 import { Workflow } from '../../qrimatic/workflow'
 
-export enum TemplateType {
-  CSVDownload = 'CSVDownload',
-  APICall = 'APICall',
-  DatabaseQuery = 'DatabaseQuery',
-  Webscrape = 'Webscrape'
-}
-
-export interface ITemplate extends Workflow {
-  type: TemplateType
-}
-
 // TODO (ramfox): need to formalize possible trigger & on completion types
 
-export const CSVDownload:  ITemplate = {
-  type: TemplateType.CSVDownload,
+export const CSVDownload:  Workflow = {
+  id: 'CSVDownload',
   triggers: [{
     // repeat every hour
     type: 'cron',
@@ -31,8 +20,8 @@ export const CSVDownload:  ITemplate = {
   ]
 } 
 
-export const APICall:  ITemplate = {
-  type: TemplateType.APICall,
+export const APICall:  Workflow = {
+  id: 'APICall',
   triggers: [{
     // repeat every hour
     type: 'cron',
@@ -49,8 +38,8 @@ export const APICall:  ITemplate = {
   ]
 } 
 
-export const DatabaseQuery:  ITemplate = {
-  type: TemplateType.DatabaseQuery,
+export const DatabaseQuery:  Workflow = {
+  id: 'DatabaseQuery',
   triggers: [{
     // repeat every hour
     type: 'cron',
@@ -67,8 +56,8 @@ export const DatabaseQuery:  ITemplate = {
   ]
 } 
 
-export const Webscrape:  ITemplate = {
-  type: TemplateType.Webscrape,
+export const Webscrape:  Workflow = {
+  id: 'Webscrape',
   triggers: [{
     // repeat every hour
     type: 'cron',
@@ -85,13 +74,13 @@ export const Webscrape:  ITemplate = {
   ]
 } 
 
-export const Templates: {[key in TemplateType]: ITemplate} = {
-  [TemplateType.CSVDownload]: CSVDownload,
-  [TemplateType.APICall]: APICall,
-  [TemplateType.DatabaseQuery]: DatabaseQuery,
-  [TemplateType.Webscrape]: Webscrape
+export const Templates: Record<string, Workflow> = {
+  'CSVDownload': CSVDownload,
+  'APICall': APICall,
+  'DatabaseQuery': DatabaseQuery,
+  'Webscrape': Webscrape
 }
 
-export function selectTemplate(templateType: TemplateType): ITemplate {
-  return Templates[templateType]
+export function selectTemplate(id: string): Workflow {
+  return Templates[id]
 }

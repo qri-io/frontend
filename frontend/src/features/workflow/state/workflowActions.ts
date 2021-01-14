@@ -9,13 +9,13 @@ import {
  } from './workflowState'
 
 
-export interface WorkflowAction {
+export interface SetWorkflowStepAction {
   type: string
   index: number
   value: string
 }
 
-export function changeWorkflowStep(index: number, value: string): WorkflowAction {
+export function changeWorkflowStep(index: number, value: string): SetWorkflowStepAction {
   return {
     type: WORKFLOW_CHANGE_STEP,
     index,

@@ -10,10 +10,10 @@ import { changeWorkflowStep, runWorkflow, setWorkflow, tempSetWorkflowEvents } f
 import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
 import { showModal } from '../app/state/appActions';
 import { AppModalType } from '../app/state/appState';
-import { selectTemplate, TemplateType } from '../template/templates';
+import { selectTemplate } from '../template/templates';
 
 interface WorkflowEditorLocationState {
-  template: TemplateType
+  template: string
 }
 
 const WorkflowEditor: React.FC<any> = () => {
