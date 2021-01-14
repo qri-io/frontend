@@ -7,13 +7,9 @@ export interface OutputProps {
 }
 
 const Output: React.FC<OutputProps> = ({ data }) => {
-  if (!data) {
-    return null
-  }
-
   return (
-  <div className='text-sm font-mono mt-2 py-3 px-3 rounded-sm bg-gray-100'>
-    {data.map((line, i) => {
+  <div className='text-sm font-mono p-2 rounded-sm overflow-auto'>
+    {data && data.map((line, i) => {
       switch (line.type) {
         case EventLogLineType.ETPrint:
         case EventLogLineType.ETDebug:
@@ -24,6 +20,7 @@ const Output: React.FC<OutputProps> = ({ data }) => {
           return <p key={i}>{JSON.stringify(line, undefined, 2)}</p>
       }
     })}
+    &nbsp;
   </div>)
 }
 

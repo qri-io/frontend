@@ -9,9 +9,13 @@ export interface CodeEditorProps {
 const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, disabled }) => {
   return (
     <textarea
-      className={`w-full font-mono bg-white ${disabled && 'text-gray-400'}`}
+      className='w-full font-mono p-2 text-gray-900 bg-gray-200'
       value={value as any as string}
       onChange={(e: any) => { onChange(e.target.value) }}
+      style={{
+        height: 200,
+        verticalAlign: 'top'
+      }}
     />
   )
 }

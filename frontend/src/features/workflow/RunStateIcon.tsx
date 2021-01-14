@@ -6,24 +6,24 @@ export interface RunStateIconProps {
 }
 
 const RunStateIcon: React.FC<RunStateIconProps> = ({ state }) => (
-  <div>
+  <span className='text-sm'> - 
     {((s: RunState) => {
       switch (s) {
         case 'waiting':
-          return <p className='text-gray-500'>{s}</p>
+          return <span className='text-gray-500'>{s}</span>
         case 'running':
-          return <p className='text-blue-500'>{s}</p>
+          return <span className='text-blue-500'>{s}</span>
         case 'succeeded':
-          return <p className='text-green-500'>{s}</p>
+          return <span className='text-green-500'>{s}</span>
         case 'failed':
-          return <p className='text-red-500'>{s}</p>
+          return <span className='text-red-500'>{s}</span>
         case 'skipped':
-          return <p></p>
+          return <span></span>
         default:
-          return <p>{state}</p>
+          return <span>{state}</span>
       }
     })(state)}
-  </div>
+  </span>
 )
 
 export default RunStateIcon
