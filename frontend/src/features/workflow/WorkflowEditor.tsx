@@ -16,6 +16,45 @@ interface WorkflowEditorLocationState {
   template: string
 }
 
+const triggerItems = [
+  {
+    name: 'Run on a Schedule',
+    description: 'Run the workflow every day at 11:30am'
+  },
+  {
+    name: 'Run when another dataset is updated',
+    description: 'The workflow will run whenever b5/world_bank_population is updated'
+  },
+  {
+    name: 'Run with a webhook',
+    description: 'The workflow will run when this webhook is called: https://qrimatic.qri.io/my-dataset'
+  },
+]
+
+const onCompleteItems = [
+  {
+    name: 'Push to Qri Cloud',
+    description: 'If the workflow results in a new version of the dataset, it will be published on qri.cloud'
+  },
+  {
+    name: 'Call Webhook',
+    description: 'If the workflow results in a new version of the dataset, call http://mywebook.com/somewebhook'
+  },
+  {
+    name: 'Email Workflow Report',
+    description: 'Whenever the workflow finishes, email chris@qri.io with a report'
+  }
+]
+
+const GenericItem: React.FC<any> = ({ name, description }) => (
+  <div className='my-2 px-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/3'>
+    <div className='bg-white px-4 py-2 rounded mt-1 border-b border-gray-300 cursor-pointer hover:bg-gray-100'>
+      <div className='font-semibold pb-1'>{name}</div>
+      <div className='text-xs'>{description}</div>
+    </div>
+  </div>
+)
+
 const WorkflowEditor: React.FC<any> = () => {
   const dispatch = useDispatch()
   const location = useLocation<WorkflowEditorLocationState>()
@@ -44,9 +83,9 @@ const WorkflowEditor: React.FC<any> = () => {
         case 'failed':
           return 'all'
         case 'succeeded':
-          return 'collapsed'
+          return 'all'
         default:
-          return 'collapsed'
+          return 'all'
       }
     }
     return 'all'
@@ -54,23 +93,23 @@ const WorkflowEditor: React.FC<any> = () => {
 
   return (
     <div className='container mx-auto pt-5 pb-10 text-left'>
-      <section className='py-5'>
-        <h2 className='text-2xl font-semibold text-gray-600'>Triggers</h2>
-        <div className='py-5 grid grid-cols-5'>
-          <div className='bg-gray-200 px-3 py-3 rounded-md' onClick={() => { dispatch(showModal(AppModalType.schedulePicker)) }}>
-            <p>Every night at 11:30pm</p>
-          </div>
+      <section className='rounded bg-gray-200 p-4 mb-6'>
+        <h2 className='text-2xl font-semibold text-gray-600 mb-3'>Triggers</h2>
+        <div className='text-xs'>Customize your workflow to execute on a schedule, or based on other events</div>
+        <div className='flex flex-wrap -mx-2 overflow-hidden'>
+          {triggerItems.map((d) => (<GenericItem {...d} />))}
         </div>
       </section>
-      <section className='py-5'>
-        <h2 className='text-2xl font-semibold text-gray-600'>Script</h2>
+      <section className='rounded bg-gray-200 p-4 mb-6'>
+        <h2 className='text-2xl font-semibold text-gray-600 mb-3'>Script</h2>
+        <div className='text-xs'>Use code to download source data, transform it, and commit the next version of this dataset</div>
         <div>
           {workflow.steps && workflow.steps.map((step, i) => {
             let run
             if (latestRun) {
               run = (latestRun?.steps && latestRun?.steps.length >= i) ? latestRun.steps[i] : NewRunStep({ status: RunState.waiting })
             }
-            return (<WorkflowCell 
+            return (<WorkflowCell
               key={i}
               index={i}
               step={step}
@@ -91,14 +130,17 @@ const WorkflowEditor: React.FC<any> = () => {
           })}
         </div>
       </section>
-      <section className='py-5'>
-        <h2 className='text-2xl font-semibold text-gray-600'>On Complete</h2>
-        <p>No Hooks</p>
-      </section>
+      <div className='rounded bg-gray-200 p-4 mb-6'>
+        <h2 className='text-2xl font-semibold text-gray-600 mb-3'>On Complete</h2>
+        <div className='text-xs'>Configure actions that will happen when the workflow finishes</div>
+        <div className='flex flex-wrap -mx-2 overflow-hidden'>
+          {onCompleteItems.map((d) => (<GenericItem {...d} />))}
+        </div>
+      </div>
       <div>
         <button
           className='py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-300'
-          onClick={() => { 
+          onClick={() => {
             if (!running) {
               setCollapseStates({})
             }
@@ -111,7 +153,7 @@ const WorkflowEditor: React.FC<any> = () => {
         >{running ? 'Cancel' : 'Run' }</button>
         <button
           className='py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-300'
-          onClick={() => { 
+          onClick={() => {
             if (!running) {
               setCollapseStates({})
             }
@@ -124,7 +166,7 @@ const WorkflowEditor: React.FC<any> = () => {
         >{running ? 'Cancel' : 'Run with Errors' }</button>
         <button
           className='py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-300'
-          onClick={() => { 
+          onClick={() => {
             if (!running) {
               setCollapseStates({})
             }
