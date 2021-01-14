@@ -17,13 +17,14 @@ interface WorkflowEditorLocationState {
 }
 
 const WorkflowEditor: React.FC<any> = () => {
-  const location = useLocation<WorkflowEditorLocationState>()
   const dispatch = useDispatch()
+  const location = useLocation<WorkflowEditorLocationState>()
+  
   useEffect(() => {
     if (location.state && location.state.template) {
       dispatch(setWorkflow(selectTemplate(location.state.template)))
     }
-  }, [])
+  }, [dispatch, location.state])
 
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
   const workflow = useSelector(selectWorkflow)
