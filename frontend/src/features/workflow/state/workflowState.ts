@@ -1,12 +1,13 @@
 import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import { EventLogAction, WorkflowAction } from './workflowActions';
+import { EventLogAction, SetWorkflowAction, WorkflowAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
 import { NewWorkflow, Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qrimatic/eventLog';
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_STEP = 'WORKFLOW_CHANGE_STEP'
+export const SET_WORKFLOW = 'SET_WORKFLOW'
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
@@ -59,6 +60,7 @@ export const workflowReducer = createReducer(initialState, {
     state.events = action.events
     state.lastRunID = action.id
   },
+  SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_STEP: changeWorkflowStep,
   RUN_EVENT_LOG: addRunEvent,
 })
@@ -73,4 +75,10 @@ function changeWorkflowStep(state: WorkflowState, action: WorkflowAction) {
 function addRunEvent(state: WorkflowState, action: EventLogAction) {
   state.events.push(action.data)
   state.events.sort((a,b) => a.ts - b.ts)
+}
+
+function setWorkflow(state: WorkflowState, action: SetWorkflowAction) {
+  state.workflow = action.workflow
+  state.events = []
+  return
 }

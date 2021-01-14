@@ -4,7 +4,8 @@ import { CALL_API, ApiActionThunk } from '../../../store/api'
 import { 
   WORKFLOW_CHANGE_STEP,
   RUN_EVENT_LOG,
-  TEMP_SET_WORKFLOW_EVENTS
+  TEMP_SET_WORKFLOW_EVENTS,
+  SET_WORKFLOW
  } from './workflowState'
 
 
@@ -49,6 +50,18 @@ export function runEventLog(event: EventLogLine): EventLogAction {
   return {
     type: RUN_EVENT_LOG,
     data: event,
+  }
+}
+
+export interface SetWorkflowAction {
+  type: string
+  workflow: Workflow
+}
+
+export function setWorkflow(workflow: Workflow): SetWorkflowAction {
+  return {
+    type: SET_WORKFLOW,
+    workflow
   }
 }
 

@@ -8,6 +8,7 @@ const NavBar: React.FC<any> = () => {
       <div className='w-10'></div>
       <Link className='px-1' to='/collection'>Collection</Link>
       <Link className='px-1' to='/notifications'>Notifications</Link>
+      <Link className='px-1' to='/ds/new'>New Workflow</Link>
     </div>
   )
 }
