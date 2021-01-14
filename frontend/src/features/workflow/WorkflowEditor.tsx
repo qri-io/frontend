@@ -1,20 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 
 import WorkflowCell from './WorkflowCell';
 import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
 import { WorkflowStep } from '../../qrimatic/workflow';
-import { useDispatch, useSelector } from 'react-redux';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
-import { changeWorkflowStep, runWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
+import { changeWorkflowStep, runWorkflow, setWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
 import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
 import { showModal } from '../app/state/appActions';
 import { AppModalType } from '../app/state/appState';
+import { selectTemplate } from '../template/templates';
+
+interface WorkflowEditorLocationState {
+  template: string
+}
 
 const WorkflowEditor: React.FC<any> = () => {
+  const dispatch = useDispatch()
+  const location = useLocation<WorkflowEditorLocationState>()
+  
+  useEffect(() => {
+    if (location.state && location.state.template) {
+      dispatch(setWorkflow(selectTemplate(location.state.template)))
+    }
+  }, [dispatch, location.state])
+
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
   const workflow = useSelector(selectWorkflow)
   const latestRun = useSelector(selectLatestRun)
-  const dispatch = useDispatch()
+
   const running = latestRun ? (latestRun.status === 'running') : false
 
   const collapseState = (step: WorkflowStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {

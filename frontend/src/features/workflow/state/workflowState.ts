@@ -1,12 +1,13 @@
 import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import { EventLogAction, WorkflowAction } from './workflowActions';
+import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
 import { NewWorkflow, Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qrimatic/eventLog';
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_STEP = 'WORKFLOW_CHANGE_STEP'
+export const SET_WORKFLOW = 'SET_WORKFLOW'
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
@@ -14,7 +15,7 @@ export const TEMP_SET_WORKFLOW_EVENTS = 'TEMP_SET_WORKFLOW_EVENTS'
 
 export const selectLatestRun = (state: RootState): Run | undefined => {
   if (state.workflow.lastRunID) {
-    console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
+    // console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
     return NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events)
   }
   return undefined
@@ -59,11 +60,12 @@ export const workflowReducer = createReducer(initialState, {
     state.events = action.events
     state.lastRunID = action.id
   },
+  SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_STEP: changeWorkflowStep,
   RUN_EVENT_LOG: addRunEvent,
 })
 
-function changeWorkflowStep(state: WorkflowState, action: WorkflowAction) {
+function changeWorkflowStep(state: WorkflowState, action: SetWorkflowStepAction) {
   if (state.workflow.steps) {
     state.workflow.steps[action.index].value = action.value
   }
@@ -73,4 +75,10 @@ function changeWorkflowStep(state: WorkflowState, action: WorkflowAction) {
 function addRunEvent(state: WorkflowState, action: EventLogAction) {
   state.events.push(action.data)
   state.events.sort((a,b) => a.ts - b.ts)
+}
+
+function setWorkflow(state: WorkflowState, action: SetWorkflowAction) {
+  state.workflow = action.workflow
+  state.events = []
+  return
 }
