@@ -13,7 +13,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({ qriRef }) => {
         <h3 className='text-xl'>{qriRef.username}/</h3>
         <h1 className='text-3xl font-bold'>{qriRef.name}</h1>
       </div>
-      <div className='flex mt-5 mb-2'>
+      <div className='flex my-1'>
         {[
           { name: 'Workflow', link: `/ds/${qriRef.username}/${qriRef.name}` },
           { name: 'Components', link: `/ds/${qriRef.username}/${qriRef.name}/components` },

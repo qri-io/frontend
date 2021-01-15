@@ -17,7 +17,7 @@ const App: React.FC<any> = () => {
   })
 
   return (
-    <div className='App'>
+    <div className='App flex flex-col h-screen'>
       <ConnectedRouter history={history}>
         <Modal />
         <NavBar />
