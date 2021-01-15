@@ -15,7 +15,22 @@ export interface WorkflowCellProps {
   onChangeValue: (index: number, v: string) => void
 }
 
-const WorkflowCell: React.FC<WorkflowCellProps> = ({ 
+const nameLookup = (name: string) => {
+  switch(name) {
+    case 'setup':
+      return 'Import dependencies or load existing qri datasets'
+    case 'download':
+      return 'Pull in data from external sources like websites, APIs, or databases'
+    case 'transform':
+      return 'Shape your data into the desired output for your dataset'
+    case 'save':
+      return 'Saving will commit changes to your qri dataset after running the code above. You can preview the changes here after each dry run of the workflow'
+    default:
+      return ''
+  }
+}
+
+const WorkflowCell: React.FC<WorkflowCellProps> = ({
   index,
   step,
   run,
@@ -24,6 +39,8 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   onChangeValue,
 }) => {
   const { type, name, value } = step
+
+  const description = nameLookup(name)
 
   let editor: React.ReactElement
   switch (type) {
@@ -38,14 +55,21 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div className='w-full py-5'>
-      {run && <RunStateIcon state={run.status} />}
-      {run && <p className='float-right'>{run.duration}</p>}
-      <h3 className='text-xl text-gray-500 font-semibold mb-2 cursor-pointer' onClick={() => {
-        onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
-      }}>{name}</h3>
+    <div className='w-full rounded border-gray-200 border-2 my-4'>
+      <header>
+        <div className='text-center w-10 h-100 py-3 float-left'>
+          <h1 className='font-black text-3xl text-gray-300' >{index + 1}</h1>
+        </div>
+        <div className='py-2 px-5'>
+          {run && <p className='float-right'>{run.duration}</p>}
+          <h3 className='text-lg text-gray-500 font-semibold cursor-pointer' onClick={() => {
+            onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
+          }}>{name}{run && <RunStateIcon state={run.status} />}</h3>
+          <div className='text-xs mb-2'>{description}</div>
+        </div>
+      </header>
       {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-      {run && (collapseState === 'all' || collapseState === 'only-output') && <Output data={run.output} />}
+      {(collapseState === 'all' || collapseState === 'only-output') && <Output data={run?.output} />}
     </div>
   )
 }

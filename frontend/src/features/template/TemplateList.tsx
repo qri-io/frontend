@@ -4,19 +4,19 @@ import { Link } from 'react-router-dom'
 const templates = [
   {
     name: 'CSV Download',
-    type: 'CSVDownload'
+    id: 'CSVDownload'
   },
   {
     name: 'API Call',
-    type: 'APICall'
+    id: 'APICall'
   },
   {
     name: 'Database Query',
-    type: 'DatabaseQuery'
+    id: 'DatabaseQuery'
   },
   {
     name: 'Web Scrape',
-    type: 'Webscrape'
+    id: 'Webscrape'
   }
 ]
 
@@ -28,11 +28,11 @@ const TemplateList: React.FC<any> = () => {
       <br />
       <div className='text-lg text-bold flex flex-wrap -mx-2 overflow-hidden'>
         {
-          templates.map(({ name, type }) => (
+          templates.map(({ name, id }) => (
             <div key={name} className='my-2 px-2 overflow-hidden w-full md:w-1/2 lg:w-1/3 xl:w-1/3'>
               <Link to={{ 
                 pathname: `/ds/me/dataset_${Math.floor(Math.random() * 1000)}`,
-                state: { template: type }
+                state: { template: id }
               }}>
                 <div className='border border-gray-300 hover:border-blue-500 rounded bg-white text-sm p-10 text-center'>
                     <h3>{name}</h3>
