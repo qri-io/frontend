@@ -1,8 +1,8 @@
 import React from 'react'
-import { Dataset } from '../../qri/dataset'
-import { EventLogLine, EventLogLineType } from '../../qrimatic/eventLog'
+import { Dataset } from '../../../qri/dataset'
+import { EventLogLine, EventLogLineType } from '../../../qrimatic/eventLog'
 import { DatasetPreview } from './DatasetPreview'
-import LogLinePrint from './LogLinePrint'
+import LogLinePrint from '../LogLinePrint'
 
 export interface OutputProps {
   data?: EventLogLine[]
