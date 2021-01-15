@@ -9,7 +9,7 @@ interface TabbedDisplayProps {
   activeTab: string
   tabs: Tab[]
   onTabClick: (tab: string) => void
-  content: string | Record<string, any>
+  content: JSX.Element
 }
 
 export const TabbedDisplay: React.FC<TabbedDisplayProps> = (props) => {
@@ -42,10 +42,7 @@ export const TabbedDisplay: React.FC<TabbedDisplayProps> = (props) => {
         })
       }
     </div>
-    <div className='p-4 border'>
-      <pre className='max-h-60 overflow-x-hidden overflow-y-auto '>
-        {typeof content === 'string'? content : JSON.stringify(content, null, 4)}
-      </pre>
-    </div>
+    {content}
+
   </div>
 }
