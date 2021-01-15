@@ -1,5 +1,6 @@
 
 export interface Dataset {
+  [key: string]: any
   peername: string
   name: string
   path: string
@@ -142,7 +143,7 @@ export interface ColumnProperties {
 }
 
 export interface Schema {
-
+  [key: string]: any
 }
 
 export interface Stats {
@@ -213,3 +214,5 @@ export function newTransform(d: Record<string,any>): Transform {
 
 export type Body = Record<string, any> | any[][]
 
+export const ComponentList = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz']
+export type ComponentTypes = 'readme' | 'meta' | 'body' | 'structure' | 'transform' | 'commit' | 'viz'
