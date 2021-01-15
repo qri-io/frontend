@@ -1,6 +1,5 @@
 
 export interface Dataset {
-  [key: string]: any
   peername: string
   name: string
   path: string
@@ -12,6 +11,7 @@ export interface Dataset {
   readme?: string
   transform?: Transform
   stats?: Stats
+  viz?: string
 }
 
 export default Dataset
@@ -30,6 +30,32 @@ export function newDataset(d: Record<string,any>): Dataset {
     readme: d.readme,
     transform: newTransform(d.transform || {}),
     stats: newStats(d.stats || {}),
+    viz: d.viz
+  }
+}
+
+export function getComponentFromDatasetByName(d: Dataset, component: string): string | Record<string, any> | undefined {
+  if (!ComponentNames.includes(component)) {
+    return
+  }
+  
+  switch (component) {
+    case 'commit':
+      return d.commit
+    case 'meta':
+      return d.meta
+    case 'structure':
+      return d.structure
+    case 'body':
+      return d.body
+    case 'readme':
+      return d.readme
+    case 'transform':
+      return d.transform
+    case 'stats':
+      return d.stats
+    case 'viz':
+      return d.viz
   }
 }
 
@@ -214,5 +240,5 @@ export function newTransform(d: Record<string,any>): Transform {
 
 export type Body = Record<string, any> | any[][]
 
-export const ComponentList = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz']
-export type ComponentTypes = 'readme' | 'meta' | 'body' | 'structure' | 'transform' | 'commit' | 'viz'
+export const ComponentNames = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz', 'stats']
+export type ComponentTypes = 'readme' | 'meta' | 'body' | 'structure' | 'transform' | 'commit' | 'viz' | 'stats'
