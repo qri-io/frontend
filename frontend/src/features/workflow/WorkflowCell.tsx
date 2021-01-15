@@ -2,7 +2,7 @@ import React from 'react'
 import { RunStep } from '../../qrimatic/run'
 import { WorkflowStep } from '../../qrimatic/workflow'
 import CodeEditor from './CodeEditor'
-import Output from './Output'
+import Output from './output/Output'
 import RunStateIcon from './RunStateIcon'
 
 export interface WorkflowCellProps {

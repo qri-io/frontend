@@ -27,10 +27,8 @@ export const eventLogSuccess = [
   { "type": "transform:HttpRequestStop", "ts": 1609461300090, "sid": "bbbb", "data": {"size": 230409, "method": "GET", "url": "https://registy.qri.cloud" }},
   { "type": "transform:TransformStepStop",    "ts": 1609461400090, "sid": "bbbb", "data": {"name": "download", "status": "succeeded" }},
   { "type": "transform:TransformStepStart",   "ts": 1609461500090, "sid": "bbbb", "data": {"name": "transform" }},
-  { "type": "transform:TransformStepStop",    "ts": 1609461600090, "sid": "bbbb", "data": {"name": "transform", "status": "succeeded"}},
-  { "type": "transform:TransformStepStart",   "ts": 1609461700090, "sid": "bbbb", "data": {"name": "save" }},
   { "type": "transform:Dataset", "ts": 1609461800090, "sid":"bbbb", "data": {
-    "bodyPath": "/ipfs/QmQPkpJnFeUycJhpJfV2r7cEeRBUnATe18hicCdCnjaSC4",
+    "body": [["2021-01-13T02:40:45.410Z",32.743,-115.825,7.53,1.58,"ml",24,60,0.1251,0.2,"ci","ci39755576","2021-01-13T02:51:48.180Z","16km E of Ocotillo, CA","earthquake",0.36,1.03,0.167,30,"automatic","ci","ci"],["2021-01-13T02:29:20.140Z",35.887,-117.7111667,7.29,0.75,"ml",14,66,0.07828,0.11,"ci","ci39755568","2021-01-13T02:33:02.826Z","18km ESE of Little Lake, CA","earthquake",0.25,0.75,0.178,12,"automatic","ci","ci"],["2021-01-13T02:21:52.433Z",59.9399,-153.3,143.5,1.7,"ml","","","",1.17,"ak","ak021ljazpu","2021-01-13T02:25:41.169Z","48 km ENE of Pedro Bay, Alaska","earthquake","",0.8,"","","automatic","ak","ak"],["2021-01-13T02:18:53.875Z",60.9257,-152.5483,119.2,1.7,"ml","","","",0.8,"ak","ak021ljaco5","2021-01-13T02:27:21.481Z","73 km WNW of Nikiski, Alaska","earthquake","",0.9,"","","automatic","ak","ak"],["2021-01-13T02:06:58.210Z",35.8278333,-117.664,6.02,1.01,"ml",13,106,0.05537,0.13,"ci","ci39755552","2021-01-13T02:10:37.695Z","23km N of Ridgecrest, CA","earthquake",0.32,0.88,0.21,12,"automatic","ci","ci"],["2021-01-13T02:01:32.490Z",38.3841667,-122.2041702,3.63,2.07,"md",21,73,0.06714,0.31,"nc","nc73510225","2021-01-13T02:24:05.217Z","12km NE of Napa, CA","earthquake",0.56,2.56,0.04,15,"automatic","nc","nc"],["2021-01-13T01:39:28.957Z",19.4508,145.3781,194.47,4.7,"mb","",101,4.212,0.63,"us","us6000d7ws","2021-01-13T01:57:52.040Z","Maug Islands region, Northern Mariana Islands","earthquake",11,7.7,0.039,196,"reviewed","us","us"],["2021-01-13T01:36:41.410Z",38.1677,-118.0548,10,1.4,"ml",20,"148.84",0.031,0.11,"nn","nn00797023","2021-01-13T01:39:59.672Z","25 km S of Mina, Nevada","earthquake","",1.4,"","","automatic","nn","nn"],["2021-01-13T01:26:30.460Z",37.9259987,-122.2883301,10.46,2.14,"md",53,27,0.03602,0.06,"nc","nc73510215","2021-01-13T02:39:19.403Z","2km NNW of Kensington, CA","earthquake",0.14,0.29,0.15,44,"automatic","nc","nc"],["2021-01-13T01:18:14.240Z",32.7476667,-115.815,8.06,1.41,"ml",18,64,0.1233,0.19,"ci","ci39755520","2021-01-13T01:21:45.917Z","17km E of Ocotillo, CA","earthquake",0.39,1.76,0.263,17,"automatic","ci","ci"]],
     "commit": {
      "author": {
       "id": "QmeitTcgUPiw1PyUDdaCbMcNotx84yR8EwJVjTv7MRmELA"
@@ -2055,6 +2053,8 @@ export const eventLogSuccess = [
      ]
     }
    }},
+  { "type": "transform:TransformStepStop",    "ts": 1609461600090, "sid": "bbbb", "data": {"name": "transform", "status": "succeeded"}},
+  { "type": "transform:TransformStepStart",   "ts": 1609461700090, "sid": "bbbb", "data": {"name": "save" }},
   { "type": "transform:TransformStepStop",    "ts": 1609461800090, "sid": "bbbb", "data": {"name": "save", "status": "succeeded"}},
   { "type": "transform:TransformStop",        "ts": 1609461900090, "sid": "aaaa", "data": {"status": "failed" }}
 ]
