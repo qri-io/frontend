@@ -3,9 +3,9 @@
 export interface Workflow {
   // id of the workflow
   id: string
-  triggers?: WorkflowTrigger[]
   // init id of the dataset
   datasetID?: string
+  triggers?: WorkflowTrigger[]
   steps?: WorkflowStep[]
   onCompletion?: WorkflowHook[]
 }
@@ -36,6 +36,7 @@ export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
 export interface WorkflowStep {
   type: string
   name: string
+  syntax: string
   value: string
 }
 
@@ -43,6 +44,7 @@ export function NewWorkflowStep(data: Record<string,any>): WorkflowStep {
   return {
     type: data.type,
     name: data.name,
+    syntax: data.syntax,
     value: data.value
   }
 }

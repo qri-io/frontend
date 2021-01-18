@@ -32,10 +32,24 @@ export function runWorkflow(w: Workflow): ApiActionThunk {
         method: 'POST',
         body: {
           transform: {
-            syntax: 'starlark',
+            // syntax: 'starlark',
             scriptBytes: btoa(workflowScriptString(w)),
+            steps: w.steps
           }
         },
+      }
+    })
+  }
+}
+
+export function deployWorkflow(w: Workflow): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch({
+      type: 'deploy',
+      [CALL_API]: {
+        endpoint: 'deploy',
+        method: 'POST',
+        body: w
       }
     })
   }

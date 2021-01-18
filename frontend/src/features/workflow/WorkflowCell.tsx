@@ -38,16 +38,16 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   onChangeCollapse,
   onChangeValue,
 }) => {
-  const { type, name, value } = step
+  const { syntax, type, name, value } = step
 
   const description = nameLookup(name)
 
   let editor: React.ReactElement
-  switch (type) {
+  switch (syntax) {
     case 'starlark':
       editor = <CodeEditor value={value} onChange={(v) => { onChangeValue(index, v) }} disabled={!!run} />
       break;
-    case 'save':
+    case 'qri':
       editor = <></>
       break;
     default:

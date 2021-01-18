@@ -99,7 +99,6 @@ func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (
 		o = &cron.DatasetOptions{
 			Title:               p.SaveParams.Title,
 			Message:             p.SaveParams.Message,
-			Recall:              p.SaveParams.Recall,
 			BodyPath:            p.SaveParams.BodyPath,
 			FilePaths:           p.SaveParams.FilePaths,
 			Force:               p.SaveParams.Force,
@@ -259,7 +258,6 @@ func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err 
 				Ref:                 p.Name,
 				Title:               o.Title,
 				Message:             o.Message,
-				Recall:              o.Recall,
 				BodyPath:            o.BodyPath,
 				FilePaths:           o.FilePaths,
 				Force:               o.Force,

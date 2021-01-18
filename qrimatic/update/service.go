@@ -179,9 +179,6 @@ func datasetSaveCmd(streams ioes.IOStreams, job *cron.Job) *exec.Cmd {
 		if o.Message != "" {
 			args = append(args, fmt.Sprintf(`--message=%s`, o.Message))
 		}
-		if o.Recall != "" {
-			args = append(args, fmt.Sprintf(`--recall=%s`, o.Recall))
-		}
 		if o.BodyPath != "" {
 			args = append(args, fmt.Sprintf(`--body=%s`, o.BodyPath))
 		}

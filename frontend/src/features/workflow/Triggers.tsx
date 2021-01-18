@@ -27,7 +27,7 @@ const Triggers: React.FC<any> = () => {
       <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Triggers</h2>
       <div className='text-xs mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
       <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
-        {triggerItems.map((d) => <Block {...d} onClick={() => { dispatch(showModal(AppModalType.schedulePicker))}} />)}
+        {triggerItems.map((d, i) => <Block key={i} {...d} onClick={() => { dispatch(showModal(AppModalType.schedulePicker))}} />)}
       </div>
     </section>
     )

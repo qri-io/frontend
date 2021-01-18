@@ -11,10 +11,10 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/multiformats/go-multihash v0.0.14
 	github.com/qri-io/apiutil v0.2.0
-	github.com/qri-io/dataset v0.2.1-0.20201201155506-9b4fc79ffde8
+	github.com/qri-io/dataset v0.2.1-0.20210118153421-4b6176e58a47
 	github.com/qri-io/ioes v0.1.1
 	github.com/qri-io/iso8601 v0.1.1-0.20201221213213-f31ee4cdc38b
 	github.com/qri-io/qfs v0.5.1-0.20201119141805-fb13393b2d1f
-	github.com/qri-io/qri v0.9.14-0.20210105032858-9f921941b37c
+	github.com/qri-io/qri v0.9.14-0.20210118153642-8104342e2155
 	github.com/spf13/cobra v1.0.0
 )

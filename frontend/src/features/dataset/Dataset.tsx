@@ -11,18 +11,18 @@ import { loadDataset } from './state/datasetActions'
 import { useParams } from 'react-router-dom';
 
 const Dataset: React.FC<any> = () => {
-  const ref = newQriRef(useParams())
+  const qriRef = newQriRef(useParams())
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(loadDataset(ref))
-  }, [dispatch, ref])
+    dispatch(loadDataset(qriRef))
+  }, [dispatch, qriRef])
 
   return (
     <div>
-      <DatasetHeader qriRef={ref} />
+      <DatasetHeader qriRef={qriRef} />
       <Switch>
-        <Route path='/ds/:username/:dataset' exact><WorkflowEditor /></Route>
+        <Route path='/ds/:username/:dataset' exact><WorkflowEditor qriRef={qriRef} /></Route>
         <Route path='/ds/:username/:dataset/components'><DatasetComponents /></Route>
         <Route path='/ds/:username/:dataset/history'><HistoryList /></Route>
       </Switch>

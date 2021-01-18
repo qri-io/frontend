@@ -8,7 +8,8 @@ export const selectModalType = (state: RootState): AppModalType => state.app.mod
 
 export enum AppModalType {
   none = '',
-  schedulePicker = 'schedulePicker'
+  schedulePicker = 'schedulePicker',
+  deployWorkflow = 'deployWorkflow'
 }
 
 export interface AppState {

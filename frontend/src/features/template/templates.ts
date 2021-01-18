@@ -10,20 +10,20 @@ export const CSVDownload: Workflow = {
     value: 'R/PT1H'
   }],
   steps: [
-    { type: 'starlark', name: 'setup', value: `# load starlark dependencies
+    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load starlark dependencies
 load("http.star", "http")
 load("encoding/csv.star", "csv")` },
-    { type: 'starlark', name: 'download', value: `# get the popular baby names dataset as a csv
+    { syntax: 'starlark', type: 'download', name: 'download', value: `# get the popular baby names dataset as a csv
 def download(ctx):
   csvDownloadUrl = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"
   return http.get(csvDownloadUrl).body()` },
-    { type: 'starlark', name: 'transform', value: `# set the body
+    { syntax: 'starlark', type: 'transform', name: 'transform', value: `# set the body
 def transform(ds, ctx):
   # ctx.download is whatever download() returned
   csv = ctx.download
   # set the dataset body
   ds.set_body(csv, parse_as='csv')`},
-    { type: 'save', name: 'save', value: '' }
+    { syntax: 'qri', type: 'save', name: 'save', value: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }
@@ -38,10 +38,10 @@ export const APICall: Workflow = {
     value: 'R/PT1H'
   }],
   steps: [
-    { type: 'starlark', name: 'setup', value: `# load_ds("b5/apicall")` },
-    { type: 'starlark', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-    { type: 'starlark', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { type: 'save', name: 'save', value: '' }
+    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load_ds("b5/apicall")` },
+    { syntax: 'starlark', type: 'download', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
+    { syntax: 'starlark', type: 'transform', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+    { syntax: 'qri', type: 'save', name: 'save', value: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }
@@ -56,10 +56,10 @@ export const DatabaseQuery: Workflow = {
     value: 'R/PT1H'
   }],
   steps: [
-    { type: 'starlark', name: 'setup', value: `# load_ds("b5/databasequery")` },
-    { type: 'starlark', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-    { type: 'starlark', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { type: 'save', name: 'save', value: '' }
+    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load_ds("b5/databasequery")` },
+    { syntax: 'starlark', type: 'download', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
+    { syntax: 'starlark', type: 'transform', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+    { syntax: 'qri', type: 'save', name: 'save', value: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }
@@ -74,10 +74,10 @@ export const Webscrape: Workflow = {
     value: 'R/PT1H'
   }],
   steps: [
-    { type: 'starlark', name: 'setup', value: `# load_ds("b5/webscrape")` },
-    { type: 'starlark', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-    { type: 'starlark', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { type: 'save', name: 'save', value: '' }
+    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load_ds("b5/webscrape")` },
+    { syntax: 'starlark', type: 'download', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
+    { syntax: 'starlark', type: 'transform', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+    { syntax: 'qri', type: 'save', name: 'save', value: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }

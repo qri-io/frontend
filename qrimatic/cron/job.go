@@ -249,7 +249,6 @@ type ShellScriptOptions struct {
 type DatasetOptions struct {
 	Title     string
 	Message   string
-	Recall    string
 	BodyPath  string
 	FilePaths []string
 

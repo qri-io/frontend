@@ -1,8 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ScheduleModal from '../workflow/ScheduleModal'
+
 import { clearModal } from './state/appActions'
 import { AppModalType, selectModalType } from './state/appState'
+import DeployWorkflowModal from '../workflow/modal/DeployWorkflowModal'
+import ScheduleModal from '../workflow/modal/ScheduleModal'
 
 const Modal: React.FC<any> = () => {
   const type = useSelector(selectModalType)
@@ -25,6 +27,8 @@ const Modal: React.FC<any> = () => {
                   switch (type) {
                     case AppModalType.schedulePicker:
                       return <ScheduleModal />
+                    case AppModalType.deployWorkflow:
+                      return <DeployWorkflowModal />
                     default:
                       return null
                   }
