@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"context"
@@ -21,23 +21,17 @@ func mustRepeatingInterval(s string) iso8601.RepeatingInterval {
 func TestCronDataset(t *testing.T) {
 	updateCount := 0
 	next := time.Now().Add(time.Millisecond * 20)
-	job := &Job{
+	job := &Workflow{
 		Name:         "b5/libp2p_node_count",
 		DatasetID:    "dsID",
 		OwnerID:      "ownerID",
-		Type:         JTDataset,
 		Periodicity:  mustRepeatingInterval("R/P1W"),
 		NextRunStart: &next,
 	}
 
-	factory := func(outer context.Context) RunJobFunc {
-		return func(ctx context.Context, streams ioes.IOStreams, job *Job) error {
-			switch job.Type {
-			case JTDataset:
-				updateCount++
-				return nil
-			}
-			t.Fatalf("runner called with invalid job: %v", job)
+	factory := func(outer context.Context) RunTransformFunc {
+		return func(ctx context.Context, streams ioes.IOStreams, job *Workflow) error {
+			updateCount++
 			return nil
 		}
 	}
@@ -62,7 +56,7 @@ func TestCronDataset(t *testing.T) {
 		t.Errorf("update ran wrong number of times. expected: %d, got: %d", expectedUpdateCount, updateCount)
 	}
 
-	logs, err := store.ListJobs(ctx, 0, -1)
+	logs, err := store.ListWorkflows(ctx, 0, -1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,16 +66,15 @@ func TestCronDataset(t *testing.T) {
 
 	got := logs[0]
 
-	expect := &Job{
+	expect := &Workflow{
 		Name:        "b5/libp2p_node_count",
-		Type:        JTDataset,
 		Periodicity: mustRepeatingInterval("R/P1W"),
 		// RunNumber: 1,
 		// RunStart:  got.RunStart,
 		// RunStop:   got.RunStop,
 	}
 
-	if diff := compareJob(expect, got); diff != "" {
+	if diff := compareWorkflow(expect, got); diff != "" {
 		t.Errorf("log job mismatch (-want +got):\n%s", diff)
 	}
 }
@@ -93,21 +86,15 @@ func TestCronShellScript(t *testing.T) {
 
 	updateCount := 0
 
-	job := &Job{
+	job := &Workflow{
 		Name:        "foo.sh",
-		Type:        JTShellScript,
 		Periodicity: mustRepeatingInterval("R/P1W"),
 	}
 
 	// scriptRunner := LocalShellScriptRunner("testdata")
-	factory := func(outer context.Context) RunJobFunc {
-		return func(ctx context.Context, streams ioes.IOStreams, job *Job) error {
-			switch job.Type {
-			case JTShellScript:
-				updateCount++
-				return nil
-			}
-			t.Fatalf("runner called with invalid job: %v", job)
+	factory := func(outer context.Context) RunTransformFunc {
+		return func(ctx context.Context, streams ioes.IOStreams, job *Workflow) error {
+			updateCount++
 			return nil
 		}
 	}
@@ -132,7 +119,7 @@ func TestCronShellScript(t *testing.T) {
 		t.Fatalf("update ran wrong number of times. expected: %d, got: %d", expectedUpdateCount, updateCount)
 	}
 
-	logs, err := store.ListJobs(ctx, 0, -1)
+	logs, err := store.ListWorkflows(ctx, 0, -1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -142,9 +129,8 @@ func TestCronShellScript(t *testing.T) {
 
 	got := logs[0]
 
-	expect := &Job{
+	expect := &Workflow{
 		Name:        "foo.sh",
-		Type:        JTShellScript,
 		Periodicity: mustRepeatingInterval("R/P1W"),
 
 		// RunNumber: 1,
@@ -152,7 +138,7 @@ func TestCronShellScript(t *testing.T) {
 		// RunStop:   got.RunStop,
 	}
 
-	if diff := compareJob(expect, got); diff != "" {
+	if diff := compareWorkflow(expect, got); diff != "" {
 		t.Errorf("log job mismatch (-want +got):\n%s", diff)
 	}
 }

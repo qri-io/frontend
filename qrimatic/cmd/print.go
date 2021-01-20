@@ -9,7 +9,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
-	"github.com/qri-io/qrimatic/cron"
+	"github.com/qri-io/qrimatic/update"
 )
 
 // StringerLocation is the function to retrieve the timezone location
@@ -31,24 +31,24 @@ func printItems(w io.Writer, items []fmt.Stringer, offset int) error {
 	return err
 }
 
-type jobStringer cron.Job
+type workflowStringer update.Workflow
 
 // String assumes Name, Type, Periodicity, and PrevRunStart are present
-func (j jobStringer) String() string {
+func (j workflowStringer) String() string {
 	w := &bytes.Buffer{}
 	name := color.New(color.Bold).SprintFunc()
 	if j.NextRunStart != nil {
 		t := j.Periodicity.After(*j.NextRunStart)
 		relTime := humanize.RelTime(time.Now().In(time.UTC), t, "", "")
-		fmt.Fprintf(w, "%s\nin %sat %s | %s\n", name(j.Name), relTime, t.In(StringerLocation).Format(time.Kitchen), j.Type)
+		fmt.Fprintf(w, "%s\nin %sat %s\n", name(j.Name), relTime, t.In(StringerLocation).Format(time.Kitchen))
 	} else {
-		fmt.Fprintf(w, "%s\nin paused | %s\n", name(j.Name), j.Type)
+		fmt.Fprintf(w, "%s\nin paused\n", name(j.Name))
 	}
 	fmt.Fprintf(w, "\n")
 	return w.String()
 }
 
-type runStringer cron.Run
+type runStringer update.Run
 
 // String assumes Name, Type, PrevRunStart and ExitStatus are present
 func (j runStringer) String() string {

@@ -6,13 +6,15 @@ import WorkflowCell from './WorkflowCell';
 import Triggers from './Triggers';
 import OnComplete from './OnComplete';
 import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
-import { WorkflowStep } from '../../qrimatic/workflow';
+import { TransformStep } from '../../qrimatic/workflow';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
-import { changeWorkflowStep, runWorkflow, setWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
+import { changeTransformStep, changeDatasetName, runWorkflow, setWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
 import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
 import { selectTemplate } from '../template/templates';
 import RunBar from './RunBar';
 import { QriRef } from '../../qri/ref';
+import { showModal } from '../app/state/appActions';
+import { AppModalType } from '../app/state/appState';
 
 interface WorkflowEditorLocationState {
   template: string
@@ -36,7 +38,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ qriRef }) => {
     }
   }, [dispatch, location.state])
 
-  const collapseState = (step: WorkflowStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
+  const collapseState = (step: TransformStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
     if (collapseStates[step.name]) {
       return collapseStates[step.name]
     }
@@ -65,9 +67,10 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ qriRef }) => {
           setCollapseStates({})
           dispatch(runWorkflow(workflow))
         }}
-        onRunCancel={() => { alert('cannot cancel runs just yet') }}
-        onDeploy={() => { alert('deploy isn\'t wired up yet')}}
-        onDeployCancel={() => { alert('cannot cancel deploys just yet') }}
+        onRunCancel={() => { alert('cannot cancel runs yet') }}
+        onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }}
+        onDeployCancel={() => { alert('cannot cancel deploys yet') }}
+        onRename={(name: string) => { dispatch(changeDatasetName(name)) }}
       />
       <Triggers />
       <section className='p-4'>
@@ -93,7 +96,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ qriRef }) => {
               }}
               onChangeValue={(i:number, v:string) => {
                 if (workflow && workflow.steps) {
-                  dispatch(changeWorkflowStep(i,v))
+                  dispatch(changeTransformStep(i,v))
                 }
               }}
             />)

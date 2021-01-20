@@ -1,12 +1,14 @@
-import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction } from './workflowActions';
+
+import { RootState } from '../../../store/store';
+import { EventLogAction, RenameDatasetAction, SetWorkflowAction, SetWorkflowStepAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
-import { NewWorkflow, Workflow } from '../../../qrimatic/workflow';
+import { Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qrimatic/eventLog';
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_STEP = 'WORKFLOW_CHANGE_STEP'
+export const WORKFLOW_RENAME_DATASET = 'WORKFLOW_RENAME_DATASET'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 
 // temp action used to work around the api, auto sets the events
@@ -31,21 +33,26 @@ export interface WorkflowState {
 }
 
 const initialState: WorkflowState = {
-  workflow: NewWorkflow({
-    datasetID: 'fake_id',
+  workflow: {
+    id: '_',
+    datasetID: 'me/transform_example_2',
+    name: '',
+    runCount: 0,
+    periodicity: 'R/PT10M',
+
     triggers: [
       { type: 'cron', value: 'R/PT1H' }
     ],
     steps: [
-      { type: 'starlark', name: 'setup', value: `# load_ds("b5/world_bank_population")` },
-      { type: 'starlark', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-      { type: 'starlark', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-      { type: 'save', name: 'save', value: '' }
+      { syntax: 'starlark', name: 'setup', category: 'setup', script: `# load_ds("b5/world_bank_population")` },
+      { syntax: 'starlark', name: 'download', category: 'download', script: `def download(ctx):\n\treturn "your download here"` },
+      { syntax: 'starlark', name: 'transform', category: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+      { syntax: 'save', name: 'save', category: 'save', script: '' }
     ],
     onCompletion: [
       { type: 'push', value: 'https://registry.qri.cloud' },
     ]
-  }),
+  },
   events: []
 }
 
@@ -62,12 +69,15 @@ export const workflowReducer = createReducer(initialState, {
   },
   SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_STEP: changeWorkflowStep,
+  WORKFLOW_RENAME_DATASET: (state: WorkflowState, action: RenameDatasetAction) => {
+    state.workflow.name = action.name
+  },
   RUN_EVENT_LOG: addRunEvent,
 })
 
 function changeWorkflowStep(state: WorkflowState, action: SetWorkflowStepAction) {
   if (state.workflow.steps) {
-    state.workflow.steps[action.index].value = action.value
+    state.workflow.steps[action.index].script = action.script
   }
   return
 }

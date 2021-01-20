@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"encoding/json"
@@ -10,12 +10,12 @@ import (
 	"github.com/multiformats/go-multihash"
 )
 
-// RunMulticodecType is a CID prefix for cron.Run content identifiers
+// RunMulticodecType is a CID prefix for scheduler.Run content identifiers
 // TODO(b5) - using a dummy codec number for now. Pick a real one!
 const RunMulticodecType = 2200
 
-func runID(jobID string, created time.Time) (string, error) {
-	str := fmt.Sprintf("%s.%d", jobID, created.UnixNano())
+func runID(workflowID string, created time.Time) (string, error) {
+	str := fmt.Sprintf("%s.%d", workflowID, created.UnixNano())
 	mh, err := multihash.Encode([]byte(str), multihashCodec)
 	if err != nil {
 		return "", err
@@ -23,15 +23,15 @@ func runID(jobID string, created time.Time) (string, error) {
 	return cid.NewCidV1(RunMulticodecType, multihash.Multihash(mh)).String(), nil
 }
 
-// Run is a record of job execution
+// Run is a record of workflow execution
 // RunSet have one of three execution states, which describe it's position in
 // the execution lifecycle:
-// * unexected: job.RunStart == nil && job.RunSettop == nil
-// * executing: !job.RunStart == nil && job.RunSettop == nil
-// * completed: !job.RunStart == nil && !job.RunSettop == nil
+// * unexected: workflow.RunStart == nil && workflow.RunSettop == nil
+// * executing: !workflow.RunStart == nil && workflow.RunSettop == nil
+// * completed: !workflow.RunStart == nil && !workflow.RunSettop == nil
 type Run struct {
 	ID          string     `json:"ID"`
-	JobID       string     `json:"jobID"`
+	WorkflowID  string     `json:"workflowID"`
 	Number      int        `json:"number"`
 	Start       *time.Time `json:"start"`
 	Stop        *time.Time `json:"stop"`
@@ -40,18 +40,18 @@ type Run struct {
 }
 
 // NewRun constructs a run pointer
-func NewRun(jobID string, number int) (*Run, error) {
+func NewRun(workflowID string, number int) (*Run, error) {
 	created := NowFunc()
-	id, err := runID(jobID, created)
+	id, err := runID(workflowID, created)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Run{
-		ID:     id,
-		JobID:  jobID,
-		Number: number,
-		Start:  &created,
+		ID:         id,
+		WorkflowID: workflowID,
+		Number:     number,
+		Start:      &created,
 	}, nil
 }
 
@@ -73,7 +73,7 @@ func (r *Run) Copy() *Run {
 // LogName returns a canonical name string for a run that's executed and saved
 // to a logging system
 func (r *Run) LogName() string {
-	return fmt.Sprintf("%s-%d", r.JobID, r.Number)
+	return fmt.Sprintf("%s-%d", r.WorkflowID, r.Number)
 }
 
 // RunSet is a list of RunSet that implements the sort.Interface, sorting a list
@@ -124,7 +124,7 @@ func (rs *RunSet) Remove(id string) (removed bool) {
 	return false
 }
 
-// MarshalJSON serializes RunSet to an array of Jobs
+// MarshalJSON serializes RunSet to an array of Workflows
 func (rs RunSet) MarshalJSON() ([]byte, error) {
 	return json.Marshal(rs.set)
 }

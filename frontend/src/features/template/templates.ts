@@ -4,26 +4,31 @@ import { Workflow } from '../../qrimatic/workflow'
 
 export const CSVDownload: Workflow = {
   id: 'CSVDownload',
+  datasetID: 'me/csv_download_template',
+  name: '',
+  runCount: 0,
+  periodicity: 'R/PT1H',
+
   triggers: [{
     // repeat every hour
     type: 'cron',
     value: 'R/PT1H'
   }],
   steps: [
-    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load starlark dependencies
+    { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
 load("http.star", "http")
 load("encoding/csv.star", "csv")` },
-    { syntax: 'starlark', type: 'download', name: 'download', value: `# get the popular baby names dataset as a csv
+    { syntax: 'starlark', category: 'download', name: 'download', script: `# get the popular baby names dataset as a csv
 def download(ctx):
   csvDownloadUrl = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"
   return http.get(csvDownloadUrl).body()` },
-    { syntax: 'starlark', type: 'transform', name: 'transform', value: `# set the body
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: `# set the body
 def transform(ds, ctx):
   # ctx.download is whatever download() returned
   csv = ctx.download
   # set the dataset body
   ds.set_body(csv, parse_as='csv')`},
-    { syntax: 'qri', type: 'save', name: 'save', value: '' }
+    { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }
@@ -32,16 +37,19 @@ def transform(ds, ctx):
 
 export const APICall: Workflow = {
   id: 'APICall',
+  name: '',
+  runCount: 0,
+
   triggers: [{
     // repeat every hour
     type: 'cron',
     value: 'R/PT1H'
   }],
   steps: [
-    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load_ds("b5/apicall")` },
-    { syntax: 'starlark', type: 'download', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-    { syntax: 'starlark', type: 'transform', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { syntax: 'qri', type: 'save', name: 'save', value: '' }
+    { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/apicall")` },
+    { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+    { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }
@@ -50,16 +58,19 @@ export const APICall: Workflow = {
 
 export const DatabaseQuery: Workflow = {
   id: 'DatabaseQuery',
+  name: '',
+  runCount: 0,
+
   triggers: [{
     // repeat every hour
     type: 'cron',
     value: 'R/PT1H'
   }],
   steps: [
-    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load_ds("b5/databasequery")` },
-    { syntax: 'starlark', type: 'download', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-    { syntax: 'starlark', type: 'transform', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { syntax: 'qri', type: 'save', name: 'save', value: '' }
+    { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/databasequery")` },
+    { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+    { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }
@@ -68,16 +79,19 @@ export const DatabaseQuery: Workflow = {
 
 export const Webscrape: Workflow = {
   id: 'Webscrape',
+  name: '',
+  runCount: 0,
+  
   triggers: [{
     // repeat every hour
     type: 'cron',
     value: 'R/PT1H'
   }],
   steps: [
-    { syntax: 'starlark', type: 'setup', name: 'setup', value: `# load_ds("b5/webscrape")` },
-    { syntax: 'starlark', type: 'download', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-    { syntax: 'starlark', type: 'transform', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { syntax: 'qri', type: 'save', name: 'save', value: '' }
+    { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/webscrape")` },
+    { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+    { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onCompletion: [
     { type: 'push', value: 'https://registry.qri.cloud' }

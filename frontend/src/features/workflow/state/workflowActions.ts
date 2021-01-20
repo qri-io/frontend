@@ -3,6 +3,7 @@ import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk } from '../../../store/api'
 import { 
   WORKFLOW_CHANGE_STEP,
+  WORKFLOW_RENAME_DATASET,
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
   SET_WORKFLOW
@@ -12,14 +13,26 @@ import {
 export interface SetWorkflowStepAction {
   type: string
   index: number
-  value: string
+  script: string
 }
 
-export function changeWorkflowStep(index: number, value: string): SetWorkflowStepAction {
+export function changeTransformStep(index: number, script: string): SetWorkflowStepAction {
   return {
     type: WORKFLOW_CHANGE_STEP,
     index,
-    value,
+    script,
+  }
+}
+
+export interface RenameDatasetAction {
+  type: string,
+  name: string
+}
+
+export function changeDatasetName(name: string): RenameDatasetAction {
+  return {
+    type: WORKFLOW_RENAME_DATASET,
+    name,
   }
 }
 
@@ -32,7 +45,6 @@ export function runWorkflow(w: Workflow): ApiActionThunk {
         method: 'POST',
         body: {
           transform: {
-            // syntax: 'starlark',
             scriptBytes: btoa(workflowScriptString(w)),
             steps: w.steps
           }
@@ -49,7 +61,14 @@ export function deployWorkflow(w: Workflow): ApiActionThunk {
       [CALL_API]: {
         endpoint: 'deploy',
         method: 'POST',
-        body: w
+        body: {
+          apply: true,
+          workflow: w,
+          transform: {
+            scriptBytes: btoa(workflowScriptString(w)),
+            steps: w.steps
+          }
+        }
       }
     })
   }

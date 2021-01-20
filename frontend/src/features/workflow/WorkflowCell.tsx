@@ -1,13 +1,13 @@
 import React from 'react'
 import { RunStep } from '../../qrimatic/run'
-import { WorkflowStep } from '../../qrimatic/workflow'
+import { TransformStep } from '../../qrimatic/workflow'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
 import RunStateIcon from './RunStateIcon'
 
 export interface WorkflowCellProps {
   index: number
-  step: WorkflowStep
+  step: TransformStep
   run?: RunStep
 
   collapseState: 'collapsed' | 'only-editor' | 'only-output' | 'all'
@@ -38,20 +38,20 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   onChangeCollapse,
   onChangeValue,
 }) => {
-  const { syntax, type, name, value } = step
+  const { syntax, category, name, script } = step
 
   const description = nameLookup(name)
 
   let editor: React.ReactElement
   switch (syntax) {
     case 'starlark':
-      editor = <CodeEditor value={value} onChange={(v) => { onChangeValue(index, v) }} disabled={!!run} />
+      editor = <CodeEditor script={script} onChange={(v) => { onChangeValue(index, v) }} disabled={!!run} />
       break;
     case 'qri':
       editor = <></>
       break;
     default:
-      editor = <p>unknown editor for '{type}' workflow step</p>
+      editor = <p>unknown editor for '{category}' workflow step</p>
   }
 
   return (

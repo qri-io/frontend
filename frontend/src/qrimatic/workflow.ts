@@ -5,9 +5,17 @@ export interface Workflow {
   id: string
   // init id of the dataset
   datasetID?: string
+  ownerID?: string
+  created?: string
+  name: string
+  runCount: number
+
   triggers?: WorkflowTrigger[]
-  steps?: WorkflowStep[]
+  steps?: TransformStep[]
   onCompletion?: WorkflowHook[]
+
+  periodicity?: string // temp
+  nextRunStart?: string
 }
 
 export function NewWorkflow(data: Record<string,any>): Workflow {
@@ -15,9 +23,17 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
     // TODO (ramfox): where/when do we get an id?
     id: data.id || 'temp_id',
     datasetID: data.datasetID,
+    ownerID: data.ownerID,
+    name: data.name,
+    created: data.created,
+    runCount: data.runCount || 0,
+    
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
-    steps: data.steps && data.steps.map(NewWorkflowStep),
+    steps: data.steps && data.steps.map(NewTransformStep),
     onCompletion: data.onCompletion && data.onCompletion.map(NewWorkflowHook),
+
+    periodicity: data.periodicity,
+    nextRunStart: data.nextRunStart,
   }
 }
 
@@ -33,19 +49,19 @@ export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
   }
 }
 
-export interface WorkflowStep {
-  type: string
+export interface TransformStep {
+  category: string
   name: string
   syntax: string
-  value: string
+  script: string
 }
 
-export function NewWorkflowStep(data: Record<string,any>): WorkflowStep {
+export function NewTransformStep(data: Record<string,any>): TransformStep {
   return {
-    type: data.type,
     name: data.name,
     syntax: data.syntax,
-    value: data.value
+    category: data.category,
+    script: data.script
   }
 }
 
@@ -67,8 +83,8 @@ export function workflowScriptString(w: Workflow): string {
   }
 
   return w.steps.reduce((str, step) => {
-    if (step.type === 'starlark') {
-      return str + `${step.value}\n`
+    if (step.syntax === 'starlark') {
+      return str + `${step.script}\n`
     }
     return str
   }, '')

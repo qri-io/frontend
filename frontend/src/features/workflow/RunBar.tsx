@@ -1,4 +1,5 @@
 import React from 'react'
+import EditableLabel from '../../chrome/EditableLabel'
 import { QriRef } from '../../qri/ref'
 import { RunState } from '../../qrimatic/run'
 import RunStateIcon from './RunStateIcon'
@@ -10,22 +11,25 @@ export interface RunBarProps {
   onRunCancel: () => void,
   onDeploy: () => void,
   onDeployCancel: () => void,
+  onRename: (name: string) => void,
 }
 
-const RunBar: React.FC<any> = ({
+const RunBar: React.FC<RunBarProps> = ({
   qriRef,
   status,
   onRun,
   onRunCancel,
   onDeploy,
   onDeployCancel,
+  onRename,
 }) => (
   <div className='pt-4 sticky top-0' style={{
     background: 'linear-gradient(rgb(255, 255, 255) 10%, rgba(255, 255, 255, 0))'
   }}>
     <div className='flex bg-gray-100 rounded border border-gray-200'>
       <div className='flex-2'>
-        <p>{qriRef.username}/{qriRef.name}</p>
+        <p>{qriRef.username}/</p>
+        <EditableLabel name='name' size='xl' value={qriRef.name} onChange={(name: string, value: string) => { onRename(value) }} />
         <p><RunStateIcon state={status} /></p>
       </div>
       <div className='flex-1 text-right'>

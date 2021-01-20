@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"context"
@@ -16,7 +16,7 @@ type FileStore struct {
 	path string
 
 	lock    sync.Mutex
-	jobs    *JobSet
+	jobs    *WorkflowSet
 	jobRuns map[string]*RunSet
 	runs    *RunSet
 }
@@ -28,7 +28,7 @@ var _ Store = (*FileStore)(nil)
 func NewFileStore(path string) (Store, error) {
 	s := &FileStore{
 		path:    path,
-		jobs:    NewJobSet(),
+		jobs:    NewWorkflowSet(),
 		jobRuns: map[string]*RunSet{},
 		runs:    NewRunSet(),
 	}
@@ -37,8 +37,8 @@ func NewFileStore(path string) (Store, error) {
 	return s, s.loadFromFile()
 }
 
-// ListJobs lists jobs currently in the store
-func (s *FileStore) ListJobs(ctx context.Context, offset, limit int) ([]*Job, error) {
+// ListWorkflows lists jobs currently in the store
+func (s *FileStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -46,7 +46,7 @@ func (s *FileStore) ListJobs(ctx context.Context, offset, limit int) ([]*Job, er
 		limit = len(s.jobs.set)
 	}
 
-	jobs := make([]*Job, 0, limit)
+	jobs := make([]*Workflow, 0, limit)
 	for i, job := range s.jobs.set {
 		if i < offset {
 			continue
@@ -78,9 +78,9 @@ func (s *FileStore) ListRuns(ctx context.Context, offset, limit int) ([]*Run, er
 	return runs, nil
 }
 
-// GetJobByName gets a job with the corresponding name field. usually matches
+// GetWorkflowByName gets a job with the corresponding name field. usually matches
 // the dataset name
-func (s *FileStore) GetJobByName(ctx context.Context, name string) (*Job, error) {
+func (s *FileStore) GetWorkflowByName(ctx context.Context, name string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -92,8 +92,8 @@ func (s *FileStore) GetJobByName(ctx context.Context, name string) (*Job, error)
 	return nil, ErrNotFound
 }
 
-// GetJob gets job details from the store by dataset identifier
-func (s *FileStore) GetJob(ctx context.Context, id string) (*Job, error) {
+// GetWorkflow gets job details from the store by dataset identifier
+func (s *FileStore) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -105,9 +105,9 @@ func (s *FileStore) GetJob(ctx context.Context, id string) (*Job, error) {
 	return nil, ErrNotFound
 }
 
-// PutJob places a job in the store. If the job name matches the name of a job
+// PutWorkflow places a job in the store. If the job name matches the name of a job
 // that already exists, it will be overwritten with the new job
-func (s *FileStore) PutJob(ctx context.Context, job *Job) error {
+func (s *FileStore) PutWorkflow(ctx context.Context, job *Workflow) error {
 	if job.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
@@ -127,9 +127,9 @@ func (s *FileStore) PutJob(ctx context.Context, job *Job) error {
 	return s.writeToFile()
 }
 
-// DeleteJob removes a job from the store by name. deleting a non-existent job
+// DeleteWorkflow removes a job from the store by name. deleting a non-existent job
 // won't return an error
-func (s *FileStore) DeleteJob(ctx context.Context, id string) error {
+func (s *FileStore) DeleteWorkflow(ctx context.Context, id string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -152,7 +152,7 @@ func (s *FileStore) GetRun(ctx context.Context, id string) (*Run, error) {
 	return nil, ErrNotFound
 }
 
-func (s *FileStore) GetJobRuns(ctx context.Context, jobID string, offset, limit int) ([]*Run, error) {
+func (s *FileStore) GetWorkflowRuns(ctx context.Context, jobID string, offset, limit int) ([]*Run, error) {
 	runs, ok := s.jobRuns[jobID]
 	if !ok {
 		return nil, ErrNotFound
@@ -180,31 +180,31 @@ func (s *FileStore) PutRun(ctx context.Context, run *Run) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
-	if run.JobID == "" {
-		return fmt.Errorf("JobID is required")
+	if run.WorkflowID == "" {
+		return fmt.Errorf("WorkflowID is required")
 	}
 
 	s.lock.Lock()
-	if jobRuns, ok := s.jobRuns[run.JobID]; ok {
+	if jobRuns, ok := s.jobRuns[run.WorkflowID]; ok {
 		jobRuns.Add(run)
 	} else {
 		jobRuns = NewRunSet()
 		jobRuns.Add(run)
-		s.jobRuns[run.JobID] = jobRuns
+		s.jobRuns[run.WorkflowID] = jobRuns
 	}
 	s.runs.Add(run)
 	s.lock.Unlock()
 	return s.writeToFile()
 }
 
-func (s *FileStore) DeleteAllJobRuns(ctx context.Context, jobID string) error {
+func (s *FileStore) DeleteAllWorkflowRuns(ctx context.Context, jobID string) error {
 	return fmt.Errorf("not finished: FileStore delete all job runs")
 }
 
 // const logsDirName = "logfiles"
 
 // // CreateLogFile creates a log file in the specified logs directory
-// func (s *FileStore) CreateLogFile(j *Job) (f io.WriteCloser, path string, err error) {
+// func (s *FileStore) CreateLogFile(j *Workflow) (f io.WriteCloser, path string, err error) {
 // 	s.lock.Lock()
 // 	defer s.lock.Unlock()
 
@@ -244,20 +244,20 @@ func (s *FileStore) loadFromFile() (err error) {
 	}
 
 	state := struct {
-		Jobs    *JobSet
-		JobRuns map[string]*RunSet
-		Runs    *RunSet
+		Workflows    *WorkflowSet
+		WorkflowRuns map[string]*RunSet
+		Runs         *RunSet
 	}{}
 	if err := json.Unmarshal(data, &state); err != nil {
 		log.Debugw("FileStore deserializing from JSON", "error", err)
 		return err
 	}
 
-	if state.Jobs != nil {
-		s.jobs = state.Jobs
+	if state.Workflows != nil {
+		s.jobs = state.Workflows
 	}
-	if state.JobRuns != nil {
-		s.jobRuns = state.JobRuns
+	if state.WorkflowRuns != nil {
+		s.jobRuns = state.WorkflowRuns
 	}
 	if state.Runs != nil {
 		s.runs = state.Runs
@@ -270,13 +270,13 @@ func (s *FileStore) writeToFile() error {
 	defer s.lock.Unlock()
 
 	state := struct {
-		Jobs    *JobSet
-		JobRuns map[string]*RunSet
-		Runs    *RunSet
+		Workflows    *WorkflowSet
+		WorkflowRuns map[string]*RunSet
+		Runs         *RunSet
 	}{
-		Jobs:    s.jobs,
-		JobRuns: s.jobRuns,
-		Runs:    s.runs,
+		Workflows:    s.jobs,
+		WorkflowRuns: s.jobRuns,
+		Runs:         s.runs,
 	}
 	data, err := json.Marshal(state)
 	if err != nil {

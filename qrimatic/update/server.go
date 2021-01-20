@@ -49,6 +49,7 @@ func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string) (*S
 func (s *Server) Serve(ctx context.Context) error {
 	apiServer := api.New(s.inst)
 	s.svc.AddRoutes(apiServer.Mux, apiServer.Middleware)
+	apiServer.Mux.Handle("/deploy", apiServer.Middleware(s.svc.NewDeployHandler("/deploy")))
 
 	go func() {
 		if err := apiServer.Serve(ctx); err != nil {

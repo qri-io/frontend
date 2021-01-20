@@ -259,7 +259,7 @@ func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err 
 		p.Periodicity = args[1]
 	}
 
-	res := &update.Job{}
+	res := &update.Workflow{}
 	if err := client.updates.Schedule(ctx, p, res); err != nil {
 		return err
 	}
@@ -294,7 +294,7 @@ func (client *ClientCommands) List(ctx context.Context) (err error) {
 		Offset: page.Offset(),
 		Limit:  page.Limit(),
 	}
-	res := []*update.Job{}
+	res := []*update.Workflow{}
 	if err = client.updates.List(ctx, p, &res); err != nil {
 		return
 	}
@@ -305,7 +305,7 @@ func (client *ClientCommands) List(ctx context.Context) (err error) {
 	// should use a more proper fix
 	j := 0
 	for i := len(res) - 1; i >= 0; i-- {
-		items[j] = jobStringer(*res[i])
+		items[j] = workflowStringer(*res[i])
 		j++
 	}
 	printItems(client.Out, items, page.Offset())
@@ -371,7 +371,7 @@ func (client *ClientCommands) RunUpdate(ctx context.Context, args []string) (err
 
 	var (
 		name = args[0]
-		job  = &update.Job{
+		job  = &update.Workflow{
 			Name: name,
 		}
 	)
