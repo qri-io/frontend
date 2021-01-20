@@ -9,10 +9,11 @@ import (
 )
 
 func NewServeCommand(ctx context.Context, streams ioes.IOStreams, repoPath string) *cobra.Command {
+	o := ServeOptions{}
 	cmd := &cobra.Command{
 		Use: "serve",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			server, err := update.NewServer(ctx, streams, repoPath)
+			server, err := update.NewServer(ctx, streams, repoPath, o.Setup)
 			if err != nil {
 				return err
 			}
@@ -21,5 +22,11 @@ func NewServeCommand(ctx context.Context, streams ioes.IOStreams, repoPath strin
 		},
 	}
 
+	cmd.Flags().BoolVarP(&o.Setup, "setup", "", false, "run setup if necessary, reading options from environment variables")
+
 	return cmd
+}
+
+type ServeOptions struct {
+	Setup bool
 }

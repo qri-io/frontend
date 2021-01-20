@@ -56,4 +56,4 @@ RUN apk update \
 # the setup flag initalizes ipfs & qri repos if none is mounted
 # the migrate flag automatically executes any necessary migrations
 # the no-prompt flag disables asking for any user input, reverting to defaults
-CMD ["qrimatic", "serve"]
+CMD ["qrimatic", "serve", "--setup"]
