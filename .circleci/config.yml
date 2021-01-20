@@ -207,6 +207,7 @@ workflows:
             branches:
               only:
               - master
+              - qme_deploy
       - engine-prod-deploy:
           requires:
             - engine-image-push
@@ -214,3 +215,4 @@ workflows:
             branches:
               only:
                 - master
+                - qme_deploy
