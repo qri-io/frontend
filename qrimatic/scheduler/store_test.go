@@ -3,6 +3,7 @@ package scheduler
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -31,10 +32,12 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		}
 
 		jobOne := &Workflow{
-			Name:        "job_one",
-			DatasetID:   "dsID1",
-			Periodicity: mustRepeatingInterval("R/PT1H"),
-			ID:          "jobID",
+			Name:      "job_one",
+			DatasetID: "dsID1",
+			ID:        "workflowID",
+			Triggers: Triggers{
+				NewCronTrigger("workflowID", time.Time{}, mustRepeatingInterval("R/PT1H")),
+			},
 		}
 		if err = store.PutWorkflow(ctx, jobOne); err != nil {
 			t.Errorf("putting job one: %s", err)
@@ -52,10 +55,12 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 
 		// d2 := time.Date(2001, 1, 1, 1, 1, 1, 1, time.UTC)
 		jobTwo := &Workflow{
-			ID:          "job2",
-			Name:        "job two",
-			DatasetID:   "dsID2",
-			Periodicity: mustRepeatingInterval("R/P3M"),
+			ID:        "job2",
+			Name:      "job two",
+			DatasetID: "dsID2",
+			Triggers: Triggers{
+				NewCronTrigger("job2", time.Time{}, mustRepeatingInterval("R/P3M")),
+			},
 			// RunStart:    &d2,
 		}
 		if err = store.PutWorkflow(ctx, jobTwo); err != nil {
@@ -71,8 +76,8 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		}
 
 		jobThree := &Workflow{
-			Name:        "job_three",
-			Periodicity: mustRepeatingInterval("R/PT1H"),
+			Name: "job_three",
+			// Periodicity: mustRepeatingInterval("R/PT1H"),
 			Options: &DatasetOptions{
 				Title: "hallo",
 			},
@@ -90,8 +95,8 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 
 		// d3 := time.Date(2002, 1, 1, 1, 1, 1, 1, time.UTC)
 		updatedWorkflowOne := &Workflow{
-			Name:        jobOne.Name,
-			Periodicity: jobOne.Periodicity,
+			Name: jobOne.Name,
+			// Periodicity: jobOne.Periodicity,
 			// RunStart:    &d3,
 		}
 		if err = store.PutWorkflow(ctx, updatedWorkflowOne); err != nil {
@@ -141,18 +146,18 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 	})
 
 	t.Run("TestWorkflowStoreValidPut", func(t *testing.T) {
-		r1h := mustRepeatingInterval("R/PT1H")
+		// r1h := mustRepeatingInterval("R/PT1H")
 		bad := []struct {
 			description string
 			job         *Workflow
 		}{
 			{"empty", &Workflow{}},
-			{"no name", &Workflow{Periodicity: r1h}},
+			// {"no name", &Workflow{Periodicity: r1h}},
 			{"no periodicity", &Workflow{Name: "some_name"}},
-			{"no type", &Workflow{Name: "some_name", Periodicity: r1h}},
+			// {"no type", &Workflow{Name: "some_name", Periodicity: r1h}},
 
 			{"invalid periodicity", &Workflow{Name: "some_name"}},
-			{"invalid WorkflowType", &Workflow{Name: "some_name", Periodicity: r1h}},
+			// {"invalid WorkflowType", &Workflow{Name: "some_name", Periodicity: r1h}},
 		}
 
 		store := newStore()

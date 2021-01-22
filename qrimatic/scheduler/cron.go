@@ -124,6 +124,11 @@ func (c *Cron) GetRun(ctx context.Context, datasetID string, runNumber int) (*Ru
 // 	return os.Open(workflow.LogFilePath)
 // }
 
+type execTrigger struct {
+	w *Workflow
+	t Trigger
+}
+
 // Start initiates the check loop, looking for updates to execute once at every
 // iteration of the configured check interval.
 // Start blocks until the passed context completes
@@ -139,20 +144,26 @@ func (c *Cron) Start(ctx context.Context) error {
 			return
 		}
 
-		run := []*Workflow{}
+		run := []execTrigger{}
 		for _, workflow := range workflows {
-			if workflow.NextRunStart != nil && now.After(*workflow.NextRunStart) {
-				run = append(run, workflow)
+			for _, t := range workflow.Triggers.CronTriggers() {
+				if t.NextRunStart != nil && now.After(*t.NextRunStart) {
+					run = append(run, execTrigger{
+						w: workflow,
+						t: t,
+					})
+				}
+				break
 			}
 		}
 
 		if len(run) > 0 {
 			log.Debugw("running workflows", "workflowCount", len(workflows), "runCount", len(run))
 			runner := c.factory(ctx)
-			for _, workflow := range run {
+			for _, r := range run {
 				// TODO (b5) - if we want things like per-workflow timeout, we should create
 				// a new workflow-scoped context here
-				c.runWorkflow(ctx, workflow, runner)
+				c.runWorkflow(ctx, r.w, r.t, runner)
 			}
 		}
 	}
@@ -168,16 +179,19 @@ func (c *Cron) Start(ctx context.Context) error {
 	}
 }
 
-func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, runner RunTransformFunc) {
+func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, t Trigger, runner RunTransformFunc) {
 	go func(j *Workflow) {
 		if err := c.pub.Publish(ctx, ETWorkflowStarted, j); err != nil {
 			log.Debug(err)
 		}
 	}(workflow.Copy())
 
-	log.Debugf("run workflow: %s", workflow.Name)
+	log.Debugf("run workflow: %s", workflow.ID)
 	if err := workflow.Advance(); err != nil {
-		log.Debug(err)
+		log.Debugw("advancing workflow", "err", err, "id", workflow.ID)
+	}
+	if err := t.Advance(); err != nil {
+		log.Debugw("advancing trigger", "err", err, "id", t.Info().ID)
 	}
 
 	streams := ioes.NewDiscardIOStreams()
@@ -191,10 +205,10 @@ func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, runner RunTr
 	}
 
 	if err := runner(ctx, streams, workflow); err != nil {
-		log.Errorf("run workflow: %s error: %s", workflow.Name, err.Error())
+		log.Errorf("run workflow: %s error: %s", workflow.ID, err.Error())
 		workflow.CurrentRun.Error = err.Error()
 	} else {
-		log.Debugf("run workflow: %s success", workflow.Name)
+		log.Debugf("run workflow: %s success", workflow.ID)
 		workflow.CurrentRun.Error = ""
 	}
 	now := NowFunc()
@@ -232,9 +246,15 @@ func (c *Cron) Schedule(ctx context.Context, workflow *Workflow) (err error) {
 		}
 	}
 
-	if !workflow.Disabled && workflow.NextRunStart == nil {
-		next := workflow.Periodicity.After(NowFunc())
-		workflow.NextRunStart = &next
+	if !workflow.Disabled {
+		for _, t := range workflow.Triggers {
+			// give any cron triggers a start time
+			if ct, ok := t.(*CronTrigger); ok {
+				ct.Start = NowFunc()
+				next := ct.Periodicity.After(ct.Start)
+				ct.NextRunStart = &next
+			}
+		}
 	}
 
 	if err := c.store.PutWorkflow(ctx, workflow); err != nil {

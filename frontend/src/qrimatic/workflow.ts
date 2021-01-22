@@ -13,9 +13,6 @@ export interface Workflow {
   triggers?: WorkflowTrigger[]
   steps?: TransformStep[]
   onCompletion?: WorkflowHook[]
-
-  periodicity?: string // temp
-  nextRunStart?: string
 }
 
 export function NewWorkflow(data: Record<string,any>): Workflow {
@@ -31,21 +28,28 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
     steps: data.steps && data.steps.map(NewTransformStep),
     onCompletion: data.onCompletion && data.onCompletion.map(NewWorkflowHook),
-
-    periodicity: data.periodicity,
-    nextRunStart: data.nextRunStart,
   }
 }
 
 export interface WorkflowTrigger {
-  type: string
-  value: string | Record<string,any>
+  id:         string,
+  workflowId: string,
+  type:       string,
+  disabled?:   boolean,
+
+	runCount?:      number,
+	lastRunID?:     string,
+	lastRunStart?:  string,
+  lastRunStatus?: string,
+  [key: string]: any
 }
 
 export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
   return {
+    id: data.id || '',
+    workflowId: data.workflowId || '',
     type: data.type,
-    value: data.value
+    disabled: data.disabled || false,
   }
 }
 

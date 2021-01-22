@@ -1,15 +1,18 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store';
-import { EventLogAction, RenameDatasetAction, SetWorkflowAction, SetWorkflowStepAction } from './workflowActions';
+import { EventLogAction, RenameDatasetAction, SetWorkflowAction, SetWorkflowRefAction, SetWorkflowStepAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
 import { Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qrimatic/eventLog';
+import { QriRef } from '../../../qri/ref';
+import Dataset from '../../../qri/dataset';
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_STEP = 'WORKFLOW_CHANGE_STEP'
 export const WORKFLOW_RENAME_DATASET = 'WORKFLOW_RENAME_DATASET'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
+export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
@@ -26,6 +29,7 @@ export const selectLatestRun = (state: RootState): Run | undefined => {
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
 
 export interface WorkflowState {
+  qriRef?: QriRef
   workflow: Workflow,
 
   lastRunID?: string,
@@ -34,19 +38,17 @@ export interface WorkflowState {
 
 const initialState: WorkflowState = {
   workflow: {
-    id: '_',
-    datasetID: 'me/transform_example_2',
+    id: '',
+    datasetID: '',
     name: '',
     runCount: 0,
-    periodicity: 'R/PT10M',
-
     triggers: [
-      { type: 'cron', value: 'R/PT1H' }
+      { id: '', workflowId: '', type: 'cron', periodicity: 'R/PT1H' }
     ],
     steps: [
-      { syntax: 'starlark', name: 'setup', category: 'setup', script: `# load_ds("b5/world_bank_population")` },
-      { syntax: 'starlark', name: 'download', category: 'download', script: `def download(ctx):\n\treturn "your download here"` },
-      { syntax: 'starlark', name: 'transform', category: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+      { syntax: 'starlark', name: 'setup', category: 'setup', script: `` },
+      { syntax: 'starlark', name: 'download', category: 'download', script: `` },
+      { syntax: 'starlark', name: 'transform', category: 'transform', script: '' },
       { syntax: 'save', name: 'save', category: 'save', script: '' }
     ],
     onCompletion: [
@@ -60,6 +62,22 @@ export const workflowReducer = createReducer(initialState, {
   'API_RUN_WORKFLOW_SUCCESS': (state, action) => {
     const runID = action.payload.data.runID
     state.lastRunID = runID
+  },
+  'API_LOAD_WORKFLOW_SUCCESS': (state, action) => {
+    console.log('loaded workflow', action)
+  },
+  'API_DATASET_SUCCESS': (state, action) => {
+    const d = action.payload.data as Dataset
+    // TODO (b5) - this should check peername *and* confirm the loaded verison is HEAD
+    if (state.qriRef?.name === d.name) {
+      if (d.transform?.steps) {
+        state.workflow.steps = d.transform.steps
+      }
+    }
+  },
+  SET_WORKFLOW_REF: (state, action: SetWorkflowRefAction) => {
+    state.qriRef = action.qriRef
+    state.workflow.datasetID = `${action.qriRef.username}/${action.qriRef.name}`
   },
   // temp action used to work around the api, auto sets the events
   // of the workflow without having to have a working api

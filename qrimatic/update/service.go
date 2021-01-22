@@ -106,7 +106,7 @@ func NewService(inst *lib.Instance) (*Service, error) {
 	// 	return fmt.Errorf("unknown scheduler type: %q", cfg.Type)
 	// }
 
-	svc := scheduler.NewCron(store, Factory, inst.Bus())
+	svc := scheduler.NewCron(store, LocalInstanceFactory(inst), inst.Bus())
 	log.Debug("starting update service")
 	// go func() {
 	// 	if err := svc.ServeHTTP(cfg.Addr); err != nil {
@@ -145,6 +145,35 @@ func Factory(context.Context) scheduler.RunTransformFunc {
 		cmd := WorkflowToCmd(streams, workflow)
 		err := cmd.Run()
 		return processWorkflowError(workflow, errBuf, err)
+	}
+}
+
+func LocalInstanceFactory(inst *lib.Instance) func(context.Context) scheduler.RunTransformFunc {
+	return func(ctx context.Context) scheduler.RunTransformFunc {
+		return func(ctx context.Context, streams ioes.IOStreams, workflow *scheduler.Workflow) error {
+			log.Debugf("running workflow with an instance factory: %w", workflow.ID)
+			var errBuf *bytes.Buffer
+			// if the workflow type is a dataset, error output is semi-predictable
+			// write to a buffer for better error reporting
+			errBuf = &bytes.Buffer{}
+			teedErrOut := io.MultiWriter(streams.ErrOut, errBuf)
+			streams = ioes.NewIOStreams(streams.In, streams.Out, teedErrOut)
+
+			dsm := lib.NewDatasetMethods(inst)
+
+			getResult := &lib.GetResult{}
+			if err := dsm.Get(&lib.GetParams{Refstr: workflow.DatasetID}, getResult); err != nil {
+				log.Errorw("getting dataset", "err", err, "datasetID", workflow.DatasetID)
+			}
+
+			p := &lib.SaveParams{
+				Dataset: getResult.Dataset,
+				Apply:   true,
+			}
+			res := &dataset.Dataset{}
+			err := dsm.Save(p, res)
+			return processWorkflowError(workflow, errBuf, err)
+		}
 	}
 }
 
@@ -212,12 +241,6 @@ func shellScriptCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.
 	return cmd
 }
 
-// PossibleShellScript checks a path to see if it might be a shell script
-// TODO (b5) - deal with platforms that don't use '.sh' as a script extension (windows?)
-func PossibleShellScript(path string) bool {
-	return filepath.Ext(path) == ".sh"
-}
-
 // DatasetToWorkflow converts a dataset to scheduler.Workflow
 func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.DatasetOptions) (workflow *scheduler.Workflow, err error) {
 	if periodicity == "" && ds.Meta != nil && ds.Meta.AccrualPeriodicity != "" {
@@ -229,7 +252,7 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 	}
 
 	name := fmt.Sprintf("%s/%s", ds.Peername, ds.Name)
-	workflow, err = scheduler.NewWorkflow(name, "ownerID", name, periodicity)
+	workflow, err = scheduler.NewCronWorkflow(name, "ownerID", name, periodicity)
 	if err != nil {
 		log.Debugw("creating new workflow", "error", err)
 		return nil, err
@@ -242,21 +265,6 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 	}
 	// err = workflow.Validate()
 
-	return
-}
-
-// ShellScriptToWorkflow turns a shell script into scheduler.Workflow
-func ShellScriptToWorkflow(path string, periodicity string, opts *scheduler.ShellScriptOptions) (workflow *scheduler.Workflow, err error) {
-	// TODO (b5) - confirm file exists & is executable
-
-	workflow, err = scheduler.NewWorkflow(path, "foo", path, periodicity)
-	if err != nil {
-		return nil, err
-	}
-
-	if opts != nil {
-		workflow.Options = opts
-	}
 	return
 }
 

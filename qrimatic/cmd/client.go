@@ -264,7 +264,7 @@ func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err 
 		return err
 	}
 
-	fmt.Fprintf(client.ErrOut, "update scheduled, next update: %s\n", res.NextRunStart)
+	fmt.Fprintf(client.ErrOut, "update scheduled\n")
 	return nil
 }
 

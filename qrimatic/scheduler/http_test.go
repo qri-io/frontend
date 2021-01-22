@@ -43,8 +43,8 @@ func TestCronHTTP(t *testing.T) {
 
 	// d := time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)
 	dsWorkflow := &Workflow{
-		Name:        "b5/libp2p_node_count",
-		Periodicity: mustRepeatingInterval("R/P1W"),
+		Name: "b5/libp2p_node_count",
+		// Periodicity: mustRepeatingInterval("R/P1W"),
 		// RunStart:    &d,
 	}
 

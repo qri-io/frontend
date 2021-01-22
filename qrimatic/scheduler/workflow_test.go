@@ -3,6 +3,7 @@ package scheduler
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -44,9 +45,9 @@ func TestDatasetOptionsJSON(t *testing.T) {
 func TestWorkflowCopy(t *testing.T) {
 	// now := time.Now()
 	a := &Workflow{
-		ID:          "id",
-		Name:        "name",
-		Periodicity: mustRepeatingInterval("R/P1W"),
+		ID:   "id",
+		Name: "name",
+		// Periodicity: mustRepeatingInterval("R/P1W"),
 		// PrevRunStart: &now,
 		// RunNumber:    1234567890,
 		// RunStart:     &now,
@@ -68,18 +69,22 @@ func compareWorkflow(a, b *Workflow) string {
 	return cmp.Diff(a, b, cmpopts.IgnoreUnexported(iso8601.Duration{}))
 }
 
-func TestWorkflowsJSON(t *testing.T) {
+func TestWorkflowSetJSON(t *testing.T) {
 	jobs := NewWorkflowSet()
 	jobs.Add(&Workflow{
-		ID:          "job1",
-		Name:        "job_one",
-		Periodicity: mustRepeatingInterval("R/PT1H"),
-		Options:     &DatasetOptions{Title: "Yus"},
+		ID:      "job1",
+		Name:    "job_one",
+		Options: &DatasetOptions{Title: "Yus"},
+		Triggers: Triggers{
+			NewCronTrigger("job1", time.Time{}, mustRepeatingInterval("R/PT1H")),
+		},
 	})
 	jobs.Add(&Workflow{
-		ID:          "job2",
-		Name:        "job_two",
-		Periodicity: mustRepeatingInterval("R/PT1D"),
+		ID:   "job2",
+		Name: "job_two",
+		Triggers: Triggers{
+			NewCronTrigger("job2", time.Time{}, mustRepeatingInterval("R/PT1D")),
+		},
 	})
 
 	data, err := json.Marshal(jobs)
@@ -88,7 +93,7 @@ func TestWorkflowsJSON(t *testing.T) {
 	}
 
 	got := []*Workflow{}
-	if err := json.Unmarshal(data, got); err != nil {
+	if err := json.Unmarshal(data, &got); err != nil {
 		t.Fatal(err)
 	}
 

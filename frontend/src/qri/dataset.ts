@@ -1,3 +1,5 @@
+// TODO (b5) - move TransformStep definition into this
+import { TransformStep } from "../qrimatic/workflow"
 
 export interface Dataset {
   peername: string
@@ -229,12 +231,14 @@ export interface INumericStats {
 export interface Transform {
   syntax: string
   bodyBytes?: string
+  steps: TransformStep[]
 }
 
 export function newTransform(d: Record<string,any>): Transform {
   return {
     syntax: d.syntax || '',
     bodyBytes: d.bodyBytes,
+    steps: d.steps
   }
 }
 

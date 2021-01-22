@@ -7,13 +7,11 @@ export const CSVDownload: Workflow = {
   datasetID: 'me/csv_download_template',
   name: '',
   runCount: 0,
-  periodicity: 'R/PT1H',
 
-  triggers: [{
+  triggers: [
     // repeat every hour
-    type: 'cron',
-    value: 'R/PT1H'
-  }],
+    { id: '', workflowId: '', type: 'cron', value: 'R/PT1H' }
+  ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
 load("http.star", "http")
@@ -40,11 +38,10 @@ export const APICall: Workflow = {
   name: '',
   runCount: 0,
 
-  triggers: [{
+  triggers: [
     // repeat every hour
-    type: 'cron',
-    value: 'R/PT1H'
-  }],
+    { id: '', workflowId: '', type: 'cron', value: 'R/PT1H' }
+  ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/apicall")` },
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
@@ -61,11 +58,10 @@ export const DatabaseQuery: Workflow = {
   name: '',
   runCount: 0,
 
-  triggers: [{
+  triggers: [
     // repeat every hour
-    type: 'cron',
-    value: 'R/PT1H'
-  }],
+    { id: '', workflowId: '', type: 'cron', value: 'R/PT1H' }
+  ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/databasequery")` },
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
@@ -82,11 +78,10 @@ export const Webscrape: Workflow = {
   name: '',
   runCount: 0,
   
-  triggers: [{
+  triggers: [
     // repeat every hour
-    type: 'cron',
-    value: 'R/PT1H'
-  }],
+    { id: '', workflowId: '', type: 'cron', value: 'R/PT1H' }
+  ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/webscrape")` },
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },

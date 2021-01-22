@@ -21,12 +21,16 @@ func mustRepeatingInterval(s string) iso8601.RepeatingInterval {
 func TestCronDataset(t *testing.T) {
 	updateCount := 0
 	next := time.Now().Add(time.Millisecond * 20)
+	trig := NewCronTrigger("workflowID", time.Now(), mustRepeatingInterval("R/P1W"))
+	trig.NextRunStart = &next
+
 	job := &Workflow{
-		Name:         "b5/libp2p_node_count",
-		DatasetID:    "dsID",
-		OwnerID:      "ownerID",
-		Periodicity:  mustRepeatingInterval("R/P1W"),
-		NextRunStart: &next,
+		Name:      "b5/libp2p_node_count",
+		DatasetID: "dsID",
+		OwnerID:   "ownerID",
+		Triggers: Triggers{
+			trig,
+		},
 	}
 
 	factory := func(outer context.Context) RunTransformFunc {
@@ -67,11 +71,15 @@ func TestCronDataset(t *testing.T) {
 	got := logs[0]
 
 	expect := &Workflow{
-		Name:        "b5/libp2p_node_count",
-		Periodicity: mustRepeatingInterval("R/P1W"),
-		// RunNumber: 1,
-		// RunStart:  got.RunStart,
-		// RunStop:   got.RunStop,
+		Name: "b5/libp2p_node_count",
+		Triggers: Triggers{
+			&CronTrigger{
+				Periodicity: mustRepeatingInterval("R/P1W"),
+				// RunNumber: 1,
+				// RunStart:  got.RunStart,
+				// RunStop:   got.RunStop,
+			},
+		},
 	}
 
 	if diff := compareWorkflow(expect, got); diff != "" {
@@ -87,8 +95,8 @@ func TestCronShellScript(t *testing.T) {
 	updateCount := 0
 
 	job := &Workflow{
-		Name:        "foo.sh",
-		Periodicity: mustRepeatingInterval("R/P1W"),
+		Name: "foo.sh",
+		// Periodicity: mustRepeatingInterval("R/P1W"),
 	}
 
 	// scriptRunner := LocalShellScriptRunner("testdata")
@@ -130,8 +138,8 @@ func TestCronShellScript(t *testing.T) {
 	got := logs[0]
 
 	expect := &Workflow{
-		Name:        "foo.sh",
-		Periodicity: mustRepeatingInterval("R/P1W"),
+		Name: "foo.sh",
+		// Periodicity: mustRepeatingInterval("R/P1W"),
 
 		// RunNumber: 1,
 		// RunStart:  got.RunStart,

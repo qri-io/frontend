@@ -1,3 +1,4 @@
+import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qrimatic/eventLog'
 import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk } from '../../../store/api'
@@ -6,7 +7,8 @@ import {
   WORKFLOW_RENAME_DATASET,
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
-  SET_WORKFLOW
+  SET_WORKFLOW,
+  SET_WORKFLOW_REF
  } from './workflowState'
 
 
@@ -95,6 +97,18 @@ export function setWorkflow(workflow: Workflow): SetWorkflowAction {
   return {
     type: SET_WORKFLOW,
     workflow
+  }
+}
+
+export interface SetWorkflowRefAction {
+  type: string
+  qriRef: QriRef
+}
+
+export function setWorkflowRef(qriRef: QriRef): SetWorkflowRefAction {
+  return {
+    type: SET_WORKFLOW_REF,
+    qriRef,
   }
 }
 

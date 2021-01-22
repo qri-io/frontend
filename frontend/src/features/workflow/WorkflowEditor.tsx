@@ -8,7 +8,7 @@ import OnComplete from './OnComplete';
 import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
 import { TransformStep } from '../../qrimatic/workflow';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
-import { changeTransformStep, changeDatasetName, runWorkflow, setWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
+import { changeTransformStep, changeDatasetName, runWorkflow, setWorkflow, tempSetWorkflowEvents, setWorkflowRef } from './state/workflowActions';
 import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
 import { selectTemplate } from '../template/templates';
 import RunBar from './RunBar';
@@ -37,6 +37,10 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ qriRef }) => {
       dispatch(setWorkflow(selectTemplate(location.state.template)))
     }
   }, [dispatch, location.state])
+
+  useEffect(() => {
+    dispatch(setWorkflowRef(qriRef))
+  }, [dispatch, qriRef])
 
   const collapseState = (step: TransformStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
     if (collapseStates[step.name]) {

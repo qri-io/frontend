@@ -49,13 +49,6 @@ type ScheduleParams struct {
 
 // Schedule creates a job and adds it to the scheduler
 func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *scheduler.Workflow) (err error) {
-	// Make all paths absolute. this must happen *before* any possible RPC call
-	if PossibleShellScript(in.Name) {
-		if err = qfs.AbsPath(&in.Name); err != nil {
-			return
-		}
-	}
-
 	if err = in.SaveParams.AbsolutizePaths(); err != nil {
 		return err
 	}
@@ -77,10 +70,6 @@ func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *schedule
 }
 
 func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (job *scheduler.Workflow, err error) {
-	if PossibleShellScript(p.Name) {
-		return ShellScriptToWorkflow(p.Name, p.Periodicity, nil)
-	}
-
 	// TODO (b5) - finish
 	inst, err := lib.NewInstance(ctx, c.repoPath)
 	if err != nil {

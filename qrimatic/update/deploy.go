@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/qri/api/util"
@@ -56,14 +57,26 @@ func (s *Service) Deploy(ctx context.Context, p *DeployParams) (*DeployResponse,
 		Apply: p.Apply,
 		// Wait: false,
 	}
-
+	log.Warnw("deploying dataset", "datasetID", saveP.Ref)
 	res := &dataset.Dataset{}
-	if err := dsm.Save(saveP, res); err != nil {
-		return nil, err
+	err := dsm.Save(saveP, res)
+	if err != nil {
+		if strings.Contains(err.Error(), "no changes") {
+			err = nil
+		} else {
+			log.Errorw("deploy save dataset", "error", err)
+			return nil, err
+		}
 	}
 
+	p.Workflow.OwnerID = s.inst.Config().Profile.ID
+
 	// save workflow
-	err := s.scheduler.Schedule(ctx, p.Workflow)
+	err = s.scheduler.Schedule(ctx, p.Workflow)
+	if err != nil {
+		log.Errorw("deploy scheduling", "error", err)
+	}
+
 	return &DeployResponse{
 		Workflow: p.Workflow,
 	}, err

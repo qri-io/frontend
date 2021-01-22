@@ -37,10 +37,10 @@ type workflowStringer update.Workflow
 func (j workflowStringer) String() string {
 	w := &bytes.Buffer{}
 	name := color.New(color.Bold).SprintFunc()
-	if j.NextRunStart != nil {
-		t := j.Periodicity.After(*j.NextRunStart)
-		relTime := humanize.RelTime(time.Now().In(time.UTC), t, "", "")
-		fmt.Fprintf(w, "%s\nin %sat %s\n", name(j.Name), relTime, t.In(StringerLocation).Format(time.Kitchen))
+	if j.LatestRunStart != nil {
+		lr := *j.LatestRunStart
+		relTime := humanize.RelTime(time.Now().In(time.UTC), lr, "", "")
+		fmt.Fprintf(w, "%s\nlast ran %sat %s\n", name(j.Name), relTime, lr.In(StringerLocation).Format(time.Kitchen))
 	} else {
 		fmt.Fprintf(w, "%s\nin paused\n", name(j.Name))
 	}

@@ -49,17 +49,15 @@ type Workflow struct {
 	LatestRunStart *time.Time `json:"latestRunStart"`       // time workflow last started
 	CurrentRun     *Run       `json:"currentRun,omitempty"` // optional currently executing run
 
-	Periodicity  iso8601.RepeatingInterval `json:"periodicity"`  // how frequently to run this workflow
-	NextRunStart *time.Time                `json:"nextRunStart"` // earliest possible instant workflow should run at
+	// Periodicity  iso8601.RepeatingInterval `json:"periodicity"`  // how frequently to run this workflow
+	// NextRunStart *time.Time                `json:"nextRunStart"` // earliest possible instant workflow should run at
 
-	// Triggers   []Trigger    `json:"triggers"`   // things that can initiate a run
+	Triggers Triggers `json:"triggers"` // things that can initiate a run
 	// OnComplete []OnComplete `json:"onComplete"` // things to do after a run executes
-	Triggers   []map[string]interface{}    `json:"triggers"`   // things that can initiate a run
-	OnComplete []map[string]interface{} `json:"onComplete"` // things to do after a run executes
 }
 
-// NewWorkflow constructs a workflow pointer
-func NewWorkflow(name, ownerID, datasetID string, periodicityString string) (*Workflow, error) {
+// NewCronWorkflow constructs a workflow pointer with a cron trigger
+func NewCronWorkflow(name, ownerID, datasetID string, periodicityString string) (*Workflow, error) {
 	p, err := iso8601.ParseRepeatingInterval(periodicityString)
 	if err != nil {
 		return nil, err
@@ -72,12 +70,14 @@ func NewWorkflow(name, ownerID, datasetID string, periodicityString string) (*Wo
 
 	t := NowFunc()
 	return &Workflow{
-		ID:          id,
-		OwnerID:     ownerID,
-		DatasetID:   datasetID,
-		Name:        name,
-		Created:     &t,
-		Periodicity: p,
+		ID:        id,
+		OwnerID:   ownerID,
+		DatasetID: datasetID,
+		Name:      name,
+		Created:   &t,
+		Triggers: Triggers{
+			NewCronTrigger(id, t, p),
+		},
 	}, nil
 }
 
@@ -90,23 +90,7 @@ func (j *Workflow) Advance() (err error) {
 	}
 	j.RunCount++
 	j.LatestRunStart = j.CurrentRun.Start
-	j.Periodicity = j.Periodicity.NextRep()
-	j.NextRunStart = j.NextExecutionWall()
 	return nil
-}
-
-// NextExecutionWall returns the next time execution wall
-func (workflow *Workflow) NextExecutionWall() *time.Time {
-	if workflow.Disabled {
-		return nil
-	}
-	if workflow.LatestRunStart != nil {
-		t := workflow.Periodicity.After(*workflow.LatestRunStart)
-		return &t
-	}
-
-	t := workflow.Periodicity.After(*workflow.Created)
-	return &t
 }
 
 // Copy creates a copy of a workflow
@@ -117,11 +101,10 @@ func (workflow *Workflow) Copy() *Workflow {
 		OwnerID:        workflow.OwnerID,
 		Name:           workflow.Name,
 		Created:        workflow.Created,
-		Periodicity:    workflow.Periodicity,
 		Disabled:       workflow.Disabled,
 		RunCount:       workflow.RunCount,
 		LatestRunStart: workflow.LatestRunStart,
-		NextRunStart:   workflow.NextRunStart,
+		Triggers:       workflow.Triggers,
 	}
 
 	if workflow.CurrentRun != nil {
@@ -147,7 +130,7 @@ func NewWorkflowSet() *WorkflowSet {
 
 func (js WorkflowSet) Len() int { return len(js.set) }
 func (js WorkflowSet) Less(i, j int) bool {
-	return lessNilTime(js.set[i].NextRunStart, js.set[j].NextRunStart)
+	return lessNilTime(js.set[i].LatestRunStart, js.set[j].LatestRunStart)
 }
 func (js WorkflowSet) Swap(i, j int) { js.set[i], js.set[j] = js.set[j], js.set[i] }
 
@@ -218,7 +201,6 @@ type ShellScriptOptions struct {
 }
 
 // DatasetOptions encapsulates options passed to `qri save`
-// TODO (b5) - we should contribute flexbuffer support for golang & remove this entirely
 type DatasetOptions struct {
 	Title     string
 	Message   string
