@@ -9,44 +9,44 @@ package scheduler
 // 	"testing"
 // )
 
-// func TestFbJobStore(t *testing.T) {
-// 	tmp, err := ioutil.TempDir(os.TempDir(), "TestFsJobStore")
+// func TestFbWorkflowStore(t *testing.T) {
+// 	tmp, err := ioutil.TempDir(os.TempDir(), "TestFsWorkflowStore")
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
 // 	defer os.RemoveAll(tmp)
-// 	newStore := func() JobStore {
-// 		return NewFlatbufferJobStore(filepath.Join(tmp, "jobs.dat"))
+// 	newStore := func() WorkflowStore {
+// 		return NewFlatbufferWorkflowStore(filepath.Join(tmp, "workflows.dat"))
 // 	}
-// 	RunJobStoreTests(t, newStore)
+// 	RunWorkflowStoreTests(t, newStore)
 // }
 
-// func BenchmarkFbJobStore(b *testing.B) {
+// func BenchmarkFbWorkflowStore(b *testing.B) {
 // 	ctx := context.Background()
-// 	js := make(jobs, 1000)
+// 	js := make(workflows, 1000)
 // 	for i := range js {
-// 		js[i] = &Job{
-// 			Name:        fmt.Sprintf("job_%d", i),
+// 		js[i] = &Workflow{
+// 			Name:        fmt.Sprintf("workflow_%d", i),
 // 			Type:        JTDataset,
 // 			Periodicity: mustRepeatingInterval("R/P1H"),
 // 		}
 // 	}
 
-// 	tmp, err := ioutil.TempDir(os.TempDir(), "TestFsJobStore")
+// 	tmp, err := ioutil.TempDir(os.TempDir(), "TestFsWorkflowStore")
 // 	if err != nil {
 // 		b.Fatal(err)
 // 	}
 
 // 	defer os.RemoveAll(tmp)
-// 	store := NewFlatbufferJobStore(filepath.Join(tmp, "jobs.dat"))
+// 	store := NewFlatbufferWorkflowStore(filepath.Join(tmp, "workflows.dat"))
 
 // 	b.ResetTimer()
 
 // 	for i := 0; i < b.N; i++ {
-// 		if err := store.PutJobs(ctx, js...); err != nil {
+// 		if err := store.PutWorkflows(ctx, js...); err != nil {
 // 			b.Fatal(err)
 // 		}
-// 		if _, err := store.ListJobs(ctx, 0, -1); err != nil {
+// 		if _, err := store.ListWorkflows(ctx, 0, -1); err != nil {
 // 			b.Fatal(err)
 // 		}
 // 	}

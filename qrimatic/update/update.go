@@ -98,9 +98,9 @@ func NewService(inst *lib.Instance) (*Service, error) {
 	var store scheduler.Store
 	// switch cfg.Type {
 	// case "fs":
-	store, err = scheduler.NewFileStore(filepath.Join(path, "jobs.json"))
+	store, err = scheduler.NewFileStore(filepath.Join(path, "workflows.json"))
 	// case "mem":
-	// 	jobStore = scheduler.NewMemStore()
+	// 	workflowStore = scheduler.NewMemStore()
 	// 	logStore = scheduler.NewMemStore()
 	// default:
 	// 	return fmt.Errorf("unknown cron type: %q", cfg.Type)
@@ -130,49 +130,49 @@ func (s *Service) Start(ctx context.Context) error {
 	return s.sched.Start(ctx)
 }
 
-// Factory returns a function that can run jobs
-func Factory(context.Context) scheduler.RunJobFunc {
-	return func(ctx context.Context, streams ioes.IOStreams, job *scheduler.Job) error {
-		log.Debugf("running update: %s", job.Name)
+// Factory returns a function that can run workflows
+func Factory(context.Context) scheduler.RunWorkflowFunc {
+	return func(ctx context.Context, streams ioes.IOStreams, workflow *scheduler.Workflow) error {
+		log.Debugf("running update: %s", workflow.Name)
 
 		var errBuf *bytes.Buffer
-		// if the job type is a dataset, error output is semi-predictable
+		// if the workflow type is a dataset, error output is semi-predictable
 		// write to a buffer for better error reporting
-		if job.Type == scheduler.JTDataset {
+		if workflow.Type == scheduler.JTDataset {
 			errBuf = &bytes.Buffer{}
 			teedErrOut := io.MultiWriter(streams.ErrOut, errBuf)
 			streams = ioes.NewIOStreams(streams.In, streams.Out, teedErrOut)
 		}
 
-		cmd := JobToCmd(streams, job)
+		cmd := WorkflowToCmd(streams, workflow)
 		if cmd == nil {
-			return fmt.Errorf("unrecognized update type: %s", job.Type)
+			return fmt.Errorf("unrecognized update type: %s", workflow.Type)
 		}
 
 		err := cmd.Run()
-		return processJobError(job, errBuf, err)
+		return processWorkflowError(workflow, errBuf, err)
 	}
 }
 
-// JobToCmd returns an operating system command that will execute the given job
+// WorkflowToCmd returns an operating system command that will execute the given workflow
 // wiring operating system in/out/errout to the provided iostreams.
-func JobToCmd(streams ioes.IOStreams, job *scheduler.Job) *exec.Cmd {
-	switch job.Type {
+func WorkflowToCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.Cmd {
+	switch workflow.Type {
 	case scheduler.JTDataset:
-		return datasetSaveCmd(streams, job)
+		return datasetSaveCmd(streams, workflow)
 	case scheduler.JTShellScript:
-		return shellScriptCmd(streams, job)
+		return shellScriptCmd(streams, workflow)
 	default:
 		return nil
 	}
 }
 
-// datasetSaveCmd configures a "qri save" command based on job details
+// datasetSaveCmd configures a "qri save" command based on workflow details
 // wiring operating system in/out/errout to the provided iostreams.
-func datasetSaveCmd(streams ioes.IOStreams, job *scheduler.Job) *exec.Cmd {
-	args := []string{"save", job.Name}
+func datasetSaveCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.Cmd {
+	args := []string{"save", workflow.Name}
 
-	if o, ok := job.Options.(*scheduler.DatasetOptions); ok {
+	if o, ok := workflow.Options.(*scheduler.DatasetOptions); ok {
 		if o.Title != "" {
 			args = append(args, fmt.Sprintf(`--title=%s`, o.Title))
 		}
@@ -218,10 +218,10 @@ func datasetSaveCmd(streams ioes.IOStreams, job *scheduler.Job) *exec.Cmd {
 // to the provided iostreams.
 // Commands are executed with access to the same enviornment variables as the
 // process the runner is executing in
-func shellScriptCmd(streams ioes.IOStreams, job *scheduler.Job) *exec.Cmd {
+func shellScriptCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.Cmd {
 	// TODO (b5) - config and secrets as env vars
 
-	cmd := exec.Command(job.Name)
+	cmd := exec.Command(workflow.Name)
 	cmd.Stderr = streams.ErrOut
 	cmd.Stdout = streams.Out
 	cmd.Stdin = streams.In
@@ -234,8 +234,8 @@ func PossibleShellScript(path string) bool {
 	return filepath.Ext(path) == ".sh"
 }
 
-// DatasetToJob converts a dataset to scheduler.Job
-func DatasetToJob(ds *dataset.Dataset, periodicity string, opts *scheduler.DatasetOptions) (job *scheduler.Job, err error) {
+// DatasetToWorkflow converts a dataset to scheduler.Workflow
+func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.DatasetOptions) (workflow *scheduler.Workflow, err error) {
 	if periodicity == "" && ds.Meta != nil && ds.Meta.AccrualPeriodicity != "" {
 		periodicity = ds.Meta.AccrualPeriodicity
 	}
@@ -245,43 +245,43 @@ func DatasetToJob(ds *dataset.Dataset, periodicity string, opts *scheduler.Datas
 	}
 
 	name := fmt.Sprintf("%s/%s", ds.Peername, ds.Name)
-	job, err = scheduler.NewJob(name, "ownerID", name, scheduler.JTDataset, periodicity)
+	workflow, err = scheduler.NewWorkflow(name, "ownerID", name, scheduler.JTDataset, periodicity)
 	if err != nil {
-		log.Debugw("creating new job", "error", err)
+		log.Debugw("creating new workflow", "error", err)
 		return nil, err
 	}
 	if ds.Commit != nil {
-		job.LatestRunStart = &ds.Commit.Timestamp
+		workflow.LatestRunStart = &ds.Commit.Timestamp
 	}
 	if opts != nil {
-		job.Options = opts
+		workflow.Options = opts
 	}
-	// err = job.Validate()
+	// err = workflow.Validate()
 
 	return
 }
 
-// ShellScriptToJob turns a shell script into scheduler.Job
-func ShellScriptToJob(path string, periodicity string, opts *scheduler.ShellScriptOptions) (job *scheduler.Job, err error) {
+// ShellScriptToWorkflow turns a shell script into scheduler.Workflow
+func ShellScriptToWorkflow(path string, periodicity string, opts *scheduler.ShellScriptOptions) (workflow *scheduler.Workflow, err error) {
 	// TODO (b5) - confirm file exists & is executable
 
-	job, err = scheduler.NewJob(path, "foo", path, scheduler.JTShellScript, periodicity)
+	workflow, err = scheduler.NewWorkflow(path, "foo", path, scheduler.JTShellScript, periodicity)
 	if err != nil {
 		return nil, err
 	}
 
 	if opts != nil {
-		job.Options = opts
+		workflow.Options = opts
 	}
 	return
 }
 
-func processJobError(job *scheduler.Job, errOut *bytes.Buffer, err error) error {
+func processWorkflowError(workflow *scheduler.Workflow, errOut *bytes.Buffer, err error) error {
 	if err == nil {
 		return nil
 	}
 
-	if job.Type == scheduler.JTDataset && errOut != nil {
+	if workflow.Type == scheduler.JTDataset && errOut != nil {
 		// TODO (b5) - this should be a little more stringent :(
 		if strings.Contains(errOut.String(), "no changes to save") {
 			// TODO (b5) - this should be a concrete error declared in dsfs:

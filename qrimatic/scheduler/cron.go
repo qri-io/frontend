@@ -13,7 +13,7 @@ import (
 
 var (
 	log = golog.Logger("cron")
-	// DefaultCheckInterval is the frequency cron will check all stored jobs
+	// DefaultCheckInterval is the frequency cron will check all stored workflows
 	// for scheduled updates without any additional configuration. Qri recommends
 	// not running updates more than once an hour for performance and storage
 	// consumption reasons, making a check every second reasonable
@@ -29,52 +29,52 @@ func init() {
 // Service is the generic interface for the Cron Scheduler, it's implemented
 // by both Cron and HTTPClient for easier RPC communication
 type Service interface {
-	// ListJobs lists currently scheduled jobs
-	ListJobs(ctx context.Context, offset, limit int) ([]*Job, error)
-	// JobForName gets a job by it's name (which often matches the dataset name)
-	JobForName(ctx context.Context, name string) (*Job, error)
-	// Job gets a single scheduled job by dataset identifier
-	Job(ctx context.Context, id string) (*Job, error)
-	// Runs gives a log of executed jobs
+	// ListWorkflows lists currently scheduled workflows
+	ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error)
+	// WorkflowForName gets a workflow by it's name (which often matches the dataset name)
+	WorkflowForName(ctx context.Context, name string) (*Workflow, error)
+	// Workflow gets a single scheduled workflow by dataset identifier
+	Workflow(ctx context.Context, id string) (*Workflow, error)
+	// Runs gives a log of executed workflows
 	Runs(ctx context.Context, offset, limit int) ([]*Run, error)
-	// GetRun returns a single executed job by job.LogName
+	// GetRun returns a single executed workflow by workflow.LogName
 	GetRun(ctx context.Context, id string, runNumber int) (*Run, error)
 	// // RunLogFile returns a reader for a file at the given name
 	// RunLogFile(ctx context.Context, id string, runNumber int) (io.ReadCloser, error)
 
-	// Schedule adds a job to the scheduler for execution
-	Schedule(ctx context.Context, job *Job) error
-	// Unschedule removes a job from the scheduler
+	// Schedule adds a workflow to the scheduler for execution
+	Schedule(ctx context.Context, workflow *Workflow) error
+	// Unschedule removes a workflow from the scheduler
 	Unschedule(ctx context.Context, id string) error
 }
 
-// RunJobFunc is a function for executing a job. Cron takes care of scheduling
-// job execution, and delegates the work of executing a job to a RunJobFunc
+// RunWorkflowFunc is a function for executing a workflow. Cron takes care of scheduling
+// workflow execution, and delegates the work of executing a workflow to a RunWorkflowFunc
 // implementation.
-type RunJobFunc func(ctx context.Context, streams ioes.IOStreams, job *Job) error
+type RunWorkflowFunc func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error
 
-// RunJobFactory is a function that returns a runner
-type RunJobFactory func(ctx context.Context) (runner RunJobFunc)
+// RunWorkflowFactory is a function that returns a runner
+type RunWorkflowFactory func(ctx context.Context) (runner RunWorkflowFunc)
 
-// Cron coordinates the scheduling of running jobs at specified periodicities
-// (intervals) with a provided job runner function
+// Cron coordinates the scheduling of running workflows at specified periodicities
+// (intervals) with a provided workflow runner function
 type Cron struct {
 	pub      event.Publisher
 	store    Store
 	interval time.Duration
-	factory  RunJobFactory
+	factory  RunWorkflowFactory
 }
 
 // assert Cron is a Scheduler at compile time
 var _ Service = (*Cron)(nil)
 
 // NewCron creates a Cron with the default check interval
-func NewCron(store Store, factory RunJobFactory, pub event.Publisher) *Cron {
+func NewCron(store Store, factory RunWorkflowFactory, pub event.Publisher) *Cron {
 	return NewCronInterval(store, factory, pub, DefaultCheckInterval)
 }
 
 // NewCronInterval creates a Cron with a check interval
-func NewCronInterval(store Store, factory RunJobFactory, pub event.Publisher, checkInterval time.Duration) *Cron {
+func NewCronInterval(store Store, factory RunWorkflowFactory, pub event.Publisher, checkInterval time.Duration) *Cron {
 	return &Cron{
 		pub:      pub,
 		store:    store,
@@ -83,22 +83,22 @@ func NewCronInterval(store Store, factory RunJobFactory, pub event.Publisher, ch
 	}
 }
 
-// ListJobs proxies to the schedule store for reading jobs
-func (c *Cron) ListJobs(ctx context.Context, offset, limit int) ([]*Job, error) {
-	return c.store.ListJobs(ctx, offset, limit)
+// ListWorkflows proxies to the schedule store for reading workflows
+func (c *Cron) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
+	return c.store.ListWorkflows(ctx, offset, limit)
 }
 
-// JobForName gets a job by it's name (which often matches the dataset name)
-func (c *Cron) JobForName(ctx context.Context, name string) (*Job, error) {
-	return c.store.GetJobByName(ctx, name)
+// WorkflowForName gets a workflow by it's name (which often matches the dataset name)
+func (c *Cron) WorkflowForName(ctx context.Context, name string) (*Workflow, error) {
+	return c.store.GetWorkflowByName(ctx, name)
 }
 
-// Job proxies to the schedule store for reading a job by name
-func (c *Cron) Job(ctx context.Context, id string) (*Job, error) {
-	return c.store.GetJob(ctx, id)
+// Workflow proxies to the schedule store for reading a workflow by name
+func (c *Cron) Workflow(ctx context.Context, id string) (*Workflow, error) {
+	return c.store.GetWorkflow(ctx, id)
 }
 
-// Runs returns a list of jobs that have been executed
+// Runs returns a list of workflows that have been executed
 func (c *Cron) Runs(ctx context.Context, offset, limit int) ([]*Run, error) {
 	return c.store.ListRuns(ctx, offset, limit)
 }
@@ -110,18 +110,18 @@ func (c *Cron) GetRun(ctx context.Context, datasetID string, runNumber int) (*Ru
 
 // // LogFile returns a reader for a file at the given name
 // func (c *Cron) LogFile(ctx context.Context, logName string) (io.ReadCloser, error) {
-// 	job, err := c.log.Job(ctx, logName)
+// 	workflow, err := c.log.Workflow(ctx, logName)
 // 	if err != nil {
 // 		return nil, err
 // 	}
 
-// 	if job.LogFilePath == "" {
+// 	if workflow.LogFilePath == "" {
 // 		return ioutil.NopCloser(&bytes.Buffer{}), nil
 // 	}
 
 // 	// TODO (b5): if logs are being stored somewhere other than local this'll break
 // 	// we should add an OpenLogFile method to LogFileCreator & rename the interface
-// 	return os.Open(job.LogFilePath)
+// 	return os.Open(workflow.LogFilePath)
 // }
 
 // Start initiates the check loop, looking for updates to execute once at every
@@ -133,26 +133,26 @@ func (c *Cron) Start(ctx context.Context) error {
 		ctx, cleanup := context.WithCancel(ctx)
 		defer cleanup()
 
-		jobs, err := c.store.ListJobs(ctx, 0, -1)
+		workflows, err := c.store.ListWorkflows(ctx, 0, -1)
 		if err != nil {
-			log.Errorf("getting jobs from store: %s", err)
+			log.Errorf("getting workflows from store: %s", err)
 			return
 		}
 
-		run := []*Job{}
-		for _, job := range jobs {
-			if job.NextRunStart != nil && now.After(*job.NextRunStart) {
-				run = append(run, job)
+		run := []*Workflow{}
+		for _, workflow := range workflows {
+			if workflow.NextRunStart != nil && now.After(*workflow.NextRunStart) {
+				run = append(run, workflow)
 			}
 		}
 
 		if len(run) > 0 {
-			log.Debugw("running jobs", "jobCount", len(jobs), "runCount", len(run))
+			log.Debugw("running workflows", "workflowCount", len(workflows), "runCount", len(run))
 			runner := c.factory(ctx)
-			for _, job := range run {
-				// TODO (b5) - if we want things like per-job timeout, we should create
-				// a new job-scoped context here
-				c.runJob(ctx, job, runner)
+			for _, workflow := range run {
+				// TODO (b5) - if we want things like per-workflow timeout, we should create
+				// a new workflow-scoped context here
+				c.runWorkflow(ctx, workflow, runner)
 			}
 		}
 	}
@@ -168,97 +168,97 @@ func (c *Cron) Start(ctx context.Context) error {
 	}
 }
 
-func (c *Cron) runJob(ctx context.Context, job *Job, runner RunJobFunc) {
-	go func(j *Job) {
-		if err := c.pub.Publish(ctx, event.ETCronJobStarted, j); err != nil {
+func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, runner RunWorkflowFunc) {
+	go func(j *Workflow) {
+		if err := c.pub.Publish(ctx, ETWorkflowStarted, j); err != nil {
 			log.Debug(err)
 		}
-	}(job.Copy())
+	}(workflow.Copy())
 
-	log.Debugf("run job: %s", job.Name)
-	if err := job.Advance(); err != nil {
+	log.Debugf("run workflow: %s", workflow.Name)
+	if err := workflow.Advance(); err != nil {
 		log.Debug(err)
 	}
 
 	streams := ioes.NewDiscardIOStreams()
 	if lfc, ok := c.store.(LogFileCreator); ok {
-		if file, logPath, err := lfc.CreateLogFile(job); err == nil {
+		if file, logPath, err := lfc.CreateLogFile(workflow); err == nil {
 			log.Debugf("using log file: %s", logPath)
 			defer file.Close()
 			streams = ioes.NewIOStreams(nil, file, file)
-			job.CurrentRun.LogFilePath = logPath
+			workflow.CurrentRun.LogFilePath = logPath
 		}
 	}
 
-	if err := runner(ctx, streams, job); err != nil {
-		log.Errorf("run job: %s error: %s", job.Name, err.Error())
-		job.CurrentRun.Error = err.Error()
+	if err := runner(ctx, streams, workflow); err != nil {
+		log.Errorf("run workflow: %s error: %s", workflow.Name, err.Error())
+		workflow.CurrentRun.Error = err.Error()
 	} else {
-		log.Debugf("run job: %s success", job.Name)
-		job.CurrentRun.Error = ""
+		log.Debugf("run workflow: %s success", workflow.Name)
+		workflow.CurrentRun.Error = ""
 	}
 	now := NowFunc()
-	job.CurrentRun.Stop = &now
-	job.LatestRunStart = job.CurrentRun.Start
+	workflow.CurrentRun.Stop = &now
+	workflow.LatestRunStart = workflow.CurrentRun.Start
 
-	go func(j *Job) {
-		if err := c.pub.Publish(ctx, event.ETCronJobCompleted, j); err != nil {
+	go func(j *Workflow) {
+		if err := c.pub.Publish(ctx, ETWorkflowCompleted, j); err != nil {
 			log.Debug(err)
 		}
-	}(job.Copy())
+	}(workflow.Copy())
 
-	// the updated job that goes to the schedule store shouldn't have a log path
-	// scheduleJob := job.Copy()
-	// scheduleJob.LogFilePath = ""
-	// scheduleJob.RunStart = time.Time{}
-	// scheduleJob.RunStop = time.Time{}
-	// scheduleJob.PrevRunStart = job.RunStart
-	if err := c.store.PutJob(ctx, job); err != nil {
+	// the updated workflow that goes to the schedule store shouldn't have a log path
+	// scheduleWorkflow := workflow.Copy()
+	// scheduleWorkflow.LogFilePath = ""
+	// scheduleWorkflow.RunStart = time.Time{}
+	// scheduleWorkflow.RunStop = time.Time{}
+	// scheduleWorkflow.PrevRunStart = workflow.RunStart
+	if err := c.store.PutWorkflow(ctx, workflow); err != nil {
 		log.Error(err)
 	}
 
-	// job.Name = job.LogName()
-	// if err := c.log.PutJob(ctx, job); err != nil {
+	// workflow.Name = workflow.LogName()
+	// if err := c.log.PutWorkflow(ctx, workflow); err != nil {
 	// 	log.Error(err)
 	// }
 }
 
-// Schedule adds a job to the cron scheduler
-func (c *Cron) Schedule(ctx context.Context, job *Job) (err error) {
-	if job.ID == "" && job.OwnerID != "" && job.DatasetID != "" {
-		job.ID, err = jobID(job.OwnerID, job.DatasetID)
+// Schedule adds a workflow to the cron scheduler
+func (c *Cron) Schedule(ctx context.Context, workflow *Workflow) (err error) {
+	if workflow.ID == "" && workflow.OwnerID != "" && workflow.DatasetID != "" {
+		workflow.ID, err = workflowID(workflow.OwnerID, workflow.DatasetID)
 		if err != nil {
 			return err
 		}
 	}
 
-	if !job.Paused && job.NextRunStart == nil {
-		next := job.Periodicity.After(NowFunc())
-		job.NextRunStart = &next
+	if !workflow.Paused && workflow.NextRunStart == nil {
+		next := workflow.Periodicity.After(NowFunc())
+		workflow.NextRunStart = &next
 	}
 
-	if err := c.store.PutJob(ctx, job); err != nil {
+	if err := c.store.PutWorkflow(ctx, workflow); err != nil {
 		return err
 	}
 
-	go func(j *Job) {
-		if err := c.pub.Publish(ctx, event.ETCronJobScheduled, j); err != nil {
+	go func(j *Workflow) {
+		if err := c.pub.Publish(ctx, ETWorkflowScheduled, j); err != nil {
 			log.Debug(err)
 		}
-	}(job.Copy())
+	}(workflow.Copy())
 
 	return nil
 }
 
-// Unschedule removes a job from the cron scheduler, cancelling any future
-// job executions
+// Unschedule removes a workflow from the cron scheduler, cancelling any future
+// workflow executions
 func (c *Cron) Unschedule(ctx context.Context, name string) error {
-	if err := c.store.DeleteJob(ctx, name); err != nil {
+	if err := c.store.DeleteWorkflow(ctx, name); err != nil {
 		return err
 	}
 
 	go func() {
-		if err := c.pub.Publish(ctx, event.ETCronJobUnscheduled, name); err != nil {
+		if err := c.pub.Publish(ctx, ETWorkflowUnscheduled, name); err != nil {
 			log.Debug(err)
 		}
 	}()

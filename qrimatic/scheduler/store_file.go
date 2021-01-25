@@ -9,54 +9,53 @@ import (
 	"sync"
 )
 
-// FileStore is a jobstore implementation that writeToFiles to a file of
-// JSON bytes.
+// FileStore is a store implementation that writes to a file of JSON bytes.
 // FileStore is safe for concurrent use
 type FileStore struct {
 	path string
 
-	lock    sync.Mutex
-	jobs    *JobSet
-	jobRuns map[string]*RunSet
-	runs    *RunSet
+	lock         sync.Mutex
+	workflows    *WorkflowSet
+	workflowRuns map[string]*RunSet
+	runs         *RunSet
 }
 
 // compile-time assertion that FileStore is a Store
 var _ Store = (*FileStore)(nil)
 
-// NewFileStore creates a job store that persists to a file
+// NewFileStore creates a workflow store that persists to a file
 func NewFileStore(path string) (Store, error) {
 	s := &FileStore{
-		path:    path,
-		jobs:    NewJobSet(),
-		jobRuns: map[string]*RunSet{},
-		runs:    NewRunSet(),
+		path:         path,
+		workflows:    NewWorkflowSet(),
+		workflowRuns: map[string]*RunSet{},
+		runs:         NewRunSet(),
 	}
 
 	log.Debugw("creating file store")
 	return s, s.loadFromFile()
 }
 
-// ListJobs lists jobs currently in the store
-func (s *FileStore) ListJobs(ctx context.Context, offset, limit int) ([]*Job, error) {
+// ListWorkflows lists workflows currently in the store
+func (s *FileStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
 	if limit < 0 {
-		limit = len(s.jobs.set)
+		limit = len(s.workflows.set)
 	}
 
-	jobs := make([]*Job, 0, limit)
-	for i, job := range s.jobs.set {
+	workflows := make([]*Workflow, 0, limit)
+	for i, workflow := range s.workflows.set {
 		if i < offset {
 			continue
-		} else if len(jobs) == limit {
+		} else if len(workflows) == limit {
 			break
 		}
 
-		jobs = append(jobs, job)
+		workflows = append(workflows, workflow)
 	}
-	return jobs, nil
+	return workflows, nil
 }
 
 func (s *FileStore) ListRuns(ctx context.Context, offset, limit int) ([]*Run, error) {
@@ -65,75 +64,75 @@ func (s *FileStore) ListRuns(ctx context.Context, offset, limit int) ([]*Run, er
 	}
 
 	runs := make([]*Run, 0, limit)
-	for i, job := range s.runs.set {
+	for i, workflow := range s.runs.set {
 		if i < offset {
 			continue
 		} else if len(runs) == limit {
 			break
 		}
 
-		runs = append(runs, job)
+		runs = append(runs, workflow)
 	}
 
 	return runs, nil
 }
 
-// GetJobByName gets a job with the corresponding name field. usually matches
+// GetWorkflowByName gets a workflow with the corresponding name field. usually matches
 // the dataset name
-func (s *FileStore) GetJobByName(ctx context.Context, name string) (*Job, error) {
+func (s *FileStore) GetWorkflowByName(ctx context.Context, name string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	for _, job := range s.jobs.set {
-		if job.Name == name {
-			return job.Copy(), nil
+	for _, workflow := range s.workflows.set {
+		if workflow.Name == name {
+			return workflow.Copy(), nil
 		}
 	}
 	return nil, ErrNotFound
 }
 
-// GetJob gets job details from the store by dataset identifier
-func (s *FileStore) GetJob(ctx context.Context, id string) (*Job, error) {
+// GetWorkflow gets workflow details from the store by dataset identifier
+func (s *FileStore) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	for _, job := range s.jobs.set {
-		if job.ID == id {
-			return job.Copy(), nil
+	for _, workflow := range s.workflows.set {
+		if workflow.ID == id {
+			return workflow.Copy(), nil
 		}
 	}
 	return nil, ErrNotFound
 }
 
-// PutJob places a job in the store. If the job name matches the name of a job
-// that already exists, it will be overwritten with the new job
-func (s *FileStore) PutJob(ctx context.Context, job *Job) error {
-	if job.ID == "" {
+// PutWorkflow places a workflow in the store. If the workflow name matches the name of a workflow
+// that already exists, it will be overwritten with the new workflow
+func (s *FileStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
+	if workflow.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
-	if job.DatasetID == "" {
+	if workflow.DatasetID == "" {
 		return fmt.Errorf("DatasetID is required")
 	}
 
 	s.lock.Lock()
-	s.jobs.Add(job)
+	s.workflows.Add(workflow)
 	s.lock.Unlock()
 
-	if job.CurrentRun != nil {
-		if err := s.PutRun(ctx, job.CurrentRun); err != nil {
+	if workflow.CurrentRun != nil {
+		if err := s.PutRun(ctx, workflow.CurrentRun); err != nil {
 			return err
 		}
 	}
 	return s.writeToFile()
 }
 
-// DeleteJob removes a job from the store by name. deleting a non-existent job
+// DeleteWorkflow removes a workflow from the store by name. deleting a non-existent workflow
 // won't return an error
-func (s *FileStore) DeleteJob(ctx context.Context, id string) error {
+func (s *FileStore) DeleteWorkflow(ctx context.Context, id string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	if removed := s.jobs.Remove(id); removed {
+	if removed := s.workflows.Remove(id); removed {
 		return s.writeToFile()
 	}
 	return ErrNotFound
@@ -152,8 +151,8 @@ func (s *FileStore) GetRun(ctx context.Context, id string) (*Run, error) {
 	return nil, ErrNotFound
 }
 
-func (s *FileStore) GetJobRuns(ctx context.Context, jobID string, offset, limit int) ([]*Run, error) {
-	runs, ok := s.jobRuns[jobID]
+func (s *FileStore) GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*Run, error) {
+	runs, ok := s.workflowRuns[workflowID]
 	if !ok {
 		return nil, ErrNotFound
 	}
@@ -180,31 +179,35 @@ func (s *FileStore) PutRun(ctx context.Context, run *Run) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
-	if run.JobID == "" {
-		return fmt.Errorf("JobID is required")
+	if run.WorkflowID == "" {
+		return fmt.Errorf("WorkflowID is required")
 	}
 
 	s.lock.Lock()
-	if jobRuns, ok := s.jobRuns[run.JobID]; ok {
-		jobRuns.Add(run)
+	if workflowRuns, ok := s.workflowRuns[run.WorkflowID]; ok {
+		workflowRuns.Add(run)
 	} else {
-		jobRuns = NewRunSet()
-		jobRuns.Add(run)
-		s.jobRuns[run.JobID] = jobRuns
+		workflowRuns = NewRunSet()
+		workflowRuns.Add(run)
+		s.workflowRuns[run.WorkflowID] = workflowRuns
 	}
 	s.runs.Add(run)
 	s.lock.Unlock()
 	return s.writeToFile()
 }
 
-func (s *FileStore) DeleteAllJobRuns(ctx context.Context, jobID string) error {
-	return fmt.Errorf("not finished: FileStore delete all job runs")
+func (s *FileStore) DeleteAllWorkflowRuns(ctx context.Context, workflowID string) error {
+	return fmt.Errorf("not finished: FileStore delete all workflow runs")
+}
+
+func (s *FileStore) DeleteAlWorkflows(ctx context.Context) error {
+	return fmt.Errorf("not finished: FileStore delete all workflows")
 }
 
 // const logsDirName = "logfiles"
 
 // // CreateLogFile creates a log file in the specified logs directory
-// func (s *FileStore) CreateLogFile(j *Job) (f io.WriteCloser, path string, err error) {
+// func (s *FileStore) CreateLogFile(j *Workflow) (f io.WriteCloser, path string, err error) {
 // 	s.lock.Lock()
 // 	defer s.lock.Unlock()
 
@@ -244,20 +247,20 @@ func (s *FileStore) loadFromFile() (err error) {
 	}
 
 	state := struct {
-		Jobs    *JobSet
-		JobRuns map[string]*RunSet
-		Runs    *RunSet
+		Workflows    *WorkflowSet
+		WorkflowRuns map[string]*RunSet
+		Runs         *RunSet
 	}{}
 	if err := json.Unmarshal(data, &state); err != nil {
 		log.Debugw("FileStore deserializing from JSON", "error", err)
 		return err
 	}
 
-	if state.Jobs != nil {
-		s.jobs = state.Jobs
+	if state.Workflows != nil {
+		s.workflows = state.Workflows
 	}
-	if state.JobRuns != nil {
-		s.jobRuns = state.JobRuns
+	if state.WorkflowRuns != nil {
+		s.workflowRuns = state.WorkflowRuns
 	}
 	if state.Runs != nil {
 		s.runs = state.Runs
@@ -270,13 +273,13 @@ func (s *FileStore) writeToFile() error {
 	defer s.lock.Unlock()
 
 	state := struct {
-		Jobs    *JobSet
-		JobRuns map[string]*RunSet
-		Runs    *RunSet
+		Workflows    *WorkflowSet
+		WorkflowRuns map[string]*RunSet
+		Runs         *RunSet
 	}{
-		Jobs:    s.jobs,
-		JobRuns: s.jobRuns,
-		Runs:    s.runs,
+		Workflows:    s.workflows,
+		WorkflowRuns: s.workflowRuns,
+		Runs:         s.runs,
 	}
 	data, err := json.Marshal(state)
 	if err != nil {

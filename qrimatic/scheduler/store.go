@@ -10,79 +10,79 @@ import (
 // ErrNotFound represents a lookup miss
 var ErrNotFound = fmt.Errorf("not found")
 
-// Store handles the persistence of Jobs and Runs. Store implementations
+// Store handles the persistence of Workflows and Runs. Store implementations
 // must be safe for concurrent use
 type Store interface {
-	// ListJobs should return the set of jobs sorted in reverse-chronological order
-	// (newest first order) of the last time they were run. When two LastRun times
-	// are equal, Jobs should alpha sort the names
+	// ListWorkflows should return the set of workflows sorted in reverse-chronological
+	// order (newest first order) of the last time they were run. When two LastRun
+	// times are equal, Workflows should alpha sort the names
 	// passing a limit of -1 and an offset of 0 returns the entire list of stored
-	// jobs
-	ListJobs(ctx context.Context, offset, limit int) ([]*Job, error)
+	// workflows
+	ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error)
 
 	ListRuns(ctx context.Context, offset, limit int) ([]*Run, error)
-	// GetJobByName gets a job with the corresponding name field. usually matches
+	// GetWorkflowByName gets a workflow with the corresponding name field. usually matches
 	// the dataset name
-	GetJobByName(ctx context.Context, name string) (*Job, error)
-	// Job gets a job by it's identifier
-	GetJob(ctx context.Context, id string) (*Job, error)
-	// PutJob places a job in the store. Putting a job who's name already exists
-	// must overwrite the previous job, making all job names unique
-	PutJob(context.Context, *Job) error
-	// DeleteJob removes a job from the store
-	DeleteJob(ctx context.Context, id string) error
+	GetWorkflowByName(ctx context.Context, name string) (*Workflow, error)
+	// Workflow gets a workflow by it's identifier
+	GetWorkflow(ctx context.Context, id string) (*Workflow, error)
+	// PutWorkflow places a workflow in the store. Putting a workflow who's name already exists
+	// must overwrite the previous workflow, making all workflow names unique
+	PutWorkflow(context.Context, *Workflow) error
+	// DeleteWorkflow removes a workflow from the store
+	DeleteWorkflow(ctx context.Context, id string) error
 
 	GetRun(ctx context.Context, id string) (*Run, error)
-	GetJobRuns(ctx context.Context, jobID string, offset, limit int) ([]*Run, error)
+	GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*Run, error)
 	PutRun(ctx context.Context, r *Run) error
-	DeleteAllJobRuns(ctx context.Context, jobID string) error
+	DeleteAllWorkflowRuns(ctx context.Context, workflowID string) error
 }
 
 // LogFileCreator is an interface for generating log files to write to,
 // Stores should implement this interface
 type LogFileCreator interface {
 	// CreateLogFile returns a file to write output to
-	CreateLogFile(job *Job) (f io.WriteCloser, path string, err error)
+	CreateLogFile(workflow *Workflow) (f io.WriteCloser, path string, err error)
 }
 
 // MemStore is an in-memory implementation of the Store interface
-// Jobs stored in MemStore can be persisted for the duration of a process
+// Workflows stored in MemStore can be persisted for the duration of a process
 // at the longest.
 // MemStore is safe for concurrent use
 type MemStore struct {
-	lock    sync.Mutex
-	jobs    *JobSet
-	jobRuns map[string]*RunSet
-	runs    *RunSet
+	lock         sync.Mutex
+	workflows    *WorkflowSet
+	workflowRuns map[string]*RunSet
+	runs         *RunSet
 }
 
 var _ Store = (*MemStore)(nil)
 
 func NewMemStore() *MemStore {
 	return &MemStore{
-		jobs:    NewJobSet(),
-		jobRuns: map[string]*RunSet{},
-		runs:    NewRunSet(),
+		workflows:    NewWorkflowSet(),
+		workflowRuns: map[string]*RunSet{},
+		runs:         NewRunSet(),
 	}
 }
 
-// ListJobs lists jobs currently in the store
-func (s *MemStore) ListJobs(ctx context.Context, offset, limit int) ([]*Job, error) {
+// ListWorkflows lists workflows currently in the store
+func (s *MemStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
 	if limit < 0 {
-		limit = len(s.jobs.set)
+		limit = len(s.workflows.set)
 	}
 
-	jobs := make([]*Job, 0, limit)
-	for i, job := range s.jobs.set {
+	workflows := make([]*Workflow, 0, limit)
+	for i, workflow := range s.workflows.set {
 		if i < offset {
 			continue
-		} else if len(jobs) == limit {
+		} else if len(workflows) == limit {
 			break
 		}
 
-		jobs = append(jobs, job)
+		workflows = append(workflows, workflow)
 	}
-	return jobs, nil
+	return workflows, nil
 }
 
 func (s *MemStore) ListRuns(ctx context.Context, offset, limit int) ([]*Run, error) {
@@ -91,88 +91,88 @@ func (s *MemStore) ListRuns(ctx context.Context, offset, limit int) ([]*Run, err
 	}
 
 	runs := make([]*Run, 0, limit)
-	for i, job := range s.runs.set {
+	for i, workflow := range s.runs.set {
 		if i < offset {
 			continue
 		} else if len(runs) == limit {
 			break
 		}
 
-		runs = append(runs, job)
+		runs = append(runs, workflow)
 	}
 
 	return runs, nil
 }
 
-// GetJobByName gets a job with the corresponding name field. usually matches
+// GetWorkflowByName gets a workflow with the corresponding name field. usually matches
 // the dataset name
-func (s *MemStore) GetJobByName(ctx context.Context, name string) (*Job, error) {
+func (s *MemStore) GetWorkflowByName(ctx context.Context, name string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	for _, job := range s.jobs.set {
-		if job.Name == name {
-			return job.Copy(), nil
+	for _, workflow := range s.workflows.set {
+		if workflow.Name == name {
+			return workflow.Copy(), nil
 		}
 	}
 	return nil, ErrNotFound
 }
 
-// GetJob gets job details from the store by dataset identifier
-func (s *MemStore) GetJob(ctx context.Context, id string) (*Job, error) {
+// GetWorkflow gets workflow details from the store by dataset identifier
+func (s *MemStore) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	for _, job := range s.jobs.set {
-		if job.ID == id {
-			return job.Copy(), nil
+	for _, workflow := range s.workflows.set {
+		if workflow.ID == id {
+			return workflow.Copy(), nil
 		}
 	}
 	return nil, ErrNotFound
 }
 
-// GetDatasetJob gets job details from the store by dataset identifier
-func (s *MemStore) GetDatasetJob(ctx context.Context, datasetID string) (*Job, error) {
+// GetDatasetWorkflow gets workflow details from the store by dataset identifier
+func (s *MemStore) GetDatasetWorkflow(ctx context.Context, datasetID string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	for _, job := range s.jobs.set {
-		if job.DatasetID == datasetID {
-			return job.Copy(), nil
+	for _, workflow := range s.workflows.set {
+		if workflow.DatasetID == datasetID {
+			return workflow.Copy(), nil
 		}
 	}
 	return nil, ErrNotFound
 }
 
-// PutJob places a job in the store. If the job name matches the name of a job
-// that already exists, it will be overwritten with the new job
-func (s *MemStore) PutJob(ctx context.Context, job *Job) error {
-	if job.ID == "" {
+// PutWorkflow places a workflow in the store. If the workflow name matches the name of a workflow
+// that already exists, it will be overwritten with the new workflow
+func (s *MemStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
+	if workflow.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
-	if job.DatasetID == "" {
+	if workflow.DatasetID == "" {
 		return fmt.Errorf("DatasetID is required")
 	}
 
 	s.lock.Lock()
-	s.jobs.Add(job)
+	s.workflows.Add(workflow)
 	s.lock.Unlock()
 
-	if job.CurrentRun != nil {
-		if err := s.PutRun(ctx, job.CurrentRun); err != nil {
+	if workflow.CurrentRun != nil {
+		if err := s.PutRun(ctx, workflow.CurrentRun); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-// DeleteJob removes a job from the store by name. deleting a non-existent job
+// DeleteWorkflow removes a workflow from the store by name. deleting a non-existent workflow
 // won't return an error
-func (s *MemStore) DeleteJob(ctx context.Context, id string) error {
+func (s *MemStore) DeleteWorkflow(ctx context.Context, id string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	if removed := s.jobs.Remove(id); removed {
+	if removed := s.workflows.Remove(id); removed {
 		return nil
 	}
 	return ErrNotFound
@@ -191,8 +191,8 @@ func (s *MemStore) GetRun(ctx context.Context, id string) (*Run, error) {
 	return nil, ErrNotFound
 }
 
-func (s *MemStore) GetJobRuns(ctx context.Context, jobID string, offset, limit int) ([]*Run, error) {
-	runs, ok := s.jobRuns[jobID]
+func (s *MemStore) GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*Run, error) {
+	runs, ok := s.workflowRuns[workflowID]
 	if !ok {
 		return nil, ErrNotFound
 	}
@@ -219,23 +219,23 @@ func (s *MemStore) PutRun(ctx context.Context, run *Run) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
-	if run.JobID == "" {
-		return fmt.Errorf("JobID is required")
+	if run.WorkflowID == "" {
+		return fmt.Errorf("WorkflowID is required")
 	}
 
 	s.lock.Lock()
 	defer s.lock.Unlock()
-	if jobRuns, ok := s.jobRuns[run.JobID]; ok {
-		jobRuns.Add(run)
+	if workflowRuns, ok := s.workflowRuns[run.WorkflowID]; ok {
+		workflowRuns.Add(run)
 	} else {
-		jobRuns = NewRunSet()
-		jobRuns.Add(run)
-		s.jobRuns[run.JobID] = jobRuns
+		workflowRuns = NewRunSet()
+		workflowRuns.Add(run)
+		s.workflowRuns[run.WorkflowID] = workflowRuns
 	}
 	s.runs.Add(run)
 	return nil
 }
 
-func (s *MemStore) DeleteAllJobRuns(ctx context.Context, jobID string) error {
-	return fmt.Errorf("not finished: MemStore delete all job runs")
+func (s *MemStore) DeleteAllWorkflowRuns(ctx context.Context, workflowID string) error {
+	return fmt.Errorf("not finished: MemStore delete all workflow runs")
 }

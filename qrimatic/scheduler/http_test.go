@@ -12,8 +12,8 @@ import (
 func TestCronHTTP(t *testing.T) {
 	store := NewMemStore()
 
-	factory := func(context.Context) RunJobFunc {
-		return func(ctx context.Context, streams ioes.IOStreams, job *Job) error {
+	factory := func(context.Context) RunWorkflowFunc {
+		return func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error {
 			return nil
 		}
 	}
@@ -33,50 +33,50 @@ func TestCronHTTP(t *testing.T) {
 		t.Errorf("expected ping to active server to not fail. got: %s", err)
 	}
 
-	jobs, err := cli.ListJobs(cliCtx, 0, -1)
+	workflows, err := cli.ListWorkflows(cliCtx, 0, -1)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(jobs) != 0 {
-		t.Error("expected 0 jobs")
+	if len(workflows) != 0 {
+		t.Error("expected 0 workflows")
 	}
 
 	// d := time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)
-	dsJob := &Job{
+	dsWorkflow := &Workflow{
 		Name:        "b5/libp2p_node_count",
 		Type:        JTDataset,
 		Periodicity: mustRepeatingInterval("R/P1W"),
 		// RunStart:    &d,
 	}
 
-	if err = cli.Schedule(cliCtx, dsJob); err != nil {
+	if err = cli.Schedule(cliCtx, dsWorkflow); err != nil {
 		t.Fatal(err.Error())
 	}
 
-	jobs, err = cli.ListJobs(cliCtx, 0, -1)
+	workflows, err = cli.ListWorkflows(cliCtx, 0, -1)
 	if err != nil {
 		t.Fatal(err.Error())
 	}
 
-	if len(jobs) != 1 {
-		t.Error("expected len of jobs to equal 1")
+	if len(workflows) != 1 {
+		t.Error("expected len of workflows to equal 1")
 	}
 
-	_, err = cli.Job(cliCtx, jobs[0].Name)
+	_, err = cli.Workflow(cliCtx, workflows[0].Name)
 	if err != nil {
 		t.Fatal(err.Error())
 	}
 
-	if err := cli.Unschedule(cliCtx, dsJob.Name); err != nil {
+	if err := cli.Unschedule(cliCtx, dsWorkflow.Name); err != nil {
 		t.Fatal(err)
 	}
 
-	jobs, err = cli.ListJobs(cliCtx, 0, -1)
+	workflows, err = cli.ListWorkflows(cliCtx, 0, -1)
 	if err != nil {
 		t.Fatal(err.Error())
 	}
 
-	if len(jobs) != 0 {
-		t.Error("expected len of jobs to equal 0")
+	if len(workflows) != 0 {
+		t.Error("expected len of workflows to equal 0")
 	}
 }

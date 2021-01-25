@@ -14,127 +14,127 @@ func TestMemStore(t *testing.T) {
 	newStore := func() Store {
 		return NewMemStore()
 	}
-	RunJobStoreTests(t, newStore)
+	RunWorkflowStoreTests(t, newStore)
 }
 
-func RunJobStoreTests(t *testing.T, newStore func() Store) {
+func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 	ctx := context.Background()
 
-	t.Run("JobStoreTest", func(t *testing.T) {
+	t.Run("WorkflowStoreTest", func(t *testing.T) {
 		store := newStore()
-		jobs, err := store.ListJobs(ctx, 0, -1)
+		workflows, err := store.ListWorkflows(ctx, 0, -1)
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(jobs) != 0 {
-			t.Errorf("expected new store to contain no jobs")
+		if len(workflows) != 0 {
+			t.Errorf("expected new store to contain no workflows")
 		}
 
-		jobOne := &Job{
-			Name:        "job_one",
+		workflowOne := &Workflow{
+			Name:        "workflow_one",
 			DatasetID:   "dsID1",
 			Periodicity: mustRepeatingInterval("R/PT1H"),
 			Type:        JTDataset,
-			ID:          "jobID",
+			ID:          "workflowID",
 		}
-		if err = store.PutJob(ctx, jobOne); err != nil {
-			t.Errorf("putting job one: %s", err)
+		if err = store.PutWorkflow(ctx, workflowOne); err != nil {
+			t.Errorf("putting workflow one: %s", err)
 		}
 
-		if jobs, err = store.ListJobs(ctx, 0, -1); err != nil {
+		if workflows, err = store.ListWorkflows(ctx, 0, -1); err != nil {
 			t.Fatal(err)
 		}
-		if len(jobs) != 1 {
-			t.Fatal("expected default get to return inserted job")
+		if len(workflows) != 1 {
+			t.Fatal("expected default get to return inserted workflow")
 		}
-		if diff := compareJob(jobOne, jobs[0]); diff != "" {
-			t.Errorf("stored job mismatch (-want +got):\n%s", diff)
+		if diff := compareWorkflow(workflowOne, workflows[0]); diff != "" {
+			t.Errorf("stored workflow mismatch (-want +got):\n%s", diff)
 		}
 
 		// d2 := time.Date(2001, 1, 1, 1, 1, 1, 1, time.UTC)
-		jobTwo := &Job{
-			ID:          "job2",
-			Name:        "job two",
+		workflowTwo := &Workflow{
+			ID:          "workflow2",
+			Name:        "workflow two",
 			DatasetID:   "dsID2",
 			Periodicity: mustRepeatingInterval("R/P3M"),
 			Type:        JTShellScript,
 			// RunStart:    &d2,
 		}
-		if err = store.PutJob(ctx, jobTwo); err != nil {
-			t.Errorf("putting job one: %s", err)
+		if err = store.PutWorkflow(ctx, workflowTwo); err != nil {
+			t.Errorf("putting workflow one: %s", err)
 		}
 
-		if jobs, err = store.ListJobs(ctx, 0, -1); err != nil {
+		if workflows, err = store.ListWorkflows(ctx, 0, -1); err != nil {
 			t.Fatal(err)
 		}
-		expect := []*Job{jobTwo, jobOne}
-		if diff := cmp.Diff(expect, jobs, cmpopts.IgnoreUnexported(iso8601.Duration{})); diff != "" {
-			t.Errorf("job slice mismatch (-want +got):\n%s", diff)
+		expect := []*Workflow{workflowTwo, workflowOne}
+		if diff := cmp.Diff(expect, workflows, cmpopts.IgnoreUnexported(iso8601.Duration{})); diff != "" {
+			t.Errorf("workflow slice mismatch (-want +got):\n%s", diff)
 		}
 
-		jobThree := &Job{
-			Name:        "job_three",
+		workflowThree := &Workflow{
+			Name:        "workflow_three",
 			Periodicity: mustRepeatingInterval("R/PT1H"),
 			Type:        JTDataset,
 			Options: &DatasetOptions{
 				Title: "hallo",
 			},
 		}
-		if err = store.PutJob(ctx, jobThree); err != nil {
-			t.Errorf("putting job three: %s", err)
+		if err = store.PutWorkflow(ctx, workflowThree); err != nil {
+			t.Errorf("putting workflow three: %s", err)
 		}
-		gotJobThree, err := store.GetJob(ctx, jobThree.ID)
+		gotWorkflowThree, err := store.GetWorkflow(ctx, workflowThree.ID)
 		if err != nil {
-			t.Errorf("getting jobThree: %s", err)
+			t.Errorf("getting workflowThree: %s", err)
 		}
-		if diff := compareJob(jobThree, gotJobThree); diff != "" {
-			t.Errorf("jobThree mismatch (-want +got):\n%s", diff)
+		if diff := compareWorkflow(workflowThree, gotWorkflowThree); diff != "" {
+			t.Errorf("workflowThree mismatch (-want +got):\n%s", diff)
 		}
 
 		// d3 := time.Date(2002, 1, 1, 1, 1, 1, 1, time.UTC)
-		updatedJobOne := &Job{
-			Name:        jobOne.Name,
-			Periodicity: jobOne.Periodicity,
-			Type:        jobOne.Type,
+		updatedWorkflowOne := &Workflow{
+			Name:        workflowOne.Name,
+			Periodicity: workflowOne.Periodicity,
+			Type:        workflowOne.Type,
 			// RunStart:    &d3,
 		}
-		if err = store.PutJob(ctx, updatedJobOne); err != nil {
-			t.Errorf("putting job one: %s", err)
+		if err = store.PutWorkflow(ctx, updatedWorkflowOne); err != nil {
+			t.Errorf("putting workflow one: %s", err)
 		}
 
-		if jobs, err = store.ListJobs(ctx, 1, 1); err != nil {
+		if workflows, err = store.ListWorkflows(ctx, 1, 1); err != nil {
 			t.Fatal(err)
 		}
-		if len(jobs) != 1 {
+		if len(workflows) != 1 {
 			t.Fatal("expected limit 1 length to equal 1")
 		}
-		if diff := compareJob(jobTwo, jobs[0]); diff != "" {
-			t.Errorf("jobTwo mismatch (-want +got):\n%s", diff)
+		if diff := compareWorkflow(workflowTwo, workflows[0]); diff != "" {
+			t.Errorf("workflowTwo mismatch (-want +got):\n%s", diff)
 		}
 
-		job, err := store.GetJob(ctx, updatedJobOne.ID)
+		workflow, err := store.GetWorkflow(ctx, updatedWorkflowOne.ID)
 		if err != nil {
 			t.Fatal(err)
 		}
-		if diff := compareJob(updatedJobOne, job); diff != "" {
-			t.Errorf("updated jobOne mismatch (-want +got):\n%s", diff)
+		if diff := compareWorkflow(updatedWorkflowOne, workflow); diff != "" {
+			t.Errorf("updated workflowOne mismatch (-want +got):\n%s", diff)
 		}
 
-		if err = store.DeleteJob(ctx, updatedJobOne.Name); err != nil {
+		if err = store.DeleteWorkflow(ctx, updatedWorkflowOne.Name); err != nil {
 			t.Error(err)
 		}
-		if err = store.DeleteJob(ctx, jobTwo.Name); err != nil {
+		if err = store.DeleteWorkflow(ctx, workflowTwo.Name); err != nil {
 			t.Error(err)
 		}
-		if err = store.DeleteJob(ctx, jobThree.Name); err != nil {
+		if err = store.DeleteWorkflow(ctx, workflowThree.Name); err != nil {
 			t.Error(err)
 		}
 
-		if jobs, err = store.ListJobs(ctx, 0, -1); err != nil {
+		if workflows, err = store.ListWorkflows(ctx, 0, -1); err != nil {
 			t.Fatal(err)
 		}
-		if len(jobs) != 0 {
-			t.Error("expected deleted jobs to equal zero")
+		if len(workflows) != 0 {
+			t.Error("expected deleted workflows to equal zero")
 		}
 
 		if dest, ok := store.(qfs.Destroyer); ok {
@@ -144,30 +144,30 @@ func RunJobStoreTests(t *testing.T, newStore func() Store) {
 		}
 	})
 
-	t.Run("TestJobStoreValidPut", func(t *testing.T) {
+	t.Run("TestWorkflowStoreValidPut", func(t *testing.T) {
 		r1h := mustRepeatingInterval("R/PT1H")
 		bad := []struct {
 			description string
-			job         *Job
+			workflow    *Workflow
 		}{
-			{"empty", &Job{}},
-			{"no name", &Job{Periodicity: r1h, Type: JTDataset}},
-			{"no periodicity", &Job{Name: "some_name", Type: JTDataset}},
-			{"no type", &Job{Name: "some_name", Periodicity: r1h}},
+			{"empty", &Workflow{}},
+			{"no name", &Workflow{Periodicity: r1h, Type: JTDataset}},
+			{"no periodicity", &Workflow{Name: "some_name", Type: JTDataset}},
+			{"no type", &Workflow{Name: "some_name", Periodicity: r1h}},
 
-			{"invalid periodicity", &Job{Name: "some_name", Type: JTDataset}},
-			{"invalid JobType", &Job{Name: "some_name", Periodicity: r1h, Type: JobType("huh")}},
+			{"invalid periodicity", &Workflow{Name: "some_name", Type: JTDataset}},
+			{"invalid WorkflowType", &Workflow{Name: "some_name", Periodicity: r1h, Type: WorkflowType("huh")}},
 		}
 
 		store := newStore()
 		for i, c := range bad {
-			if err := store.PutJob(ctx, c.job); err == nil {
+			if err := store.PutWorkflow(ctx, c.workflow); err == nil {
 				t.Errorf("bad case %d %s: expected error, got nil", i, c.description)
 			}
 		}
 	})
 
-	t.Run("TestJobStoreConcurrentUse", func(t *testing.T) {
+	t.Run("TestWorkflowStoreConcurrentUse", func(t *testing.T) {
 		t.Skip("TODO (b5)")
 	})
 }

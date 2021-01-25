@@ -3,21 +3,21 @@ package scheduler
 import "github.com/qri-io/qri/event"
 
 const (
-	// ETCronJobScheduled fires when a job is registered for updating, or when
-	// a scheduled job changes
-	// payload is a Job
+	// ETWorkflowScheduled fires when a workflow is registered for updating, or
+	// when a scheduled workflow changes
+	// payload is a Workflow
 	// subscriptions do not block the publisher
-	ETCronJobScheduled = event.Type("cron:JobScheduled")
-	// ETCronJobUnscheduled fires when a job is removed from the update schedule
-	// payload is a Job
+	ETWorkflowScheduled = event.Type("cron:WorkflowScheduled")
+	// ETWorkflowUnscheduled fires when a workflow is removed from the update
+	// schedule payload is a Workflow
 	// subscriptions do not block the publisher
-	ETCronJobUnscheduled = event.Type("cron:JobUnscheduled")
-	// ETCronJobStarted fires when a job has started running
-	// payload is a Job
+	ETWorkflowUnscheduled = event.Type("cron:WorkflowUnscheduled")
+	// ETWorkflowStarted fires when a workflow has started running
+	// payload is a Workflow
 	// subscriptions do not block the publisher
-	ETCronJobStarted = event.Type("cron:JobStarted")
-	// ETCronJobCompleted fires when a job has finished running
-	// payload is a Job
+	ETWorkflowStarted = event.Type("cron:WorkflowStarted")
+	// ETWorkflowCompleted fires when a workflow has finished running
+	// payload is a Workflow
 	// subscriptions do not block the publisher
-	ETCronJobCompleted = event.Type("cron:JobCompleted")
+	ETWorkflowCompleted = event.Type("cron:WorkflowCompleted")
 )

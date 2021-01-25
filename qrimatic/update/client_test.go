@@ -36,14 +36,14 @@ package update
 
 // 	m := NewUpdateMethods(inst)
 
-// 	shellJob := &ScheduleParams{
+// 	shellWorkflow := &ScheduleParams{
 // 		// this'll create type ShellScript with the .sh extension
 // 		Name: "testdata/hello.sh",
 // 		// run one time after one second
 // 		Periodicity: "R1/PT10S",
 // 	}
-// 	shellRes := &Job{}
-// 	if err := m.Schedule(shellJob, shellRes); err != nil {
+// 	shellRes := &Workflow{}
+// 	if err := m.Schedule(shellWorkflow, shellRes); err != nil {
 // 		t.Fatal(err)
 // 	}
 
@@ -51,7 +51,7 @@ package update
 // 	// working
 // 	ref := addNowTransformDataset(t, inst.Node())
 
-// 	dsJob := &ScheduleParams{
+// 	dsWorkflow := &ScheduleParams{
 // 		Name: ref.AliasString(),
 // 		// run one time after ten seconds
 // 		// TODO (b5) - currently we *don't* want this code to run, because it'll
@@ -65,8 +65,8 @@ package update
 // 			Title:     "hallo",
 // 		},
 // 	}
-// 	dsRes := &Job{}
-// 	if err := m.Schedule(dsJob, dsRes); err != nil {
+// 	dsRes := &Workflow{}
+// 	if err := m.Schedule(dsWorkflow, dsRes); err != nil {
 // 		t.Fatal(err)
 // 	}
 // 	dsName := dsRes.Name
@@ -80,7 +80,7 @@ package update
 // 		t.Fatal(err)
 // 	}
 
-// 	res := []*Job{}
+// 	res := []*Workflow{}
 // 	if err := m.Logs(&ListParams{Offset: 0, Limit: -1}, &res); err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -95,8 +95,8 @@ package update
 // 		t.Errorf("expected 2 list entries, got: %d", len(res))
 // 	}
 
-// 	jobRes := &Job{}
-// 	if err := m.Job(&dsName, jobRes); err != nil {
+// 	WorkflowRes := &Workflow{}
+// 	if err := m.Workflow(&dsName, WorkflowRes); err != nil {
 // 		t.Error(err)
 // 	}
 
@@ -135,13 +135,13 @@ package update
 
 // 	m := NewUpdateMethods(inst)
 // 	res := &reporef.DatasetRef{}
-// 	if err := m.Run(&Job{Name: "me/bad_dataset", Type: scheduler.JTDataset}, res); err == nil {
+// 	if err := m.Run(&Workflow{Name: "me/bad_dataset", Type: scheduler.JTDataset}, res); err == nil {
 // 		t.Error("expected update to nonexistent dataset to error")
 // 	}
 
 // 	ref := addNowTransformDataset(t, node)
 // 	res = &reporef.DatasetRef{}
-// 	if err := m.Run(&Job{Name: ref.AliasString(), Type: scheduler.JTDataset /* Recall: "tf", ReturnBody: true */}, res); err != nil {
+// 	if err := m.Run(&Workflow{Name: ref.AliasString(), Type: scheduler.JTDataset /* Recall: "tf", ReturnBody: true */}, res); err != nil {
 // 		t.Errorf("update error: %s", err)
 // 	}
 
@@ -163,7 +163,7 @@ package update
 // 	}
 
 // 	// update should grab the transform from 2 commits back
-// 	if err := m.Run(&Job{Name: res.AliasString(), Type: scheduler.JTDataset /* ReturnBody: true */}, res); err != nil {
+// 	if err := m.Run(&Workflow{Name: res.AliasString(), Type: scheduler.JTDataset /* ReturnBody: true */}, res); err != nil {
 // 		t.Error(err)
 // 	}
 // }

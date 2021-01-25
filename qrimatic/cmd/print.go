@@ -31,10 +31,10 @@ func printItems(w io.Writer, items []fmt.Stringer, offset int) error {
 	return err
 }
 
-type jobStringer scheduler.Job
+type workflowStringer scheduler.Workflow
 
 // String assumes Name, Type, Periodicity, and PrevRunStart are present
-func (j jobStringer) String() string {
+func (j workflowStringer) String() string {
 	w := &bytes.Buffer{}
 	name := color.New(color.Bold).SprintFunc()
 	if j.NextRunStart != nil {
