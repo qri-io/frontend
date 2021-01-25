@@ -23,13 +23,15 @@ type Server struct {
 }
 
 func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string, setup bool) (*Server, error) {
-	if setup {
+	repoErr := lib.QriRepoExists(repoPath)
+	if repoErr != nil && setup {
+		log.Debugf("repoErr: %q", repoErr.Error())
 		if err := setupRepo(ctx, streams, repoPath); err != nil {
 			return nil, err
 		}
 	}
 
-	repoErr := lib.QriRepoExists(repoPath)
+	repoErr = lib.QriRepoExists(repoPath)
 	if repoErr != nil {
 		return nil, errors.New("no qri repo exists\nhave you run 'qri setup'?")
 	}
