@@ -169,83 +169,83 @@ func (c *Cron) Start(ctx context.Context) error {
 }
 
 func (c *Cron) runJob(ctx context.Context, job *Job, runner RunJobFunc) {
-	go func(j *Job) {
-		if err := c.pub.Publish(ctx, event.ETCronJobStarted, j); err != nil {
-			log.Debug(err)
-		}
-	}(job.Copy())
+	// go func(j *Job) {
+	// 	if err := c.pub.Publish(ctx, event.ETCronJobStarted, j); err != nil {
+	// 		log.Debug(err)
+	// 	}
+	// }(job.Copy())
 
-	log.Debugf("run job: %s", job.Name)
-	if err := job.Advance(); err != nil {
-		log.Debug(err)
-	}
+	// log.Debugf("run job: %s", job.Name)
+	// if err := job.Advance(); err != nil {
+	// 	log.Debug(err)
+	// }
 
-	streams := ioes.NewDiscardIOStreams()
-	if lfc, ok := c.store.(LogFileCreator); ok {
-		if file, logPath, err := lfc.CreateLogFile(job); err == nil {
-			log.Debugf("using log file: %s", logPath)
-			defer file.Close()
-			streams = ioes.NewIOStreams(nil, file, file)
-			job.CurrentRun.LogFilePath = logPath
-		}
-	}
+	// streams := ioes.NewDiscardIOStreams()
+	// if lfc, ok := c.store.(LogFileCreator); ok {
+	// 	if file, logPath, err := lfc.CreateLogFile(job); err == nil {
+	// 		log.Debugf("using log file: %s", logPath)
+	// 		defer file.Close()
+	// 		streams = ioes.NewIOStreams(nil, file, file)
+	// 		job.CurrentRun.LogFilePath = logPath
+	// 	}
+	// }
 
-	if err := runner(ctx, streams, job); err != nil {
-		log.Errorf("run job: %s error: %s", job.Name, err.Error())
-		job.CurrentRun.Error = err.Error()
-	} else {
-		log.Debugf("run job: %s success", job.Name)
-		job.CurrentRun.Error = ""
-	}
-	now := NowFunc()
-	job.CurrentRun.Stop = &now
-	job.LatestRunStart = job.CurrentRun.Start
+	// if err := runner(ctx, streams, job); err != nil {
+	// 	log.Errorf("run job: %s error: %s", job.Name, err.Error())
+	// 	job.CurrentRun.Error = err.Error()
+	// } else {
+	// 	log.Debugf("run job: %s success", job.Name)
+	// 	job.CurrentRun.Error = ""
+	// }
+	// now := NowFunc()
+	// job.CurrentRun.Stop = &now
+	// job.LatestRunStart = job.CurrentRun.Start
 
-	go func(j *Job) {
-		if err := c.pub.Publish(ctx, event.ETCronJobCompleted, j); err != nil {
-			log.Debug(err)
-		}
-	}(job.Copy())
+	// go func(j *Job) {
+	// 	if err := c.pub.Publish(ctx, event.ETCronJobCompleted, j); err != nil {
+	// 		log.Debug(err)
+	// 	}
+	// }(job.Copy())
 
-	// the updated job that goes to the schedule store shouldn't have a log path
-	// scheduleJob := job.Copy()
-	// scheduleJob.LogFilePath = ""
-	// scheduleJob.RunStart = time.Time{}
-	// scheduleJob.RunStop = time.Time{}
-	// scheduleJob.PrevRunStart = job.RunStart
-	if err := c.store.PutJob(ctx, job); err != nil {
-		log.Error(err)
-	}
-
-	// job.Name = job.LogName()
-	// if err := c.log.PutJob(ctx, job); err != nil {
+	// // the updated job that goes to the schedule store shouldn't have a log path
+	// // scheduleJob := job.Copy()
+	// // scheduleJob.LogFilePath = ""
+	// // scheduleJob.RunStart = time.Time{}
+	// // scheduleJob.RunStop = time.Time{}
+	// // scheduleJob.PrevRunStart = job.RunStart
+	// if err := c.store.PutJob(ctx, job); err != nil {
 	// 	log.Error(err)
 	// }
+
+	// // job.Name = job.LogName()
+	// // if err := c.log.PutJob(ctx, job); err != nil {
+	// // 	log.Error(err)
+	// // }
 }
 
 // Schedule adds a job to the cron scheduler
 func (c *Cron) Schedule(ctx context.Context, job *Job) (err error) {
-	if job.ID == "" && job.OwnerID != "" && job.DatasetID != "" {
-		job.ID, err = jobID(job.OwnerID, job.DatasetID)
-		if err != nil {
-			return err
-		}
-	}
+	// if job.ID == "" && job.OwnerID != "" && job.DatasetID != "" {
+	// 	job.ID, err = jobID(job.OwnerID, job.DatasetID)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
 
-	if !job.Paused && job.NextRunStart == nil {
-		next := job.Periodicity.After(NowFunc())
-		job.NextRunStart = &next
-	}
+	// if !job.Paused && job.NextRunStart == nil {
+	// 	next := job.Periodicity.After(NowFunc())
+	// 	job.NextRunStart = &next
+	// }
 
-	if err := c.store.PutJob(ctx, job); err != nil {
-		return err
-	}
+	// if err := c.store.PutJob(ctx, job); err != nil {
+	// 	return err
+	// }
 
-	go func(j *Job) {
-		if err := c.pub.Publish(ctx, event.ETCronJobScheduled, j); err != nil {
-			log.Debug(err)
-		}
-	}(job.Copy())
+	// go func(j *Job) {
+	// 	if err := c.pub.Publish(ctx, event.ETCronJobScheduled, j); err != nil {
+	// 		log.Debug(err)
+	// 	}
+	// }(job.Copy())
 
 	return nil
 }
@@ -253,15 +253,15 @@ func (c *Cron) Schedule(ctx context.Context, job *Job) (err error) {
 // Unschedule removes a job from the cron scheduler, cancelling any future
 // job executions
 func (c *Cron) Unschedule(ctx context.Context, name string) error {
-	if err := c.store.DeleteJob(ctx, name); err != nil {
-		return err
-	}
+	// if err := c.store.DeleteJob(ctx, name); err != nil {
+	// 	return err
+	// }
 
-	go func() {
-		if err := c.pub.Publish(ctx, event.ETCronJobUnscheduled, name); err != nil {
-			log.Debug(err)
-		}
-	}()
+	// go func() {
+	// 	if err := c.pub.Publish(ctx, event.ETCronJobUnscheduled, name); err != nil {
+	// 		log.Debug(err)
+	// 	}
+	// }()
 
 	return nil
 }
