@@ -190,6 +190,7 @@ workflows:
             branches:
               only:
                 - master
+                - link_fe
       - frontend-prod-deploy:
           requires:
             - frontend-image-push
@@ -197,6 +198,7 @@ workflows:
             branches:
               only:
                 - master
+                - link_fe
   engine:
     jobs:
       - engine-test
@@ -207,6 +209,7 @@ workflows:
             branches:
               only:
               - master
+              - link_fe
       - engine-prod-deploy:
           requires:
             - engine-image-push
@@ -214,3 +217,4 @@ workflows:
             branches:
               only:
                 - master
+                - link_fe
