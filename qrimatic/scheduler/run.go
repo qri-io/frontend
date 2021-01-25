@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"github.com/multiformats/go-multihash"
 )
 
-// RunMulticodecType is a CID prefix for cron.Run content identifiers
+// RunMulticodecType is a CID prefix for scheduler.Run content identifiers
 // TODO(b5) - using a dummy codec number for now. Pick a real one!
 const RunMulticodecType = 2200
 

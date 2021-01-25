@@ -8,7 +8,7 @@ import (
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
-	"github.com/qri-io/qrimatic/cron"
+	"github.com/qri-io/qrimatic/scheduler"
 )
 
 func TestJobFromDataset(t *testing.T) {
@@ -36,10 +36,10 @@ func TestJobFromShellScript(t *testing.T) {
 }
 
 func TestDatasetJobToCmd(t *testing.T) {
-	dsj := &cron.Job{
-		Type: cron.JTDataset,
+	dsj := &scheduler.Job{
+		Type: scheduler.JTDataset,
 		Name: "me/foo",
-		Options: &cron.DatasetOptions{
+		Options: &scheduler.DatasetOptions{
 			Title:    "title",
 			BodyPath: "body/path.csv",
 			FilePaths: []string{
@@ -66,8 +66,8 @@ func TestDatasetJobToCmd(t *testing.T) {
 }
 
 func TestShellScriptJobToCmd(t *testing.T) {
-	dsj := &cron.Job{
-		Type: cron.JTShellScript,
+	dsj := &scheduler.Job{
+		Type: scheduler.JTShellScript,
 		Name: "path/to/shell/script.sh",
 	}
 	streams := ioes.NewDiscardIOStreams()

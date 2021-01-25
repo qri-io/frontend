@@ -11,13 +11,13 @@ import (
 	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
-	"github.com/qri-io/qrimatic/cron"
+	"github.com/qri-io/qrimatic/scheduler"
 )
 
 // Client enapsulates logic for scheduled updates
 type Client struct {
 	repoPath string
-	sch      cron.Service
+	sch      scheduler.Service
 }
 
 // NewClient creates a new HTTP client from an address
@@ -28,15 +28,15 @@ func NewClient(repoPath string) (*Client, error) {
 	}
 	return &Client{
 		repoPath: repoPath,
-		sch:      cron.HTTPClient{Addr: cfg.API.Address},
+		sch:      scheduler.HTTPClient{Addr: cfg.API.Address},
 	}, nil
 }
 
-// Job aliases a cron.Job, removing the need to import the cron package.
-type Job = cron.Job
+// Job aliases a scheduler.Job, removing the need to import the cron package.
+type Job = scheduler.Job
 
-// Run aliase a cron.Run, removing the need to import the cron package.
-type Run = cron.Run
+// Run aliase a scheduler.Run, removing the need to import the cron package.
+type Run = scheduler.Run
 
 // ScheduleParams encapsulates parameters for scheduling updates
 type ScheduleParams struct {
@@ -49,7 +49,7 @@ type ScheduleParams struct {
 }
 
 // Schedule creates a job and adds it to the scheduler
-func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *cron.Job) (err error) {
+func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *scheduler.Job) (err error) {
 	// Make all paths absolute. this must happen *before* any possible RPC call
 	if PossibleShellScript(in.Name) {
 		if err = qfs.AbsPath(&in.Name); err != nil {
@@ -77,7 +77,7 @@ func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *cron.Job
 	return nil
 }
 
-func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (job *cron.Job, err error) {
+func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (job *scheduler.Job, err error) {
 	if PossibleShellScript(p.Name) {
 		return ShellScriptToJob(p.Name, p.Periodicity, nil)
 	}
@@ -94,9 +94,9 @@ func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (
 		return nil, err
 	}
 
-	var o *cron.DatasetOptions
+	var o *scheduler.DatasetOptions
 	if p.SaveParams != nil {
-		o = &cron.DatasetOptions{
+		o = &scheduler.DatasetOptions{
 			Title:               p.SaveParams.Title,
 			Message:             p.SaveParams.Message,
 			Recall:              p.SaveParams.Recall,
@@ -240,9 +240,9 @@ func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err 
 		if err = qfs.AbsPath(&p.Name); err != nil {
 			return
 		}
-		p.Type = cron.JTShellScript
+		p.Type = scheduler.JTShellScript
 	} else {
-		p.Type = cron.JTDataset
+		p.Type = scheduler.JTDataset
 	}
 
 	if err := absolutizeJobFilepaths(p); err != nil {
@@ -250,11 +250,11 @@ func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err 
 	}
 
 	switch p.Type {
-	case cron.JTDataset:
+	case scheduler.JTDataset:
 		params := &lib.SaveParams{
 			Ref: p.Name,
 		}
-		if o, ok := p.Options.(*cron.DatasetOptions); ok {
+		if o, ok := p.Options.(*scheduler.DatasetOptions); ok {
 			params = &lib.SaveParams{
 				Ref:                 p.Name,
 				Title:               o.Title,
@@ -275,10 +275,10 @@ func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err 
 		*res = reporef.DatasetRef{}
 		err = c.runDatasetUpdate(ctx, params, res)
 
-	case cron.JTShellScript:
+	case scheduler.JTShellScript:
 		// err = JobToCmd(m.inst.streams, p).Run()
 		err = JobToCmd(ioes.NewStdIOStreams(), p).Run()
-	case cron.JobType(""):
+	case scheduler.JobType(""):
 		return fmt.Errorf("update requires a job type to run")
 	default:
 		return fmt.Errorf("unrecognized update type: %s", p.Type)
@@ -295,7 +295,7 @@ func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err 
 }
 
 func absolutizeJobFilepaths(j *Job) error {
-	if o, ok := j.Options.(*cron.DatasetOptions); ok {
+	if o, ok := j.Options.(*scheduler.DatasetOptions); ok {
 		if err := qfs.AbsPath(&o.BodyPath); err != nil {
 			return err
 		}

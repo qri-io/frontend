@@ -1,5 +1,5 @@
-// Package cron schedules dataset and shell script updates
-package cron
+// package scheduler schedules dataset and shell script updates
+package scheduler
 
 import (
 	"context"

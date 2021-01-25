@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import "github.com/qri-io/qri/event"
 

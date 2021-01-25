@@ -11,18 +11,18 @@ package update
 // 	"github.com/qri-io/ioes"
 // 	"github.com/qri-io/qri/config"
 // 	reporef "github.com/qri-io/qri/repo/ref"
-// 	"github.com/qri-io/qrimatic/cron"
+// 	"github.com/qri-io/qrimatic/scheduler"
 // )
 
 // func TestUpdateMethods(t *testing.T) {
-// 	prevDci := cron.DefaultCheckInterval
+// 	prevDci := scheduler.DefaultCheckInterval
 // 	tmpDir, err := ioutil.TempDir("", "update_methods")
 // 	if err != nil {
 // 		t.Fatal(err)
-// 		cron.DefaultCheckInterval = prevDci
+// 		scheduler.DefaultCheckInterval = prevDci
 // 	}
 // 	defer os.RemoveAll(tmpDir)
-// 	cron.DefaultCheckInterval = time.Millisecond * 500
+// 	scheduler.DefaultCheckInterval = time.Millisecond * 500
 
 // 	cfg := config.DefaultConfigForTesting()
 // 	cfg.Update = &config.Update{Type: "mem"}
@@ -76,7 +76,7 @@ package update
 // 	// sorry tests, y'all gotta run a little slower :/
 // 	ctx, done := context.WithDeadline(context.Background(), time.Now().Add(time.Second*2))
 // 	defer done()
-// 	if err := inst.cron.(*cron.Cron).Start(ctx); err != nil {
+// 	if err := inst.scheduler.(*scheduler.Cron).Start(ctx); err != nil {
 // 		t.Fatal(err)
 // 	}
 
@@ -135,13 +135,13 @@ package update
 
 // 	m := NewUpdateMethods(inst)
 // 	res := &reporef.DatasetRef{}
-// 	if err := m.Run(&Job{Name: "me/bad_dataset", Type: cron.JTDataset}, res); err == nil {
+// 	if err := m.Run(&Job{Name: "me/bad_dataset", Type: scheduler.JTDataset}, res); err == nil {
 // 		t.Error("expected update to nonexistent dataset to error")
 // 	}
 
 // 	ref := addNowTransformDataset(t, node)
 // 	res = &reporef.DatasetRef{}
-// 	if err := m.Run(&Job{Name: ref.AliasString(), Type: cron.JTDataset /* Recall: "tf", ReturnBody: true */}, res); err != nil {
+// 	if err := m.Run(&Job{Name: ref.AliasString(), Type: scheduler.JTDataset /* Recall: "tf", ReturnBody: true */}, res); err != nil {
 // 		t.Errorf("update error: %s", err)
 // 	}
 
@@ -163,7 +163,7 @@ package update
 // 	}
 
 // 	// update should grab the transform from 2 commits back
-// 	if err := m.Run(&Job{Name: res.AliasString(), Type: cron.JTDataset /* ReturnBody: true */}, res); err != nil {
+// 	if err := m.Run(&Job{Name: res.AliasString(), Type: scheduler.JTDataset /* ReturnBody: true */}, res); err != nil {
 // 		t.Error(err)
 // 	}
 // }

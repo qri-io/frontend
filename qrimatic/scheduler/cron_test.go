@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"context"
@@ -47,11 +47,11 @@ func TestCronDataset(t *testing.T) {
 
 	store := NewMemStore()
 	cron := NewCronInterval(store, factory, event.NilBus, time.Millisecond*50)
-	if err := cron.Schedule(ctx, job); err != nil {
+	if err := scheduler.Schedule(ctx, job); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := cron.Start(ctx); err != nil {
+	if err := scheduler.Start(ctx); err != nil {
 		t.Fatal(err)
 	}
 
@@ -117,11 +117,11 @@ func TestCronShellScript(t *testing.T) {
 
 	store := NewMemStore()
 	cron := NewCron(store, factory, event.NilBus)
-	if err := cron.Schedule(ctx, job); err != nil {
+	if err := scheduler.Schedule(ctx, job); err != nil {
 		t.Fatal(err)
 	}
 
-	if err := cron.Start(ctx); err != nil {
+	if err := scheduler.Start(ctx); err != nil {
 		t.Fatal(err)
 	}
 

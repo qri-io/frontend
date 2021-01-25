@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	// JobMulticodecType is a CID prefix for cron.Job content identifiers
+	// JobMulticodecType is a CID prefix for scheduler.Job content identifiers
 	// TODO(b5) - using a dummy codec number for now. Pick a real one!
 	JobMulticodecType = 2000
 	// multihashCodec defines the hashing algorithm this package uses when
