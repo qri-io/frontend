@@ -52,7 +52,9 @@
     "test": "craco test",
     "test-e2e": "NODE_ENV=test && npm run build && jest ./e2e/* --detectOpenHandles",
     "test-e2e-no-build": "NODE_ENV=test && jest ./e2e/* --detectOpenHandles",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -70,6 +72,12 @@
     ]
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^6.1.15",
+    "@storybook/addon-essentials": "^6.1.15",
+    "@storybook/addon-links": "^6.1.15",
+    "@storybook/node-logger": "^6.1.15",
+    "@storybook/preset-create-react-app": "^3.1.5",
+    "@storybook/react": "^6.1.15",
     "@types/react-router-dom": "^5.1.6",
     "ts-jest": "^26.4.4"
   }

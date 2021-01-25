@@ -1,11 +1,29 @@
+import React from 'react';
+import { Provider } from 'react-redux';
+import { Story, Meta } from '@storybook/react';
+
 import WorkflowEditor from "../WorkflowEditor";
+import { configureStore, history } from '../../../store/store';
+import { ConnectedRouter } from 'connected-react-router';
 
-export default WorkflowEditor
+export default {
+  title: 'Workflow/WorkflowEditor',
+  component: WorkflowEditor,
+  argTypes: {},
+} as Meta;
 
-// export interface WorkflowEditorProps {
-//   workflow: Workflow
-//   run?: Run
-// }
+const Template: Story<any> = (args) => (
+  <Provider store={configureStore()}>
+    <ConnectedRouter history={history}>
+      <WorkflowEditor {...args} />
+    </ConnectedRouter>
+  </Provider>
+);
+
+export const Basic = Template.bind({})
+Basic.args = {
+  label: 'Basic',
+}
 
 // const initialState: WorkflowEditorProps = {
 //   workflow: NewWorkflow({
