@@ -31,21 +31,25 @@ export interface WorkflowState {
 }
 
 const initialState: WorkflowState = {
-  workflow: NewWorkflow({
+  workflow: {
+    id: '',
     datasetID: 'fake_id',
+    runCount: 0,
+    disabled: false,
+
     triggers: [
-      { type: 'cron', value: 'R/PT1H' }
+      { id: '', workflowID: '', type: 'cron', value: 'R/PT1H' }
     ],
     steps: [
-      { type: 'starlark', name: 'setup', value: `# load_ds("b5/world_bank_population")` },
-      { type: 'starlark', name: 'download', value: `def download(ctx):\n\treturn "your download here"` },
-      { type: 'starlark', name: 'transform', value: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-      { type: 'save', name: 'save', value: '' }
+      { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
+      { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
+      { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
+      { syntax: 'save', category: 'save', name: 'save', script: '' }
     ],
-    onCompletion: [
+    onComplete: [
       { type: 'push', value: 'https://registry.qri.cloud' },
     ]
-  }),
+  },
   events: []
 }
 
@@ -67,7 +71,7 @@ export const workflowReducer = createReducer(initialState, {
 
 function changeWorkflowStep(state: WorkflowState, action: SetWorkflowStepAction) {
   if (state.workflow.steps) {
-    state.workflow.steps[action.index].value = action.value
+    state.workflow.steps[action.index].script = action.script
   }
   return
 }

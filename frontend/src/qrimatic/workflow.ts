@@ -1,49 +1,75 @@
+import { VersionInfo } from "../qri/versionInfo"
 
 
 export interface Workflow {
-  // id of the workflow
   id: string
-  triggers?: WorkflowTrigger[]
-  // init id of the dataset
+  ownerID?: string
   datasetID?: string
-  steps?: WorkflowStep[]
-  onCompletion?: WorkflowHook[]
+
+  disabled: boolean
+  runCount: number
+  latestRunStart?: string
+  
+  triggers?: WorkflowTrigger[]
+  steps?: TransformStep[]
+  onComplete?: WorkflowHook[]
+
+  versionInfo?: VersionInfo
 }
 
 export function NewWorkflow(data: Record<string,any>): Workflow {
   return {
-    // TODO (ramfox): where/when do we get an id?
-    id: data.id || 'temp_id',
+    id: data.id || '',
     datasetID: data.datasetID,
+    ownerID: data.ownerID,
+
+    disabled: data.disabled || false,
+    runCount: data.runCount || 0,
+    latestRunStart: data.latestRunStart,
+
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
-    steps: data.steps && data.steps.map(NewWorkflowStep),
-    onCompletion: data.onCompletion && data.onCompletion.map(NewWorkflowHook),
+    steps: data.steps && data.steps.map(NewTransformStep),
+    onComplete: data.onComplete && data.onComplete.map(NewWorkflowHook),
+
+    versionInfo: data.versionInfo
   }
 }
 
 export interface WorkflowTrigger {
-  type: string
-  value: string | Record<string,any>
+  id:         string,
+  workflowID: string,
+  type:       string,
+  disabled?:   boolean,
+
+  runCount?:      number,
+  lastRunID?:     string,
+  lastRunStart?:  string,
+  lastRunStatus?: string,
+  [key: string]: any
 }
 
 export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
   return {
+    id: data.id || '',
+    workflowID: data.workflowID || '',
     type: data.type,
-    value: data.value
+    disabled: data.disabled || false,
   }
 }
 
-export interface WorkflowStep {
-  type: string
+export interface TransformStep {
+  category: string
   name: string
-  value: string
+  syntax: string
+  script: string
 }
 
-export function NewWorkflowStep(data: Record<string,any>): WorkflowStep {
+export function NewTransformStep(data: Record<string,any>): TransformStep {
   return {
-    type: data.type,
     name: data.name,
-    value: data.value
+    syntax: data.syntax,
+    category: data.category,
+    script: data.script
   }
 }
 
@@ -65,8 +91,8 @@ export function workflowScriptString(w: Workflow): string {
   }
 
   return w.steps.reduce((str, step) => {
-    if (step.type === 'starlark') {
-      return str + `${step.value}\n`
+    if (step.category === 'starlark') {
+      return str + `${step.script}\n`
     }
     return str
   }, '')

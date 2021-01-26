@@ -7,7 +7,7 @@ import WorkflowCell from './WorkflowCell';
 import Triggers from './Triggers';
 import OnComplete from './OnComplete';
 import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
-import { WorkflowStep } from '../../qrimatic/workflow';
+import { TransformStep } from '../../qrimatic/workflow';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
 import { changeWorkflowStep, runWorkflow, setWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
 import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
@@ -33,7 +33,7 @@ const WorkflowEditor: React.FC<any> = () => {
 
   const running = latestRun ? (latestRun.status === 'running') : false
 
-  const collapseState = (step: WorkflowStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
+  const collapseState = (step: TransformStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
     if (collapseStates[step.name]) {
       return collapseStates[step.name]
     }

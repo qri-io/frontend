@@ -12,14 +12,14 @@ import {
 export interface SetWorkflowStepAction {
   type: string
   index: number
-  value: string
+  script: string
 }
 
-export function changeWorkflowStep(index: number, value: string): SetWorkflowStepAction {
+export function changeWorkflowStep(index: number, script: string): SetWorkflowStepAction {
   return {
     type: WORKFLOW_CHANGE_STEP,
     index,
-    value,
+    script,
   }
 }
 
@@ -32,14 +32,35 @@ export function runWorkflow(w: Workflow): ApiActionThunk {
         method: 'POST',
         body: {
           transform: {
-            syntax: 'starlark',
             scriptBytes: btoa(workflowScriptString(w)),
+            steps: w.steps
           }
         },
       }
     })
   }
 }
+
+export function deployWorkflow(w: Workflow): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch({
+      type: 'deploy',
+      [CALL_API]: {
+        endpoint: 'deploy',
+        method: 'POST',
+        body: {
+          apply: true,
+          workflow: w,
+          transform: {
+            scriptBytes: btoa(workflowScriptString(w)),
+            steps: w.steps
+          }
+        }
+      }
+    })
+  }
+}
+
 
 export interface EventLogAction {
   type: string
