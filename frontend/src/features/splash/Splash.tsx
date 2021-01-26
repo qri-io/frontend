@@ -7,7 +7,7 @@ const Splash: React.FC<any> = () => {
       <h1 className='text-xl font-medium text-black'>Automate Your Data.</h1>
 
       <div className='max-w-small'>
-        <Link to='/datasets/new'>
+        <Link to='/ds/new'>
           <div className='py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-gray-600 hover:bg-gray-300'>
             <p>Create A Dataset</p>
           </div>

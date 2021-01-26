@@ -1,20 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
+import NavBar from '../navbar/NavBar'
 import { VersionInfo } from '../../qri/versionInfo'
 import DatasetsTable from './DatasetsTable'
 import { loadDatasets } from './state/collectionActions'
 import { selectCollection } from './state/collectionState'
-
-// const datasets: VersionInfo[] = [
-//   {
-//     username: 'b5',
-//     name: 'world_bank_population',
-//   },
-//   {
-//     username: 'b5',
-//     name: 'gop_word'
-//   }
-// ].map(newVersionInfo)
 
 const Collection: React.FC<any> = () => {
   const dispatch = useDispatch()
@@ -25,6 +16,7 @@ const Collection: React.FC<any> = () => {
   }, [dispatch])
 
   return (<div>
+    <NavBar />
     <header>
       <h1 className='text-2xl font-bold'>Collection</h1>
     </header>

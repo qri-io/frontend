@@ -9,6 +9,7 @@ import DatasetComponents from './DatasetComponents';
 import DatasetHeader from './DatasetHeader';
 import { loadDataset } from './state/datasetActions'
 import { useParams } from 'react-router-dom';
+import NavBar from '../navbar/NavBar';
 
 const Dataset: React.FC<any> = () => {
   const ref = newQriRef(useParams())
@@ -20,6 +21,12 @@ const Dataset: React.FC<any> = () => {
 
   return (
     <div>
+      <NavBar menu={[
+        { type: 'link', label: 'back to collection', to: '/collection' },
+        { type: 'hr' }
+      ]}>
+        <p className='text-bold text-xl text-white'>{ref.name}/{ref.username}</p>
+      </NavBar>
       <DatasetHeader qriRef={ref} />
       <Switch>
         <Route path='/ds/:username/:dataset' exact><WorkflowEditor /></Route>
