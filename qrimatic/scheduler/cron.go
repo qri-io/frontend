@@ -140,19 +140,38 @@ func (c *Cron) Start(ctx context.Context) error {
 		}
 
 		run := []*Workflow{}
+		trigger := []Trigger{}
 		for _, workflow := range workflows {
-			if workflow.NextRunStart != nil && now.After(*workflow.NextRunStart) {
-				run = append(run, workflow)
+			if workflow.Disabled {
+				log.Debugf("workflow disabled: %q", workflow.ID)
+				continue
+			}
+			for _, t := range workflow.Triggers {
+				if t.Info().Disabled {
+					log.Debugf("trigger disabled: %q", t.Info().ID)
+					continue
+				}
+				// TODO (arqu): handle other trigger types
+				switch t.Info().Type {
+					case TTCron:
+						crn := t.(*CronTrigger)
+						if crn.NextRunStart != nil && now.After(*crn.NextRunStart) {
+							run = append(run, workflow)
+							trigger = append(trigger, t)
+						}	
+					default:
+						log.Debugf("trigger type not implemented: %q", t.Info().Type)	
+				}
 			}
 		}
 
 		if len(run) > 0 {
 			log.Debugw("running workflows", "workflowCount", len(workflows), "runCount", len(run))
 			runner := c.factory(ctx)
-			for _, workflow := range run {
+			for i, workflow := range run {
 				// TODO (b5) - if we want things like per-workflow timeout, we should create
 				// a new workflow-scoped context here
-				c.runWorkflow(ctx, workflow, runner)
+				c.runWorkflow(ctx, workflow, trigger[i].Info().ID, runner)
 			}
 		}
 	}
@@ -168,7 +187,7 @@ func (c *Cron) Start(ctx context.Context) error {
 	}
 }
 
-func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, runner RunWorkflowFunc) {
+func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, triggerID string, runner RunWorkflowFunc) {
 	go func(j *Workflow) {
 		if err := c.pub.Publish(ctx, ETWorkflowStarted, j); err != nil {
 			log.Debug(err)
@@ -176,7 +195,7 @@ func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, runner RunWo
 	}(workflow.Copy())
 
 	log.Debugf("run workflow: %s", workflow.Name)
-	if err := workflow.Advance(); err != nil {
+	if err := workflow.Advance(triggerID); err != nil {
 		log.Debug(err)
 	}
 
@@ -226,15 +245,27 @@ func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, runner RunWo
 // Schedule adds a workflow to the cron scheduler
 func (c *Cron) Schedule(ctx context.Context, workflow *Workflow) (err error) {
 	if workflow.ID == "" && workflow.OwnerID != "" && workflow.DatasetID != "" {
-		workflow.ID, err = workflowID(workflow.OwnerID, workflow.DatasetID)
-		if err != nil {
-			return err
-		}
+		workflow.ID = workflowID()
 	}
 
-	if !workflow.Paused && workflow.NextRunStart == nil {
-		next := workflow.Periodicity.After(NowFunc())
-		workflow.NextRunStart = &next
+	// if we're scheduling a workflow, it means it's enabled
+	workflow.Disabled = false
+
+	for _, t := range workflow.Triggers {
+		if t.Info().Disabled {
+			log.Debugf("trigger disabled: %q", t.Info().ID)
+			continue
+		}
+		// TODO (arqu): handle other trigger types
+		switch t.Info().Type {
+			case TTCron:
+				crn := t.(*CronTrigger)
+				if crn.NextRunStart == nil {
+					crn.NextRunStart = crn.NextExecutionWall()
+				}
+			default:
+				log.Debugf("trigger type not implemented: %q", t.Info().Type)	
+		}
 	}
 
 	if err := c.store.PutWorkflow(ctx, workflow); err != nil {

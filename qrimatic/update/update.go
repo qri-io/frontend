@@ -179,9 +179,9 @@ func datasetSaveCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.
 		if o.Message != "" {
 			args = append(args, fmt.Sprintf(`--message=%s`, o.Message))
 		}
-		if o.Recall != "" {
-			args = append(args, fmt.Sprintf(`--recall=%s`, o.Recall))
-		}
+		// if o.Recall != "" {
+		// 	args = append(args, fmt.Sprintf(`--recall=%s`, o.Recall))
+		// }
 		if o.BodyPath != "" {
 			args = append(args, fmt.Sprintf(`--body=%s`, o.BodyPath))
 		}
@@ -245,7 +245,7 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 	}
 
 	name := fmt.Sprintf("%s/%s", ds.Peername, ds.Name)
-	workflow, err = scheduler.NewWorkflow(name, "ownerID", name, scheduler.JTDataset, periodicity)
+	workflow, err = scheduler.NewCronWorkflow(name, "ownerID", name, periodicity)
 	if err != nil {
 		log.Debugw("creating new workflow", "error", err)
 		return nil, err
@@ -263,16 +263,16 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 
 // ShellScriptToWorkflow turns a shell script into scheduler.Workflow
 func ShellScriptToWorkflow(path string, periodicity string, opts *scheduler.ShellScriptOptions) (workflow *scheduler.Workflow, err error) {
-	// TODO (b5) - confirm file exists & is executable
+	// // TODO (b5) - confirm file exists & is executable
 
-	workflow, err = scheduler.NewWorkflow(path, "foo", path, scheduler.JTShellScript, periodicity)
-	if err != nil {
-		return nil, err
-	}
+	// workflow, err = scheduler.NewWorkflow(path, "foo", path, scheduler.JTShellScript, periodicity)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	if opts != nil {
-		workflow.Options = opts
-	}
+	// if opts != nil {
+	// 	workflow.Options = opts
+	// }
 	return
 }
 
