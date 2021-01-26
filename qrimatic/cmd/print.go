@@ -37,13 +37,14 @@ type workflowStringer scheduler.Workflow
 func (j workflowStringer) String() string {
 	w := &bytes.Buffer{}
 	name := color.New(color.Bold).SprintFunc()
-	if j.NextRunStart != nil {
-		t := j.Periodicity.After(*j.NextRunStart)
-		relTime := humanize.RelTime(time.Now().In(time.UTC), t, "", "")
-		fmt.Fprintf(w, "%s\nin %sat %s | %s\n", name(j.Name), relTime, t.In(StringerLocation).Format(time.Kitchen), j.Type)
-	} else {
-		fmt.Fprintf(w, "%s\nin paused | %s\n", name(j.Name), j.Type)
-	}
+	fmt.Fprintf(w, "%s\nin %sat %s | %s\n", name(j.Name), "not implented", "not implented", j.Type)
+	// if j.NextRunStart != nil {
+	// 	t := j.Periodicity.After(*j.NextRunStart)
+	// 	relTime := humanize.RelTime(time.Now().In(time.UTC), t, "", "")
+	// 	fmt.Fprintf(w, "%s\nin %sat %s | %s\n", name(j.Name), relTime, t.In(StringerLocation).Format(time.Kitchen), j.Type)
+	// } else {
+	// 	fmt.Fprintf(w, "%s\nin paused | %s\n", name(j.Name), j.Type)
+	// }
 	fmt.Fprintf(w, "\n")
 	return w.String()
 }
