@@ -13,6 +13,8 @@ import mapError from './mapError'
 // CALL_API is a global, unique constant for passing actions to API middleware
 export const CALL_API = Symbol('CALL_API')
 
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:2503'
+
 // ApiAction is an action that api middleware will operate on. ApiAction
 // intentionally does _not_ extend Action. when api middleware encounters an
 // ApiAction, it will immideately fire a API_[endpoint]_REQUEST action and
@@ -139,7 +141,7 @@ function apiUrl (endpoint: string, segments?: ApiSegments, query?: ApiQuery, pag
     if (!(url[url.length - 1] === '/' || seg[0] === '/')) url += '/'
     return url + seg
   }
-  let url = `http://localhost:2503/${endpoint}`
+  let url = API_BASE_URL + `/${endpoint}`
   if (segments) {
     if (segments.peername) {
       url = addToUrl(url, segments.peername)

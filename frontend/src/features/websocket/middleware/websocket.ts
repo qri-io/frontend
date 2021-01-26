@@ -23,7 +23,7 @@ export interface RemoteEvent {
 
 export type RemoteEvents = Record<string, RemoteEvent>
 
-export const WEBSOCKETS_URL = 'ws://localhost:2506'
+export const WEBSOCKETS_URL = process.env.REACT_APP_WS_BASE_URL || 'ws://localhost:2503'
 export const WEBSOCKETS_PROTOCOL = 'qri-websocket'
 
 // wsMiddleware manages requests to connect to the qri backend via websockets
