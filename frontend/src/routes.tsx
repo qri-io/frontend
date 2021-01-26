@@ -16,7 +16,7 @@ import Dataset from './features/dataset/Dataset';
 
 export default function Routes () {
   return (
-    <div className='route-content flex-1 overflow-y-auto'>
+    <div className='route-content h-full'>
       <Switch>
         <Route path='/login'><Login /></Route>
         <Route path='/signup'><Signup /></Route>
