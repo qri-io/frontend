@@ -387,13 +387,15 @@ func (client *ClientCommands) RunUpdate(ctx context.Context, args []string) (err
 
 func (client *ClientCommands) saveParams() *lib.SaveParams {
 	p := &lib.SaveParams{
-		Ref:                 client.Ref,
-		Title:               client.Title,
-		Message:             client.Message,
-		BodyPath:            client.BodyPath,
-		FilePaths:           client.FilePaths,
-		Recall:              client.Recall,
-		DryRun:              client.DryRun,
+		Ref:       client.Ref,
+		Title:     client.Title,
+		Message:   client.Message,
+		BodyPath:  client.BodyPath,
+		FilePaths: client.FilePaths,
+		// TODO (arqu): revert once implemented
+		// Recall:              client.Recall,
+		// TODO (arqu): revert once implemented
+		// DryRun:              client.DryRun,
 		ShouldRender:        !client.NoRender,
 		Force:               client.Force,
 		ConvertFormatToPrev: client.KeepFormat,

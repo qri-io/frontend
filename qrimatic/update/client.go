@@ -97,9 +97,10 @@ func (c *Client) workflowFromScheduleParams(ctx context.Context, p *SchedulePara
 	var o *scheduler.DatasetOptions
 	if p.SaveParams != nil {
 		o = &scheduler.DatasetOptions{
-			Title:               p.SaveParams.Title,
-			Message:             p.SaveParams.Message,
-			Recall:              p.SaveParams.Recall,
+			Title:   p.SaveParams.Title,
+			Message: p.SaveParams.Message,
+			// TODO (arqu): revert once implemented
+			// Recall:              p.SaveParams.Recall,
 			BodyPath:            p.SaveParams.BodyPath,
 			FilePaths:           p.SaveParams.FilePaths,
 			Force:               p.SaveParams.Force,
@@ -256,10 +257,11 @@ func (c *Client) Run(ctx context.Context, p *Workflow, res *reporef.DatasetRef) 
 		}
 		if o, ok := p.Options.(*scheduler.DatasetOptions); ok {
 			params = &lib.SaveParams{
-				Ref:                 p.Name,
-				Title:               o.Title,
-				Message:             o.Message,
-				Recall:              o.Recall,
+				Ref:     p.Name,
+				Title:   o.Title,
+				Message: o.Message,
+				// TODO (arqu): revert once implemented
+				// Recall:              o.Recall,
 				BodyPath:            o.BodyPath,
 				FilePaths:           o.FilePaths,
 				Force:               o.Force,

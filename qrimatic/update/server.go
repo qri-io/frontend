@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 
 	"github.com/qri-io/ioes"
@@ -64,6 +65,8 @@ func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string, set
 
 func (s *Server) Serve(ctx context.Context) error {
 	apiServer := api.New(s.inst)
+	apiServer.Mux = http.NewServeMux()
+
 	s.svc.AddRoutes(apiServer.Mux, apiServer.Middleware)
 
 	go func() {

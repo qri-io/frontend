@@ -15,6 +15,6 @@ require (
 	github.com/qri-io/ioes v0.1.1
 	github.com/qri-io/iso8601 v0.1.1-0.20201221213213-f31ee4cdc38b
 	github.com/qri-io/qfs v0.5.1-0.20201119141805-fb13393b2d1f
-	github.com/qri-io/qri v0.9.14-0.20210105032858-9f921941b37c
+	github.com/qri-io/qri v0.9.14-0.20210126145200-eccdf9b544f3
 	github.com/spf13/cobra v1.0.0
 )
