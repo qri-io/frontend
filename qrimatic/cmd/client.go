@@ -38,7 +38,7 @@ type ClientCommands struct {
 	Page      int
 	PageSize  int
 
-	// specifies custom repo location when scheduling a job,
+	// specifies custom repo location when scheduling a workflow,
 	// should only be set if --repo persistent flag is set
 	RepoPath string
 }
@@ -245,7 +245,7 @@ but assumes you want to recall the most recent transform in the dataset.
 	return cmd
 }
 
-// Schedule adds a job to the update scheduler
+// Schedule adds a workflow to the update scheduler
 func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err error) {
 	if len(args) < 1 {
 		return errors.New(lib.ErrBadArgs, "please provide a dataset reference for updating")
@@ -259,7 +259,7 @@ func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err 
 		p.Periodicity = args[1]
 	}
 
-	res := &update.Job{}
+	res := &update.Workflow{}
 	if err := client.updates.Schedule(ctx, p, res); err != nil {
 		return err
 	}
@@ -268,7 +268,7 @@ func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err 
 	return nil
 }
 
-// Unschedule removes a job from the scheduler
+// Unschedule removes a workflow from the scheduler
 func (client *ClientCommands) Unschedule(ctx context.Context, args []string) (err error) {
 	if len(args) < 1 {
 		return errors.New(lib.ErrBadArgs, "please provide a name to unschedule")
@@ -286,7 +286,7 @@ func (client *ClientCommands) Unschedule(ctx context.Context, args []string) (er
 	return nil
 }
 
-// List shows scheduled update jobs
+// List shows scheduled update workflows
 func (client *ClientCommands) List(ctx context.Context) (err error) {
 	// convert Page and PageSize to Limit and Offset
 	page := util.NewPage(client.Page, client.PageSize)
@@ -294,7 +294,7 @@ func (client *ClientCommands) List(ctx context.Context) (err error) {
 		Offset: page.Offset(),
 		Limit:  page.Limit(),
 	}
-	res := []*update.Job{}
+	res := []*update.Workflow{}
 	if err = client.updates.List(ctx, p, &res); err != nil {
 		return
 	}
@@ -305,14 +305,14 @@ func (client *ClientCommands) List(ctx context.Context) (err error) {
 	// should use a more proper fix
 	j := 0
 	for i := len(res) - 1; i >= 0; i-- {
-		items[j] = jobStringer(*res[i])
+		items[j] = workflowStringer(*res[i])
 		j++
 	}
 	printItems(client.Out, items, page.Offset())
 	return
 }
 
-// Runs shows a history of job events
+// Runs shows a history of workflow events
 func (client *ClientCommands) Runs(ctx context.Context, args []string) (err error) {
 	if len(args) == 1 {
 		return client.LogFile(ctx, args[0])
@@ -370,14 +370,14 @@ func (client *ClientCommands) RunUpdate(ctx context.Context, args []string) (err
 	}
 
 	var (
-		name = args[0]
-		job  = &update.Job{
+		name     = args[0]
+		workflow = &update.Workflow{
 			Name: name,
 		}
 	)
 
 	res := &reporef.DatasetRef{}
-	if err := client.updates.Run(ctx, job, res); err != nil {
+	if err := client.updates.Run(ctx, workflow, res); err != nil {
 		return err
 	}
 

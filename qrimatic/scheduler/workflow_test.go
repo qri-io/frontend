@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"encoding/json"
@@ -42,12 +42,12 @@ func TestDatasetOptionsJSON(t *testing.T) {
 	}
 }
 
-func TestJobCopy(t *testing.T) {
+func TestWorkflowCopy(t *testing.T) {
 	// now := time.Now()
-	a := &Job{
+	a := &Workflow{
 		ID:          "id",
 		Name:        "name",
-		Type:        JobType("FOO"),
+		Type:        WorkflowType("FOO"),
 		Periodicity: mustRepeatingInterval("R/P1W"),
 		// PrevRunStart: &now,
 		// RunNumber:    1234567890,
@@ -61,44 +61,44 @@ func TestJobCopy(t *testing.T) {
 		},
 	}
 
-	if diff := compareJob(a, a.Copy()); diff != "" {
+	if diff := compareWorkflow(a, a.Copy()); diff != "" {
 		t.Errorf("copy mismatch (-want +got):\n%s", diff)
 	}
 }
 
-func compareJob(a, b *Job) string {
+func compareWorkflow(a, b *Workflow) string {
 	return cmp.Diff(a, b, cmpopts.IgnoreUnexported(iso8601.Duration{}))
 }
 
-func TestJobsJSON(t *testing.T) {
-	jobs := NewJobSet()
-	jobs.Add(&Job{
-		ID:          "job1",
-		Name:        "job_one",
+func TestWorkflowsJSON(t *testing.T) {
+	workflows := NewWorkflowSet()
+	workflows.Add(&Workflow{
+		ID:          "workflow1",
+		Name:        "workflow_one",
 		Periodicity: mustRepeatingInterval("R/PT1H"),
 		Type:        JTDataset,
 		Options:     &DatasetOptions{Title: "Yus"},
 	})
-	jobs.Add(&Job{
-		ID:          "job2",
-		Name:        "job_two",
+	workflows.Add(&Workflow{
+		ID:          "workflow2",
+		Name:        "workflow_two",
 		Periodicity: mustRepeatingInterval("R/PT1D"),
 		Type:        JTShellScript,
 	})
 
-	data, err := json.Marshal(jobs)
+	data, err := json.Marshal(workflows)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	got := []*Job{}
+	got := []*Workflow{}
 	if err := json.Unmarshal(data, got); err != nil {
 		t.Fatal(err)
 	}
 
 	for i, j := range got {
-		if diff := compareJob(jobs.set[i], j); diff != "" {
-			t.Errorf("job %d mismatch (-want +got):\n%s", i, diff)
+		if diff := compareWorkflow(workflows.set[i], j); diff != "" {
+			t.Errorf("workflow %d mismatch (-want +got):\n%s", i, diff)
 		}
 	}
 

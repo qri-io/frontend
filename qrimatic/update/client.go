@@ -11,13 +11,13 @@ import (
 	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
-	"github.com/qri-io/qrimatic/cron"
+	"github.com/qri-io/qrimatic/scheduler"
 )
 
 // Client enapsulates logic for scheduled updates
 type Client struct {
 	repoPath string
-	sch      cron.Service
+	sch      scheduler.Service
 }
 
 // NewClient creates a new HTTP client from an address
@@ -28,15 +28,15 @@ func NewClient(repoPath string) (*Client, error) {
 	}
 	return &Client{
 		repoPath: repoPath,
-		sch:      cron.HTTPClient{Addr: cfg.API.Address},
+		sch:      scheduler.HTTPClient{Addr: cfg.API.Address},
 	}, nil
 }
 
-// Job aliases a cron.Job, removing the need to import the cron package.
-type Job = cron.Job
+// Workflow aliases a scheduler.Workflow, removing the need to import the cron package.
+type Workflow = scheduler.Workflow
 
-// Run aliase a cron.Run, removing the need to import the cron package.
-type Run = cron.Run
+// Run aliase a scheduler.Run, removing the need to import the cron package.
+type Run = scheduler.Run
 
 // ScheduleParams encapsulates parameters for scheduling updates
 type ScheduleParams struct {
@@ -48,8 +48,8 @@ type ScheduleParams struct {
 	SaveParams *lib.SaveParams
 }
 
-// Schedule creates a job and adds it to the scheduler
-func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *cron.Job) (err error) {
+// Schedule creates a workflow and adds it to the scheduler
+func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *scheduler.Workflow) (err error) {
 	// Make all paths absolute. this must happen *before* any possible RPC call
 	if PossibleShellScript(in.Name) {
 		if err = qfs.AbsPath(&in.Name); err != nil {
@@ -61,25 +61,25 @@ func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *cron.Job
 		return err
 	}
 
-	job, err := c.jobFromScheduleParams(ctx, in)
+	workflow, err := c.workflowFromScheduleParams(ctx, in)
 	if err != nil {
-		log.Debugw("creating job from schedule params", "error", err)
+		log.Debugw("creating workflow from schedule params", "error", err)
 		return err
 	}
 
-	log.Debugw("scheduling job", "job", job)
-	if err = c.sch.Schedule(ctx, job); err != nil {
-		log.Debugw("scheduling job", "error", err)
+	log.Debugw("scheduling workflow", "workflow", workflow)
+	if err = c.sch.Schedule(ctx, workflow); err != nil {
+		log.Debugw("scheduling workflow", "error", err)
 		return err
 	}
 
-	*out = *job
+	*out = *workflow
 	return nil
 }
 
-func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (job *cron.Job, err error) {
+func (c *Client) workflowFromScheduleParams(ctx context.Context, p *ScheduleParams) (workflow *scheduler.Workflow, err error) {
 	if PossibleShellScript(p.Name) {
-		return ShellScriptToJob(p.Name, p.Periodicity, nil)
+		return ShellScriptToWorkflow(p.Name, p.Periodicity, nil)
 	}
 
 	// TODO (b5) - finish
@@ -94,9 +94,9 @@ func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (
 		return nil, err
 	}
 
-	var o *cron.DatasetOptions
+	var o *scheduler.DatasetOptions
 	if p.SaveParams != nil {
-		o = &cron.DatasetOptions{
+		o = &scheduler.DatasetOptions{
 			Title:               p.SaveParams.Title,
 			Message:             p.SaveParams.Message,
 			Recall:              p.SaveParams.Recall,
@@ -109,37 +109,37 @@ func (c *Client) jobFromScheduleParams(ctx context.Context, p *ScheduleParams) (
 		}
 	}
 
-	return DatasetToJob(res.Dataset, p.Periodicity, o)
+	return DatasetToWorkflow(res.Dataset, p.Periodicity, o)
 }
 
-// Unschedule removes a job from the scheduler by name
+// Unschedule removes a workflow from the scheduler by name
 func (c *Client) Unschedule(ctx context.Context, name *string, unscheduled *bool) error {
 	return c.sch.Unschedule(ctx, *name)
 }
 
-// List gets scheduled jobs
-func (c *Client) List(ctx context.Context, p *lib.ListParams, jobs *[]*Job) error {
-	list, err := c.sch.ListJobs(ctx, p.Offset, p.Limit)
+// List gets scheduled workflows
+func (c *Client) List(ctx context.Context, p *lib.ListParams, workflows *[]*Workflow) error {
+	list, err := c.sch.ListWorkflows(ctx, p.Offset, p.Limit)
 	if err != nil {
-		log.Debugw("listing jobs", "error", err)
+		log.Debugw("listing workflows", "error", err)
 		return err
 	}
-	*jobs = list
+	*workflows = list
 	return nil
 }
 
-// Job gets a job by name
-func (c *Client) Job(ctx context.Context, name *string, job *Job) error {
-	res, err := c.sch.Job(ctx, *name)
+// Workflow gets a workflow by name
+func (c *Client) Workflow(ctx context.Context, name *string, workflow *Workflow) error {
+	res, err := c.sch.Workflow(ctx, *name)
 	if err != nil {
 		return err
 	}
 
-	*job = *res
+	*workflow = *res
 	return nil
 }
 
-// Runs shows the history of job execution
+// Runs shows the history of workflow execution
 func (c *Client) Runs(ctx context.Context, p *lib.ListParams, res *[]*Run) error {
 	runs, err := c.sch.Runs(ctx, p.Offset, p.Limit)
 	if err != nil {
@@ -234,27 +234,27 @@ func (c *Client) ServiceStatus(in *bool, out *ServiceStatus) error {
 
 // Run advances a dataset to the latest known version from either a peer or by
 // re-running a transform in the peer's namespace
-func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err error) {
+func (c *Client) Run(ctx context.Context, p *Workflow, res *reporef.DatasetRef) (err error) {
 	// Make all paths absolute. this must happen *before* any possible RPC call
 	if PossibleShellScript(p.Name) {
 		if err = qfs.AbsPath(&p.Name); err != nil {
 			return
 		}
-		p.Type = cron.JTShellScript
+		p.Type = scheduler.JTShellScript
 	} else {
-		p.Type = cron.JTDataset
+		p.Type = scheduler.JTDataset
 	}
 
-	if err := absolutizeJobFilepaths(p); err != nil {
+	if err := absolutizeWorkflowFilepaths(p); err != nil {
 		return err
 	}
 
 	switch p.Type {
-	case cron.JTDataset:
+	case scheduler.JTDataset:
 		params := &lib.SaveParams{
 			Ref: p.Name,
 		}
-		if o, ok := p.Options.(*cron.DatasetOptions); ok {
+		if o, ok := p.Options.(*scheduler.DatasetOptions); ok {
 			params = &lib.SaveParams{
 				Ref:                 p.Name,
 				Title:               o.Title,
@@ -275,11 +275,11 @@ func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err 
 		*res = reporef.DatasetRef{}
 		err = c.runDatasetUpdate(ctx, params, res)
 
-	case cron.JTShellScript:
-		// err = JobToCmd(m.inst.streams, p).Run()
-		err = JobToCmd(ioes.NewStdIOStreams(), p).Run()
-	case cron.JobType(""):
-		return fmt.Errorf("update requires a job type to run")
+	case scheduler.JTShellScript:
+		// err = WorkflowToCmd(m.inst.streams, p).Run()
+		err = WorkflowToCmd(ioes.NewStdIOStreams(), p).Run()
+	case scheduler.WorkflowType(""):
+		return fmt.Errorf("update requires a workflow type to run")
 	default:
 		return fmt.Errorf("unrecognized update type: %s", p.Type)
 	}
@@ -289,13 +289,13 @@ func (c *Client) Run(ctx context.Context, p *Job, res *reporef.DatasetRef) (err 
 	}
 
 	// if p.RunError == "" {
-	// 	err = m.inst.Repo().Logbook().WriteCronJobRan(ctx, p.RunNumber, reporef.ConvertToDsref(*res))
+	// 	err = m.inst.Repo().Logbook().WriteCronWorkflowRan(ctx, p.RunNumber, reporef.ConvertToDsref(*res))
 	// }
 	return err
 }
 
-func absolutizeJobFilepaths(j *Job) error {
-	if o, ok := j.Options.(*cron.DatasetOptions); ok {
+func absolutizeWorkflowFilepaths(j *Workflow) error {
+	if o, ok := j.Options.(*scheduler.DatasetOptions); ok {
 		if err := qfs.AbsPath(&o.BodyPath); err != nil {
 			return err
 		}

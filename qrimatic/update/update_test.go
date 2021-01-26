@@ -8,10 +8,10 @@ import (
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
-	"github.com/qri-io/qrimatic/cron"
+	"github.com/qri-io/qrimatic/scheduler"
 )
 
-func TestJobFromDataset(t *testing.T) {
+func TestWorkflowFromDataset(t *testing.T) {
 	ds := &dataset.Dataset{
 		Peername: "b5",
 		Name:     "libp2p_node_count",
@@ -25,21 +25,21 @@ func TestJobFromDataset(t *testing.T) {
 		},
 	}
 
-	_, err := DatasetToJob(ds, "", nil)
+	_, err := DatasetToWorkflow(ds, "", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
-func TestJobFromShellScript(t *testing.T) {
-	// ShellScriptToJob(qfs.NewMemfileBytes("test.sh", nil)
+func TestWorkflowFromShellScript(t *testing.T) {
+	// ShellScriptToWorkflow(qfs.NewMemfileBytes("test.sh", nil)
 }
 
-func TestDatasetJobToCmd(t *testing.T) {
-	dsj := &cron.Job{
-		Type: cron.JTDataset,
+func TestDatasetWorkflowToCmd(t *testing.T) {
+	dsj := &scheduler.Workflow{
+		Type: scheduler.JTDataset,
 		Name: "me/foo",
-		Options: &cron.DatasetOptions{
+		Options: &scheduler.DatasetOptions{
 			Title:    "title",
 			BodyPath: "body/path.csv",
 			FilePaths: []string{
@@ -56,36 +56,36 @@ func TestDatasetJobToCmd(t *testing.T) {
 		},
 	}
 	streams := ioes.NewDiscardIOStreams()
-	cmd := JobToCmd(streams, dsj)
+	cmd := WorkflowToCmd(streams, dsj)
 
 	expect := "qri save me/foo --title=title --message=message --body=body/path.csv --file=file/path/0.json --file=file/path/1.json --publish"
 	got := strings.Join(cmd.Args, " ")
 	if got != expect {
-		t.Errorf("job string mismatch. expected:\n'%s'\ngot:\n'%s'", expect, got)
+		t.Errorf("workflow string mismatch. expected:\n'%s'\ngot:\n'%s'", expect, got)
 	}
 }
 
-func TestShellScriptJobToCmd(t *testing.T) {
-	dsj := &cron.Job{
-		Type: cron.JTShellScript,
+func TestShellScriptWorkflowToCmd(t *testing.T) {
+	dsj := &scheduler.Workflow{
+		Type: scheduler.JTShellScript,
 		Name: "path/to/shell/script.sh",
 	}
 	streams := ioes.NewDiscardIOStreams()
-	cmd := JobToCmd(streams, dsj)
+	cmd := WorkflowToCmd(streams, dsj)
 
 	expect := "path/to/shell/script.sh"
 	got := strings.Join(cmd.Args, " ")
 	if got != expect {
-		t.Errorf("job string mismatch. expected:\n'%s'\ngot:\n'%s'", expect, got)
+		t.Errorf("workflow string mismatch. expected:\n'%s'\ngot:\n'%s'", expect, got)
 	}
 }
 
-func TestShellScriptToJob(t *testing.T) {
-	if _, err := ShellScriptToJob("", "", nil); err == nil {
+func TestShellScriptToWorkflow(t *testing.T) {
+	if _, err := ShellScriptToWorkflow("", "", nil); err == nil {
 		t.Errorf("expected error")
 	}
 
-	if _, err := ShellScriptToJob("testdata/hello.sh", "R/P1Y", nil); err != nil {
+	if _, err := ShellScriptToWorkflow("testdata/hello.sh", "R/P1Y", nil); err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
 }

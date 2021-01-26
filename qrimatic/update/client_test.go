@@ -11,18 +11,18 @@ package update
 // 	"github.com/qri-io/ioes"
 // 	"github.com/qri-io/qri/config"
 // 	reporef "github.com/qri-io/qri/repo/ref"
-// 	"github.com/qri-io/qrimatic/cron"
+// 	"github.com/qri-io/qrimatic/scheduler"
 // )
 
 // func TestUpdateMethods(t *testing.T) {
-// 	prevDci := cron.DefaultCheckInterval
+// 	prevDci := scheduler.DefaultCheckInterval
 // 	tmpDir, err := ioutil.TempDir("", "update_methods")
 // 	if err != nil {
 // 		t.Fatal(err)
-// 		cron.DefaultCheckInterval = prevDci
+// 		scheduler.DefaultCheckInterval = prevDci
 // 	}
 // 	defer os.RemoveAll(tmpDir)
-// 	cron.DefaultCheckInterval = time.Millisecond * 500
+// 	scheduler.DefaultCheckInterval = time.Millisecond * 500
 
 // 	cfg := config.DefaultConfigForTesting()
 // 	cfg.Update = &config.Update{Type: "mem"}
@@ -36,14 +36,14 @@ package update
 
 // 	m := NewUpdateMethods(inst)
 
-// 	shellJob := &ScheduleParams{
+// 	shellWorkflow := &ScheduleParams{
 // 		// this'll create type ShellScript with the .sh extension
 // 		Name: "testdata/hello.sh",
 // 		// run one time after one second
 // 		Periodicity: "R1/PT10S",
 // 	}
-// 	shellRes := &Job{}
-// 	if err := m.Schedule(shellJob, shellRes); err != nil {
+// 	shellRes := &Workflow{}
+// 	if err := m.Schedule(shellWorkflow, shellRes); err != nil {
 // 		t.Fatal(err)
 // 	}
 
@@ -51,7 +51,7 @@ package update
 // 	// working
 // 	ref := addNowTransformDataset(t, inst.Node())
 
-// 	dsJob := &ScheduleParams{
+// 	dsWorkflow := &ScheduleParams{
 // 		Name: ref.AliasString(),
 // 		// run one time after ten seconds
 // 		// TODO (b5) - currently we *don't* want this code to run, because it'll
@@ -65,8 +65,8 @@ package update
 // 			Title:     "hallo",
 // 		},
 // 	}
-// 	dsRes := &Job{}
-// 	if err := m.Schedule(dsJob, dsRes); err != nil {
+// 	dsRes := &Workflow{}
+// 	if err := m.Schedule(dsWorkflow, dsRes); err != nil {
 // 		t.Fatal(err)
 // 	}
 // 	dsName := dsRes.Name
@@ -76,11 +76,11 @@ package update
 // 	// sorry tests, y'all gotta run a little slower :/
 // 	ctx, done := context.WithDeadline(context.Background(), time.Now().Add(time.Second*2))
 // 	defer done()
-// 	if err := inst.cron.(*cron.Cron).Start(ctx); err != nil {
+// 	if err := inst.scheduler.(*scheduler.Cron).Start(ctx); err != nil {
 // 		t.Fatal(err)
 // 	}
 
-// 	res := []*Job{}
+// 	res := []*Workflow{}
 // 	if err := m.Logs(&ListParams{Offset: 0, Limit: -1}, &res); err != nil {
 // 		t.Fatal(err)
 // 	}
@@ -95,8 +95,8 @@ package update
 // 		t.Errorf("expected 2 list entries, got: %d", len(res))
 // 	}
 
-// 	jobRes := &Job{}
-// 	if err := m.Job(&dsName, jobRes); err != nil {
+// 	WorkflowRes := &Workflow{}
+// 	if err := m.Workflow(&dsName, WorkflowRes); err != nil {
 // 		t.Error(err)
 // 	}
 
@@ -135,13 +135,13 @@ package update
 
 // 	m := NewUpdateMethods(inst)
 // 	res := &reporef.DatasetRef{}
-// 	if err := m.Run(&Job{Name: "me/bad_dataset", Type: cron.JTDataset}, res); err == nil {
+// 	if err := m.Run(&Workflow{Name: "me/bad_dataset", Type: scheduler.JTDataset}, res); err == nil {
 // 		t.Error("expected update to nonexistent dataset to error")
 // 	}
 
 // 	ref := addNowTransformDataset(t, node)
 // 	res = &reporef.DatasetRef{}
-// 	if err := m.Run(&Job{Name: ref.AliasString(), Type: cron.JTDataset /* Recall: "tf", ReturnBody: true */}, res); err != nil {
+// 	if err := m.Run(&Workflow{Name: ref.AliasString(), Type: scheduler.JTDataset /* Recall: "tf", ReturnBody: true */}, res); err != nil {
 // 		t.Errorf("update error: %s", err)
 // 	}
 
@@ -163,7 +163,7 @@ package update
 // 	}
 
 // 	// update should grab the transform from 2 commits back
-// 	if err := m.Run(&Job{Name: res.AliasString(), Type: cron.JTDataset /* ReturnBody: true */}, res); err != nil {
+// 	if err := m.Run(&Workflow{Name: res.AliasString(), Type: scheduler.JTDataset /* ReturnBody: true */}, res); err != nil {
 // 		t.Error(err)
 // 	}
 // }

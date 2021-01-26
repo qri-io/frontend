@@ -1,4 +1,4 @@
-package cron
+package scheduler
 
 import (
 	"bytes"
@@ -51,9 +51,9 @@ func (c HTTPClient) Ping() error {
 	return maybeErrorResponse(res)
 }
 
-// ListJobs  jobs by querying an HTTP server
-func (c HTTPClient) ListJobs(ctx context.Context, offset, limit int) ([]*Job, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/jobs?offset=%d&limit=%d", c.Addr, offset, limit), nil)
+// ListWorkflows by querying an HTTP server
+func (c HTTPClient) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflows?offset=%d&limit=%d", c.Addr, offset, limit), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -64,32 +64,12 @@ func (c HTTPClient) ListJobs(ctx context.Context, offset, limit int) ([]*Job, er
 		return nil, err
 	}
 
-	return decodeJSONJobsResponse(res)
+	return decodeJSONWorkflowsResponse(res)
 }
 
-// JobForName gets a job by it's name (which often matches the dataset name)
-func (c HTTPClient) JobForName(ctx context.Context, name string) (*Job, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/job?name=%s", c.Addr, name), nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Accept", jsonMimeType)
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	if res.StatusCode == 200 {
-		return decodeJSONJobResponse(res)
-	}
-
-	return nil, maybeErrorResponse(res)
-}
-
-// Job gets a job by querying an HTTP server
-func (c HTTPClient) Job(ctx context.Context, id string) (*Job, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/job?id=%s", c.Addr, id), nil)
+// WorkflowForName gets a workflow by it's name (which often matches the dataset name)
+func (c HTTPClient) WorkflowForName(ctx context.Context, name string) (*Workflow, error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflow?name=%s", c.Addr, name), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -101,20 +81,40 @@ func (c HTTPClient) Job(ctx context.Context, id string) (*Job, error) {
 	}
 
 	if res.StatusCode == 200 {
-		return decodeJSONJobResponse(res)
+		return decodeJSONWorkflowResponse(res)
 	}
 
 	return nil, maybeErrorResponse(res)
 }
 
-// Schedule adds a job to the cron scheduler via an HTTP request
-func (c HTTPClient) Schedule(ctx context.Context, job *Job) error {
-	return c.postJob(job)
+// Workflow gets a workflow by querying an HTTP server
+func (c HTTPClient) Workflow(ctx context.Context, id string) (*Workflow, error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflow?id=%s", c.Addr, id), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", jsonMimeType)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode == 200 {
+		return decodeJSONWorkflowResponse(res)
+	}
+
+	return nil, maybeErrorResponse(res)
 }
 
-// Unschedule removes a job from scheduling
+// Schedule adds a workflow to the cron scheduler via an HTTP request
+func (c HTTPClient) Schedule(ctx context.Context, workflow *Workflow) error {
+	return c.postWorkflow(workflow)
+}
+
+// Unschedule removes a workflow from scheduling
 func (c HTTPClient) Unschedule(ctx context.Context, name string) error {
-	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://%s/jobs?name=%s", c.Addr, name), nil)
+	req, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("http://%s/workflows?name=%s", c.Addr, name), nil)
 	if err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func (c HTTPClient) Unschedule(ctx context.Context, name string) error {
 	return maybeErrorResponse(res)
 }
 
-// Runs gives a log of executed jobs for a dataset name
+// Runs gives a log of executed workflows for a dataset name
 func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*Run, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/runs?offset=%d&limit=%d", c.Addr, offset, limit), nil)
 	if err != nil {
@@ -144,7 +144,7 @@ func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*Run, error)
 	return decodeJSONRunsResponse(res)
 }
 
-// GetRun returns a single executed job by job.LogName
+// GetRun returns a single executed workflow by workflow.LogName
 func (c HTTPClient) GetRun(ctx context.Context, logName string, number int) (*Run, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/run?name=%s", c.Addr, logName), nil)
 	if err != nil {
@@ -184,13 +184,13 @@ func (c HTTPClient) LogFile(ctx context.Context, logName string) (io.ReadCloser,
 	return nil, maybeErrorResponse(res)
 }
 
-func (c HTTPClient) postJob(job *Job) error {
-	data, err := json.Marshal(job)
+func (c HTTPClient) postWorkflow(workflow *Workflow) error {
+	data, err := json.Marshal(workflow)
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/jobs", c.Addr), bytes.NewReader(data))
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("http://%s/workflows", c.Addr), bytes.NewReader(data))
 	if err != nil {
 		return err
 
@@ -219,10 +219,10 @@ func maybeErrorResponse(res *http.Response) error {
 	return fmt.Errorf(string(errData))
 }
 
-func decodeJSONJobsResponse(res *http.Response) ([]*Job, error) {
+func decodeJSONWorkflowsResponse(res *http.Response) ([]*Workflow, error) {
 	defer res.Body.Close()
 	env := struct {
-		Data []*Job
+		Data []*Workflow
 	}{}
 	if err := json.NewDecoder(res.Body).Decode(&env); err != nil {
 		return nil, err
@@ -230,10 +230,10 @@ func decodeJSONJobsResponse(res *http.Response) ([]*Job, error) {
 	return env.Data, nil
 }
 
-func decodeJSONJobResponse(res *http.Response) (*Job, error) {
+func decodeJSONWorkflowResponse(res *http.Response) (*Workflow, error) {
 	defer res.Body.Close()
 	env := struct {
-		Data *Job
+		Data *Workflow
 	}{}
 	err := json.NewDecoder(res.Body).Decode(&env)
 	return env.Data, err
@@ -273,11 +273,11 @@ func noopMiddlware(h http.HandlerFunc) http.HandlerFunc {
 // AddCronRoutes registers cron endpoints on an *http.Mux
 func AddCronRoutes(m *http.ServeMux, c *Cron, mw func(http.HandlerFunc) http.HandlerFunc) {
 	m.HandleFunc("/cron", mw(c.statusHandler))
-	m.HandleFunc("/jobs", mw(c.jobsHandler))
-	m.HandleFunc("/job", mw(c.jobHandler))
+	m.HandleFunc("/workflows", mw(c.workflowsHandler))
+	m.HandleFunc("/workflow", mw(c.workflowHandler))
 	m.HandleFunc("/runs", mw(c.runsHandler))
 	m.HandleFunc("/run", mw(c.getRunHandler))
-	// m.HandleFunc("/log/output", mw(c.loggedJobFileHandler))
+	// m.HandleFunc("/log/output", mw(c.loggedWorkflowFileHandler))
 	// m.HandleFunc("/run", mw(c.runHandler))
 }
 
@@ -285,13 +285,13 @@ func (c *Cron) statusHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (c *Cron) jobsHandler(w http.ResponseWriter, r *http.Request) {
+func (c *Cron) workflowsHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		offset := apiutil.ReqParamInt(r, "offset", 0)
 		limit := apiutil.ReqParamInt(r, "limit", 25)
 
-		js, err := c.ListJobs(r.Context(), offset, limit)
+		js, err := c.ListWorkflows(r.Context(), offset, limit)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -300,14 +300,14 @@ func (c *Cron) jobsHandler(w http.ResponseWriter, r *http.Request) {
 		apiutil.WriteResponse(w, js)
 		return
 	case http.MethodPost:
-		job := &Job{}
+		workflow := &Workflow{}
 
-		if err := json.NewDecoder(r.Body).Decode(job); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(workflow); err != nil {
 			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 			return
 		}
 
-		if err := c.Schedule(r.Context(), job); err != nil {
+		if err := c.Schedule(r.Context(), workflow); err != nil {
 			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 			return
 		}
@@ -322,16 +322,16 @@ func (c *Cron) jobsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Cron) jobHandler(w http.ResponseWriter, r *http.Request) {
+func (c *Cron) workflowHandler(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
-	job, err := c.JobForName(r.Context(), name)
+	workflow, err := c.WorkflowForName(r.Context(), name)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
 
-	apiutil.WriteResponse(w, job)
+	apiutil.WriteResponse(w, workflow)
 }
 
 func (c *Cron) runsHandler(w http.ResponseWriter, r *http.Request) {
@@ -342,7 +342,7 @@ func (c *Cron) runsHandler(w http.ResponseWriter, r *http.Request) {
 		offset := apiutil.ReqParamInt(r, "offset", 0)
 		limit := apiutil.ReqParamInt(r, "limit", 25)
 
-		logs, err := c.ListJobs(r.Context(), offset, limit)
+		logs, err := c.ListWorkflows(r.Context(), offset, limit)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -365,7 +365,7 @@ func (c *Cron) getRunHandler(w http.ResponseWriter, r *http.Request) {
 	apiutil.WriteResponse(w, run)
 }
 
-// func (c *Cron) loggedJobFileHandler(w http.ResponseWriter, r *http.Request) {
+// func (c *Cron) loggedWorkflowFileHandler(w http.ResponseWriter, r *http.Request) {
 // 	logName := r.FormValue("log_name")
 // 	f, err := c.LogFile(r.Context(), logName)
 // 	if err != nil {
@@ -382,5 +382,5 @@ func (c *Cron) runHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO (b5): implement an HTTP run handler
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte("not finished"))
-	// c.runJob(r.Context(), nil)
+	// c.runWorkflow(r.Context(), nil)
 }

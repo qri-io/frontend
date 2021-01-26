@@ -9,7 +9,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
-	"github.com/qri-io/qrimatic/cron"
+	"github.com/qri-io/qrimatic/scheduler"
 )
 
 // StringerLocation is the function to retrieve the timezone location
@@ -31,10 +31,10 @@ func printItems(w io.Writer, items []fmt.Stringer, offset int) error {
 	return err
 }
 
-type jobStringer cron.Job
+type workflowStringer scheduler.Workflow
 
 // String assumes Name, Type, Periodicity, and PrevRunStart are present
-func (j jobStringer) String() string {
+func (j workflowStringer) String() string {
 	w := &bytes.Buffer{}
 	name := color.New(color.Bold).SprintFunc()
 	if j.NextRunStart != nil {
@@ -48,7 +48,7 @@ func (j jobStringer) String() string {
 	return w.String()
 }
 
-type runStringer cron.Run
+type runStringer scheduler.Run
 
 // String assumes Name, Type, PrevRunStart and ExitStatus are present
 func (j runStringer) String() string {
