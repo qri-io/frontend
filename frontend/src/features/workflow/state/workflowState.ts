@@ -2,7 +2,7 @@ import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
 import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
-import { NewWorkflow, Workflow } from '../../../qrimatic/workflow';
+import { Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qrimatic/eventLog';
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
