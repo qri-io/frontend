@@ -8,7 +8,7 @@ const DatasetHistory: React.FC<any> = () => {
   const ref = qriRefFromString('rgardaphe/presidents')
 
   return (
-    <div>
+    <div className='bg-gray-100'>
       <DatasetHeader qriRef={ref} />
       <HistoryList />
     </div>

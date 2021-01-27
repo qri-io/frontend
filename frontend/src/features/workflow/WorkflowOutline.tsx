@@ -12,7 +12,7 @@ export interface WorkflowOutlineProps {
 
 const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ run, onDeploy }) => {
   return (
-    <div className='outline h-full w-56 border-r flex-none'>
+    <div className='outline h-full w-56 flex-none'>
       <div className='p-4 text-left'>
         <div className='font-semibold text-gray-600 mb-2'>Triggers</div>
           <div className='text-xs inline-block py-1 px-2 rounded border'>

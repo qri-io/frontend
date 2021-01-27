@@ -43,20 +43,20 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
 
   return (
     <div className='overflow-y-auto p-4 text-left h-full flex-grow'>
-      <RunBar
-        status={run ? run.status : RunState.waiting }
-        onRun={() => {
-          setCollapseStates({})
-          dispatch(runWorkflow(workflow))
-        }}
-        onRunCancel={() => { alert('cannot cancel runs yet') }}
-        onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }}
-        onDeployCancel={() => { alert('cannot cancel deploys yet') }}
-      />
       <Triggers />
-      <section className='p-4'>
+      <section className='p-4 bg-white shadow-sm mb-4'>
         <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Script</h2>
         <div className='text-xs mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
+        <RunBar
+          status={run ? run.status : RunState.waiting }
+          onRun={() => {
+            setCollapseStates({})
+            dispatch(runWorkflow(workflow))
+          }}
+          onRunCancel={() => { alert('cannot cancel runs yet') }}
+          onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }}
+          onDeployCancel={() => { alert('cannot cancel deploys yet') }}
+        />
         <div>
           {workflow.steps && workflow.steps.map((step, i) => {
             let r

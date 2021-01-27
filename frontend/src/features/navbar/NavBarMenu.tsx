@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Icon from '../../chrome/Icon'
 
 export interface NavBarMenuItem {
   type: 'link' | 'hr'
@@ -15,8 +16,8 @@ const NavBarMenu: React.FC<NavBarMenuProps> = ({ items = [] }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className='relative mr-5'>
-      <div onClick={() => { setOpen(!open) }}>Menu</div>
+    <div className='relative mr-5 ml-3'>
+      <div className='text-gray-400' onClick={() => { setOpen(!open) }}><Icon icon='bars' /></div>
       {open &&
         <div className='absolute bg-gray-600 p-5'>
           {items.map((item, i) => {

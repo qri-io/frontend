@@ -15,6 +15,7 @@ import {
   faExclamationCircle,
   faSpinner,
   faTable,
+  faBars,
 
   IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
@@ -45,7 +46,8 @@ const icons: Record<string, IconDefinition> = {
   'times': faTimes,
   'exclamationCircle': faExclamationCircle,
   'spinner': faSpinner,
-  'table': faTable
+  'table': faTable,
+  'bars': faBars
 }
 
 const sizes: {[key: string]: FontAwesomeIconProps['size']} = {

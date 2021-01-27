@@ -54,7 +54,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div className='w-full rounded border-gray-200 border-2 my-4'>
+    <div className='w-full my-4'>
       <header>
         <div className='text-center w-10 h-100 py-3 float-left'>
           <h1 className='font-black text-3xl text-gray-300' >{index + 1}</h1>

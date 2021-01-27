@@ -20,12 +20,12 @@ const Dataset: React.FC<any> = () => {
   }, [dispatch, qriRef])
 
   return (
-    <div className='flex flex-col h-full'>
+    <div className='flex flex-col h-full bg-gray-100'>
       <NavBar menu={[
         { type: 'link', label: 'back to collection', to: '/collection' },
         { type: 'hr' }
       ]}>
-        <p className='text-bold text-xl text-white'>{qriRef.name}/{qriRef.username}</p>
+        <p className='font-bold text-white'>{qriRef.username} / {qriRef.name}</p>
       </NavBar>
       <div className='flex flex-grow overflow-hidden'>
         <DatasetNavSidebar qriRef={qriRef} />

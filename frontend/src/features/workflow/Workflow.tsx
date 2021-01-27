@@ -36,7 +36,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   }, [dispatch, qriRef])
 
   return (
-    <div className='flex h-full'>
+    <div className='flex h-full bg-gray-100'>
       <WorkflowOutline run={latestRun} onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }} />
       <WorkflowEditor workflow={workflow} run={latestRun} />
     </div>
