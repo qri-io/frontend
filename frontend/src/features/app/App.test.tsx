@@ -12,5 +12,5 @@ test('initial app render', () => {
   );
 
   // app should render the splash route by default, text pulled from theere
-  expect(getByText(/Create A Dataset/i)).toBeInTheDocument();
+  expect(getByText(/New Dataset/i)).toBeInTheDocument();
 });

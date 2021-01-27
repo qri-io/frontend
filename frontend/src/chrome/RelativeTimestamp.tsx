@@ -11,7 +11,7 @@ const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({ ti
     className='relative-timestamp'
     title={format(timestamp, 'MMM d yyyy, h:mm zz')}
   >
-    {formatDistanceToNow(timestamp)}
+    {formatDistanceToNow(timestamp, { addSuffix: true })}
   </span>
 )
 

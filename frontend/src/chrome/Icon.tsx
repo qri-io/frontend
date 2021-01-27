@@ -3,22 +3,30 @@ import classNames from 'classnames'
 
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 import {
+  faArrowRight,
+  faBars,
   faBolt,
   faClock,
   faCloudUploadAlt,
   faCode,
   faProjectDiagram,
   faEnvelope,
+  faHdd,
   faList,
   faCheck,
+  faPlus,
   faTimes,
   faExclamationCircle,
   faSpinner,
   faTable,
-  faBars,
 
   IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
+
+import {
+  faFile
+} from '@fortawesome/free-regular-svg-icons'
+
 
 interface IconProps {
   // name of the icon
@@ -34,20 +42,24 @@ interface IconProps {
 }
 
 const icons: Record<string, IconDefinition> = {
+  'arrowRight': faArrowRight,
+  'bars': faBars,
   'clock': faClock,
   'code': faCode,
   'bolt': faBolt,
   'projectDiagram': faProjectDiagram,
   'cloudUpload': faCloudUploadAlt,
   'envelope': faEnvelope,
+  'file': faFile,
+  'hdd': faHdd,
   'list': faList,
   'check': faCheck,
   'close': faCheck, // TODO (b5) - close icon def
+  'plus': faPlus,
   'times': faTimes,
   'exclamationCircle': faExclamationCircle,
   'spinner': faSpinner,
   'table': faTable,
-  'bars': faBars
 }
 
 const sizes: {[key: string]: FontAwesomeIconProps['size']} = {

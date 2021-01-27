@@ -4,8 +4,8 @@ import ReactDataTable from 'react-data-table-component'
 import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router-dom'
 
+import Icon from '../../chrome/Icon'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
-// import StatusIcons from './StatusIcons'
 import ExportButton from '../../chrome/ExportButton'
 import { VersionInfo } from '../../qri/versionInfo'
 
@@ -81,7 +81,18 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       selector: 'name',
       sortable: true,
       grow: 2,
-      cell: (row: VersionInfo) => <Link to={`/ds/${row.username}/${row.name}`}>{row.username}/{row.name}</Link>
+      cell: (row: VersionInfo) => (
+        <div className='p-3'>
+          <div className='font-medium text-sm mb-1'>
+            <Link to={`/ds/${row.username}/${row.name}`}>{row.username}/{row.name}</Link>
+          </div>
+          <div className='text-gray-500 text-xs'>
+            <span className='mr-4'><Icon icon='hdd' size='sm' className='mr-1' />{numeral(row.bodySize).format('0.0 b')}</span>
+            <span className='mr-4'><Icon icon='bars' size='sm' className='mr-1' />{numeral(row.bodyRows).format('0,0a')} rows</span>
+            <span className='mr-4'><Icon icon='file' size='sm' className='mr-1' />{row.bodyFormat}</span>
+          </div>
+        </div>
+      )
     },
     {
       name: 'updated',
@@ -97,30 +108,16 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       }
     },
     {
-      name: 'size',
-      selector: 'size',
-      sortable: true,
-      width: '100px',
-      cell: (row: VersionInfo) => row.bodySize ? numeral(row.bodySize).format('0.00 b') : '--'
-    },
-    {
-      name: 'rows',
-      selector: 'rows',
-      sortable: true,
-      width: '60px',
-      cell: (row: VersionInfo) => row.bodyRows ? numeral(row.bodyRows).format('0a') : '--'
-    },
-    {
       name: 'status',
       selector: 'status',
-      width: '85px',
+      width: '180px',
       // cell: (row: VersionInfo) => <StatusIcons data={row} onClickFolder={onOpenInFinder} /> // eslint-disable-line
       cell: (row: VersionInfo) => <p>todo - status icons</p>
     },
     {
       name: '',
       selector: 'hamburger',
-      width: '60px',
+      width: '120px',
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => {
         return <ExportButton qriRef={row} showIcon={true} size={'md'} />
@@ -136,11 +133,9 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       customStyles={customStyles}
       sortFunction={customSort}
       selectableRows={true}
-      fixedHeader
-      overflowY
-      overflowYOffset='250px'
       highlightOnHover
       pointerOnHover
+      noHeader
       onRowClicked={onRowClicked}
       onSelectedRowsChange={onSelectedRowsChange}
       clearSelectedRows={clearSelectedTrigger}
