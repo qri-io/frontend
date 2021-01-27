@@ -2,20 +2,20 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Story, Meta } from '@storybook/react';
 
-import WorkflowEditor from "../WorkflowEditor";
+import Workflow from "../Workflow";
 import { configureStore, history } from '../../../store/store';
 import { ConnectedRouter } from 'connected-react-router';
 
 export default {
-  title: 'Workflow/WorkflowEditor',
-  component: WorkflowEditor,
+  title: 'Workflow/Workflow',
+  component: Workflow,
   argTypes: {},
 } as Meta;
 
 const Template: Story<any> = (args) => (
   <Provider store={configureStore()}>
     <ConnectedRouter history={history}>
-      <WorkflowEditor {...args} />
+      <Workflow {...args} />
     </ConnectedRouter>
   </Provider>
 );
@@ -25,7 +25,7 @@ Basic.args = {
   label: 'Basic',
 }
 
-// const initialState: WorkflowEditorProps = {
+// const initialState: WorkflowProps = {
 //   workflow: NewWorkflow({
 //     datasetID: 'fake_id',
 //     triggers: [

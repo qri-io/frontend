@@ -25,7 +25,7 @@ const RunBar: React.FC<RunBarProps> = ({
   }}>
    <div className='flex bg-gray-100 rounded border border-gray-200'>
      <div className='flex-2'>
-       <p><RunStateIcon state={status} /></p>
+       {(status !== RunState.waiting) && <p><RunStateIcon state={status} /></p>}
      </div>
      <div className='flex-1 text-right'>
        <button

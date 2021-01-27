@@ -14,7 +14,9 @@ import {
   faTimes,
   faExclamationCircle,
   faSpinner,
-  faTable
+  faTable,
+
+  IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
 
 interface IconProps {
@@ -30,7 +32,7 @@ interface IconProps {
   spin?: boolean
 }
 
-const icons: Record<string, any> = {
+const icons: Record<string, IconDefinition> = {
   'clock': faClock,
   'code': faCode,
   'bolt': faBolt,
@@ -39,6 +41,7 @@ const icons: Record<string, any> = {
   'envelope': faEnvelope,
   'list': faList,
   'check': faCheck,
+  'close': faCheck, // TODO (b5) - close icon def
   'times': faTimes,
   'exclamationCircle': faExclamationCircle,
   'spinner': faSpinner,

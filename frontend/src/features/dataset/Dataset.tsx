@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { newQriRef } from '../../qri/ref';
 import HistoryList from '../history/HistoryList';
-import WorkflowEditor from '../workflow/WorkflowEditor';
+import Workflow from '../workflow/Workflow';
 import DatasetComponents from './DatasetComponents';
 import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
@@ -31,7 +31,7 @@ const Dataset: React.FC<any> = () => {
         <DatasetNavSidebar qriRef={qriRef} />
         <div className='h-full'>
           <Switch>
-            <Route path='/ds/:username/:dataset' exact><WorkflowEditor qriRef={qriRef} /></Route>
+            <Route path='/ds/:username/:dataset' exact><Workflow qriRef={qriRef} /></Route>
             <Route path='/ds/:username/:dataset/components'><DatasetComponents /></Route>
             <Route path='/ds/:username/:dataset/history'><HistoryList /></Route>
           </Switch>
