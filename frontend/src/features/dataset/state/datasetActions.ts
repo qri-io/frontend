@@ -1,9 +1,9 @@
-import Dataset, { newDataset } from "../../../qri/dataset";
+import Dataset, { NewDataset } from "../../../qri/dataset";
 import { QriRef } from "../../../qri/ref";
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
 
 export function mapDataset(d: object | []): Dataset {
-  return newDataset((d as Record<string,any>).dataset)
+  return NewDataset((d as Record<string,any>).dataset)
 }
 
 export function loadDataset (ref: QriRef): ApiActionThunk {

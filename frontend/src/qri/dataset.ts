@@ -16,20 +16,20 @@ export interface Dataset {
 
 export default Dataset
 
-export function newDataset(d: Record<string,any>): Dataset {
+export function NewDataset(d: Record<string,any>): Dataset {
   return {
     peername: d.peername || '',
     name: d.name || '',
     path: d.path || '',
 
-    commit: newCommit(d.commit || {}),
-    meta: newMeta(d.meta || {}),
-    structure: newStructure(d.structure || {}),
+    commit: NewCommit(d.commit || {}),
+    meta: NewMeta(d.meta || {}),
+    structure: NewStructure(d.structure || {}),
     body: d.body,
     bodyPath: d.bodyPath,
     readme: d.readme,
-    transform: newTransform(d.transform || {}),
-    stats: newStats(d.stats || {}),
+    transform: NewTransform(d.transform || {}),
+    stats: NewStats(d.stats || {}),
     viz: d.viz
   }
 }
@@ -68,7 +68,7 @@ export interface Commit {
   count?: number // commit chain height
 }
 
-export function newCommit(d: Record<string,any>): Commit {
+export function NewCommit(d: Record<string,any>): Commit {
   return {
     author: d.author,
     message: d.message,
@@ -98,7 +98,7 @@ export interface Meta {
   [key: string]: any
 }
 
-export function newMeta(d: Record<string,any>): Meta {
+export function NewMeta(d: Record<string,any>): Meta {
   return Object.assign({}, d)
 }
 
@@ -133,7 +133,7 @@ export interface Structure {
   schema?: Schema
 }
 
-export function newStructure(d: Record<string,any>): Structure {
+export function NewStructure(d: Record<string,any>): Structure {
   return {
     depth: d.depth,
     entries: d.entries,
@@ -177,7 +177,7 @@ export interface Stats {
   stats: IStatTypes[]
 }
 
-export function newStats(d: Record<string,any>): Stats {
+export function NewStats(d: Record<string,any>): Stats {
   return {
     path: d.path,
     stats: d.stats,
@@ -227,14 +227,31 @@ export interface INumericStats {
 }
 
 export interface Transform {
-  syntax: string
   bodyBytes?: string
+  steps: TransformStep[]
+  syntaxes?: Record<string,string>
 }
 
-export function newTransform(d: Record<string,any>): Transform {
+export function NewTransform(d: Record<string,any>): Transform {
   return {
-    syntax: d.syntax || '',
     bodyBytes: d.bodyBytes,
+    steps: d.steps
+  }
+}
+
+export interface TransformStep {
+  category: string
+  name: string
+  syntax: string
+  script: string
+}
+
+export function NewTransformStep(data: Record<string,any>): TransformStep {
+  return {
+    name: data.name,
+    syntax: data.syntax,
+    category: data.category,
+    script: data.script
   }
 }
 

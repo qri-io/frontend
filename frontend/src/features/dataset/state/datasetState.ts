@@ -1,6 +1,6 @@
 import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import Dataset, { newDataset } from '../../../qri/dataset';
+import Dataset, { NewDataset } from '../../../qri/dataset';
 
 export const selectDataset = (state: RootState): Dataset => state.dataset.dataset
 
@@ -9,12 +9,11 @@ export interface DatasetState {
 }
 
 const initialState: DatasetState = {
-  dataset: newDataset({}),
+  dataset: NewDataset({}),
 }
 
 export const datasetReducer = createReducer(initialState, {
   'API_DATASET_SUCCESS': (state, action) => {
-    console.log('fetched dataset', action)
     state.dataset = action.payload.data as Dataset
   },
 })

@@ -7,19 +7,27 @@ import WorkflowCell from './WorkflowCell';
 import Triggers from './Triggers';
 import OnComplete from './OnComplete';
 import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
-import { TransformStep } from '../../qrimatic/workflow';
+import { TransformStep } from '../../qri/dataset';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
-import { changeWorkflowStep, runWorkflow, setWorkflow, tempSetWorkflowEvents } from './state/workflowActions';
+import { changeWorkflowTransformStep, runWorkflow, setWorkflow, setWorkflowRef, tempSetWorkflowEvents } from './state/workflowActions';
 import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
 import { selectTemplate } from '../template/templates';
+import { QriRef } from '../../qri/ref';
 
 interface WorkflowEditorLocationState {
   template: string
 }
 
-const WorkflowEditor: React.FC<any> = () => {
+export interface WorkflowEditorProps {
+  qriRef: QriRef
+}
+
+const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
   const location = useLocation<WorkflowEditorLocationState>()
+  const workflow = useSelector(selectWorkflow)
+  const latestRun = useSelector(selectLatestRun)
+  const running = latestRun ? (latestRun.status === 'running') : false
 
   useEffect(() => {
     if (location.state && location.state.template) {
@@ -27,11 +35,11 @@ const WorkflowEditor: React.FC<any> = () => {
     }
   }, [dispatch, location.state])
 
-  const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
-  const workflow = useSelector(selectWorkflow)
-  const latestRun = useSelector(selectLatestRun)
+  useEffect(() => {
+    dispatch(setWorkflowRef(qriRef))
+  }, [dispatch, qriRef])
 
-  const running = latestRun ? (latestRun.status === 'running') : false
+  const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
 
   const collapseState = (step: TransformStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
     if (collapseStates[step.name]) {
@@ -129,7 +137,7 @@ const WorkflowEditor: React.FC<any> = () => {
                 }}
                 onChangeValue={(i:number, v:string) => {
                   if (workflow && workflow.steps) {
-                    dispatch(changeWorkflowStep(i,v))
+                    dispatch(changeWorkflowTransformStep(i,v))
                   }
                 }}
               />)

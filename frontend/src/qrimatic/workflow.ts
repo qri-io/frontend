@@ -1,3 +1,4 @@
+import { NewTransformStep, TransformStep } from "../qri/dataset"
 import { VersionInfo } from "../qri/versionInfo"
 
 
@@ -54,22 +55,6 @@ export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
     workflowID: data.workflowID || '',
     type: data.type,
     disabled: data.disabled || false,
-  }
-}
-
-export interface TransformStep {
-  category: string
-  name: string
-  syntax: string
-  script: string
-}
-
-export function NewTransformStep(data: Record<string,any>): TransformStep {
-  return {
-    name: data.name,
-    syntax: data.syntax,
-    category: data.category,
-    script: data.script
   }
 }
 
