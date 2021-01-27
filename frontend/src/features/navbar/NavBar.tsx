@@ -8,7 +8,7 @@ export interface NavBarProps {
 
 const NavBar: React.FC<any> = ({ menu = [], children }) => {
   return (
-    <div className='bg-gray-600 text-white text-bold flex p-2'>
+    <div className='bg-gray-800 text-white text-bold flex p-2'>
       {(menu.length > 0) && <NavBarMenu items={menu} />}
       {children
         ? children
