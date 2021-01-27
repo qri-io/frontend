@@ -2,9 +2,11 @@ import React from 'react'
 
 import Icon from '../../chrome/Icon'
 
-export interface WorkflowOutlineProps {}
+export interface WorkflowOutlineProps {
+  onDeploy: () => void
+}
 
-const WorkflowOutline: React.FC<WorkflowOutlineProps> = () => {
+const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ onDeploy }) => {
   return (
     <div className='p-4 text-left'>
       <div className='font-semibold text-gray-600 mb-2'>Triggers</div>
@@ -38,6 +40,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = () => {
       </div>
       <button
         className='mt-4 py-1 px-4 w-full font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300 rounded'
+        onClick={() => { onDeploy() }}
       >
         Deploy Workflow
       </button>
