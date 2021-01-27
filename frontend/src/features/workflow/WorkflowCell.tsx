@@ -1,6 +1,6 @@
 import React from 'react'
 import { RunStep } from '../../qrimatic/run'
-import { TransformStep } from '../../qrimatic/workflow'
+import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
 import RunStateIcon from './RunStateIcon'

@@ -1,11 +1,13 @@
+import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qrimatic/eventLog'
 import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk } from '../../../store/api'
 import { 
-  WORKFLOW_CHANGE_STEP,
+  WORKFLOW_CHANGE_TRANSFORM_STEP,
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
-  SET_WORKFLOW
+  SET_WORKFLOW,
+  SET_WORKFLOW_REF
  } from './workflowState'
 
 
@@ -15,9 +17,9 @@ export interface SetWorkflowStepAction {
   script: string
 }
 
-export function changeWorkflowStep(index: number, script: string): SetWorkflowStepAction {
+export function changeWorkflowTransformStep(index: number, script: string): SetWorkflowStepAction {
   return {
-    type: WORKFLOW_CHANGE_STEP,
+    type: WORKFLOW_CHANGE_TRANSFORM_STEP,
     index,
     script,
   }
@@ -61,7 +63,6 @@ export function deployWorkflow(w: Workflow): ApiActionThunk {
   }
 }
 
-
 export interface EventLogAction {
   type: string
   data: EventLogLine
@@ -101,5 +102,17 @@ export function tempSetWorkflowEvents(id: string, events: EventLogLine[]): TempW
     type: TEMP_SET_WORKFLOW_EVENTS,
     id,
     events
+  }
+}
+
+export interface SetWorkflowRefAction {
+  type: string
+  qriRef: QriRef
+}
+
+ export function setWorkflowRef(qriRef: QriRef): SetWorkflowRefAction {
+  return {
+    type: SET_WORKFLOW_REF,
+    qriRef,
   }
 }
