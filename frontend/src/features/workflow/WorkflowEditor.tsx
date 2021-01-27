@@ -9,10 +9,12 @@ import OnComplete from './OnComplete';
 import { NewRunStep, RunState, RunStep } from '../../qrimatic/run';
 import { TransformStep } from '../../qri/dataset';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
-import { changeWorkflowTransformStep, runWorkflow, setWorkflow, setWorkflowRef, tempSetWorkflowEvents } from './state/workflowActions';
-import { eventLogSuccess, eventLogWithError, NewEventLogLines } from '../../qrimatic/eventLog'
+import { changeWorkflowTransformStep, runWorkflow, setWorkflow, setWorkflowRef } from './state/workflowActions';
 import { selectTemplate } from '../template/templates';
 import { QriRef } from '../../qri/ref';
+import { AppModalType } from '../app/state/appState';
+import { showModal } from '../app/state/appActions';
+import RunBar from './RunBar';
 
 interface WorkflowEditorLocationState {
   template: string
@@ -27,7 +29,6 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ qriRef }) => {
   const location = useLocation<WorkflowEditorLocationState>()
   const workflow = useSelector(selectWorkflow)
   const latestRun = useSelector(selectLatestRun)
-  const running = latestRun ? (latestRun.status === 'running') : false
 
   useEffect(() => {
     if (location.state && location.state.template) {
@@ -64,59 +65,23 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ qriRef }) => {
   return (
     <div className='flex h-full'>
       <div className='outline h-full w-56 border-r flex-none'>
-        <WorkflowOutline />
+        <WorkflowOutline onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }} />
       </div>
       <div className='overflow-y-auto p-4 text-left h-full flex-grow'>
-        <div className='pt-4 sticky top-0' style={{
-          background: 'linear-gradient(rgb(255, 255, 255) 10%, rgba(255, 255, 255, 0))'
-        }}>
-          <div className='text-right bg-gray-100 rounded border border-gray-200'>
-            <button
-              className='py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300'
-              onClick={() => {
-                if (!running) {
-                  setCollapseStates({})
-                }
-                if (!running) {
-                  dispatch(runWorkflow(workflow))
-                } else {
-                  alert('cancelling a workflow isn\'t wired up yet')
-                }
-              }}
-            >{running ? 'Cancel' : 'Run' }</button>
-            <button
-              className='py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300'
-              onClick={() => {
-                if (!running) {
-                  setCollapseStates({})
-                }
-                if (!running) {
-                  dispatch(tempSetWorkflowEvents("aaaa", NewEventLogLines(eventLogWithError)))
-                } else {
-                  alert('cancelling a workflow isn\'t wired up yet')
-                }
-              }}
-            >{running ? 'Cancel' : 'Run with Errors' }</button>
-            <button
-              className='py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300'
-              onClick={() => {
-                if (!running) {
-                  setCollapseStates({})
-                }
-                if (!running) {
-                  dispatch(tempSetWorkflowEvents("bbbb", NewEventLogLines(eventLogSuccess)))
-                } else {
-                  alert('cancelling a workflow isn\'t wired up yet')
-                }
-              }}
-            >{running ? 'Cancel' : 'Run with dataset' }</button>
-          </div>
-        </div>
+        <RunBar
+          status={latestRun ? latestRun.status : RunState.waiting }
+          onRun={() => {
+            setCollapseStates({})
+            dispatch(runWorkflow(workflow))
+          }}
+          onRunCancel={() => { alert('cannot cancel runs yet') }}
+          onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }}
+          onDeployCancel={() => { alert('cannot cancel deploys yet') }}
+        />
         <Triggers />
         <section className='p-4'>
           <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Script</h2>
           <div className='text-xs mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
-
           <div>
             {workflow.steps && workflow.steps.map((step, i) => {
               let run
