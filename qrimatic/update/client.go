@@ -11,6 +11,7 @@ import (
 	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
+	qmapi "github.com/qri-io/qrimatic/api"
 	"github.com/qri-io/qrimatic/scheduler"
 )
 
@@ -279,7 +280,7 @@ func (c *Client) Run(ctx context.Context, p *Workflow, res *reporef.DatasetRef) 
 
 	case scheduler.JTShellScript:
 		// err = WorkflowToCmd(m.inst.streams, p).Run()
-		err = WorkflowToCmd(ioes.NewStdIOStreams(), p).Run()
+		err = qmapi.WorkflowToCmd(ioes.NewStdIOStreams(), p).Run()
 	case scheduler.WorkflowType(""):
 		return fmt.Errorf("update requires a workflow type to run")
 	default:

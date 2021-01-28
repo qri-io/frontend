@@ -16,11 +16,12 @@ import (
 	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qri/repo/gen"
+	qmapi "github.com/qri-io/qrimatic/api"
 )
 
 type Server struct {
 	inst *lib.Instance
-	svc  *Service
+	svc  *qmapi.Service
 }
 
 func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string, setup bool) (*Server, error) {
@@ -46,7 +47,7 @@ func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string, set
 		return nil, err
 	}
 
-	svc, err := NewService(inst)
+	svc, err := qmapi.NewService(inst)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +62,7 @@ func (s *Server) Serve(ctx context.Context) error {
 	apiServer := api.New(s.inst)
 	apiServer.Mux = http.NewServeMux()
 
-	s.svc.AddRoutes(apiServer.Mux, apiServer.Middleware)
+	s.svc.AddRoutes(apiServer.Mux, "", apiServer.Middleware)
 
 	go func() {
 		if err := apiServer.Serve(ctx); err != nil {

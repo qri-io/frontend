@@ -1,63 +1,38 @@
-package update
+package scheduler
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/qri-io/dataset"
-	"github.com/qri-io/qri/api/util"
 	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
-	"github.com/qri-io/qrimatic/scheduler"
 )
-
-// DeployHandler parses the deploy request and executes it
-func (s *Service) DeployHandler(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-
-	p := &DeployParams{}
-	if err := json.NewDecoder(r.Body).Decode(p); err != nil {
-		util.WriteErrResponse(w, http.StatusBadRequest, err)
-		return
-	}
-	log.Warnw("deploying", "params", p)
-
-	workflow, err := s.Deploy(r.Context(), p)
-	if err != nil {
-		log.Warnf("error deploying: %s", err)
-		util.WriteErrResponse(w, http.StatusBadRequest, err)
-		return
-	}
-
-	util.WriteResponse(w, workflow)
-}
 
 // DeployParams represents what we need in order to deploy a workflow
 type DeployParams struct {
-	Apply     bool                `json:"apply"`
-	Workflow  *scheduler.Workflow `json:"workflow"`
-	Transform *dataset.Transform  `json:"transform"`
+	Apply     bool               `json:"apply"`
+	Workflow  *Workflow          `json:"workflow"`
+	Transform *dataset.Transform `json:"transform"`
 }
 
 // DeployResponse is what we return when we first deploy a workflow
 type DeployResponse struct {
-	RunID    string              `json:"runID"`
-	Workflow *scheduler.Workflow `json:"workflow"`
+	RunID    string    `json:"runID"`
+	Workflow *Workflow `json:"workflow"`
 }
 
 // Deploy takes a workflow and transform and returns a runid and workflow
 // It applys a transform to a specified dataset and schedules the workflow
-func (s *Service) Deploy(ctx context.Context, p *DeployParams) (*DeployResponse, error) {
+func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) (*DeployResponse, error) {
 	if p.Workflow == nil {
 		return nil, fmt.Errorf("deploy: workflow not set")
 	}
 	if p.Workflow.DatasetID == "" {
 		return nil, fmt.Errorf("deploy: DatasetID not set")
 	}
-	dsm := lib.NewDatasetMethods(s.inst)
+	dsm := lib.NewDatasetMethods(inst)
 	saveP := &lib.SaveParams{
 		Ref: p.Workflow.DatasetID, // currently the DatasetID is the Ref
 		Dataset: &dataset.Dataset{
@@ -82,10 +57,10 @@ func (s *Service) Deploy(ctx context.Context, p *DeployParams) (*DeployResponse,
 		Username: res.Peername,
 		Name:     res.Name,
 	}
-	p.Workflow.Complete(ref, s.inst.Config().Profile.ID)
+	p.Workflow.Complete(ref, inst.Config().Profile.ID)
 
 	// save workflow
-	err = s.sched.Schedule(ctx, p.Workflow)
+	err = c.Schedule(ctx, p.Workflow)
 	if err != nil {
 		log.Errorw("deploy scheduling", "error", err)
 	}
@@ -93,4 +68,13 @@ func (s *Service) Deploy(ctx context.Context, p *DeployParams) (*DeployResponse,
 	return &DeployResponse{
 		Workflow: p.Workflow,
 	}, err
+}
+
+// Undeploy takes a workflow and removes it from the scheduler
+func (c *Cron) Undeploy(ctx context.Context, workflowID string) error {
+	err := c.Unschedule(ctx, workflowID)
+	if err != nil {
+		log.Errorw("undeploy unscheduling", "error", err)
+	}
+	return err
 }

@@ -185,7 +185,6 @@ func (s *MemStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
 func (s *MemStore) DeleteWorkflow(ctx context.Context, id string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
-
 	if removed := s.workflows.Remove(id); removed {
 		return nil
 	}
