@@ -4,20 +4,25 @@ import { ModalAction } from './appActions';
 
 export const SET_MODAL = 'SET_MODAL'
 
-export const selectModalType = (state: RootState): AppModalType => state.app.modal
+export const selectModal = (state: RootState): Modal => state.app.modal
 
-export enum AppModalType {
+export enum ModalType {
   none = '',
   schedulePicker = 'schedulePicker',
   deployWorkflow = 'deployWorkflow'
 }
 
+export interface Modal<P = {}> {
+  type: ModalType
+  props?: P
+}
+
 export interface AppState {
-  modal: AppModalType,
+  modal: Modal,
 }
 
 const initialState: AppState = {
-  modal: AppModalType.none
+  modal: { type: ModalType.none },
 }
 
 export const appReducer = createReducer(initialState, {

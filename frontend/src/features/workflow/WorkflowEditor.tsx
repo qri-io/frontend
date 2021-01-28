@@ -7,7 +7,7 @@ import OnComplete from './OnComplete';
 import { NewRunStep, Run, RunState, RunStep } from '../../qrimatic/run';
 import { TransformStep } from '../../qri/dataset';
 import { changeWorkflowTransformStep, runWorkflow } from './state/workflowActions';
-import { AppModalType } from '../app/state/appState';
+import { ModalType } from '../app/state/appState';
 import { showModal } from '../app/state/appActions';
 import RunBar from './RunBar';
 import { Workflow } from '../../qrimatic/workflow';
@@ -54,7 +54,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
             dispatch(runWorkflow(workflow))
           }}
           onRunCancel={() => { alert('cannot cancel runs yet') }}
-          onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }}
+          onDeploy={() => { dispatch(showModal(ModalType.deployWorkflow)) }}
           onDeployCancel={() => { alert('cannot cancel deploys yet') }}
         />
         <div>

@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 
 import { showModal } from '../app/state/appActions';
-import { AppModalType } from '../app/state/appState';
+import { ModalType } from '../app/state/appState';
 import Block from './Block';
 
 const triggerItems = [
@@ -27,7 +27,7 @@ const Triggers: React.FC<any> = () => {
       <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Triggers</h2>
       <div className='text-xs mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
       <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
-        {triggerItems.map((d, i) => <Block {...d} key={i} onClick={() => { dispatch(showModal(AppModalType.schedulePicker))}} />)}
+        {triggerItems.map((d, i) => <Block {...d} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />)}
       </div>
     </section>
     )

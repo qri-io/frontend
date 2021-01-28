@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Story, Meta } from '@storybook/react';
+import { ConnectedRouter } from 'connected-react-router';
 
 import Workflow from "../Workflow";
 import { configureStore, history } from '../../../store/store';
-import { ConnectedRouter } from 'connected-react-router';
 
 export default {
   title: 'Workflow/Workflow',
