@@ -74,9 +74,9 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
                 update[step.name] = v
                 setCollapseStates(update)
               }}
-              onChangeValue={(i:number, v:string) => {
+              onChangeScript={(i:number, script:string) => {
                 if (workflow && workflow.steps) {
-                  dispatch(changeWorkflowTransformStep(i,v))
+                  dispatch(changeWorkflowTransformStep(i, script))
                 }
               }}
             />)

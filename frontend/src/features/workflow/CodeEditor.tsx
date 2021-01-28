@@ -53,11 +53,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange, disabled }) =
       // height={lineCount * LINE_HEIGHT}
       height={200}
       value={script as any as string}
-      onChange={(e: any) => { 
-        console.log('event!', e)
-        if (e && e.target) {
-          onChange(e.target.value) 
-        }
+      onChange={(script: string) => { 
+        onChange(script) 
         // TODO (ramfox): starting point to adjust # of lines based on script
         // content:
         // if (ref) {
@@ -65,7 +62,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange, disabled }) =
         // }
       }}
       language='python'
-      theme='vs-dark'
+      theme='vs-light'
       // TODO (ramfox): starting point to set the # of lines based on initial
       // script content
       // editorDidMount={editorDidMount}
