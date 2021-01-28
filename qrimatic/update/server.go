@@ -38,13 +38,7 @@ func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string, set
 	}
 
 	opts := []lib.Option{
-		lib.OptIOStreams(streams), // transfer iostreams to instance
-		// lib.OptCheckConfigMigrations(o.migrationApproval, (!o.Migrate && !o.NoPrompt)),
-		// lib.OptSetLogAll(o.LogAll),
-		// lib.OptRemoteOptions([]remote.OptionsFunc{
-		// 	// look for a remote policy
-		// 	remote.OptLoadPolicyFileIfExists(filepath.Join(o.repoPath, access.DefaultAccessControlPolicyFilename)),
-		// }),
+		lib.OptIOStreams(streams),
 	}
 
 	inst, err := lib.NewInstance(ctx, repoPath, opts...)
