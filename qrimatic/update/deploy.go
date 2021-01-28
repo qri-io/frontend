@@ -3,6 +3,7 @@ package update
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -13,27 +14,25 @@ import (
 	"github.com/qri-io/qrimatic/scheduler"
 )
 
-// NewDeployHandler creates a deploy http handler function
-func (s *Service) NewDeployHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
+// DeployHandler parses the deploy request and executes it
+func (s *Service) DeployHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
 
-		p := &DeployParams{}
-		if err := json.NewDecoder(r.Body).Decode(p); err != nil {
-			util.WriteErrResponse(w, http.StatusBadRequest, err)
-			return
-		}
-		log.Warnw("deploying", "params", p)
-
-		workflow, err := s.Deploy(r.Context(), p)
-		if err != nil {
-			log.Warnf("error deploying: %s", err)
-			util.WriteErrResponse(w, http.StatusBadRequest, err)
-			return
-		}
-
-		util.WriteResponse(w, workflow)
+	p := &DeployParams{}
+	if err := json.NewDecoder(r.Body).Decode(p); err != nil {
+		util.WriteErrResponse(w, http.StatusBadRequest, err)
+		return
 	}
+	log.Warnw("deploying", "params", p)
+
+	workflow, err := s.Deploy(r.Context(), p)
+	if err != nil {
+		log.Warnf("error deploying: %s", err)
+		util.WriteErrResponse(w, http.StatusBadRequest, err)
+		return
+	}
+
+	util.WriteResponse(w, workflow)
 }
 
 // DeployParams represents what we need in order to deploy a workflow
@@ -52,6 +51,12 @@ type DeployResponse struct {
 // Deploy takes a workflow and transform and returns a runid and workflow
 // It applys a transform to a specified dataset and schedules the workflow
 func (s *Service) Deploy(ctx context.Context, p *DeployParams) (*DeployResponse, error) {
+	if p.Workflow == nil {
+		return nil, fmt.Errorf("deploy: workflow not set")
+	}
+	if p.Workflow.DatasetID == "" {
+		return nil, fmt.Errorf("deploy: DatasetID not set")
+	}
 	dsm := lib.NewDatasetMethods(s.inst)
 	saveP := &lib.SaveParams{
 		Ref: p.Workflow.DatasetID, // currently the DatasetID is the Ref

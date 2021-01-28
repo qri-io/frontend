@@ -244,6 +244,13 @@ func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, triggerID st
 
 // Schedule adds a workflow to the cron scheduler
 func (c *Cron) Schedule(ctx context.Context, workflow *Workflow) (err error) {
+
+	// ensure IDs are aligned to avoid double workflows/scheduling
+	wf, err := c.store.GetWorkflowByDatasetID(ctx, workflow.DatasetID)
+	if err == nil && (workflow.ID == "" || workflow.ID != wf.ID) {
+		return fmt.Errorf("schedule: bad workflow ID")
+	}
+
 	if workflow.ID == "" && workflow.OwnerID != "" && workflow.DatasetID != "" {
 		workflow.ID = workflowID()
 	}

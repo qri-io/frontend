@@ -24,6 +24,8 @@ type Store interface {
 	// GetWorkflowByName gets a workflow with the corresponding name field. usually matches
 	// the dataset name
 	GetWorkflowByName(ctx context.Context, name string) (*Workflow, error)
+	// GetWorkflowByDatasetID gets a workflow with the corresponding datasetID field
+	GetWorkflowByDatasetID(ctx context.Context, datasetID string) (*Workflow, error)
 	// Workflow gets a workflow by it's identifier
 	GetWorkflow(ctx context.Context, id string) (*Workflow, error)
 	// PutWorkflow places a workflow in the store. Putting a workflow who's name already exists
@@ -112,6 +114,18 @@ func (s *MemStore) GetWorkflowByName(ctx context.Context, name string) (*Workflo
 
 	for _, workflow := range s.workflows.set {
 		if workflow.Name == name {
+			return workflow.Copy(), nil
+		}
+	}
+	return nil, ErrNotFound
+}
+
+// GetWorkflowByDatasetID gets a workflow with the corresponding datasetID field
+func (s *MemStore) GetWorkflowByDatasetID(ctx context.Context, datasetID string) (*Workflow, error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	for _, workflow := range s.workflows.set {
+		if workflow.DatasetID == datasetID {
 			return workflow.Copy(), nil
 		}
 	}
