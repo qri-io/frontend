@@ -14,7 +14,7 @@ import (
 )
 
 // NewDeployHandler creates a deploy http handler function
-func (s *Service) NewDeployHandler(path string) http.HandlerFunc {
+func (s *Service) NewDeployHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
