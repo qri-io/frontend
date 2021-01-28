@@ -144,9 +144,8 @@ func (s *FileStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
 func (s *FileStore) DeleteWorkflow(ctx context.Context, id string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
-
 	if removed := s.workflows.Remove(id); removed {
-		return s.writeToFile()
+		return s.writeToFileNoLock()
 	}
 	return ErrNotFound
 }
@@ -285,6 +284,24 @@ func (s *FileStore) writeToFile() error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
+	state := struct {
+		Workflows    *WorkflowSet
+		WorkflowRuns map[string]*RunSet
+		Runs         *RunSet
+	}{
+		Workflows:    s.workflows,
+		WorkflowRuns: s.workflowRuns,
+		Runs:         s.runs,
+	}
+	data, err := json.Marshal(state)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(s.path, data, 0644)
+}
+
+// Only use this when you have a surrounding lock
+func (s *FileStore) writeToFileNoLock() error {
 	state := struct {
 		Workflows    *WorkflowSet
 		WorkflowRuns map[string]*RunSet

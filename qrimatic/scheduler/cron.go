@@ -290,13 +290,13 @@ func (c *Cron) Schedule(ctx context.Context, workflow *Workflow) (err error) {
 
 // Unschedule removes a workflow from the cron scheduler, cancelling any future
 // workflow executions
-func (c *Cron) Unschedule(ctx context.Context, name string) error {
-	if err := c.store.DeleteWorkflow(ctx, name); err != nil {
+func (c *Cron) Unschedule(ctx context.Context, id string) error {
+	// TODO(arqu): this should also remove associated runs
+	if err := c.store.DeleteWorkflow(ctx, id); err != nil {
 		return err
 	}
-
 	go func() {
-		if err := c.pub.Publish(ctx, ETWorkflowUnscheduled, name); err != nil {
+		if err := c.pub.Publish(ctx, ETWorkflowUnscheduled, id); err != nil {
 			log.Debug(err)
 		}
 	}()

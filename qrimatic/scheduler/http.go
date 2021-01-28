@@ -9,8 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	apiutil "github.com/qri-io/apiutil"
 )
 
 const jsonMimeType = "application/json"
@@ -255,132 +253,17 @@ func decodeJSONRunResponse(res *http.Response) (*Run, error) {
 	return run, err
 }
 
-// ServeHTTP spins up an HTTP server at the specified address
-func (c *Cron) ServeHTTP(addr string) error {
-	m := http.NewServeMux()
-	AddCronRoutes(m, c, noopMiddlware)
-	s := &http.Server{
-		Addr:    addr,
-		Handler: m,
-	}
-	return s.ListenAndServe()
-}
-
-func noopMiddlware(h http.HandlerFunc) http.HandlerFunc {
-	return h
-}
-
-// AddCronRoutes registers cron endpoints on an *http.Mux
-func AddCronRoutes(m *http.ServeMux, c *Cron, mw func(http.HandlerFunc) http.HandlerFunc) {
-	m.HandleFunc("/cron", mw(c.statusHandler))
-	m.HandleFunc("/workflows", mw(c.workflowsHandler))
-	m.HandleFunc("/workflow", mw(c.workflowHandler))
-	m.HandleFunc("/runs", mw(c.runsHandler))
-	m.HandleFunc("/run", mw(c.getRunHandler))
-	// m.HandleFunc("/log/output", mw(c.loggedWorkflowFileHandler))
-	// m.HandleFunc("/run", mw(c.runHandler))
-}
-
-func (c *Cron) statusHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-}
-
-func (c *Cron) workflowsHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		offset := apiutil.ReqParamInt(r, "offset", 0)
-		limit := apiutil.ReqParamInt(r, "limit", 25)
-
-		js, err := c.ListWorkflows(r.Context(), offset, limit)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		apiutil.WriteResponse(w, js)
-		return
-	case http.MethodPost:
-		workflow := &Workflow{}
-
-		if err := json.NewDecoder(r.Body).Decode(workflow); err != nil {
-			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
-			return
-		}
-
-		if err := c.Schedule(r.Context(), workflow); err != nil {
-			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
-			return
-		}
-
-	case http.MethodDelete:
-		name := r.FormValue("name")
-		if err := c.Unschedule(r.Context(), name); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-			return
-		}
-	}
-}
-
-func (c *Cron) workflowHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("name")
-	workflow, err := c.WorkflowForName(r.Context(), name)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	apiutil.WriteResponse(w, workflow)
-}
-
-func (c *Cron) runsHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodOptions:
-		apiutil.EmptyOkHandler(w, r)
-	case http.MethodGet:
-		offset := apiutil.ReqParamInt(r, "offset", 0)
-		limit := apiutil.ReqParamInt(r, "limit", 25)
-
-		logs, err := c.ListWorkflows(r.Context(), offset, limit)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		apiutil.WriteResponse(w, logs)
-	}
-}
-
-func (c *Cron) getRunHandler(w http.ResponseWriter, r *http.Request) {
-	datasetID := r.FormValue("name")
-	runNumber := apiutil.ReqParamInt(r, "number", 0)
-	run, err := c.GetRun(r.Context(), datasetID, runNumber)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		return
-	}
-
-	apiutil.WriteResponse(w, run)
-}
-
-// func (c *Cron) loggedWorkflowFileHandler(w http.ResponseWriter, r *http.Request) {
-// 	logName := r.FormValue("log_name")
-// 	f, err := c.LogFile(r.Context(), logName)
-// 	if err != nil {
-// 		w.WriteHeader(http.StatusInternalServerError)
-// 		w.Write([]byte(err.Error()))
-// 		return
+// // ServeHTTP spins up an HTTP server at the specified address
+// func (c *Cron) ServeHTTP(addr string) error {
+// 	m := http.NewServeMux()
+// 	AddCronRoutes(m, c, noopMiddlware)
+// 	s := &http.Server{
+// 		Addr:    addr,
+// 		Handler: m,
 // 	}
-
-// 	io.Copy(w, f)
-// 	return
+// 	return s.ListenAndServe()
 // }
 
-func (c *Cron) runHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO (b5): implement an HTTP run handler
-	w.WriteHeader(http.StatusInternalServerError)
-	w.Write([]byte("not finished"))
-	// c.runWorkflow(r.Context(), nil)
-}
+// func noopMiddlware(h http.HandlerFunc) http.HandlerFunc {
+// 	return h
+// }
