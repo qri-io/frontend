@@ -91,6 +91,19 @@ func (s *FileStore) GetWorkflowByName(ctx context.Context, name string) (*Workfl
 	return nil, ErrNotFound
 }
 
+// GetWorkflowByDatasetID gets a workflow with the corresponding datasetID field
+func (s *FileStore) GetWorkflowByDatasetID(ctx context.Context, datasetID string) (*Workflow, error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	for _, workflow := range s.workflows.set {
+		if workflow.DatasetID == datasetID {
+			return workflow.Copy(), nil
+		}
+	}
+	return nil, ErrNotFound
+}
+
 // GetWorkflow gets workflow details from the store by dataset identifier
 func (s *FileStore) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
 	s.lock.Lock()

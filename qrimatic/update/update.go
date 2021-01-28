@@ -123,7 +123,7 @@ func NewService(inst *lib.Instance) (*Service, error) {
 // AddRoutes registers cron routes with an *http.Mux.
 func (s *Service) AddRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
 	scheduler.AddCronRoutes(m, s.sched, mw)
-	m.HandleFunc("/deploy", mw(s.NewDeployHandler()))
+	m.HandleFunc("/deploy", mw(s.DeployHandler)
 }
 
 // Start runs the cron service, blocking until an error occurs
