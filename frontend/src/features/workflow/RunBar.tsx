@@ -20,7 +20,7 @@ const RunBar: React.FC<RunBarProps> = ({
   onDeploy,
   onDeployCancel,
 }) => (
-  <div className='pt-4 sticky top-0 shadow-md'>
+  <div className='pt-4 sticky top-0 shadow-md z-10'>
    <div className='flex bg-gray-100 rounded border border-gray-200'>
      <div className='flex-2'>
        {(status !== RunState.waiting) && <p><RunStateIcon state={status} /></p>}
