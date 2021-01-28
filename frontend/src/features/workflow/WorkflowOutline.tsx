@@ -33,11 +33,11 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
           {workflow && workflow.steps?.map((step: TransformStep, i: number) => {
             let r
             if (run) {
-              r = (run?.steps && run?.steps.length >= i) ? run.steps[i] : NewRunStep({ status: RunState.waiting })
+              r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: RunState.waiting })
             }
             return (
               <div key={i} className='text-sm ml-2'>
-                <span className='font-black text-gray-400'>{i+1}</span> &nbsp; {step.name} 
+                <span className='font-black text-gray-400'>{i+1}</span> &nbsp; {step.name}
                 {r && <div className='float-right text-green-500'><RunStateIcon state={r.status || RunState.waiting} /></div>}
               </div>
             )

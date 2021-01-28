@@ -9,7 +9,7 @@ export interface CodeEditorProps {
 
 const LINE_HEIGHT = 19
 const MIN_LINE_COUNT = 4
-const PADDING = 14
+const PADDING = 15
 
 const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
   const ref = useRef<MonacoEditor>(null)
@@ -51,7 +51,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
   }
 
   const handleResize = () => {
-    console.log('calling layout')
     if (theEditor) theEditor.layout()
   }
 

@@ -6,6 +6,7 @@ import {
   faArrowRight,
   faBars,
   faBolt,
+  faCircle,
   faClock,
   faCloudUploadAlt,
   faCode,
@@ -44,6 +45,7 @@ interface IconProps {
 const icons: Record<string, IconDefinition> = {
   'arrowRight': faArrowRight,
   'bars': faBars,
+  'circle': faCircle,
   'clock': faClock,
   'code': faCode,
   'bolt': faBolt,
