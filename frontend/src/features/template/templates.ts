@@ -10,7 +10,7 @@ export const CSVDownload: Workflow = {
 
   triggers: [
     // repeat every hour
-    { id: '', workflowID: '', type: 'cron', value: 'R/PT1H' }
+    { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
   ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
@@ -29,7 +29,7 @@ def transform(ds, ctx):
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', value: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 }
 
@@ -40,7 +40,7 @@ export const APICall: Workflow = {
 
   triggers: [
     // repeat every hour
-    { id: '', workflowID: '', type: 'cron', value: 'R/PT1H' }
+    { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
   ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/apicall")` },
@@ -49,7 +49,7 @@ export const APICall: Workflow = {
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', value: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 } 
 
@@ -60,7 +60,7 @@ export const DatabaseQuery: Workflow = {
 
   triggers: [
     // repeat every hour
-    { id: '', workflowID: '', type: 'cron', value: 'R/PT1H' }
+    { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
   ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/databasequery")` },
@@ -69,7 +69,7 @@ export const DatabaseQuery: Workflow = {
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', value: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 } 
 
@@ -80,7 +80,7 @@ export const Webscrape: Workflow = {
   
   triggers: [
     // repeat every hour
-    { id: '', workflowID: '', type: 'cron', value: 'R/PT1H' }
+    { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
   ],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/webscrape")` },
@@ -89,7 +89,7 @@ export const Webscrape: Workflow = {
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', value: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 } 
 

@@ -29,7 +29,7 @@ Basic.args = {
 //   workflow: NewWorkflow({
 //     datasetID: 'fake_id',
 //     triggers: [
-//       { type: 'cron', value: 'R/PT1H' }
+//       { type: 'cron', periodicity: 'R/PT1H' }
 //     ],
 //     steps: [
 //       { type: 'starlark', name: 'setup', value: `load("http", "http")\nds_presidents = load_ds("rico/famous_presidents")` },

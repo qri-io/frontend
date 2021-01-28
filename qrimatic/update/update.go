@@ -123,6 +123,7 @@ func NewService(inst *lib.Instance) (*Service, error) {
 // AddRoutes registers cron routes with an *http.Mux.
 func (s *Service) AddRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
 	scheduler.AddCronRoutes(m, s.sched, mw)
+	m.HandleFunc("/deploy", mw(s.NewDeployHandler("/deploy")))
 }
 
 // Start runs the cron service, blocking until an error occurs
@@ -245,7 +246,7 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 	}
 
 	name := fmt.Sprintf("%s/%s", ds.Peername, ds.Name)
-	workflow, err = scheduler.NewWorkflow(name, "ownerID", name, scheduler.JTDataset, periodicity)
+	workflow, err = scheduler.NewCronWorkflow(name, "ownerID", name, periodicity)
 	if err != nil {
 		log.Debugw("creating new workflow", "error", err)
 		return nil, err
@@ -263,16 +264,16 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 
 // ShellScriptToWorkflow turns a shell script into scheduler.Workflow
 func ShellScriptToWorkflow(path string, periodicity string, opts *scheduler.ShellScriptOptions) (workflow *scheduler.Workflow, err error) {
-	// TODO (b5) - confirm file exists & is executable
+	// // TODO (b5) - confirm file exists & is executable
 
-	workflow, err = scheduler.NewWorkflow(path, "foo", path, scheduler.JTShellScript, periodicity)
-	if err != nil {
-		return nil, err
-	}
+	// workflow, err = scheduler.NewWorkflow(path, "foo", path, scheduler.JTShellScript, periodicity)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	if opts != nil {
-		workflow.Options = opts
-	}
+	// if opts != nil {
+	// 	workflow.Options = opts
+	// }
 	return
 }
 

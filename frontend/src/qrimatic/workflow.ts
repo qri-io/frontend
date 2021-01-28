@@ -60,7 +60,8 @@ export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
 
 export interface WorkflowHook {
   type: string
-  value: string | Record<string,any>
+  value?: string | Record<string,any>
+  [key: string]: any
 }
 
 export function NewWorkflowHook(data: Record<string,any>): WorkflowHook {

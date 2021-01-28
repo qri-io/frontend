@@ -45,7 +45,7 @@ const initialState: WorkflowState = {
     disabled: false,
 
     triggers: [
-      { id: '', workflowID: '', type: 'cron', value: 'R/PT1H' }
+      { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
     ],
     steps: [
       { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
@@ -54,7 +54,7 @@ const initialState: WorkflowState = {
       { syntax: 'save', category: 'save', name: 'save', script: '' }
     ],
     onComplete: [
-      { type: 'push', value: 'https://registry.qri.cloud' },
+      { type: 'push', remote: 'https://registry.qri.cloud' },
     ]
   },
   events: []
