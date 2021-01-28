@@ -112,11 +112,11 @@ func newHookFromMap(m map[string]interface{}) (Hook, error) {
 	switch hi.Type {
 	case HTPush:
 		h := &PushHook{HookInfo: hi}
-		reg, ok := m["registry"].(string)
+		reg, ok := m["remote"].(string)
 		if !ok {
-			return nil, fmt.Errorf("invalid push hook. expected %s to be a string type", "registry")
+			return nil, fmt.Errorf("invalid push hook. expected %s to be a string type", "remote")
 		}
-		h.Registry = reg
+		h.Remote = reg
 		return h, nil
 	default:
 		return nil, fmt.Errorf("unknown hook type %q", hi.Type)
@@ -129,23 +129,23 @@ func newHookID() string {
 
 type PushHook struct {
 	HookInfo
-	Registry string `json:"registry"`
+	Remote string `json:"remote"`
 }
 
-func NewPushHook(workflowID string, registry string) *PushHook {
+func NewPushHook(workflowID string, remote string) *PushHook {
 	return &PushHook{
 		HookInfo: HookInfo{
 			ID:         newHookID(),
 			WorkflowID: workflowID,
 			Type:       HTPush,
 		},
-		Registry: registry,
+		Remote: remote,
 	}
 }
 
 func (ph *PushHook) ToMap() map[string]interface{} {
 	m := ph.toMap()
-	m["registry"] = ph.Registry
+	m["remote"] = ph.Remote
 	return m
 }
 

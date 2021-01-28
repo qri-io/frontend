@@ -53,7 +53,7 @@ const initialState: WorkflowState = {
       { syntax: 'save', category: 'save', name: 'save', script: '' }
     ],
     onComplete: [
-      { type: 'push', registry: 'https://registry.qri.cloud' },
+      { type: 'push', remote: 'https://registry.qri.cloud' },
     ]
   },
   events: []

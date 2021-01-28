@@ -29,7 +29,7 @@ def transform(ds, ctx):
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', registry: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 }
 
@@ -49,7 +49,7 @@ export const APICall: Workflow = {
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', registry: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 } 
 
@@ -69,7 +69,7 @@ export const DatabaseQuery: Workflow = {
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', registry: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 } 
 
@@ -89,7 +89,7 @@ export const Webscrape: Workflow = {
     { syntax: 'qri', category: 'save', name: 'save', script: '' }
   ],
   onComplete: [
-    { type: 'push', registry: 'https://registry.qri.cloud' }
+    { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 } 
 
