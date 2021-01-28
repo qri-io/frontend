@@ -1,21 +1,23 @@
-import { AppModalType, SET_MODAL } from "./appState";
-
+import { Modal, ModalType, SET_MODAL } from "./appState";
 
 export interface ModalAction {
   type: string
-  modal: AppModalType
+  modal: Modal
 }
 
-export function showModal(modal: AppModalType): ModalAction {
+export function showModal<P = {}>(type: ModalType, props?: P): ModalAction {
   return {
     type: SET_MODAL,
-    modal
+    modal: {
+      type,
+      props
+    }
   }
 }
 
 export function clearModal(): ModalAction {
   return {
     type: SET_MODAL,
-    modal: AppModalType.none,
+    modal: { type: ModalType.none }
   }
 }

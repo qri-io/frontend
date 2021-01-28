@@ -1,8 +1,9 @@
 import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qri/eventLog'
-import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
+import { Workflow, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk } from '../../../store/api'
 import { 
+  WORKFLOW_CHANGE_TRIGGER,
   WORKFLOW_CHANGE_TRANSFORM_STEP,
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
@@ -22,6 +23,20 @@ export function changeWorkflowTransformStep(index: number, script: string): SetW
     type: WORKFLOW_CHANGE_TRANSFORM_STEP,
     index,
     script,
+  }
+}
+
+export interface WorkflowTriggerAction {
+  type: string
+  index: number,
+  trigger: WorkflowTrigger
+}
+
+export function changeWorkflowTrigger(index: number, trigger: WorkflowTrigger): WorkflowTriggerAction {
+  return {
+    type: WORKFLOW_CHANGE_TRIGGER,
+    index,
+    trigger
   }
 }
 

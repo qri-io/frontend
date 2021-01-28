@@ -5,7 +5,7 @@ import { clearModal } from '../../app/state/appActions'
 import { deployWorkflow } from '../state/workflowActions'
 import { selectWorkflow } from '../state/workflowState'
 
-const DeployWorkflowModal: React.FC<any> = () => {
+const DeployWorkflowModal: React.FC = () => {
   const dispatch = useDispatch()
   const workflow = useSelector(selectWorkflow)
 

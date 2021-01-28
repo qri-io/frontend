@@ -7,7 +7,7 @@ import { selectLatestRun, selectWorkflow } from './state/workflowState';
 import { setWorkflow, setWorkflowRef } from './state/workflowActions';
 import { selectTemplate } from '../template/templates';
 import { QriRef } from '../../qri/ref';
-import { AppModalType } from '../app/state/appState';
+import { ModalType } from '../app/state/appState';
 import { showModal } from '../app/state/appActions';
 import WorkflowEditor from './WorkflowEditor';
 
@@ -37,7 +37,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
 
   return (
     <div className='flex h-full'>
-      <WorkflowOutline workflow={workflow} run={latestRun} onDeploy={() => { dispatch(showModal(AppModalType.deployWorkflow)) }} />
+      <WorkflowOutline workflow={workflow} run={latestRun} onDeploy={() => { dispatch(showModal(ModalType.deployWorkflow)) }} />
       <WorkflowEditor workflow={workflow} run={latestRun} />
     </div>
   )

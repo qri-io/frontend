@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store';
-import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction } from './workflowActions';
+import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
 import { Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qri/eventLog';
@@ -9,6 +9,7 @@ import Dataset from '../../../qri/dataset';
 import { QriRef } from '../../../qri/ref';
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
+export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
 export const WORKFLOW_CHANGE_TRANSFORM_STEP = 'WORKFLOW_CHANGE_TRANSFORM_STEP'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
@@ -71,6 +72,7 @@ export const workflowReducer = createReducer(initialState, {
     state.lastRunID = action.id
   },
   SET_WORKFLOW: setWorkflow,
+  WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,
   WORKFLOW_CHANGE_TRANSFORM_STEP: changeWorkflowTransformStep,
   RUN_EVENT_LOG: addRunEvent,
   SET_WORKFLOW_REF: (state, action: SetWorkflowRefAction) => {
@@ -90,6 +92,13 @@ export const workflowReducer = createReducer(initialState, {
     }
   },
 })
+
+function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerAction) {
+  if (state.workflow.triggers && state.workflow.triggers.length > action.index) {
+    state.workflow.triggers[action.index] = action.trigger
+  }
+  return
+}
 
 function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowStepAction) {
   if (state.workflow.steps) {

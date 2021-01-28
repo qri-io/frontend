@@ -2,15 +2,15 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { clearModal } from './state/appActions'
-import { AppModalType, selectModalType } from './state/appState'
+import { ModalType, selectModal } from './state/appState'
 import DeployWorkflowModal from '../workflow/modal/DeployWorkflowModal'
 import ScheduleModal from '../workflow/modal/ScheduleModal'
 
 const Modal: React.FC<any> = () => {
-  const type = useSelector(selectModalType)
+  const modal = useSelector(selectModal)
   const dispatch = useDispatch()
 
-  if (type === AppModalType.none) {
+  if (modal.type === ModalType.none) {
     return null
   }
 
@@ -24,11 +24,11 @@ const Modal: React.FC<any> = () => {
             </div>
             <div className='sm:flex sm:items-start'>
                 {(() => {
-                  switch (type) {
-                    case AppModalType.schedulePicker:
-                      return <ScheduleModal />
-                    case AppModalType.deployWorkflow:
-                        return <DeployWorkflowModal />
+                  switch (modal.type) {
+                    case ModalType.schedulePicker:
+                      return <ScheduleModal {...modal.props} />
+                    case ModalType.deployWorkflow:
+                        return <DeployWorkflowModal {...modal.props} />
                     default:
                       return null
                   }
