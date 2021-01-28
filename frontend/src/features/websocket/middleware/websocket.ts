@@ -1,7 +1,7 @@
 import { Dispatch, AnyAction, Store } from 'redux'
 
 import { QriRef } from '../../../qri/ref'
-import { NewEventLogLine } from '../../../qrimatic/eventLog'
+import { NewEventLogLine } from '../../../qri/eventLog'
 import { RootState } from '../../../store/store'
 import { jobScheduled, jobUnscheduled, jobStarted, jobStopped } from '../../job/state/jobActions'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
@@ -111,7 +111,7 @@ const middleware = () => {
     try {
       const event = JSON.parse(e.data)
 
-      if (event.type.startsWith("transform:")) {
+      if (event.type.startsWith("tf:")) {
         dispatch(runEventLog(NewEventLogLine(event)))
         return
       }

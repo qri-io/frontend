@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { Dataset } from '../../../qri/dataset'
-import { EventLogLine, EventLogLineType } from '../../../qrimatic/eventLog'
+import { EventLogLine, EventLogLineType } from '../../../qri/eventLog'
 import { DatasetPreview } from './DatasetPreview'
-import LogLinePrint from '../LogLinePrint'
+import LogLinePrint from './LogLinePrint'
 
 export interface OutputProps {
   data?: EventLogLine[]
@@ -14,11 +15,9 @@ const Output: React.FC<OutputProps> = ({ data }) => {
     {data && data.map((line, i) => {
       switch (line.type) {
         case EventLogLineType.ETPrint:
-        case EventLogLineType.ETDebug:
         case EventLogLineType.ETError:
-        case EventLogLineType.ETWarn:
           return <LogLinePrint key={i} line={line} />
-        case EventLogLineType.ETDataset:
+        case EventLogLineType.ETDatasetPreview:
           return <DatasetPreview key={i} data={line.data as Dataset}/>
         default:
           return <p key={i}>{JSON.stringify(line, undefined, 2)}</p>
