@@ -16,7 +16,7 @@ const NavBarMenu: React.FC<NavBarMenuProps> = ({ items = [] }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className='relative mr-5 ml-3'>
+    <div className='relative mr-5 ml-1'>
       <div className='text-gray-400' onClick={() => { setOpen(!open) }}><Icon icon='bars' /></div>
       {open &&
         <div className='absolute bg-gray-600 p-5'>

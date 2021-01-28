@@ -8,12 +8,14 @@ export interface NavBarProps {
 
 const NavBar: React.FC<any> = ({ menu = [], children }) => {
   return (
-    <div className='bg-gray-800 text-white text-bold flex p-2'>
+    <div className='bg-gray-800 text-white text-bold flex p-4 items-center'>
       {(menu.length > 0) && <NavBarMenu items={menu} />}
+      <div className="py-2 opacity-0">.</div> {/* forces height */}
       {children
         ? children
         : <AppNavItems />
       }
+
     </div>
   )
 }
