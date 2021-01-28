@@ -1,5 +1,5 @@
 import { QriRef } from '../../../qri/ref'
-import { EventLogLine } from '../../../qrimatic/eventLog'
+import { EventLogLine } from '../../../qri/eventLog'
 import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk } from '../../../store/api'
 import { 

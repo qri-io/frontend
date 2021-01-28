@@ -1,4 +1,4 @@
-import { EventLogLine, EventLogLineType } from "./eventLog"
+import { EventLogLine, EventLogLineType } from "../qri/eventLog"
 
 export enum RunState {
   waiting = 'waiting',
@@ -32,6 +32,7 @@ export function NewRunFromEventLog(runID: string, log: EventLogLine[]): Run {
 
 export interface RunStep {
   name: string
+  category: string
   status: RunState
   startTime?: Date
   stopTime?: Date
@@ -42,6 +43,7 @@ export interface RunStep {
 export function NewRunStep(data: Record<string, any>): RunStep {
   return {
     name: data.name,
+    category: data.category,
     status: data.status,
     startTime: data.started,
     stopTime: data.stopped,
@@ -52,7 +54,7 @@ export function NewRunStep(data: Record<string, any>): RunStep {
 
 
 export function runAddLogStep(run: Run, line: EventLogLine): Run {
-  if (run.id !== line.sid) {
+  if (run.id !== line.sessionID) {
     return run
   }
 
@@ -60,13 +62,11 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
     case EventLogLineType.ETTransformStart:
       run.status = RunState.running
       run.startTime = new Date(line.ts / 1000)
+      run.steps = []
       break;
     case EventLogLineType.ETTransformStop:
       run.status = line.data.status || RunState.failed
       run.stopTime = new Date(line.ts / 1000)
-      break;
-    case EventLogLineType.ETTransformSkip:
-      // TODO (b5)
       break;
 
     case EventLogLineType.ETTransformStepStart:
@@ -92,12 +92,10 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
       run.steps.push(NewRunStep(line.data))
       break;
 
-    case EventLogLineType.ETDebug:
     case EventLogLineType.ETPrint:
-    case EventLogLineType.ETWarn:
     case EventLogLineType.ETError:
     case EventLogLineType.ETReference:
-    case EventLogLineType.ETDataset:
+    case EventLogLineType.ETDatasetPreview:
     case EventLogLineType.ETChangeReport:
     case EventLogLineType.ETHistory:
     case EventLogLineType.ETProfile:

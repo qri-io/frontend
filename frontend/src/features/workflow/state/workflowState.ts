@@ -4,7 +4,7 @@ import { RootState } from '../../../store/store';
 import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
 import { Workflow } from '../../../qrimatic/workflow';
-import { EventLogLine } from '../../../qrimatic/eventLog';
+import { EventLogLine } from '../../../qri/eventLog';
 import Dataset from '../../../qri/dataset';
 import { QriRef } from '../../../qri/ref';
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { EventLogLine, EventLogLineType } from '../../qrimatic/eventLog'
+import { EventLogLine, EventLogLineType } from '../../../qri/eventLog'
 
 export interface LogLineProps {
   line: EventLogLine
@@ -7,9 +7,8 @@ export interface LogLineProps {
 
 const LogLinePrint: React.FC<LogLineProps> = ({ line }) => {
   switch (line.type) {
-    case EventLogLineType.ETWarn:
-     return <p className='text-yellow-500'>{line.data.msg}</p>
-    case EventLogLineType.ETDebug:
+    case EventLogLineType.ETPrint:
+      // TODO (b5) - utilize line.data.lvl to set output colour
      return <p className='text-gray-500'>{line.data.msg}</p>
     case EventLogLineType.ETError:
      return <p className='text-red-500'>{line.data.msg}</p>

@@ -1,0 +1,16 @@
+[
+  { "type": "transform:TransformStart", "ts": 1609459200090, "sid": "aaaa", "data": {"id": "aaaa" }},
+  { "type": "transform:TransformStepStart", "ts": 1609459300090, "sid": "aaaa", "data": {"name": "setup" }},
+  { "type": "transform:VersionPulled", "ts": 1609459400090, "sid": "aaaa", "data": {"refstring": "rico/presidents@QmFoo", "remote": "https://registy.qri.cloud" }},
+  { "type": "transform:TransformStepStop",     "ts": 1609459500090, "sid": "aaaa", "data": {"name": "setup", "status": "succeeded" }},
+  { "type": "transform:TransformStepStart",   "ts": 1609459600090, "sid": "aaaa", "data": {"name": "download" }},
+  { "type": "transform:Print",                    "ts": 1609459700090, "sid": "aaaa", "data": {"msg": "oh hai there" }},
+  { "type": "transform:HttpRequestStart", "ts": 1609459800090, "sid": "aaaa", "data": {"id": "bbbb", "downloadSize": 230409, "method": "GET", "url": "https://registy.qri.cloud" }},
+  { "type": "transform:HttpRequestStop", "ts": 1609459900090, "sid": "aaaa", "data": {"size": 230409, "method": "GET", "url": "https://registy.qri.cloud" }},
+  { "type": "transform:TransformStepStop",    "ts": 1609460000090, "sid": "aaaa", "data": {"name": "download", "status": "succeeded" }},
+  { "type": "transform:TransformStepStart",   "ts": 1609460100090, "sid": "aaaa", "data": {"name": "transform" }},
+  { "type": "transform:Error",    "ts": 1609460200090, "sid": "aaaa", "data": {"msg": "oh shit. it broke." }},
+  { "type": "transform:TransformStepStop",    "ts": 1609460300090, "sid": "aaaa", "data": {"name": "transform", "status": "failed", "error": "oh shit. it broke."}},
+  { "type": "transform:TransformStepSkip",   "ts": 1609460400090, "sid": "aaaa", "data": {"name": "save" }},
+  { "type": "transform:TransformStop",        "ts": 1609460500090, "sid": "aaaa", "data": {"status": "failed" }}
+]
