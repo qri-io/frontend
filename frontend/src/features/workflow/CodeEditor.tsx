@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import MonacoEditor from 'react-monaco-editor'
 
 export interface CodeEditorProps {
@@ -7,74 +7,89 @@ export interface CodeEditorProps {
   disabled?: boolean
 }
 
-// TODO (ramfox): consts used when attempting to set set editor height to the 
-// height of the script content
-// // line height of the default monaco theme
-// const LINE_HEIGHT = 19
-// const MIN_LINE_COUNT = 4
+const LINE_HEIGHT = 19
+const MIN_LINE_COUNT = 4
+const PADDING = 14
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange, disabled }) => {
-  
-  /**
-   * TODO (ramfox): starting point to detect the number of lines in the
-   * script & setting the editor height to expand to fit it
-   * Two remaining (large) issues
-   * 1) first iteration of detection happens in the `editorDidMount` func however
-   * it looks like the editor at this point doesn't actually have an accurate count
-   * of how many lines are in the editor. Need to double check that it actually 
-   * contains the correct content, otherwise the issue might be that before the 
-   * component mounts we don't actually have the correct props/`script`
-   * 2) monaco editor seems to have some styling that forces a vertical scroll bar
-   * or just forces a few extra empty "lines" at the end of the script so the scroll
-   * bar is always present. Pretty sure we just need to figure out the correct 
-   * settings to override
-  // const ref = useRef<MonacoEditor>(null)
-  // const [lineCount, setLineCount] = useState(MIN_LINE_COUNT)  */  
+const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
+  const ref = useRef<MonacoEditor>(null)
 
-  // const handleSetLineCount = (count: number) => {
-  //   if (count < MIN_LINE_COUNT) {
-  //     count = MIN_LINE_COUNT
-  //   }
-  //   setLineCount(count)
-  // }
+  const [lineCount, setLineCount] = useState(MIN_LINE_COUNT)
+  const [theEditor, setTheEditor] = useState<MonacoEditor['editor']>()
 
-  // const editorDidMount = (editor: any) => {
-  //   const currLineHeight = editor.getModel().getLineCount()
-  //   if (currLineHeight > 4) {
-  //     handleSetLineCount(editor.getModel().getLineCount())
-  //   }
-  // }
+  const handleSetLineCount = (count: number) => {
+    if (count < MIN_LINE_COUNT) {
+      count = MIN_LINE_COUNT
+    }
+    setLineCount(count)
+  }
+
+  const handleEditorWillMount = (monaco: any) => {
+    if (monaco.editor) {
+      monaco.editor.defineTheme("qri-theme", {
+          base: 'vs',
+          inherit: true,
+          rules: [],
+          colors: {
+            'editor.background': '#f4f6f8',
+        	}
+      });
+    }
+  }
+
+  const handleEditorDidMount = (editor: MonacoEditor['editor']) => {
+    setTheEditor(editor)
+    if (theEditor) {
+      const theModel = theEditor.getModel()
+      if (theModel) {
+        const currLineHeight = theModel.getLineCount()
+        if (currLineHeight > 4) {
+          handleSetLineCount(currLineHeight)
+        }
+      }
+    }
+  }
+
+  const handleResize = () => {
+    console.log('calling layout')
+    if (theEditor) theEditor.layout()
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+  });
 
   return (
     <MonacoEditor
-      // TODO (ramfox): starting poitn to adjust the height based on the number
-      // lines in the script
-      // ref={ref}
-      // height={lineCount * LINE_HEIGHT}
-      height={200}
+      ref={ref}
+      height={(lineCount * LINE_HEIGHT) + PADDING}
       value={script as any as string}
-      onChange={(script: string) => { 
-        onChange(script) 
-        // TODO (ramfox): starting point to adjust # of lines based on script
-        // content:
-        // if (ref) {
-        //   handleSetLineCount(ref.current?.editor?.getModel()?.getLineCount() || 4)
-        // }
+      onChange={(script: string) => {
+        onChange(script)
+
+        if (ref) {
+          handleSetLineCount(ref.current?.editor?.getModel()?.getLineCount() || 4)
+        }
       }}
       language='python'
-      theme='vs-light'
-      // TODO (ramfox): starting point to set the # of lines based on initial
-      // script content
-      // editorDidMount={editorDidMount}
+      theme='qri-theme'
       options={{
         scrollbar:{
           vertical: "hidden",
-          horizontalScrollbarSize: 4
+          horizontalScrollbarSize: 4,
+          alwaysConsumeMouseWheel: false
         },
+        scrollBeyondLastLine: false,
         minimap: {
           enabled: false
+        },
+        padding: {
+          top: 10,
+          bottom: 10
         }
       }}
+      editorDidMount={handleEditorDidMount}
+      editorWillMount={handleEditorWillMount}
     />
   )
 }

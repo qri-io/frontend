@@ -29,7 +29,7 @@ const Dataset: React.FC<any> = () => {
       </NavBar>
       <div className='flex flex-grow overflow-hidden'>
         <DatasetNavSidebar qriRef={qriRef} />
-        <div className='h-full'>
+        <div className='h-full overflow-hidden'>
           <Switch>
             <Route path='/ds/:username/:dataset' exact><Workflow qriRef={qriRef} /></Route>
             <Route path='/ds/:username/:dataset/components'><DatasetComponents /></Route>
