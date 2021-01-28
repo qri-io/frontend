@@ -5,10 +5,10 @@ import (
 	"sort"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/multiformats/go-multihash"
 	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qri/dsref"
-	"github.com/google/uuid"
 )
 
 // WorkflowType is a type for distinguishing between two different kinds of WorkflowSet
@@ -26,7 +26,6 @@ const (
 	// indicates the workflow failed to execute properly
 	JTShellScript WorkflowType = "shell"
 )
-
 
 const (
 	// WorkflowMulticodecType is a CID prefix for cron.Workflow content
@@ -63,14 +62,12 @@ type Workflow struct {
 	LatestRunStart *time.Time `json:"latestRunStart"`       // time workflow last started
 	CurrentRun     *Run       `json:"currentRun,omitempty"` // optional currently executing run
 
-	Triggers Triggers `json:"triggers"` // things that can initiate a run
-	// OnComplete []OnComplete `json:"onComplete"` // things to do after a run executes
+	Triggers   Triggers `json:"triggers"`   // things that can initiate a run
+	OnComplete Hooks    `json:"onComplete"` // things to do after a run executes
 
-	VersionInfo dsref.VersionInfo `json:"versionInfo"` // optional versionInfo of DatsaetID field
+	VersionInfo dsref.VersionInfo `json:"versionInfo"` // optional versionInfo of DatasetID field
 
-
-
-	Type        WorkflowType              `json:"type"`              // distinguish run type
+	Type WorkflowType `json:"type"` // distinguish run type
 }
 
 // NewCronWorkflow constructs a workflow pointer with a cron trigger
@@ -93,9 +90,19 @@ func NewCronWorkflow(name, ownerID, datasetID string, periodicityString string) 
 			NewCronTrigger(id, t, p),
 		},
 
-
 		Type: JTDataset,
 	}, nil
+}
+
+func (workflow *Workflow) Complete(ds *dsref.Ref, ownerID string) error {
+	workflow.Name = ds.Human()
+	//TODO (arqu): expand this as this version info is very shallow
+	workflow.VersionInfo = ds.VersionInfo()
+	now := time.Now()
+	workflow.Created = &now
+	workflow.Type = JTDataset
+	workflow.OwnerID = ownerID
+	return nil
 }
 
 // Advance creates a new run, increments the run count, and sets the next
@@ -111,7 +118,7 @@ func (workflow *Workflow) Advance(triggerID string) (err error) {
 	if triggerID != "" {
 		for _, t := range workflow.Triggers {
 			if t.Info().ID == triggerID {
-				t.Advance()
+				t.Advance(workflow)
 			}
 		}
 	}
@@ -130,6 +137,9 @@ func (workflow *Workflow) Copy() *Workflow {
 		RunCount:       workflow.RunCount,
 		LatestRunStart: workflow.LatestRunStart,
 		Triggers:       workflow.Triggers,
+		OnComplete:     workflow.OnComplete,
+		VersionInfo:    workflow.VersionInfo,
+		Type:           workflow.Type,
 	}
 
 	if workflow.CurrentRun != nil {
@@ -220,7 +230,7 @@ type OptionsType string
 
 const (
 	OTDataset OptionsType = "dataset"
-	OTShell OptionsType = "shell"
+	OTShell   OptionsType = "shell"
 )
 
 // Options is an interface for workflow options
@@ -233,9 +243,11 @@ type ShellScriptOptions struct {
 }
 
 // DatasetOptions encapsulates options passed to `qri save`
+// TODO (b5) - we should contribute flexbuffer support for golang & remove this entirely
 type DatasetOptions struct {
 	Title     string
 	Message   string
+	Recall    string
 	BodyPath  string
 	FilePaths []string
 

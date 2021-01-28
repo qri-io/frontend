@@ -18,7 +18,7 @@ var (
 type Trigger interface {
 	Info() TriggerInfo
 	ToMap() map[string]interface{}
-	Advance() error
+	Advance(workflow *Workflow) error
 }
 
 type TriggerInfo struct {
@@ -37,8 +37,10 @@ type TriggerInfo struct {
 
 func newTriggerInfo(m map[string]interface{}) (TriggerInfo, error) {
 	ti := TriggerInfo{}
-	if id, ok := m["id"].(string); ok {
+	if id, ok := m["id"].(string); ok && id != "" {
 		ti.ID = id
+	} else {
+		ti.ID = newTriggerID()
 	}
 	if wid, ok := m["workflowId"].(string); ok {
 		ti.WorkflowID = wid
@@ -184,11 +186,17 @@ func (t *CronTrigger) ToMap() map[string]interface{} {
 	return m
 }
 
-func (t *CronTrigger) Advance() error {
+func (t *CronTrigger) Advance(workflow *Workflow) error {
 	t.RunCount++
 	t.Periodicity = t.Periodicity.NextRep()
-	t.LastRunStart = t.NextRunStart
+	t.LastRunStart = workflow.LatestRunStart
+	// synchronize clocks on advance to avoid
+	// the scheduler trying to make up for the missed ticks
+	t.NextRunStart = t.LastRunStart
 	t.NextRunStart = t.NextExecutionWall()
+
+	t.LastRunID = workflow.CurrentRun.ID
+	// TODO(arqu): t.LastRunStatus = workflow.?
 	return nil
 }
 

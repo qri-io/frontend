@@ -9,11 +9,9 @@ import (
 	"github.com/qri-io/qri/errors"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
-	"github.com/qri-io/qrimatic/update"
 	"github.com/qri-io/qrimatic/scheduler"
+	"github.com/qri-io/qrimatic/update"
 	"github.com/spf13/cobra"
-
-
 )
 
 // ClientCommands wraps a set of commands for interacting with the update
@@ -270,10 +268,10 @@ func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err 
 	for _, t := range res.Triggers {
 		if !t.Info().Disabled && t.Info().Type == scheduler.TTCron {
 			crn := t.(*scheduler.CronTrigger)
-			fmt.Fprintf(client.ErrOut, "update scheduled, next update: %s\n", crn.NextRunStart)	
+			fmt.Fprintf(client.ErrOut, "update scheduled, next update: %s\n", crn.NextRunStart)
 		}
 	}
-	
+
 	return nil
 }
 

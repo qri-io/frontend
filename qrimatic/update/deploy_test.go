@@ -17,11 +17,6 @@ import (
 )
 
 func TestDeploy(t *testing.T) {
-	// construct Service
-	// construct deployparams
-	// deploy
-	// catch error
-
 	tr, err := repotest.NewTempRepo("foo", "deploy_test", repotest.NewTestCrypto())
 	if err != nil {
 		t.Fatal(err)

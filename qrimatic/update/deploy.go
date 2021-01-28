@@ -8,6 +8,7 @@ import (
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/qri/api/util"
+	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qrimatic/scheduler"
 )
@@ -51,17 +52,16 @@ type DeployResponse struct {
 // Deploy takes a workflow and transform and returns a runid and workflow
 // It applys a transform to a specified dataset and schedules the workflow
 func (s *Service) Deploy(ctx context.Context, p *DeployParams) (*DeployResponse, error) {
-	// save dataset
 	dsm := lib.NewDatasetMethods(s.inst)
 	saveP := &lib.SaveParams{
-		Ref: p.Workflow.Name,
+		Ref: p.Workflow.DatasetID, // currently the DatasetID is the Ref
 		Dataset: &dataset.Dataset{
 			Transform: p.Transform,
 		},
 		Apply: p.Apply,
 		// Wait: false,
 	}
-	log.Warnw("deploying dataset", "datasetID", saveP.Ref)
+	log.Debugw("deploying dataset", "datasetID", saveP.Ref)
 	res := &dataset.Dataset{}
 	err := dsm.Save(saveP, res)
 	if err != nil {
@@ -73,7 +73,11 @@ func (s *Service) Deploy(ctx context.Context, p *DeployParams) (*DeployResponse,
 		}
 	}
 
-	p.Workflow.OwnerID = s.inst.Config().Profile.ID
+	ref := &dsref.Ref{
+		Username: res.Peername,
+		Name:     res.Name,
+	}
+	p.Workflow.Complete(ref, s.inst.Config().Profile.ID)
 
 	// save workflow
 	err = s.sched.Schedule(ctx, p.Workflow)

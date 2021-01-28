@@ -123,6 +123,7 @@ func NewService(inst *lib.Instance) (*Service, error) {
 // AddRoutes registers cron routes with an *http.Mux.
 func (s *Service) AddRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
 	scheduler.AddCronRoutes(m, s.sched, mw)
+	m.HandleFunc("/deploy", mw(s.NewDeployHandler("/deploy")))
 }
 
 // Start runs the cron service, blocking until an error occurs
@@ -179,9 +180,9 @@ func datasetSaveCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.
 		if o.Message != "" {
 			args = append(args, fmt.Sprintf(`--message=%s`, o.Message))
 		}
-		// if o.Recall != "" {
-		// 	args = append(args, fmt.Sprintf(`--recall=%s`, o.Recall))
-		// }
+		if o.Recall != "" {
+			args = append(args, fmt.Sprintf(`--recall=%s`, o.Recall))
+		}
 		if o.BodyPath != "" {
 			args = append(args, fmt.Sprintf(`--body=%s`, o.BodyPath))
 		}

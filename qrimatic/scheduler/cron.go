@@ -153,14 +153,14 @@ func (c *Cron) Start(ctx context.Context) error {
 				}
 				// TODO (arqu): handle other trigger types
 				switch t.Info().Type {
-					case TTCron:
-						crn := t.(*CronTrigger)
-						if crn.NextRunStart != nil && now.After(*crn.NextRunStart) {
-							run = append(run, workflow)
-							trigger = append(trigger, t)
-						}	
-					default:
-						log.Debugf("trigger type not implemented: %q", t.Info().Type)	
+				case TTCron:
+					crn := t.(*CronTrigger)
+					if crn.NextRunStart != nil && now.After(*crn.NextRunStart) {
+						run = append(run, workflow)
+						trigger = append(trigger, t)
+					}
+				default:
+					log.Debugf("trigger type not implemented: %q", t.Info().Type)
 				}
 			}
 		}
@@ -258,13 +258,13 @@ func (c *Cron) Schedule(ctx context.Context, workflow *Workflow) (err error) {
 		}
 		// TODO (arqu): handle other trigger types
 		switch t.Info().Type {
-			case TTCron:
-				crn := t.(*CronTrigger)
-				if crn.NextRunStart == nil {
-					crn.NextRunStart = crn.NextExecutionWall()
-				}
-			default:
-				log.Debugf("trigger type not implemented: %q", t.Info().Type)	
+		case TTCron:
+			crn := t.(*CronTrigger)
+			if crn.NextRunStart == nil {
+				crn.NextRunStart = crn.NextExecutionWall()
+			}
+		default:
+			log.Debugf("trigger type not implemented: %q", t.Info().Type)
 		}
 	}
 
