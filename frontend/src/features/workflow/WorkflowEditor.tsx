@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 
 import WorkflowCell from './WorkflowCell';
-import Triggers from './Triggers';
+import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor';
 import OnComplete from './OnComplete';
 import { NewRunStep, Run, RunState, RunStep } from '../../qrimatic/run';
 import { TransformStep } from '../../qri/dataset';
@@ -43,7 +43,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
 
   return (
     <div className='overflow-y-auto p-4 text-left h-full flex-grow'>
-      <Triggers />
+      <WorkflowTriggersEditor triggers={workflow.triggers} />
       <section className='p-4 bg-white shadow-sm mb-4'>
         <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Script</h2>
         <div className='text-xs mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
