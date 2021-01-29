@@ -283,21 +283,7 @@ func (s *FileStore) loadFromFile() (err error) {
 func (s *FileStore) writeToFile() error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
-
-	state := struct {
-		Workflows    *WorkflowSet
-		WorkflowRuns map[string]*RunSet
-		Runs         *RunSet
-	}{
-		Workflows:    s.workflows,
-		WorkflowRuns: s.workflowRuns,
-		Runs:         s.runs,
-	}
-	data, err := json.Marshal(state)
-	if err != nil {
-		return err
-	}
-	return ioutil.WriteFile(s.path, data, 0644)
+	return s.writeToFileNoLock()
 }
 
 // Only use this when you have a surrounding lock

@@ -10,7 +10,7 @@ import (
 )
 
 // DeployHandler parses the deploy request and executes it
-func (s *Service) DeployHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) DeployHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	p := &scheduler.DeployParams{}
@@ -31,7 +31,7 @@ func (s *Service) DeployHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // UndeployHandler parses the request and unschedules the provided workflow
-func (s *Service) UndeployHandler(path string) http.HandlerFunc {
+func (s *Server) UndeployHandler(path string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 

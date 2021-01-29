@@ -20,4 +20,7 @@ const (
 	// payload is a Workflow
 	// subscriptions do not block the publisher
 	ETWorkflowCompleted = event.Type("cron:WorkflowCompleted")
+	// ETWorkflowUpdated fires when a workflow has updated
+	// its configuration
+	ETWorkflowUpdated = event.Type("cron:WorkflowUpdated")
 )

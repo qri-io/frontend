@@ -13,7 +13,7 @@ func NewServeCommand(ctx context.Context, streams ioes.IOStreams, repoPath strin
 	cmd := &cobra.Command{
 		Use: "serve",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			server, err := update.NewServer(ctx, streams, repoPath, o.Setup)
+			server, err := update.NewService(ctx, streams, repoPath, o.Setup)
 			if err != nil {
 				return err
 			}

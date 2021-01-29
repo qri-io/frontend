@@ -46,6 +46,8 @@ type Service interface {
 	Schedule(ctx context.Context, workflow *Workflow) error
 	// Unschedule removes a workflow from the scheduler
 	Unschedule(ctx context.Context, id string) error
+	// UpdateWorkflow
+	UpdateWorkflow(ctx context.Context, workflow *Workflow) error
 }
 
 // RunWorkflowFunc is a function for executing a workflow. Cron takes care of scheduling
@@ -297,6 +299,34 @@ func (c *Cron) Unschedule(ctx context.Context, id string) error {
 	}
 	go func() {
 		if err := c.pub.Publish(ctx, ETWorkflowUnscheduled, id); err != nil {
+			log.Debug(err)
+		}
+	}()
+
+	return nil
+}
+
+func (c *Cron) UpdateWorkflow(ctx context.Context, workflow *Workflow) error {
+	if workflow == nil {
+		return fmt.Errorf("workflow is nil")
+	}
+	if workflow.ID == "" {
+		return fmt.Errorf("bad workflow ID")
+	}
+	wf, err := c.store.GetWorkflow(ctx, workflow.ID)
+	if err != nil {
+		return err
+	}
+
+	wf.Disabled = workflow.Disabled
+	wf.Triggers = workflow.Triggers
+	wf.OnComplete = workflow.OnComplete
+
+	if err := c.store.PutWorkflow(ctx, wf); err != nil {
+		return err
+	}
+	go func() {
+		if err := c.pub.Publish(ctx, ETWorkflowUpdated, wf.ID); err != nil {
 			log.Debug(err)
 		}
 	}()

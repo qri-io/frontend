@@ -126,6 +126,10 @@ func (c HTTPClient) Unschedule(ctx context.Context, name string) error {
 	return maybeErrorResponse(res)
 }
 
+func (c HTTPClient) UpdateWorkflow(ctx context.Context, workflow *Workflow) error {
+	return fmt.Errorf("not implemented")
+}
+
 // Runs gives a log of executed workflows for a dataset name
 func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*Run, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/runs?offset=%d&limit=%d", c.Addr, offset, limit), nil)
