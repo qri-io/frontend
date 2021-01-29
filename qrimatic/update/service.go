@@ -19,12 +19,12 @@ import (
 	qmapi "github.com/qri-io/qrimatic/api"
 )
 
-type Server struct {
+type Service struct {
 	inst *lib.Instance
-	svc  *qmapi.Service
+	srv  *qmapi.Server
 }
 
-func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string, setup bool) (*Server, error) {
+func NewService(ctx context.Context, streams ioes.IOStreams, repoPath string, setup bool) (*Service, error) {
 	repoErr := lib.QriRepoExists(repoPath)
 	if repoErr != nil && setup {
 		log.Debugf("repoErr: %q", repoErr.Error())
@@ -47,22 +47,22 @@ func NewServer(ctx context.Context, streams ioes.IOStreams, repoPath string, set
 		return nil, err
 	}
 
-	svc, err := qmapi.NewService(inst)
+	srv, err := qmapi.NewServer(inst)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Server{
+	return &Service{
 		inst: inst,
-		svc:  svc,
+		srv:  srv,
 	}, nil
 }
 
-func (s *Server) Serve(ctx context.Context) error {
+func (s *Service) Serve(ctx context.Context) error {
 	apiServer := api.New(s.inst)
 	apiServer.Mux = http.NewServeMux()
 
-	s.svc.AddRoutes(apiServer.Mux, "", apiServer.Middleware)
+	s.srv.AddRoutes(apiServer.Mux, "", apiServer.Middleware)
 
 	go func() {
 		if err := apiServer.Serve(ctx); err != nil {
@@ -70,7 +70,7 @@ func (s *Server) Serve(ctx context.Context) error {
 		}
 	}()
 
-	return s.svc.Start(ctx)
+	return s.srv.Start(ctx)
 }
 
 func setupRepo(ctx context.Context, streams ioes.IOStreams, repoPath string) error {

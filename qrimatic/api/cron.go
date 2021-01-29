@@ -8,11 +8,11 @@ import (
 	"github.com/qri-io/qrimatic/scheduler"
 )
 
-func (s *Service) StatusHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) StatusHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (s *Service) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		offset := apiutil.ReqParamInt(r, "offset", 0)
@@ -38,6 +38,18 @@ func (s *Service) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 			return
 		}
+	case http.MethodPut:
+		workflow := &scheduler.Workflow{}
+
+		if err := json.NewDecoder(r.Body).Decode(workflow); err != nil {
+			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
+			return
+		}
+
+		if err := s.sched.UpdateWorkflow(r.Context(), workflow); err != nil {
+			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
+			return
+		}
 
 	case http.MethodDelete:
 		name := r.FormValue("name")
@@ -49,7 +61,7 @@ func (s *Service) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Service) WorkflowHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) WorkflowHandler(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
 	workflow, err := s.sched.WorkflowForName(r.Context(), name)
 	if err != nil {
@@ -61,7 +73,7 @@ func (s *Service) WorkflowHandler(w http.ResponseWriter, r *http.Request) {
 	apiutil.WriteResponse(w, workflow)
 }
 
-func (s *Service) RunsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) RunsHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodOptions:
 		apiutil.EmptyOkHandler(w, r)
@@ -79,7 +91,7 @@ func (s *Service) RunsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Service) GetRunHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) GetRunHandler(w http.ResponseWriter, r *http.Request) {
 	datasetID := r.FormValue("name")
 	runNumber := apiutil.ReqParamInt(r, "number", 0)
 	run, err := s.sched.GetRun(r.Context(), datasetID, runNumber)
@@ -105,7 +117,7 @@ func (s *Service) GetRunHandler(w http.ResponseWriter, r *http.Request) {
 // 	return
 // }
 
-func (s *Service) RunHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) RunHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO (b5): implement an HTTP run handler
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte("not finished"))

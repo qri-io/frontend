@@ -34,12 +34,12 @@ func Path(repoPath string) (path string, err error) {
 	return
 }
 
-type Service struct {
+type Server struct {
 	inst  *lib.Instance
 	sched *scheduler.Cron
 }
 
-func NewService(inst *lib.Instance) (*Service, error) {
+func NewServer(inst *lib.Instance) (*Server, error) {
 	path, err := Path(inst.RepoPath())
 	if err != nil {
 		return nil, err
@@ -64,14 +64,14 @@ func NewService(inst *lib.Instance) (*Service, error) {
 	// 	}
 	// }()
 
-	return &Service{
+	return &Server{
 		inst:  inst,
 		sched: svc,
 	}, nil
 }
 
 // Start runs the cron service, blocking until an error occurs
-func (s *Service) Start(ctx context.Context) error {
+func (s *Server) Start(ctx context.Context) error {
 	return s.sched.Start(ctx)
 }
 

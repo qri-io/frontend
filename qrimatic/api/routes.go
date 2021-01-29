@@ -6,7 +6,7 @@ import (
 )
 
 // AddRoutes registers cron routes with an *http.Mux.
-func (s *Service) AddRoutes(m *http.ServeMux, prefix string, mw func(http.HandlerFunc) http.HandlerFunc) {
+func (s *Server) AddRoutes(m *http.ServeMux, prefix string, mw func(http.HandlerFunc) http.HandlerFunc) {
 	route := func(route string) string {
 		return fmt.Sprintf("%s%s", prefix, route)
 	}
@@ -19,7 +19,7 @@ func (s *Service) AddRoutes(m *http.ServeMux, prefix string, mw func(http.Handle
 }
 
 // AddCronRoutes registers cron endpoints on an *http.Mux
-func (s *Service) AddCronRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
+func (s *Server) AddCronRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
 	m.HandleFunc("/cron", mw(s.StatusHandler))
 	m.HandleFunc("/workflows", mw(s.WorkflowsHandler))
 	m.HandleFunc("/workflow", mw(s.WorkflowHandler))
