@@ -33,8 +33,10 @@ type Service interface {
 	ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error)
 	// WorkflowForName gets a workflow by it's name (which often matches the dataset name)
 	WorkflowForName(ctx context.Context, name string) (*Workflow, error)
-	// Workflow gets a single scheduled workflow by dataset identifier
+	// Workflow gets a single scheduled workflow by workflow identifier
 	Workflow(ctx context.Context, id string) (*Workflow, error)
+	// WorkflowForDataset gets a single scheduled workflow by dataset identifier
+	WorkflowForDataset(ctx context.Context, id string) (*Workflow, error)
 	// Runs gives a log of executed workflows
 	Runs(ctx context.Context, offset, limit int) ([]*Run, error)
 	// GetRun returns a single executed workflow by workflow.LogName
@@ -98,6 +100,11 @@ func (c *Cron) WorkflowForName(ctx context.Context, name string) (*Workflow, err
 // Workflow proxies to the schedule store for reading a workflow by name
 func (c *Cron) Workflow(ctx context.Context, id string) (*Workflow, error) {
 	return c.store.GetWorkflow(ctx, id)
+}
+
+// WorkflowForDataset gets a single scheduled workflow by dataset identifier
+func (c *Cron) WorkflowForDataset(ctx context.Context, id string) (*Workflow, error) {
+	return c.store.GetWorkflowByDatasetID(ctx, id)
 }
 
 // Runs returns a list of workflows that have been executed

@@ -85,6 +85,26 @@ func (c HTTPClient) WorkflowForName(ctx context.Context, name string) (*Workflow
 	return nil, maybeErrorResponse(res)
 }
 
+// WorkflowForDataset gets a single scheduled workflow by dataset identifier
+func (c HTTPClient) WorkflowForDataset(ctx context.Context, id string) (*Workflow, error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflow?dataset_id=%s", c.Addr, id), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", jsonMimeType)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode == 200 {
+		return decodeJSONWorkflowResponse(res)
+	}
+
+	return nil, maybeErrorResponse(res)
+}
+
 // Workflow gets a workflow by querying an HTTP server
 func (c HTTPClient) Workflow(ctx context.Context, id string) (*Workflow, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflow?id=%s", c.Addr, id), nil)

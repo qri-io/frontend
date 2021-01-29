@@ -62,10 +62,14 @@ func (s *Server) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) WorkflowHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("name")
-	workflow, err := s.sched.WorkflowForName(r.Context(), name)
+	dsID := r.FormValue("dataset_id")
+	workflow, err := s.sched.WorkflowForDataset(r.Context(), dsID)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		if err == scheduler.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 		w.Write([]byte(err.Error()))
 		return
 	}
