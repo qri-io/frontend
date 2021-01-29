@@ -8,12 +8,27 @@ export enum RunState {
   skipped = 'skipped'
 }
 
+export enum RunType {
+  dry = 'dry',
+  save = 'save'
+}
+
+export function getOutputNameFromRunType(runType: RunType): string {
+  switch (runType){
+    case RunType.dry:
+      return "result"
+    case RunType.save:
+      return "save"
+  }
+}
+
 export interface Run {
   id: string
   status: RunState
   startTime?: Date
   stopTime?: Date
   duration?: string
+  runType: RunType
 
   steps: RunStep[]
 }
@@ -22,7 +37,8 @@ export function NewRun(data: Record<string,any>): Run {
   return {
     id: data.id || '',
     status: data.status || RunState.waiting,
-    steps: data.steps && data.steps.map(NewRunStep)
+    steps: data.steps && data.steps.map(NewRunStep),
+    runType: RunType.dry
   }
 }
 

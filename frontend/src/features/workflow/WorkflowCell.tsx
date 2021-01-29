@@ -24,7 +24,9 @@ const nameLookup = (name: string) => {
     case 'transform':
       return 'Shape your data into the desired output for your dataset'
     case 'save':
-      return 'Saving will commit changes to your qri dataset after running the code above. You can preview the changes here after each dry run of the workflow'
+      return 'Saving will commit changes to your qri dataset after running the code above.'
+    case 'result':
+        return 'You can preview the changes here after each dry run of the workflow'
     default:
       return ''
   }

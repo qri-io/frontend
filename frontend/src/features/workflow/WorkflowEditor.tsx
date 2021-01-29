@@ -4,18 +4,22 @@ import { useDispatch } from 'react-redux';
 import WorkflowCell from './WorkflowCell';
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor';
 import OnComplete from './OnComplete';
-import { NewRunStep, Run, RunState, RunStep } from '../../qrimatic/run';
+import { NewRunStep, Run, RunState, RunStep, RunType, getOutputNameFromRunType } from '../../qrimatic/run';
 import { TransformStep } from '../../qri/dataset';
 import { changeWorkflowTransformStep, runWorkflow } from './state/workflowActions';
 import RunBar from './RunBar';
 import { Workflow } from '../../qrimatic/workflow';
+import { SetRunTypeFunc } from './Workflow';
 
 export interface WorkflowEditorProps {
   workflow: Workflow
   run?: Run
+  lastRunType: RunType
+
+  setLastRunType: SetRunTypeFunc
 }
 
-const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
+const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow, lastRunType, setLastRunType }) => {
   const dispatch = useDispatch()
 
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
@@ -52,6 +56,9 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
             <RunBar
               status={run ? run.status : RunState.waiting }
               onRun={() => {
+                // TODO (ramfox): when we have both "dry run" and "run and save"
+                // we need to set the `lastRunType` accordingly
+                setLastRunType(RunType.dry)
                 setCollapseStates({})
                 dispatch(runWorkflow(workflow))
               }}
@@ -69,7 +76,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
             return (<WorkflowCell
               key={i}
               index={i}
-              step={step}
+              step={step.name === "save" ? {...step, name: getOutputNameFromRunType(lastRunType)} : step}
               run={r}
               collapseState={collapseState(step, r)}
               onChangeCollapse={(v) => {

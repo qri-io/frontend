@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,10 +10,14 @@ import { QriRef } from '../../qri/ref';
 import { ModalType } from '../app/state/appState';
 import { showModal } from '../app/state/appActions';
 import WorkflowEditor from './WorkflowEditor';
+import { RunType } from '../../qrimatic/run';
+import { DeployWorkflowModalProps } from './modal/DeployWorkflowModal';
 
 interface WorkflowLocationState {
   template: string
 }
+
+export type SetRunTypeFunc = React.Dispatch<React.SetStateAction<RunType>>
 
 export interface WorkflowProps {
   qriRef: QriRef
@@ -24,6 +28,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const location = useLocation<WorkflowLocationState>()
   const workflow = useSelector(selectWorkflow)
   const latestRun = useSelector(selectLatestRun)
+  const [lastRunType, setLastRunType] = useState<RunType>(RunType.dry)
 
   useEffect(() => {
     if (location.state && location.state.template) {
@@ -38,10 +43,14 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
     dispatch(loadWorkflowByDatasetRef(qriRef))
   }, [dispatch, qriRef])
 
+  const handleDeploy = () => {
+    dispatch(showModal<DeployWorkflowModalProps>(ModalType.deployWorkflow, {setIfSave: () => setLastRunType(RunType.save)}))
+  }
+
   return (
     <div className='flex h-full'>
-      <WorkflowOutline workflow={workflow} run={latestRun} onDeploy={() => { dispatch(showModal(ModalType.deployWorkflow)) }} />
-      <WorkflowEditor workflow={workflow} run={latestRun} />
+      <WorkflowOutline workflow={workflow} run={latestRun} lastRunType={lastRunType} onDeploy={handleDeploy} />
+      <WorkflowEditor workflow={workflow} run={latestRun} lastRunType={lastRunType} setLastRunType={setLastRunType} />
     </div>
   )
 }
