@@ -6,7 +6,7 @@ export function mapDataset(d: object | []): Dataset {
   return NewDataset((d as Record<string,any>).dataset)
 }
 
-export function loadDataset (ref: QriRef): ApiActionThunk {
+export function loadDataset(ref: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     // TODO (b5) - check state before making a network request
     return dispatch(fetchDataset(ref))

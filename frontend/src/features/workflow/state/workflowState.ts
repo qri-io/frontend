@@ -91,6 +91,21 @@ export const workflowReducer = createReducer(initialState, {
       }
     }
   },
+  'API_WORKFLOW_SUCCESS': (state, action) => {
+    const w = action.payload.data as Workflow
+    // TODO (b5) - right now we only use the single-workflow fetch endpoint in one
+    // place (on the workflow editor), so there's no need to check if the ID of the
+    // workflow we're editing matches the one coming from a successful API call,
+    // but in the future we'll need to work out a way to only update on workflow
+    // match, even when the dataset is fetched by qriRef. Two options:
+    //   * modify the definintion of a workflow to always include this info 
+    // (basically *don't* switch datasetID to only be InitIDs in the future, always use full refs)
+    //   * include the id we requested in the response action
+    // Personally, I'm a fan of the latter
+    const steps = state.workflow.steps
+    state.workflow = w
+    state.workflow.steps = steps
+  },
 })
 
 function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerAction) {
