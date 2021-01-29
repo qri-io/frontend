@@ -1,7 +1,7 @@
 import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qri/eventLog'
-import { Workflow, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
-import { CALL_API, ApiActionThunk } from '../../../store/api'
+import { NewWorkflow, Workflow, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
+import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
 import { 
   WORKFLOW_CHANGE_TRIGGER,
   WORKFLOW_CHANGE_TRANSFORM_STEP,
@@ -9,7 +9,28 @@ import {
   TEMP_SET_WORKFLOW_EVENTS,
   SET_WORKFLOW,
   SET_WORKFLOW_REF
- } from './workflowState'
+} from './workflowState'
+
+export function mapWorkflow(d: object | []): Workflow {
+  return NewWorkflow((d as Record<string,any>))
+}
+
+ export function loadWorkflowByDatasetRef(ref: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchWorkflow(ref))
+  }
+}
+
+function fetchWorkflow(ref: QriRef): ApiAction {
+  return {
+    type: 'workflow',
+    [CALL_API]: {
+      endpoint: `workflow?dataset_id=${ref.username}/${ref.name}`,
+      method: 'GET',
+      map: mapWorkflow
+    }
+  }
+}
 
 
 export interface SetWorkflowStepAction {

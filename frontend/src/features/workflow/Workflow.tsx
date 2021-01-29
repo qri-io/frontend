@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import WorkflowOutline from './WorkflowOutline';
 import { selectLatestRun, selectWorkflow } from './state/workflowState';
-import { setWorkflow, setWorkflowRef } from './state/workflowActions';
+import { loadWorkflowByDatasetRef, setWorkflow, setWorkflowRef } from './state/workflowActions';
 import { selectTemplate } from '../template/templates';
 import { QriRef } from '../../qri/ref';
 import { ModalType } from '../app/state/appState';
@@ -32,7 +32,10 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   }, [dispatch, location.state])
 
   useEffect(() => {
+    // TODO (b5) - highly-unlikely but possible race condition here. loading workflow
+    // should be chained in a promise
     dispatch(setWorkflowRef(qriRef))
+    dispatch(loadWorkflowByDatasetRef(qriRef))
   }, [dispatch, qriRef])
 
   return (
