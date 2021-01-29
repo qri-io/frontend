@@ -37,3 +37,10 @@
     transform: translateY(0px)
   }
 }
+
+
+/* override fade-in/fade-out transition on react-tooltip */
+.__react_component_tooltip {
+	transition: opacity 0.1s ease-in-out !important;
+	visibility: visible;
+}

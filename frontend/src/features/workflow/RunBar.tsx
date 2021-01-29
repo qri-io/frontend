@@ -7,35 +7,27 @@ export interface RunBarProps {
  status: RunState,
  onRun: () => void,
  onRunCancel: () => void,
- showDeployButton?: boolean,
- onDeploy: () => void,
- onDeployCancel: () => void,
 }
 
 const RunBar: React.FC<RunBarProps> = ({
   status,
   onRun,
-  onRunCancel,
-  showDeployButton,
-  onDeploy,
-  onDeployCancel,
+  onRunCancel
 }) => (
-  <div className='pt-4 sticky top-0 shadow-md z-10'>
-   <div className='flex bg-gray-100 rounded border border-gray-200'>
-     <div className='flex-2'>
-       {(status !== RunState.waiting) && <p><RunStateIcon state={status} /></p>}
-     </div>
-     <div className='flex-1 text-right'>
-       <button
-         className='py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300'
-         onClick={() => {(status === RunState.running) ? onRunCancel() : onRun() }}
-       >{(status === RunState.running) ? 'Cancel' : 'Run' }</button>
-       {showDeployButton && <button
-         className='py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300'
-         onClick={() => {(status === RunState.running) ? onDeployCancel() : onDeploy() }}
-       >{(status === RunState.running) ? 'Cancel' : 'Deploy' }</button>}
-     </div>
-   </div>
+  <div className=''>
+    <div className='flex'>
+      <div className='flex-2 mr-2'>
+        <div className='inline-block align-middle'>
+          <RunStateIcon state={status} size='md' />
+        </div>
+      </div>
+      <div className='flex-1 text-right'>
+        <button
+          className='w-40 py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-500 rounded'
+          onClick={() => {(status === RunState.running) ? onRunCancel() : onRun() }}
+        >{(status === RunState.running) ? 'Cancel' : 'Dry Run' }</button>
+      </div>
+    </div>
   </div>
 )
 

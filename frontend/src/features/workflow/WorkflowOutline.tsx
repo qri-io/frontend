@@ -54,7 +54,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
           <Icon icon='envelope'/>
         </div>
         <button
-          className='mt-4 py-1 px-4 w-full font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300 rounded'
+          className='mt-4 py-1 px-4 w-full font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-500 rounded'
           onClick={() => { onDeploy() }}
         >
           Deploy Workflow
