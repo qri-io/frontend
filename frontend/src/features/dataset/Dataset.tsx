@@ -10,6 +10,7 @@ import DatasetComponents from './DatasetComponents';
 import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
+import DatasetTitleMenu from './DatasetTitleMenu';
 
 const Dataset: React.FC<any> = () => {
   const qriRef = newQriRef(useParams())
@@ -20,12 +21,12 @@ const Dataset: React.FC<any> = () => {
   }, [dispatch, qriRef])
 
   return (
-    <div className='flex flex-col h-full bg-gray-100'>
+    <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
       <NavBar menu={[
         { type: 'link', label: 'back to collection', to: '/collection' },
         { type: 'hr' }
       ]}>
-        <p className='font-bold text-white'>{qriRef.username} / {qriRef.name}</p>
+        <DatasetTitleMenu qriRef={qriRef} />
       </NavBar>
       <div className='flex flex-grow overflow-hidden'>
         <DatasetNavSidebar qriRef={qriRef} />
