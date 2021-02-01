@@ -67,7 +67,8 @@ export interface WorkflowHook {
 export function NewWorkflowHook(data: Record<string,any>): WorkflowHook {
   return {
     type: data.type,
-    value: data.value
+    value: data.value,
+    remote: data.remote
   }
 }
 

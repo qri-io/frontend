@@ -51,7 +51,7 @@ const initialState: WorkflowState = {
       { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
       { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
       { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-      { syntax: 'save', category: 'save', name: 'save', script: '' }
+      { syntax: 'qri', category: 'save', name: 'save', script: '' }
     ],
     onComplete: [
       { type: 'push', remote: 'https://registry.qri.cloud' },
