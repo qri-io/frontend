@@ -51,8 +51,8 @@ var zero iso8601.RepeatingInterval
 // a specified Periodicity (time interval)
 type Workflow struct {
 	ID        string     `json:"id"`                // CID string
-	DatasetID string     `json:"datasetId"`         // dataset identifier
-	OwnerID   string     `json:"ownerId"`           // user that created this workflow
+	DatasetID string     `json:"datasetID"`         // dataset identifier
+	OwnerID   string     `json:"ownerID"`           // user that created this workflow
 	Name      string     `json:"name"`              // human dataset name eg: "b5/world_bank_population"
 	Created   *time.Time `json:"created"`           // date workflow was created
 	RunCount  int        `json:"runCount"`          // number of times this workflow has been run

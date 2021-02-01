@@ -46,7 +46,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
     case 'starlark':
       editor = <CodeEditor script={script} onChange={(v) => { onChangeScript(index, v) }} disabled={!!run} />
       break;
-    case 'save':
+    case 'qri':
       editor = <></>
       break;
     default:
