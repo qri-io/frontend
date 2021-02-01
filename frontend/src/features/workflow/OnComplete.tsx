@@ -1,4 +1,5 @@
 import React from 'react'
+import ScrollElement from '../scroller/ScrollElement';
 import Block from './Block';
 
 const onCompleteItems = [
@@ -19,12 +20,13 @@ const onCompleteItems = [
 const OnComplete: React.FC<any> = () => {
   return (
     <div className='p-4 bg-white shadow-sm mb-4'>
-      <h2 className='text-2xl font-semibold text-gray-600'>On Completion</h2>
-      <div className='text-xs mb-2'>Configure actions that will happen when the workflow succeeds</div>
-      <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
-        {onCompleteItems.map((d, i) => (<Block key={i} {...d} />))}
+        <ScrollElement name='on-completion' />
+        <h2 className='text-2xl font-semibold text-gray-600'>On Completion</h2>
+        <div className='text-xs mb-2'>Configure actions that will happen when the workflow succeeds</div>
+        <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
+          {onCompleteItems.map((d, i) => (<Block key={i} {...d} />))}
+        </div>
       </div>
-    </div>
   )
 }
 

@@ -4,6 +4,7 @@ import Icon from '../../chrome/Icon'
 import { TransformStep } from '../../qri/dataset'
 import { NewRunStep, Run, RunState } from '../../qrimatic/run'
 import { Workflow } from '../../qrimatic/workflow'
+import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStateIcon from './RunStateIcon'
 
 export interface WorkflowOutlineProps {
@@ -16,19 +17,23 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
   return (
     <div className='outline h-full w-56 flex-none'>
       <div className='p-4 text-left'>
-        <div className='font-semibold text-gray-600 mb-2'>Triggers</div>
-          <div className='text-xs inline-block py-1 px-2 rounded border'>
-            <Icon icon='clock'/>
-          </div>
-          <div className='text-xs inline-block py-1 px-2 rounded border'>
-            <Icon icon='projectDiagram'/>
-          </div>
-          <div className='text-xs inline-block py-1 px-2 rounded border'>
-            <Icon icon='bolt'/>
-          </div>
-        <div  className='font-semibold text-gray-600 mb-2'>
-          Script {(run && run.status === RunState.running) && <div className='float-right text-blue-500'> <Icon icon='spinner' spin /></div>}
+        <ScrollTrigger name={'triggers'} >
+          <div className='font-semibold text-gray-600 mb-2'>Triggers</div>
+        </ScrollTrigger>
+        <div className='text-xs inline-block py-1 px-2 rounded border'>
+          <Icon icon='clock'/>
         </div>
+        <div className='text-xs inline-block py-1 px-2 rounded border'>
+          <Icon icon='projectDiagram'/>
+        </div>
+        <div className='text-xs inline-block py-1 px-2 rounded border'>
+          <Icon icon='bolt'/>
+        </div>
+        <ScrollTrigger name='script'>
+          <div  className='font-semibold text-gray-600 mb-2'>
+            Script {(run && run.status === RunState.running) && <div className='float-right text-blue-500'> <Icon icon='spinner' spin /></div>}
+          </div>
+        </ScrollTrigger>
         <div className='mb-2'>
           {workflow && workflow.steps?.map((step: TransformStep, i: number) => {
             let r
@@ -36,14 +41,16 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
               r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: RunState.waiting })
             }
             return (
-              <div key={i} className='text-sm ml-2'>
-                <span className='font-black text-gray-400'>{i+1}</span> &nbsp; {step.name}
-                {r && <div className='float-right text-green-500'><RunStateIcon state={r.status || RunState.waiting} /></div>}
-              </div>
+              <ScrollTrigger name={step.name} key={i}>
+                <div key={i} className='text-sm ml-2'>
+                  <span className='font-black text-gray-400'>{i+1}</span> &nbsp; {step.name}
+                  {r && <div className='float-right text-green-500'><RunStateIcon state={r.status || RunState.waiting} /></div>}
+                </div>
+              </ScrollTrigger>
             )
           })}
         </div>
-        <div className='font-semibold text-gray-600 mb-2'>On Completion</div>
+        <ScrollTrigger name='on-completion'><div className='font-semibold text-gray-600 mb-2'>On Completion</div></ScrollTrigger>
         <div className='text-xs inline-block py-1 px-2 rounded border'>
           <Icon icon='cloudUpload'/>
         </div>
