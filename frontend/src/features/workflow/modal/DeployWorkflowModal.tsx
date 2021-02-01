@@ -1,15 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { RunType } from '../../../qrimatic/run'
 
 import { clearModal } from '../../app/state/appActions'
-import { deployWorkflow } from '../state/workflowActions'
+import { clearRun, deployWorkflow, setRunType } from '../state/workflowActions'
 import { selectWorkflow } from '../state/workflowState'
 
-export interface DeployWorkflowModalProps {
-  setIfSave: () => void
-}
-
-const DeployWorkflowModal: React.FC<DeployWorkflowModalProps> = ({ setIfSave }) => {
+const DeployWorkflowModal: React.FC = () => {
   const dispatch = useDispatch()
   const workflow = useSelector(selectWorkflow)
   const [save, setSave] = useState(true)
@@ -21,7 +18,8 @@ const DeployWorkflowModal: React.FC<DeployWorkflowModalProps> = ({ setIfSave }) 
      <button
        className='py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-300'
        onClick={() => {
-         save && setIfSave()
+         save && dispatch(setRunType(RunType.save))
+         dispatch(clearRun())
          dispatch(deployWorkflow(workflow))
          dispatch(clearModal())
        }}>Deploy!</button>

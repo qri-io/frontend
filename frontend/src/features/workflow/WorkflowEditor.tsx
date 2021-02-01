@@ -1,26 +1,25 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import WorkflowCell from './WorkflowCell';
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor';
 import OnComplete from './OnComplete';
-import { NewRunStep, Run, RunState, RunStep, RunType, getOutputNameFromRunType } from '../../qrimatic/run';
+import { NewRunStep, Run, RunState, RunStep, getOutputNameFromRunType } from '../../qrimatic/run';
 import { TransformStep } from '../../qri/dataset';
-import { changeWorkflowTransformStep, runWorkflow } from './state/workflowActions';
+import { changeWorkflowTransformStep, clearRun, runWorkflow, setRunType } from './state/workflowActions';
 import RunBar from './RunBar';
 import { Workflow } from '../../qrimatic/workflow';
-import { SetRunTypeFunc } from './Workflow';
+import { selectRunButtonType, selectRunType } from './state/workflowState';
 
 export interface WorkflowEditorProps {
   workflow: Workflow
   run?: Run
-  lastRunType: RunType
-
-  setLastRunType: SetRunTypeFunc
 }
 
-const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow, lastRunType, setLastRunType }) => {
+const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
   const dispatch = useDispatch()
+  const runType = useSelector(selectRunType)
+  const runButtonType = useSelector(selectRunButtonType)
 
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
   const collapseState = (step: TransformStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
@@ -56,10 +55,9 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow, lastRunT
             <RunBar
               status={run ? run.status : RunState.waiting }
               onRun={() => {
-                // TODO (ramfox): when we have both "dry run" and "run and save"
-                // we need to set the `lastRunType` accordingly
-                setLastRunType(RunType.dry)
                 setCollapseStates({})
+                dispatch(setRunType(runButtonType))
+                dispatch(clearRun())
                 dispatch(runWorkflow(workflow))
               }}
               onRunCancel={() => { alert('cannot cancel runs yet') }}
@@ -76,7 +74,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow, lastRunT
             return (<WorkflowCell
               key={i}
               index={i}
-              step={step.name === "save" ? {...step, name: getOutputNameFromRunType(lastRunType)} : step}
+              step={step.name === "save" ? {...step, name: getOutputNameFromRunType(runType)} : step}
               run={r}
               collapseState={collapseState(step, r)}
               onChangeCollapse={(v) => {

@@ -1,19 +1,22 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import Icon from '../../chrome/Icon'
 import { TransformStep } from '../../qri/dataset'
-import { getOutputNameFromRunType, NewRunStep, Run, RunState, RunType } from '../../qrimatic/run'
+import { getOutputNameFromRunType, NewRunStep, Run, RunState } from '../../qrimatic/run'
 import { Workflow } from '../../qrimatic/workflow'
 import RunStateIcon from './RunStateIcon'
+import { selectRunType } from './state/workflowState'
 
 export interface WorkflowOutlineProps {
   workflow?: Workflow
   run?: Run
   onDeploy: () => void
-  lastRunType: RunType
 }
 
-const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDeploy, lastRunType }) => {
+const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDeploy }) => {
+  const runType = useSelector(selectRunType)
+  
   return (
     <div className='outline h-full w-56 flex-none'>
       <div className='p-4 text-left'>
@@ -38,7 +41,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
             }
             return (
               <div key={i} className='text-sm ml-2'>
-                <span className='font-black text-gray-400'>{i+1}</span> &nbsp; {step.name === 'save' ? getOutputNameFromRunType(lastRunType) : step.name}
+                <span className='font-black text-gray-400'>{i+1}</span> &nbsp; {step.name === 'save' ? getOutputNameFromRunType(runType) : step.name}
                 {r && <div className='float-right text-green-500'><RunStateIcon state={r.status || RunState.waiting} /></div>}
               </div>
             )

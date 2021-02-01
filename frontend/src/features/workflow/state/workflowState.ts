@@ -1,8 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store';
-import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction } from './workflowActions';
-import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
+import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction, SetRunTypeAction, SetRunButtonTypeAction } from './workflowActions';
+import { NewRunFromEventLog, Run, RunType } from '../../../qrimatic/run';
 import { Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qri/eventLog';
 import Dataset from '../../../qri/dataset';
@@ -13,6 +13,9 @@ export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
 export const WORKFLOW_CHANGE_TRANSFORM_STEP = 'WORKFLOW_CHANGE_TRANSFORM_STEP'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
+export const SET_RUN_TYPE = 'SET_RUN_TYPE'
+export const SET_RUN_BUTTON_TYPE = 'SET_RUN_BUTTON_TYPE'
+export const CLEAR_RUN = 'CLEAR_RUN'
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
@@ -28,16 +31,24 @@ export const selectLatestRun = (state: RootState): Run | undefined => {
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
 
+export const selectRunType = (state: RootState): RunType => state.workflow.runType
+
+export const selectRunButtonType = (state: RootState): RunType => state.workflow.runButtonType
+
 export interface WorkflowState {
   // reference the workflow editor is manipulating
   qriRef?: QriRef,
   workflow: Workflow,
 
+  runType: RunType,
+  runButtonType: RunType,
   lastRunID?: string,
   events: EventLogLine[],
 }
 
 const initialState: WorkflowState = {
+  runType: RunType.dry,
+  runButtonType: RunType.dry,
   workflow: {
     id: '',
     datasetID: 'fake_id',
@@ -79,6 +90,13 @@ export const workflowReducer = createReducer(initialState, {
     state.qriRef = action.qriRef
     state.workflow.datasetID = `${action.qriRef.username}/${action.qriRef.name}`
   },
+  SET_RUN_TYPE: (state, action: SetRunTypeAction) => {
+    state.runType = action.runType
+  },
+  SET_RUN_BUTTON_TYPE: (state, action: SetRunButtonTypeAction) => {
+    state.runButtonType = action.runButtonType
+  },
+  CLEAR_RUN: clearRun,
   // listen for dataset fetching actions, if the reference of the fetched dataset
   // matches the ref the workbench reducer is tuned to, load the transform script
   // into the workbench
@@ -131,4 +149,8 @@ function setWorkflow(state: WorkflowState, action: SetWorkflowAction) {
   state.workflow = action.workflow
   state.events = []
   return
+}
+
+function clearRun(state: WorkflowState) {
+  state.events = []
 }

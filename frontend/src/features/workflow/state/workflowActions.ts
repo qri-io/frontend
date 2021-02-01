@@ -8,8 +8,12 @@ import {
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
   SET_WORKFLOW,
-  SET_WORKFLOW_REF
+  SET_WORKFLOW_REF,
+  SET_RUN_TYPE,
+  CLEAR_RUN,
+  SET_RUN_BUTTON_TYPE
 } from './workflowState'
+import { RunType } from '../../../qrimatic/run'
 
 export function mapWorkflow(d: object | []): Workflow {
   return NewWorkflow((d as Record<string,any>))
@@ -150,5 +154,39 @@ export interface SetWorkflowRefAction {
   return {
     type: SET_WORKFLOW_REF,
     qriRef,
+  }
+}
+
+export interface SetRunTypeAction {
+  type: string,
+  runType: RunType
+}
+
+export function setRunType(runType: RunType): SetRunTypeAction {
+  return {
+    type: SET_RUN_TYPE,
+    runType
+  }
+}
+
+export interface SetRunButtonTypeAction {
+  type: string,
+  runButtonType: RunType
+}
+
+export function setRunButtonType(runButtonType: RunType): SetRunButtonTypeAction {
+  return {
+    type: SET_RUN_BUTTON_TYPE,
+    runButtonType
+  }
+}
+
+export interface ClearRunAction {
+  type: string
+}
+
+export function clearRun(): ClearRunAction {
+  return {
+    type: CLEAR_RUN
   }
 }

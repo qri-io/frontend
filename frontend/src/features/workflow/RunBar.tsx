@@ -13,8 +13,17 @@ const RunBar: React.FC<RunBarProps> = ({
   status,
   onRun,
   onRunCancel
-}) => (
-  <div className=''>
+}) => {
+
+  // TODO (ramfox): when we get the ability to switch between "dry run" and "run and save"
+  // we need to switch on `runButtonType` and set `setRunButtonType`
+  // const dispatch = useDispatch()
+  // const runButtonType = useSelector(selectRunButtonType)
+  // const handleSwitchButtonTypes = (runType: RunType) => {
+  //   dispatch(setRunButtonType(runType))
+  //   dispatch(clearRun())
+  // }
+  return (<div className=''>
     <div className='flex'>
       <div className='flex-2 mr-2'>
         <div className='inline-block align-middle'>
@@ -28,7 +37,7 @@ const RunBar: React.FC<RunBarProps> = ({
         >{(status === RunState.running) ? 'Cancel' : 'Dry Run' }</button>
       </div>
     </div>
-  </div>
-)
+  </div>)
+}
 
 export default RunBar
