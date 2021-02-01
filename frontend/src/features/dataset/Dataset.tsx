@@ -34,6 +34,7 @@ const Dataset: React.FC<any> = () => {
           <Switch>
             <Route path='/ds/:username/:dataset' exact><Workflow qriRef={qriRef} /></Route>
             <Route path='/ds/:username/:dataset/components'><DatasetComponents /></Route>
+            <Route path='/ds/:username/:dataset/components/:componentName'><DatasetComponents /></Route>
             <Route path='/ds/:username/:dataset/history'><HistoryList /></Route>
           </Switch>
         </div>

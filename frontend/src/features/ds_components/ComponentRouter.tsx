@@ -1,0 +1,201 @@
+import React from 'react'
+import { Action } from 'redux'
+import { useSelector } from 'react-redux'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import path from 'path'
+import { useLocation, Switch, useRouteMatch, Redirect, Route } from 'react-router-dom'
+
+import { ApiActionThunk } from '../../store/api'
+import Store, { SelectedComponent, ToastType, RouteProps } from '../../models/store'
+import Dataset from '../../models/dataset'
+import { QriRef, qriRefFromRoute } from '../../models/qriRef'
+import { isEditPath } from '../../paths'
+
+import { connectComponentToPropsWithRouter } from '../../utils/connectComponentToProps'
+
+import { openToast, closeToast } from '../../actions/ui'
+import { writeDataset } from '../../actions/workbench'
+import { setRecentEditRef, setRecentDatasetRef } from '../../actions/workbenchRoutes'
+
+import { selectWorkingDatasetIsLoading, selectWorkingDataset, selectFsiPath, selectDatasetIsLoading, selectDatasetStatusInfo, selectStatusInfoFromMutations } from '../../selections'
+
+import Body from './datasetComponents/Body'
+import CalloutBlock from '../chrome/CalloutBlock'
+import CommitEditor from './datasetComponents/CommitEditor'
+import Commit from './datasetComponents/Commit'
+import DropZone from '../chrome/DropZone'
+import Icon from '../../chrome/Icon'
+import Metadata from './datasetComponents/Metadata'
+import MetadataEditor from './datasetComponents/MetadataEditor'
+import ReadmeEditor from './datasetComponents/ReadmeEditor'
+import Readme from './datasetComponents/Readme'
+import Structure from '../Structure'
+import Transform from './datasetComponents/Transform'
+import StructureEditor from './datasetComponents/StructureEditor'
+import StatusDot from '../../chrome/StatusDot'
+import { getComponentDisplayProps } from './WorkingComponentList'
+
+interface ComponentRouterProps extends RouteProps {
+  // setting actions
+  openToast: (type: ToastType, name: string, message: string) => Action
+  closeToast: () => Action
+  write: (peername: string, name: string, dataset: Dataset) => ApiActionThunk | void
+  setRecentDatasetRef: (qriRef: QriRef) => Action
+  setRecentEditRef: (qriRef: QriRef) => Action
+
+  loading: boolean
+  component: SelectedComponent
+  fsiPath?: string
+  bodyPath?: string
+
+  qriRef: QriRef
+}
+
+export const ComponentRouterComponent: React.FunctionComponent<ComponentRouterProps> = (props) => {
+  const {
+    fsiPath,
+    bodyPath,
+    write,
+    openToast,
+    closeToast,
+    setRecentDatasetRef,
+    setRecentEditRef,
+    qriRef
+  } = props
+
+  const showHistory = !!qriRef.path
+  const username = qriRef.username || ''
+  const name = qriRef.name || ''
+
+  const [dragging, setDragging] = React.useState(false)
+
+  const location = useLocation()
+  const { path: routePath, url } = useRouteMatch()
+
+  React.useEffect(() => {
+    if (isEditPath(routePath)) {
+      setRecentEditRef(qriRef)
+    } else {
+      setRecentDatasetRef(qriRef)
+    }
+  }, [qriRef.location])
+
+  const dragHandler = (drag: boolean) => (e: React.DragEvent) => {
+    if (showHistory) {
+      return
+    }
+    e.preventDefault()
+    setDragging(drag)
+  }
+
+  const dropHandler = (e: React.DragEvent) => {
+    setDragging(false)
+    e.preventDefault()
+    const ext = path.extname(e.dataTransfer.files[0].path)
+    if (!(ext === '.csv' || ext === '.json')) {
+      // open toast for 1 second
+      openToast('error', 'drag-drop', 'unsupported file format: only json and csv supported')
+      setTimeout(closeToast, 1000)
+      return
+    }
+
+    write(username, name, { bodyPath: e.dataTransfer.files[0].path })
+  }
+
+  return (
+    <div className='component-container'>
+      <div className='component-content transition-group' onDragEnter={dragHandler(true)}>
+        <TransitionGroup component={null}>
+          <CSSTransition
+            key={location.key}
+            classNames='fade'
+            component='div'
+            timeout={300}
+          >
+            <Switch location={location}>
+              <Route exact path={routePath}>
+                <Redirect to={`${url}/body`} />
+              </Route>
+              <Route path={`${routePath}/meta`} render={(props) => {
+                if (isEditPath(routePath)) {
+                  return <><ComponentHeader {...props} /><MetadataEditor {...props} /></>
+                }
+                return <><ComponentHeader {...props} /><Metadata {...props} /></>
+              }}>
+              </Route>
+              <Route path={`${routePath}/readme`} render={(props) => {
+                if (isEditPath(routePath)) {
+                  return <><ComponentHeader {...props} /><ReadmeEditor {...props} /></>
+                }
+                return <><ComponentHeader {...props} /><Readme {...props} /></>
+              }
+              }>
+              </Route>
+              <Route path={`${routePath}/body`} render={(props) => {
+                return <>
+                  {dragging && fsiPath === '' && <DropZone
+                    title='Drop a body update'
+                    subtitle='import either csv or json file'
+                    setDragging={setDragging}
+                    onDrop={dropHandler}
+                  />}
+                  {isEditPath(routePath) && bodyPath && <CalloutBlock
+                    type='info'
+                    text={`body will be replaced with file: ${bodyPath} when you commit`}
+                    cancelText='unstage file'
+                    onCancel={() => { write(username, name, { bodyPath: '' }) }}
+                  />}
+                  <><ComponentHeader {...props} /><Body {...props} /></>
+                </>
+              }}>
+              </Route>
+              <Route path={`${routePath}/structure`} render={(props) => {
+                if (isEditPath(routePath)) {
+                  return <><ComponentHeader {...props} /><StructureEditor {...props} /></>
+                }
+                return <><ComponentHeader {...props} /><Structure {...props} /></>
+              }
+              }>
+              </Route>
+              <Route path={`${routePath}/transform`} render={(props) => {
+                return <><ComponentHeader {...props} /><Transform {...props} /></>
+              }
+              }>
+              </Route>
+              <Route path={`${routePath}/commit`} render={(props) => {
+                if (isEditPath(routePath)) {
+                  return <><ComponentHeader {...props} /><CommitEditor {...props} /></>
+                }
+                return <><ComponentHeader {...props} /><Commit {...props} /></>
+              }
+              }>
+              </Route>
+            </Switch>
+          </CSSTransition>
+        </TransitionGroup>
+      </div>
+    </div>
+  )
+}
+
+export default connectComponentToPropsWithRouter(
+  ComponentRouterComponent,
+  (state: Store, ownProps: ComponentRouterProps) => {
+    const qriRef = qriRefFromRoute(ownProps)
+    const showHistory = !!qriRef.path
+    return {
+      ...ownProps,
+      loading: showHistory ? selectWorkingDatasetIsLoading(state) : selectDatasetIsLoading(state),
+      fsiPath: selectFsiPath(state),
+      bodyPath: showHistory ? selectWorkingDataset(state).bodyPath : '',
+      qriRef
+    }
+  },
+  {
+    openToast,
+    closeToast,
+    write: writeDataset,
+    setRecentEditRef,
+    setRecentDatasetRef
+  }
+)

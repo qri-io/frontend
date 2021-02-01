@@ -8,10 +8,10 @@ export interface Dataset {
   structure?: Structure
   body?: Body
   bodyPath?: string
-  readme?: string
+  readme?: Readme
   transform?: Transform
   stats?: Stats
-  viz?: string
+  viz?: Viz
 }
 
 export default Dataset
@@ -27,18 +27,52 @@ export function NewDataset(d: Record<string,any>): Dataset {
     structure: NewStructure(d.structure || {}),
     body: d.body,
     bodyPath: d.bodyPath,
-    readme: d.readme,
+    readme: NewReadme(d.readme || {}),
     transform: NewTransform(d.transform || {}),
     stats: NewStats(d.stats || {}),
-    viz: d.viz
+    viz: NewViz(d.viz || {}),
   }
 }
 
-export function getComponentFromDatasetByName(d: Dataset, component: string): string | Record<string, any> | undefined {
+export const ComponentNames = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz', 'stats']
+
+export type ComponentName = 
+ | 'readme' 
+ | 'meta'
+ | 'body'
+ | 'structure'
+ | 'transform'
+ | 'commit'
+ | 'viz'
+ | 'stats'
+
+ export type ComponentStatus =
+ | 'modified'
+ | 'unmodified'
+ | 'removed'
+ | 'added'
+ | 'add'
+ | 'parse error'
+
+export interface Component {
+  qri: string
+}
+
+export function datasetComponents(d: Dataset): Component[] {
+  return ComponentNames.reduce((acc, name) => {
+    const comp = getComponentFromDatasetByName(d, name)
+    if (comp) {
+      acc.push(comp)
+    }
+    return acc
+  }, [] as Component[])
+}
+
+export function getComponentFromDatasetByName(d: Dataset, component: string): Component | undefined {
   if (!ComponentNames.includes(component)) {
     return
   }
-  
+
   switch (component) {
     case 'commit':
       return d.commit
@@ -47,7 +81,10 @@ export function getComponentFromDatasetByName(d: Dataset, component: string): st
     case 'structure':
       return d.structure
     case 'body':
-      return d.body
+      return {
+        qri: 'bd:0',
+        body: d.body
+      } as BodyComponent
     case 'readme':
       return d.readme
     case 'transform':
@@ -59,7 +96,7 @@ export function getComponentFromDatasetByName(d: Dataset, component: string): st
   }
 }
 
-export interface Commit {
+export interface Commit extends Component {
   author?: string
   message?: string
   path?: string
@@ -70,6 +107,7 @@ export interface Commit {
 
 export function NewCommit(d: Record<string,any>): Commit {
   return {
+    qri: d.qri || 'cm:0',
     author: d.author,
     message: d.message,
     path: d.path,
@@ -79,7 +117,7 @@ export function NewCommit(d: Record<string,any>): Commit {
   }
 }
 
-export interface Meta {
+export interface Meta extends Component {
   accessURL?: string
   accrualPeriodicity?: string
   citations?: Citation[]
@@ -99,7 +137,7 @@ export interface Meta {
 }
 
 export function NewMeta(d: Record<string,any>): Meta {
-  return Object.assign({}, d)
+  return Object.assign({ qri: 'md:0' }, d)
 }
 
 // meta.citations
@@ -123,7 +161,7 @@ export interface License {
   url: string
 }
 
-export interface Structure {
+export interface Structure extends Component {
   depth?: number
   entries: number
   format?: string
@@ -135,6 +173,7 @@ export interface Structure {
 
 export function NewStructure(d: Record<string,any>): Structure {
   return {
+    qri: d.qri || 'st:0',
     depth: d.depth,
     entries: d.entries,
     format: d.format,
@@ -172,13 +211,14 @@ export interface Schema {
   [key: string]: any
 }
 
-export interface Stats {
+export interface Stats extends Component {
   path: string
   stats: IStatTypes[]
 }
 
 export function NewStats(d: Record<string,any>): Stats {
   return {
+    qri: d.qri || 'sa:0',
     path: d.path,
     stats: d.stats,
   }
@@ -226,7 +266,7 @@ export interface INumericStats {
   }
 }
 
-export interface Transform {
+export interface Transform extends Component {
   bodyBytes?: string
   steps: TransformStep[]
   syntaxes?: Record<string,string>
@@ -234,6 +274,7 @@ export interface Transform {
 
 export function NewTransform(d: Record<string,any>): Transform {
   return {
+    qri: d.qri || 'tf:0',
     bodyBytes: d.bodyBytes,
     steps: d.steps
   }
@@ -255,7 +296,34 @@ export function NewTransformStep(data: Record<string,any>): TransformStep {
   }
 }
 
-export type Body = Record<string, any> | any[][]
+export interface Readme extends Component {
+  scriptPath: string
+  script: string
+}
 
-export const ComponentNames = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz', 'stats']
-export type ComponentTypes = 'readme' | 'meta' | 'body' | 'structure' | 'transform' | 'commit' | 'viz' | 'stats'
+export function NewReadme(d: Record<string,any>): Readme {
+  return {
+    qri: d.qri || 'rm:0',
+    scriptPath: d.scriptPath,
+    script: d.script
+  }
+}
+
+export interface BodyComponent extends Component {
+  body: Body
+}
+
+export interface Viz extends Component {
+  scriptPath?: string
+  script?: string
+}
+
+export function NewViz(d: Record<string,any>): Viz {
+  return {
+    qri: d.qri || 'vz:0',
+    scriptPath: d.scriptPath,
+    script: d.script
+  }
+}
+
+export type Body = Record<string, any> | any[][]
