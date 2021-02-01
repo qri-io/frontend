@@ -11,6 +11,7 @@ import { workflowReducer, WorkflowState } from '../features/workflow/state/workf
 import { AppState, appReducer } from '../features/app/state/appState';
 import { CollectionState, collectionReducer } from '../features/collection/state/collectionState';
 import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
+import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
 
 export const history = createBrowserHistory()
 
@@ -22,6 +23,7 @@ export interface RootState {
   app: AppState
   collection: CollectionState
   dataset: DatasetState
+  scroller: ScrollerState
 }
 
 const rootReducer = (h: History) => combineReducers({
@@ -35,6 +37,7 @@ const rootReducer = (h: History) => combineReducers({
   app: appReducer,
   collection: collectionReducer,
   dataset: datasetReducer,
+  scroller: scrollerReducer
 })
 
 export function configureStore(preloadedState?: any) {
