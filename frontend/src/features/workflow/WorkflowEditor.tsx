@@ -11,6 +11,7 @@ import RunBar from './RunBar';
 import { Workflow } from '../../qrimatic/workflow';
 import Scroller from '../scroller/Scroller';
 import ScrollElement from '../scroller/ScrollElement';
+import IntersectionObserver from '../scroller/Intersect'
 
 export interface WorkflowEditorProps {
   workflow: Workflow
@@ -45,6 +46,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
     <Scroller className='overflow-y-auto p-4 text-left h-full flex-grow'>
       <WorkflowTriggersEditor triggers={workflow.triggers} />
       <ScrollElement name='script' />
+      <IntersectionObserver />
       <section className='bg-white shadow-sm mb-4'>
           <div className='bg-white sticky top-0 z-10 p-4 flex bg-opacity-90'>
             <div className='flex-grow'>
