@@ -51,11 +51,11 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
           <div>
             <RunBar
               status={run ? run.status : RunState.waiting }
-              onRun={() => {
+              onRun={(mode: 'apply' | 'save') => {
                 setCollapseStates({})
                 dispatch(runWorkflow(workflow))
               }}
-              onRunCancel={() => { alert('cannot cancel runs yet') }}
+              onCancel={() => { alert('cannot cancel runs yet') }}
             />
           </div>
         </div>
