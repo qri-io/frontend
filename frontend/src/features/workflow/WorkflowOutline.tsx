@@ -15,18 +15,14 @@ export interface WorkflowOutlineProps {
 const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDeploy }) => {
   return (
     <div className='outline h-full w-56 flex-none'>
-      <div className='p-4 text-left'>
-        <div className='font-semibold text-gray-600 mb-2'>Triggers</div>
-          <div className='text-xs inline-block py-1 px-2 rounded border'>
-            <Icon icon='clock'/>
+      <div className='pt-4 pb-4 pl-4 text-left'>
+        <div className='mb-2'>
+          <div className='font-semibold text-gray-900 mb-1 uppercase text-xs'>Triggers</div>
+          <div className='text-xs text-gray-500 bg-gray-200 inline-block py-0 px-2 rounded-xl border ml-2'>
+            <Icon icon='clock' size='sm' className='mr-1'/> <span>schedule</span>
           </div>
-          <div className='text-xs inline-block py-1 px-2 rounded border'>
-            <Icon icon='projectDiagram'/>
-          </div>
-          <div className='text-xs inline-block py-1 px-2 rounded border'>
-            <Icon icon='bolt'/>
-          </div>
-        <div  className='font-semibold text-gray-600 mb-2'>
+        </div>
+        <div  className='font-semibold text-gray-900 mb-2 uppercase text-xs tracking-wide'>
           Script {(run && run.status === RunState.running) && <div className='float-right text-blue-500'> <Icon icon='spinner' spin /></div>}
         </div>
         <div className='mb-2'>
@@ -36,25 +32,19 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
               r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: RunState.waiting })
             }
             return (
-              <div key={i} className='text-sm ml-2'>
-                <span className='font-black text-gray-400'>{i+1}</span> &nbsp; {step.name}
+              <div key={i} className='text-sm ml-2 mb-1 text-gray-500 font-semibold'>
+                <span className='font-black text-gray-500'>{i+1}</span> &nbsp; {step.name}
                 {r && <div className='float-right text-green-500'><RunStateIcon state={r.status || RunState.waiting} /></div>}
               </div>
             )
           })}
         </div>
-        <div className='font-semibold text-gray-600 mb-2'>On Completion</div>
-        <div className='text-xs inline-block py-1 px-2 rounded border'>
-          <Icon icon='cloudUpload'/>
-        </div>
-        <div className='text-xs inline-block py-1 px-2 rounded border'>
-          <Icon icon='bolt'/>
-        </div>
-        <div className='text-xs inline-block py-1 px-2 rounded border'>
-          <Icon icon='envelope'/>
+        <div className='font-semibold text-gray-900 mb-2 uppercase text-xs tracking-wide'>On Completion</div>
+        <div className='text-xs text-gray-500 bg-gray-200 inline-block py-0 px-2 rounded-xl border ml-2'>
+          <Icon icon='cloudUpload' size='sm' className='mr-1'/> <span>push to cloud</span>
         </div>
         <button
-          className='mt-4 py-1 px-4 w-full font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-500 rounded'
+          className='mt-4 py-1 px-4 w-full font-semibold shadow-md text-white bg-qrilightblue hover:bg-qrilightblue-light rounded'
           onClick={() => { onDeploy() }}
         >
           Deploy Workflow

@@ -9,7 +9,7 @@ export interface DatasetNavSidebarProps {
 }
 
 const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
-  <div className='side-nav border-r border-1 h-full'>
+  <div className='side-nav h-full bg-white'>
     <SideNavItem
       id='workflow-editor'
       icon='code'

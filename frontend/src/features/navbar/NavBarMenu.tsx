@@ -17,7 +17,7 @@ const NavBarMenu: React.FC<NavBarMenuProps> = ({ items = [] }) => {
 
   return (
     <div className='relative mr-5 ml-1'>
-      <div className='text-gray-400' onClick={() => { setOpen(!open) }}><Icon icon='bars' /></div>
+      <div className='text-white' onClick={() => { setOpen(!open) }}><Icon icon='bars' /></div>
       {open &&
         <div className='absolute bg-gray-600 p-5'>
           {items.map((item, i) => {

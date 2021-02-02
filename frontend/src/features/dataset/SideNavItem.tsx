@@ -17,7 +17,7 @@ const SideNavItem: React.FC<SideNavItemProps> = ({ id, icon, to, tooltip }) => {
   return (
       <Link to={to} className=''>
         <div
-          className={`text-gray-500 text-center h-10 w-10 m-3 rounded py-2 hover:bg-gray-300 transition-all duration-200 ${active && 'bg-gray-300'}`}
+          className={`text-center h-10 w-10 m-3 rounded py-2 hover:bg-qrilightblue hover:text-white transition-all duration-200 ${active ? 'bg-qrilightblue text-white' : 'text-gray-400'}`}
           data-tip
           data-for={id}
         >

@@ -23,7 +23,7 @@ const RunBar: React.FC<RunBarProps> = ({
       </div>
       <div className='flex-1 text-right'>
         <button
-          className='w-40 py-1 px-4 mx-1 font-semibold shadow-md text-white bg-gray-600 hover:bg-gray-500 rounded'
+          className='w-40 py-1 px-4 mx-1 font-semibold shadow-md text-white bg-qrilightblue hover:bg-qrilightblue-light rounded'
           onClick={() => {(status === RunState.running) ? onRunCancel() : onRun() }}
         >{(status === RunState.running) ? 'Cancel' : 'Dry Run' }</button>
       </div>

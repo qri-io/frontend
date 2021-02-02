@@ -18,6 +18,7 @@ import {
   faPlus,
   faTimes,
   faExclamationCircle,
+  faSortDown,
   faSpinner,
   faTable,
 
@@ -58,6 +59,7 @@ const icons: Record<string, IconDefinition> = {
   'check': faCheck,
   'close': faCheck, // TODO (b5) - close icon def
   'plus': faPlus,
+  'sortDown': faSortDown,
   'times': faTimes,
   'exclamationCircle': faExclamationCircle,
   'spinner': faSpinner,
