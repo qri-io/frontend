@@ -8,7 +8,8 @@ import {
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
   SET_WORKFLOW,
-  SET_WORKFLOW_REF
+  SET_WORKFLOW_REF,
+  SET_RUN_MODE
 } from './workflowState'
 
 export function mapWorkflow(d: object | []): Workflow {
@@ -59,6 +60,18 @@ export function changeWorkflowTrigger(index: number, trigger: WorkflowTrigger): 
     type: WORKFLOW_CHANGE_TRIGGER,
     index,
     trigger
+  }
+}
+
+export interface RunModeAction {
+  type: string
+  mode: 'apply' | 'save'
+}
+
+export function setRunMode(mode: 'apply' | 'save'): RunModeAction {
+  return {
+    type: SET_RUN_MODE,
+    mode,
   }
 }
 

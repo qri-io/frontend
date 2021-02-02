@@ -58,11 +58,10 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
                   setCollapseStates({})
                   dispatch(runWorkflow(workflow))
                 }}
-                onRunCancel={() => { alert('cannot cancel runs yet') }}
+                onCancel={() => { alert('cannot cancel runs yet') }}
                 />
             </div>
           </div>
-
         <div className='px-4'>
           {workflow.steps && workflow.steps.map((step, i) => {
             let r
