@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
 import { useParams } from 'react-router-dom';
+import SyncLoader from 'react-spinners/SyncLoader'
 
 import { newQriRef } from '../../qri/ref';
 import HistoryList from '../history/HistoryList';
@@ -21,6 +22,8 @@ const Dataset: React.FC<any> = () => {
     dispatch(loadDataset(qriRef))
   }, [dispatch, qriRef])
 
+  const [showSpinner, setShowSpinner] = useState(false)
+
   return (
     <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
       <NavBar menu={[
@@ -29,7 +32,7 @@ const Dataset: React.FC<any> = () => {
       ]}>
         <DatasetTitleMenu qriRef={qriRef} />
       </NavBar>
-      <div className='flex flex-grow overflow-hidden'>
+      <div className='flex flex-grow overflow-hidden relative'>
         <DatasetNavSidebar qriRef={qriRef} />
         <div className='h-full overflow-hidden'>
           <Switch>
@@ -39,6 +42,18 @@ const Dataset: React.FC<any> = () => {
             <Route path='/ds/:username/:dataset/history'><HistoryList /></Route>
           </Switch>
         </div>
+        {
+          showSpinner && (
+            <div className='absolute h-full flex-grow w-full bg-white z-20 flex flex-col items-center justify-center'>
+              <div className='mx-auto mb-8'>
+                <SyncLoader color='#4FC7F3' />
+              </div>
+              <div className="text-3xl font-bold leading-tighter tracking-tighter mb-4  mx-auto">
+                Deploying workflow...
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
   )

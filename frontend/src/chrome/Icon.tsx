@@ -15,6 +15,8 @@ import {
   faHdd,
   faList,
   faCheck,
+  faPauseCircle,
+  faPlayCircle,
   faPlus,
   faTimes,
   faExclamationCircle,
@@ -58,6 +60,8 @@ const icons: Record<string, IconDefinition> = {
   'list': faList,
   'check': faCheck,
   'close': faCheck, // TODO (b5) - close icon def
+  'pauseCircle': faPauseCircle,
+  'playCircle': faPlayCircle,
   'plus': faPlus,
   'sortDown': faSortDown,
   'times': faTimes,

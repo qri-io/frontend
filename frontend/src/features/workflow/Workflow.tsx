@@ -17,9 +17,10 @@ interface WorkflowLocationState {
 
 export interface WorkflowProps {
   qriRef: QriRef
+  setShowSpinner: any
 }
 
-const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
+const Workflow: React.FC<WorkflowProps> = ({ qriRef, setShowSpinner }) => {
   const dispatch = useDispatch()
   const location = useLocation<WorkflowLocationState>()
   const workflow = useSelector(selectWorkflow)
@@ -40,7 +41,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
 
   return (
     <div className='flex h-full'>
-      <WorkflowOutline workflow={workflow} run={latestRun} onDeploy={() => { dispatch(showModal(ModalType.deployWorkflow)) }} />
+      <WorkflowOutline workflow={workflow} run={latestRun} onDeploy={() => { dispatch(showModal(ModalType.deployWorkflow)) }} setShowSpinner={setShowSpinner} />
       <WorkflowEditor workflow={workflow} run={latestRun} />
     </div>
   )
