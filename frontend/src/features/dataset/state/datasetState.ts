@@ -5,11 +5,11 @@ import Dataset, { NewDataset } from '../../../qri/dataset';
 export const selectDataset = (state: RootState): Dataset => state.dataset.dataset
 
 export interface DatasetState {
-  dataset: Dataset,
+  dataset: Dataset
 }
 
 const initialState: DatasetState = {
-  dataset: NewDataset({}),
+  dataset: NewDataset({})
 }
 
 export const datasetReducer = createReducer(initialState, {

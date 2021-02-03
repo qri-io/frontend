@@ -2,24 +2,19 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
-import { Structure as IStructure } from '../models/dataset'
-import Store from '../models/store'
+import { Structure } from '../../../qri/dataset'
 
-import fileSize, { abbreviateNumber } from '../utils/fileSize'
-import { connectComponentToProps } from '../utils/connectComponentToProps'
+import fileSize, { abbreviateNumber } from '../fileSize'
 
-import { selectDataset, selectDatasetIsLoading } from '../selections'
-
-import ExternalLink from './ExternalLink'
-import LabeledStats from './item/LabeledStats'
-import FormatConfigHistory from './FormatConfigHistory'
-import SpinnerWithIcon from './chrome/SpinnerWithIcon'
-import Schema from './structure/Schema'
+import LabeledStats from '../LabeledStats'
+import FormatConfigHistory from '../FormatConfigHistory'
+// import SpinnerWithIcon from './chrome/SpinnerWithIcon'
+import Schema from '../Schema'
 
 export interface StructureProps {
-  data: IStructure
-  showConfig?: boolean
-  loading: boolean
+  data?: Structure
+  // showConfig?: boolean
+  // loading: boolean
 }
 
 export interface FormatConfigOption {
@@ -64,7 +59,7 @@ export const formatConfigOptions: { [key: string]: FormatConfigOption } = {
   }
 }
 
-export function getStats (data: IStructure): any[] {
+export function getStats (data: Structure): any[] {
   return [
     { 'label': 'format', 'value': data.format ? data.format.toUpperCase() : 'unknown' },
     { 'label': 'body size', 'value': data.length ? fileSize(data.length) : '—' },
@@ -74,12 +69,13 @@ export function getStats (data: IStructure): any[] {
   ]
 }
 
-export const StructureComponent: React.FunctionComponent<StructureProps> = (props) => {
-  const { data, showConfig = true, loading } = props
+export const StructureComponent: React.FunctionComponent<StructureProps> = ({data}) => {
 
-  if (loading) {
-    return <SpinnerWithIcon loading />
-  }
+  if (!data) return null
+
+  // if (loading) {
+  //   return <SpinnerWithIcon loading />
+  // }
 
   let schema
   if (data && data.schema) {
@@ -89,20 +85,19 @@ export const StructureComponent: React.FunctionComponent<StructureProps> = (prop
   return (
     <div className='structure'>
       <div className='stats'><LabeledStats data={getStats(data)} size='lg' /></div>
-      { showConfig && <FormatConfigHistory structure={data} />
-      }
+      <FormatConfigHistory structure={data} />
       <div>
         <h4 className='schema-title'>
           Schema
           &nbsp;
-          <ExternalLink id='json-schema' href='https://json-schema.org/'>
+          <a id='json-schema' href='https://json-schema.org/' target='_blank' rel='noreferrer'>
             <span
               data-tip={'JSON schema that describes the structure of the dataset. Click here to learn more about JSON schemas'}
               className='text-input-tooltip'
             >
               <FontAwesomeIcon icon={faInfoCircle} size='sm'/>
             </span>
-          </ExternalLink>
+          </a>
         </h4>
       </div>
       <Schema
@@ -113,12 +108,4 @@ export const StructureComponent: React.FunctionComponent<StructureProps> = (prop
   )
 }
 
-export default connectComponentToProps(
-  StructureComponent,
-  (state: Store) => {
-    return {
-      data: selectDataset(state).structure,
-      loading: selectDatasetIsLoading(state)
-    }
-  }
-)
+export default StructureComponent 

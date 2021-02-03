@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Dataset from '../../qri/dataset'
+import Dataset, { ComponentName } from '../../qri/dataset'
 import ComponentItem from './ComponentItem'
-import { datasetComponents, ComponentStatus } from '../../qri/dataset'
+import { ComponentStatus } from '../../qri/dataset'
 
 // import { Status, SelectedComponent, ComponentStatus, RouteProps } from '../../models/store'
 // import { pathToDataset } from '../../paths'
@@ -53,13 +53,15 @@ export const componentsInfo = [
 export interface ComponentListProps {
   // qriRef: QriRef
   dataset: Dataset
+  onClick: (component: ComponentName) => void
   // components?: SelectedComponent[]
   // status: Status
   // selectedComponent: SelectedComponent
 }
 
 const ComponentList: React.FC<ComponentListProps> = ({
-  dataset
+  dataset,
+  onClick
   // qriRef,
   // status,
   // components = [],
@@ -72,12 +74,11 @@ const ComponentList: React.FC<ComponentListProps> = ({
   //   path = ''
   // } = qriRef
 
-  const components = datasetComponents(dataset)
-
+  const componentNames = Object.keys(dataset)
   return (
     <div>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
-          if (components.includes(name)) {
+          if (componentNames.includes(name)) {
             var fileStatus: ComponentStatus = 'unmodified'
             // if (status[name]) {
             //   fileStatus = status[name].status
@@ -93,7 +94,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
                 // selected={false}
                 tooltip={tooltip}
                 // onClick={(component: SelectedComponent) => history.push(pathToDataset(username, datasetName, path, component))}
-                onClick={() => {}}
+                onClick={onClick}
               />
             )
           }

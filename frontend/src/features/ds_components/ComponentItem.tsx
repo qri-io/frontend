@@ -4,7 +4,7 @@ import { Action } from 'redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
-import { ComponentStatus, SelectedComponent } from '../../models/store'
+import { ComponentStatus, ComponentName } from '../../qri/dataset'
 
 import Icon from '../../chrome/Icon'
 import StatusDot from '../../chrome/StatusDot'
@@ -19,12 +19,13 @@ export interface ComponentItemProps {
   status?: ComponentStatus
   disabled?: boolean
   tooltip?: string
-  onClick?: (component: SelectedComponent) => Action | void
+  onClick?: (component: ComponentName) => Action | void
 }
 
 export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (props) => {
-  const { status = 'unmodified' } = props
+  const { status = 'unmodified', disabled = false } = props
 
+  console.log(disabled)
   let statusIcon = <StatusDot status={status} />
 
   if (props.displayName.toLowerCase() === 'commit') {
@@ -36,16 +37,18 @@ export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (props
       id={`${props.displayName.toLowerCase()}-status`}
       className={classNames('sidebar-list-item', 'sidebar-list-item-text', {
         'selected': props.selected,
-        'disabled': props.disabled
+        'disabled': disabled,
+        'hover:cursor-pointer': !disabled
       })}
       onClick={() => {
         if (props.onClick && props.displayName) {
-          props.onClick(props.displayName.toLowerCase() as SelectedComponent)
+          console.log('clicked', props.displayName)
+          props.onClick(props.displayName.toLowerCase() as ComponentName)
         }
       }}
     >
       {props.icon && (<div className='icon-column'>
-        <Icon icon={props.icon} size='sm' color={props.disabled ? 'medium' : props.color}/>
+        <Icon icon={props.icon} size='sm' color={disabled ? 'medium' : props.color}/>
       </div>)}
       <div className='text-column'>
         <div className='text'>{props.displayName}</div>

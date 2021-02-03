@@ -1,14 +1,14 @@
-import React from 'react'
-import { useParams } from 'react-router'
+import React, { useState } from 'react'
+// import { useLocation, useParams, useRouteMatch } from 'react-router'
 
-import Dataset from '../../qri/dataset'
-import { QriRef } from '../../qri/ref'
+import Dataset, { ComponentName } from '../../qri/dataset'
+// import { QriRef } from '../../qri/ref'
 import ComponentList from './ComponentList'
 // import ComponentRouter from './ComponentRouter'
-import DatasetHeader from './DatasetHeader'
-import DatasetLayout from './DatasetLayout'
-import Layout from './Layout'
-import LogList from './LogList'
+// import DatasetHeader from './DatasetHeader'
+// import DatasetLayout from './DatasetLayout'
+// import Layout from './Layout'
+// import LogList from './LogList'
 import Resizable from '../../chrome/Resizable'
 import DatasetComponent from './DatasetComponent'
 
@@ -23,15 +23,14 @@ export interface DatasetProps {
 }
 
 export const DatasetComponents: React.FC<DatasetProps> = ({
-  dataset,
-  isPublished,
-  fsiPath,
-  inNamespace,
-  fetchWorkbench,
-  setModal
+  dataset
+  // isPublished,
+  // fsiPath,
+  // inNamespace,
+  // fetchWorkbench,
+  // setModal
 }) => {
-  const componentName = 'body'
-
+  const [selectedComponent, setSelectedComponent] = useState<ComponentName>('body')
   // const publishUnpublishDataset = () => {
   //   inNamespace && isPublished
   //     ? setModal({
@@ -102,10 +101,10 @@ export const DatasetComponents: React.FC<DatasetProps> = ({
           onResize={(s: number) => { console.log(s) }}
           maximumWidth={500}
         >
-          <ComponentList dataset={dataset} />
+          <ComponentList dataset={dataset} onClick={setSelectedComponent}/>
         </Resizable>
         <div id='DatasetComponents-main-content' className='main-content'>
-          <DatasetComponent dataset={dataset} componentName={componentName} />
+          <DatasetComponent dataset={dataset} componentName={selectedComponent} />
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Structure as IStructure } from '../models/dataset'
-import { formatConfigOptions } from './Structure'
+import { Structure } from '../../qri/dataset'
+import { formatConfigOptions } from './datasetComponents/Structure'
 
 export interface FormatConfigHistoryProps {
-  structure: IStructure
+  structure: Structure
 }
 
 const FormatConfigHistory: React.FunctionComponent<FormatConfigHistoryProps> = ({ structure }) => {

@@ -1,23 +1,19 @@
 import React from 'react'
 
-import Store, { RouteProps } from '../../../models/store'
-import { Meta, Citation, License, User } from '../../../models/dataset'
-import { QriRef, qriRefFromRoute } from '../../../models/qriRef'
+// import Store, { RouteProps } from '../../../models/store'
+import { Meta, Citation, License, User, StandardFieldNames } from '../../../qri/dataset'
+// import { QriRef, qriRefFromRoute } from '../../../models/qriRef'
 
-import { connectComponentToProps } from '../../../utils/connectComponentToProps'
+// import { connectComponentToProps } from '../../../utils/connectComponentToProps'
 
-import { selectDataset, selectDatasetIsLoading } from '../../../selections'
+// import { selectDataset, selectDatasetIsLoading } from '../../../selections'
+// import ExternalLink from '../../ExternalLink'
+import KeyValueTable from '../KeyValueTable'
+// import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
 
-import { isUserArray } from '../../form/MetadataMultiInput'
-import ExternalLink from '../../ExternalLink'
-import KeyValueTable from '../../KeyValueTable'
-import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
-import { standardFields } from './MetadataEditor'
-
-interface MetadataProps extends RouteProps {
-  qriRef: QriRef
-  data: Meta
-  loading: boolean
+interface MetaProps {
+  data?: Meta
+  // loading: boolean
 }
 
 const renderValue = (value: string | string[] | object) => {
@@ -39,13 +35,13 @@ const renderChips = (value: string[] | undefined) => (
 )
 
 const renderLicense = (license: License) => (
-  <ExternalLink id='render-license' href={license.url}>
+  <a id='render-license' href={license.url} target='_blank' rel="noreferrer">
     {license.type}
-  </ExternalLink>
+  </a>
 )
 
 const renderURL = (url: string) => (
-  <ExternalLink id='render-url' href={url}>{url}</ExternalLink>
+  <a id='render-url' href={url} target='_blank' rel="noreferrer">{url}</a>
 )
 
 const renderArrayItemsTable = (value: any[]) => {
@@ -59,10 +55,6 @@ const renderArrayItemsTable = (value: any[]) => {
 }
 
 const renderMultiStructured = (value: User[] | Citation[]) => {
-  if (isUserArray(value)) {
-    return renderArrayItemsTable(value)
-  }
-
   return renderArrayItemsTable(value)
 }
 
@@ -110,16 +102,16 @@ const renderTable = (keys: string[], data: Meta) => {
   )
 }
 
-export const MetadataComponent: React.FunctionComponent<MetadataProps> = ({ data, loading }) => {
-  if (loading) {
-    return <SpinnerWithIcon loading />
-  }
+export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
+
+  if (!data) return null
+
 
   // TODO (b5) - this should happen at the point of ingest from the API
   const ignoreFields = ['qri', 'path']
-  const standard = standardFields.filter((key) => !!data[key])
+  const standard = StandardFieldNames.filter((key) => !!data[key])
   const extra = Object.keys(data).filter((key) => {
-    return !(~standardFields.findIndex((sKey) => (key === sKey)) || ~ignoreFields.findIndex((iKey) => (key === iKey)))
+    return !(~StandardFieldNames.findIndex((sKey) => (key === sKey)) || ~ignoreFields.findIndex((iKey) => (key === iKey)))
   })
 
   return (
@@ -135,16 +127,4 @@ export const MetadataComponent: React.FunctionComponent<MetadataProps> = ({ data
   )
 }
 
-// TODO (b5) - this component doesn't need to be a container. Just feed it the right data
-export default connectComponentToProps(
-  MetadataComponent,
-  (state: Store, ownProps: MetadataProps) => {
-    // get data for the currently selected component
-    return {
-      ...ownProps,
-      qriRef: qriRefFromRoute(ownProps),
-      loading: selectDatasetIsLoading(state),
-      data: selectDataset(state).meta
-    }
-  }
-)
+export default MetaComponent

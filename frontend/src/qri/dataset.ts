@@ -1,3 +1,4 @@
+import { JSONSchema7 } from "json-schema"
 
 export interface Dataset {
   peername: string
@@ -140,6 +141,25 @@ export function NewMeta(d: Record<string,any>): Meta {
   return Object.assign({ qri: 'md:0' }, d)
 }
 
+
+export const StandardFieldNames = [
+  'accessUrl',
+  'accrualPeriodicity',
+  'citations',
+  'contributors',
+  'description',
+  'downloadUrl',
+  'homeUrl',
+  'identifier',
+  'keywords',
+  'language',
+  'license',
+  'readmeUrl',
+  'title',
+  'theme',
+  'version'
+]
+
 // meta.citations
 export interface Citation {
   name: string
@@ -164,7 +184,7 @@ export interface License {
 export interface Structure extends Component {
   depth?: number
   entries: number
-  format?: string
+  format: string
   length: number
   errCount: number
   formatConfig?: CSVFormatConfig | JSONFormatConfig | XLSXFormatConfig
@@ -296,6 +316,14 @@ export function NewTransformStep(data: Record<string,any>): TransformStep {
   }
 }
 
+export function scriptFromTransform(t: Transform): string {
+  var s = ''
+  t.steps.forEach((step: TransformStep) => {
+    s += step.script + '\n'
+  })
+  return s
+}
+
 export interface Readme extends Component {
   scriptPath: string
   script: string
@@ -327,3 +355,14 @@ export function NewViz(d: Record<string,any>): Viz {
 }
 
 export type Body = Record<string, any> | any[][]
+
+export function schemaToColumns (schema: Schema): ColumnProperties[] {
+  if (schema && schema.items && isJSONSchema7(schema.items) && schema.items.items && Array.isArray(schema.items.items)) {
+    return schema.items.items as ColumnProperties[]
+  }
+  return []
+}
+
+function isJSONSchema7 (x: any): x is JSONSchema7 {
+  return (x as JSONSchema7).type !== undefined
+}
