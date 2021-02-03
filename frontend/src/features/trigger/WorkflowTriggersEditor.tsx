@@ -4,6 +4,7 @@ import { WorkflowTrigger } from '../../qrimatic/workflow';
 
 import { showModal } from '../app/state/appActions';
 import { ModalType } from '../app/state/appState';
+import ScrollAnchor from '../scroller/ScrollAnchor';
 import Block from '../workflow/Block';
 import { changeWorkflowTrigger } from '../workflow/state/workflowActions';
 import CronTriggerEditor from './CronTriggerEditor';
@@ -38,19 +39,20 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
   const dispatch = useDispatch();
   return (
     <section className='p-4 bg-white shadow-sm mb-4'>
-      <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Triggers</h2>
-      <div className='text-xs mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
-      <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
-        {triggers.map((trigger: WorkflowTrigger, i) => {
-          switch (trigger.type) {
-            case 'cron':
-              return <CronTriggerEditor key={i} trigger={trigger} onChange={(t: WorkflowTrigger) => { dispatch(changeWorkflowTrigger(i, t)) }}/>
-            default:
-              return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
-          }
-         })}
-      </div>
-    </section>
+        <ScrollAnchor id='triggers'/>
+        <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Triggers</h2>
+        <div className='text-xs mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
+        <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
+          {triggers.map((trigger: WorkflowTrigger, i) => {
+            switch (trigger.type) {
+              case 'cron':
+                return <CronTriggerEditor key={i} trigger={trigger} onChange={(t: WorkflowTrigger) => { dispatch(changeWorkflowTrigger(i, t)) }}/>
+              default:
+                return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
+            }
+          })}
+        </div>
+      </section>
     )
 }
 

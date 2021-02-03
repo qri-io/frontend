@@ -4,6 +4,7 @@ import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
 import RunStateIcon from './RunStateIcon'
+import ScrollAnchor from '../scroller/ScrollAnchor'
 
 export interface WorkflowCellProps {
   index: number
@@ -55,21 +56,22 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
 
   return (
     <div className='w-full my-4'>
-      <header>
-        <div className='text-center w-10 h-100 py-3 float-left'>
-          <h1 className='font-black text-3xl text-gray-300' >{index + 1}</h1>
-        </div>
-        <div className='py-2 px-5'>
-          {run && <p className='float-right'>{run.duration}</p>}
-          <h3 className='text-lg text-gray-500 font-semibold cursor-pointer' onClick={() => {
-            onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
-          }}>{name}{run && <RunStateIcon state={run.status} />}</h3>
-          <div className='text-xs mb-2'>{description}</div>
-        </div>
-      </header>
-      {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-      {(collapseState === 'all' || collapseState === 'only-output') && <Output data={run?.output} />}
-    </div>
+        <ScrollAnchor id={step.name} />
+        <header>
+          <div className='text-center w-10 h-100 py-3 float-left'>
+            <h1 className='font-black text-3xl text-gray-300' >{index + 1}</h1>
+          </div>
+          <div className='py-2 px-5'>
+            {run && <p className='float-right'>{run.duration}</p>}
+            <h3 className='text-lg text-gray-500 font-semibold cursor-pointer' onClick={() => {
+              onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
+            }}>{name}{run && <RunStateIcon state={run.status} />}</h3>
+            <div className='text-xs mb-2'>{description}</div>
+          </div>
+        </header>
+        {(collapseState === 'all' || collapseState === 'only-editor') && editor}
+        {(collapseState === 'all' || collapseState === 'only-output') && <Output data={run?.output} />}
+      </div>
   )
 }
 
