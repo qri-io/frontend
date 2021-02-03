@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
+
 import { selectScrollerPos } from './state/scrollerState'
 
-interface ScrollerProps {
+export interface ScrollerProps {
   // optional className to pass in styling
   className?: string
 }
@@ -24,6 +25,7 @@ const Scroller: React.FC<ScrollerProps> = ({className, children})=> {
       ref.current.scrollTo({top: pos, behavior: 'smooth'})
     }
   }, [pos])
+
   return (
     <div ref={ref} className={className}>
       {children}

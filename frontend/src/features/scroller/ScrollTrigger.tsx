@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch } from "react-redux"
-import { setScrollElement } from "./state/scrollerActions"
+import { setScrollAnchor } from "./state/scrollerActions"
 
-interface ScrollTriggerProps {
-  // the name of the component this trigger will cause the 
+export interface ScrollTriggerProps {
+  // the id of the component this trigger will cause the 
   // app to scroll to
-  name: string
+  target: string
 }
 
 // `ScrollTrigger` name must match the name of the associated `ScrollElement` 
@@ -14,15 +14,15 @@ interface ScrollTriggerProps {
 // As the mechanisms for showing and tracking scroll location are not tied to this
 // system, we need to be able to click the same trigger twice in a row, after 
 // scrolling in between, and still activate the trigger
-const ScrollTrigger: React.FC<ScrollTriggerProps> = ({ name, children }) => {
+const ScrollTrigger: React.FC<ScrollTriggerProps> = ({ target, children }) => {
   const dispatch = useDispatch()
   return <div
     className='hover:cursor-pointer'
     onClick={() => {
       new Promise(() => {
-        dispatch(setScrollElement(name))
+        dispatch(setScrollAnchor(target))
       }).then (() =>
-        dispatch(setScrollElement(''))
+        dispatch(setScrollAnchor(''))
       )
     }}>
     {children}

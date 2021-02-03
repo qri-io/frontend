@@ -12,14 +12,14 @@ export interface SetScrollerPosAction {
   }
 }
 
-export interface SetScrollElementAction {
+export interface SetScrollAnchorAction {
   type: string
-  scrollElement: string
+  id: string
 }
 
- export function setScrollElement(scrollElement: string): SetScrollElementAction {
+ export function setScrollAnchor(id: string): SetScrollAnchorAction {
   return {
     type: SET_SCROLL_ELEMENT,
-    scrollElement
+    id
   }
 }

@@ -4,7 +4,7 @@ import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
 import RunStateIcon from './RunStateIcon'
-import ScrollElement from '../scroller/ScrollElement'
+import ScrollAnchor from '../scroller/ScrollAnchor'
 
 export interface WorkflowCellProps {
   index: number
@@ -56,7 +56,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
 
   return (
     <div className='w-full my-4'>
-        <ScrollElement name={step.name} />
+        <ScrollAnchor id={step.name} />
         <header>
           <div className='text-center w-10 h-100 py-3 float-left'>
             <h1 className='font-black text-3xl text-gray-300' >{index + 1}</h1>
