@@ -10,7 +10,7 @@ const Code: React.FunctionComponent<CodeProps> = (props: CodeProps) => {
 
   return (
     <div style={{ overflowX: 'auto' }} className="code">
-      <pre style={{ float: 'left', margin: '0 20px', color: '#bbb' }}>{lines.map((_, i) => (`${i}\n`))}</pre>
+      <pre style={{ float: 'left', margin: '0 20px', color: '#bbb' }}>{lines.map((_, i) => (`${i+1}\n`))}</pre>
       <pre>{data}</pre>
     </div>
   )
