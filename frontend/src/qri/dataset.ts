@@ -1,3 +1,5 @@
+import { JSONSchema7 } from "json-schema"
+import { QriRef } from "./ref"
 
 export interface Dataset {
   peername: string
@@ -8,37 +10,93 @@ export interface Dataset {
   structure?: Structure
   body?: Body
   bodyPath?: string
-  readme?: string
+  readme?: Readme
   transform?: Transform
   stats?: Stats
-  viz?: string
+  viz?: Viz
 }
 
 export default Dataset
 
-export function NewDataset(d: Record<string,any>): Dataset {
+export function qriRefFromDataset(dataset: Dataset): QriRef {
   return {
-    peername: d.peername || '',
-    name: d.name || '',
-    path: d.path || '',
-
-    commit: NewCommit(d.commit || {}),
-    meta: NewMeta(d.meta || {}),
-    structure: NewStructure(d.structure || {}),
-    body: d.body,
-    bodyPath: d.bodyPath,
-    readme: d.readme,
-    transform: NewTransform(d.transform || {}),
-    stats: NewStats(d.stats || {}),
-    viz: d.viz
+    username: dataset.peername,
+    name: dataset.name,
+    path: dataset.path
   }
 }
 
-export function getComponentFromDatasetByName(d: Dataset, component: string): string | Record<string, any> | undefined {
+export function NewDataset(d: Record<string,any>): Dataset {
+  const dataset: Dataset = {
+    peername: d.peername || '',
+    name: d.name || '',
+    path: d.path || '',
+    body: d.body,
+    bodyPath: d.bodyPath
+  }
+  if (d.commit) {
+    dataset.commit = NewCommit(d.commit)
+  }
+  if (d.meta) {
+    dataset.meta = NewMeta(d.meta)
+  }
+  if (d.structure) {
+    dataset.structure = NewStructure(d.structure)
+  }
+  if (d.readme) {
+    dataset.readme = NewReadme(d.readme)
+  }
+  if (d.transform) {
+    dataset.transform = NewTransform(d.transform)
+  }
+  if (d.stats) {
+    dataset.stats = NewStats(d.stats)
+  }
+  if (d.viz) {
+    dataset.viz = NewViz(d.viz)
+  }
+  return dataset
+}
+
+export const ComponentNames = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz', 'stats']
+
+export type ComponentName = 
+ | 'readme' 
+ | 'meta'
+ | 'body'
+ | 'structure'
+ | 'transform'
+ | 'commit'
+ | 'viz'
+ | 'stats'
+
+ export type ComponentStatus =
+ | 'modified'
+ | 'unmodified'
+ | 'removed'
+ | 'added'
+ | 'add'
+ | 'parse error'
+
+export interface Component {
+  qri: string
+}
+
+export function datasetComponents(d: Dataset): Component[] {
+  return ComponentNames.reduce((acc, name) => {
+    const comp = getComponentFromDatasetByName(d, name)
+    if (comp) {
+      acc.push(comp)
+    }
+    return acc
+  }, [] as Component[])
+}
+
+export function getComponentFromDatasetByName(d: Dataset, component: string): Component | undefined {
   if (!ComponentNames.includes(component)) {
     return
   }
-  
+
   switch (component) {
     case 'commit':
       return d.commit
@@ -47,7 +105,10 @@ export function getComponentFromDatasetByName(d: Dataset, component: string): st
     case 'structure':
       return d.structure
     case 'body':
-      return d.body
+      return {
+        qri: 'bd:0',
+        body: d.body
+      } as BodyComponent
     case 'readme':
       return d.readme
     case 'transform':
@@ -59,7 +120,7 @@ export function getComponentFromDatasetByName(d: Dataset, component: string): st
   }
 }
 
-export interface Commit {
+export interface Commit extends Component {
   author?: string
   message?: string
   path?: string
@@ -70,6 +131,7 @@ export interface Commit {
 
 export function NewCommit(d: Record<string,any>): Commit {
   return {
+    qri: d.qri || 'cm:0',
     author: d.author,
     message: d.message,
     path: d.path,
@@ -79,7 +141,7 @@ export function NewCommit(d: Record<string,any>): Commit {
   }
 }
 
-export interface Meta {
+export interface Meta extends Component {
   accessURL?: string
   accrualPeriodicity?: string
   citations?: Citation[]
@@ -99,8 +161,27 @@ export interface Meta {
 }
 
 export function NewMeta(d: Record<string,any>): Meta {
-  return Object.assign({}, d)
+  return Object.assign({ qri: 'md:0' }, d)
 }
+
+
+export const StandardFieldNames = [
+  'accessUrl',
+  'accrualPeriodicity',
+  'citations',
+  'contributors',
+  'description',
+  'downloadUrl',
+  'homeUrl',
+  'identifier',
+  'keywords',
+  'language',
+  'license',
+  'readmeUrl',
+  'title',
+  'theme',
+  'version'
+]
 
 // meta.citations
 export interface Citation {
@@ -123,10 +204,10 @@ export interface License {
   url: string
 }
 
-export interface Structure {
+export interface Structure extends Component {
   depth?: number
   entries: number
-  format?: string
+  format: string
   length: number
   errCount: number
   formatConfig?: CSVFormatConfig | JSONFormatConfig | XLSXFormatConfig
@@ -135,6 +216,7 @@ export interface Structure {
 
 export function NewStructure(d: Record<string,any>): Structure {
   return {
+    qri: d.qri || 'st:0',
     depth: d.depth,
     entries: d.entries,
     format: d.format,
@@ -172,13 +254,14 @@ export interface Schema {
   [key: string]: any
 }
 
-export interface Stats {
+export interface Stats extends Component {
   path: string
   stats: IStatTypes[]
 }
 
 export function NewStats(d: Record<string,any>): Stats {
   return {
+    qri: d.qri || 'sa:0',
     path: d.path,
     stats: d.stats,
   }
@@ -226,7 +309,7 @@ export interface INumericStats {
   }
 }
 
-export interface Transform {
+export interface Transform extends Component {
   bodyBytes?: string
   steps: TransformStep[]
   syntaxes?: Record<string,string>
@@ -234,6 +317,7 @@ export interface Transform {
 
 export function NewTransform(d: Record<string,any>): Transform {
   return {
+    qri: d.qri || 'tf:0',
     bodyBytes: d.bodyBytes,
     steps: d.steps
   }
@@ -255,7 +339,55 @@ export function NewTransformStep(data: Record<string,any>): TransformStep {
   }
 }
 
+export function scriptFromTransform(t: Transform): string {
+  var s = ''
+  t.steps.forEach((step: TransformStep, i: number) => {
+    if (step.script && step.script !== "") {
+      s += step.script += "\n\n"
+    }
+  })
+  return s
+}
+
+export interface Readme extends Component {
+  scriptPath: string
+  script: string
+}
+
+export function NewReadme(d: Record<string,any>): Readme {
+  return {
+    qri: d.qri || 'rm:0',
+    scriptPath: d.scriptPath,
+    script: d.script
+  }
+}
+
+export interface BodyComponent extends Component {
+  body: Body
+}
+
+export interface Viz extends Component {
+  scriptPath?: string
+  script?: string
+}
+
+export function NewViz(d: Record<string,any>): Viz {
+  return {
+    qri: d.qri || 'vz:0',
+    scriptPath: d.scriptPath,
+    script: d.script
+  }
+}
+
 export type Body = Record<string, any> | any[][]
 
-export const ComponentNames = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz', 'stats']
-export type ComponentTypes = 'readme' | 'meta' | 'body' | 'structure' | 'transform' | 'commit' | 'viz' | 'stats'
+export function schemaToColumns (schema: Schema): ColumnProperties[] {
+  if (schema && schema.items && isJSONSchema7(schema.items) && schema.items.items && Array.isArray(schema.items.items)) {
+    return schema.items.items as ColumnProperties[]
+  }
+  return []
+}
+
+function isJSONSchema7 (x: any): x is JSONSchema7 {
+  return (x as JSONSchema7).type !== undefined
+}

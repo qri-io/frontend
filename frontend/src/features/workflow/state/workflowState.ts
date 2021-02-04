@@ -48,10 +48,10 @@ const initialState: WorkflowState = {
       { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
     ],
     steps: [
-      { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
-      { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
+      { syntax: 'starlark', category: 'setup', name: 'setup', script: `` },
+      { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "download result"` },
       { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-      { syntax: 'qri', category: 'save', name: 'save', script: '' }
+      { syntax: 'qri', category: 'save', name: 'result', script: '' }
     ],
     onComplete: [
       { type: 'push', remote: 'https://registry.qri.cloud' },
