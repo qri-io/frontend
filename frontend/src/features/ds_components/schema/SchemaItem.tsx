@@ -1,7 +1,7 @@
 import React from 'react'
-import Icon from './Icon'
+import Icon from '../../../chrome/Icon'
 import DynamicEditField from './DynamicEditField'
-import { DataTypes } from './DataType'
+import { DataTypes } from '../DataType'
 import TypePicker from './TypePicker'
 import classNames from 'classnames'
 
@@ -21,7 +21,7 @@ export interface SchemaItemType {
   validation?: string
 }
 
-const SchemaItemProps: React.FunctionComponent<SchemaItemProps> = ({
+const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
   onChange,
   data,
   editable = true
@@ -116,4 +116,4 @@ const SchemaItemProps: React.FunctionComponent<SchemaItemProps> = ({
   )
 }
 
-export default SchemaItemProps
+export default SchemaItem

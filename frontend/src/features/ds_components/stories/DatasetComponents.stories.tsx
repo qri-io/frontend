@@ -8,6 +8,8 @@ import DatasetComponents from '../DatasetComponents';
 import { NewDataset } from '../../../qri/dataset';
 import earthquakes from './data/earthquakes.json'
 
+// import './styles.css'
+
 export default {
   title: 'Workflow/DatasetComponents',
   component: DatasetComponents,

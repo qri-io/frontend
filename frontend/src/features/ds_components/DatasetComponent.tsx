@@ -1,5 +1,5 @@
 import React from 'react'
-import Dataset, { ComponentName } from '../../qri/dataset'
+import Dataset, { ComponentName, qriRefFromDataset } from '../../qri/dataset'
 import ComponentHeader from './ComponentHeader'
 
 import Transform from './datasetComponents/Transform'
@@ -7,6 +7,7 @@ import Body from './datasetComponents/Body'
 import Commit from './datasetComponents/Commit'
 import Meta from './datasetComponents/Meta'
 import Structure from './datasetComponents/Structure'
+import Readme from './datasetComponents/Readme'
 
 export interface DatasetComponentProps {
   dataset: Dataset
@@ -34,6 +35,9 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
       break
     case 'transform':
       component = <Transform data={dataset.transform}/>
+      break
+    case 'readme':
+      component = <Readme qriRef={qriRefFromDataset(dataset)}/>
       break
     default:
       component = <div>Unknown component</div>

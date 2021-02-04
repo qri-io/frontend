@@ -22,39 +22,46 @@ export interface ComponentItemProps {
   onClick?: (component: ComponentName) => Action | void
 }
 
-export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (props) => {
-  const { status = 'unmodified', disabled = false } = props
+export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (
+  { 
+    status = 'unmodified',
+    disabled = false,
+    displayName,
+    selected,
+    onClick,
+    icon,
+    filename,
+    color = 'dark'
+  }) => {
 
-  console.log(disabled)
   let statusIcon = <StatusDot status={status} />
 
-  if (props.displayName.toLowerCase() === 'commit') {
+  if (displayName.toLowerCase() === 'commit') {
     statusIcon = <FontAwesomeIcon icon={faArrowRight} style={{ color: '#FFF' }} size='lg' />
   }
 
   return (
     <div
-      id={`${props.displayName.toLowerCase()}-status`}
+      id={`${displayName.toLowerCase()}-status`}
       className={classNames('sidebar-list-item', 'sidebar-list-item-text', {
-        'selected': props.selected,
+        'selected': selected,
         'disabled': disabled,
         'hover:cursor-pointer': !disabled
       })}
       onClick={() => {
-        if (props.onClick && props.displayName) {
-          console.log('clicked', props.displayName)
-          props.onClick(props.displayName.toLowerCase() as ComponentName)
+        if (onClick && displayName) {
+          onClick(displayName.toLowerCase() as ComponentName)
         }
       }}
     >
-      {props.icon && (<div className='icon-column'>
-        <Icon icon={props.icon} size='sm' color={disabled ? 'medium' : props.color}/>
+      {icon && (<div className='icon-column'>
+        <Icon icon={icon} size='sm' color={disabled ? 'medium' : color}/>
       </div>)}
       <div className='text-column'>
-        <div className='text'>{props.displayName}</div>
-        <div className='subtext'>{props.filename}</div>
+        <div className='text'>{displayName}</div>
+        <div className='subtext'>{filename}</div>
       </div>
-      <div className={classNames('status-column', { 'disabled': props.disabled })}>
+      <div className={classNames('status-column', { 'disabled': disabled })}>
         {statusIcon}
       </div>
     </div>

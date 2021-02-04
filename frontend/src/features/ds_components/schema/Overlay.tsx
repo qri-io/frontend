@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import React from 'react'
-import Icon from './Icon'
+import React, { useCallback } from 'react'
+import Icon from '../../../chrome/Icon'
 import classNames from 'classnames'
 
 interface OverlayProps {
@@ -23,7 +23,7 @@ const Overlay: React.FunctionComponent<OverlayProps> = ({
 }) => {
   const overlayRef = React.useRef<HTMLDivElement>(null)
 
-  const isInOverlay = (e: MouseEvent) => {
+  const isInOverlay = useCallback((e: MouseEvent) => {
     if (!onCancel || !overlayRef || !overlayRef.current) return
 
     // figure out if the user clicking inside the overlay
@@ -40,7 +40,7 @@ const Overlay: React.FunctionComponent<OverlayProps> = ({
       e.stopPropagation()
       onCancel()
     }
-  }
+  }, [onCancel, overlayRef])
 
   React.useEffect(() => {
     if (open) {
@@ -51,7 +51,7 @@ const Overlay: React.FunctionComponent<OverlayProps> = ({
     return () => (
       window.removeEventListener('click', isInOverlay)
     )
-  }, [open])
+  }, [open, isInOverlay])
 
   return (
     <div

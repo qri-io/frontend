@@ -1,7 +1,7 @@
 import React from 'react'
 import cloneDeep from 'clone-deep'
 
-import { Schema as ISchema } from '../../qri/dataset'
+import { Schema as ISchema } from '../../../qri/dataset'
 import SchemaItem, { SchemaItemType } from './SchemaItem'
 
 interface SchemaProps {

@@ -1,8 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
-import { DataTypes } from './DataType'
+import { DataTypes } from '../DataType'
 
-import Icon from './Icon'
+import Icon from '../../../chrome/Icon'
 
 export interface ColumnTypeProps {
   type: DataTypes | DataTypes[]

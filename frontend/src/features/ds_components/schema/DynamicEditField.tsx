@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import classNames from 'classnames'
 import { stripHtml } from 'string-strip-html'
 
@@ -40,9 +40,16 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
 
   React.useEffect(() => {
     if (value !== newValue) setNewValue(value)
-  }, [value])
+  }, [value, newValue])
 
-  const commitEdit = (e: Event) => {
+  const cancelEdit = useCallback(() => {
+    setNewValue(value)
+    ref.current.innerHTML = value
+    setIsValid(true)
+    ref.current.blur()
+  }, [setNewValue, setIsValid, value])
+
+  const commitEdit = useCallback((e: Event) => {
     // TODO (ramfox): for some reason, the only way I can get the actual updated
     // state value is by hacking into the `setNewValue` function, which passes
     // the previous value into a function
@@ -64,16 +71,9 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
     }
     // drop focus
     ref.current.blur()
-  }
+  }, [setNewValue, setIsValid, onChange, cancelEdit, allowEmpty, name, newValue, value])
 
-  const cancelEdit = () => {
-    setNewValue(value)
-    ref.current.innerHTML = value
-    setIsValid(true)
-    ref.current.blur()
-  }
-
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     // cancel on esc
     if (e.keyCode === 27) {
       cancelEdit()
@@ -83,12 +83,12 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
     if ((e.keyCode === 13) || (e.keyCode === 9)) {
       commitEdit(e)
     }
-  }
+  }, [cancelEdit, commitEdit])
 
   // use a ref so we can set up a click handler
   const ref: any = React.useRef()
 
-  const handleMousedown = (e: MouseEvent) => {
+  const handleMousedown = useCallback((e: MouseEvent) => {
     const target = e.target as HTMLElement
 
     if (!target) return
@@ -98,7 +98,7 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
     if (!ref.current.contains(target)) {
       commitEdit(e)
     }
-  }
+  }, [commitEdit])
 
   const [focused, setFocused] = React.useState(false)
 
@@ -115,7 +115,7 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
       document.removeEventListener('keydown', handleKeyDown, false)
       document.removeEventListener('mousedown', handleMousedown, false)
     }
-  }, [focused])
+  }, [focused, handleKeyDown, handleMousedown])
 
   const handleChange = async (e: any) => {
     if (!editable) return

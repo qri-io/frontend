@@ -1,8 +1,8 @@
 import React from 'react'
 import Overlay from './Overlay'
 import { typesAndDescriptions } from './TypePicker'
-import DataType from './DataType'
-import Icon from './Icon'
+import DataType from '../DataType'
+import Icon from '../../../chrome/Icon'
 
 interface TypePickerOverlayProps {
   // function to close the picker

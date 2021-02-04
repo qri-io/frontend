@@ -2,41 +2,47 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faToggleOn } from '@fortawesome/free-solid-svg-icons'
 
-import KeyValueTable from './KeyValueTable'
-import { ColumnProperties, Schema, schemaToColumns } from '../../qri/dataset'
+import KeyValueTable from '../KeyValueTable'
+import { ColumnProperties, Schema, schemaToColumns } from '../../../qri/dataset'
 
 interface RowProps {
   column: ColumnProperties
+  key: number
 }
 
-const buildOtherKeywordsTable = (column: any) => {
+const buildOtherKeywordsTable = (column: any, index: number) => {
   const filterKeys = ['title', 'type', 'description']
   const hasOtherKeys = Object.keys(column).filter(d => !filterKeys.includes(d)).length > 0
-  return hasOtherKeys ? <KeyValueTable data={column} filterKeys={filterKeys}/> : null
+  return hasOtherKeys ? <KeyValueTable index={index} data={column} filterKeys={filterKeys}/> : null
 }
 
 export interface TypeLabelProps {
-  type: string | undefined
+  type: string | string[] | undefined
   showLabel?: boolean
 }
 
 export const TypeLabel: React.FunctionComponent<TypeLabelProps> = ({ type, showLabel = true }) => {
   let icon
-  switch (type) {
-    case 'string':
-      icon = <div className='text-glyph'>T</div>
-      break
-    case 'number':
-      icon = <div className='text-glyph'>1.0</div>
-      break
-    case 'integer':
-      icon = <div className='text-glyph'>1</div>
-      break
-    case 'boolean':
-      icon = <FontAwesomeIcon icon={faToggleOn} size='xs'/>
-      break
-    default:
-      icon = ''
+
+  if (Array.isArray(type)) {
+    icon = ''
+  } else {
+    switch (type) {
+      case 'string':
+        icon = <div className='text-glyph'>T</div>
+        break
+      case 'number':
+        icon = <div className='text-glyph'>1.0</div>
+        break
+      case 'integer':
+        icon = <div className='text-glyph'>1</div>
+        break
+      case 'boolean':
+        icon = <FontAwesomeIcon icon={faToggleOn} size='xs'/>
+        break
+      default:
+        icon = ''
+    }
   }
 
   return (
@@ -53,7 +59,7 @@ export const TypeLabel: React.FunctionComponent<TypeLabelProps> = ({ type, showL
   )
 }
 
-const Row: React.FunctionComponent<RowProps> = ({ column }) => {
+const Row: React.FunctionComponent<RowProps> = ({ column, key }) => {
   // let typeContent
 
   return (
@@ -63,7 +69,7 @@ const Row: React.FunctionComponent<RowProps> = ({ column }) => {
         <TypeLabel type={column.type}/>
       </div>
       <div className='cell'>{column.description}</div>
-      <div className='cell other-keywords'>{buildOtherKeywordsTable(column)}</div>
+      <div className='cell other-keywords'>{buildOtherKeywordsTable(column, key)}</div>
     </div>
   )
 }

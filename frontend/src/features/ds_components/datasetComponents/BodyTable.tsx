@@ -7,7 +7,7 @@ import React from 'react'
 // import { bodyPageSizeDefault } from '../actions/api'
 // import { ApiActionThunk } from '../store/api'
 
-import { TypeLabel } from './../TwoDSchemaLayout'
+import { TypeLabel } from '../schema/TwoDSchemaLayout'
 // import SpinnerWithIcon from './chrome/SpinnerWithIcon'
 
 interface BodyTableProps {

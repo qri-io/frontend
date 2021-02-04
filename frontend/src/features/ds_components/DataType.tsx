@@ -1,5 +1,5 @@
 import React from 'react'
-import Icon from './Icon'
+import Icon from '../../chrome/Icon'
 
 export type DataTypes = 'string' | 'integer' | 'number' | 'boolean' | 'null' | 'any' | 'array' | 'object'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import fileSize, { abbreviateNumber } from '../../utils/fileSize'
+import fileSize, { abbreviateNumber } from './fileSize'
 
 export interface Stat {
   label: string

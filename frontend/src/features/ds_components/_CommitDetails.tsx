@@ -1,11 +1,11 @@
 import React from 'react'
 import numeral from 'numeral'
 
-import { VersionInfo } from '../models/store'
+import { VersionInfo } from '../../qri/versionInfo'
 
-import Icon from './chrome/Icon'
-import RelativeTimestamp from './RelativeTimestamp'
-import { getCommitishFromPath } from '../utils/commitish'
+import Icon from '../../chrome/Icon'
+import RelativeTimestamp from '../../chrome/RelativeTimestamp'
+import { getCommitishFromPath } from './utils/commitish'
 
 const CommitDetails: React.FunctionComponent<VersionInfo> = ({
   commitTitle,

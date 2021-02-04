@@ -6,10 +6,10 @@ import { Structure } from '../../../qri/dataset'
 
 import fileSize, { abbreviateNumber } from '../fileSize'
 
-import LabeledStats from '../LabeledStats'
+import LabeledStats from '../LabeledStat'
 import FormatConfigHistory from '../FormatConfigHistory'
 // import SpinnerWithIcon from './chrome/SpinnerWithIcon'
-import Schema from '../Schema'
+import Schema from '../schema/Schema'
 
 export interface StructureProps {
   data?: Structure
