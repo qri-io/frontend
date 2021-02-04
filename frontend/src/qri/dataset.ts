@@ -1,4 +1,5 @@
 import { JSONSchema7 } from "json-schema"
+import { QriRef } from "./ref"
 
 export interface Dataset {
   peername: string
@@ -17,22 +18,44 @@ export interface Dataset {
 
 export default Dataset
 
-export function NewDataset(d: Record<string,any>): Dataset {
+export function qriRefFromDataset(dataset: Dataset): QriRef {
   return {
+    username: dataset.peername,
+    name: dataset.name,
+    path: dataset.path
+  }
+}
+
+export function NewDataset(d: Record<string,any>): Dataset {
+  const dataset: Dataset = {
     peername: d.peername || '',
     name: d.name || '',
     path: d.path || '',
-
-    commit: NewCommit(d.commit || {}),
-    meta: NewMeta(d.meta || {}),
-    structure: NewStructure(d.structure || {}),
     body: d.body,
-    bodyPath: d.bodyPath,
-    readme: NewReadme(d.readme || {}),
-    transform: NewTransform(d.transform || {}),
-    stats: NewStats(d.stats || {}),
-    viz: NewViz(d.viz || {}),
+    bodyPath: d.bodyPath
   }
+  if (d.commit) {
+    dataset.commit = NewCommit(d.commit)
+  }
+  if (d.meta) {
+    dataset.meta = NewMeta(d.meta)
+  }
+  if (d.structure) {
+    dataset.structure = NewStructure(d.structure)
+  }
+  if (d.readme) {
+    dataset.readme = NewReadme(d.readme)
+  }
+  if (d.transform) {
+    dataset.transform = NewTransform(d.transform)
+  }
+  if (d.stats) {
+    dataset.stats = NewStats(d.stats)
+  }
+  if (d.viz) {
+    dataset.viz = NewViz(d.viz)
+  }
+  return dataset
 }
 
 export const ComponentNames = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz', 'stats']
@@ -318,8 +341,10 @@ export function NewTransformStep(data: Record<string,any>): TransformStep {
 
 export function scriptFromTransform(t: Transform): string {
   var s = ''
-  t.steps.forEach((step: TransformStep) => {
-    s += step.script + '\n'
+  t.steps.forEach((step: TransformStep, i: number) => {
+    if (step.script && step.script !== "") {
+      s += step.script += "\n\n"
+    }
   })
   return s
 }
