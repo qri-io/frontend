@@ -1,0 +1,1695 @@
+// TODO (ramfox): remove when styles in `ds_components` are replaced by tailwind
+
+// Variables
+//
+// Copy settings from this file into the provided `_custom.scss` to override
+// the Bootstrap defaults without modifying key, versioned files.
+
+
+// Table of Contents
+//
+// Colors
+// Options
+// Spacing
+// Body
+// Links
+// Grid breakpoints
+// Grid containers
+// Grid columns
+// Fonts
+// Components
+
+// General variable structure
+//
+// Variable format should follow the `$component-modifier-state-property` order.
+
+
+// Colors
+//
+// Grayscale and brand colors for use across Qri.
+
+// background colors
+
+$white: #FFFFFF;
+$black: #000000;
+$primary: #0061A6;
+$primary-dark: #004E86;
+$primary-muted: #B3CFE4;
+$primary-light: #F6F6F8;
+$button: #5383A6;
+$text: #303030;
+$text-muted: #646464;
+$text-light: #C9C9C9;
+$error: #EB0000;
+$connected: #F8CD1C;
+$qri-blue: #123459;
+$qri-blue-active: #355c86;
+$qri-blue-subdued: #12345994;
+$light-blue-accent: #4FC7F3;
+$light-blue-accent-subdued: #2f7791;
+
+$appBackground: $white;
+$dataset-sidebar-color: #f7f8fc;
+$topbar: $primary-light;
+$sink: $primary-light;
+$border-color: rgba(0, 97, 166, .1);
+
+
+$success: $primary-muted;
+$error: #D00218;
+
+// used for css transitions when hovering/switching tabs and selectable items
+$active-item-highlight-transition: 0.2s;
+
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-flex:               false !default;
+$enable-rounded:            true !default;
+$enable-shadows:            false !default;
+$enable-gradients:          false !default;
+$enable-transitions:        false !default;
+$enable-hover-media-query:  false !default;
+$enable-grid-classes:       true !default;
+$enable-print-styles:       true !default;
+
+
+// Spacing
+//
+// Control the default styling of most Bootstrap elements by modifying these
+// variables. Mostly focused on spacing.
+// You can add more entries to the $spacers map, should you need more variation.
+
+$spacer:   1rem !default;
+$spacer-x: $spacer !default;
+$spacer-y: $spacer !default;
+$spacers: (
+  0: (
+    x: 0,
+    y: 0
+  ),
+  1: (
+    x: $spacer-x,
+    y: $spacer-y
+  ),
+  2: (
+    x: ($spacer-x * 1.5),
+    y: ($spacer-y * 1.5)
+  ),
+  3: (
+    x: ($spacer-x * 3),
+    y: ($spacer-y * 3)
+  )
+) !default;
+
+$border-width: .5px !default;
+
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg:    $appBackground !default;
+$body-color: $text !default;
+
+
+// Links
+//
+// Style anchor elements.
+
+$link-color:            $primary !default;
+$link-decoration:       none !default;
+$link-hover-color:      $primary-dark !default;
+$link-hover-decoration: none !default;
+
+
+// Grid breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 544px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+
+// Grid containers
+//
+// Define the maximum width of `.container` for different screen sizes.
+
+$container-max-widths: (
+  sm: 576px,
+  md: 720px,
+  lg: 940px,
+  xl: 1140px
+) !default;
+
+
+// Grid columns
+//
+// Set the number of columns and specify the width of the gutters.
+
+$grid-columns:      12 !default;
+$grid-gutter-width: 30px !default;
+
+
+// Typography
+//
+// Font, line-height, and color for body text, headings, and more.
+
+// /* rubik-300 - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: normal;
+//   font-weight: 300;
+//   src: local('Rubik Light'), local('Rubik-Light'),
+//        url('../assets/fonts/rubik-v9-latin-300.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-300italic - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: italic;
+//   font-weight: 300;
+//   src: local('Rubik Light Italic'), local('Rubik-LightItalic'),
+//        url('../assets/fonts/rubik-v9-latin-300italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-regular - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: normal;
+//   font-weight: 400;
+//   src: local('Rubik'), local('Rubik-Regular'),
+//        url('../assets/fonts/rubik-v9-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-italic - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: italic;
+//   font-weight: 400;
+//   src: local('Rubik Italic'), local('Rubik-Italic'),
+//        url('../assets/fonts/rubik-v9-latin-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-500 - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: normal;
+//   font-weight: 500;
+//   src: local('Rubik Medium'), local('Rubik-Medium'),
+//        url('../assets/fonts/rubik-v9-latin-500.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-500italic - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: italic;
+//   font-weight: 500;
+//   src: local('Rubik Medium Italic'), local('Rubik-MediumItalic'),
+//        url('../assets/fonts/rubik-v9-latin-500italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-700 - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: normal;
+//   font-weight: 700;
+//   src: local('Rubik Bold'), local('Rubik-Bold'),
+//        url('../assets/fonts/rubik-v9-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-700italic - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: italic;
+//   font-weight: 700;
+//   src: local('Rubik Bold Italic'), local('Rubik-BoldItalic'),
+//        url('../assets/fonts/rubik-v9-latin-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-900 - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: normal;
+//   font-weight: 900;
+//   src: local('Rubik Black'), local('Rubik-Black'),
+//        url('../assets/fonts/rubik-v9-latin-900.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+// /* rubik-900italic - latin */
+// @font-face {
+//   font-family: 'Rubik';
+//   font-style: italic;
+//   font-weight: 900;
+//   src: local('Rubik Black Italic'), local('Rubik-BlackItalic'),
+//        url('../assets/fonts/rubik-v9-latin-900italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+// }
+
+// /* RobotoMono */
+// @font-face {
+//   font-family: 'Roboto Mono';
+//   font-style: normal;
+//   font-weight: 400;
+//   src: url('../assets/fonts/RobotoMono-Regular.ttf') format('truetype'),
+// }
+
+$font-family-sans-serif: "Avenir", "Rubik", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif !default;
+$font-family-serif:      Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace:  "Roboto Mono", monospace !default;
+$font-family-base:       $font-family-sans-serif !default;
+
+// Pixel value used to responsively scale all typography. Applied to the `<html>` element.
+$font-size-root: 16px !default;
+
+$font-size-base: 1rem !default;
+$font-size-lg:   1.25rem !default;
+$font-size-sm:   .875rem !default;
+$font-size-xs:   .75rem !default;
+
+$line-height-base: 1.375 !default;
+
+$font-size-h1: 40px !default;
+$font-size-h2: 36px !default;
+$font-size-h3: 24px !default;
+$font-size-h4: 18px !default;
+$font-size-h5: 16px !default;
+$font-size-h6: 14px !default;
+
+$font-weight-heavy: 900;
+$font-weight-bold: 700;
+$font-weight-medium: 500;
+$font-weight-regular : 400;
+$font-weight-light: 300;
+
+$headings-margin-bottom: 10px !default;
+// $headings-font-family:   inherit !default;
+$headings-font-family:   $font-family-sans-serif !default;
+$headings-font-weight:   1000 !default;
+$headings-line-height:   1.1 !default;
+$headings-color:         $text !default;
+
+$bold-heading-font-family: 'Helvetica Neue', Helvetica, sans-serif !default;
+
+$small-font-size: 80% !default;
+
+$abbr-border-color: $primary-light !default;
+
+$blockquote-small-color:  $text-muted !default;
+$blockquote-font-size:    ($font-size-base * 1.25) !default;
+$blockquote-border-color: $primary-light !default;
+$blockquote-border-width: .25rem !default;
+
+$hr-border-color: rgba(0,0,0,.5) !default;
+$hr-border-width: $border-width !default;
+
+$mark-padding: .2em !default;
+
+$dt-font-weight: bold !default;
+
+$kbd-box-shadow:         inset 0 -.1rem 0 rgba(0,0,0,.25) !default;
+$nested-kbd-font-weight: bold !default;
+
+$list-inline-padding: 5px !default;
+
+
+// Components
+//
+// Define common padding and border radius sizes and more.
+
+$line-height-lg:         (4 / 3) !default;
+$line-height-sm:         1.5 !default;
+
+$border-radius:          .2rem !default;
+$border-radius-lg:       .3rem !default;
+$border-radius-sm:       .2rem !default;
+
+$component-active-color: $white !default;
+$component-active-bg:    $primary !default;
+
+$caret-width:            .3em !default;
+$caret-width-lg:         $caret-width !default;
+
+
+// Tables
+//
+// Customizes the `.table` component with basic values, each used across all table variations.
+
+$table-cell-padding:            .75rem !default;
+$table-sm-cell-padding:         .3rem !default;
+
+$table-bg:                      transparent !default;
+$table-bg-accent:               rgba(0,0,0,.05) !default;
+$table-bg-hover:                rgba(0,0,0,.075) !default;
+$table-bg-active:               $table-bg-hover !default;
+
+$table-border-width:            $border-width !default;
+$table-border-color:            $primary-light !default;
+
+
+// Buttons
+//
+// For each of Bootstrap's buttons, define text, background and border color.
+
+$btn-padding-x:                  1rem !default;
+$btn-padding-y:                  .5rem !default;
+$btn-line-height:                .9rem !default;
+$btn-font-size:                  0.78rem;
+
+$btn-font-weight:                bold !default;
+$btn-box-shadow:                 inset 0 1px 0 rgba(255,255,255,.15), 0 1px 1px rgba(0,0,0,.075) !default;
+$btn-active-box-shadow:          inset 0 3px 5px rgba(0,0,0,.125) !default;
+
+$btn-primary-color:              #fff !default;
+$btn-primary-bg:                 $button !default;
+$btn-primary-border:             $button !default;
+
+$btn-link-disabled-color:        $primary-muted!default;
+
+$btn-min-width:                  115px !default;
+$btn-height:                     30px !default;
+
+$btn-padding-x-sm:               .5rem !default;
+$btn-padding-y-sm:               .25rem !default;
+
+$btn-padding-x-lg:               1.5rem !default;
+$btn-padding-y-lg:               .75rem !default;
+
+$btn-block-spacing-y:            .5rem !default;
+$btn-toolbar-margin:             .5rem !default;
+
+// Allows for customizing button radius independently from global border radius
+$btn-border-radius:              $border-radius !default;
+$btn-border-radius-lg:           $border-radius-lg !default;
+$btn-border-radius-sm:           $border-radius-sm !default;
+
+
+// Forms
+
+$input-padding-x:                .75rem !default;
+$input-padding-y:                .5rem !default;
+$input-line-height:              1.25 !default;
+
+$input-bg:                       transparent !default;
+$input-bg-disabled:              transparent !default;
+
+$input-color:                    $white !default;
+$input-border-color:             $primary-muted !default;
+$input-btn-border-width:         $border-width !default; // For form controls and buttons
+$input-box-shadow:               inset 0 1px 1px rgba(0,0,0,.075) !default;
+
+$input-border-radius:            $border-radius !default;
+$input-border-radius-lg:         $border-radius-lg !default;
+$input-border-radius-sm:         $border-radius-sm !default;
+$input-border-width:             2px;
+
+$input-bg-focus:                 transparent !default;
+$input-border-focus:             $primary-light !default;
+$input-box-shadow-focus:         rgba(102,175,233,.6) !default;
+$input-color-focus:              $input-color;
+
+$input-color-placeholder:        $primary-muted !default;
+
+$input-padding-x-sm:             .5rem !default;
+$input-padding-y-sm:             .25rem !default;
+
+$input-padding-x-lg:             1.5rem !default;
+$input-padding-y-lg:             .75rem !default;
+
+$input-height:                   (($font-size-base * $line-height-base) + ($input-padding-y * 2)) !default;
+$input-height-lg:                (($font-size-lg * $line-height-lg) + ($input-padding-y-lg * 2)) !default;
+$input-height-sm:                (($font-size-sm * $line-height-sm) + ($input-padding-y-sm * 2)) !default;
+$input-border-error:             $error !default;
+
+$form-group-margin-bottom:       $spacer-y !default;
+
+$cursor-disabled:                not-allowed !default;
+
+
+
+// Dropdowns
+//
+// Dropdown menu container and contents.
+
+$dropdown-min-width:                10rem !default;
+$dropdown-padding-y:                .5rem !default;
+$dropdown-spacer:                   .125rem !default;
+$dropdown-bg:                       $white !default;
+$dropdown-border-color:             rgba($black, .15) !default;
+$dropdown-border-radius:            $border-radius !default;
+$dropdown-border-width:             $border-width !default;
+$dropdown-divider-bg:               $primary-light !default;
+$dropdown-box-shadow:               0 .5rem 1rem rgba($black, .175) !default;
+
+$dropdown-link-color:               $primary !default;
+$dropdown-link-hover-color:         $primary-dark !default;
+$dropdown-link-hover-bg:            $primary-light !default;
+
+$dropdown-link-active-color:        $component-active-color !default;
+$dropdown-link-active-bg:           $component-active-bg !default;
+
+$dropdown-link-disabled-color:      $primary-muted !default;
+
+$dropdown-item-padding-y:           .25rem !default;
+$dropdown-item-padding-x:           1.5rem !default;
+
+$dropdown-header-color:             $primary-light !default;
+
+$nav-divider-color:                 $primary-muted !default;
+$nav-divider-margin-y:              ($spacer / 2) !default;
+
+// Z-index master list
+//
+// Warning: Avoid customizing these values. They're used for a bird's eye view
+// of components dependent on the z-axis and are designed to all work together.
+
+$zindex-dropdown:                   2000 !default;
+$zindex-sticky:                     1020 !default;
+$zindex-fixed:                      1030 !default;
+$zindex-modal-backdrop:             1040 !default;
+$zindex-modal:                      1050 !default;
+$zindex-popover:                    1060 !default;
+$zindex-tooltip:                    1070 !default;
+
+
+/**
+  * The z-index for modals. Nothing should be higher, but other z-indexes can
+  * be defined in terms of it.
+  *
+  * 100 seems arbitrary (because it is)
+  */
+$modal-z-index: 100;
+$modal-overlay-z-index: calc($popup-z-index - 1);
+$foldout-z-index: calc($popup-z-index - 2);
+
+// Form validation icons
+$form-icon-success: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%235cb85c' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3E%3C/svg%3E") !default;
+$form-icon-warning: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23f0ad4e' d='M4.4 5.324h-.8v-2.46h.8zm0 1.42h-.8V5.89h.8zM3.76.63L.04 7.075c-.115.2.016.425.26.426h7.397c.242 0 .372-.226.258-.426C6.726 4.924 5.47 2.79 4.253.63c-.113-.174-.39-.174-.494 0z'/%3E%3C/svg%3E") !default;
+$form-icon-danger: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23d9534f' viewBox='-2 -2 7 7'%3E%3Cpath stroke='%23d9534f' d='M0 0l3 3m0-3L0 3'/%3E%3Ccircle r='.5'/%3E%3Ccircle cx='3' r='.5'/%3E%3Ccircle cy='3' r='.5'/%3E%3Ccircle cx='3' cy='3' r='.5'/%3E%3C/svg%3E") !default;
+
+
+
+// Form states and alerts
+//
+// Define colors for form feedback states and, by default, alerts.
+
+$state-success-text:             #3c763d !default;
+$state-success-bg:               #dff0d8 !default;
+$state-success-border:           darken($state-success-bg, 5%) !default;
+
+$state-info-text:                #31708f !default;
+$state-info-bg:                  #d9edf7 !default;
+$state-info-border:              darken($state-info-bg, 7%) !default;
+
+$state-warning-text:             #8a6d3b !default;
+$state-warning-bg:               #fcf8e3 !default;
+$mark-bg:                        $state-warning-bg !default;
+$state-warning-border:           darken($state-warning-bg, 5%) !default;
+
+$state-danger-text:              #a94442 !default;
+$state-danger-bg:                #f2dede !default;
+$state-danger-border:            darken($state-danger-bg, 5%) !default;
+
+
+
+
+// Tooltips
+
+$tooltip-max-width:           200px !default;
+$tooltip-color:               #fff !default;
+$tooltip-bg:                  #000 !default;
+$tooltip-opacity:             .9 !default;
+$tooltip-padding-y:           3px !default;
+$tooltip-padding-x:           8px !default;
+$tooltip-margin:              3px !default;
+
+$tooltip-arrow-width:         5px !default;
+$tooltip-arrow-color:         $tooltip-bg !default;
+
+
+// Alerts
+//
+// Define alert colors, border radius, and padding.
+
+$alert-padding:               15px !default;
+$alert-border-radius:         $border-radius !default;
+$alert-link-font-weight:      bold !default;
+$alert-border-width:          $border-width !default;
+
+$alert-success-bg:            $state-success-bg !default;
+$alert-success-text:          $state-success-text !default;
+$alert-success-border:        $state-success-border !default;
+
+$alert-info-bg:               $state-info-bg !default;
+$alert-info-text:             $state-info-text !default;
+$alert-info-border:           $state-info-border !default;
+
+$alert-warning-bg:            $state-warning-bg !default;
+$alert-warning-text:          $state-warning-text !default;
+$alert-warning-border:        $state-warning-border !default;
+
+$alert-danger-bg:             $state-danger-bg !default;
+$alert-danger-text:           $state-danger-text !default;
+$alert-danger-border:         $state-danger-border !default;
+
+
+// dataset nav links
+//
+// Define standards for the nav links on the dataset page
+//
+$nav-font-size: $font-size-base !default;
+$nav-font-color: $topbar !default;
+$nav-font-size-sm: $font-size-base * 1.15 !default;
+$nav-font-color-sm: $black !default;
+
+// dataset specific vars
+$list-item-bottom-border: 1px solid $border-color;
+$sidebar-item-padding:  6px 10px;
+$hover-highlight-color: #F6F8FA;
+$header-height: 30px;
+$header-font-size: .9rem;
+
+// LabeledStats
+.stats-values {
+  display: flex;
+  flex-wrap: wrap;
+
+  .stats-value {
+    margin: 5px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &.large {
+      margin: 10px 20px;
+    }
+
+    &:first-child, &.large:first-child {
+      margin-left: 0;
+    }
+
+    .label {
+      font-family: $font-family-sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      margin-bottom: 0px;
+      color: #808080;
+      text-transform: capitalize;
+      &.uppercase {
+        text-transform: uppercase;
+      }
+      &.light {
+        color: white;
+      }
+      &.large {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+    }
+
+    .value {
+      font-family: $font-family-sans-serif;
+      margin-bottom: 0;
+      font-size: 16px;
+      font-weight: 600;
+      &.light {
+        color: white;
+      }
+      &.large {
+        font-size: 24px;
+      }
+    }
+
+    .delta {
+      font-size: 12px;
+      font-weight: 300;
+      color: green;
+      &.light {
+        color: rgb(63, 209, 63);
+      }
+      &.large {
+        font-size: 14px;
+        font-weight: 400;
+      }
+      &.negative {
+        color: $error;
+        &.light {
+          color: red;
+        }
+      }
+    }
+
+    .delta-spacer {
+      height: 14px;
+      &.large {
+        height: 16px;
+      }
+    }
+  }
+}
+
+// keyvalue table
+
+.keyvalue-table-wrap {
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #eee;
+  overflow: hidden;
+
+  .keyvalue-table {
+    width: 100%;
+
+    .keyvalue-table-row {
+      border-bottom: 1px solid #eee;
+
+      .keyvalue-table-key {
+        padding: 8px 8px;
+        font-size: .8rem;
+        font-weight: 600;
+        width: 112px;
+        text-align: right;
+      }
+    }
+  }
+}
+
+// icon
+.icon-dark {
+  transition: color .2s ease-out;
+  color: #000000;
+}
+
+.icon-medium {
+  transition: color .2s ease-out;
+  color: #B3B3B3;
+}
+
+.icon-light {
+  transition: color .2s ease-out;
+  color: #ffffff;
+}
+
+.icon-red {
+  transition: color .2s ease-out;
+  color: #EE325C;
+}
+
+.icon-green {
+  transition: color .2s ease-out;
+  color: #9EEE32;
+}
+
+// DataType
+.data-type {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: space-between;
+  margin: 3px;
+
+  .type-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+// DatasetHeader
+.commit-details-header {
+  padding: $sidebar-item-padding;
+  border-bottom: $list-item-bottom-border;
+
+  .details-flex {
+    display: flex;
+    justify-content: space-between;
+
+    .text-column {
+      flex: 1;
+    }
+
+    .details-column {
+      flex: 1;
+      color: #999999;
+      align-items: center;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .time-message {
+      margin: 2px 0;
+    }
+
+    .small.hash {
+      font-size: 12px;
+    }
+  }
+}
+
+// DatasetComponents
+.sidebar-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+
+  .columns {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    overflow-y: auto;
+    height: 100%;
+
+    .resizable-component {
+      position: relative;
+      flex: 0 0 auto;
+
+      .resize-handle {
+        position: absolute;
+        right: -5px;
+        top: 0px;
+        height: 100%;
+        width: 10px;
+        cursor: ew-resize;
+        z-index: 112;
+      }
+    }
+
+    .main-content {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      position: relative;
+      flex-basis: auto;
+      overflow: hidden;
+
+      .main-content-header {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 5px 0;
+
+        .header-column {
+          display: inline-flex;
+          padding: 10px 10px 8px 10px;
+          font-size: .8rem;
+          font-weight: 500;
+          align-items: center;
+          cursor: pointer;
+
+          &:hover {
+            .header-column-icon {
+              color: $text-muted;
+              transition: color $active-item-highlight-transition;
+            }
+          }
+
+          .header-column-icon {
+            color: $text-light;
+            margin-right: 8px;
+          }
+          .header-column-text {
+            color: $light-blue-accent;
+          }
+        }
+      }
+
+      .main-content-flex {
+        flex: 1;
+        height: 100%;
+      }
+    }
+  }
+}
+
+// ComponentItem
+////////////////////////////
+//   Sidebar List Items   //
+////////////////////////////
+
+.sidebar-list-item {
+  display: flex;
+  align-items: center;
+  user-select: none;
+  min-height: 50px;
+  cursor: pointer;
+
+  .text-column {
+    flex-direction: column;
+    overflow-x: hidden;
+    flex: 1;
+
+    .text {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-weight: 400;
+      font-size: 0.9rem;
+    }
+
+    .subtext {
+      display: flex;
+      flex: 1;
+      font-size: .75rem;
+      line-height: 1rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+.sidebar-list-header  {
+  height: $header-height;
+  font-weight: 500;
+  font-size: .9rem;
+}
+
+.sidebar-list-header-disabled {
+  color: #646464;
+}
+
+.sidebar-list-item-text {
+  padding: 6px 10px 6px 10px;
+  flex-direction: row;
+  border-left: 2px solid transparent;
+  transition: border $active-item-highlight-transition;
+  position: relative;
+
+  &:hover {
+    border-left: 2px solid $light-blue-accent-subdued;
+  }
+
+  &.selected {
+    border-left: 4px solid $light-blue-accent;
+  }
+
+  .status-column {
+    &.disabled {
+      display: none;
+    }
+    text-align: center;
+    width: 30px;
+  }
+
+  .icon-column {
+    margin-right: 10px;
+    text-align: center;
+    display: flex;
+    align-self: center;
+    font-size: 1rem;
+    height: 100%;
+  }
+
+  &.disabled {
+    cursor: default;
+    color: #ccc;
+
+    &:hover {
+      border-left: 2px solid transparent;
+    }
+
+    .icon-column {
+      color: #ccc;
+    }
+  }
+}
+
+// ComponentHeader
+
+.component-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .component-header {
+    line-height: 1.9rem;
+    height: $header-height;
+    border-bottom: $list-item-bottom-border;
+    font-size: $header-font-size;
+    padding: 0px 10px;
+    flex-direction: row;
+    display: flex;
+
+    .component-display-name-container {
+      flex: 1;
+      .component-display-name {
+        display: inline-block
+      }
+    }
+
+    .status-dot-container {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .component-content {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    position:relative;
+    display: flex;
+    flex-direction: column;
+
+    #body-table-container {
+      overflow-y: none;
+    }
+  }
+}
+
+// CommitDetails
+.dataset-details {
+  font-size: 12px;
+  display: inline-block;
+  font-weight: 500;
+  color: #797878;
+  margin: 0 16px 0 0;
+
+  &:first-child {
+    margin-left: 0
+  }
+
+  &:last-child {
+    margin-right: 0
+  }
+
+  svg {
+    margin-right: 6px;
+  }
+
+  .commitish-qm {
+    color: #a5a5a5 
+  }
+}
+
+// Code
+
+.code {
+  font-family: $font-family-monospace;
+  font-weight: $font-weight-regular;
+  line-height: 22px;
+}
+
+// Structure
+
+
+.structure {
+  .schema-title {
+    text-transform: uppercase;
+    color: #4D4D4D;
+    font-size: 16px;
+    font-weight: 300;
+    font-family: 'Rubik';
+    margin: 0;
+  }
+}
+
+// Readme
+
+.editor-preview {
+  padding: 1rem;
+
+  h1, h2 {
+    padding-bottom: .3em;
+    border-bottom: 1px solid #eaecef;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  h4 {
+    font-size: 24px;
+  }
+
+  h5 {
+    font-size: 14px;
+  }
+
+  h6 {
+    font-size: 13.6px;
+  }
+}
+
+.editor-preview > blockquote {
+  margin: 1rem;
+  padding-left: .5rem;
+  border-left: solid #eaeaea;
+}
+
+.editor-preview > ol {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.editor-preview > ul {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.editor-preview > table {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+// Meta
+.metadata-viewer-wrap {
+  padding: 10px;
+}
+
+.metadata-viewer-title {
+}
+
+.metadata-viewer-table-wrap {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.metadata-viewer-table {
+  width: 100%;
+}
+
+.array-items-table-container {
+  padding-top: 5px;
+  padding-right: 5px;
+  .metadata-viewer-table-wrap {
+    margin-bottom: 5px;
+  }
+}
+
+.metadata-viewer-row {
+  border-bottom: 1px solid #eee;
+}
+
+.metadata-viewer-key {
+  padding: 8px 8px;
+  font-size: .8rem;
+  font-weight: 600;
+  width: 112px;
+  text-align: right;
+}
+
+.metadata-viewer-link {
+  font-size: 17px;
+}
+
+.metadata-viewer-info {
+  color: $primary-light;
+}
+
+.metadata-viewer-data {
+  text-align: right;
+  color: $primary-light;
+  padding-right: 15px;
+}
+
+.chip, .big-chip {
+  background: #e4e4e4;
+  border-radius: 4px;
+  padding: 0px 8px;
+  margin: 2px 2px;
+  display: inline-block;
+}
+
+.big-chip {
+  padding: 4px 8px;
+}
+
+// spacing
+// spacing
+
+.margin {
+  margin: $spacer;
+}
+
+.margin-top {
+  margin-top: $spacer;
+}
+
+.margin-left {
+  margin-left: $spacer;
+}
+
+.margin-bottom {
+  margin-bottom: $spacer;
+}
+
+.margin-right {
+  margin-right: $spacer;
+}
+
+.padding {
+  padding: $spacer;
+}
+
+.padding-top {
+  padding-top: $spacer;
+}
+
+.padding-left {
+  padding-left: $spacer;
+}
+
+.padding-bottom {
+  padding-bottom: $spacer;
+}
+
+.padding-right {
+  padding-right: $spacer;
+}
+
+// body
+
+// body table
+
+#body-table-container {
+  height: 100%;
+  overflow-y: scroll;
+  width: 100%;
+  background: #ffffff;
+
+  th:hover:not(.highlighted) {
+    background: #dcdcdc;
+  }
+
+  .highlighted {
+    background: #cdcdcd;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .cell {
+    display: block;
+    max-width: 260px;
+    min-height: 12px;
+    max-height: 28px;
+    padding: 7px 8px;
+    border-left: 1px solid #ECECEC;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  th:first-child .cell, td:first-child .cell, td:nth-child(2) .cell {
+    border-left: none;
+  }
+
+  table tbody tr {
+    width: 100%;
+    border-top: 1px solid #ECECEC;
+    background: #FFF;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #e6e6e6;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  tfoot {
+    padding: 100px 0;
+    border-top: 1px solid #ECECEC;
+  }
+
+  .first-column {
+    text-align: center;
+    background: #e6e6e6;
+  }
+
+  .bottom-loading-spinner {
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+    margin: 0 auto;
+    z-index: -1;
+    font-weight: 500;
+    color: #cdcdcd;
+    border-style: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .bottom-filler {
+    height: 50px;
+  }
+}
+
+.spinner-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// JSON body viewer
+#body-json-container {
+  font-size: 0.8rem;
+
+  #body-json-array {
+    padding: 0 10px;
+  }
+
+  .preview-warning {
+    background: #f0f39e;
+    padding: 3px 10px;
+  }
+
+  .manual-code-line {
+    font-family: monospace;
+    display: inline-block;
+    font-weight: bold;
+    color: rgb(0, 43, 54);
+  }
+
+  .react-json-view {
+    padding-left: 12px;
+  }
+
+  .manual-code-ellipsis {
+    color: #cb4b16;
+    font-size: 2rem;
+    line-height: 1rem;
+    padding-left: 15px;
+  }
+}
+
+// overlay
+.overlay {
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 6px rgba(0,0,0,0.20);
+  background: #fff;
+
+  &.closed {
+    display: none;
+  }
+
+  .title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 7px;
+    background: #F5F7FA;
+    text-transform: uppercase;
+    height: 25px;
+    filter: none;
+  }
+
+  .content {
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.type-picker-overlay-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 3px 7px 3px 7px;
+  align-items: center;
+  // border: solid 1px #fff;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #F5F7FA;
+  }
+
+  &> * {
+    pointer-events: none;
+  }
+
+  .icon-wrap {
+    margin-right: 5px;
+  }
+}
+
+// structure
+.type-picker {
+  position: relative;
+
+  .type-picker-overlay {
+    position: absolute;
+    right: 0;
+    margin-top: 5px;
+    z-index: 99;
+  }
+}
+
+.column-type {
+  background: #fff;
+  padding: 5px;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px #fff;
+  border-radius: 3px;
+  transition: 200ms;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .multi {
+    padding-bottom: 3px;
+  }
+
+  span {
+    margin-right: 5px;
+    width: 60px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.column-type.clickable:hover {
+  cursor: pointer;
+  border: solid 1px #D8DFE6;
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1)
+}
+
+.column-type.clickable.active {
+  border: solid 1px #D8DFE6;
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1)
+}
+
+#schema-wrap {
+  margin: 0;
+  border: none;
+  padding: 0;
+  table-layout: fixed;
+  
+  .schema-header {
+    font-family: 'Rubik';
+    font-size: 10px;
+    font-weight: 500;
+    color: #4D4D4D;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    height: 30px;
+    border-top: solid 1px #E8E9ED;
+
+    th:first-child {
+      width: 20px;
+    }
+
+    th {
+      padding-left: 8px;
+    }
+
+    th.type-picker-header {
+      padding-left: 10px;
+      width: 100px;
+    }
+  }
+}
+
+.structure {
+  .schema-title {
+    text-transform: uppercase;
+    color: #4D4D4D;
+    font-size: 16px;
+    font-weight: 300;
+    font-family: 'Rubik';
+    margin: 0;
+  }
+}
+
+// schema
+.edit-schema-wrap {
+  width: 100%;
+  border-radius: 2px;
+  border: 1px solid $primary-muted;
+  margin: 5px 14px;
+}
+
+.twod-schema-layout {
+  .flex-table {
+    .cell {
+      display: inline-flex;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-row {
+      font-weight: 500;
+      padding: 0;
+      margin-bottom: 9px;
+      border-bottom: 1px solid $border-color
+    }
+
+    .row {
+      display: flex;
+      padding: 10px 0;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .other-keywords {
+      flex-basis: 20%;
+    }
+  }
+}
+
+.type-icon {
+  display: inline-block;
+  display: inline-block;
+  text-align: center;
+  color: #ababab;
+}
+
+.text-glyph {
+  font-family: 'Georgia', serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+// tabpicker
+.tab-picker {
+  display: flex;
+  flex-direction: row;
+  font-family: 'Rubik';
+
+  div {
+    cursor: pointer;
+  }
+
+  .active {
+    border-bottom-style: solid;
+  }
+}
+
+.tab-picker.small {
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+
+  div {
+    padding: 5px 7px 3px 7px;
+    margin: 3px 3px 0px 10px;
+  }
+
+  .active {
+    border-bottom-width: 1px;
+  }
+}
+
+.tab-picker.medium {
+  text-transform: capitalize;
+  font-size: 14px;
+  
+  div {
+    padding: 7px 40px 5px 40px; 
+    margin: 0 0 0 5px;
+  }
+
+  .active {
+    border-bottom-width: 2px;
+  }
+}
+
+.tab-picker.dark {
+  color: #4D4D4D;
+
+  .active {
+    border-bottom-color: #D8DFE6;
+  }
+}
+
+.tab-picker.light {
+  color: #4FC7F3;
+
+  .active {
+    border-bottom-color: #4FC7F3;
+  }
+}
+
+// item
+.data-type {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: space-between;
+  margin: 3px;
+
+  .type-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.schema-item {
+  border-bottom: solid 1px #E8E9ED;
+  min-height: 60px;
+
+  td {
+    vertical-align: top;
+    padding-top: 10px;
+  }
+
+  td.type-picker-cell {
+    padding-top: 7px;
+  }
+
+
+  .schema-item-icon {
+    padding-left: 7px;
+    width: 14px;
+    flex: 0 0 14px;
+  }
+
+  &.top {
+    border-top: solid 1px #E8E9ED;
+  }
+}
+
+.stats-values {
+  display: flex;
+  flex-wrap: wrap;
+
+  .stats-value {
+    margin: 5px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &.large {
+      margin: 10px 20px;
+    }
+
+    &:first-child, &.large:first-child {
+      margin-left: 0;
+    }
+
+    .label {
+      font-family: $font-family-sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      margin-bottom: 0px;
+      color: #808080;
+      text-transform: capitalize;
+      &.uppercase {
+        text-transform: uppercase;
+      }
+      &.light {
+        color: white;
+      }
+      &.large {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+    }
+
+    .value {
+      font-family: $font-family-sans-serif;
+      margin-bottom: 0;
+      font-size: 16px;
+      font-weight: 600;
+      &.light {
+        color: white;
+      }
+      &.large {
+        font-size: 24px;
+      }
+    }
+
+    .delta {
+      font-size: 12px;
+      font-weight: 300;
+      color: green;
+      &.light {
+        color: rgb(63, 209, 63);
+      }
+      &.large {
+        font-size: 14px;
+        font-weight: 400;
+      }
+      &.negative {
+        color: $error;
+        &.light {
+          color: red;
+        }
+      }
+    }
+
+    .delta-spacer {
+      height: 14px;
+      &.large {
+        height: 16px;
+      }
+    }
+  }
+}
+
+.tag {
+  font-size: 14px;
+  color: #AFD148;
+  padding: 3px 5px;
+  letter-spacing: .5px;
+
+  &.category {
+    color: #F8AB31;
+    background: #F2F2F2;
+    border-radius: 2px;
+  }
+}
