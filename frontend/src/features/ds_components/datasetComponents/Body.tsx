@@ -39,14 +39,9 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
   const schema = structure.schema
 
   if (!schema) {
-    // iterate over first row of body
     const firstRow = value && value[0]
     if (!firstRow) return []
-
-    // need to take a slice from index 1 because we have mutated the
-    // body to have each row[0] be a row number
-    // this row number does not get it's own header
-    return firstRow.slice(1).map((d: any, i: number) => `field_${i + 1}`)
+    return firstRow.map((d: any, i: number) => `field_${i + 1}`)
   }
 
   return schemaToColumns(schema)

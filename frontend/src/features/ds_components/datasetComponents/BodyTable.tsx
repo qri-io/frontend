@@ -112,11 +112,19 @@ export default class BodyTable extends React.Component<BodyTableProps> {
     const tableRows = body.map((row, i) => {
       return (
         <tr key={i}>
+          <td key={0}className={'first-column'}>
+            <div className='cell'>
+              {
+                // TODO (ramfox): when we add back pageInfo/fetching
+                // we should use the page number, page size, and the row index (i)
+                // to determine the row number
+                i+1
+              }
+            </div>
+          </td>
           {row.map((d: any, j: number) => {
-            const isFirstColumn = j === 0
-            if (isFirstColumn) d = parseInt(d) + 1
             return (
-              <td key={j} className={isFirstColumn ? 'first-column' : ''}>
+              <td key={j + 1}>
                 <div className='cell'>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
               </td>
             )
