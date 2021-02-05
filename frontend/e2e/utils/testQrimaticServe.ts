@@ -5,7 +5,7 @@ import path from 'path'
 import rimraf from 'rimraf'
 import sleep from 'sleep-promise'
 
-// TestQrimaticBackend connects to a local Cloud backend via qrimatic.
+// TestQrimaticBackend connects to a local Qri backend via Qrimatic.
 export default class TestQrimaticBackend {
   private qrimaticBinPath: string
   private process?: ChildProcess | null
@@ -43,21 +43,21 @@ export default class TestQrimaticBackend {
           if (this.isProcessRunning) {
             waitForExit()
           }
-          return 'Cloud backend process has gracefully exited.'
+          return 'Qrimatic backend process has gracefully exited.'
         })
       }
     }
     const promiseTimeout = async (timeoutMilliseconds: number) => {
       return new Promise((resolve, reject) => {
         return setTimeout(
-          () => reject(Error(`Cloud backend failed to exit in ${timeoutMilliseconds} milliseconds`)),
+          () => reject(Error(`Qrimatic backend failed to exit in ${timeoutMilliseconds} milliseconds`)),
           timeoutMilliseconds
         )
       })
     }
     return Promise.race([waitForExit(), promiseTimeout(3000)])
       .then(result => console.log(result))
-      .catch(err => console.log(`Error: Cloud backend could not gracefully exit: ${err}`))
+      .catch(err => console.log(`Error: Qrimatic backend could not gracefully exit: ${err}`))
   }
 
   private async launchProcess () {

@@ -1,11 +1,11 @@
-import { ChildProcess } from 'child_process'
 import puppeteer from 'puppeteer'
 
 import { startupBackendApp, startUpFrontendApp } from './utils/specHelpers'
+import TestQrimaticFrontend from './utils/testFrontendServe'
 import TestQrimaticBackend from './utils/testQrimaticServe'
 
 let backend: TestQrimaticBackend
-let frontend: ChildProcess
+let frontend: TestQrimaticFrontend
 let headless: boolean
 let browser: puppeteer.Browser
 let page: puppeteer.Page
@@ -40,8 +40,9 @@ afterEach(async () => {
 
 afterAll(async () => {
   await backend.close()
-  frontend.kill()
-})
+  await frontend.close()
+  await browser.close()
+}, 200)
 
 test('load splash page', async () => {
   await page.goto('http://localhost:3000/')
