@@ -21,7 +21,8 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   browser = await puppeteer.launch({
-    headless
+    headless,
+    slowMo: 500
   })
   page = await browser.newPage()
 
@@ -51,6 +52,46 @@ test('load splash page', async () => {
   const html = await page.$eval('title', e => e.innerHTML)
   expect(html).toBe('Home | Qri Cloud')
 })
+
+// first time user flow
+ * - start at root
+ * - click on try it out now
+ * - be on new dataset page
+ * - click "csv download"
+ * - be on workflow page
+ * - click "dry run"
+ * - opens "create account" modal w/ "if you want to run this workflow, create an account!" text
+ * - click "deploy"
+ * - opens "create account" modal w/ "if you want to run this workflow, create an account!" text
+ * - click "run and save"
+ * - opens "create account" modal w/ "if you want to run this workflow, create an account!" text
+ * - click to new route
+ * - opens" create account" modal w/ "if you want to save your work, sign up for an account" text
+ */
+test('first time user flow', async () => {
+  await page.goto('http://localhost:3000/')
+  // await page.click('#app > div.route-content.h-full > div > div.bg-qriblue.text-white.text-bold.flex.p-4.items-center > a.px-4')
+  await page.click("#new-dataset-button")
+} )
+
+// create account flow
+/**
+ * - start at root
+ * - click sign up
+ * - enter username, password, email address
+ * - enter verification code
+ * - redirect to new dataset page
+ */
+
+// log in
+/**
+ * - start at root
+ * - click login
+ * - fill in username and password (email and password?)
+ * - redirect to collection view
+ */
+
+// main flow
 
 
   // to avoid erroring as a duplicate user on signin test,
