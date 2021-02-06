@@ -55,7 +55,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div className='w-full my-4'>
+    <div id={`${step.name}-cell`} className='w-full my-4'>
         <ScrollAnchor id={step.name} />
         <header>
           <div className='text-center w-10 h-100 py-3 float-left'>

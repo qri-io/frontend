@@ -48,6 +48,7 @@ const RunBar: React.FC<RunBarProps> = ({
           {(status === RunState.running)
             ? <button className='relative rounded-md bg-gray-500 font-bold text-white p-1 pr-5 pl-5' onClick={() => { handleCancel() }}>Cancel</button>
             : <DropdownButton
+                id='dry-run'
                 value={(runMode === 'apply') ? runModes[0] : runModes[1]}
                 onClick={() => { handleRun() }}
                 onChangeValue={(opt: Option<RunMode>) => { dispatch(setRunMode(opt.value)) }}

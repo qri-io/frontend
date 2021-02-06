@@ -1,3 +1,4 @@
+import { hasUncaughtExceptionCaptureCallback } from 'process'
 import puppeteer from 'puppeteer'
 
 import { startupBackendApp, startUpFrontendApp } from './utils/specHelpers'
@@ -53,7 +54,69 @@ test('load splash page', async () => {
   expect(html).toBe('Home | Qri Cloud')
 })
 
+test('happy path', async () => {
+  await page.goto('http://localhost:3000/')
+  await page.waitForSelector("#new-dataset-button")
+
+  await page.click('#new-dataset-button')
+  expect(page.url()).toContain('/ds/new')
+
+  await page.click('#CSVDownload')
+  await page.waitForSelector('#workflow')
+
+  await page.type('#setup-cell .monaco-editor', '\n\tprint("hello!")', {delay: 100})
+  await page.click('#dry-run')
+  await page.waitForSelector('#succeeded')
+  const setupOutputEl = await page.$('#setup-cell .output')
+  expect((await setupOutputEl?.getProperty('innerHTML'))?.jsonValue()).toContain("hello!")
+
+  const downloadCodeEl = await page.$('#download-cell .monaco-editor')
+  expect((await downloadCodeEl?.getProperty('innerHTML'))?.jsonValue()).toContain("hello!")
+  const downloadCode = (await downloadCodeEl?.getProperty('innerHTML'))?.jsonValue()
+  await downloadCodeEl?.type('\n\tbadcode')
+  await page.click('#dry-run')
+  await page.waitForSelector('#failed')
+  const downloadOutputEl = await page.$('#download-cell .output')
+  expect((await downloadOutputEl?.getProperty('innerHTML'))?.jsonValue()).toContain('error')
+
+  await page.evaluate((el) => el.innerHTML = downloadCode, downloadCodeEl)
+  await page.click('#dry-run')
+  await page.waitForSelector('#succeeded')
+  await page.waitForSelector('#dataset-preview')
+  
+  // TODO (ramfox): when we get this functionality up and running, we can comment
+  // these tests back in
+  // await page.click('#select-schedule')
+  // await page.click('#minute')
+  // await page.click('#deploy')
+  // await page.waitForSelector('#deploy-modal')
+  // await page.click('#submit')
+
+  // await page.click('#menu')
+  // await page.click('#back-to-collection')
+  // // need to figure out what this id should be
+  // const workflowItemId = '#workflow-unique-name'
+  // const workflowItemEl = await page.$(workflowItemId)
+  // expect(workflowItemEl).not.toBeNull()
+  // expect((await workflowItemEl?.$('.update-status')).getProperty('innerHTML')).toContain('never run')
+
+  // await workflowItemEl.click()
+  // await page.click('#run-and-save')
+  // await page.click('#menu')
+  // await page.click('#back-to-collection')
+
+  // await page.waitForSelector(`${workflowItemId} .success`)
+
+  // await workflowItemEl.click()
+  // await downloadCodeEl.type('\n\tbadcode')
+  // await page.click('#run-and-save')
+  // await page.click('#menu')
+  // await page.click('#back-to-collection')
+  // await page.waitForSelector(`${workflowItemId} .failure`)
+})
+
 // first time user flow
+/**
  * - start at root
  * - click on try it out now
  * - be on new dataset page

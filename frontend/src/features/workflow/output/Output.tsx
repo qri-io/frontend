@@ -11,7 +11,7 @@ export interface OutputProps {
 
 const Output: React.FC<OutputProps> = ({ data }) => {
   return (
-  <div className='text-sm font-mono p-2 rounded-sm overflow-auto'>
+  <div className='output text-sm font-mono p-2 rounded-sm overflow-auto'>
     {data && data.map((line, i) => {
       switch (line.type) {
         case EventLogLineType.ETPrint:
