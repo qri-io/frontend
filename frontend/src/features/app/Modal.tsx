@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { clearModal } from './state/appActions'
 import { ModalType, selectModal } from './state/appState'
-import DeployWorkflowModal from '../workflow/modal/DeployWorkflowModal'
+import DeployWorkflowModal from '../deploy/DeployWorkflowModal'
 import ScheduleModal from '../workflow/modal/ScheduleModal'
 
 const Modal: React.FC<any> = () => {

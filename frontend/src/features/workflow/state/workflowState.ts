@@ -102,6 +102,9 @@ export const workflowReducer = createReducer(initialState, {
     // (basically *don't* switch datasetID to only be InitIDs in the future, always use full refs)
     //   * include the id we requested in the response action
     // Personally, I'm a fan of the latter
+    // UPDATE: we're now passing the ref as a prop in workflow fetching actions
+    // (see deploy reducer for an example usage), we should be able to add in this
+    // ref check
     const steps = state.workflow.steps
     state.workflow = w
     state.workflow.steps = steps

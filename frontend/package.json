@@ -48,6 +48,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-spinner": "0.2.7",
+    "react-spinners": "^0.10.4",
     "react-tooltip": "4.2.13",
     "sass-loader": "^10.1.1",
     "sleep-promise": "^9.0.0",

@@ -11,6 +11,7 @@ import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
 import DatasetTitleMenu from './DatasetTitleMenu';
+import DeployingScreen from '../deploy/DeployingScreen';
 
 const Dataset: React.FC<any> = () => {
   const qriRef = newQriRef(useParams())
@@ -29,7 +30,7 @@ const Dataset: React.FC<any> = () => {
       ]}>
         <DatasetTitleMenu qriRef={qriRef} />
       </NavBar>
-      <div className='flex flex-grow overflow-hidden'>
+      <div className='flex flex-grow overflow-hidden relative'>
         <DatasetNavSidebar qriRef={qriRef} />
         <div className='h-full overflow-hidden'>
           <Switch>
@@ -39,6 +40,7 @@ const Dataset: React.FC<any> = () => {
             <Route path='/ds/:username/:dataset/history'><HistoryList /></Route>
           </Switch>
         </div>
+        <DeployingScreen qriRef={qriRef} />
       </div>
     </div>
   )

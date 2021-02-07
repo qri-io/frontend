@@ -6,17 +6,18 @@ import { NewRunStep, Run, RunState } from '../../qrimatic/run'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStateIcon from './RunStateIcon'
+import DeployButtonWithStatusDescription from '../deploy/DeployStatusDescriptionButton'
+import SnackBar from '../snackBar/SnackBar'
 
 export interface WorkflowOutlineProps {
   workflow?: Workflow
   run?: Run
-  onDeploy: () => void
 }
 
-const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDeploy }) => {
+const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run }) => {
   return (
-    <div className='outline h-full w-56 flex-none'>
-      <div className='pt-4 pl-4 text-left'>
+    <div className='outline h-full w-56 flex-none flex flex-col'>
+      <div className='py-4 pl-4 text-left'>
         <div className='mb-2'>
           <ScrollTrigger target='triggers'>
             <div className='font-semibold text-gray-900 mb-1 uppercase text-xs'>Triggers</div>
@@ -52,13 +53,12 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
         <div className='text-xs text-gray-500 bg-gray-200 inline-block py-0 px-2 rounded-xl border ml-2'>
           <Icon icon='cloudUpload' size='sm' className='mr-1'/> <span>push to cloud</span>
         </div>
-        <button
-          className='mt-4 py-1 px-4 w-full font-semibold shadow-md text-white bg-qrilightblue hover:bg-qrilightblue-light rounded'
-          onClick={() => { onDeploy() }}
-        >
-          Deploy Workflow
-        </button>
       </div>
+      <hr />
+      <div className='flex-grow'>
+        {workflow && <DeployButtonWithStatusDescription workflow={workflow} />}
+      </div>
+      <SnackBar />
     </div>
   )
 }

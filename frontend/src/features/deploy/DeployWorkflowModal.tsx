@@ -1,9 +1,9 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { clearModal } from '../../app/state/appActions'
-import { deployWorkflow } from '../state/workflowActions'
-import { selectWorkflow } from '../state/workflowState'
+import { clearModal } from '../app/state/appActions'
+import { deployWorkflow } from './state/deployActions'
+import { selectWorkflow } from '../workflow/state/workflowState'
 
 const DeployWorkflowModal: React.FC = () => {
   const dispatch = useDispatch()

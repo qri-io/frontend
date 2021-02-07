@@ -210,22 +210,19 @@ export const apiMiddleware: Middleware = () => (next: Dispatch<AnyAction>) => as
     let data: APIResponseEnvelope
     let { endpoint = '', method, map = identityFunc, segments, query, body, pageInfo } = action[CALL_API]
     const [REQ_TYPE, SUCC_TYPE, FAIL_TYPE] = apiActionTypes(action.type)
-    next({ type: REQ_TYPE, pageInfo, segments })
+
+    next({ 
+      ...action,
+      type: REQ_TYPE,
+      pageInfo,
+      segments
+    })
 
     try {
       data = await getAPIJSON(endpoint, method, segments, query, pageInfo, body)
     } catch (err) {
-      // if (err && err.message && err.message.includes('Failed to fetch')) {
-      //   next({
-      //     type: FAILED_TO_FETCH
-      //   })
-      // }
-      // if (err && err.code === 401) {
-      //   next({
-      //     type: UNAUTHORIZED
-      //   })
-      // }
       return next({
+        ...action,
         type: FAIL_TYPE,
         payload: {
           err,
@@ -239,6 +236,7 @@ export const apiMiddleware: Middleware = () => (next: Dispatch<AnyAction>) => as
     }
 
     return next({
+      ...action,
       type: SUCC_TYPE,
       payload: {
         data: map(data.data),

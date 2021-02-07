@@ -12,6 +12,7 @@ import { AppState, appReducer } from '../features/app/state/appState';
 import { CollectionState, collectionReducer } from '../features/collection/state/collectionState';
 import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
 import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
+import { deployReducer, DeployState } from '../features/deploy/state/deployState';
 
 export const history = createBrowserHistory()
 
@@ -19,6 +20,7 @@ export interface RootState {
   router: RouterState
   jobs: JobState
   workflow: WorkflowState
+  deploy: DeployState
   transfers: RemoteEvents
   app: AppState
   collection: CollectionState
@@ -37,7 +39,8 @@ const rootReducer = (h: History) => combineReducers({
   app: appReducer,
   collection: collectionReducer,
   dataset: datasetReducer,
-  scroller: scrollerReducer
+  scroller: scrollerReducer,
+  deploy: deployReducer,
 })
 
 export function configureStore(preloadedState?: any) {
