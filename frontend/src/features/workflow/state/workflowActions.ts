@@ -15,17 +15,18 @@ export function mapWorkflow(d: object | []): Workflow {
   return NewWorkflow((d as Record<string,any>))
 }
 
- export function loadWorkflowByDatasetRef(ref: QriRef): ApiActionThunk {
+export function loadWorkflowByDatasetRef(qriRef: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
-    return dispatch(fetchWorkflow(ref))
+    return dispatch(fetchWorkflowByDatasetRef(qriRef))
   }
 }
 
-function fetchWorkflow(ref: QriRef): ApiAction {
+function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
   return {
     type: 'workflow',
+    qriRef,
     [CALL_API]: {
-      endpoint: `workflow?dataset_id=${ref.username}/${ref.name}`,
+      endpoint: `workflow?dataset_id=${qriRef.username}/${qriRef.name}`,
       method: 'GET',
       map: mapWorkflow
     }
@@ -74,26 +75,6 @@ export function runWorkflow(w: Workflow): ApiActionThunk {
             steps: w.steps
           }
         },
-      }
-    })
-  }
-}
-
-export function deployWorkflow(w: Workflow): ApiActionThunk {
-  return async (dispatch, getState) => {
-    return dispatch({
-      type: 'deploy',
-      [CALL_API]: {
-        endpoint: 'deploy',
-        method: 'POST',
-        body: {
-          apply: true,
-          workflow: w,
-          transform: {
-            scriptBytes: btoa(workflowScriptString(w)),
-            steps: w.steps
-          }
-        }
       }
     })
   }

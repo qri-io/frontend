@@ -2,10 +2,11 @@ import React from 'react'
 
 import Icon from '../../chrome/Icon'
 
-export interface WorkflowMessageProps {
+export interface SnackBarMessageProps {
+  
 }
 
-const WorkflowMessage: React.FC<WorkflowMessageProps> = () => {
+const SnackBarMessage: React.FC<SnackBarMessageProps> = () => {
   return (
     <div className='flex shadow-sm bg-white'>
       <div className='w-2 bg-green-400' />
@@ -15,7 +16,9 @@ const WorkflowMessage: React.FC<WorkflowMessageProps> = () => {
       <div className='flex flex-col flex-grow py-2 px-2' style={{ fontSize: '8px' }}>
         <div className='text-xs font-semibold mb-1'>Workflow Deployed</div>
         <div className='text-xs font-light mb-1'>Next run at 11:00pm EST</div>
-        <div className='text-xs font-light text-qrilightblue font-medium underline'><a href=''>show collection</a></div>
+        <div className='text-xs text-qrilightblue font-medium underline'>
+          show collection
+        </div>
       </div>
       <div className='pr-2'>
         <Icon icon='times' className='text-gray-600' size='xs' />
@@ -24,4 +27,4 @@ const WorkflowMessage: React.FC<WorkflowMessageProps> = () => {
   )
 }
 
-export default WorkflowMessage
+export default SnackBarMessage

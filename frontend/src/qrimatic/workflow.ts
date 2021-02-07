@@ -1,7 +1,6 @@
 import { NewTransformStep, TransformStep } from "../qri/dataset"
 import { VersionInfo } from "../qri/versionInfo"
 
-
 export interface Workflow {
   id: string
   ownerID?: string
@@ -83,4 +82,22 @@ export function workflowScriptString(w: Workflow): string {
     }
     return str
   }, '')
+}
+
+export type DeployStatus = 
+  | 'undeployed'
+  | 'deployed'
+  | 'deploying'
+  | 'drafting'
+  | 'paused'
+
+export function workflowDeployStatus(w?: Workflow): DeployStatus {
+  if (!w) {
+    return 'undeployed'
+  } else if (w.id === '') {
+    return 'undeployed'
+  } else if (w.disabled) {
+    return 'paused'
+  }
+  return 'deployed'
 }

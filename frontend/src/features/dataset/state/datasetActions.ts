@@ -16,6 +16,7 @@ export function loadDataset(ref: QriRef): ApiActionThunk {
 function fetchDataset (ref: QriRef): ApiAction {
   return {
     type: 'dataset',
+    ref,
     [CALL_API]: {
       endpoint: 'get',
       method: 'GET',

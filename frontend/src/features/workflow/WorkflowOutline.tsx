@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Icon from '../../chrome/Icon'
 import { TransformStep } from '../../qri/dataset'
@@ -6,28 +6,15 @@ import { NewRunStep, Run, RunState } from '../../qrimatic/run'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStateIcon from './RunStateIcon'
-import WorkflowStatus from './WorkflowStatus'
-import WorkflowMessage from './WorkflowMessage'
+import DeployButtonWithStatusDescription from '../deploy/DeployStatusDescriptionButton'
+import SnackBar from '../snackBar/SnackBar'
 
 export interface WorkflowOutlineProps {
   workflow?: Workflow
   run?: Run
-  onDeploy: () => void
-  setShowSpinner: any
 }
 
-const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDeploy, setShowSpinner }) => {
-  const [status, setStatus] = useState('notDepolyed')
-
-  const handleStatusButtonClick = () => {
-    setShowSpinner(true)
-    setTimeout(() => {
-      setStatus('deployed')
-      setShowSpinner(false)
-    }, 2500)
-  }
-
-
+const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run }) => {
   return (
     <div className='outline h-full w-56 flex-none flex flex-col'>
       <div className='py-4 pl-4 text-left'>
@@ -69,11 +56,9 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({ workflow, run, onDepl
       </div>
       <hr />
       <div className='flex-grow'>
-        <WorkflowStatus status={status} onStatusButtonClick={handleStatusButtonClick}/>
+        {workflow && <DeployButtonWithStatusDescription workflow={workflow} />}
       </div>
-      <div className="py-4 pl-4" >
-        <WorkflowMessage />
-      </div>
+      <SnackBar />
     </div>
   )
 }
