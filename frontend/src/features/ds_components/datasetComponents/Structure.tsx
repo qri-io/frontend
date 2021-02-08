@@ -6,7 +6,7 @@ import { Structure } from '../../../qri/dataset'
 
 import fileSize, { abbreviateNumber } from '../fileSize'
 
-import LabeledStats from '../LabeledStat'
+import LabeledStats from '../LabeledStats'
 import FormatConfigHistory from '../FormatConfigHistory'
 // import SpinnerWithIcon from './chrome/SpinnerWithIcon'
 import Schema from '../schema/Schema'
@@ -83,22 +83,24 @@ export const StructureComponent: React.FunctionComponent<StructureProps> = ({dat
   }
 
   return (
-    <div className='structure'>
-      <div className='stats'><LabeledStats data={getStats(data)} size='lg' /></div>
-      <FormatConfigHistory structure={data} />
-      <div>
-        <h4 className='schema-title'>
-          Schema
-          &nbsp;
-          <a id='json-schema' href='https://json-schema.org/' target='_blank' rel='noreferrer'>
-            <span
-              data-tip={'JSON schema that describes the structure of the dataset. Click here to learn more about JSON schemas'}
-              className='text-input-tooltip'
-            >
-              <FontAwesomeIcon icon={faInfoCircle} size='sm'/>
-            </span>
-          </a>
-        </h4>
+    <div>
+      <div className='p-3'>
+        <LabeledStats data={getStats(data)} size='lg' />
+        <FormatConfigHistory structure={data} />
+        <div>
+          <div className='text-sm font-semibold mb-2'>
+            Schema
+            &nbsp;
+            <a id='json-schema' href='https://json-schema.org/' target='_blank' rel='noreferrer'>
+              <span
+                data-tip={'JSON schema that describes the structure of the dataset. Click here to learn more about JSON schemas'}
+                className='text-input-tooltip'
+              >
+                <FontAwesomeIcon icon={faInfoCircle} size='sm'/>
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
       <Schema
         data={schema}
@@ -108,4 +110,4 @@ export const StructureComponent: React.FunctionComponent<StructureProps> = ({dat
   )
 }
 
-export default StructureComponent 
+export default StructureComponent

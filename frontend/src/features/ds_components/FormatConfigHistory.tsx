@@ -13,10 +13,10 @@ const FormatConfigHistory: React.FunctionComponent<FormatConfigHistoryProps> = (
   const formatConfig = structure.formatConfig
   return (
     <div>
-      <h4 className='config-title'>
+      <div className='text-sm font-semibold mb-2'>
         {format ? format.toUpperCase() + ' ' : ''}Configuration
-      </h4>
-      <div>
+      </div>
+      <div className='mb-6 text-sm pl-3'>
         { (formatConfig === undefined || formatConfig === null || Object.keys(formatConfig).length === 0)
           ? <div className='margin'>No configurations details</div>
           : Object.keys(formatConfigOptions).map((option: string, i) => {

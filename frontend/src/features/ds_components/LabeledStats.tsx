@@ -40,7 +40,7 @@ const LabeledStats: React.FunctionComponent<LabeledStatsProps> = (props) => {
   } = props
 
   return (
-    <div className='stats-values'>
+    <div className='flex justify-between mb-6'>
       {data.map((stat, i) => {
         let displayVal: any = stat.value
         let displayDelta: any = stat.delta
@@ -58,9 +58,9 @@ const LabeledStats: React.FunctionComponent<LabeledStatsProps> = (props) => {
           }
         }
         return (
-          <div key={i} className={classNames('stats-value', { 'large': size === 'lg' })} >
-            <label className={classNames('label', { uppercase, 'light': color === 'light', 'large': size === 'lg' })}>{stat.label}</label>
-            <div className={classNames('value', { 'light': color === 'light', 'large': size === 'lg' })}>{displayVal}</div>
+          <div key={i} className={classNames('text-center', { 'large': size === 'lg' })} >
+            <label className={classNames('text-gray-500 text-sm', { uppercase, 'light': color === 'light', 'large': size === 'lg' })}>{stat.label}</label>
+            <div className={classNames('font-semibold', { 'light': color === 'light', 'large': size === 'lg' })}>{displayVal}</div>
             {stat.delta
               ? <div className={classNames('delta', { 'negative': stat.delta < 0, 'light': color === 'light', 'large': size === 'lg' })}>{stat.delta > 0 && <span>+</span>}{displayDelta}</div>
               : <div className={classNames('delta-spacer', { 'large': size === 'lg' })}></div>}

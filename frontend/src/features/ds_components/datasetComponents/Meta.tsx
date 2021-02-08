@@ -7,7 +7,7 @@ import { Meta, Citation, License, User, StandardFieldNames } from '../../../qri/
 // import { connectComponentToProps } from '../../../utils/connectComponentToProps'
 
 // import { selectDataset, selectDatasetIsLoading } from '../../../selections'
-// import ExternalLink from '../../ExternalLink'
+import ExternalLink from '../../../chrome/ExternalLink'
 import KeyValueTable from '../KeyValueTable'
 // import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
 
@@ -30,23 +30,23 @@ const renderValue = (value: string | string[] | object) => {
 
 const renderChips = (value: string[] | undefined) => (
   <div>
-    {value && value.map((d, i) => (<span key={i} className='chip'>{d}</span>))}
+    {value && value.map((d, i) => (<span key={i} className='text-xs rounded bg-gray-300 px-2 py-1 mr-2'>{d}</span>))}
   </div>
 )
 
 const renderLicense = (license: License) => (
-  <a id='render-license' href={license.url} target='_blank' rel="noreferrer">
+  <ExternalLink href={license.url}>
     {license.type}
-  </a>
+  </ExternalLink>
 )
 
 const renderURL = (url: string) => (
-  <a id='render-url' href={url} target='_blank' rel="noreferrer">{url}</a>
+  <ExternalLink href={url}>{url}</ExternalLink>
 )
 
 const renderArrayItemsTable = (value: any[]) => {
   return (
-    <div className='array-items-table-container'>
+    <div>
       {
         value.map((item, i) => (<div key={i}><KeyValueTable index={i} data={item} /></div>))
       }
@@ -60,10 +60,11 @@ const renderMultiStructured = (value: User[] | Citation[]) => {
 
 const renderTable = (keys: string[], data: Meta) => {
   return (
-    <div className='keyvalue-table-wrap'>
+    <div className='border rounded-md'>
       <table className='keyvalue-table'>
         <tbody>
           {keys.map((key) => {
+            console.log('key', key)
             const value = data[key]
             let cellContent
             switch (key) {
@@ -75,10 +76,10 @@ const renderTable = (keys: string[], data: Meta) => {
               case 'license':
                 cellContent = renderLicense(value)
                 break
-              case 'accessURL':
-              case 'downloadURL':
-              case 'readmeURL':
-              case 'homeURL':
+              case 'accessUrl':
+              case 'downloadUrl':
+              case 'readmeUrl':
+              case 'homeUrl':
                 cellContent = renderURL(value)
                 break
               case 'contributors':
@@ -90,9 +91,9 @@ const renderTable = (keys: string[], data: Meta) => {
             }
 
             return (
-              <tr key={key} className='keyvalue-table-row'>
-                <td className='keyvalue-table-key'>{key}</td>
-                <td id={`meta-${key}`}>{cellContent}</td>
+              <tr key={key} className='border-b'>
+                <td className='p-2 font-semibold text-xs text-right'>{key}</td>
+                <td id={`meta-${key}`} className='p-2'>{cellContent}</td>
               </tr>
             )
           })}
@@ -115,12 +116,12 @@ export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
   })
 
   return (
-    <div className='content metadata-viewer-wrap'>
-      <h4 className='metadata-viewer-title'>Standard Metadata</h4>
+    <div className='p-3'>
+      <div className='text-sm font-semibold mb-2'>Standard Metadata</div>
       {renderTable(standard, data)}
 
       {(extra.length > 0) && <div>
-        <h4 className='metadata-viewer-title'>Additional Metadata</h4>
+        <h4 className='text-sm font-semibold mb-2'>Additional Metadata</h4>
         {renderTable(extra, data)}
       </div>}
     </div>

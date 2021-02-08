@@ -3,6 +3,8 @@ import classNames from 'classnames'
 import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ComponentStatus } from '../../models/store'
+import Icon from './Icon'
+
 
 export interface StatusDotProps {
   status: ComponentStatus
@@ -15,16 +17,20 @@ export const StatusDot: React.FunctionComponent<StatusDotProps> = (props) => {
     showNoChanges = false
   } = props
   let statusTooltip
+  let statusColor = ''
   switch (status) {
     case 'modified':
       statusTooltip = 'modified'
+      statusColor = 'text-yellow-500'
       break
     case 'add':
     case 'added':
       statusTooltip = 'added'
+      statusColor = 'text-green-500'
       break
     case 'removed':
       statusTooltip = 'removed'
+      statusColor = 'text-red-600'
       break
     case 'parse error':
       return (<FontAwesomeIcon
@@ -40,13 +46,11 @@ export const StatusDot: React.FunctionComponent<StatusDotProps> = (props) => {
       statusTooltip = 'unmodified'
   }
 
-  return <div
-    className={classNames('status-dot', {
-      'status-dot-modified': statusTooltip === 'modified',
-      'status-dot-removed': statusTooltip === 'removed',
-      'status-dot-added': statusTooltip === 'added',
-      'status-dot-transparent': statusTooltip === 'unmodified' })}
-    data-tip={statusTooltip} />
+  return (
+    <div className={statusColor} style={{ fontSize: '0.55rem' }} data-tip={statusTooltip}>
+      {statusColor && <Icon icon='circle' />}
+    </div>
+  )
 }
 
 export default StatusDot

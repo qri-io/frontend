@@ -44,7 +44,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   return (
-    <div>
+    <div className='flex-grow'>
       <ComponentHeader componentName={componentName} />
       {component}
     </div>

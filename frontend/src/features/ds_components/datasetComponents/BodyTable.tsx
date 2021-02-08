@@ -38,6 +38,8 @@ interface BodyTableProps {
 //   return Math.abs(scrollTop + offsetHeight - scrollHeight) < buffer
 // }
 
+const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap border-r border-gray-100 '
+
 export default class BodyTable extends React.Component<BodyTableProps> {
   constructor (props: BodyTableProps) {
     super(props)
@@ -111,9 +113,9 @@ export default class BodyTable extends React.Component<BodyTableProps> {
 
     const tableRows = body.map((row, i) => {
       return (
-        <tr key={i}>
-          <td key={0}className={'first-column'}>
-            <div className='cell'>
+        <tr key={i} className='border-b border-gray-100'>
+          <td key={0}className='bg-gray-200 text-center'>
+            <div className={cellClasses}>
               {
                 // TODO (ramfox): when we add back pageInfo/fetching
                 // we should use the page number, page size, and the row index (i)
@@ -125,7 +127,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
           {row.map((d: any, j: number) => {
             return (
               <td key={j + 1}>
-                <div className='cell'>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
+                <div className={cellClasses}>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
               </td>
             )
           })}
@@ -138,16 +140,16 @@ export default class BodyTable extends React.Component<BodyTableProps> {
         id='body-table-container'
         onScroll={() => { this.handleVerticalScrollThrottled() } }
       >
-        <table style={{ display: 'table' }}>
-          <thead>
+        <table className='table text-xs'>
+          <thead className='border-b border-gray-100'>
             <tr>
-              <th>
-                <div className='cell'>&nbsp;</div>
+              <th className='sticky top-0 h-6 bg-gray-200 font-semibold cursor-pointer p-0'>
+                <div className={cellClasses}>&nbsp;</div>
               </th>
               {headers && headers.map((d: any, j: number) => {
                 return (
-                  <th key={j} >
-                    <div className='cell' >
+                  <th key={j} className='sticky top-0 h-6 bg-gray-200 font-semibold text-left p-0'>
+                    <div className={cellClasses} >
                       <TypeLabel type={d.type} showLabel={false}/>&nbsp;{d.title}
                     </div>
                   </th>
