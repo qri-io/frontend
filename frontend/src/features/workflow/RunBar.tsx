@@ -4,13 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import DropdownButton, { Option } from '../../chrome/DropdownButton'
 import { RunState } from '../../qrimatic/run'
 import RunStateIcon from './RunStateIcon'
-import { setRunMode } from './state/workflowActions'
-import { selectRunMode } from './state/workflowState'
+import { applyWorkflowTransform, saveAndApplyWorkflowTransform, setRunMode } from './state/workflowActions'
+import { selectRunMode, selectWorkflow } from './state/workflowState'
 
 export interface RunBarProps {
- status: RunState,
- onRun: (mode: 'apply' | 'save') => void,
- onCancel: () => void,
+ status: RunState
+ onRun?: () => void
 }
 
 const runModes: Option[] = [
@@ -20,14 +19,25 @@ const runModes: Option[] = [
 
 const RunBar: React.FC<RunBarProps> = ({
   status,
-  onRun,
-  onCancel
+  onRun
 }) => {
   const dispatch = useDispatch()
   const runMode = useSelector(selectRunMode)
+  const workflow = useSelector(selectWorkflow)
+
+  const handleRun = () => {
+    if (onRun) { onRun() }
+    if (runMode === 'apply') {
+      dispatch(applyWorkflowTransform(workflow))
+    } else if (runMode === 'save') {
+      dispatch(saveAndApplyWorkflowTransform(workflow))
+    }
+  }
+
+  const handleCancel = () => { alert('cannot cancel runs yet') }
 
   return (
-    <div >
+    <div>
       <div className='flex'>
         <div className='flex-2 mr-2'>
           <div className='inline-block align-middle'>
@@ -37,7 +47,7 @@ const RunBar: React.FC<RunBarProps> = ({
         <div className='flex-1 text-right'>
           <DropdownButton
             value={(runMode === 'apply') ? runModes[0] : runModes[1]}
-            onClick={() => {(status === RunState.running) ? onCancel() : onRun(runMode) }}
+            onClick={() => {(status === RunState.running) ? handleCancel() : handleRun() }}
             onChangeValue={(v: Option) => { 
               if (v.id === 'apply') {
                 dispatch(setRunMode('apply'))

@@ -75,10 +75,10 @@ export function setRunMode(mode: 'apply' | 'save'): RunModeAction {
   }
 }
 
-export function runWorkflow(w: Workflow): ApiActionThunk {
+export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch({
-      type: 'run_workflow',
+      type: 'apply',
       [CALL_API]: {
         endpoint: 'apply',
         method: 'POST',
@@ -90,6 +90,30 @@ export function runWorkflow(w: Workflow): ApiActionThunk {
         },
       }
     })
+  }
+}
+
+export function saveAndApplyWorkflowTransform(w: Workflow): ApiActionThunk {
+  return async (dispatch, getState) => {
+    throw new Error("we need to ajust the save API endpoint before workflow saving can work")
+
+    // return dispatch({
+    //   type: 'save',
+    //   [CALL_API]: {
+    //     endpoint: 'save',
+    //     method: 'POST',
+    //     body: {
+    //       apply: true,
+    //       ref: w.datasetID,
+    //       dataset: {
+    //         transform: {
+    //           scriptBytes: btoa(workflowScriptString(w)),
+    //           steps: w.steps
+    //         }
+    //       }
+    //     },
+    //   }
+    // })
   }
 }
 

@@ -6,24 +6,26 @@ import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor';
 import OnComplete from './OnComplete';
 import { NewRunStep, Run, RunState, RunStep } from '../../qrimatic/run';
 import { TransformStep } from '../../qri/dataset';
-import { changeWorkflowTransformStep, runWorkflow } from './state/workflowActions';
+import { changeWorkflowTransformStep } from './state/workflowActions';
 import RunBar from './RunBar';
 import { Workflow } from '../../qrimatic/workflow';
 import Scroller from '../scroller/Scroller';
 import ScrollAnchor from '../scroller/ScrollAnchor';
+import { RunMode } from './state/workflowState';
 
 export interface WorkflowEditorProps {
+  runMode: RunMode
   workflow: Workflow
   run?: Run
 }
 
-const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
+const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow }) => {
   const dispatch = useDispatch()
 
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
-  const collapseState = (step: TransformStep, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
-    if (collapseStates[step.name]) {
-      return collapseStates[step.name]
+  const collapseState = (stepName: string, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
+    if (collapseStates[stepName]) {
+      return collapseStates[stepName]
     }
 
     if (run) {
@@ -51,16 +53,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
                 <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Script</h2>
               <div className='text-xs'>Use code to download source data, transform it, and commit the next version of this dataset</div>
             </div>
-            <div>
-              <RunBar
-                status={run ? run.status : RunState.waiting }
-                onRun={() => {
-                  setCollapseStates({})
-                  dispatch(runWorkflow(workflow))
-                }}
-                onCancel={() => { alert('cannot cancel runs yet') }}
-                />
-            </div>
+            <RunBar status={run ? run.status : RunState.waiting } onRun={() => {setCollapseStates({})}} />
           </div>
         <div className='px-4'>
           {workflow.steps && workflow.steps.map((step, i) => {
@@ -73,7 +66,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
               index={i}
               step={step}
               run={r}
-              collapseState={collapseState(step, r)}
+              collapseState={collapseState(step.name, r)}
               onChangeCollapse={(v) => {
                 const update = Object.assign({}, collapseStates as any)
                 update[step.name] = v
@@ -86,6 +79,18 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ run, workflow }) => {
               }}
             />)
           })}
+          {/* TODO(b5) - hack for now. In the future we should make a component that trances & selects save results */}
+          {runMode === 'save' && <WorkflowCell 
+            index={(workflow.steps?.length || 1)}
+            step={{name: 'save', syntax: 'qri', category: 'save', script: ''}}
+            collapseState={collapseState('save')}
+            onChangeCollapse={(v) => {
+              const update = Object.assign({}, collapseStates as any)
+              update['save'] = v
+              setCollapseStates(update)
+            }}
+            onChangeScript={() => {}}
+            />}
         </div>
       </section>
       <OnComplete />

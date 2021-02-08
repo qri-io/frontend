@@ -22,15 +22,15 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
 }) => {
   const [open, setOpen] = useState(false)
   return (
-    <button className='relative rounded-md bg-qriblue border-qriblue-700 border'>
+    <button className='relative rounded-md bg-qriblue'>
       <div
-        className='float-right p-3 pt-1 pb-3 border-l rounded-tr-md rounded-br-md hover:bg-qriblue-500 border-qriblue-700 bg-qriblue-600'
+        className='float-right p-3 pt-0 pb-2 rounded-tr-md rounded-br-md hover:bg-qriblue-500 bg-qriblue-600'
         onClick={() => {setOpen(!open)}}
       >
         <Icon color='light' icon='sortDown'/>
       </div>
       <div
-        className='p-2 pr-16 pl-5 hover:bg-qriblue-400 font-bold text-white'
+        className='p-1 pr-16 pl-5 hover:bg-qriblue-400 rounded-md font-bold text-white'
         onClick={() => {onClick(value)}}
       >
         {value.title}

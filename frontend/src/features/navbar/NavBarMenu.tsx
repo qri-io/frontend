@@ -19,7 +19,7 @@ const NavBarMenu: React.FC<NavBarMenuProps> = ({ items = [] }) => {
     <div className='relative mr-5 ml-1'>
       <div className='text-white' onClick={() => { setOpen(!open) }}><Icon icon='bars' /></div>
       {open &&
-        <div className='absolute bg-gray-600 p-5'>
+        <div className='absolute bg-gray-600 p-5 z-20'>
           {items.map((item, i) => {
             switch (item.type) {
               case 'link':

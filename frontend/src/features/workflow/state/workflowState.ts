@@ -28,10 +28,14 @@ export const selectLatestRun = (state: RootState): Run | undefined => {
 }
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
-export const selectRunMode = (state: RootState): 'apply' | 'save' => state.workflow.runMode
+export const selectRunMode = (state: RootState): RunMode => state.workflow.runMode
+
+export type RunMode =
+  | 'apply'
+  | 'save'
 
 export interface WorkflowState {
-  runMode: 'apply' | 'save'
+  runMode: RunMode
   // reference the workflow editor is manipulating
   qriRef?: QriRef,
   workflow: Workflow,
@@ -64,23 +68,12 @@ const initialState: WorkflowState = {
 }
 
 export const workflowReducer = createReducer(initialState, {
-  'API_RUN_WORKFLOW_SUCCESS': (state, action) => {
+  'API_APPLY_SUCCESS': (state, action) => {
     const runID = action.payload.data.runID
     state.lastRunID = runID
   },
   SET_RUN_MODE: (state, action: RunModeAction) => {
     state.runMode = action.mode
-    // TODO (B5) - this is a hack for now while cells aren't editable and "save" / "result" is still
-    // represented as a step
-    if (state.workflow.steps) {
-      if (state.runMode === 'apply') {
-        state.workflow.steps[3].category = 'result'
-        state.workflow.steps[3].name = 'result'
-      } else if (state.runMode === 'save') {
-        state.workflow.steps[3].category = 'save'
-        state.workflow.steps[3].name = 'save'
-      }
-    }
   },
   SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,
