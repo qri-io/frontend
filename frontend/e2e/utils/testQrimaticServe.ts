@@ -248,6 +248,7 @@ const qriConfig = `{
     "allowedorigins": [
       "electron://local.qri.io",
       "http://localhost:2505",
+      "http://localhost:3000",
       "http://app.qri.io",
       "https://app.qri.io"
     ],

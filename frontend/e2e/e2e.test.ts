@@ -1,4 +1,3 @@
-import { hasUncaughtExceptionCaptureCallback } from 'process'
 import puppeteer from 'puppeteer'
 
 import { startupBackendApp, startUpFrontendApp } from './utils/specHelpers'
@@ -23,7 +22,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   browser = await puppeteer.launch({
     headless,
-    slowMo: 500
+    slowMo: 100
   })
   page = await browser.newPage()
 
@@ -64,22 +63,52 @@ test('happy path', async () => {
   await page.click('#CSVDownload')
   await page.waitForSelector('#workflow')
 
-  await page.type('#setup-cell .monaco-editor', '\n\tprint("hello!")', {delay: 100})
+  await page.click('#setup-cell .monaco-editor')
+  await page.keyboard.type('\nprint("hello!")',{delay: 20})
   await page.click('#dry-run')
   await page.waitForSelector('#succeeded')
-  const setupOutputEl = await page.$('#setup-cell .output')
-  expect((await setupOutputEl?.getProperty('innerHTML'))?.jsonValue()).toContain("hello!")
 
-  const downloadCodeEl = await page.$('#download-cell .monaco-editor')
-  expect((await downloadCodeEl?.getProperty('innerHTML'))?.jsonValue()).toContain("hello!")
-  const downloadCode = (await downloadCodeEl?.getProperty('innerHTML'))?.jsonValue()
-  await downloadCodeEl?.type('\n\tbadcode')
+  // puppeteer works mainly through promises
+  // you can nest "await"s, but I found that supremely ugly/confusing
+  // `page.evalutate` is the key when trying to get at the underlying element
+  // one gotchya: whatever ElementHandle you want to pass actually evalute
+  // (aka the one that you pass into the evalute anonymous function), must be
+  // the second param of the `evalute` function. You can pass an object of
+  // elements/additional params, that you can destructure inside the anonymous
+  // function
+  const setupOutput = await page.$('#setup-cell .output')
+    .then(async el => {
+      return await page.evaluate((el: HTMLElement) => {
+        // things get messy if we cannot find the the given element
+        // throw here so we can see what when wrong in the test
+        if (!el) {throw "cannot get setup output"}
+        return el.innerText
+      }, el)
+    })
+  expect(setupOutput).toContain("hello!")
+
+  // note: in order to interact with the monaco editor, you must click into the
+  // specific editor and interact by using the puppeteer keyboard API
+  await page.click('#download-cell .monaco-editor')
+  // note: no need to add formating whitespace, monaco editor does this
+  // automatically when you type "enter"
+  await page.keyboard.type('\nbadcode',{delay: 20})
   await page.click('#dry-run')
   await page.waitForSelector('#failed')
-  const downloadOutputEl = await page.$('#download-cell .output')
-  expect((await downloadOutputEl?.getProperty('innerHTML'))?.jsonValue()).toContain('error')
+  
+  const downloadOutput = await page.$('#download-cell .output')
+    .then(async el => {
+      return await page.evaluate((el: HTMLElement) => {
+        if (!el) {throw "cannot get download output"}
+        return el.innerText
+      }, el)
+    })
+  expect(downloadOutput).toContain('undefined: badcode')
 
-  await page.evaluate((el) => el.innerHTML = downloadCode, downloadCodeEl)
+  await page.click("#download-cell .monaco-editor")
+  await page.evaluate(() => document.execCommand("selectAll", true))
+  const downloadCode = '# get the popular baby names dataset as a csv\ndef download(ctx):\ncsvDownloadUrl = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"\nreturn http.get(csvDownloadUrl).body()'
+  await page.keyboard.type(downloadCode)
   await page.click('#dry-run')
   await page.waitForSelector('#succeeded')
   await page.waitForSelector('#dataset-preview')
@@ -87,6 +116,7 @@ test('happy path', async () => {
   // TODO (ramfox): when we get this functionality up and running, we can comment
   // these tests back in
   // await page.click('#select-schedule')
+  // TODO (ramfox): do we really want to have 'minute' be an option?
   // await page.click('#minute')
   // await page.click('#deploy')
   // await page.waitForSelector('#deploy-modal')
@@ -96,9 +126,20 @@ test('happy path', async () => {
   // await page.click('#back-to-collection')
   // // need to figure out what this id should be
   // const workflowItemId = '#workflow-unique-name'
-  // const workflowItemEl = await page.$(workflowItemId)
-  // expect(workflowItemEl).not.toBeNull()
-  // expect((await workflowItemEl?.$('.update-status')).getProperty('innerHTML')).toContain('never run')
+  // const workflowItemEl = await page.$(workflowItemId).then(el => {
+  //   if (!el) throw "cannot find workflow item element"
+  //   return el
+  // })
+  // const workflowItemText = await page.evaluate(async (workflowItemEl: puppeteer.ElementHandle<Element>) => {
+  //   return await workflowItemEl.$('.update-status').then(async updateEl => {
+  //     if (!updateEl) throw 'cannot find update-status element'
+  //     await page.evaluate(el => {
+  //       return el.innerText
+  //     }, updateEl)
+  //   })
+
+  // }, workflowItemEl)
+  // expect(workflowItemText).toContain('never run')
 
   // await workflowItemEl.click()
   // await page.click('#run-and-save')
@@ -108,12 +149,17 @@ test('happy path', async () => {
   // await page.waitForSelector(`${workflowItemId} .success`)
 
   // await workflowItemEl.click()
-  // await downloadCodeEl.type('\n\tbadcode')
+  // await page.waitForSelector('#setup-cell')
+  // await page.click('#setup-cell .monaco-editor')
+  // await page.keyboard.type('badcode',{delay: 20}) 
   // await page.click('#run-and-save')
   // await page.click('#menu')
   // await page.click('#back-to-collection')
   // await page.waitForSelector(`${workflowItemId} .failure`)
-})
+
+  // note: jest was timing out on this test sometimes
+  // extended the time beyond the default 6 * 1000 defined above
+}, 90000)
 
 // first time user flow
 /**
@@ -131,11 +177,11 @@ test('happy path', async () => {
  * - click to new route
  * - opens" create account" modal w/ "if you want to save your work, sign up for an account" text
  */
-test('first time user flow', async () => {
-  await page.goto('http://localhost:3000/')
-  // await page.click('#app > div.route-content.h-full > div > div.bg-qriblue.text-white.text-bold.flex.p-4.items-center > a.px-4')
-  await page.click("#new-dataset-button")
-} )
+// test('first time user flow', async () => {
+//   await page.goto('http://localhost:3000/')
+//   // await page.click('#app > div.route-content.h-full > div > div.bg-qriblue.text-white.text-bold.flex.p-4.items-center > a.px-4')
+//   await page.click("#new-dataset-button")
+// } )
 
 // create account flow
 /**
