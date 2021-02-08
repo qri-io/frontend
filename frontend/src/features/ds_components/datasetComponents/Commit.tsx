@@ -25,10 +25,10 @@ export const CommitComponent: React.FunctionComponent<CommitProps> = ({
   if (!data) return null
 
   return (
-    <div id='history-commit' className='margin'>
-      <h4>{data.title}</h4>
-      <h6>{moment(data.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</h6>
-      <div>{data.message}</div>
+    <div className='p-3'>
+      <div className='font-semibold mb-2'>{data.title}</div>
+      <div className='text-sm mb-2'>{moment(data.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</div>
+      <div className='text-sm'>{data.message}</div>
     </div>
   )
 }

@@ -56,7 +56,7 @@ const Overlay: React.FunctionComponent<OverlayProps> = ({
   return (
     <div
       style={{ maxHeight: height, maxWidth: width }}
-      className={classNames('overlay', { 'closed': !open })}
+      className={classNames('radius relative flex flex-col bg-white', { 'hidden': !open })}
       ref={overlayRef}
     >
       {title && <div className='title-bar'>

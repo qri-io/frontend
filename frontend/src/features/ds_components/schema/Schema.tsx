@@ -34,14 +34,14 @@ const Schema: React.FunctionComponent<SchemaProps> = ({
   }
 
   return (
-    <table id='schema-wrap' style={{ width: '100%' }}>
+    <table className='w-full'>
       <thead>
-        <tr className='schema-header'>
-          <th></th>
-          <th>title</th>
-          <th className='type-picker-header'>type</th>
-          <th>description</th>
-          <th>validation</th>
+        <tr className='border-t border-b uppercase' style={{ fontSize: '.7rem' }}>
+          <th className='py-2 pl-2'></th>
+          <th className='py-2 pl-2'>title</th>
+          <th className='py-2 pl-2'>type</th>
+          <th className='py-2 pl-2'>description</th>
+          <th className='py-2 pl-2'>validation</th>
         </tr>
       </thead>
       <tbody>

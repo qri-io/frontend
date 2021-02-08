@@ -93,20 +93,13 @@ export const DatasetComponents: React.FC<DatasetProps> = ({
   //   />
   // )
   return (
-    <div id='DatasetComponents' className='sidebar-layout'>
-      <div className='columns'>
-        <Resizable
-          id='DatasetComponents-sidebar'
-          width={300}
-          onResize={(s: number) => { console.log(s) }}
-          maximumWidth={500}
-        >
-          <ComponentList dataset={dataset} onClick={setSelectedComponent}/>
-        </Resizable>
-        <div id='DatasetComponents-main-content' className='main-content'>
-          <DatasetComponent dataset={dataset} componentName={selectedComponent} />
-        </div>
-      </div>
+    <div className='flex h-full w-full overflow-hidden'>
+      <ComponentList
+        dataset={dataset}
+        onClick={setSelectedComponent}
+        selectedComponent={selectedComponent}
+      />
+      <DatasetComponent dataset={dataset} componentName={selectedComponent} />
     </div>
   )
 }

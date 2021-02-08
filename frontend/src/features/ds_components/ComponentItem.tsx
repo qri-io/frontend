@@ -23,7 +23,7 @@ export interface ComponentItemProps {
 }
 
 export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (
-  { 
+  {
     status = 'unmodified',
     disabled = false,
     displayName,
@@ -43,9 +43,9 @@ export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (
   return (
     <div
       id={`${displayName.toLowerCase()}-status`}
-      className={classNames('sidebar-list-item', 'sidebar-list-item-text', {
+      className={classNames('flex text-sm font-light group', {
         'selected': selected,
-        'disabled': disabled,
+        'text-gray-400': disabled,
         'hover:cursor-pointer': !disabled
       })}
       onClick={() => {
@@ -54,14 +54,17 @@ export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (
         }
       }}
     >
-      {icon && (<div className='icon-column'>
-        <Icon icon={icon} size='sm' color={disabled ? 'medium' : color}/>
-      </div>)}
-      <div className='text-column'>
-        <div className='text'>{displayName}</div>
-        <div className='subtext'>{filename}</div>
+      <div className={`w-1 ${!disabled && 'group-hover:bg-qrilightblue'} transition-all duration-100 ${selected && 'bg-qrilightblue'}`}/>
+      {icon && (
+        <div className='w-8  text-center flex flex-col justify-center'>
+          <Icon icon={icon} size='sm' color={disabled ? 'medium' : color} className='mx-auto'/>
+        </div>
+      )}
+      <div className='flex-grow py-3'>
+        <div>{displayName}</div>
+        <div>{filename}</div>
       </div>
-      <div className={classNames('status-column', { 'disabled': disabled })}>
+      <div>
         {statusIcon}
       </div>
     </div>

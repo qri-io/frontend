@@ -1,4 +1,5 @@
 {
+  "readme": "foo",
   "body": [
     [
       "2021-01-13T02:40:45.410Z",
@@ -287,19 +288,22 @@
         "items": [
           {
             "title": "time",
-            "type": "string"
+            "type": "string",
+            "description": "the time that the earthquake occurred"
           },
           {
             "title": "latitude",
-            "type": "number"
+            "type": "number",
+            "description" : "the wgs84 latitude of the earthquake's epicenter"
           },
           {
             "title": "longitude",
-            "type": "number"
+            "type": "number",
+            "description" : "the wgs84 longitude of the earthquake's epicenter. the wgs84 longitude of the earthquake's epicenter. the wgs84 longitude of the earthquake's epicenter. the wgs84 longitude of the earthquake's epicenter. the wgs84 longitude of the earthquake's epicenter. the wgs84 longitude of the earthquake's epicenter. the wgs84 longitude of the earthquake's epicenter. the wgs84 longitude of the earthquake's epicenter"
           },
           {
             "title": "depth",
-            "type": "number"
+            "type": ["integer","string"]
           },
           {
             "title": "mag",
@@ -2271,25 +2275,25 @@
   },
   "transform": {
     "steps": [
-      { 
-        "syntax": "starlark", 
-        "category": "setup", 
-        "name": "setup", 
-        "script": "# load starlark dependencies\nload(\"http.star\", \"http\")\nload(\"encoding/csv.star\", \"csv\")" 
-      }, { 
-        "syntax": "starlark", 
-        "category": "download", 
-        "name": "download", 
-        "script": "# get the popular baby names dataset as a csv\ndef download(ctx):\n\tcsvDownloadUrl = \"https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD\"\n\treturn http.get(csvDownloadUrl).body()" 
-      }, { 
-        "syntax": "starlark", 
-        "category": "transform", 
-        "name": "transform", 
+      {
+        "syntax": "starlark",
+        "category": "setup",
+        "name": "setup",
+        "script": "# load starlark dependencies\nload(\"http.star\", \"http\")\nload(\"encoding/csv.star\", \"csv\")"
+      }, {
+        "syntax": "starlark",
+        "category": "download",
+        "name": "download",
+        "script": "# get the popular baby names dataset as a csv\ndef download(ctx):\n\tcsvDownloadUrl = \"https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD\"\n\treturn http.get(csvDownloadUrl).body()"
+      }, {
+        "syntax": "starlark",
+        "category": "transform",
+        "name": "transform",
         "script": "# set the body\ndef transform(ds, ctx):\n\t# ctx.download is whatever download() returned\n\tcsv = ctx.download\n\t# set the dataset body\n\tds.set_body(csv, parse_as=\"csv\")"
-      }, { 
-        "syntax": "qri", 
-        "category": "save", 
-        "name": "save", 
+      }, {
+        "syntax": "qri",
+        "category": "save",
+        "name": "save",
         "script": "" }
     ]
   }

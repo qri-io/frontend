@@ -15,14 +15,17 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
 
   const refCallback = useCallback((el: HTMLDivElement) =>{
     if (el !== null) {
-      fetch(`${API_BASE_URL}/render/${qriRefStr}`)
-        .then(async (res) => {
-          return res.text()
-        })
-        .then((render) => {
-          if (!render) { setHasReadme(false) }
-          el.innerHTML = render
-        })
+      // fetch(`${API_BASE_URL}/render/${qriRefStr}`)
+      //   .then(async (res) => {
+      //     return res.text()
+      //   })
+      //   .then((render) => {
+      //     if (!render) { setHasReadme(false) }
+      //     el.innerHTML = render
+      //   })
+
+      const render = "<h1>Heading</h1><p>Lorem Ipsum Dolor</p><p><strong>bold text</strong></p><h2>Heading 2</h2>"
+      el.innerHTML = render
     }
   }, [qriRefStr])
 
@@ -30,14 +33,16 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
     return null
   }
   return (
-    <div
-      // use "editor-preview" class to piggie-back off the simplemde styling
-      className="editor-preview"
-      ref={refCallback}
-    >loading...
+    <div className='p-3'>
+      <div
+        // use "editor-preview" class to piggie-back off the simplemde styling
+        className="markdown-body"
+        ref={refCallback}
+      >loading...
+      </div>
     </div>
   )
 }
 
 // TODO (b5) - this doesn't need to be a container at all
-export default ReadmeComponent 
+export default ReadmeComponent

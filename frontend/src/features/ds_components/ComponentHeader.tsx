@@ -28,13 +28,16 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
 
   const { displayName, icon, tooltip } = displayProps[componentName]
   return (
-    <div className='component-header'>
-      <div className='component-display-name-container'>
-        <div className='component-display-name' data-tip={tooltip}>
-          <Icon icon={icon} size='sm'/> {displayName}
+    <div className='flex-grow text-sm border-b'>
+      <div className='flex text-sm items-center px-3 py-1'>
+        <div className='w-4 mr-2 text-center' data-tip={tooltip}>
+          <Icon icon={icon} size='sm'/>
+        </div>
+        <div>
+          {displayName}
         </div>
       </div>
-      <div className='status-dot-container'>
+      <div className='flex-none'>
         {status && <StatusDot status={status} />}
       </div>
     </div>
