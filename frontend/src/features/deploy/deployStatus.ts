@@ -17,7 +17,7 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     statusIconClass: 'text-gray-500',
     message: 'This workflow is not deployed yet. Edit your script here, use a Dry Run to confirm that it is working, then Deploy it!',
     buttonIcon: 'playCircle',
-    buttonClass: 'bg-qrilightblue hover:bg-qrilightblue-light',
+    buttonClass: 'bg-qriblue hover:bg-qriblue-300',
     buttonText: 'Deploy Workflow',
   },
   'deployed': {
@@ -44,7 +44,7 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     statusIconClass: 'text-gray-500',
     message: 'This version is deployed, but drafted changes to this script are not yet live.',
     buttonIcon: 'playCircle',
-    buttonClass: 'bg-qrilightblue hover:bg-qrilightblue-light',
+    buttonClass: 'bg-qriblue hover:bg-qriblue-300',
     buttonText: 'Deploy Changes',
   },
   'paused': {

@@ -16,7 +16,7 @@ const SnackBarMessage: React.FC<SnackBarMessageProps> = () => {
       <div className='flex flex-col flex-grow py-2 px-2' style={{ fontSize: '8px' }}>
         <div className='text-xs font-semibold mb-1'>Workflow Deployed</div>
         <div className='text-xs font-light mb-1'>Next run at 11:00pm EST</div>
-        <div className='text-xs text-qrilightblue font-medium underline'>
+        <div className='text-xs text-qriblue font-medium underline'>
           show collection
         </div>
       </div>
