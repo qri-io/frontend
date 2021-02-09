@@ -1,16 +1,16 @@
 import React from 'react'
 
 import Icon from '../../chrome/Icon'
-import { RunState } from '../../qrimatic/run'
+import { RunStatus } from '../../qri/run'
 
-export interface RunStateIconProps {
-  state: RunState
+export interface RunStatusIconProps {
+  state: RunStatus
   size?: "sm" | "xs" | "md" | "lg"
 }
 
-const RunStateIcon: React.FC<RunStateIconProps> = ({ state, size='sm' }) => (
-  <span id={state} className='text-sm pl-2'>
-    {((s: RunState) => {
+const RunStatusIcon: React.FC<RunStatusIconProps> = ({ state, size='sm' }) => (
+  <span className='text-sm pl-2'>
+    {((s: RunStatus) => {
       switch (s) {
         case 'waiting':
           return <span className='text-gray-400'><Icon icon='circle' size={size}/></span>
@@ -20,13 +20,16 @@ const RunStateIcon: React.FC<RunStateIconProps> = ({ state, size='sm' }) => (
           return <span className='text-green-500'><Icon icon='check' size={size}/></span>
         case 'failed':
           return <span className='text-red-500'><Icon icon='exclamationCircle' size={size} /></span>
+        case 'unchanged':
+          // TODO(b5): consider an icon for "cached" here?
+          return <span className='text-blue-500'><Icon icon='minusCircle' size={size} spin /></span>
         case 'skipped':
-          return <span></span>
-        default:
-          return <span>{state}</span>
+          return <span className='text-blue-500'><Icon icon='minusCircle' size={size} spin /></span>
+        case '':
+          return null
       }
     })(state)}
   </span>
 )
 
-export default RunStateIcon
+export default RunStatusIcon

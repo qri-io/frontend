@@ -19,7 +19,7 @@ const Collection: React.FC<any> = () => {
     <PageLayout>
       <div className='max-w-screen-xl mx-auto px-10 py-20'>
         <header className='mb-8'>
-          <h1 className='text-2xl font-extrabold'>Datasets</h1>
+          <h1 className='text-2xl font-extrabold'>Collection</h1>
         </header>
 
         <DatasetsTable

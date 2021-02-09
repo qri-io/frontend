@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import WorkflowCell from './WorkflowCell';
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor';
 import OnComplete from './OnComplete';
-import { NewRunStep, Run, RunState, RunStep } from '../../qrimatic/run';
+import { NewRunStep, Run, RunStep } from '../../qri/run';
 import { changeWorkflowTransformStep } from './state/workflowActions';
 import RunBar from './RunBar';
 import { Workflow } from '../../qrimatic/workflow';
@@ -52,13 +52,13 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
                 <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Script</h2>
               <div className='text-xs'>Use code to download source data, transform it, and commit the next version of this dataset</div>
             </div>
-            <RunBar status={run ? run.status : RunState.waiting } onRun={() => {setCollapseStates({})}} />
+            <RunBar status={run ? run.status : "waiting" } onRun={() => {setCollapseStates({})}} />
           </div>
         <div className='px-4'>
           {workflow.steps && workflow.steps.map((step, i) => {
             let r
             if (run) {
-              r = (run?.steps && run?.steps.length >= i) ? run.steps[i] : NewRunStep({ status: RunState.waiting })
+              r = (run?.steps && run?.steps.length >= i) ? run.steps[i] : NewRunStep({ status: "waiting" })
             }
             return (<WorkflowCell
               key={i}

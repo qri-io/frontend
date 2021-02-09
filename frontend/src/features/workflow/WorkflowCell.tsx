@@ -1,9 +1,9 @@
 import React from 'react'
-import { RunStep } from '../../qrimatic/run'
+import { RunStep } from '../../qri/run'
 import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
-import RunStateIcon from './RunStateIcon'
+import RunStatusIcon from '../run/RunStatusIcon'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 
 export interface WorkflowCellProps {
@@ -65,7 +65,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
             {run && <p className='float-right'>{run.duration}</p>}
             <h3 className='text-lg text-gray-500 font-semibold cursor-pointer' onClick={() => {
               onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
-            }}>{name}{run && <RunStateIcon state={run.status} />}</h3>
+            }}>{name}{run && <RunStatusIcon state={run.status} />}</h3>
             <div className='text-xs mb-2'>{description}</div>
           </div>
         </header>

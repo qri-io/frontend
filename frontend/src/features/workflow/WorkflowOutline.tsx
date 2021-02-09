@@ -2,10 +2,10 @@ import React from 'react'
 
 import Icon from '../../chrome/Icon'
 import { TransformStep } from '../../qri/dataset'
-import { NewRunStep, Run, RunState } from '../../qrimatic/run'
+import { NewRunStep, Run } from '../../qri/run'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollTrigger from '../scroller/ScrollTrigger'
-import RunStateIcon from './RunStateIcon'
+import RunStatusIcon from '../run/RunStatusIcon'
 import DeployButtonWithStatusDescription from '../deploy/DeployStatusDescriptionButton'
 import SnackBar from '../snackBar/SnackBar'
 import { RunMode } from './state/workflowState'
@@ -34,7 +34,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
       <div className='mb-2'>
         <ScrollTrigger target='script'>
           <div className='font-semibold text-gray-900 mb-2 uppercase text-xs tracking-wide'>
-            Script {(run && run.status === RunState.running) && <div className='float-right text-blue-500'> <Icon icon='spinner' spin /></div>}
+            Script {(run && run.status === "running") && <div className='float-right text-blue-500'> <Icon icon='spinner' spin /></div>}
           </div>
         </ScrollTrigger>
       </div>
@@ -42,13 +42,13 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
         {workflow && workflow.steps?.map((step: TransformStep, i: number) => {
           let r
           if (run) {
-            r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: RunState.waiting })
+            r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: "waiting" })
           }
           return (
             <ScrollTrigger target={step.name} key={i}>
               <div className='text-sm ml-2 mb-1 text-gray-500 font-semibold'>
                 <span className='font-black text-gray-500'>{i+1}</span> &nbsp; {step.name}
-                {r && <div className='float-right text-green-500'><RunStateIcon state={r.status || RunState.waiting} /></div>}
+                {r && <div className='float-right text-green-500'><RunStatusIcon state={r.status || "waiting"} /></div>}
               </div>
             </ScrollTrigger>
           )
