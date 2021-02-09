@@ -5,16 +5,16 @@ import DropdownButton, { Option } from '../../chrome/DropdownButton'
 import { RunState } from '../../qrimatic/run'
 import RunStateIcon from './RunStateIcon'
 import { applyWorkflowTransform, saveAndApplyWorkflowTransform, setRunMode } from './state/workflowActions'
-import { selectRunMode, selectWorkflow } from './state/workflowState'
+import { RunMode, selectRunMode, selectWorkflow } from './state/workflowState'
 
 export interface RunBarProps {
  status: RunState
  onRun?: () => void
 }
 
-const runModes: Option[] = [
-  { id: 'apply', title: 'Dry Run', description: 'apply transform & preview results without saving'},
-  { id: 'save', title: 'Run & Save', description: 'run script & save results to version history'},
+const runModes: Option<RunMode>[] = [
+  { value: 'apply', title: 'Dry Run', description: 'apply transform & preview results without saving'},
+  { value: 'save', title: 'Run & Save', description: 'run script & save results to version history'},
 ]
 
 const RunBar: React.FC<RunBarProps> = ({
@@ -45,18 +45,15 @@ const RunBar: React.FC<RunBarProps> = ({
           </div>
         </div>
         <div className='flex-1 text-right'>
-          <DropdownButton
-            value={(runMode === 'apply') ? runModes[0] : runModes[1]}
-            onClick={() => {(status === RunState.running) ? handleCancel() : handleRun() }}
-            onChangeValue={(v: Option) => { 
-              if (v.id === 'apply') {
-                dispatch(setRunMode('apply'))
-              } else if (v.id === 'save') {
-                dispatch(setRunMode('save'))
-              }
-            }}
-            options={runModes}
-            />
+          {(status === RunState.running)
+            ? <button className='relative rounded-md bg-gray-500 font-bold text-white p-1 pr-5 pl-5' onClick={() => { handleCancel() }}>Cancel</button>
+            : <DropdownButton
+                value={(runMode === 'apply') ? runModes[0] : runModes[1]}
+                onClick={() => { handleRun() }}
+                onChangeValue={(opt: Option<RunMode>) => { dispatch(setRunMode(opt.value)) }}
+                options={runModes}
+                />
+          }
         </div>
       </div>
     </div>

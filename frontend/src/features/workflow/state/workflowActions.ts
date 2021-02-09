@@ -9,7 +9,8 @@ import {
   TEMP_SET_WORKFLOW_EVENTS,
   SET_WORKFLOW,
   SET_WORKFLOW_REF,
-  SET_RUN_MODE
+  SET_RUN_MODE,
+  RunMode
 } from './workflowState'
 
 export function mapWorkflow(d: object | []): Workflow {
@@ -33,7 +34,6 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
     }
   }
 }
-
 
 export interface SetWorkflowStepAction {
   type: string
@@ -65,10 +65,10 @@ export function changeWorkflowTrigger(index: number, trigger: WorkflowTrigger): 
 
 export interface RunModeAction {
   type: string
-  mode: 'apply' | 'save'
+  mode: RunMode
 }
 
-export function setRunMode(mode: 'apply' | 'save'): RunModeAction {
+export function setRunMode(mode: RunMode): RunModeAction {
   return {
     type: SET_RUN_MODE,
     mode,

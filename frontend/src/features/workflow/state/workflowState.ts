@@ -73,7 +73,10 @@ export const workflowReducer = createReducer(initialState, {
     state.lastRunID = runID
   },
   SET_RUN_MODE: (state, action: RunModeAction) => {
-    state.runMode = action.mode
+    if (state.runMode !== action.mode) {
+      state.events = [] // changing run modes negates any existing run state
+      state.runMode = action.mode
+    }
   },
   SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,

@@ -5,7 +5,6 @@ import WorkflowCell from './WorkflowCell';
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor';
 import OnComplete from './OnComplete';
 import { NewRunStep, Run, RunState, RunStep } from '../../qrimatic/run';
-import { TransformStep } from '../../qri/dataset';
 import { changeWorkflowTransformStep } from './state/workflowActions';
 import RunBar from './RunBar';
 import { Workflow } from '../../qrimatic/workflow';
