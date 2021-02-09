@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store';
 import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction, RunModeAction } from './workflowActions';
-import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
+import { NewRunFromEventLog, Run } from '../../../qri/run';
 import { Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qri/eventLog';
 import Dataset from '../../../qri/dataset';

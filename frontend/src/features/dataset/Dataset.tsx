@@ -6,12 +6,12 @@ import { useParams } from 'react-router-dom';
 import { newQriRef } from '../../qri/ref';
 import Workflow from '../workflow/Workflow';
 import DatasetComponents from './DatasetComponents';
-import DatasetActivity from './DatasetActivity';
 import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
 import DatasetTitleMenu from './DatasetTitleMenu';
 import DeployingScreen from '../deploy/DeployingScreen';
+import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
 
 const Dataset: React.FC<any> = () => {
   const qriRef = newQriRef(useParams())
@@ -37,7 +37,7 @@ const Dataset: React.FC<any> = () => {
             <Route path='/ds/:username/:dataset' exact><Workflow qriRef={qriRef} /></Route>
             <Route path='/ds/:username/:dataset/components'><Redirect to={`${url}/body`} /></Route>
             <Route path='/ds/:username/:dataset/components/:componentName'><DatasetComponents /></Route>
-            <Route path='/ds/:username/:dataset/history'><DatasetActivity /></Route>
+            <Route path='/ds/:username/:dataset/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
           </Switch>
         </div>
         <DeployingScreen qriRef={qriRef} />

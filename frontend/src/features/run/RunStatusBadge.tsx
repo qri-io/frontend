@@ -1,9 +1,10 @@
 import React from 'react'
 
 import Icon from '../../chrome/Icon'
+import { RunStatus } from '../../qri/run'
 
 interface RunStatusBadgeProps {
-  status: "success" | "error" | "no-changes" | "manual-commit"
+  status: RunStatus
 }
 
 const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
@@ -14,25 +15,28 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
   let size = 'md'
 
   switch(status) {
-    case 'success':
+    case 'waiting':
+      break
+    case 'running':
+      break
+    case 'succeeded':
       icon = 'checkCircle'
       displayStatus = 'Success'
       backgroundClass = 'bg-green-500'
       break
 
-    case 'error':
+    case 'failed':
       icon = 'exclamationCircle'
       displayStatus = 'Failed'
       backgroundClass = 'bg-red-500'
       break
 
-    case 'no-changes':
+    case 'unchanged':
       icon = 'minusCircle'
       displayStatus = 'No Changes'
       backgroundClass = 'bg-blue-500'
       break
-
-    case 'manual-commit':
+    case '':
       icon = 'pen'
       displayStatus = 'Manual Edit'
       backgroundClass = 'bg-gray-500'

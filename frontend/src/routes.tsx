@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom'
 import JobList from './features/job/JobList';
 import TemplateList from './features/template/TemplateList';
 import ChangeReport from './features/changes/ChangeReport';
-import Activity from './features/activity/Activity';
+import CollectionActivityFeed from './features/activityFeed/CollectionActivityFeed';
 import NotificationList from './features/notification/NotificationList';
 import NotificationSettings from './features/notification/NotificationSettings';
 import Login from './features/session/Login';
@@ -32,7 +32,7 @@ export default function Routes () {
         <Route path='/jobs'><JobList /></Route>
         <Route path='/changes'><ChangeReport /></Route>
 
-        <Route path='/activity'><Activity/></Route>
+        <Route path='/activity'><CollectionActivityFeed /></Route>
 
         <Route path='/notifications'><NotificationList /></Route>
         <Route path='/notification_settings'><NotificationSettings /></Route>

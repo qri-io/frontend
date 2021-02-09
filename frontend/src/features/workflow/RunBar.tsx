@@ -2,13 +2,13 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import DropdownButton, { Option } from '../../chrome/DropdownButton'
-import { RunState } from '../../qrimatic/run'
-import RunStateIcon from './RunStateIcon'
+import { RunStatus } from '../../qri/run'
+import RunStatusIcon from '../run/RunStatusIcon'
 import { applyWorkflowTransform, saveAndApplyWorkflowTransform, setRunMode } from './state/workflowActions'
 import { RunMode, selectRunMode, selectWorkflow } from './state/workflowState'
 
 export interface RunBarProps {
- status: RunState
+ status: RunStatus
  onRun?: () => void
 }
 
@@ -41,11 +41,11 @@ const RunBar: React.FC<RunBarProps> = ({
       <div className='flex'>
         <div className='flex-2 mr-2'>
           <div className='inline-block align-middle'>
-            <RunStateIcon state={status} size='md' />
+            <RunStatusIcon state={status} size='md' />
           </div>
         </div>
         <div className='flex-1 text-right'>
-          {(status === RunState.running)
+          {(status === "running")
             ? <button className='relative rounded-md bg-gray-500 font-bold text-white p-1 pr-5 pl-5' onClick={() => { handleCancel() }}>Cancel</button>
             : <DropdownButton
                 id='dry-run'

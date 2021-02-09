@@ -1,16 +1,17 @@
-import { EventLogLine, EventLogLineType } from "../qri/eventLog"
+import { EventLogLine, EventLogLineType } from "./eventLog"
 
-export enum RunState {
-  waiting = 'waiting',
-  running = 'running',
-  succeeded = 'succeeded',
-  failed = 'failed',
-  skipped = 'skipped'
-}
+export type RunStatus =
+  | 'waiting'
+  | 'running'
+  | 'succeeded'
+  | 'failed'
+  | 'unchanged'
+  | 'skipped'
+  | ''          // empty status indicates a manual change
 
 export interface Run {
   id: string
-  status: RunState
+  status: RunStatus
   startTime?: Date
   stopTime?: Date
   duration?: string
@@ -21,7 +22,7 @@ export interface Run {
 export function NewRun(data: Record<string,any>): Run {
   return {
     id: data.id || '',
-    status: data.status || RunState.waiting,
+    status: data.status || 'waiting',
     steps: data.steps && data.steps.map(NewRunStep)
   }
 }
@@ -33,7 +34,7 @@ export function NewRunFromEventLog(runID: string, log: EventLogLine[]): Run {
 export interface RunStep {
   name: string
   category: string
-  status: RunState
+  status: RunStatus
   startTime?: Date
   stopTime?: Date
   duration?: string
@@ -60,12 +61,12 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
 
   switch (line.type) {
     case EventLogLineType.ETTransformStart:
-      run.status = RunState.running
+      run.status = 'running'
       run.startTime = new Date(line.ts / 1000)
       run.steps = []
       break;
     case EventLogLineType.ETTransformStop:
-      run.status = line.data.status || RunState.failed
+      run.status = line.data.status || 'failed'
       run.stopTime = new Date(line.ts / 1000)
       break;
 
@@ -74,7 +75,7 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
         run.steps = []
       }
       const s = NewRunStep(line.data)
-      s.status = RunState.running
+      s.status = 'running'
       s.startTime = new Date(line.ts / 1000)
       run.steps.push(s)
       break;
@@ -82,7 +83,7 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
       const step = lastStep(run)
       if (step) {
         step.stopTime = new Date(line.ts / 1000)
-        step.status = line.data.status || RunState.failed
+        step.status = line.data.status || 'failed'
       }
       break;
     case EventLogLineType.ETTransformStepSkip:

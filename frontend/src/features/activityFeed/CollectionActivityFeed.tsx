@@ -3,9 +3,9 @@ import React from 'react'
 import PageLayout from '../app/PageLayout'
 import ActivityList from './ActivityList'
 
-import activity from './stories/data/activity.json'
+import activity from './stories/data/activityLog.json'
 
-const ActivityFeed: React.FC<any> = () => {
+const CollectionActivityFeed: React.FC<any> = () => {
 
   return (
     <PageLayout>
@@ -13,10 +13,10 @@ const ActivityFeed: React.FC<any> = () => {
         <header className='mb-8'>
           <h1 className='text-2xl font-extrabold'>Activity Feed</h1>
         </header>
-        <ActivityList activity={activity}/>
+        <ActivityList log={activity}/>
       </div>
     </PageLayout>
   )
 }
 
-export default ActivityFeed
+export default CollectionActivityFeed
