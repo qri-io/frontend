@@ -9,6 +9,7 @@ import {
   faBolt,
   faCaretDown,
   faCaretRight,
+  faCheckCircle,
   faCircle,
   faClock,
   faCloudUploadAlt,
@@ -22,8 +23,10 @@ import {
   faList,
   faCheck,
   faPauseCircle,
+  faPen,
   faPlayCircle,
   faPlus,
+  faMinusCircle,
   faTags,
   faTimes,
   faTh,
@@ -50,7 +53,6 @@ interface IconProps {
   // md: 1.33em
   // lg: 2em
   size?: 'xs' | 'sm' | 'md' | 'lg'
-  color?: 'light' | 'medium' | 'dark' | 'red' | 'green'
   className?: string
   rotation?: 90 | 180 | 270
   spin?: boolean
@@ -65,6 +67,7 @@ const icons: Record<string, IconDefinition> = {
   'caretDown': faCaretDown,
   'caretRight': faCaretRight,
   'check': faCheck,
+  'checkCircle': faCheckCircle,
   'circle': faCircle,
   'clock': faClock,
   'close': faCheck, // TODO (b5) - close icon def
@@ -80,11 +83,13 @@ const icons: Record<string, IconDefinition> = {
   'list': faList,
   'pauseCircle': faPauseCircle,
   'playCircle': faPlayCircle,
+  'minusCircle': faMinusCircle,
   'meta': faTags,
   'null': faQuestionCircle,
   'number': faHashtag,
   'numeric': faHashtag,
   'object': faQuestionCircle,
+  'pen': faPen,
   'plus': faPlus,
   'readme': faGlasses,
   'sortDown': faSortDown,
@@ -110,7 +115,6 @@ export const iconsList = Object.keys(icons)
 const Icon: React.FunctionComponent<IconProps> = ({
   icon = 'unknown',
   size = 'md',
-  color = 'dark',
   className,
   rotation,
   spin
@@ -118,7 +122,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
 
   if (icon === 'commit') {
     return (
-      <svg aria-hidden='true' focusable='false' className={classNames('icon', `icon-${color}`, className, 'svg-inline--fa', `fa-${sizes[size]}`)} role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 91'>
+      <svg aria-hidden='true' focusable='false' className={classNames(className, 'svg-inline--fa', `fa-${sizes[size]}`)} role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 91'>
         <circle id='Oval' stroke='currentColor' strokeWidth='10' cx='26' cy='45' r='21' fill='none'></circle>
         <line x1='26.5' y1='4.5' x2='26.5' y2='22.5' id='Line' stroke='currentColor' strokeWidth='10' strokeLinecap='square'></line>
         <line x1='26.5' y1='66.5' x2='26.5' y2='86.5' id='Line' stroke='currentColor' strokeWidth='10' strokeLinecap='square'></line>
@@ -126,7 +130,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     )
   }
 
-  return <FontAwesomeIcon rotation={rotation} size={sizes[size]} icon={icons[icon]} className={classNames('icon', `icon-${color}`, className)} spin={spin} />
+  return <FontAwesomeIcon rotation={rotation} size={sizes[size]} icon={icons[icon]} className={className} spin={spin} />
 }
 
 export default Icon

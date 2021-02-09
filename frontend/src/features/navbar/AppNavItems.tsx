@@ -8,7 +8,7 @@ const AppNavItems: React.FC<any> = () => (
     <Link className='px-1 font-bold text-lg tracking-tight' to='/'>Qrimatic</Link>
     <div className='w-10'></div>
     <Link className='px-4' to='/collection'>Collection</Link>
-    <Link className='px-1' to='/notifications'>Notifications</Link>
+    <Link className='px-1' to='/activity'>Activity Feed</Link>
 
     <div className='flex ml-auto'>
     <Link id='new-dataset-button' to="/ds/new">
