@@ -37,8 +37,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
     }
   }
 
-  const handleEditorDidMount = (editor: MonacoEditor['editor']) => {
-    setTheEditor(editor)
+  useEffect(() => {
     if (theEditor) {
       const theModel = theEditor.getModel()
       if (theModel) {
@@ -46,8 +45,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
         if (currLineHeight > 4) {
           handleSetLineCount(currLineHeight)
         }
+        theModel.updateOptions({ tabSize: 2, insertSpaces: true, indentSize: 2 })
       }
     }
+  }, [theEditor])
+
+  const handleEditorDidMount = (editor: MonacoEditor['editor']) => {
+    setTheEditor(editor)
   }
 
   const handleResize = () => {

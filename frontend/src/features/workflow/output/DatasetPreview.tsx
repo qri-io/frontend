@@ -42,7 +42,7 @@ export const DatasetPreview: React.FC<DatasetPreviewProps> = ({ data }) => {
     </div>
   }
 
-  return <div className='w-full bg-white'>
+  return <div id='dataset-preview' className='w-full bg-white'>
     <TabbedDisplay
       activeTab={componentTab}
       tabs={tabs}

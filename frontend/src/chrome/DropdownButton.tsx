@@ -6,6 +6,7 @@ export interface DropdownButtonProps {
   options: Option[]
   onChangeValue: (value: Option<any>) => void
   onClick: (value: Option<any>) => void
+  id: string
 }
 
 export interface Option<T = string> {
@@ -15,6 +16,7 @@ export interface Option<T = string> {
 }
 
 const DropdownButton: React.FC<DropdownButtonProps> = ({
+  id,
   value,
   options,
   onChangeValue,
@@ -22,7 +24,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
 }) => {
   const [open, setOpen] = useState(false)
   return (
-    <button className='relative rounded-md bg-qriblue'>
+    <button id={id} className='relative rounded-md bg-qriblue'>
       <div
         className='float-right p-3 pt-0 pb-2 rounded-tr-md rounded-br-md hover:bg-qriblue-500 bg-qriblue-600'
         onClick={() => {setOpen(!open)}}

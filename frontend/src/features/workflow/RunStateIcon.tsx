@@ -9,7 +9,7 @@ export interface RunStateIconProps {
 }
 
 const RunStateIcon: React.FC<RunStateIconProps> = ({ state, size='sm' }) => (
-  <span className='text-sm pl-2'>
+  <span id={state} className='text-sm pl-2'>
     {((s: RunState) => {
       switch (s) {
         case 'waiting':

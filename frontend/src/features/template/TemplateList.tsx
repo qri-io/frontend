@@ -41,7 +41,7 @@ const TemplateList: React.FC<any> = () => {
             {
               templates.map(({ name, id }) => (
                 <div key={name} className='my-2 px-2 overflow-hidden w-full md:w-1/2 lg:w-1/3 xl:w-1/3'>
-                  <Link to={{
+                  <Link id={id} to={{
                     pathname: `/ds/me/dataset_${Math.floor(Math.random() * 1000)}`,
                     state: { template: id }
                   }}>

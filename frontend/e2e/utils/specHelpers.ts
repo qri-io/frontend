@@ -1,8 +1,7 @@
-import childProcess, { ChildProcess } from 'child_process'
 import fetch from 'node-fetch'
 import sleep from 'sleep-promise'
-
-import TestCloudBackend from './testQrimaticServe'
+import TestQrimaticBackend from './testQrimaticServe'
+import TestQrimaticFrontend from './testFrontendServe'
 
 const FRONTEND_URL_BASE = process.env.FRONTEND_URL_BASE || 'http://localhost:3000'
 const BACKEND_URL_BASE = process.env.BACKEND_URL_BASE || 'http://localhost:2503'
@@ -36,7 +35,7 @@ const readinessCheck = async (url: string) => {
 }
 
 export const startupBackendApp = async () => {
-  let backend =  new TestCloudBackend()
+  let backend =  new TestQrimaticBackend()
   try {
     await backend.start()
     await readinessCheck(BACKEND_URL_BASE)
@@ -48,7 +47,7 @@ export const startupBackendApp = async () => {
 }
 
 export const startUpFrontendApp = async () => {
-  let frontend: ChildProcess = childProcess.spawn('yarn', ['start'])
+  let frontend = new TestQrimaticFrontend()
   try {
     await readinessCheck(FRONTEND_URL_BASE)
   } catch (err) {
