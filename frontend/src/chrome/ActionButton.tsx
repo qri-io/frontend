@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-// import ReactTooltip from 'react-tooltip'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons'
 

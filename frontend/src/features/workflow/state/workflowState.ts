@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store';
-import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction } from './workflowActions';
+import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction, RunModeAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qrimatic/run';
 import { Workflow } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qri/eventLog';
@@ -13,6 +13,7 @@ export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
 export const WORKFLOW_CHANGE_TRANSFORM_STEP = 'WORKFLOW_CHANGE_TRANSFORM_STEP'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
+export const SET_RUN_MODE = 'SET_RUN_MODE'
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
@@ -27,8 +28,14 @@ export const selectLatestRun = (state: RootState): Run | undefined => {
 }
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
+export const selectRunMode = (state: RootState): RunMode => state.workflow.runMode
+
+export type RunMode =
+  | 'apply'
+  | 'save'
 
 export interface WorkflowState {
+  runMode: RunMode
   // reference the workflow editor is manipulating
   qriRef?: QriRef,
   workflow: Workflow,
@@ -38,6 +45,7 @@ export interface WorkflowState {
 }
 
 const initialState: WorkflowState = {
+  runMode: 'apply',
   workflow: {
     id: '',
     datasetID: 'fake_id',
@@ -48,10 +56,9 @@ const initialState: WorkflowState = {
       { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
     ],
     steps: [
-      { syntax: 'starlark', category: 'setup', name: 'setup', script: `` },
-      { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "download result"` },
-      { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-      { syntax: 'qri', category: 'save', name: 'result', script: '' }
+      { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
+      { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
+      { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
     ],
     onComplete: [
       { type: 'push', remote: 'https://registry.qri.cloud' },
@@ -61,15 +68,15 @@ const initialState: WorkflowState = {
 }
 
 export const workflowReducer = createReducer(initialState, {
-  'API_RUN_WORKFLOW_SUCCESS': (state, action) => {
+  'API_APPLY_SUCCESS': (state, action) => {
     const runID = action.payload.data.runID
     state.lastRunID = runID
   },
-  // temp action used to work around the api, auto sets the events
-  // of the workflow without having to have a working api
-  TEMP_SET_WORKFLOW_EVENTS: (state, action) => {
-    state.events = action.events
-    state.lastRunID = action.id
+  SET_RUN_MODE: (state, action: RunModeAction) => {
+    if (state.runMode !== action.mode) {
+      state.events = [] // changing run modes negates any existing run state
+      state.runMode = action.mode
+    }
   },
   SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,

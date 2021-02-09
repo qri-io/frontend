@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
 import WorkflowOutline from './WorkflowOutline';
-import { selectLatestRun, selectWorkflow } from './state/workflowState';
+import { selectLatestRun, selectRunMode, selectWorkflow } from './state/workflowState';
 import { loadWorkflowByDatasetRef, setWorkflow, setWorkflowRef } from './state/workflowActions';
 import { selectTemplate } from '../template/templates';
 import { QriRef } from '../../qri/ref';
@@ -22,6 +22,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const location = useLocation<WorkflowLocationState>()
   const workflow = useSelector(selectWorkflow)
   const latestRun = useSelector(selectLatestRun)
+  const runMode = useSelector(selectRunMode)
 
   useEffect(() => {
     if (location.state && location.state.template) {
@@ -38,8 +39,8 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
 
   return (
     <div className='flex h-full'>
-      <WorkflowOutline workflow={workflow} run={latestRun} />
-      <WorkflowEditor workflow={workflow} run={latestRun} />
+      <WorkflowOutline workflow={workflow} run={latestRun} runMode={runMode} />
+      <WorkflowEditor workflow={workflow} run={latestRun} runMode={runMode} />
     </div>
   )
 }

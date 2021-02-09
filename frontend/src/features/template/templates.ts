@@ -25,8 +25,7 @@ def transform(ds, ctx):
   # ctx.download is whatever download() returned
   csv = ctx.download
   # set the dataset body
-  ds.set_body(csv, parse_as='csv')`},
-    { syntax: 'qri', category: 'save', name: 'save', script: '' }
+  ds.set_body(csv, parse_as='csv')`}
   ],
   onComplete: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
@@ -45,8 +44,7 @@ export const APICall: Workflow = {
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/apicall")` },
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
-    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { syntax: 'qri', category: 'save', name: 'save', script: '' }
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
   ],
   onComplete: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
@@ -65,8 +63,7 @@ export const DatabaseQuery: Workflow = {
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/databasequery")` },
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
-    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { syntax: 'qri', category: 'save', name: 'save', script: '' }
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
   ],
   onComplete: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
@@ -85,8 +82,7 @@ export const Webscrape: Workflow = {
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/webscrape")` },
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
-    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' },
-    { syntax: 'qri', category: 'save', name: 'save', script: '' }
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
   ],
   onComplete: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
