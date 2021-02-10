@@ -54,7 +54,7 @@ export const ComponentItem: React.FunctionComponent<ComponentItemProps> = (
         }
       }}
     >
-      <div className={`w-1 ${!disabled && 'group-hover:bg-qrilightblue'} transition-all duration-100 ${selected && 'bg-qrilightblue'}`}/>
+      <div className={`w-1 ${!disabled && 'group-hover:bg-qriblue'} transition-all duration-100 ${selected && 'bg-qriblue'}`}/>
       {icon && (
         <div className='w-8  text-center flex flex-col justify-center'>
           <Icon icon={icon} size='sm' color={disabled ? 'medium' : color} className='mx-auto'/>

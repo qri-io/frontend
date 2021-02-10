@@ -64,7 +64,6 @@ const renderTable = (keys: string[], data: Meta) => {
       <table className='keyvalue-table'>
         <tbody>
           {keys.map((key) => {
-            console.log('key', key)
             const value = data[key]
             let cellContent
             switch (key) {
@@ -116,7 +115,7 @@ export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
   })
 
   return (
-    <div className='p-3'>
+    <div className='p-3 h-full w-full overflow-auto pb-8'>
       <div className='text-sm font-semibold mb-2'>Standard Metadata</div>
       {renderTable(standard, data)}
 

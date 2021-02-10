@@ -17,7 +17,7 @@ import Dataset from './features/dataset/Dataset';
 
 export default function Routes () {
   return (
-    <div className='route-content h-full'>
+    <div className='route-content h-full w-full'>
       <Switch>
         <Route path='/login'><Login /></Route>
         <Route path='/signup'><Signup /></Route>

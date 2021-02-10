@@ -24,7 +24,7 @@ const BodyJson: React.FunctionComponent<BodyJsonProps> = (props) => {
   return (
     <div
       id='body-json-container'
-      style={{ height: '100%', overflowY: 'scroll' }}
+      className='h-full w-full overflow-auto pb-8'
     >
       {/* {previewWarning && <div className='preview-warning'><FontAwesomeIcon icon={faExclamationTriangle} size='xs' /> This is a preview of the first 50 items in this json array</div>} */}
       <div id='body-json-array'>
