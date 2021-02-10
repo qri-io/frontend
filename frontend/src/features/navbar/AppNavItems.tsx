@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import Icon from '../../chrome/Icon'
 
+
 const AppNavItems: React.FC<any> = () => (
   <>
     <Link className='px-1 font-bold text-lg tracking-tight' to='/'>Qrimatic</Link>
@@ -19,5 +20,6 @@ const AppNavItems: React.FC<any> = () => (
     </div>
   </>
 )
+
 
 export default AppNavItems
