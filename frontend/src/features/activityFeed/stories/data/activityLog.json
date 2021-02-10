@@ -2,75 +2,79 @@
 	{
 		"timestamp": "2020-03-20T16:10:33.741276588-04:00",
 		"message": "no changes detected",
-		
+
 		"username": "b5",
 		"name": "us_politicians_on_twitter",
 		"initID": "u2gr5gy6a6s5jq7fhpiicpi5htnqd65ybey7r3pmaou7uwtqqisq",
 		"path": "",
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
-		
+
 		"runNumber": 11,
 		"runID": "b9d1211c-6a53-11eb-9439-0242ac130002",
 		"runStatus": "unchanged",
-		"runDuration": 600,
+		"runDuration": 58,
 
 		"bodySize": 282000,
 		"bodyRows": 2345678,
+		"bodyFormat": "csv",
 		"changeAmount": 0
 	},
 	{
 		"timestamp": "2020-03-19T16:10:33.741276588-04:00",
 		"message": "body and meta changed",
-		
+
 		"username": "b5",
 		"name": "world_bank_population",
 		"initID": "u2gr5gy6a6s5jq7fhpiicpi5htnqd65ybey7r3pmaou7uwtqqisq",
 		"path": "/ipfs/Qmebr6jDGqPViYe7pXtggNN3wJ6SiQehEpU8aZLg83AVpr",
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
-		
+
 		"runNumber": 10,
 		"runID": "b9d1211c-6a53-11eb-9439-0242ac130002",
 		"runStatus": "succeeded",
-		"runDuration": 600,
-		
+		"runDuration": 128,
+
 		"bodySize": 282000,
 		"bodyRows": 2345678,
+		"bodyFormat": "csv",
 		"changeAmount": 0.45
 	},
 	{
 		"timestamp": "2020-03-18T16:10:33.741276588-04:00",
 		"message": "http: no such host",
-		
+
 		"initID": "u2gr5gy6a6s5jq7fhpiicpi5htnqd65ybey7r3pmaou7uwtqqisq",
 		"username": "b5",
 		"name": "nyc-turnstile-daily-counts-2020",
 		"path": "/ipfs/Qmebr6jDGqPViYe7pXtggNN3wJ6SiQehEpU8aZLg83AVpr",
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
-		
+
 		"runNumber": 9,
 		"runID": "b9d1211c-6a53-11eb-9439-0242ac130002",
 		"runStatus": "failed",
-		
+
 		"bodySize": 282000,
 		"bodyRows": 2345678,
+		"bodyFormat": "csv",
 		"changeAmount": 0
 	},
 	{
 		"timestamp": "2020-03-17T16:10:33.741276588-04:00",
 		"message": "update readme to new website URLS",
-		
+
 		"initID": "u2gr5gy6a6s5jq7fhpiicpi5htnqd65ybey7r3pmaou7uwtqqisq",
 		"username": "b5",
 		"name": "white-wine-quality",
 		"path": "/ipfs/QmPaEH5amBCg3xw8u4csmWg446E66PdX6JQ6gtNyMnD7au",
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
-		
+
 		"runID": "",
 		"runNumber": -1,
 		"runStatus": "",
 
 		"bodySize": 3240000,
 		"bodyRows": 25678,
+		"bodyFormat": "csv",
 		"changeAmount": 0.12
 	}
 ]

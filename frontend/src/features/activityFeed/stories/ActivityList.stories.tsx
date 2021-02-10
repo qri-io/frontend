@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { Story, Meta } from '@storybook/react';
 
-import activity from './data/activity.json'
+import activity from './data/activityLog.json'
 import { configureStore, history } from '../../../store/store';
 
 import ActivityList from "../ActivityList";

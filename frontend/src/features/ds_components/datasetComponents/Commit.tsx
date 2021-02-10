@@ -1,5 +1,6 @@
 import React from 'react'
-import moment from 'moment'
+import format from 'date-fns/format'
+import parseISO from 'date-fns/parseISO'
 
 import { Commit } from '../../../qri/dataset'
 
@@ -23,11 +24,10 @@ export const CommitComponent: React.FunctionComponent<CommitProps> = ({
   // }
 
   if (!data) return null
-
   return (
     <div className='p-3 h-full w-full overflow-auto pb-8'>
       <div className='font-semibold mb-2'>{data.title}</div>
-      <div className='text-sm mb-2'>{moment(data.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</div>
+      <div className='text-sm mb-2'>{format(parseISO(data.timestamp), 'MMMM Do yyyy, h:mm:ss a')}</div>
       <div className='text-sm'>{data.message}</div>
     </div>
   )

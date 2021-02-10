@@ -2,7 +2,12 @@ import React from 'react'
 
 import ModalLayout from '../../app/ModalLayout'
 
-const RemoveDatasetModal: React.FC = () => {
+interface RemoveDatasetModalProps {
+  username: string,
+  name: string
+}
+
+const RemoveDatasetModal: React.FC<RemoveDatasetModalProps> = ({ username, name }) => {
   return (
     <ModalLayout
       title='Remove Dataset'
@@ -10,7 +15,7 @@ const RemoveDatasetModal: React.FC = () => {
       actionButtonText='I understand, remove it'
       action={() => { alert('REMOVE DATASET') }}
     >
-      <p className='mb-4'>Are you sure you want to remove the dataset <span className='font-semibold'>chriswhong/nyc-turnstile-counts-2020</span>?</p>
+      <p className='mb-4'>Are you sure you want to remove the dataset <span className='font-semibold'>{username}/{name}</span>?</p>
       <p>This action cannot be undone.</p>
     </ModalLayout>
   )

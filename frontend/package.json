@@ -32,7 +32,6 @@
     "history": "^4.10.1",
     "install": "^0.13.0",
     "json-schema": "^0.3.0",
-    "moment": "^2.29.1",
     "monaco-editor-webpack-plugin": "^2.1.0",
     "node-fetch": "^2.6.1",
     "node-sass": "4.14.1",

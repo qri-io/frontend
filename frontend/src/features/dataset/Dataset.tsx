@@ -27,8 +27,7 @@ const Dataset: React.FC<any> = () => {
   return (
     <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#F4F7FC'}}>
       <NavBar menu={[
-        { type: 'link', label: 'back to collection', to: '/collection' },
-        { type: 'hr' }
+        { text: 'back to collection', link: '/collection', icon: 'arrowLeft' },
       ]}>
         <DatasetTitleMenu qriRef={qriRef} />
       </NavBar>

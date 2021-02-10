@@ -17,5 +17,6 @@ export interface LogItem {
 
   bodySize: number
   bodyRows: number
+  bodyFormat: string
   changeAmount: number
 }
