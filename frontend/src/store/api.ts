@@ -36,7 +36,7 @@ export interface ApiAction extends AnyAction {
     pageInfo?: ApiPagination
     // map is a function
     // map defaults to the identity function
-    map?: (data: object|[]) => any
+    map?: (data: any) => any
   }
 }
 

@@ -8,6 +8,7 @@ import Icon from '../../chrome/Icon'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import ExportButton from '../../chrome/ExportButton'
 import { VersionInfo } from '../../qri/versionInfo'
+import { pathToWorkflowEditor } from '../dataset/state/datasetPaths'
 
 interface DatasetsTableProps {
   filteredDatasets: VersionInfo[]
@@ -84,7 +85,7 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       cell: (row: VersionInfo) => (
         <div className='p-3'>
           <div className='font-medium text-sm mb-1'>
-            <Link to={`/ds/${row.username}/${row.name}`}>{row.username}/{row.name}</Link>
+            <Link to={pathToWorkflowEditor(row.username, row.name)}>{row.username}/{row.name}</Link>
           </div>
           <div className='text-gray-500 text-xs'>
             <span className='mr-4'><Icon icon='hdd' size='sm' className='mr-1' />{numeral(row.bodySize).format('0.0 b')}</span>

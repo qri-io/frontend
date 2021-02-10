@@ -16,4 +16,7 @@ export const datasetReducer = createReducer(initialState, {
   'API_DATASET_SUCCESS': (state, action) => {
     state.dataset = action.payload.data as Dataset
   },
+  'API_BODY_SUCCESS': (state, action) => {
+    state.dataset.body = action.payload.data as Body
+  }
 })

@@ -13,7 +13,7 @@ export interface SideNavItemProps {
 
 const SideNavItem: React.FC<SideNavItemProps> = ({ id, icon, to, tooltip }) => {
   const { pathname } = useLocation();
-  const active = pathname === to
+  const active = pathname.includes(to)
   return (
       <Link to={to} className=''>
         <div

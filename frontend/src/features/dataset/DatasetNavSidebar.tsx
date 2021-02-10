@@ -3,6 +3,11 @@ import React from 'react'
 import { QriRef } from '../../qri/ref'
 import SideNavItem from './SideNavItem'
 import TooltipContent from '../../chrome/TooltipContent'
+import { 
+  pathToActivityFeed, 
+  pathToDatasetViewer, 
+  pathToWorkflowEditor 
+} from './state/datasetPaths'
 
 export interface DatasetNavSidebarProps {
   qriRef: QriRef
@@ -13,7 +18,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
     <SideNavItem
       id='workflow-editor'
       icon='code'
-      to={`/ds/${qriRef.username}/${qriRef.name}`}
+      to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
       tooltip={
         <TooltipContent
           text='Workflow Editor'
@@ -24,7 +29,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
     <SideNavItem
       id='components'
       icon='table'
-      to={`/ds/${qriRef.username}/${qriRef.name}/components`}
+      to={pathToDatasetViewer(qriRef.username, qriRef.name)}
       tooltip={
         <TooltipContent
           text='Components'
@@ -35,7 +40,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
     <SideNavItem
       id='activity-feed'
       icon='clock'
-      to={`/ds/${qriRef.username}/${qriRef.name}/history`}
+      to={pathToActivityFeed(qriRef.username, qriRef.name)}
       tooltip={
         <TooltipContent
           text='Activity Feed'

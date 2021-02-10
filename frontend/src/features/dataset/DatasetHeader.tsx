@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { QriRef } from '../../qri/ref';
+import { pathToActivityFeed, pathToDatasetViewer, pathToWorkflowEditor } from './state/datasetPaths';
 
 export interface DatasetHeaderProps {
   qriRef: QriRef
@@ -15,9 +16,9 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({ qriRef }) => {
       </div>
       <div className='flex my-1'>
         {[
-          { name: 'Workflow', link: `/ds/${qriRef.username}/${qriRef.name}` },
-          { name: 'Components', link: `/ds/${qriRef.username}/${qriRef.name}/components` },
-          { name: 'History', link: `/ds/${qriRef.username}/${qriRef.name}/history` },
+          { name: 'Workflow', link: pathToWorkflowEditor(qriRef.username, qriRef.name) },
+          { name: 'Components', link: pathToDatasetViewer(qriRef.username, qriRef.name) },
+          { name: 'History', link: pathToActivityFeed(qriRef.username, qriRef.name) },
         ].map((d, i) => (
           <Link key={i} className='my-2 mr-5' to={d.link}>{d.name}</Link>
         ))}

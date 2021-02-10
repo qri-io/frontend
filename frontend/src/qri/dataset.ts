@@ -26,6 +26,22 @@ export function qriRefFromDataset(dataset: Dataset): QriRef {
   }
 }
 
+export function isDatasetEmpty(ds: Dataset): boolean {
+  return (
+    !ds.peername &&
+    !ds.name &&
+    !ds.path &&
+    !ds.commit &&
+    !ds.meta &&
+    !ds.structure &&
+    !ds.body &&
+    !ds.bodyPath &&
+    !ds.readme &&
+    !ds.transform &&
+    !ds.stats &&
+    !ds.viz)
+}
+
 export function NewDataset(d: Record<string,any>): Dataset {
   const dataset: Dataset = {
     peername: d.peername || '',

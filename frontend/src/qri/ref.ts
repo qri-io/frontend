@@ -1,5 +1,7 @@
 // import { RouteComponentProps } from 'react-router-dom'
 
+import { ComponentName } from "./dataset"
+
 // QriRef models a reference to a user, dataset, or part of a dataset within Qri
 // We use "QriRef" instead of "Ref" to disambiguate with the react "ref"
 // property.
@@ -45,7 +47,7 @@ export interface QriRef {
   // commit hash, eg: /ipfs/QmY9WcXXUnHJbYRA28LRctiL4qu4y...
   path?: string
   // optional: a specific component the user is trying to index into component
-  component?: string
+  component?: ComponentName 
   // address into dataset structure
   selector?: string
 }
