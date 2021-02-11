@@ -2,7 +2,7 @@ import React from 'react'
 import { SyncLoader } from 'react-spinners'
 // import { useLocation, useParams, useRouteMatch } from 'react-router'
 
-import Dataset, { ComponentName, isDatasetEmpty } from '../../qri/dataset'
+import Dataset, { ComponentName, isDatasetEmpty, NewDataset } from '../../qri/dataset'
 // import { QriRef } from '../../qri/ref'
 import ComponentList from './ComponentList'
 // import ComponentRouter from './ComponentRouter'
@@ -17,6 +17,7 @@ export interface DatasetProps {
   dataset: Dataset
   selectedComponent: ComponentName
   setSelectedComponent: (name: ComponentName) => void
+  loading: boolean
   // isPublished: boolean
   // inNamespace: boolean
   // fsiPath: string
@@ -25,7 +26,8 @@ export interface DatasetProps {
 }
 
 export const DatasetComponents: React.FC<DatasetProps> = ({
-  dataset,
+  dataset: ds,
+  loading,
   selectedComponent,
   setSelectedComponent
   // isPublished,
@@ -34,6 +36,15 @@ export const DatasetComponents: React.FC<DatasetProps> = ({
   // fetchWorkbench,
   // setModal
 }) => {
+  if (loading) {
+    return <div className='h-full w-full flex justify-center items-center'><SyncLoader color='#4FC7F3' /></div>
+  }
+
+  let dataset = ds
+
+  if (!ds || isDatasetEmpty(ds)) {
+    dataset = NewDataset({})
+  }
   // get selected component from route
 
   
@@ -99,9 +110,6 @@ export const DatasetComponents: React.FC<DatasetProps> = ({
   //   />
   // )
 
-  if (!dataset || !dataset.body || isDatasetEmpty(dataset)) {
-    return <div className='h-full w-full flex justify-center items-center'><SyncLoader color='#4FC7F3' /></div>
-  }
   return (
     <div className='flex h-full w-full'>
       <ComponentList

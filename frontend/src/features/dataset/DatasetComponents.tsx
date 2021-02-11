@@ -6,7 +6,7 @@ import { ComponentName } from '../../qri/dataset'
 import { newQriRef } from '../../qri/ref'
 import DSComponents from '../ds_components/DatasetComponents'
 import { pathToDatasetViewer } from './state/datasetPaths'
-import { selectDataset } from './state/datasetState'
+import { selectDataset, selectIsDatasetLoading } from './state/datasetState'
 
 const DatasetComponents: React.FC<any> = () => {
   const dispatch = useDispatch()
@@ -15,8 +15,11 @@ const DatasetComponents: React.FC<any> = () => {
   const setSelectedComponent = (component: ComponentName) => {
     dispatch(push(pathToDatasetViewer(username, name, component)))
   }
+  const loading = useSelector(selectIsDatasetLoading)
+
   return <DSComponents 
     dataset={dataset} 
+    loading={loading}
     selectedComponent={component as ComponentName || 'body'} 
     setSelectedComponent={setSelectedComponent} 
   /> 

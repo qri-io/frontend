@@ -68,8 +68,23 @@ export const Body: React.FunctionComponent<BodyProps> = (props) => {
 
   const { body, structure } = data
 
-  if (!structure || !body) {
-    return <div>Error cannot show body</div>
+  if (!body) {
+    return (
+      <div className='h-full w-full flex justify-center items-center'>
+        <div>
+          There's nothing here yet!
+        </div>
+      </div>
+    )
+  }
+  if (!structure) {
+    return (
+      <div className='h-full w-full flex justify-center items-center'>
+        <div>
+          Error cannot show body without a structure
+        </div>
+      </div>
+    )
   }
 
   // const makeStatsDetails = (stats: IStatTypes, title: string, index: number): StatsDetails => {

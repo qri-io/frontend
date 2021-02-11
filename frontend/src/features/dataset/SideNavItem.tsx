@@ -5,9 +5,9 @@ import ReactTooltip from 'react-tooltip'
 import Icon from '../../chrome/Icon';
 
 export interface SideNavItemProps {
-  id: string;
-  icon: string;
-  to: string;
+  id: string
+  icon: string
+  to: string
   tooltip?: React.ReactNode
 }
 
