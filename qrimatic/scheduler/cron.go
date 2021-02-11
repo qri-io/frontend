@@ -189,7 +189,13 @@ func (c *Cron) Start(ctx context.Context) error {
 	for {
 		select {
 		case <-t.C:
-			go check(ctx)
+			// TODO(b5): running these checks in a goroutine kicks off major issues when
+			// running dataset updates. If multiple updates are scheduled in a tight loop
+			// two writes can kick off at the same time, causing all sorts of undefiend
+			// behaviour. We can only restore this goroutine once a qri instance is deemed
+			// safe for concurrent use
+			// go check(ctx)
+			check(ctx)
 		case <-ctx.Done():
 			return nil
 		}

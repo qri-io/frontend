@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	golog "github.com/ipfs/go-log"
+	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qrimatic/scheduler"
@@ -56,7 +57,11 @@ func NewServer(inst *lib.Instance) (*Server, error) {
 	// 	return fmt.Errorf("unknown cron type: %q", cfg.Type)
 	// }
 
-	svc := scheduler.NewCron(store, Factory, inst.Bus())
+	// TODO (b5): this will need to be configurable, for now we're restricted to
+	// local execution
+	factory := newInstanceRunnerFactory(inst)
+
+	svc := scheduler.NewCron(store, factory, inst.Bus())
 	log.Debug("starting update service")
 	// go func() {
 	// 	if err := svc.ServeHTTP(cfg.Addr); err != nil {
@@ -73,6 +78,23 @@ func NewServer(inst *lib.Instance) (*Server, error) {
 // Start runs the cron service, blocking until an error occurs
 func (s *Server) Start(ctx context.Context) error {
 	return s.sched.Start(ctx)
+}
+
+// newInstanceRunnerFactory returns a factory function that produces a workflow
+// runner from a qri instance
+func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) scheduler.RunWorkflowFunc {
+	return func(ctx context.Context) scheduler.RunWorkflowFunc {
+		dsm := lib.NewDatasetMethods(inst)
+
+		return func(ctx context.Context, streams ioes.IOStreams, workflow *scheduler.Workflow) error {
+			p := &lib.SaveParams{
+				Ref:   workflow.DatasetID,
+				Apply: true,
+			}
+			res := &dataset.Dataset{}
+			return dsm.Save(p, res)
+		}
+	}
 }
 
 // Factory returns a function that can run workflows
