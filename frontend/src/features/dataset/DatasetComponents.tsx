@@ -1,16 +1,28 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { selectDataset } from './state/datasetState'
+import { push } from 'connected-react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { ComponentName } from '../../qri/dataset'
+import { newQriRef } from '../../qri/ref'
+import DSComponents from '../ds_components/DatasetComponents'
+import { pathToDatasetViewer } from './state/datasetPaths'
+import { selectDataset, selectIsDatasetLoading } from './state/datasetState'
 
 const DatasetComponents: React.FC<any> = () => {
+  const dispatch = useDispatch()
   const dataset = useSelector(selectDataset)
+  const { username, name, component } = newQriRef(useParams())
+  const setSelectedComponent = (component: ComponentName) => {
+    dispatch(push(pathToDatasetViewer(username, name, component)))
+  }
+  const loading = useSelector(selectIsDatasetLoading)
 
-  return (
-    <div className='text-left p-6'>
-      <p>Dataset Components View Goes Here</p>
-      {JSON.stringify(dataset, null, 2)}
-    </div>
-  )
+  return <DSComponents 
+    dataset={dataset} 
+    loading={loading}
+    selectedComponent={component as ComponentName || 'body'} 
+    setSelectedComponent={setSelectedComponent} 
+  /> 
 }
 
 export default DatasetComponents;

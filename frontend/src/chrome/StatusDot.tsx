@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ComponentStatus } from '../../models/store'

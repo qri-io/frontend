@@ -23,7 +23,7 @@ const App: React.FC<any> = () => {
 
 
   return (
-    <div id='app' className='flex flex-col h-screen'>
+    <div id='app' className='flex flex-col h-screen w-screen'>
       <ConnectedRouter history={history}>
         <Modal />
         <Routes />

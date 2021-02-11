@@ -138,6 +138,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
     return (
       <div
         id='body-table-container'
+        className='overflow-auto h-full w-full pb-8'
         onScroll={() => { this.handleVerticalScrollThrottled() } }
       >
         <table className='table text-xs'>

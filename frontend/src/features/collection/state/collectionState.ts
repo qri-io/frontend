@@ -15,7 +15,6 @@ const initialState: CollectionState = {
 
 export const collectionReducer = createReducer(initialState, {
   'API_LIST_SUCCESS': (state, action) => {
-    console.log('listed datasets', action)
     state.datasets = action.payload.data as VersionInfo[]
   },
 })

@@ -83,7 +83,7 @@ export const StructureComponent: React.FunctionComponent<StructureProps> = ({dat
   }
 
   return (
-    <div>
+    <div className='h-full w-full overflow-auto pb-8'>
       <div className='p-3'>
         <LabeledStats data={getStats(data)} size='lg' />
         <FormatConfigHistory structure={data} />

@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { newQriRef } from '../../qri/ref';
 import Workflow from '../workflow/Workflow';
 import DatasetComponents from './DatasetComponents';
-import { loadDataset } from './state/datasetActions'
+import { loadBody, loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
 import DatasetTitleMenu from './DatasetTitleMenu';
@@ -19,27 +19,28 @@ const Dataset: React.FC<any> = () => {
   const { url } = useRouteMatch()
 
   useEffect(() => {
-    dispatch(loadDataset(qriRef))
-  }, [dispatch, qriRef])
+      const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
+      dispatch(loadDataset(ref))
+      dispatch(loadBody(ref))
+  }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
 
   return (
-    <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
+    <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#F4F7FC'}}>
       <NavBar menu={[
         { type: 'link', label: 'back to collection', to: '/collection' },
         { type: 'hr' }
       ]}>
         <DatasetTitleMenu qriRef={qriRef} />
       </NavBar>
-      <div className='flex flex-grow overflow-hidden relative'>
+      <div className='flex flex-grow h-full w-full overflow-hidden relative'>
         <DatasetNavSidebar qriRef={qriRef} />
-        <div className='h-full overflow-hidden flex-grow'>
-          <Switch>
-            <Route path='/ds/:username/:dataset' exact><Workflow qriRef={qriRef} /></Route>
-            <Route path='/ds/:username/:dataset/components'><Redirect to={`${url}/body`} /></Route>
-            <Route path='/ds/:username/:dataset/components/:componentName'><DatasetComponents /></Route>
-            <Route path='/ds/:username/:dataset/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
-          </Switch>
-        </div>
+        <Switch>
+          <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
+          <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>
+          <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
+          <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
+          <Route path='/ds/:username/:name/history'><DatasetActivityFeed /></Route>
+        </Switch>
         <DeployingScreen qriRef={qriRef} />
       </div>
     </div>

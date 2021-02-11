@@ -5,15 +5,15 @@ import ReactTooltip from 'react-tooltip'
 import Icon from '../../chrome/Icon';
 
 export interface SideNavItemProps {
-  id: string;
-  icon: string;
-  to: string;
+  id: string
+  icon: string
+  to: string
   tooltip?: React.ReactNode
 }
 
 const SideNavItem: React.FC<SideNavItemProps> = ({ id, icon, to, tooltip }) => {
   const { pathname } = useLocation();
-  const active = pathname === to
+  const active = pathname.includes(to)
   return (
       <Link to={to} className=''>
         <div

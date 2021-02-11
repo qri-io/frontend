@@ -15,14 +15,14 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
 
   const refCallback = useCallback((el: HTMLDivElement) =>{
     if (el !== null) {
-      // fetch(`${API_BASE_URL}/render/${qriRefStr}`)
-      //   .then(async (res) => {
-      //     return res.text()
-      //   })
-      //   .then((render) => {
-      //     if (!render) { setHasReadme(false) }
-      //     el.innerHTML = render
-      //   })
+      fetch(`${API_BASE_URL}/render/${qriRefStr}`)
+        .then(async (res) => {
+          return res.text()
+        })
+        .then((render) => {
+          if (!render) { setHasReadme(false) }
+          el.innerHTML = render
+        })
 
       const render = "<h1>Heading</h1><p>Lorem Ipsum Dolor</p><p><strong>bold text</strong></p><h2>Heading 2</h2>"
       el.innerHTML = render
@@ -33,7 +33,7 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
     return null
   }
   return (
-    <div className='p-3'>
+    <div className='p-3 h-full w-full overflow-auto pb-8'>
       <div
         // use "editor-preview" class to piggie-back off the simplemde styling
         className="markdown-body"

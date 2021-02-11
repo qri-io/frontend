@@ -19,7 +19,7 @@ export const TransformComponent: React.FunctionComponent<TransformProps> = ({ da
   // if (loading) {
   //   return <SpinnerWithIcon loading />
   // }
-  return <Code data={scriptFromTransform(data)} />
+  return <div className='h-full w-full overflow-auto pb-8'><Code data={scriptFromTransform(data)} /></div>
 }
 
 export default TransformComponent 

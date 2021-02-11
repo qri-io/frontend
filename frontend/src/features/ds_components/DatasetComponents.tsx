@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { SyncLoader } from 'react-spinners'
 // import { useLocation, useParams, useRouteMatch } from 'react-router'
 
-import Dataset, { ComponentName } from '../../qri/dataset'
+import Dataset, { ComponentName, isDatasetEmpty, NewDataset } from '../../qri/dataset'
 // import { QriRef } from '../../qri/ref'
 import ComponentList from './ComponentList'
 // import ComponentRouter from './ComponentRouter'
@@ -9,12 +10,14 @@ import ComponentList from './ComponentList'
 // import DatasetLayout from './DatasetLayout'
 // import Layout from './Layout'
 // import LogList from './LogList'
-import Resizable from '../../chrome/Resizable'
 import DatasetComponent from './DatasetComponent'
 
 // export interface DatasetProps extends RouteProps {
 export interface DatasetProps {
   dataset: Dataset
+  selectedComponent: ComponentName
+  setSelectedComponent: (name: ComponentName) => void
+  loading: boolean
   // isPublished: boolean
   // inNamespace: boolean
   // fsiPath: string
@@ -23,14 +26,28 @@ export interface DatasetProps {
 }
 
 export const DatasetComponents: React.FC<DatasetProps> = ({
-  dataset
+  dataset: ds,
+  loading,
+  selectedComponent,
+  setSelectedComponent
   // isPublished,
   // fsiPath,
   // inNamespace,
   // fetchWorkbench,
   // setModal
 }) => {
-  const [selectedComponent, setSelectedComponent] = useState<ComponentName>('body')
+  if (loading) {
+    return <div className='h-full w-full flex justify-center items-center'><SyncLoader color='#4FC7F3' /></div>
+  }
+
+  let dataset = ds
+
+  if (!ds || isDatasetEmpty(ds)) {
+    dataset = NewDataset({})
+  }
+  // get selected component from route
+
+  
   // const publishUnpublishDataset = () => {
   //   inNamespace && isPublished
   //     ? setModal({
@@ -92,8 +109,9 @@ export const DatasetComponents: React.FC<DatasetProps> = ({
   //     sidebarContent={<LogList qriRef={qriRef}/>}
   //   />
   // )
+
   return (
-    <div className='flex h-full w-full overflow-hidden'>
+    <div className='flex h-full w-full'>
       <ComponentList
         dataset={dataset}
         onClick={setSelectedComponent}
