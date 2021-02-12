@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom'
 
 import Icon from './Icon'
@@ -22,10 +22,25 @@ interface DropdownMenuProps {
 
 // itemProps will be passed into the onClick handler for each item in the dropdown
 const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, alignLeft=false }) => {
+  const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
 
+  const handleClickOutside = useCallback((e: MouseEvent) => {
+    if (ref && ref.current?.contains(e.target as Element)) {
+      return
+    }
+    setOpen(false)
+  }, [ref, setOpen])
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [handleClickOutside])
+
   return (
-    <div className='relative inline-block text-left'>
+    <div ref={ref} className='relative inline-block text-left'>
       <div onClick={() => { setOpen(!open) }} className='cursor-pointer'>
         {children}
       </div>

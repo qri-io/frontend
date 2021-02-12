@@ -40,8 +40,6 @@ export interface ApiAction extends AnyAction {
   }
 }
 
-export type ApiActionPromise = Promise<ApiAction>
-
 // identityFunc is a function that returns the argument it's passed
 const identityFunc = <T>(a: T): T => a
 
