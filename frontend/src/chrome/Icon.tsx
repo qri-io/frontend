@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 import {
   faArchive,
+  faArrowLeft,
   faArrowRight,
   faBars,
   faBolt,
@@ -16,24 +17,28 @@ import {
   faCode,
   faGlasses,
   faProjectDiagram,
+  faEllipsisH,
   faEnvelope,
   faFont,
   faHashtag,
   faHdd,
+  faInfo,
   faList,
   faCheck,
-  faPauseCircle,
   faPen,
-  faPlayCircle,
-  faPlus,
   faMinusCircle,
   faTags,
+  faPlayCircle,
+  faPlus,
+  faPauseCircle,
   faTimes,
   faTh,
   faToggleOn,
   faExclamationCircle,
+  faExclamationTriangle,
   faQuestion,
   faQuestionCircle,
+  faShip,
   faSortDown,
   faSpinner,
   faTable,
@@ -52,15 +57,18 @@ interface IconProps {
   // size sm: .875em
   // md: 1.33em
   // lg: 2em
-  size?: 'xs' | 'sm' | 'md' | 'lg'
+  size?: IconSize
   className?: string
   rotation?: 90 | 180 | 270
   spin?: boolean
 }
 
+export type IconSize = 'xs' | 'sm' | 'md' | 'lg'
+
 const icons: Record<string, IconDefinition> = {
   'any': faQuestion,
   'array': faQuestionCircle,
+  'arrowLeft': faArrowLeft,
   'arrowRight': faArrowRight,
   'bars': faBars,
   'boolean': faToggleOn,
@@ -76,13 +84,13 @@ const icons: Record<string, IconDefinition> = {
   'bolt': faBolt,
   'projectDiagram': faProjectDiagram,
   'cloudUpload': faCloudUploadAlt,
+  'ellipsisH': faEllipsisH,
   'envelope': faEnvelope,
   'file': faFile,
   'hdd': faHdd,
+  'info': faInfo,
   'integer': faHashtag,
   'list': faList,
-  'pauseCircle': faPauseCircle,
-  'playCircle': faPlayCircle,
   'minusCircle': faMinusCircle,
   'meta': faTags,
   'null': faQuestionCircle,
@@ -90,8 +98,11 @@ const icons: Record<string, IconDefinition> = {
   'numeric': faHashtag,
   'object': faQuestionCircle,
   'pen': faPen,
-  'plus': faPlus,
   'readme': faGlasses,
+  'ship': faShip,
+  'playCircle': faPlayCircle,
+  'plus': faPlus,
+  'pauseCircle': faPauseCircle,
   'sortDown': faSortDown,
   'string': faFont,
   'structure': faTh,
@@ -99,6 +110,7 @@ const icons: Record<string, IconDefinition> = {
   'transform': faCode,
   'unknown': faQuestionCircle,
   'exclamationCircle': faExclamationCircle,
+  'exclamationTriangle': faExclamationTriangle,
   'spinner': faSpinner,
   'table': faTable,
 }

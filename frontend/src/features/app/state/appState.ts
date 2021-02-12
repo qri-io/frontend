@@ -9,7 +9,8 @@ export const selectModal = (state: RootState): Modal => state.app.modal
 export enum ModalType {
   none = '',
   schedulePicker = 'schedulePicker',
-  deployWorkflow = 'deployWorkflow'
+  deployWorkflow = 'deployWorkflow',
+  removeDataset = 'removeDataset'
 }
 
 export interface Modal<P = {}> {

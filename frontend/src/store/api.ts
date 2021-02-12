@@ -99,7 +99,7 @@ export interface ApiResponseAction {
 // .then(action) to perform additional work after an API call has completed
 export type ApiActionThunk = (
   dispatch: ThunkDispatch<any, any, any>,
-  getState: () => RootState
+  getState?: () => RootState
 ) => Promise<AnyAction>
 
 // chainSuccess wires together successive ApiActions in a ThunkAction.

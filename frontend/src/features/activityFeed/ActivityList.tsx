@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import ReactDataTable from 'react-data-table-component'
 import numeral from 'numeral'
 
+import DurationFormat from '../../chrome/DurationFormat'
+import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import Icon from '../../chrome/Icon'
 import RunStatusBadge from '../run/RunStatusBadge'
 
@@ -10,7 +12,7 @@ import { LogItem } from '../../qri/log'
 
 interface ActivityListProps {
   log: LogItem[]
-  showDatasetName: boolean
+  showDatasetName?: boolean
 }
 
 const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }) => {
@@ -41,7 +43,7 @@ const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }
       selector: 'start',
       width: '100px',
       cell: (row: LogItem) => {
-        return <div>20m ago</div>
+        return <div><RelativeTimestamp timestamp={new Date(row.timestamp)}/></div>
       }
     },
     {
@@ -49,7 +51,7 @@ const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }
       selector: 'duration',
       width: '100px',
       cell: (row: LogItem) => {
-        return <div>45s</div>
+        return <div><DurationFormat seconds={row.runDuration} /></div>
       }
     },
     {
@@ -66,6 +68,7 @@ const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }
               <div className='text-gray-500 text-xs'>
                 <span className='mr-4'><Icon icon='hdd' size='sm' className='mr-1' />{numeral(row.bodySize).format('0.0 b')}</span>
                 <span className='mr-4'><Icon icon='bars' size='sm' className='mr-1' />{numeral(row.bodyRows).format('0,0a')} rows</span>
+                <span className='mr-3'><Icon icon='file' size='sm' className='mr-1' />{row.bodyFormat}</span>
               </div>
             </div>
           )

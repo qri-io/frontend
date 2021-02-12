@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { LogItem } from '../../qri/log'
 import PageLayout from '../app/PageLayout'
 import ActivityList from './ActivityList'
 
@@ -13,7 +14,7 @@ const CollectionActivityFeed: React.FC<any> = () => {
         <header className='mb-8'>
           <h1 className='text-2xl font-extrabold'>Activity Feed</h1>
         </header>
-        <ActivityList log={activity}/>
+        <ActivityList log={activity as LogItem[]}/>
       </div>
     </PageLayout>
   )

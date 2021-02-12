@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip'
 
 import { history } from '../../store/store'
 import Routes from '../../routes'
-import Modal from './Modal'
+import Modal from './modal/Modal'
 import { wsConnect } from '../websocket/middleware/websocket'
 
 import './App.css';

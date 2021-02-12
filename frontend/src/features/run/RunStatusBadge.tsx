@@ -1,24 +1,32 @@
 import React from 'react'
 
-import Icon from '../../chrome/Icon'
+import Icon, { IconSize } from '../../chrome/Icon'
 import { RunStatus } from '../../qri/run'
 
 interface RunStatusBadgeProps {
   status: RunStatus
+  small?: boolean
 }
 
-const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
+const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, small = false }) => {
 
   let icon = ''
   let displayStatus = ''
   let backgroundClass = ''
-  let size = 'md'
+  let iconSize: IconSize = 'md'
+  let spin = false
+  let yPaddingClass = 'py-1'
 
   switch(status) {
     case 'waiting':
       break
     case 'running':
+      icon = 'spinner'
+      displayStatus = 'Running'
+      backgroundClass = 'bg-blue-500'
+      spin = true
       break
+
     case 'succeeded':
       icon = 'checkCircle'
       displayStatus = 'Success'
@@ -39,14 +47,19 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
     case '':
       icon = 'pen'
       displayStatus = 'Manual Edit'
-      backgroundClass = 'bg-gray-500'
-      size = 'sm'
+      backgroundClass = 'bg-gray-500 pl-2' // additional left padding for pen icon
+      iconSize = 'sm'
       break
   }
 
+  if (small) {
+    iconSize = 'sm'
+    yPaddingClass = 'py-0.5'
+  }
+
   return (
-    <div className={`${backgroundClass} text-white font-semibold flex items-center py-1 px-2 rounded-xl`}>
-      <Icon icon={icon} className='text-white mr-1' size={size} /> {displayStatus}
+    <div className={`${backgroundClass} text-white font-semibold flex items-center ${yPaddingClass} pl-1 pr-2 rounded-xl`}>
+      <Icon icon={icon} className='text-white mr-1' size={iconSize} spin={spin} /> {displayStatus}
     </div>
   )
 }
