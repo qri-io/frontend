@@ -10,7 +10,9 @@ export enum ModalType {
   none = '',
   schedulePicker = 'schedulePicker',
   deployWorkflow = 'deployWorkflow',
-  removeDataset = 'removeDataset'
+  removeDataset = 'removeDataset',
+  logIn = 'logIn',
+  signUp = 'signUp'
 }
 
 export interface Modal<P = {}> {

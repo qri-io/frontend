@@ -7,11 +7,17 @@ import { newQriRef } from '../../qri/ref';
 import Workflow from '../workflow/Workflow';
 import DatasetComponents from './DatasetComponents';
 import { loadBody, loadDataset } from './state/datasetActions'
-import NavBar from '../navbar/NavBar';
+import UserNavBar from '../navbar/UserNavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
 import DatasetTitleMenu from './DatasetTitleMenu';
 import DeployingScreen from '../deploy/DeployingScreen';
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
+
+export interface DatasetMenuItem {
+  text: string
+  link: string
+  icon: string
+}
 
 const Dataset: React.FC<any> = () => {
   const qriRef = newQriRef(useParams())
@@ -24,14 +30,16 @@ const Dataset: React.FC<any> = () => {
       dispatch(loadBody(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
 
+  const menuItems:DatasetMenuItem[] = [
+    { text: 'back to collection', link: '/collection', icon: 'arrowLeft' },
+  ]
+
   return (
-    <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#F4F7FC'}}>
-      <NavBar menu={[
-        { text: 'back to collection', link: '/collection', icon: 'arrowLeft' },
-      ]}>
+    <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
+      <UserNavBar menuItems={menuItems}>
         <DatasetTitleMenu qriRef={qriRef} />
-      </NavBar>
-      <div className='flex flex-grow h-full w-full overflow-hidden relative'>
+      </UserNavBar>
+      <div className='flex flex-grow overflow-hidden relative'>
         <DatasetNavSidebar qriRef={qriRef} />
         <Switch>
           <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
