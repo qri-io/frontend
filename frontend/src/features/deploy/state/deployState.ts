@@ -21,5 +21,4 @@ export const deployReducer = createReducer(initialState, {
     const w = action.payload.data as Workflow
     state.status[w.id] = workflowDeployStatus(w)
   }
-
 })

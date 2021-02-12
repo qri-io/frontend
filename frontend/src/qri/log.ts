@@ -23,3 +23,25 @@ export interface LogItem {
   bodyFormat: BodyDataFormat
   changeAmount: number
 }
+
+export function NewLogItem(d: Record<string,any>): LogItem {
+  return {
+    timestamp: d.timestamp || d.commitTime,
+    message: d.message || d.commitMessage,
+
+    username: d.username,
+    name: d.name || "",
+    profileID: d.profileID,
+    initID: d.initID,
+    path: d.path,
+
+    runID: d.runID,
+    runNumber: d.runNumber,
+    runDuration: d.runDuration,
+    runStatus: d.runStatus,
+
+    bodySize: d.bodySize,
+    bodyRows: d.bodyRows,
+    changeAmount: d.changeAmount,
+  }
+}
