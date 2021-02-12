@@ -12,7 +12,7 @@ import { LogItem } from '../../qri/log'
 
 interface ActivityListProps {
   log: LogItem[]
-  showDatasetName: boolean
+  showDatasetName?: boolean
 }
 
 const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }) => {

@@ -1,19 +1,19 @@
 import React from 'react'
 
-import Icon from '../../chrome/Icon'
+import Icon, { IconSize } from '../../chrome/Icon'
 import { RunStatus } from '../../qri/run'
 
 interface RunStatusBadgeProps {
   status: RunStatus
-  small: boolean
+  small?: boolean
 }
 
-const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, small }) => {
+const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, small = false }) => {
 
   let icon = ''
   let displayStatus = ''
   let backgroundClass = ''
-  let iconSize = 'md'
+  let iconSize: IconSize = 'md'
   let spin = false
   let yPaddingClass = 'py-1'
 

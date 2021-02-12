@@ -57,11 +57,13 @@ interface IconProps {
   // size sm: .875em
   // md: 1.33em
   // lg: 2em
-  size?: 'xs' | 'sm' | 'md' | 'lg'
+  size?: IconSize
   className?: string
   rotation?: 90 | 180 | 270
   spin?: boolean
 }
+
+export type IconSize = 'xs' | 'sm' | 'md' | 'lg'
 
 const icons: Record<string, IconDefinition> = {
   'any': faQuestion,
