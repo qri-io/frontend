@@ -1,8 +1,8 @@
 import React from 'react'
 
-import ModalLayout from '../../app/ModalLayout'
+import ModalLayout from '../../app/modal/ModalLayout'
 
-interface RemoveDatasetModalProps {
+export interface RemoveDatasetModalProps {
   username: string,
   name: string
 }

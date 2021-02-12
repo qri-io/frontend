@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import ModalLayout from '../app/ModalLayout'
+import ModalLayout from '../app/modal/ModalLayout'
 
 import { deployWorkflow } from './state/deployActions'
 import { selectWorkflow } from '../workflow/state/workflowState'
@@ -13,7 +13,7 @@ const DeployWorkflowModal: React.FC = () => {
   return (
     <ModalLayout
       title='Deploy Workflow'
-      type='action'
+      type='info'
       icon='ship'
       actionButtonText='Deploy!'
       action={() => { dispatch(deployWorkflow(workflow)) }}

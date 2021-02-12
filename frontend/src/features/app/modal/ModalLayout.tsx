@@ -1,13 +1,13 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
-import Icon from '../../chrome/Icon'
-import { clearModal } from '../app/state/appActions'
+import Icon from '../../../chrome/Icon'
+import { clearModal } from '../state/appActions'
 
 
 export interface ModalLayoutProps {
   title: string
-  type?: string
+  type?: 'info' | 'danger' 
   icon?: string
   actionButtonText: string
   action: () => void
@@ -33,8 +33,6 @@ const ModalLayout: React.FC<ModalLayoutProps> = (props) => {
     action()
     dispatch(clearModal())
   }
-
-  // type prop should be one of 'info' or 'danger' and will set the color scheme to qriblue or red
 
   let actionButtonColorClass = 'bg-qriblue-600 hover:bg-qriblue-700 focus:ring-qriblue-500'
   let displayIcon = 'info'

@@ -1,10 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-import { ModalType, selectModal } from './state/appState'
-import DeployWorkflowModal from '../deploy/DeployWorkflowModal'
-import RemoveDatasetModal from '../dataset/modal/RemoveDatasetModal'
-import ScheduleModal from '../workflow/modal/ScheduleModal'
+import { ModalType, selectModal } from '../state/appState'
+import DeployWorkflowModal from '../../deploy/DeployWorkflowModal'
+import RemoveDatasetModal, { RemoveDatasetModalProps } from '../../dataset/modal/RemoveDatasetModal'
+import ScheduleModal from '../../workflow/modal/ScheduleModal'
 
 const Modal: React.FC<any> = () => {
   const modal = useSelector(selectModal)
@@ -28,7 +28,7 @@ const Modal: React.FC<any> = () => {
                 case ModalType.deployWorkflow:
                     return <DeployWorkflowModal {...modal.props} />
                 case ModalType.removeDataset:
-                    return <RemoveDatasetModal {...modal.props} />
+                    return <RemoveDatasetModal {...modal.props as RemoveDatasetModalProps} />
                 default:
                   return null
               }
