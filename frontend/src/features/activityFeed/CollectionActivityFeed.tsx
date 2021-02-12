@@ -1,6 +1,6 @@
 import React from 'react'
-import { LogItem } from '../../qri/log'
 
+import { LogItem } from '../../qri/log'
 import PageLayout from '../app/PageLayout'
 import ActivityList from './ActivityList'
 

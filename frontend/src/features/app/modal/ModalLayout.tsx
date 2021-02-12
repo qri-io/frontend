@@ -4,24 +4,25 @@ import { useDispatch } from 'react-redux'
 import Icon from '../../../chrome/Icon'
 import { clearModal } from '../state/appActions'
 
+export type ModalLayoutType = 'info' | 'danger'
+
 
 export interface ModalLayoutProps {
   title: string
-  type?: 'info' | 'danger' 
+  type?: ModalLayoutType 
   icon?: string
   actionButtonText: string
   action: () => void
 }
 
-const ModalLayout: React.FC<ModalLayoutProps> = (props) => {
-  const {
+const ModalLayout: React.FC<ModalLayoutProps> = ({
     title,
     type='info',
-    icon=undefined,
+    icon,
     actionButtonText,
     action,
     children
-  } = props
+  }) => {
 
   const dispatch = useDispatch()
 

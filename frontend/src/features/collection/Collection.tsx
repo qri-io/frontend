@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { SyncLoader } from 'react-spinners'
 
-import PageLayout from '../app/PageLayout'
-import { VersionInfo } from '../../qri/versionInfo'
-import DatasetsTable from './DatasetsTable'
 import { loadDatasets } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
-import { SyncLoader } from 'react-spinners'
+import { VersionInfo } from '../../qri/versionInfo'
+
+import PageLayout from '../app/PageLayout'
+import DatasetsTable from './DatasetsTable'
 
 const Collection: React.FC<any> = () => {
   const dispatch = useDispatch()

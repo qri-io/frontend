@@ -15,11 +15,7 @@ const RemoveDatasetModal: React.FC<RemoveDatasetModalProps> = ({ username, name 
   const dispatch = useDispatch()
 
   const onRemove = () => {
-    // TODO (ramfox): because of the way that `ApiActionThunk` is composed, this is
-    // the only way to get to the underlying `Promise`
-    // it's pretty odd syntax, and it makes me think that perhaps our types
-    // aren't composed in the most optimal way
-    // the dream would be to use this pattern: `dispatch(someAction()).then(() => dispatch(someOtherAction())).catch((failure) => doSomethingWith(failure))`
+    // TODO (ramfox): we are thinking of ways to adjust this syntax: https://github.com/qri-io/qrimatic/issues/98
     removeDataset({username, name})(dispatch)
       .then((action: AnyAction) => {
         if (action.type.includes('SUCCESS')) {

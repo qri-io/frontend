@@ -223,12 +223,19 @@ export interface License {
 export interface Structure extends Component {
   depth?: number
   entries: number
-  format: string
+  format: BodyDataFormat
   length: number
   errCount: number
   formatConfig?: CSVFormatConfig | JSONFormatConfig | XLSXFormatConfig
   schema?: Schema
 }
+
+export type BodyDataFormat =
+| "cbor"
+| "json"
+| "csv"
+| "xlsx"
+| ""         // unknown format
 
 export function NewStructure(d: Record<string,any>): Structure {
   return {
