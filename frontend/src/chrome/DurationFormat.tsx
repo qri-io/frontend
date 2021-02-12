@@ -1,35 +1,53 @@
 import React from 'react'
-import { addHours, getMinutes, getSeconds } from 'date-fns'
 
-const convertToDuration = (secondsAmount: number) => {
-    const normalizeTime = (time: string): string =>
-    time.length === 1 ? `0${time}` : time
+const normalizeSeconds = (seconds: number): string => {
+  return seconds / 10 < 1 ? `0${seconds}` : String(seconds)
+}
 
-    const SECONDS_TO_MILLISECONDS_COEFF = 1000
-    const MINUTES_IN_HOUR = 60
+const SECONDS_IN_MINUTE = 60
+const SECONDS_IN_HOUR = 60 * SECONDS_IN_MINUTE
+const SECONDS_IN_DAY = 24 * SECONDS_IN_HOUR
 
-    const milliseconds = secondsAmount * SECONDS_TO_MILLISECONDS_COEFF
+// converts a total number of seconds into a string representation with the
+// longest duration in days
+// seconds are always represented, and always shown with two digits
+export const convertToDuration = (totalSeconds: number): string => {
+  if (totalSeconds < 60) {
+    return `0m ${normalizeSeconds(totalSeconds)}s`
+  }
+  let dur = ``
+  let seconds = totalSeconds
 
-    const date = new Date(milliseconds)
-    const timezoneDiff = date.getTimezoneOffset() / MINUTES_IN_HOUR
-    const dateWithoutTimezoneDiff = addHours(date, timezoneDiff)
+  let days = Math.floor(seconds/SECONDS_IN_DAY)
+  dur += days ? `${days}d` : ``
+  seconds -= days * SECONDS_IN_DAY
 
-    // const hours = normalizeTime(String(getHours(dateWithoutTimezoneDiff)))
-    const minutes = getMinutes(dateWithoutTimezoneDiff)
-    const seconds = normalizeTime(String(getSeconds(dateWithoutTimezoneDiff)))
+  let hours = Math.floor(seconds/SECONDS_IN_HOUR)
+  if (dur || hours) {
+    dur += dur ? ` ${hours}h` : `${hours}h`
+  }
+  seconds -= hours * SECONDS_IN_HOUR
 
-    return `${minutes}m ${seconds}s`
+  let minutes = Math.floor(seconds/SECONDS_IN_MINUTE)
+  if (dur || minutes) {
+    dur += dur ? ` ${minutes}m` : `${minutes}m`
+  }
+
+  seconds -= minutes * SECONDS_IN_MINUTE
+  dur += dur ? ` ${normalizeSeconds(seconds)}s` : `${normalizeSeconds(seconds)}s`
+  return dur
 }
 
 
 interface DurationFormatProps {
-  seconds: number
+  seconds?: number
 }
 
-const DurationFormat: React.FunctionComponent<DurationFormatProps> = ({ seconds }) => (
-  <span>
+const DurationFormat: React.FunctionComponent<DurationFormatProps> = ({ seconds }) => {
+  if (!seconds) return null
+  return (<span>
     {convertToDuration(seconds)}
-  </span>
-)
+  </span>)
+}
 
 export default DurationFormat

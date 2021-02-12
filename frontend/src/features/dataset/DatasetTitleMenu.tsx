@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { QriRef } from '../../qri/ref'
 import Icon from '../../chrome/Icon'

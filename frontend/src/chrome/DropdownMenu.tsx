@@ -4,21 +4,24 @@ import { Link } from 'react-router-dom'
 import Icon from './Icon'
 
 export interface DropDownMenuItem {
+  // link is the url string that clicking this item can send the user
+  // link overrides `onClick`, ie if you have both link and onClick set, only
+  // the link will work
   link?: string
-  onClick?: (context: any) => void
+  onClick?: (e?: React.MouseEvent) => void
   text: string
   disabled?: boolean
+  // icon: options are found in the `Icon` component
   icon?: string
 }
 
 interface DropdownMenuProps {
   items: DropDownMenuItem[]
-  itemProps?: any
   alignLeft?: boolean
 }
 
 // itemProps will be passed into the onClick handler for each item in the dropdown
-const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, itemProps, alignLeft=false }) => {
+const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, alignLeft=false }) => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -58,18 +61,16 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, itemProps,
                 )
               }
 
-              if (onClick) {
-                return (
-                  <button
-                    onClick={() => { onClick(itemProps) }}
-                    className={linkButtonClass}
-                    role="menuitem"
-                    key={i}
-                  >
-                    {content}
-                  </button>
-                )
-              }
+              return (
+                <button
+                  onClick={onClick}
+                  className={linkButtonClass}
+                  role="menuitem"
+                  key={i}
+                >
+                  {content}
+                </button>
+              )
             })}
           </div>
         </div>

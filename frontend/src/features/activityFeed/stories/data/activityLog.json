@@ -52,6 +52,7 @@
 		"runNumber": 9,
 		"runID": "b9d1211c-6a53-11eb-9439-0242ac130002",
 		"runStatus": "failed",
+		"runDuration": 3638,
 
 		"bodySize": 282000,
 		"bodyRows": 2345678,
@@ -71,6 +72,7 @@
 		"runID": "",
 		"runNumber": -1,
 		"runStatus": "",
+		"runDuration": 10500,
 
 		"bodySize": 3240000,
 		"bodyRows": 25678,
