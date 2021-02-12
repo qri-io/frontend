@@ -247,6 +247,7 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
 
   return (
     <ReactDataTable
+      overflowY
       columns={columns}
       data={filteredDatasets}
       customStyles={customStyles}

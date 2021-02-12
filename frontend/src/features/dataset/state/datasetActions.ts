@@ -60,3 +60,21 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
     }
   }
 }
+
+export function removeDataset (ref: QriRef): ApiActionThunk {
+    return async (dispatch) => {
+      const action = {
+        type: 'remove',
+        [CALL_API]: {
+          endpoint: 'remove',
+          method: 'DELETE',
+          segments: {
+            peername: ref.username,
+            name: ref.name
+          }
+        }
+      }
+  
+      return dispatch(action)
+    }
+  }
