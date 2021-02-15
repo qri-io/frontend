@@ -1131,12 +1131,6 @@ github.com/qri-io/jsonschema v0.2.0 h1:is8lirh3HYwTkC0e+4jL/vWEHwzPLojnl4FWkUoeE
 github.com/qri-io/jsonschema v0.2.0/go.mod h1:g7DPkiOsK1xv6T/Ao5scXRkd+yTFygcANPBaaqW+VrI=
 github.com/qri-io/qfs v0.5.1-0.20201119141805-fb13393b2d1f h1:Oj2N/HRGMcs2NDZWl1K5gFsTifrxQVVE0KyFyUGgn8M=
 github.com/qri-io/qfs v0.5.1-0.20201119141805-fb13393b2d1f/go.mod h1:SU+DUq8+BfHNod1SXzmD8FrNLgPt42aKyQuO3fnFEQI=
-github.com/qri-io/qri v0.9.14-0.20210128202211-63fadf8339de h1:l4WTS9K/4z5UAd2qoAbcj8lkyERN9DYdF9sa+bT4044=
-github.com/qri-io/qri v0.9.14-0.20210128202211-63fadf8339de/go.mod h1:b4gXn+uYJyWKFKxwc4dy5zdxb3a7OWQn4yYfSTnX5BM=
-github.com/qri-io/qri v0.9.14-0.20210212135801-d4086a32f2d6 h1:jDJD7Y7maA/+0POnngPNMGyTHLRTYV+8MDjTtJx9VDA=
-github.com/qri-io/qri v0.9.14-0.20210212135801-d4086a32f2d6/go.mod h1:dHV5yhd1z2RF7XDfEkXiaMXqEqLP1i9dx1zu6w0V5UQ=
-github.com/qri-io/qri v0.9.14-0.20210212180020-15c1a72ff0e4 h1:DTEtViOjGalQ4KPhgZ4ScRO80+orGb4CW6E++F0ZbxQ=
-github.com/qri-io/qri v0.9.14-0.20210212180020-15c1a72ff0e4/go.mod h1:vtstK0l2VE7hJPE4oHX2mH/R0JZgemXJ+ma+cOKioaU=
 github.com/qri-io/qri v0.9.14-0.20210217202507-0fa42078cdd7 h1:WIx0vfPF209YE9G7Hi3r8BA/NhwYMq1eaq9wfK1r8Mk=
 github.com/qri-io/qri v0.9.14-0.20210217202507-0fa42078cdd7/go.mod h1:Xz+7nbPYWB6XEHvLOSl2vls78FQcK+3xnaZ5Cj+vRzY=
 github.com/qri-io/starlib v0.4.2 h1:ZGzmzT9fOqdluezcwhAZAbTn/v6kMg1tC6ALVjQPhpQ=
