@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Icon from '../../chrome/Icon'
+import Button from '../../chrome/Button'
 import { Workflow } from '../../qrimatic/workflow'
 import { deployStatusInfoMap } from './deployStatus'
 import { deployWorkflow } from './state/deployActions'
@@ -42,12 +43,12 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
         <span className='text-sm font-semibold text-gray-600'>{statusText}</span>
       </div>
       <div className='text-xs mb-4'>{message}</div>
-      <button
-        className={`w-full py-1 px-4 font-semibold shadow-md text-white rounded flex items-center justify-center ${buttonClass}`}
+      <Button
+        className={`w-full  ${buttonClass}`}
         onClick={handleButtonClick}
       >
         <Icon icon={buttonIcon} className='text-sm mr-2'/> {buttonText}
-      </button>
+      </Button>
     </div>
   )
 }

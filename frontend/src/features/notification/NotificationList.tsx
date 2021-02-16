@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import NotificationMenu from './NotificationMenu';
-import PageLayout from '../app/PageLayout'
+import UserPageLayout from '../app/UserPageLayout'
 
 
 const NotificationList: React.FC<any> = () => (
-  <PageLayout>
+  <UserPageLayout>
     <div className='max-w-screen-xl mx-auto px-10 py-20'>
       <header className='mb-8'>
         <h1 className='text-2xl font-extrabold'>Notifications</h1>
@@ -36,7 +36,7 @@ const NotificationList: React.FC<any> = () => (
         </div>
       </div>
     </div>
-  </PageLayout>
+  </UserPageLayout>
 )
 
 export default NotificationList;

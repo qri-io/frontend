@@ -1,16 +1,17 @@
 import React from 'react'
 
-import NavBar from '../navbar/NavBar'
-
-export interface PageLayoutProps {}
+export interface PageLayoutProps {
+  top: any
+  main: any
+}
 
 // for non-dataset views, contains Navbar and full-height content area with
 //overflow-y-scroll
-const PageLayout: React.FC<PageLayoutProps> = ({ children }) => (
+const PageLayout: React.FC<PageLayoutProps> = ({ top, main }) => (
   <div className='flex flex-col h-full bg-gray-100'>
-    <NavBar />
+    {top}
     <div className='flex-grow overflow-y-scroll bg-white'>
-      {children}
+      {main}
     </div>
   </div>
 )

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import NavBar from '../navbar/NavBar'
+import AnonymousNavBar from '../navbar/AnonymousNavBar'
 
 const templates = [
   {
@@ -25,12 +25,7 @@ const templates = [
 const TemplateList: React.FC<any> = () => {
   return (
     <div className='flex flex-col h-full bg-gray-100'>
-      <NavBar menu={[
-        { type: 'link', label: 'back to collection', to: '/collection' },
-        { type: 'hr' }
-      ]}>
-        <p className='font-bold text-white'>New Dataset</p>
-      </NavBar>
+      <AnonymousNavBar />
         <div className='max-w-screen-xl mx-auto px-10 py-20'>
           <header className='mb-8'>
             <h1 className='text-2xl font-extrabold'>Choose a Dataset Template</h1>

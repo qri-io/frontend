@@ -6,7 +6,7 @@ import { loadDatasets } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
 import { VersionInfo } from '../../qri/versionInfo'
 
-import PageLayout from '../app/PageLayout'
+import UserPageLayout from '../app/UserPageLayout'
 import DatasetsTable from './DatasetsTable'
 
 const Collection: React.FC<any> = () => {
@@ -19,7 +19,7 @@ const Collection: React.FC<any> = () => {
   }, [dispatch])
 
   return (
-    <PageLayout>
+    <UserPageLayout>
       <div className='h-full max-w-screen-xl mx-auto px-10 py-20'>
         <header className='mb-8'>
           <h1 className='text-2xl font-extrabold'>Collection</h1>
@@ -37,7 +37,7 @@ const Collection: React.FC<any> = () => {
             />
         }
       </div>
-    </PageLayout>
+    </UserPageLayout>
   )
 }
 

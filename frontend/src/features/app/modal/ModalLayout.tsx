@@ -2,14 +2,14 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import Icon from '../../../chrome/Icon'
+import Button, { ButtonType } from '../../../chrome/Button'
 import { clearModal } from '../state/appActions'
 
 export type ModalLayoutType = 'info' | 'danger'
 
-
 export interface ModalLayoutProps {
   title: string
-  type?: ModalLayoutType 
+  type?: ModalLayoutType
   icon?: string
   actionButtonText: string
   action: () => void
@@ -35,13 +35,13 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
     dispatch(clearModal())
   }
 
-  let actionButtonColorClass = 'bg-qriblue-600 hover:bg-qriblue-700 focus:ring-qriblue-500'
   let displayIcon = 'info'
+  let actionButtonType = 'primary'
   let iconBgColorClass = 'bg-qriblue-100'
   let iconColorClass = 'text-qriblue-600'
 
   if (type === 'danger') {
-    actionButtonColorClass = 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
+    let actionButtonType: ButtonType  = 'danger'
     displayIcon = 'exclamationTriangle'
     iconBgColorClass = 'bg-red-100'
     iconColorClass = 'text-red-600'
@@ -66,20 +66,19 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
         </div>
       </div>
       <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-        <button
-          type="button"
-          className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2  sm:ml-3 sm:w-auto sm:text-sm ${actionButtonColorClass}`}
+        <Button
+          type={actionButtonType}
           onClick={handleActionButtonClick}
         >
           {actionButtonText}
-        </button>
-        <button
-          type="button"
-          className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+        </Button>
+        <Button
+          type='light'
           onClick={handleCancelButtonClick}
+          className='mr-2'
         >
         Cancel
-        </button>
+        </Button>
       </div>
     </>
   )

@@ -5,13 +5,16 @@ import { ModalType, selectModal } from '../state/appState'
 import DeployWorkflowModal from '../../deploy/DeployWorkflowModal'
 import RemoveDatasetModal, { RemoveDatasetModalProps } from '../../dataset/modal/RemoveDatasetModal'
 import ScheduleModal from '../../workflow/modal/ScheduleModal'
+import LogInModal from './LogInModal'
+import SignUpModal from './SignUpModal'
+
 import { clearModal } from '../state/appActions'
 
 const Modal: React.FC<any> = () => {
   const maskRef = useRef<HTMLDivElement>(null)
   const dispatch = useDispatch()
   const modal = useSelector(selectModal)
-  
+
   const handleMaskClick = useCallback((e: MouseEvent) => {
     if (maskRef && maskRef.current?.contains(e.target as Element)) {
       dispatch(clearModal())
@@ -46,6 +49,10 @@ const Modal: React.FC<any> = () => {
                     return <DeployWorkflowModal {...modal.props} />
                 case ModalType.removeDataset:
                     return <RemoveDatasetModal {...modal.props as RemoveDatasetModalProps} />
+                case ModalType.logIn:
+                    return <LogInModal {...modal.props} />
+                case ModalType.signUp:
+                    return <SignUpModal {...modal.props} />
                 default:
                   return null
               }
