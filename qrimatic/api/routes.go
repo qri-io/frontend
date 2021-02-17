@@ -22,6 +22,7 @@ func (s *Server) AddRoutes(m *http.ServeMux, prefix string, mw func(http.Handler
 func (s *Server) AddCronRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
 	m.HandleFunc("/cron", mw(s.StatusHandler))
 	m.HandleFunc("/workflows", mw(s.WorkflowsHandler))
+	m.HandleFunc("/workflow/list", mw(s.WorkflowListHandler))
 	m.HandleFunc("/workflow", mw(s.WorkflowHandler))
 	m.HandleFunc("/runs", mw(s.RunsHandler))
 	m.HandleFunc("/run", mw(s.GetRunHandler))
