@@ -50,7 +50,9 @@ var zero iso8601.RepeatingInterval
 // Workflow represents a "cron workflow" that can be scheduled for repeated execution at
 // a specified Periodicity (time interval)
 type Workflow struct {
-	ID        string     `json:"id"`                // CID string
+	ID string `json:"id"` // CID string0
+	// TODO (ramfox): `DatasetID` is currently expected to be the `username/name` combination
+	// when the infrastructure supports it, we want to switch this over to the dataset's `InitID`
 	DatasetID string     `json:"datasetID"`         // dataset identifier
 	OwnerID   string     `json:"ownerID"`           // user that created this workflow
 	Name      string     `json:"name"`              // human dataset name eg: "b5/world_bank_population"
