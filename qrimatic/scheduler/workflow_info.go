@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"time"
 
 	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
@@ -45,14 +46,14 @@ func WorkflowInfoFromVersionInfo(vi dsref.VersionInfo, WorkflowID string) *Workf
 	}
 }
 
-// ListWorkflowInfos returns all the WorkflowInfos (including datasets that have
-// been converted to WorkflowInfos). Future iterations will include pagination
-func (c *Cron) ListWorkflowInfos(ctx context.Context, inst *lib.Instance, after, before int) ([]*WorkflowInfo, error) {
+// ListCollection returns a union of datasets and workflows in the form of `WorkflowInfo`s
+// TODO (ramfox): add pagination by timestamp
+func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, after time.Time) ([]*WorkflowInfo, error) {
 	m := lib.NewDatasetMethods(inst)
 	// TODO (ramfox): for now we are fetching everything.
 	p := &lib.ListParams{
-		Limit:  100,
 		Offset: 0,
+		Limit:  100,
 	}
 
 	// TODO (ramfox): when we add in pagination, we should be using `after` and `before`

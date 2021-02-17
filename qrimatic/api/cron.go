@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"time"
 
 	apiutil "github.com/qri-io/apiutil"
 	"github.com/qri-io/qrimatic/scheduler"
@@ -131,12 +132,12 @@ func (s *Server) RunHandler(w http.ResponseWriter, r *http.Request) {
 	// c.runWorkflow(r.Context(), nil)
 }
 
-// WorkflowListHandler returns a list of WorkflowInfos, which include workflows
-// that do and do not include runs
-func (s *Server) WorkflowListHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := s.sched.ListWorkflowInfos(context.Background(), s.inst, 25, 0)
+// CollectionHandler returns a list of `WorkflowInfo`s, which include a union of
+// datasets and workflows
+func (s *Server) CollectionHandler(w http.ResponseWriter, r *http.Request) {
+	data, err := s.sched.ListCollection(context.Background(), s.inst, time.Now(), time.Now())
 	if err != nil {
-		log.Errorf("error listing workflowInfos: %w", err)
+		log.Errorf("error listing collection: %w", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
