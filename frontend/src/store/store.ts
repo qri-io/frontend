@@ -13,6 +13,7 @@ import { CollectionState, collectionReducer } from '../features/collection/state
 import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
 import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
 import { deployReducer, DeployState } from '../features/deploy/state/deployState';
+import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
 
 export const history = createBrowserHistory()
 
@@ -26,6 +27,7 @@ export interface RootState {
   collection: CollectionState
   dataset: DatasetState
   scroller: ScrollerState
+  activityFeed: ActivityFeedState
 }
 
 const rootReducer = (h: History) => combineReducers({
@@ -41,6 +43,7 @@ const rootReducer = (h: History) => combineReducers({
   dataset: datasetReducer,
   scroller: scrollerReducer,
   deploy: deployReducer,
+  activityFeed: activityFeedReducer,
 })
 
 export function configureStore(preloadedState?: any) {

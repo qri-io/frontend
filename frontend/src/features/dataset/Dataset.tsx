@@ -46,7 +46,7 @@ const Dataset: React.FC<any> = () => {
           <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>
           <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
           <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
-          <Route path='/ds/:username/:name/history'><DatasetActivityFeed /></Route>
+          <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
         </Switch>
         <DeployingScreen qriRef={qriRef} />
       </div>

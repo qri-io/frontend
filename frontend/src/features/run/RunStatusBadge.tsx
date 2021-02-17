@@ -44,7 +44,7 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, small = false }
       displayStatus = 'No Changes'
       backgroundClass = 'bg-blue-500'
       break
-    case '':
+    default:
       icon = 'pen'
       displayStatus = 'Manual Edit'
       backgroundClass = 'bg-gray-500 pl-2' // additional left padding for pen icon

@@ -7,7 +7,6 @@ import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import Icon from '../../chrome/Icon'
 import RunStatusBadge from '../run/RunStatusBadge'
-
 import { LogItem } from '../../qri/log'
 
 interface ActivityListProps {
@@ -43,7 +42,7 @@ const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }
       selector: 'start',
       width: '100px',
       cell: (row: LogItem) => {
-        return <div><RelativeTimestamp timestamp={new Date(row.timestamp)}/></div>
+        return <div><RelativeTimestamp timestamp={new Date(row.timestamp)} /></div>
       }
     },
     {
@@ -51,7 +50,7 @@ const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }
       selector: 'duration',
       width: '100px',
       cell: (row: LogItem) => {
-        return <div><DurationFormat seconds={row.runDuration} /></div>
+        return <div><DurationFormat seconds={Math.ceil(row.runDuration / 1000000000)} /></div>
       }
     },
     {
@@ -63,7 +62,7 @@ const ActivityList: React.FC<ActivityListProps> = ({ log, showDatasetName=true }
           return (
             <div className='p-3'>
               <div className='font-medium text-sm mb-1'>
-                <div className='font-mono'><Icon icon='commit' size='sm'/> {row.path.substring(row.path.length - 7)}</div>
+                {row.path && <div className='font-mono'><Icon icon='commit' size='sm'/> {row.path.substring(row.path.length - 7)}</div>}
               </div>
               <div className='text-gray-500 text-xs'>
                 <span className='mr-4'><Icon icon='hdd' size='sm' className='mr-1' />{numeral(row.bodySize).format('0.0 b')}</span>
