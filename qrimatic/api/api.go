@@ -14,6 +14,7 @@ import (
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/lib"
+	"github.com/qri-io/qri/transform"
 	"github.com/qri-io/qrimatic/scheduler"
 )
 
@@ -87,12 +88,25 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) sche
 		dsm := lib.NewDatasetMethods(inst)
 
 		return func(ctx context.Context, streams ioes.IOStreams, workflow *scheduler.Workflow) error {
+			runID := transform.NewRunID()
+
+			// runState = run.NewState(runID)
+			// m.inst.bus.SubscribeID(func(ctx context.Context, e event.Event) error {
+			// 	runState.AddTransformEvent(e)
+			// 	return nil
+			// }, runID)
+
 			p := &lib.SaveParams{
-				Ref:   workflow.DatasetID,
+				Ref: workflow.DatasetID,
+				Dataset: &dataset.Dataset{
+					Commit: &dataset.Commit{
+						RunID: runID,
+					},
+				},
 				Apply: true,
 			}
-			res := &dataset.Dataset{}
-			return dsm.Save(p, res)
+			_, err := dsm.Save(ctx, p)
+			return err
 		}
 	}
 }

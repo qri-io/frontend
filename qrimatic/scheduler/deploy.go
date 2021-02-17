@@ -2,10 +2,11 @@ package scheduler
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/qri-io/dataset"
+	"github.com/qri-io/qri/base/dsfs"
 	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
 )
@@ -42,10 +43,9 @@ func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) 
 		// Wait: false,
 	}
 	log.Debugw("deploying dataset", "datasetID", saveP.Ref)
-	res := &dataset.Dataset{}
-	err := dsm.Save(saveP, res)
+	res, err := dsm.Save(ctx, saveP)
 	if err != nil {
-		if strings.Contains(err.Error(), "no changes") {
+		if errors.Is(err, dsfs.ErrNoChanges) {
 			err = nil
 		} else {
 			log.Errorw("deploy save dataset", "error", err)

@@ -3,10 +3,12 @@ package api
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 // AddRoutes registers cron routes with an *http.Mux.
-func (s *Server) AddRoutes(m *http.ServeMux, prefix string, mw func(http.HandlerFunc) http.HandlerFunc) {
+func (s *Server) AddRoutes(m *mux.Router, prefix string, mw func(http.HandlerFunc) http.HandlerFunc) {
 	route := func(route string) string {
 		return fmt.Sprintf("%s%s", prefix, route)
 	}
@@ -19,7 +21,7 @@ func (s *Server) AddRoutes(m *http.ServeMux, prefix string, mw func(http.Handler
 }
 
 // AddCronRoutes registers cron endpoints on an *http.Mux
-func (s *Server) AddCronRoutes(m *http.ServeMux, mw func(http.HandlerFunc) http.HandlerFunc) {
+func (s *Server) AddCronRoutes(m *mux.Router, mw func(http.HandlerFunc) http.HandlerFunc) {
 	m.HandleFunc("/cron", mw(s.StatusHandler))
 	m.HandleFunc("/workflows", mw(s.WorkflowsHandler))
 	m.HandleFunc("/collection", mw(s.CollectionHandler))

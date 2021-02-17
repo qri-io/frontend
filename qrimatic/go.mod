@@ -7,6 +7,7 @@ require (
 	github.com/fatih/color v1.9.0
 	github.com/google/go-cmp v0.5.3
 	github.com/google/uuid v1.1.1
+	github.com/gorilla/mux v1.8.0
 	github.com/ipfs/go-cid v0.0.7
 	github.com/ipfs/go-log v1.0.4
 	github.com/mitchellh/go-homedir v1.1.0

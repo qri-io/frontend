@@ -36,12 +36,12 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
   }
 
   let displayIcon = 'info'
-  let actionButtonType = 'primary'
+  let actionButtonType: ButtonType = 'primary'
   let iconBgColorClass = 'bg-qriblue-100'
   let iconColorClass = 'text-qriblue-600'
 
   if (type === 'danger') {
-    let actionButtonType: ButtonType  = 'danger'
+    actionButtonType = 'danger'
     displayIcon = 'exclamationTriangle'
     iconBgColorClass = 'bg-red-100'
     iconColorClass = 'text-red-600'

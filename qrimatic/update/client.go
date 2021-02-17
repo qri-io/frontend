@@ -51,16 +51,6 @@ type ScheduleParams struct {
 
 // Schedule creates a workflow and adds it to the scheduler
 func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *scheduler.Workflow) (err error) {
-	// Make all paths absolute. this must happen *before* any possible RPC call
-	if PossibleShellScript(in.Name) {
-		if err = qfs.AbsPath(&in.Name); err != nil {
-			return
-		}
-	}
-
-	if err = in.SaveParams.AbsolutizePaths(); err != nil {
-		return err
-	}
 
 	workflow, err := c.workflowFromScheduleParams(ctx, in)
 	if err != nil {
@@ -89,8 +79,9 @@ func (c *Client) workflowFromScheduleParams(ctx context.Context, p *SchedulePara
 		log.Debugw("creating new instance to resolve ref")
 		return nil, err
 	}
-	res := &lib.GetResult{}
-	if err := lib.NewDatasetMethods(inst).Get(&lib.GetParams{Refstr: p.Name}, res); err != nil {
+
+	res, err := lib.NewDatasetMethods(inst).Get(ctx, &lib.GetParams{Refstr: p.Name})
+	if err != nil {
 		log.Debugw("resolving dataset", "error", err)
 		return nil, err
 	}
