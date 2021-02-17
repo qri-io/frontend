@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	golog "github.com/ipfs/go-log"
-	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qri/transform"

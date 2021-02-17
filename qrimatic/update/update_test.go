@@ -1,13 +1,13 @@
 package update
 
 import (
-	"context"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
+	"github.com/qri-io/qrimatic/api"
 	"github.com/qri-io/qrimatic/scheduler"
 )
 
@@ -56,7 +56,7 @@ func TestDatasetWorkflowToCmd(t *testing.T) {
 		},
 	}
 	streams := ioes.NewDiscardIOStreams()
-	cmd := WorkflowToCmd(streams, dsj)
+	cmd := api.WorkflowToCmd(streams, dsj)
 
 	expect := "qri save me/foo --title=title --message=message --body=body/path.csv --file=file/path/0.json --file=file/path/1.json --publish"
 	got := strings.Join(cmd.Args, " ")
@@ -71,7 +71,7 @@ func TestShellScriptWorkflowToCmd(t *testing.T) {
 		Name: "path/to/shell/script.sh",
 	}
 	streams := ioes.NewDiscardIOStreams()
-	cmd := WorkflowToCmd(streams, dsj)
+	cmd := api.WorkflowToCmd(streams, dsj)
 
 	expect := "path/to/shell/script.sh"
 	got := strings.Join(cmd.Args, " ")
@@ -87,17 +87,5 @@ func TestShellScriptToWorkflow(t *testing.T) {
 
 	if _, err := ShellScriptToWorkflow("testdata/hello.sh", "R/P1Y", nil); err != nil {
 		t.Errorf("unexpected error: %s", err)
-	}
-}
-
-func TestStart(t *testing.T) {
-	ctx, done := context.WithDeadline(context.Background(), time.Now().Add(time.Millisecond*200))
-	defer done()
-
-	// call factory here to ensure we can create a factory with this context
-	Factory(ctx)
-
-	if err := Start(ctx, "", &Config{Type: "mem"}); err != nil {
-		t.Error(err)
 	}
 }

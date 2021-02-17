@@ -20,14 +20,11 @@ func mustRepeatingInterval(s string) iso8601.RepeatingInterval {
 
 func TestCronDataset(t *testing.T) {
 	updateCount := 0
-	next := time.Now().Add(time.Millisecond * 20)
 	workflow := &Workflow{
-		Name:         "b5/libp2p_node_count",
-		DatasetID:    "dsID",
-		OwnerID:      "ownerID",
-		Type:         JTDataset,
-		Periodicity:  mustRepeatingInterval("R/P1W"),
-		NextRunStart: &next,
+		Name:      "b5/libp2p_node_count",
+		DatasetID: "dsID",
+		OwnerID:   "ownerID",
+		Type:      JTDataset,
 	}
 
 	factory := func(outer context.Context) RunWorkflowFunc {
@@ -73,9 +70,8 @@ func TestCronDataset(t *testing.T) {
 	got := logs[0]
 
 	expect := &Workflow{
-		Name:        "b5/libp2p_node_count",
-		Type:        JTDataset,
-		Periodicity: mustRepeatingInterval("R/P1W"),
+		Name: "b5/libp2p_node_count",
+		Type: JTDataset,
 		// RunNumber: 1,
 		// RunStart:  got.RunStart,
 		// RunStop:   got.RunStop,
@@ -94,9 +90,8 @@ func TestCronShellScript(t *testing.T) {
 	updateCount := 0
 
 	workflow := &Workflow{
-		Name:        "foo.sh",
-		Type:        JTShellScript,
-		Periodicity: mustRepeatingInterval("R/P1W"),
+		Name: "foo.sh",
+		Type: JTShellScript,
 	}
 
 	// scriptRunner := LocalShellScriptRunner("testdata")
@@ -143,10 +138,8 @@ func TestCronShellScript(t *testing.T) {
 	got := logs[0]
 
 	expect := &Workflow{
-		Name:        "foo.sh",
-		Type:        JTShellScript,
-		Periodicity: mustRepeatingInterval("R/P1W"),
-
+		Name: "foo.sh",
+		Type: JTShellScript,
 		// RunNumber: 1,
 		// RunStart:  got.RunStart,
 		// RunStop:   got.RunStop,

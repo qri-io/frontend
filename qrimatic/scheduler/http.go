@@ -276,18 +276,3 @@ func decodeJSONRunResponse(res *http.Response) (*Run, error) {
 	err := json.NewDecoder(res.Body).Decode(run)
 	return run, err
 }
-
-// // ServeHTTP spins up an HTTP server at the specified address
-// func (c *Cron) ServeHTTP(addr string) error {
-// 	m := http.NewServeMux()
-// 	AddCronRoutes(m, c, noopMiddlware)
-// 	s := &http.Server{
-// 		Addr:    addr,
-// 		Handler: m,
-// 	}
-// 	return s.ListenAndServe()
-// }
-
-// func noopMiddlware(h http.HandlerFunc) http.HandlerFunc {
-// 	return h
-// }

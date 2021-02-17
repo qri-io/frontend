@@ -31,11 +31,10 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		}
 
 		workflowOne := &Workflow{
-			Name:        "workflow_one",
-			DatasetID:   "dsID1",
-			Periodicity: mustRepeatingInterval("R/PT1H"),
-			Type:        JTDataset,
-			ID:          "workflowID",
+			Name:      "workflow_one",
+			DatasetID: "dsID1",
+			Type:      JTDataset,
+			ID:        "workflowID",
 		}
 		if err = store.PutWorkflow(ctx, workflowOne); err != nil {
 			t.Errorf("putting workflow one: %s", err)
@@ -53,11 +52,10 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 
 		// d2 := time.Date(2001, 1, 1, 1, 1, 1, 1, time.UTC)
 		workflowTwo := &Workflow{
-			ID:          "workflow2",
-			Name:        "workflow two",
-			DatasetID:   "dsID2",
-			Periodicity: mustRepeatingInterval("R/P3M"),
-			Type:        JTShellScript,
+			ID:        "workflow2",
+			Name:      "workflow two",
+			DatasetID: "dsID2",
+			Type:      JTShellScript,
 			// RunStart:    &d2,
 		}
 		if err = store.PutWorkflow(ctx, workflowTwo); err != nil {
@@ -73,9 +71,8 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		}
 
 		workflowThree := &Workflow{
-			Name:        "workflow_three",
-			Periodicity: mustRepeatingInterval("R/PT1H"),
-			Type:        JTDataset,
+			Name: "workflow_three",
+			Type: JTDataset,
 			Options: &DatasetOptions{
 				Title: "hallo",
 			},
@@ -93,9 +90,8 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 
 		// d3 := time.Date(2002, 1, 1, 1, 1, 1, 1, time.UTC)
 		updatedWorkflowOne := &Workflow{
-			Name:        workflowOne.Name,
-			Periodicity: workflowOne.Periodicity,
-			Type:        workflowOne.Type,
+			Name: workflowOne.Name,
+			Type: workflowOne.Type,
 			// RunStart:    &d3,
 		}
 		if err = store.PutWorkflow(ctx, updatedWorkflowOne); err != nil {
@@ -145,18 +141,17 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 	})
 
 	t.Run("TestWorkflowStoreValidPut", func(t *testing.T) {
-		r1h := mustRepeatingInterval("R/PT1H")
 		bad := []struct {
 			description string
 			workflow    *Workflow
 		}{
 			{"empty", &Workflow{}},
-			{"no name", &Workflow{Periodicity: r1h, Type: JTDataset}},
+			{"no name", &Workflow{Type: JTDataset}},
 			{"no periodicity", &Workflow{Name: "some_name", Type: JTDataset}},
-			{"no type", &Workflow{Name: "some_name", Periodicity: r1h}},
+			{"no type", &Workflow{Name: "some_name"}},
 
 			{"invalid periodicity", &Workflow{Name: "some_name", Type: JTDataset}},
-			{"invalid WorkflowType", &Workflow{Name: "some_name", Periodicity: r1h, Type: WorkflowType("huh")}},
+			{"invalid WorkflowType", &Workflow{Name: "some_name", Type: WorkflowType("huh")}},
 		}
 
 		store := newStore()

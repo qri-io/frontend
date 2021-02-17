@@ -45,10 +45,9 @@ func TestDatasetOptionsJSON(t *testing.T) {
 func TestWorkflowCopy(t *testing.T) {
 	// now := time.Now()
 	a := &Workflow{
-		ID:          "id",
-		Name:        "name",
-		Type:        WorkflowType("FOO"),
-		Periodicity: mustRepeatingInterval("R/P1W"),
+		ID:   "id",
+		Name: "name",
+		Type: WorkflowType("FOO"),
 		// PrevRunStart: &now,
 		// RunNumber:    1234567890,
 		// RunStart:     &now,
@@ -73,17 +72,15 @@ func compareWorkflow(a, b *Workflow) string {
 func TestWorkflowsJSON(t *testing.T) {
 	workflows := NewWorkflowSet()
 	workflows.Add(&Workflow{
-		ID:          "workflow1",
-		Name:        "workflow_one",
-		Periodicity: mustRepeatingInterval("R/PT1H"),
-		Type:        JTDataset,
-		Options:     &DatasetOptions{Title: "Yus"},
+		ID:      "workflow1",
+		Name:    "workflow_one",
+		Type:    JTDataset,
+		Options: &DatasetOptions{Title: "Yus"},
 	})
 	workflows.Add(&Workflow{
-		ID:          "workflow2",
-		Name:        "workflow_two",
-		Periodicity: mustRepeatingInterval("R/PT1D"),
-		Type:        JTShellScript,
+		ID:   "workflow2",
+		Name: "workflow_two",
+		Type: JTShellScript,
 	})
 
 	data, err := json.Marshal(workflows)
