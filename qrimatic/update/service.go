@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"os"
 
+	"github.com/gorilla/mux"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/api"
 	"github.com/qri-io/qri/cmd"
@@ -60,7 +60,7 @@ func NewService(ctx context.Context, streams ioes.IOStreams, repoPath string, se
 
 func (s *Service) Serve(ctx context.Context) error {
 	apiServer := api.New(s.inst)
-	apiServer.Mux = http.NewServeMux()
+	apiServer.Mux = mux.NewRouter()
 
 	s.srv.AddRoutes(apiServer.Mux, "", apiServer.Middleware)
 
