@@ -24,7 +24,7 @@ func (s *Server) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 
 		js, err := s.sched.ListWorkflows(r.Context(), offset, limit)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
 			return
 		}
 
@@ -58,8 +58,7 @@ func (s *Server) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodDelete:
 		name := r.FormValue("name")
 		if err := s.sched.Unschedule(r.Context(), name); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
+			apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
 			return
 		}
 	}
@@ -70,9 +69,9 @@ func (s *Server) WorkflowHandler(w http.ResponseWriter, r *http.Request) {
 	workflow, err := s.sched.WorkflowForDataset(r.Context(), dsID)
 	if err != nil {
 		if err == scheduler.ErrNotFound {
-			w.WriteHeader(http.StatusNotFound)
+			apiutil.WriteErrResponse(w, http.StatusNotFound, err)
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
 		}
 		w.Write([]byte(err.Error()))
 		return
@@ -104,8 +103,7 @@ func (s *Server) GetRunHandler(w http.ResponseWriter, r *http.Request) {
 	runNumber := apiutil.ReqParamInt(r, "number", 0)
 	run, err := s.sched.GetRun(r.Context(), datasetID, runNumber)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -138,8 +136,7 @@ func (s *Server) CollectionHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := s.sched.ListCollection(context.Background(), s.inst, time.Now(), time.Now())
 	if err != nil {
 		log.Errorf("error listing collection: %w", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 		return
 	}
 	apiutil.WriteResponse(w, data)

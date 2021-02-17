@@ -17,32 +17,10 @@ type WorkflowInfo struct {
 	ID string `json:"id"` // CID string
 }
 
-func WorkflowInfoFromVersionInfo(vi dsref.VersionInfo, WorkflowID string) *WorkflowInfo {
+func workflowInfoFromVersionInfo(vi dsref.VersionInfo, workflowID string) *WorkflowInfo {
 	return &WorkflowInfo{
-		VersionInfo: dsref.VersionInfo{
-			InitID:        vi.InitID,
-			Username:      vi.Username,
-			ProfileID:     vi.ProfileID,
-			Name:          vi.Name,
-			Path:          vi.Path,
-			Published:     vi.Published,
-			Foreign:       vi.Foreign,
-			MetaTitle:     vi.MetaTitle,
-			ThemeList:     vi.ThemeList,
-			BodySize:      vi.BodySize,
-			BodyRows:      vi.BodyRows,
-			BodyFormat:    vi.BodyFormat,
-			NumErrors:     vi.NumErrors,
-			CommitTime:    vi.CommitTime,
-			CommitTitle:   vi.CommitTitle,
-			CommitMessage: vi.CommitMessage,
-			NumVersions:   vi.NumVersions,
-			FSIPath:       vi.FSIPath,
-			RunID:         vi.RunID,
-			RunStatus:     vi.RunStatus,
-			RunDuration:   vi.RunDuration,
-		},
-		ID: WorkflowID,
+		VersionInfo: vi,
+		ID:          workflowID,
 	}
 }
 
@@ -53,7 +31,7 @@ func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, a
 	// TODO (ramfox): for now we are fetching everything.
 	p := &lib.ListParams{
 		Offset: 0,
-		Limit:  100,
+		Limit:  100000000000,
 	}
 
 	// TODO (ramfox): when we add in pagination, we should be using `after` and `before`
@@ -94,20 +72,20 @@ func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, a
 	wis := []*WorkflowInfo{}
 	for _, vi := range vis {
 		// DatasetID is currently `username/name`
-		viID := fmt.Sprintf("%s/%s", vi.Username, vi.Name)
+		viID := vi.Alias()
 		w, ok := wiMap[viID]
 		if ok {
-			wis = append(wis, WorkflowInfoFromVersionInfo(vi, w.ID))
+			wis = append(wis, workflowInfoFromVersionInfo(vi, w.ID))
 			continue
 		}
 		// TODO (ramfox): HACK - because frontend has no concept of identity yet
 		// all workflows created by the frontend are sent with `Username='me'`
 		w, ok = wiMap[fmt.Sprintf("me/%s", vi.Name)]
 		if ok {
-			wis = append(wis, WorkflowInfoFromVersionInfo(vi, w.ID))
+			wis = append(wis, workflowInfoFromVersionInfo(vi, w.ID))
 			continue
 		}
-		wis = append(wis, WorkflowInfoFromVersionInfo(vi, ""))
+		wis = append(wis, workflowInfoFromVersionInfo(vi, ""))
 	}
 
 	sort.Slice(wis, func(i, j int) bool {
