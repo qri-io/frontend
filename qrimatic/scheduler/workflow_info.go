@@ -3,6 +3,7 @@ package scheduler
 import (
 	"context"
 	"fmt"
+	"sort"
 
 	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
@@ -18,23 +19,27 @@ type WorkflowInfo struct {
 func WorkflowInfoFromVersionInfo(vi dsref.VersionInfo, WorkflowID string) *WorkflowInfo {
 	return &WorkflowInfo{
 		VersionInfo: dsref.VersionInfo{
-			InitID:      vi.InitID,
-			Username:    vi.Username,
-			ProfileID:   vi.ProfileID,
-			Name:        vi.Name,
-			Path:        vi.Path,
-			Published:   vi.Published,
-			Foreign:     vi.Foreign,
-			MetaTitle:   vi.MetaTitle,
-			ThemeList:   vi.ThemeList,
-			BodySize:    vi.BodySize,
-			BodyRows:    vi.BodyRows,
-			BodyFormat:  vi.BodyFormat,
-			NumErrors:   vi.NumErrors,
-			FSIPath:     vi.FSIPath,
-			RunID:       vi.RunID,
-			RunStatus:   vi.RunStatus,
-			RunDuration: vi.RunDuration,
+			InitID:        vi.InitID,
+			Username:      vi.Username,
+			ProfileID:     vi.ProfileID,
+			Name:          vi.Name,
+			Path:          vi.Path,
+			Published:     vi.Published,
+			Foreign:       vi.Foreign,
+			MetaTitle:     vi.MetaTitle,
+			ThemeList:     vi.ThemeList,
+			BodySize:      vi.BodySize,
+			BodyRows:      vi.BodyRows,
+			BodyFormat:    vi.BodyFormat,
+			NumErrors:     vi.NumErrors,
+			CommitTime:    vi.CommitTime,
+			CommitTitle:   vi.CommitTitle,
+			CommitMessage: vi.CommitMessage,
+			NumVersions:   vi.NumVersions,
+			FSIPath:       vi.FSIPath,
+			RunID:         vi.RunID,
+			RunStatus:     vi.RunStatus,
+			RunDuration:   vi.RunDuration,
 		},
 		ID: WorkflowID,
 	}
@@ -103,6 +108,13 @@ func (c *Cron) ListWorkflowInfos(ctx context.Context, inst *lib.Instance, after,
 		}
 		wis = append(wis, WorkflowInfoFromVersionInfo(vi, ""))
 	}
+
+	sort.Slice(wis, func(i, j int) bool {
+		// sort by commit time in reverse chronological order
+		// TODO (ramfox): when `activity time` is surfaced, we would prefer to sort
+		// by that metric
+		return wis[i].CommitTime.After(wis[j].CommitTime)
+	})
 
 	return wis, nil
 }
