@@ -1,22 +1,22 @@
-import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
+import { newWorkflowInfo, WorkflowInfo } from "../../../qrimatic/workflow"
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
 
-function mapVersionInfo (data: object | []): VersionInfo[] {
-  return (data as []).map((data) => newVersionInfo(data))
+function mapVersionInfo (data: object | []): WorkflowInfo[] {
+  return (data as []).map((data) => newWorkflowInfo(data))
 }
 
-export function loadDatasets (page: number = 1, pageSize = 50): ApiActionThunk {
+export function loadCollection (page: number = 1, pageSize = 50): ApiActionThunk {
   return async (dispatch, getState) => {
     // TODO (b5) - check state before making a network request
-    return dispatch(fetchDatasets(page, pageSize))
+    return dispatch(fetchCollection(page, pageSize))
   }
 }
 
-function fetchDatasets (page: number = 1, pageSize: number = 50): ApiAction {
+function fetchCollection (page: number = 1, pageSize: number = 50): ApiAction {
   return {
-    type: 'list',
+    type: 'collection',
     [CALL_API]: {
-      endpoint: 'list',
+      endpoint: 'collection',
       method: 'GET',
       pageInfo: {
         page,

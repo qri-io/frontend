@@ -2,20 +2,19 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
 
-import { loadDatasets } from './state/collectionActions'
+import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
-import { VersionInfo } from '../../qri/versionInfo'
-
 import UserPageLayout from '../app/UserPageLayout'
-import DatasetsTable from './DatasetsTable'
+import WorkflowsTable from './WorkflowsTable'
+import { WorkflowInfo } from '../../qrimatic/workflow'
 
 const Collection: React.FC<any> = () => {
   const dispatch = useDispatch()
-  const datasets = useSelector(selectCollection)
+  const collection = useSelector(selectCollection)
   const loading = useSelector(selectIsCollectionLoading)
 
   useEffect(() => {
-    dispatch(loadDatasets(1,50))
+    dispatch(loadCollection(1,50))
   }, [dispatch])
 
   return (
@@ -27,12 +26,12 @@ const Collection: React.FC<any> = () => {
 
         { loading
           ? <div className='h-full w-full flex justify-center items-center'><SyncLoader /></div>
-          : <DatasetsTable
-              filteredDatasets={datasets}
+          : <WorkflowsTable
+              filteredWorkflows={collection}
               // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
               // to its internal the selections
               clearSelectedTrigger={false}
-              onRowClicked={(row: VersionInfo) => {}}
+              onRowClicked={(row: WorkflowInfo) => {}}
               onSelectedRowsChange={() => {}}
             />
         }
