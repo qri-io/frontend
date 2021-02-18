@@ -11,31 +11,33 @@ import Icon from '../../chrome/Icon'
 import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import DropdownMenu, { DropDownMenuItem } from '../../chrome/DropdownMenu'
-import { VersionInfo } from '../../qri/versionInfo'
 import { pathToWorkflowEditor } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log';
+import { WorkflowInfo } from '../../qrimatic/workflow';
 
 // TODO (ramfox): this data helps us mock the expected log response from the backend
 // when a log contains run information, then we can remove this
 import activity from '../activityFeed/stories/data/activityLog.json'
+import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
+
 // helper function to have the `activity` be accepted as a `LogItem[]`
 function convertToLogItemList(list: any[]): LogItem[] {
   return list as LogItem[]
 }
 const runActivities = convertToLogItemList(activity)
 
-interface DatasetsTableProps {
-  filteredDatasets: VersionInfo[]
+interface WorkflowsTableProps {
+  filteredWorkflows: WorkflowInfo[]
   // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
   // to its internal the selections
   clearSelectedTrigger: boolean
-  onRowClicked: (row: VersionInfo) => void
-  onSelectedRowsChange: ({ selectedRows }: { selectedRows: VersionInfo[] }) => void
+  onRowClicked: (row: WorkflowInfo) => void
+  onSelectedRowsChange: ({ selectedRows }: { selectedRows: WorkflowInfo[] }) => void
 }
 
-// fieldValue returns a VersionInfo value for a given field argument
-const fieldValue = (row: VersionInfo, field: string) => {
+// fieldValue returns a WorkflowInfo value for a given field argument
+const fieldValue = (row: WorkflowInfo, field: string) => {
   switch (field) {
     case 'name':
       return `${row['username']}/${row['name']}`
@@ -51,7 +53,7 @@ const fieldValue = (row: VersionInfo, field: string) => {
 }
 // column sort function for react-data-table
 // defines the actual string to sort on when a sortable column is clicked
-const customSort = (rows: VersionInfo[], field: string, direction: 'asc' | 'desc') => {
+const customSort = (rows: WorkflowInfo[], field: string, direction: 'asc' | 'desc') => {
   return rows.sort((a, b) => {
     const aVal = fieldValue(a, field)
     const bVal = fieldValue(b, field)
@@ -82,8 +84,8 @@ const statusIcons = [
   },
 ]
 
-const DatasetsTable: React.FC<DatasetsTableProps> = ({
-  filteredDatasets,
+const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
+  filteredWorkflows,
   onRowClicked,
   onSelectedRowsChange,
   clearSelectedTrigger
@@ -123,11 +125,10 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       style: {
         paddingRight: 0
       },
-      cell: (row: VersionInfo) => {
+      cell: (row: WorkflowInfo) => {
 
-        // TODO (ramfox): when we get actual data back from the backend
-        // remove this in favor of pulling the type of dataset from the VersionInfo
-        const { icon, color } = statusIcons[Math.floor(Math.random() * statusIcons.length)]
+        // TODO(b5): WorkflowInfo is missing data required to report paused state
+        const { icon, color } = row.id ? statusIcons[0] : statusIcons[2]
 
         return (
           <div className={`mx-auto ${color}`} style={{ fontSize: '1.5rem' }} >
@@ -141,7 +142,7 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       selector: 'name',
       sortable: true,
       grow: 2,
-      cell: (row: VersionInfo) => (
+      cell: (row: WorkflowInfo) => (
         <div className='py-3'>
           <div className='font-medium text-sm mb-1'>
             <Link to={pathToWorkflowEditor(row.username, row.name)}>{row.username}/{row.name}</Link>
@@ -163,10 +164,10 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
       selector: 'lastrun',
       grow: 1,
       sortable: true,
-      cell: (row: VersionInfo) => {
+      cell: (row: WorkflowInfo) => {
 
         // TODO (ramfox): the activity feed expects more content than currently exists
-        // in the VersionInfo. Once the backend supplies these values, we can rip
+        // in the WorkflowInfo. Once the backend supplies these values, we can rip
         // out this section that mocks durations & timestamps for us
         const {
           runStatus,
@@ -189,10 +190,19 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
     },
     {
       name: '',
+      selector: 'actions',
+      grow: 1,
+      cell: (row: WorkflowInfo) => (row.id
+          ? <ManualTriggerButton workflowID={row.id} />
+          : '--'
+      )
+    },
+    {
+      name: '',
       selector: 'hamburger',
       width: '120px',
       // eslint-disable-next-line react/display-name
-      cell: (row: VersionInfo) => {
+      cell: (row: WorkflowInfo) => {
         const hamburgerItems: DropDownMenuItem[] = [
           {
             onClick: () => { handleButtonClick("renaming not yet implemented") },
@@ -249,7 +259,7 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
     <ReactDataTable
       overflowY
       columns={columns}
-      data={filteredDatasets}
+      data={filteredWorkflows}
       customStyles={customStyles}
       sortFunction={customSort}
       highlightOnHover
@@ -262,4 +272,4 @@ const DatasetsTable: React.FC<DatasetsTableProps> = ({
   )
 }
 
-export default DatasetsTable
+export default WorkflowsTable

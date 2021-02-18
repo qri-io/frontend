@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { AnyAction } from 'redux'
 import { removeDataset } from '../state/datasetActions'
-import { loadDatasets } from '../../collection/state/collectionActions'
+import { loadCollection } from '../../collection/state/collectionActions'
 
 import ModalLayout from '../../app/modal/ModalLayout'
 
@@ -19,7 +19,7 @@ const RemoveDatasetModal: React.FC<RemoveDatasetModalProps> = ({ username, name 
     removeDataset({username, name})(dispatch)
       .then((action: AnyAction) => {
         if (action.type.includes('SUCCESS')) {
-          dispatch(loadDatasets())
+          dispatch(loadCollection())
           return
         }
         // TODO (ramfox): when we add in toasts, this should be replaced with a

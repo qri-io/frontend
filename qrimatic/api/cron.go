@@ -110,24 +110,21 @@ func (s *Server) GetRunHandler(w http.ResponseWriter, r *http.Request) {
 	apiutil.WriteResponse(w, run)
 }
 
-// func (s *Service) loggedWorkflowFileHandler(w http.ResponseWriter, r *http.Request) {
-// 	logName := r.FormValue("log_name")
-// 	f, err := c.LogFile(r.Context(), logName)
-// 	if err != nil {
-// 		w.WriteHeader(http.StatusInternalServerError)
-// 		w.Write([]byte(err.Error()))
-// 		return
-// 	}
-
-// 	io.Copy(w, f)
-// 	return
-// }
-
-func (s *Server) RunHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO (b5): implement an HTTP run handler
-	w.WriteHeader(http.StatusInternalServerError)
-	w.Write([]byte("not finished"))
-	// c.runWorkflow(r.Context(), nil)
+// WorkflowManualTriggerHandler triggers a workflow without a backing trigger,
+// via a direct HTTP request
+func (s *Server) WorkflowManualTriggerHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("id")
+	workflow, err := s.sched.Workflow(r.Context(), id)
+	if err != nil {
+		if err == scheduler.ErrNotFound {
+			apiutil.WriteErrResponse(w, http.StatusNotFound, err)
+		} else {
+			apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
+		}
+		w.Write([]byte(err.Error()))
+		return
+	}
+	go s.sched.RunWorkflow(context.Background(), workflow, "")
 }
 
 // CollectionHandler returns a list of `WorkflowInfo`s, which include a union of

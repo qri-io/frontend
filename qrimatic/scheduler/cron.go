@@ -1,9 +1,9 @@
-// package scheduler schedules dataset and shell script updates
 package scheduler
 
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	golog "github.com/ipfs/go-log"
@@ -67,6 +67,8 @@ type Cron struct {
 	store    Store
 	interval time.Duration
 	factory  RunWorkflowFactory
+
+	runLk sync.Mutex
 }
 
 // assert Cron is a Scheduler at compile time
@@ -176,11 +178,10 @@ func (c *Cron) Start(ctx context.Context) error {
 
 		if len(run) > 0 {
 			log.Debugw("running workflows", "workflowCount", len(workflows), "runCount", len(run))
-			runner := c.factory(ctx)
 			for i, workflow := range run {
 				// TODO (b5) - if we want things like per-workflow timeout, we should create
 				// a new workflow-scoped context here
-				c.runWorkflow(ctx, workflow, trigger[i].Info().ID, runner)
+				c.RunWorkflow(ctx, workflow, trigger[i].Info().ID)
 			}
 		}
 	}
@@ -202,7 +203,12 @@ func (c *Cron) Start(ctx context.Context) error {
 	}
 }
 
-func (c *Cron) runWorkflow(ctx context.Context, workflow *Workflow, triggerID string, runner RunWorkflowFunc) {
+func (c *Cron) RunWorkflow(ctx context.Context, workflow *Workflow, triggerID string) {
+	c.runLk.Lock()
+	defer c.runLk.Unlock()
+
+	runner := c.factory(ctx)
+
 	go func(j *Workflow) {
 		if err := c.pub.Publish(ctx, ETWorkflowStarted, j); err != nil {
 			log.Debug(err)

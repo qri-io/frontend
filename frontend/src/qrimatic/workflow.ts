@@ -101,3 +101,35 @@ export function workflowDeployStatus(w?: Workflow): DeployStatus {
   }
   return 'deployed'
 }
+
+export interface WorkflowInfo extends VersionInfo {
+  id: string
+}
+
+export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
+  return {
+    username: data.username || '',
+    profileId: data.profileId || '',
+    name: data.name || '',
+    path: data.path || '',
+    
+    fsiPath: data.fsiPath || '',
+    foreign: data.foreign,
+    published: data.published,
+
+    metaTitle: data.metaTitle || '',
+    themeList: data.themeList || '',
+
+    bodyFormat: data.bodyFormat || '-',
+    bodySize: data.bodySize,
+    bodyRows: data.bodyRows,
+    numErrors: data.numErrors,
+
+    commitTitle: data.commitTitle,
+    commitMessage: data.commitMessage,
+    commitTime: data.commitTime,
+    numVersions: data.numVersions,
+
+    id: data.id || ''
+  }
+}
