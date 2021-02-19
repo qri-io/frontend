@@ -9,7 +9,7 @@ export interface User {
 }
 
 export interface SessionState {
-  user: User | undefined
+  user?: User
   loading: boolean
 }
 

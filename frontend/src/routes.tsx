@@ -41,8 +41,8 @@ export default function Routes () {
         <PrivateRoute path='/collection'><Collection /></PrivateRoute>
         <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
-        <PrivateRoute path='/ds/new'><TemplateList /></PrivateRoute>
-        <PrivateRoute path='/ds/:username/:name'><Dataset /></PrivateRoute>
+        <Route path='/ds/new'><TemplateList /></Route>
+        <Route path='/ds/:username/:name'><Dataset /></Route>
 
         <Route path='/run'><Run /></Route>
         <Route path='/jobs'><JobList /></Route>

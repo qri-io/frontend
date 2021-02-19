@@ -31,7 +31,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
   React.useEffect(() => {
     if (value !== stateValue) setStateValue(value)
-  }, [value])
+  }, [value, stateValue])
 
   const handleOnChange = (e: React.ChangeEvent) => {
     if (onChange) onChange(e)

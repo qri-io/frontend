@@ -4,7 +4,7 @@ import { SyncLoader } from 'react-spinners'
 
 import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
-import UserPageLayout from '../app/UserPageLayout'
+import Page from '../app/Page'
 import WorkflowsTable from './WorkflowsTable'
 import { WorkflowInfo } from '../../qrimatic/workflow'
 
@@ -18,7 +18,7 @@ const Collection: React.FC<any> = () => {
   }, [dispatch])
 
   return (
-    <UserPageLayout>
+    <Page>
       <div className='h-full max-w-screen-xl mx-auto px-10 py-20'>
         <header className='mb-8'>
           <h1 className='text-2xl font-extrabold'>Collection</h1>
@@ -36,7 +36,7 @@ const Collection: React.FC<any> = () => {
             />
         }
       </div>
-    </UserPageLayout>
+    </Page>
   )
 }
 

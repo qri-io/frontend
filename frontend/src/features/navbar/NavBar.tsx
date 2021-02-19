@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import Icon from '../../chrome/Icon'
 
-import SessionUserMenu from '../sessionUser/SessionUserMenu'
+import SessionUserMenu from './SessionUserMenu'
 import { DatasetMenuItem } from '../dataset/Dataset'
-export interface UserNavBarProps {
-  menuItems: DatasetMenuItem[]
+
+export interface NavBarProps {
+  menuItems?: DatasetMenuItem[]
 }
 
-const UserNavBar: React.FC<UserNavBarProps> = ({ menuItems, children }) => {
+const NavBar: React.FC<NavBarProps> = ({ menuItems, children }) => {
   let brandContent = <Link className='px-1 font-bold text-lg tracking-tight' to='/dashboard'>Qrimatic</Link>
 
   if (menuItems) {
@@ -34,4 +35,4 @@ const UserNavBar: React.FC<UserNavBarProps> = ({ menuItems, children }) => {
   )
 }
 
-export default UserNavBar
+export default NavBar

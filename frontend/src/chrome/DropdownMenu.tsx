@@ -65,26 +65,21 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, alignLeft=
               const content = <span>{icon && <Icon icon={icon} className='mr-2' size='sm' />}{text}</span>
 
               if (link) {
-                const button = (
-                  <button
-                    className={linkButtonClass}
-                    role="menuitem"
-                  >
-                    {content}
-                  </button>
-                )
-
-                if (link.includes('http')) {
+                if (link.startsWith('http')) {
                   return (
                     <ExternalLink to={link} key={i}>
-                      {button}
+                      <button className={linkButtonClass} role="menuitem">
+                        {content}
+                      </button>
                     </ExternalLink>
                   )
                 }
 
                 return (
                   <Link to={link} key={i}>
-                    {button}
+                    <button className={linkButtonClass} role="menuitem">
+                      {content}
+                    </button>
                   </Link>
                 )
               }

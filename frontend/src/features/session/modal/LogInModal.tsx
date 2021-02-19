@@ -7,10 +7,10 @@ import { SyncLoader } from 'react-spinners'
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
-import { showModal, clearModal } from '../state/appActions'
-import { logIn } from '../../session/state/sessionActions'
-import { selectIsSessionLoading } from '../../session/state/sessionState'
-import { ModalType } from '../state/appState'
+import { showModal, clearModal } from '../../app/state/appActions'
+import { logIn } from '../state/sessionActions'
+import { selectIsSessionLoading } from '../state/sessionState'
+import { ModalType } from '../../app/state/appState'
 
 
 const LogInModal: React.FC = () => {

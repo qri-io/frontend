@@ -6,13 +6,13 @@ import { SyncLoader } from 'react-spinners'
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
-import { showModal, clearModal } from '../state/appActions'
-import { ModalType } from '../state/appState'
-import { signUp } from '../../session/state/sessionActions'
-import { selectIsSessionLoading } from '../../session/state/sessionState'
-import { validateEmail, validateUsername, validatePassword } from '../utils/formValidation'
+import { showModal, clearModal } from '../../app/state/appActions'
+import { ModalType } from '../../app/state/appState'
+import { signUp } from '../state/sessionActions'
+import { selectIsSessionLoading } from '../state/sessionState'
+import { validateEmail, validateUsername, validatePassword } from '../state/formValidation'
 
-const LogInModal: React.FC = () => {
+const SignUpModal: React.FC = () => {
   const [ signupSuccess, setSignupSuccess ] = useState(false)
 
   const [ email, setEmail ] = useState('')
@@ -104,4 +104,4 @@ const LogInModal: React.FC = () => {
   )
 }
 
-export default LogInModal
+export default SignUpModal
