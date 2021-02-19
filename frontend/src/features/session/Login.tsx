@@ -1,14 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
+import LogInModal from './modal/LogInModal';
 
-const Login: React.FC<any> = () => {
-  return (
-    <div>
-      <h1>Login</h1>
-      <Link to='/datasets'></Link>
+const Login: React.FC<{}> = () => (
+  <div className='flex flex-col h-full bg-gray-100'>
+    <div className='m-auto p-10'>
+      <div className="shadow-md">
+        <LogInModal />
+      </div>
     </div>
-  )
-}
+  </div>
+)
 
 export default Login;

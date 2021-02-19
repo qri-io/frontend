@@ -1,19 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
+import { SyncLoader } from 'react-spinners'
 
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
-import { showModal } from '../state/appActions'
-import { ModalType } from '../state/appState'
+import { showModal, clearModal } from '../../app/state/appActions'
+import { logIn } from '../state/sessionActions'
+import { selectIsSessionLoading } from '../state/sessionState'
+import { ModalType } from '../../app/state/appState'
 
 
 const LogInModal: React.FC = () => {
+  const [ loginSuccess, setLoginSuccess ] = useState(false)
+
+  const [ username, setUsername ] = useState('')
+  const [ password, setPassword ] = useState('')
+
   const dispatch = useDispatch()
+  const loading = useSelector(selectIsSessionLoading)
 
   const handleSignUpClick = () => {
     dispatch(showModal(ModalType.signUp))
+  }
+
+  const handleButtonClick = () => {
+    dispatch(logIn(username, password)).then(() => {
+      setLoginSuccess(true)
+      dispatch(clearModal())
+    })
   }
 
   return (
@@ -23,14 +40,23 @@ const LogInModal: React.FC = () => {
       <div className='w-64 mx-auto'>
         <div className='mb-6'>
           <TextInput
-            placeholder='Email'
+            name='username'
+            value={username}
+            onChange={(e) => { setUsername(e.target.value)  }}
+            placeholder='Username'
           />
           <TextInput
+            name='password'
+            type='password'
+            value={password}
+            onChange={(e) => { setPassword(e.target.value)  }}
             placeholder='Password'
           />
           <Link to='/forgot-password'><div className='text-left text-xs font-semibold'>Forgot your Password?</div></Link>
         </div>
-        <Button size='lg' className='w-full mb-6'>Log In</Button>
+        <Button size='lg' className='w-full mb-6' onClick={handleButtonClick}>
+          {loading ? <SyncLoader color='#fff' size='6' /> : 'Log In'}
+        </Button>
 
         <div className='mb-3 text-gray-500' style={{ fontSize: '.7rem' }}>
           By continuing, you agree to Qri's <ExternalLink to='https://qri.io/legal/tos'>Terms of Service</ExternalLink> & <ExternalLink to='https://qri.io/legal/privacy-policy'>Privacy Policy</ExternalLink>.
@@ -42,6 +68,11 @@ const LogInModal: React.FC = () => {
           Not on Qri yet? Sign Up
         </div>
       </div>
+      {
+        loginSuccess && (
+          <Redirect to={`/dashboard`} />
+        )
+      }
     </div>
   )
 }

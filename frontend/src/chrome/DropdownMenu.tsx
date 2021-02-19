@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom'
+import ExternalLink from './ExternalLink'
 
 import Icon from './Icon'
 
@@ -61,15 +62,22 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, alignLeft=
                 linkButtonClass = `${linkButtonClass} text-gray-400`
               }
 
-              const content = <span>{icon && <Icon icon={icon} className='mr-2' />}{text}</span>
+              const content = <span>{icon && <Icon icon={icon} className='mr-2' size='sm' />}{text}</span>
 
               if (link) {
+                if (link.startsWith('http')) {
+                  return (
+                    <ExternalLink to={link} key={i}>
+                      <button className={linkButtonClass} role="menuitem">
+                        {content}
+                      </button>
+                    </ExternalLink>
+                  )
+                }
+
                 return (
                   <Link to={link} key={i}>
-                    <button
-                      className={linkButtonClass}
-                      role="menuitem"
-                    >
+                    <button className={linkButtonClass} role="menuitem">
                       {content}
                     </button>
                   </Link>

@@ -14,6 +14,7 @@ import { datasetReducer, DatasetState } from '../features/dataset/state/datasetS
 import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
 import { deployReducer, DeployState } from '../features/deploy/state/deployState';
 import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
+import { sessionReducer, SessionState } from '../features/session/state/sessionState';
 
 export const history = createBrowserHistory()
 
@@ -27,14 +28,15 @@ export interface RootState {
   collection: CollectionState
   dataset: DatasetState
   scroller: ScrollerState
-  activityFeed: ActivityFeedState
+  activityFeed: ActivityFeedState,
+  session: SessionState
 }
 
 const rootReducer = (h: History) => combineReducers({
   // apparently connected-router's types are no good.
   // https://github.com/reduxjs/redux-toolkit/issues/506#issuecomment-614295927
-  // router: connectRouter(h) as any as Reducer<RouterState>, 
-  router: connectRouter(h), 
+  // router: connectRouter(h) as any as Reducer<RouterState>,
+  router: connectRouter(h),
   jobs: jobsReducer,
   transfers: transfersReducer,
   workflow: workflowReducer,
@@ -44,6 +46,7 @@ const rootReducer = (h: History) => combineReducers({
   scroller: scrollerReducer,
   deploy: deployReducer,
   activityFeed: activityFeedReducer,
+  session: sessionReducer
 })
 
 export function configureStore(preloadedState?: any) {
@@ -79,4 +82,3 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
-

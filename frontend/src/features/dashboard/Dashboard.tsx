@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
 
-import { loadCollection } from './state/collectionActions'
-import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
+import { loadCollection } from '../collection/state/collectionActions'
+import { selectCollection, selectIsCollectionLoading } from '../collection/state/collectionState'
 import Page from '../app/Page'
-import WorkflowsTable from './WorkflowsTable'
+import WorkflowsTable from '../collection/WorkflowsTable'
 import { WorkflowInfo } from '../../qrimatic/workflow'
 
-const Collection: React.FC<any> = () => {
+const Dashboard: React.FC<any> = () => {
   const dispatch = useDispatch()
   const collection = useSelector(selectCollection)
   const loading = useSelector(selectIsCollectionLoading)
@@ -21,7 +21,7 @@ const Collection: React.FC<any> = () => {
     <Page>
       <div className='h-full max-w-screen-xl mx-auto px-10 py-20'>
         <header className='mb-8'>
-          <h1 className='text-2xl font-extrabold'>Collection</h1>
+          <h1 className='text-2xl font-extrabold'>Dashboard</h1>
         </header>
 
         { loading
@@ -40,4 +40,4 @@ const Collection: React.FC<any> = () => {
   )
 }
 
-export default Collection
+export default Dashboard
