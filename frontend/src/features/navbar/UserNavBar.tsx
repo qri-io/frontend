@@ -10,7 +10,7 @@ export interface UserNavBarProps {
 }
 
 const UserNavBar: React.FC<UserNavBarProps> = ({ menuItems, children }) => {
-  let brandContent = <Link className='px-1 font-bold text-lg tracking-tight' to='/'>Qrimatic</Link>
+  let brandContent = <Link className='px-1 font-bold text-lg tracking-tight' to='/dashboard'>Qrimatic</Link>
 
   if (menuItems) {
     brandContent = (

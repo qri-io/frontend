@@ -1,19 +1,57 @@
-import React from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react'
+import { Redirect } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux';
+import { SyncLoader } from 'react-spinners'
 
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
-import { showModal } from '../state/appActions'
+import { showModal, clearModal } from '../state/appActions'
 import { ModalType } from '../state/appState'
-
+import { signUp } from '../../session/state/sessionActions'
+import { selectIsSessionLoading } from '../../session/state/sessionState'
+import { validateEmail, validateUsername, validatePassword } from '../utils/formValidation'
 
 const LogInModal: React.FC = () => {
+  const [ signupSuccess, setSignupSuccess ] = useState(false)
+
+  const [ email, setEmail ] = useState('')
+  const [ emailError, setEmailError ] = useState(null)
+
+  const [ username, setUsername ] = useState('')
+  const [ usernameError, setUsernameError ] = useState(null)
+
+  const [ password, setPassword ] = useState('')
+  const [ passwordError, setPasswordError] = useState(null)
+
   const dispatch = useDispatch()
+  const loading = useSelector(selectIsSessionLoading)
+
 
   const handleLogInClick = () => {
     dispatch(showModal(ModalType.logIn))
   }
+
+  const handleButtonClick = () => {
+    // validate email
+    const emailError = validateEmail(email)
+    setEmailError(emailError)
+
+    // validate username
+    const usernameError = validateUsername(username)
+    setUsernameError(usernameError)
+
+    const passwordError = validatePassword(password)
+    setPasswordError(passwordError)
+
+    if (!emailError && !usernameError && !passwordError) {
+      dispatch(signUp(email, username, password)).then(() => {
+        setSignupSuccess(true)
+        dispatch(clearModal())
+      })
+    }
+  }
+
   return (
     <div className='bg-white py-7 px-5 text-center' style={{ width: '400px'}}>
       <img className="w-9 mx-auto mb-4" src="https://qri.cloud/assets/apple-touch-icon.png" alt="logo" />
@@ -21,13 +59,31 @@ const LogInModal: React.FC = () => {
       <div className='w-64 mx-auto'>
         <div className='mb-6'>
           <TextInput
+            name='email'
             placeholder='Email'
+            value={email}
+            onChange={(e) => { setEmail(e.target.value)  }}
+            error={emailError}
           />
           <TextInput
+            name='username'
+            placeholder='Username'
+            value={username}
+            onChange={(e) => { setUsername(e.target.value)  }}
+            error={usernameError}
+          />
+          <TextInput
+            name='password'
+            type='password'
             placeholder='Password'
+            value={password}
+            onChange={(e) => { setPassword(e.target.value)  }}
+            error={passwordError}
           />
         </div>
-        <Button size='lg' className='w-full mb-6'>Continue</Button>
+        <Button size='lg' className='w-full mb-6' onClick={handleButtonClick}>
+          {loading ? <SyncLoader color='#fff' size='6' /> : 'Continue'}
+        </Button>
 
         <div className='mb-3 text-gray-500' style={{ fontSize: '.7rem' }}>
           By continuing, you agree to Qri's <ExternalLink to='https://qri.io/legal/tos'>Terms of Service</ExternalLink> & <ExternalLink to='https://qri.io/legal/privacy-policy'>Privacy Policy</ExternalLink>.
@@ -39,6 +95,11 @@ const LogInModal: React.FC = () => {
           Already on Qri?  Log In
         </div>
       </div>
+      {
+        signupSuccess && (
+          <Redirect to={`/dashboard`} />
+        )
+      }
     </div>
   )
 }

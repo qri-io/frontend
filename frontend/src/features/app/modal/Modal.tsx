@@ -21,6 +21,15 @@ const Modal: React.FC<any> = () => {
     }
   }, [dispatch, maskRef])
 
+  useEffect(() => {
+    const close = (e) => {
+      if (e.keyCode === 27) {
+        dispatch(clearModal())
+      }
+    }
+    window.addEventListener('keydown', close)
+    return () => window.removeEventListener('keydown', close)
+  }, [dispatch])
 
   useEffect(() => {
     document.addEventListener("mousedown", handleMaskClick)

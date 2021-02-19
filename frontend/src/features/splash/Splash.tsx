@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router'
 import { useDispatch } from 'react-redux';
 
 import AnonymousPageLayout from '../app/AnonymousPageLayout';
@@ -7,8 +8,15 @@ import Icon from '../../chrome/Icon';
 import Button from '../../chrome/Button';
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
+import { User } from '../session/state/sessionState'
 
-const Splash: React.FC<any> = () => {
+interface SplashProps {
+  user: User
+}
+
+const Splash: React.FC<SplashProps> = ({ user }) => {
+
+  console.log('splash', user)
 
   const dispatch = useDispatch()
 
@@ -43,6 +51,7 @@ const Splash: React.FC<any> = () => {
           </div>
         </div>
       </div>
+      {user && <Redirect to='/dashboard' />}
     </AnonymousPageLayout>
   )
 }

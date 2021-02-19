@@ -16,7 +16,7 @@ import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
 export interface DatasetMenuItem {
   text: string
   link: string
-  icon: string
+  icon?: string
 }
 
 const Dataset: React.FC<any> = () => {
@@ -31,7 +31,9 @@ const Dataset: React.FC<any> = () => {
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
 
   const menuItems:DatasetMenuItem[] = [
-    { text: 'back to collection', link: '/collection', icon: 'arrowLeft' },
+    { text: 'Dashboard', link: '/dashboard', icon: 'home'},
+    { text: 'Collection', link: '/collection', icon: 'list'},
+    { text: 'Activity Feed', link: '/activity', icon: 'bolt'},
   ]
 
   return (
