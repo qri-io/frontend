@@ -203,22 +203,25 @@ func (c *Cron) Start(ctx context.Context) error {
 	}
 }
 
+// RunWorkflow runs and updates the workflow
+// It emits `ETWorkflowStarted` and `ETWorkflowCompleted` events with the updated
+// workflow events. It is not responsible for storing the resultant workflow.
 func (c *Cron) RunWorkflow(ctx context.Context, workflow *Workflow, triggerID string) {
 	c.runLk.Lock()
 	defer c.runLk.Unlock()
 
 	runner := c.factory(ctx)
 
+	log.Debugf("run workflow: %s", workflow.Name)
+	if err := workflow.Advance(triggerID); err != nil {
+		log.Debug(err)
+	}
+
 	go func(j *Workflow) {
 		if err := c.pub.Publish(ctx, ETWorkflowStarted, j); err != nil {
 			log.Debug(err)
 		}
 	}(workflow.Copy())
-
-	log.Debugf("run workflow: %s", workflow.Name)
-	if err := workflow.Advance(triggerID); err != nil {
-		log.Debug(err)
-	}
 
 	streams := ioes.NewDiscardIOStreams()
 	if lfc, ok := c.store.(LogFileCreator); ok {
@@ -233,34 +236,21 @@ func (c *Cron) RunWorkflow(ctx context.Context, workflow *Workflow, triggerID st
 	if err := runner(ctx, streams, workflow); err != nil {
 		log.Errorf("run workflow: %s error: %s", workflow.Name, err.Error())
 		workflow.CurrentRun.Error = err.Error()
+		workflow.Status = StatusFailed
 	} else {
 		log.Debugf("run workflow: %s success", workflow.Name)
 		workflow.CurrentRun.Error = ""
+		workflow.Status = StatusSucceeded
 	}
 	now := NowFunc()
 	workflow.CurrentRun.Stop = &now
-	workflow.LatestRunStart = workflow.CurrentRun.Start
+	workflow.LatestEnd = &now
 
 	go func(j *Workflow) {
 		if err := c.pub.Publish(ctx, ETWorkflowCompleted, j); err != nil {
 			log.Debug(err)
 		}
 	}(workflow.Copy())
-
-	// the updated workflow that goes to the schedule store shouldn't have a log path
-	// scheduleWorkflow := workflow.Copy()
-	// scheduleWorkflow.LogFilePath = ""
-	// scheduleWorkflow.RunStart = time.Time{}
-	// scheduleWorkflow.RunStop = time.Time{}
-	// scheduleWorkflow.PrevRunStart = workflow.RunStart
-	if err := c.store.PutWorkflow(ctx, workflow); err != nil {
-		log.Error(err)
-	}
-
-	// workflow.Name = workflow.LogName()
-	// if err := c.log.PutWorkflow(ctx, workflow); err != nil {
-	// 	log.Error(err)
-	// }
 }
 
 // Schedule adds a workflow to the cron scheduler
