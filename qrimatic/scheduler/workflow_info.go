@@ -14,14 +14,10 @@ import (
 // It is primarily used for the `workflow/list` endpoint
 type WorkflowInfo struct {
 	dsref.VersionInfo
-	ID string `json:"id"` // CID string
-}
-
-func workflowInfoFromVersionInfo(vi dsref.VersionInfo, workflowID string) *WorkflowInfo {
-	return &WorkflowInfo{
-		VersionInfo: vi,
-		ID:          workflowID,
-	}
+	ID          string     `json:"id"` // CID string
+	LatestStart *time.Time `json:"latestStart"`
+	LatestEnd   *time.Time `json:"latestEnd"`
+	Status      string     `json:"status"`
 }
 
 // ListCollection returns a union of datasets and workflows in the form of `WorkflowInfo`s
@@ -75,17 +71,19 @@ func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, a
 		viID := vi.Alias()
 		w, ok := wiMap[viID]
 		if ok {
-			wis = append(wis, workflowInfoFromVersionInfo(vi, w.ID))
+			w.VersionInfo = vi
+			wis = append(wis, w.Info())
 			continue
 		}
 		// TODO (ramfox): HACK - because frontend has no concept of identity yet
 		// all workflows created by the frontend are sent with `Username='me'`
 		w, ok = wiMap[fmt.Sprintf("me/%s", vi.Name)]
 		if ok {
-			wis = append(wis, workflowInfoFromVersionInfo(vi, w.ID))
+			w.VersionInfo = vi
+			wis = append(wis, w.Info())
 			continue
 		}
-		wis = append(wis, workflowInfoFromVersionInfo(vi, ""))
+		wis = append(wis, &WorkflowInfo{VersionInfo: vi})
 	}
 
 	sort.Slice(wis, func(i, j int) bool {

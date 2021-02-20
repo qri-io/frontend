@@ -118,6 +118,16 @@ func (workflow *Workflow) Complete(ds *dsref.Ref, ownerID string) error {
 	return nil
 }
 
+func (workflow *Workflow) Info() *WorkflowInfo {
+	return &WorkflowInfo{
+		VersionInfo: workflow.VersionInfo,
+		ID:          workflow.ID,
+		LatestStart: workflow.LatestStart,
+		LatestEnd:   workflow.LatestEnd,
+		Status:      workflow.Status,
+	}
+}
+
 // Advance creates a new run, increments the run count, and sets the next
 // execution wall, and adjusts the Status and LatestStart of the workflow
 func (workflow *Workflow) Advance(triggerID string) (err error) {
