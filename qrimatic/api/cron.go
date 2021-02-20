@@ -138,3 +138,20 @@ func (s *Server) CollectionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	apiutil.WriteResponse(w, data)
 }
+
+// CollectionRunningHandler returns a list of `WorkflowInfo`s whose status is
+// currently "Running". They are returned in reverse chronological order by
+// `LastestRun`
+func (s *Server) CollectionRunningHandler(w http.ResponseWriter, r *http.Request) {
+	ws, err := s.sched.ListWorkflowsByStatus(context.Background(), scheduler.StatusRunning, 0, -1)
+	if err != nil {
+		log.Errorf("error listing currently running workflows: %w", err)
+		apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
+		return
+	}
+	data := []*scheduler.WorkflowInfo{}
+	for _, w := range ws {
+		data = append(data, w.Info())
+	}
+	apiutil.WriteResponse(w, data)
+}

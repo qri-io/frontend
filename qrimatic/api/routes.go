@@ -25,6 +25,7 @@ func (s *Server) AddCronRoutes(m *mux.Router, mw func(http.HandlerFunc) http.Han
 	m.HandleFunc("/cron", mw(s.StatusHandler))
 	m.HandleFunc("/workflows", mw(s.WorkflowsHandler))
 	m.HandleFunc("/workflows/trigger", mw(s.WorkflowManualTriggerHandler))
+	m.HandleFunc("/collection/running", mw(s.CollectionRunningHandler))
 	m.HandleFunc("/collection", mw(s.CollectionHandler))
 	m.HandleFunc("/workflow", mw(s.WorkflowHandler))
 	m.HandleFunc("/runs", mw(s.RunsHandler))

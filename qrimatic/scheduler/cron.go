@@ -94,6 +94,12 @@ func (c *Cron) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflo
 	return c.store.ListWorkflows(ctx, offset, limit)
 }
 
+// ListWorkflowsByStatus proxies to the scheudler store for reading workflows by status
+// returns workflows is reverse chronological order by `LatestStart`
+func (c *Cron) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
+	return c.store.ListWorkflowsByStatus(ctx, status, offset, limit)
+}
+
 // WorkflowForName gets a workflow by it's name (which often matches the dataset name)
 func (c *Cron) WorkflowForName(ctx context.Context, name string) (*Workflow, error) {
 	return c.store.GetWorkflowByName(ctx, name)
