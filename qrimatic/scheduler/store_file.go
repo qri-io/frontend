@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"os"
 	"sync"
+
+	"github.com/qri-io/qri/event"
 )
 
 // FileStore is a store implementation that writes to a file of JSON bytes.
@@ -24,7 +26,7 @@ type FileStore struct {
 var _ Store = (*FileStore)(nil)
 
 // NewFileStore creates a workflow store that persists to a file
-func NewFileStore(path string) (Store, error) {
+func NewFileStore(path string, bus event.Bus) (Store, error) {
 	s := &FileStore{
 		path:         path,
 		workflows:    NewWorkflowSet(),
@@ -32,8 +34,16 @@ func NewFileStore(path string) (Store, error) {
 		runs:         NewRunSet(),
 	}
 
+	s.Subscribe(bus)
+
 	log.Debugw("creating file store")
 	return s, s.loadFromFile()
+}
+
+// Subscribe allows the store to subscribe to relevant events that allow
+// the store to track and properly store updated `Workflows`
+func (s *FileStore) Subscribe(bus event.Bus) {
+	subscribe(s, bus)
 }
 
 // ListWorkflows lists workflows currently in the store

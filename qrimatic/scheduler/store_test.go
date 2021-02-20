@@ -8,11 +8,12 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qfs"
+	"github.com/qri-io/qri/event"
 )
 
 func TestMemStore(t *testing.T) {
 	newStore := func() Store {
-		return NewMemStore()
+		return NewMemStore(event.NilBus)
 	}
 	RunWorkflowStoreTests(t, newStore)
 }

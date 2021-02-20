@@ -5,7 +5,7 @@ import (
 )
 
 func TestCronHTTP(t *testing.T) {
-	// store := NewMemStore()
+	// store := NewMemStore(event.NilBus)
 
 	// factory := func(context.Context) RunWorkflowFunc {
 	// 	return func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error {

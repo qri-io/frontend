@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"sync"
+
+	"github.com/qri-io/qri/event"
 )
 
 // ErrNotFound represents a lookup miss
@@ -13,6 +15,9 @@ var ErrNotFound = fmt.Errorf("not found")
 // Store handles the persistence of Workflows and Runs. Store implementations
 // must be safe for concurrent use
 type Store interface {
+	// Subscribe allows the store to listen for workflow events so it can properly
+	// track and modify updated `Workflows`
+	Subscribe(bus event.Bus)
 	// ListWorkflows should return the set of workflows sorted in reverse-chronological
 	// order (newest first order) of the last time they were run. When two LastRun
 	// times are equal, Workflows should alpha sort the names
@@ -60,12 +65,63 @@ type MemStore struct {
 
 var _ Store = (*MemStore)(nil)
 
-func NewMemStore() *MemStore {
-	return &MemStore{
+func NewMemStore(bus event.Bus) *MemStore {
+	store := &MemStore{
 		workflows:    NewWorkflowSet(),
 		workflowRuns: map[string]*RunSet{},
 		runs:         NewRunSet(),
 	}
+	store.Subscribe(bus)
+	return store
+}
+
+func subscribe(s Store, bus event.Bus) {
+	bus.SubscribeTypes(HandlerFromStore(s),
+		ETWorkflowScheduled,
+		ETWorkflowUnscheduled,
+		ETWorkflowStarted,
+		ETWorkflowCompleted,
+		ETWorkflowUpdated,
+	)
+}
+
+// HandlerFromStore returns an `event.Handler` that listens to all Workflow events
+// and responds accordingly so that the store is always up to date
+func HandlerFromStore(s Store) event.Handler {
+	return func(ctx context.Context, e event.Event) error {
+		switch e.Type {
+		case ETWorkflowScheduled:
+			return nil
+		case ETWorkflowUnscheduled:
+			return nil
+		case ETWorkflowUpdated:
+			return nil
+		case ETWorkflowStarted:
+			w, ok := e.Payload.(*Workflow)
+			if !ok {
+				log.Errorf("error expected event payload of %q to be of type %q", e.Type, "*Workflow")
+			}
+			log.Debugf("putting workflow %q with status %q into store", w.ID, w.Status)
+			s.PutWorkflow(ctx, w)
+		case ETWorkflowCompleted:
+			w, ok := e.Payload.(*Workflow)
+			if !ok {
+				log.Errorf("error expected event payload of %q to be of type %q", e.Type, "*Workflow")
+			}
+			log.Debugf("putting workflow %q with status %q into store", w.ID, w.Status)
+			s.PutWorkflow(ctx, w)
+		default:
+			log.Errorf("error unexpected event: %q", e.Type)
+			return fmt.Errorf("error unexpected event: %q", e.Type)
+		}
+		return nil
+	}
+}
+
+// Subscribe allows the store to subscribe to workflow events that allow
+// the store to track and properly store updated `Workflows`
+func (s *MemStore) Subscribe(bus event.Bus) {
+	subscribe(s, bus)
 }
 
 // ListWorkflows lists workflows currently in the store

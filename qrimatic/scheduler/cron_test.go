@@ -44,7 +44,7 @@ func TestCronDataset(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
 	defer cancel()
 
-	store := NewMemStore()
+	store := NewMemStore(event.NilBus)
 	cron := NewCronInterval(store, factory, event.NilBus, time.Millisecond*50)
 	if err := cron.Schedule(ctx, workflow); err != nil {
 		t.Fatal(err)
@@ -112,7 +112,7 @@ func TestCronShellScript(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
 	defer cancel()
 
-	store := NewMemStore()
+	store := NewMemStore(event.NilBus)
 	cron := NewCron(store, factory, event.NilBus)
 	if err := cron.Schedule(ctx, workflow); err != nil {
 		t.Fatal(err)
