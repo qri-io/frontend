@@ -36,8 +36,8 @@ func NewClient(repoPath string) (*Client, error) {
 // Workflow aliases a scheduler.Workflow, removing the need to import the cron package.
 type Workflow = scheduler.Workflow
 
-// Run aliase a scheduler.Run, removing the need to import the cron package.
-type Run = scheduler.Run
+// RunInfo aliase a scheduler.RunInfo, removing the need to import the cron package.
+type RunInfo = scheduler.RunInfo
 
 // ScheduleParams encapsulates parameters for scheduling updates
 type ScheduleParams struct {
@@ -133,7 +133,7 @@ func (c *Client) Workflow(ctx context.Context, name *string, workflow *Workflow)
 }
 
 // Runs shows the history of workflow execution
-func (c *Client) Runs(ctx context.Context, p *lib.ListParams, res *[]*Run) error {
+func (c *Client) Runs(ctx context.Context, p *lib.ListParams, res *[]*RunInfo) error {
 	runs, err := c.sch.Runs(ctx, p.Offset, p.Limit)
 	if err != nil {
 		return err

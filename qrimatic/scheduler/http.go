@@ -151,7 +151,7 @@ func (c HTTPClient) UpdateWorkflow(ctx context.Context, workflow *Workflow) erro
 }
 
 // Runs gives a log of executed workflows for a dataset name
-func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*Run, error) {
+func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/runs?offset=%d&limit=%d", c.Addr, offset, limit), nil)
 	if err != nil {
 		return nil, err
@@ -167,7 +167,7 @@ func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*Run, error)
 }
 
 // GetRun returns a single executed workflow by workflow.LogName
-func (c HTTPClient) GetRun(ctx context.Context, logName string, number int) (*Run, error) {
+func (c HTTPClient) GetRun(ctx context.Context, logName string, number int) (*RunInfo, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/run?name=%s", c.Addr, logName), nil)
 	if err != nil {
 		return nil, err
@@ -261,18 +261,18 @@ func decodeJSONWorkflowResponse(res *http.Response) (*Workflow, error) {
 	return env.Data, err
 }
 
-func decodeJSONRunsResponse(res *http.Response) ([]*Run, error) {
+func decodeJSONRunsResponse(res *http.Response) ([]*RunInfo, error) {
 	defer res.Body.Close()
 	env := struct {
-		Data []*Run
+		Data []*RunInfo
 	}{}
 	err := json.NewDecoder(res.Body).Decode(&env)
 	return env.Data, err
 }
 
-func decodeJSONRunResponse(res *http.Response) (*Run, error) {
+func decodeJSONRunResponse(res *http.Response) (*RunInfo, error) {
 	defer res.Body.Close()
-	run := &Run{}
+	run := &RunInfo{}
 	err := json.NewDecoder(res.Body).Decode(run)
 	return run, err
 }

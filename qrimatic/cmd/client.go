@@ -332,7 +332,7 @@ func (client *ClientCommands) Runs(ctx context.Context, args []string) (err erro
 		Limit:  page.Limit(),
 	}
 
-	res := []*update.Run{}
+	res := []*update.RunInfo{}
 	if err = client.updates.Runs(ctx, p, &res); err != nil {
 		return
 	}

@@ -49,7 +49,7 @@ func (j workflowStringer) String() string {
 	return w.String()
 }
 
-type runStringer scheduler.Run
+type runStringer scheduler.RunInfo
 
 // String assumes Name, Type, PrevRunStart and ExitStatus are present
 func (j runStringer) String() string {

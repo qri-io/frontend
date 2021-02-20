@@ -14,7 +14,6 @@ import (
 )
 
 func TestFileStore(t *testing.T) {
-	t.Skip("need to fix `RunWorkflowStoreTests` to be inline with the most recent Workflow changes")
 	tmp, err := ioutil.TempDir(os.TempDir(), "TestStoreFile")
 	if err != nil {
 		t.Fatal(err)
@@ -23,7 +22,7 @@ func TestFileStore(t *testing.T) {
 	newStore := func() Store {
 		store, err := NewFileStore(filepath.Join(tmp, "workflows.json"), event.NilBus)
 		if err != nil {
-			t.Fatalf("error creating new store: %s", err)
+			t.Fatalf("creating new store: %s", err)
 		}
 		return store
 	}
@@ -47,16 +46,16 @@ func TestSubscribe(t *testing.T) {
 	bus := event.NewBus(ctx)
 	store, err := NewFileStore(filepath.Join(tmp, "workflows.json"), bus)
 	if err != nil {
-		t.Fatalf("error creating new store: %s", err)
+		t.Fatalf("creating new store: %s", err)
 	}
 
 	w, err := NewCronWorkflow("w", "owner_ID", "dataset_ID", "R/PT1H")
 	if err != nil {
-		t.Fatalf("error creating workflow: %s", err)
+		t.Fatalf("creating workflow: %s", err)
 	}
 	wID := w.ID
 	if err := store.PutWorkflow(ctx, w); err != nil {
-		t.Fatalf("error putting workflow into store: %s", err)
+		t.Fatalf("putting workflow into store: %s", err)
 	}
 	expect := w.Copy()
 	expect.Status = "running"
@@ -67,7 +66,7 @@ func TestSubscribe(t *testing.T) {
 
 	got, err := store.GetWorkflow(ctx, wID)
 	if err != nil {
-		t.Fatalf("error getting workflow from store: %s", err)
+		t.Fatalf("getting workflow from store: %s", err)
 	}
 	if diff := cmp.Diff(expect, got, cmp.Comparer(DurationCompare)); diff != "" {
 		t.Errorf("result mismatch (-want +got):\n%s", diff)
@@ -81,7 +80,7 @@ func TestSubscribe(t *testing.T) {
 
 	got, err = store.GetWorkflow(ctx, wID)
 	if err != nil {
-		t.Fatalf("error getting workflow from store: %s", err)
+		t.Fatalf("getting workflow from store: %s", err)
 	}
 	if diff := cmp.Diff(expect, got, cmp.Comparer(DurationCompare)); diff != "" {
 		t.Errorf("result mismatch (-want +got):\n%s", diff)

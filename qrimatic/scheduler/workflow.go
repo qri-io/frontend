@@ -75,7 +75,7 @@ type Workflow struct {
 	Status      string     `json:"status"`      // the status of the workflow,  "running", "failed", "succeeded", "" for a manual run
 
 	Triggers   Triggers `json:"triggers"`             // things that can initiate a run
-	CurrentRun *Run     `json:"currentRun,omitempty"` // optional currently executing run
+	CurrentRun *RunInfo `json:"currentRun,omitempty"` // optional currently executing run
 	OnComplete Hooks    `json:"onComplete"`           // things to do after a run executes
 
 	VersionInfo dsref.VersionInfo `json:"versionInfo"` // optional versionInfo of DatasetID field
