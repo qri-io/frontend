@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"sort"
 	"sync"
 
 	"github.com/qri-io/qri/event"
@@ -25,7 +26,14 @@ type Store interface {
 	// workflows
 	ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error)
 
-	ListRuns(ctx context.Context, offset, limit int) ([]*Run, error)
+	// ListWorkflowsByStatus should return set of Workflows, filtered by `Status`
+	// and sorted by reverse chronological order by `LatestStart`. When two LatestStart
+	// times are equal, Workflows hould alpha sort by name
+	// passing a limit of -1 and an offset of 0 returns the entire list of the workflows
+	// filtered by status
+	ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error)
+
+	ListRuns(ctx context.Context, offset, limit int) ([]*RunInfo, error)
 	// GetWorkflowByName gets a workflow with the corresponding name field. usually matches
 	// the dataset name
 	GetWorkflowByName(ctx context.Context, name string) (*Workflow, error)
@@ -39,9 +47,9 @@ type Store interface {
 	// DeleteWorkflow removes a workflow from the store
 	DeleteWorkflow(ctx context.Context, id string) error
 
-	GetRun(ctx context.Context, id string) (*Run, error)
-	GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*Run, error)
-	PutRun(ctx context.Context, r *Run) error
+	GetRun(ctx context.Context, id string) (*RunInfo, error)
+	GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error)
+	PutRun(ctx context.Context, r *RunInfo) error
 	DeleteAllWorkflowRuns(ctx context.Context, workflowID string) error
 }
 
@@ -143,12 +151,49 @@ func (s *MemStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wor
 	return workflows, nil
 }
 
-func (s *MemStore) ListRuns(ctx context.Context, offset, limit int) ([]*Run, error) {
+// ListWorkflowsByStatus lists workflows filtered by status and ordered in reverse
+// chronological order by `LatestStart`
+func (s *MemStore) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
+	workflows := make([]*Workflow, 0, len(s.workflows.set))
+
+	for _, workflow := range s.workflows.set {
+		if workflow.Status == status {
+			log.Debugf("workflow %s has correct status", workflow.ID)
+			workflows = append(workflows, workflow)
+		}
+	}
+
+	if offset > len(workflows) {
+		return []*Workflow{}, nil
+	}
+
+	sort.Slice(workflows, func(i, j int) bool {
+		if workflows[j].LatestStart == nil {
+			return false
+		}
+		if workflows[i].LatestStart == workflows[j].LatestStart {
+			return workflows[i].Name < workflows[j].Name
+		}
+		return workflows[i].LatestStart.After(*(workflows[j].LatestStart))
+	})
+
+	if limit < 0 {
+		limit = len(workflows)
+	}
+
+	if offset+limit > len(workflows) {
+		return workflows[offset:], nil
+	}
+
+	return workflows[offset:limit], nil
+}
+
+func (s *MemStore) ListRuns(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	if limit < 0 {
 		limit = len(s.runs.set)
 	}
 
-	runs := make([]*Run, 0, limit)
+	runs := make([]*RunInfo, 0, limit)
 	for i, workflow := range s.runs.set {
 		if i < offset {
 			continue
@@ -248,7 +293,7 @@ func (s *MemStore) DeleteWorkflow(ctx context.Context, id string) error {
 }
 
 // GetRun fetches a run by ID
-func (s *MemStore) GetRun(ctx context.Context, id string) (*Run, error) {
+func (s *MemStore) GetRun(ctx context.Context, id string) (*RunInfo, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -260,7 +305,7 @@ func (s *MemStore) GetRun(ctx context.Context, id string) (*Run, error) {
 	return nil, ErrNotFound
 }
 
-func (s *MemStore) GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*Run, error) {
+func (s *MemStore) GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
 	runs, ok := s.workflowRuns[workflowID]
 	if !ok {
 		return nil, ErrNotFound
@@ -270,7 +315,7 @@ func (s *MemStore) GetWorkflowRuns(ctx context.Context, workflowID string, offse
 		return runs.set[offset:], nil
 	}
 
-	res := make([]*Run, 0, limit)
+	res := make([]*RunInfo, 0, limit)
 	for _, run := range runs.set {
 		if offset > 0 {
 			offset--
@@ -284,7 +329,7 @@ func (s *MemStore) GetWorkflowRuns(ctx context.Context, workflowID string, offse
 	return res, nil
 }
 
-func (s *MemStore) PutRun(ctx context.Context, run *Run) error {
+func (s *MemStore) PutRun(ctx context.Context, run *RunInfo) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
 	}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
 	"sync"
 
 	"github.com/qri-io/qri/event"
@@ -68,12 +69,52 @@ func (s *FileStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wo
 	return workflows, nil
 }
 
-func (s *FileStore) ListRuns(ctx context.Context, offset, limit int) ([]*Run, error) {
+// ListWorkflowsByStatus lists workflows filtered by status and ordered in reverse
+// chronological order by `LatestStart`
+func (s *FileStore) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	workflows := make([]*Workflow, 0, len(s.workflows.set))
+
+	for _, workflow := range s.workflows.set {
+		if workflow.Status == status {
+			log.Debugf("workflow %s has correct status", workflow.ID)
+			workflows = append(workflows, workflow)
+		}
+	}
+
+	if offset > len(workflows) {
+		return []*Workflow{}, nil
+	}
+
+	sort.Slice(workflows, func(i, j int) bool {
+		if workflows[j].LatestStart == nil {
+			return false
+		}
+		if workflows[i].LatestStart == workflows[j].LatestStart {
+			return workflows[i].Name < workflows[j].Name
+		}
+		return workflows[i].LatestStart.After(*(workflows[j].LatestStart))
+	})
+
+	if limit < 0 {
+		limit = len(workflows)
+	}
+
+	if offset+limit > len(workflows) {
+		return workflows[offset:], nil
+	}
+
+	return workflows[offset:limit], nil
+}
+
+func (s *FileStore) ListRuns(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	if limit < 0 {
 		limit = len(s.runs.set)
 	}
 
-	runs := make([]*Run, 0, limit)
+	runs := make([]*RunInfo, 0, limit)
 	for i, workflow := range s.runs.set {
 		if i < offset {
 			continue
@@ -161,7 +202,7 @@ func (s *FileStore) DeleteWorkflow(ctx context.Context, id string) error {
 }
 
 // GetRun fetches a run by ID
-func (s *FileStore) GetRun(ctx context.Context, id string) (*Run, error) {
+func (s *FileStore) GetRun(ctx context.Context, id string) (*RunInfo, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -173,7 +214,7 @@ func (s *FileStore) GetRun(ctx context.Context, id string) (*Run, error) {
 	return nil, ErrNotFound
 }
 
-func (s *FileStore) GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*Run, error) {
+func (s *FileStore) GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
 	runs, ok := s.workflowRuns[workflowID]
 	if !ok {
 		return nil, ErrNotFound
@@ -183,7 +224,7 @@ func (s *FileStore) GetWorkflowRuns(ctx context.Context, workflowID string, offs
 		return runs.set[offset:], nil
 	}
 
-	res := make([]*Run, 0, limit)
+	res := make([]*RunInfo, 0, limit)
 	for _, run := range runs.set {
 		if offset > 0 {
 			offset--
@@ -197,7 +238,7 @@ func (s *FileStore) GetWorkflowRuns(ctx context.Context, workflowID string, offs
 	return res, nil
 }
 
-func (s *FileStore) PutRun(ctx context.Context, run *Run) error {
+func (s *FileStore) PutRun(ctx context.Context, run *RunInfo) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
 	}

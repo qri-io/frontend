@@ -3,6 +3,7 @@ package scheduler
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -31,11 +32,17 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 			t.Errorf("expected new store to contain no workflows")
 		}
 
+		now := time.Now()
+		after := time.Now().Add(2 * time.Hour)
+		before := time.Now().Add(time.Hour)
+
 		workflowOne := &Workflow{
-			Name:      "workflow_one",
-			DatasetID: "dsID1",
-			Type:      JTDataset,
-			ID:        "workflowID",
+			Name:        "workflow_one",
+			DatasetID:   "dsID1",
+			Type:        JTDataset,
+			ID:          "workflowID",
+			Status:      StatusRunning,
+			LatestStart: &now,
 		}
 		if err = store.PutWorkflow(ctx, workflowOne); err != nil {
 			t.Errorf("putting workflow one: %s", err)
@@ -58,6 +65,8 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 			DatasetID: "dsID2",
 			Type:      JTShellScript,
 			// RunStart:    &d2,
+			Status:      StatusSucceeded,
+			LatestStart: &before,
 		}
 		if err = store.PutWorkflow(ctx, workflowTwo); err != nil {
 			t.Errorf("putting workflow one: %s", err)
@@ -72,11 +81,15 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		}
 
 		workflowThree := &Workflow{
-			Name: "workflow_three",
-			Type: JTDataset,
+			ID:        "workflow3",
+			Name:      "workflow_three",
+			DatasetID: "dsID3",
+			Type:      JTDataset,
 			Options: &DatasetOptions{
 				Title: "hallo",
 			},
+			Status:      StatusSucceeded,
+			LatestStart: &after,
 		}
 		if err = store.PutWorkflow(ctx, workflowThree); err != nil {
 			t.Errorf("putting workflow three: %s", err)
@@ -89,12 +102,17 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 			t.Errorf("workflowThree mismatch (-want +got):\n%s", diff)
 		}
 
-		// d3 := time.Date(2002, 1, 1, 1, 1, 1, 1, time.UTC)
-		updatedWorkflowOne := &Workflow{
-			Name: workflowOne.Name,
-			Type: workflowOne.Type,
-			// RunStart:    &d3,
+		succeeded, err := store.ListWorkflowsByStatus(ctx, StatusSucceeded, 0, -1)
+		if err != nil {
+			t.Errorf("listing workflows by status 'succeeded': %e", err)
 		}
+		expect = []*Workflow{workflowThree, workflowTwo}
+		if diff := cmp.Diff(expect, succeeded, cmpopts.IgnoreUnexported(iso8601.Duration{})); diff != "" {
+			t.Errorf("workflow slice mismatch (-want +got):\n%s", diff)
+		}
+
+		updatedWorkflowOne := workflowOne.Copy()
+		updatedWorkflowOne.Status = StatusFailed
 		if err = store.PutWorkflow(ctx, updatedWorkflowOne); err != nil {
 			t.Errorf("putting workflow one: %s", err)
 		}
@@ -117,13 +135,13 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 			t.Errorf("updated workflowOne mismatch (-want +got):\n%s", diff)
 		}
 
-		if err = store.DeleteWorkflow(ctx, updatedWorkflowOne.Name); err != nil {
+		if err = store.DeleteWorkflow(ctx, updatedWorkflowOne.ID); err != nil {
 			t.Error(err)
 		}
-		if err = store.DeleteWorkflow(ctx, workflowTwo.Name); err != nil {
+		if err = store.DeleteWorkflow(ctx, workflowTwo.ID); err != nil {
 			t.Error(err)
 		}
-		if err = store.DeleteWorkflow(ctx, workflowThree.Name); err != nil {
+		if err = store.DeleteWorkflow(ctx, workflowThree.ID); err != nil {
 			t.Error(err)
 		}
 
