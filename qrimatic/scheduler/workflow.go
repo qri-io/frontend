@@ -47,6 +47,15 @@ func workflowID() string {
 // TODO (b5) - add a IsZero methods to iso8601 structs
 var zero iso8601.RepeatingInterval
 
+const (
+	// StatusRunning is the canonical constant for "running" execution state
+	StatusRunning = "running"
+	// StatusSucceeded is the canonical constant for "succeeded" execution state
+	StatusSucceeded = "succeeded"
+	// StatusFailed is the canonical constant for "failed" execution state
+	StatusFailed = "failed"
+)
+
 // Workflow represents a "cron workflow" that can be scheduled for repeated execution at
 // a specified Periodicity (time interval)
 type Workflow struct {
@@ -60,12 +69,14 @@ type Workflow struct {
 	RunCount  int        `json:"runCount"`          // number of times this workflow has been run
 	Options   Options    `json:"options,omitempty"` // workflow configuration
 
-	Disabled       bool       `json:"disabled"`             // if true, workflow will not generate new run starts
-	LatestRunStart *time.Time `json:"latestRunStart"`       // time workflow last started
-	CurrentRun     *Run       `json:"currentRun,omitempty"` // optional currently executing run
+	Disabled    bool       `json:"disabled"`    // if true, workflow will not generate new run starts
+	LatestStart *time.Time `json:"latestStart"` // time workflow last started,
+	LatestEnd   *time.Time `json:"latestEnd"`   // time workflow last finished, nil if currently running
+	Status      string     `json:"status"`      // the status of the workflow,  "running", "failed", "succeeded", "" for a manual run
 
-	Triggers   Triggers `json:"triggers"`   // things that can initiate a run
-	OnComplete Hooks    `json:"onComplete"` // things to do after a run executes
+	Triggers   Triggers `json:"triggers"`             // things that can initiate a run
+	CurrentRun *Run     `json:"currentRun,omitempty"` // optional currently executing run
+	OnComplete Hooks    `json:"onComplete"`           // things to do after a run executes
 
 	VersionInfo dsref.VersionInfo `json:"versionInfo"` // optional versionInfo of DatasetID field
 
@@ -108,14 +119,17 @@ func (workflow *Workflow) Complete(ds *dsref.Ref, ownerID string) error {
 }
 
 // Advance creates a new run, increments the run count, and sets the next
-// execution wall
+// execution wall, and adjusts the Status and LatestStart of the workflow
 func (workflow *Workflow) Advance(triggerID string) (err error) {
 	workflow.CurrentRun, err = NewRun(workflow.ID, workflow.RunCount+1)
 	if err != nil {
 		return err
 	}
 	workflow.RunCount++
-	workflow.LatestRunStart = workflow.CurrentRun.Start
+
+	workflow.LatestStart = workflow.CurrentRun.Start
+	workflow.LatestEnd = nil
+	workflow.Status = StatusRunning
 
 	if triggerID != "" {
 		for _, t := range workflow.Triggers {
@@ -130,18 +144,20 @@ func (workflow *Workflow) Advance(triggerID string) (err error) {
 // Copy creates a copy of a workflow
 func (workflow *Workflow) Copy() *Workflow {
 	cp := &Workflow{
-		ID:             workflow.ID,
-		DatasetID:      workflow.DatasetID,
-		OwnerID:        workflow.OwnerID,
-		Name:           workflow.Name,
-		Created:        workflow.Created,
-		Disabled:       workflow.Disabled,
-		RunCount:       workflow.RunCount,
-		LatestRunStart: workflow.LatestRunStart,
-		Triggers:       workflow.Triggers,
-		OnComplete:     workflow.OnComplete,
-		VersionInfo:    workflow.VersionInfo,
-		Type:           workflow.Type,
+		ID:          workflow.ID,
+		DatasetID:   workflow.DatasetID,
+		OwnerID:     workflow.OwnerID,
+		Name:        workflow.Name,
+		Created:     workflow.Created,
+		RunCount:    workflow.RunCount,
+		Disabled:    workflow.Disabled,
+		LatestStart: workflow.LatestStart,
+		LatestEnd:   workflow.LatestEnd,
+		Status:      workflow.Status,
+		Triggers:    workflow.Triggers,
+		OnComplete:  workflow.OnComplete,
+		VersionInfo: workflow.VersionInfo,
+		Type:        workflow.Type,
 	}
 
 	if workflow.CurrentRun != nil {
@@ -167,7 +183,7 @@ func NewWorkflowSet() *WorkflowSet {
 
 func (js WorkflowSet) Len() int { return len(js.set) }
 func (js WorkflowSet) Less(i, j int) bool {
-	return lessNilTime(js.set[i].LatestRunStart, js.set[j].LatestRunStart)
+	return lessNilTime(js.set[i].LatestStart, js.set[j].LatestStart)
 }
 func (js WorkflowSet) Swap(i, j int) { js.set[i], js.set[j] = js.set[j], js.set[i] }
 

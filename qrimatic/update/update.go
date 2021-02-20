@@ -41,7 +41,7 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 		return nil, err
 	}
 	if ds.Commit != nil {
-		workflow.LatestRunStart = &ds.Commit.Timestamp
+		workflow.LatestStart = &ds.Commit.Timestamp
 	}
 	if opts != nil {
 		workflow.Options = opts

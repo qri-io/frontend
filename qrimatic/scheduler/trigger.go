@@ -189,7 +189,7 @@ func (t *CronTrigger) ToMap() map[string]interface{} {
 func (t *CronTrigger) Advance(workflow *Workflow) error {
 	t.RunCount++
 	t.Periodicity = t.Periodicity.NextRep()
-	t.LastRunStart = workflow.LatestRunStart
+	t.LastRunStart = workflow.LatestStart
 	// synchronize clocks on advance to avoid
 	// the scheduler trying to make up for the missed ticks
 	t.NextRunStart = t.LastRunStart

@@ -1,6 +1,12 @@
 import { NewTransformStep, TransformStep } from "../qri/dataset"
 import { VersionInfo } from "../qri/versionInfo"
 
+export type RunStatus =
+  | 'running'
+  | 'succeeded'
+  | 'failed'
+  | ''          // empty status indicates a manual change
+
 export interface Workflow {
   id: string
   ownerID?: string
@@ -8,7 +14,10 @@ export interface Workflow {
 
   disabled: boolean
   runCount: number
-  latestRunStart?: string
+
+  latestStart?: string
+  latestEnd?: string
+  status: RunStatus
   
   triggers?: WorkflowTrigger[]
   steps?: TransformStep[]
@@ -25,7 +34,10 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
 
     disabled: data.disabled || false,
     runCount: data.runCount || 0,
-    latestRunStart: data.latestRunStart,
+
+    latestStart: data.latestStart,
+    latestEnd: data.latestEnd,
+    status: data.status,
 
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
     steps: data.steps && data.steps.map(NewTransformStep),
