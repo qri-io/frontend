@@ -16,9 +16,6 @@ var ErrNotFound = fmt.Errorf("not found")
 // Store handles the persistence of Workflows and Runs. Store implementations
 // must be safe for concurrent use
 type Store interface {
-	// Subscribe allows the store to listen for workflow events so it can properly
-	// track and modify updated `Workflows`
-	Subscribe(bus event.Bus)
 	// ListWorkflows should return the set of workflows sorted in reverse-chronological
 	// order (newest first order) of the last time they were run. When two LastRun
 	// times are equal, Workflows should alpha sort the names
@@ -60,31 +57,31 @@ type LogFileCreator interface {
 	CreateLogFile(workflow *Workflow) (f io.WriteCloser, path string, err error)
 }
 
-// MemStore is an in-memory implementation of the Store interface
-// Workflows stored in MemStore can be persisted for the duration of a process
+// memStore is an in-memory implementation of the Store interface
+// Workflows stored in memStore can be persisted for the duration of a process
 // at the longest.
-// MemStore is safe for concurrent use
-type MemStore struct {
+// memStore is safe for concurrent use
+type memStore struct {
 	lock             sync.Mutex
 	workflows        *WorkflowSet
 	workflowRunInfos map[string]*RunInfoSet
 	runs             *RunInfoSet
 }
 
-var _ Store = (*MemStore)(nil)
+var _ Store = (*memStore)(nil)
 
-func NewMemStore(bus event.Bus) *MemStore {
-	store := &MemStore{
+func NewMemStore(bus event.Bus) Store {
+	store := &memStore{
 		workflows:        NewWorkflowSet(),
 		workflowRunInfos: map[string]*RunInfoSet{},
 		runs:             NewRunInfoSet(),
 	}
-	store.Subscribe(bus)
+	subscribe(store, bus)
 	return store
 }
 
 func subscribe(s Store, bus event.Bus) {
-	bus.SubscribeTypes(HandlerFromStore(s),
+	bus.SubscribeTypes(EventHandlerFromStore(s),
 		ETWorkflowScheduled,
 		ETWorkflowUnscheduled,
 		ETWorkflowStarted,
@@ -93,9 +90,11 @@ func subscribe(s Store, bus event.Bus) {
 	)
 }
 
-// HandlerFromStore returns an `event.Handler` that listens to all Workflow events
+// EventHandlerFromStore returns an `event.Handler` that listens to all Workflow events
 // and responds accordingly so that the store is always up to date
-func HandlerFromStore(s Store) event.Handler {
+// This is only exported for store implementations created outside of this package
+// and store implementations inside this package already handle these events
+func EventHandlerFromStore(s Store) event.Handler {
 	return func(ctx context.Context, e event.Event) error {
 		switch e.Type {
 		case ETWorkflowScheduled:
@@ -123,12 +122,12 @@ func HandlerFromStore(s Store) event.Handler {
 
 // Subscribe allows the store to subscribe to workflow events that allow
 // the store to track and properly store updated `Workflows`
-func (s *MemStore) Subscribe(bus event.Bus) {
+func (s *memStore) Subscribe(bus event.Bus) {
 	subscribe(s, bus)
 }
 
 // ListWorkflows lists workflows currently in the store
-func (s *MemStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
+func (s *memStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
 	if limit < 0 {
 		limit = len(s.workflows.set)
 	}
@@ -148,7 +147,7 @@ func (s *MemStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wor
 
 // ListWorkflowsByStatus lists workflows filtered by status and ordered in reverse
 // chronological order by `LatestStart`
-func (s *MemStore) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
+func (s *memStore) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
 	workflows := make([]*Workflow, 0, len(s.workflows.set))
 
 	for _, workflow := range s.workflows.set {
@@ -183,7 +182,7 @@ func (s *MemStore) ListWorkflowsByStatus(ctx context.Context, status string, off
 	return workflows[offset:limit], nil
 }
 
-func (s *MemStore) ListRunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
+func (s *memStore) ListRunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	if limit < 0 {
 		limit = len(s.runs.set)
 	}
@@ -204,7 +203,7 @@ func (s *MemStore) ListRunInfos(ctx context.Context, offset, limit int) ([]*RunI
 
 // GetWorkflowByName gets a workflow with the corresponding name field. usually matches
 // the dataset name
-func (s *MemStore) GetWorkflowByName(ctx context.Context, name string) (*Workflow, error) {
+func (s *memStore) GetWorkflowByName(ctx context.Context, name string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -217,7 +216,7 @@ func (s *MemStore) GetWorkflowByName(ctx context.Context, name string) (*Workflo
 }
 
 // GetWorkflowByDatasetID gets a workflow with the corresponding datasetID field
-func (s *MemStore) GetWorkflowByDatasetID(ctx context.Context, datasetID string) (*Workflow, error) {
+func (s *memStore) GetWorkflowByDatasetID(ctx context.Context, datasetID string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	for _, workflow := range s.workflows.set {
@@ -229,7 +228,7 @@ func (s *MemStore) GetWorkflowByDatasetID(ctx context.Context, datasetID string)
 }
 
 // GetWorkflow gets workflow details from the store by dataset identifier
-func (s *MemStore) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
+func (s *memStore) GetWorkflow(ctx context.Context, id string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -242,7 +241,7 @@ func (s *MemStore) GetWorkflow(ctx context.Context, id string) (*Workflow, error
 }
 
 // GetDatasetWorkflow gets workflow details from the store by dataset identifier
-func (s *MemStore) GetDatasetWorkflow(ctx context.Context, datasetID string) (*Workflow, error) {
+func (s *memStore) GetDatasetWorkflow(ctx context.Context, datasetID string) (*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -256,7 +255,7 @@ func (s *MemStore) GetDatasetWorkflow(ctx context.Context, datasetID string) (*W
 
 // PutWorkflow places a workflow in the store. If the workflow name matches the name of a workflow
 // that already exists, it will be overwritten with the new workflow
-func (s *MemStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
+func (s *memStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
 	if workflow.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
@@ -278,7 +277,7 @@ func (s *MemStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
 
 // DeleteWorkflow removes a workflow from the store by name. deleting a non-existent workflow
 // won't return an error
-func (s *MemStore) DeleteWorkflow(ctx context.Context, id string) error {
+func (s *memStore) DeleteWorkflow(ctx context.Context, id string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	if removed := s.workflows.Remove(id); removed {
@@ -288,7 +287,7 @@ func (s *MemStore) DeleteWorkflow(ctx context.Context, id string) error {
 }
 
 // GetRunInfo fetches a run by ID
-func (s *MemStore) GetRunInfo(ctx context.Context, id string) (*RunInfo, error) {
+func (s *memStore) GetRunInfo(ctx context.Context, id string) (*RunInfo, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -300,7 +299,7 @@ func (s *MemStore) GetRunInfo(ctx context.Context, id string) (*RunInfo, error) 
 	return nil, ErrNotFound
 }
 
-func (s *MemStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
+func (s *memStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
 	ris, ok := s.workflowRunInfos[workflowID]
 	if !ok {
 		return nil, ErrNotFound
@@ -324,7 +323,7 @@ func (s *MemStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, o
 	return res, nil
 }
 
-func (s *MemStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
+func (s *memStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
@@ -345,6 +344,6 @@ func (s *MemStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
 	return nil
 }
 
-func (s *MemStore) DeleteAllWorkflowRunInfos(ctx context.Context, workflowID string) error {
-	return fmt.Errorf("not finished: MemStore delete all workflow runs")
+func (s *memStore) DeleteAllWorkflowRunInfos(ctx context.Context, workflowID string) error {
+	return fmt.Errorf("not finished: memStore delete all workflow runs")
 }
