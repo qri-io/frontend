@@ -27,6 +27,19 @@ const (
 	JTShellScript WorkflowType = "shell"
 )
 
+// WorkflowStatus enumerates all possible execution states of a workflow.
+type WorkflowStatus string
+
+const (
+	// StatusRunning indicates a script/step is currently executing
+	StatusRunning = WorkflowStatus("running")
+	// StatusSucceeded indicates a script/step has completed without error
+	StatusSucceeded = WorkflowStatus("succeeded")
+	// StatusFailed indicates a script/step completed & exited when an unexpected error
+	// occured
+	StatusFailed = WorkflowStatus("failed")
+)
+
 const (
 	// WorkflowMulticodecType is a CID prefix for cron.Workflow content
 	// identifiers
@@ -47,15 +60,6 @@ func workflowID() string {
 // TODO (b5) - add a IsZero methods to iso8601 structs
 var zero iso8601.RepeatingInterval
 
-const (
-	// StatusRunning is the canonical constant for "running" execution state
-	StatusRunning = "running"
-	// StatusSucceeded is the canonical constant for "succeeded" execution state
-	StatusSucceeded = "succeeded"
-	// StatusFailed is the canonical constant for "failed" execution state
-	StatusFailed = "failed"
-)
-
 // Workflow represents a "cron workflow" that can be scheduled for repeated execution at
 // a specified Periodicity (time interval)
 type Workflow struct {
@@ -69,10 +73,10 @@ type Workflow struct {
 	RunCount  int        `json:"runCount"`          // number of times this workflow has been run
 	Options   Options    `json:"options,omitempty"` // workflow configuration
 
-	Disabled    bool       `json:"disabled"`    // if true, workflow will not generate new run starts
-	LatestStart *time.Time `json:"latestStart"` // time workflow last started,
-	LatestEnd   *time.Time `json:"latestEnd"`   // time workflow last finished, nil if currently running
-	Status      string     `json:"status"`      // the status of the workflow,  "running", "failed", "succeeded", "" for a manual run
+	Disabled    bool           `json:"disabled"`    // if true, workflow will not generate new run starts
+	LatestStart *time.Time     `json:"latestStart"` // time workflow last started,
+	LatestEnd   *time.Time     `json:"latestEnd"`   // time workflow last finished, nil if currently running
+	Status      WorkflowStatus `json:"status"`      // the status of the workflow,  "running", "failed", "succeeded", "" for a manual run
 
 	Triggers   Triggers `json:"triggers"`             // things that can initiate a run
 	CurrentRun *RunInfo `json:"currentRun,omitempty"` // optional currently executing run

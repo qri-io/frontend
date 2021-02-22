@@ -65,7 +65,7 @@ func (s *fileStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wo
 
 // ListWorkflowsByStatus lists workflows filtered by status and ordered in reverse
 // chronological order by `LatestStart`
-func (s *fileStore) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
+func (s *fileStore) ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 

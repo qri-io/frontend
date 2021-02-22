@@ -41,7 +41,7 @@ func TestCronDataset(t *testing.T) {
 		}
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*1000)
 	defer cancel()
 
 	store := NewMemStore(event.NilBus)
@@ -74,9 +74,6 @@ func TestCronDataset(t *testing.T) {
 	expect := &Workflow{
 		Name: "b5/libp2p_node_count",
 		Type: JTDataset,
-		// RunNumber: 1,
-		// RunStart:  got.RunStart,
-		// RunStop:   got.RunStop,
 	}
 
 	if diff := compareWorkflow(expect, got); diff != "" {
@@ -175,7 +172,7 @@ func TestRunWorkflow(t *testing.T) {
 					done <- struct{}{}
 					return
 				}
-			case <-time.After(2 * time.Second):
+			case <-time.After(500 * time.Millisecond):
 				done <- struct{}{}
 			}
 		}

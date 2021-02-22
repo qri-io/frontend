@@ -96,7 +96,7 @@ func (c *Cron) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflo
 
 // ListWorkflowsByStatus proxies to the scheduler store for reading workflows by status
 // returns workflows is reverse chronological order by `LatestStart`
-func (c *Cron) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
+func (c *Cron) ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error) {
 	return c.store.ListWorkflowsByStatus(ctx, status, offset, limit)
 }
 

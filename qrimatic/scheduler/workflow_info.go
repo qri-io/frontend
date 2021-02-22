@@ -14,10 +14,10 @@ import (
 // It is primarily used for the `workflow/list` endpoint
 type WorkflowInfo struct {
 	dsref.VersionInfo
-	ID          string     `json:"id"` // CID string
-	LatestStart *time.Time `json:"latestStart"`
-	LatestEnd   *time.Time `json:"latestEnd"`
-	Status      string     `json:"status"`
+	ID          string         `json:"id"` // CID string
+	LatestStart *time.Time     `json:"latestStart"`
+	LatestEnd   *time.Time     `json:"latestEnd"`
+	Status      WorkflowStatus `json:"status"`
 }
 
 // ListCollection returns a union of datasets and workflows in the form of `WorkflowInfo`s

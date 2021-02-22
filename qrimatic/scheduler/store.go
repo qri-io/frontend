@@ -28,7 +28,7 @@ type Store interface {
 	// times are equal, Workflows hould alpha sort by name
 	// passing a limit of -1 and an offset of 0 returns the entire list of the workflows
 	// filtered by status
-	ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error)
+	ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error)
 
 	ListRunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error)
 	// GetWorkflowByName gets a workflow with the corresponding name field. usually matches
@@ -147,7 +147,7 @@ func (s *memStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wor
 
 // ListWorkflowsByStatus lists workflows filtered by status and ordered in reverse
 // chronological order by `LatestStart`
-func (s *memStore) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
+func (s *memStore) ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error) {
 	workflows := make([]*Workflow, 0, len(s.workflows.set))
 
 	for _, workflow := range s.workflows.set {
