@@ -14,7 +14,6 @@ import { ModalType } from '../../app/state/appState'
 
 
 const LogInModal: React.FC = () => {
-  const [ loginSuccess, setLoginSuccess ] = useState(false)
 
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
@@ -28,7 +27,6 @@ const LogInModal: React.FC = () => {
 
   const handleButtonClick = () => {
     dispatch(logIn(username, password)).then(() => {
-      setLoginSuccess(true)
       dispatch(clearModal())
     })
   }
@@ -68,11 +66,6 @@ const LogInModal: React.FC = () => {
           Not on Qri yet? Sign Up
         </div>
       </div>
-      {
-        loginSuccess && (
-          <Redirect to={`/dashboard`} />
-        )
-      }
     </div>
   )
 }

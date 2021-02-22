@@ -53,7 +53,8 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
         pageSize
       },
       segments: {
-        peername: ref.username,
+        // peername: ref.username,
+        peername: 'me',
         name: ref.name
       },
       map: mapBody
@@ -74,7 +75,7 @@ export function removeDataset (ref: QriRef): ApiActionThunk {
           }
         }
       }
-  
+
       return dispatch(action)
     }
   }

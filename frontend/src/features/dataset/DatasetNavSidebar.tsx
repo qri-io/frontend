@@ -3,10 +3,10 @@ import React from 'react'
 import { QriRef } from '../../qri/ref'
 import SideNavItem from './SideNavItem'
 import TooltipContent from '../../chrome/TooltipContent'
-import { 
-  pathToActivityFeed, 
-  pathToDatasetViewer, 
-  pathToWorkflowEditor 
+import {
+  pathToActivityFeed,
+  pathToDatasetViewer,
+  pathToWorkflowEditor
 } from './state/datasetPaths'
 
 export interface DatasetNavSidebarProps {
@@ -16,17 +16,6 @@ export interface DatasetNavSidebarProps {
 const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
   <div className='side-nav h-full bg-white'>
     <SideNavItem
-      id='workflow-editor'
-      icon='code'
-      to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
-      tooltip={
-        <TooltipContent
-          text='Workflow Editor'
-          subtext='Automate updates to this dataset'
-        />
-      }
-    />
-    <SideNavItem
       id='components'
       icon='table'
       to={pathToDatasetViewer(qriRef.username, qriRef.name)}
@@ -34,6 +23,17 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
         <TooltipContent
           text='Components'
           subtext='Explore the lastest version of this dataset'
+        />
+      }
+    />
+    <SideNavItem
+      id='workflow-editor'
+      icon='code'
+      to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
+      tooltip={
+        <TooltipContent
+          text='Workflow Editor'
+          subtext='Automate updates to this dataset'
         />
       }
     />

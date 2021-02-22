@@ -13,7 +13,6 @@ import { selectIsSessionLoading } from '../state/sessionState'
 import { validateEmail, validateUsername, validatePassword } from '../state/formValidation'
 
 const SignUpModal: React.FC = () => {
-  const [ signupSuccess, setSignupSuccess ] = useState(false)
 
   const [ email, setEmail ] = useState('')
   const [ emailError, setEmailError ] = useState(null)
@@ -45,8 +44,7 @@ const SignUpModal: React.FC = () => {
     setPasswordError(passwordError)
 
     if (!emailError && !usernameError && !passwordError) {
-      dispatch(signUp(email, username, password)).then(() => {
-        setSignupSuccess(true)
+      dispatch(signUp(email, username, password)).then((action) => {
         dispatch(clearModal())
       })
     }
@@ -95,11 +93,6 @@ const SignUpModal: React.FC = () => {
           Already on Qri?  Log In
         </div>
       </div>
-      {
-        signupSuccess && (
-          <Redirect to={`/dashboard`} />
-        )
-      }
     </div>
   )
 }

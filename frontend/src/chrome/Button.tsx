@@ -8,7 +8,7 @@ export type ButtonType = 'primary'
 export interface ButtonProps {
   onClick?: () => void
   type?: ButtonType
-  size?: 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg'
   className?: string
 }
 
@@ -40,6 +40,9 @@ const Button: React.FC<ButtonProps> = ({
     case 'lg':
       sizeClasses = 'text-md px-8 py-3'
       break
+    case 'sm':
+      sizeClasses = 'text-md px-3 py-1'
+      break
   }
 
   return (
@@ -48,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
       className={`flex items-center inline-flex justify-center rounded-sm shadow-sm bg-white font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 w-auto transition-all duration-100 ${colorClasses} ${sizeClasses} ${className}`}
       onClick={onClick}
     >
-    { children }
+      { children }
     </button>
   )
 }

@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux';
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
-import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router-dom'
 
 import { showModal } from '../app/state/appActions'
@@ -34,6 +33,7 @@ interface WorkflowsTableProps {
   clearSelectedTrigger: boolean
   onRowClicked: (row: WorkflowInfo) => void
   onSelectedRowsChange: ({ selectedRows }: { selectedRows: WorkflowInfo[] }) => void
+  dashboard: boolean
 }
 
 // fieldValue returns a WorkflowInfo value for a given field argument
@@ -88,15 +88,11 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   filteredWorkflows,
   onRowClicked,
   onSelectedRowsChange,
-  clearSelectedTrigger
+  clearSelectedTrigger,
+  dashboard=false
 }) => {
 
   const dispatch = useDispatch()
-
-  // rebuild tooltips on mount and update
-  useEffect(() => {
-    ReactTooltip.rebuild()
-  })
 
   // react-data-table custom styles
   const customStyles = {
@@ -162,6 +158,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     {
       name: 'last run',
       selector: 'lastrun',
+      omit: dashboard,
       grow: 1,
       sortable: true,
       cell: (row: WorkflowInfo) => {
@@ -179,7 +176,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
           <div className='flex flex-col'>
             <div className='flex items-center mb-2'>
               <div className='font-bold mr-2'>23</div>
-              <RunStatusBadge status={runStatus} small />
+              <RunStatusBadge status={runStatus} size='sm' />
             </div>
             <div className='text-gray-500 text-xs'>
               <Icon icon='clock' size='sm'/> <span><DurationFormat seconds={runDuration} /> | <RelativeTimestamp timestamp={new Date(timestamp)}/></span>
@@ -189,8 +186,9 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       }
     },
     {
-      name: '',
+      name: 'actions',
       selector: 'actions',
+      omit: dashboard,
       grow: 1,
       cell: (row: WorkflowInfo) => (row.id
           ? <ManualTriggerButton workflowID={row.id} />
@@ -200,6 +198,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     {
       name: '',
       selector: 'hamburger',
+      omit: dashboard,
       width: '120px',
       // eslint-disable-next-line react/display-name
       cell: (row: WorkflowInfo) => {
@@ -245,9 +244,9 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
           }
         ]
         return (
-          <div className='mx-auto'>
+          <div className='mx-auto text-gray-500'>
             <DropdownMenu items={hamburgerItems}>
-              <Icon icon='ellipsisH' size='lg'/>
+              <Icon icon='ellipsisH' size='md'/>
             </DropdownMenu>
           </div>
         )
