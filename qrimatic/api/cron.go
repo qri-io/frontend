@@ -143,15 +143,13 @@ func (s *Server) CollectionHandler(w http.ResponseWriter, r *http.Request) {
 // currently "Running". They are returned in reverse chronological order by
 // `LastestRun`
 func (s *Server) CollectionRunningHandler(w http.ResponseWriter, r *http.Request) {
-	ws, err := s.sched.ListWorkflowsByStatus(context.Background(), scheduler.StatusRunning, 0, -1)
+	// TODO (ramfox): until we get a better story around pagination, fetch the
+	// entire list of running workflows
+	wis, err := s.sched.ListRunningCollection(context.Background(), 0, -1)
 	if err != nil {
 		log.Errorf("error listing currently running workflows: %w", err)
 		apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 		return
 	}
-	data := []*scheduler.WorkflowInfo{}
-	for _, w := range ws {
-		data = append(data, w.Info())
-	}
-	apiutil.WriteResponse(w, data)
+	apiutil.WriteResponse(w, wis)
 }

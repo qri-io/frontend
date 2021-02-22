@@ -94,10 +94,23 @@ func (c *Cron) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflo
 	return c.store.ListWorkflows(ctx, offset, limit)
 }
 
-// ListWorkflowsByStatus proxies to the scheudler store for reading workflows by status
+// ListWorkflowsByStatus proxies to the scheduler store for reading workflows by status
 // returns workflows is reverse chronological order by `LatestStart`
 func (c *Cron) ListWorkflowsByStatus(ctx context.Context, status string, offset, limit int) ([]*Workflow, error) {
 	return c.store.ListWorkflowsByStatus(ctx, status, offset, limit)
+}
+
+// ListRunningCollection converts currently running workflows into `WorkflowInfo`s
+func (c *Cron) ListRunningCollection(ctx context.Context, offset, limit int) ([]*WorkflowInfo, error) {
+	ws, err := c.ListWorkflowsByStatus(context.Background(), StatusRunning, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	wis := []*WorkflowInfo{}
+	for _, w := range ws {
+		wis = append(wis, w.Info())
+	}
+	return wis, nil
 }
 
 // WorkflowForName gets a workflow by it's name (which often matches the dataset name)
