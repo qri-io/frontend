@@ -333,7 +333,7 @@ func (client *ClientCommands) Runs(ctx context.Context, args []string) (err erro
 	}
 
 	res := []*update.RunInfo{}
-	if err = client.updates.Runs(ctx, p, &res); err != nil {
+	if err = client.updates.RunInfos(ctx, p, &res); err != nil {
 		return
 	}
 

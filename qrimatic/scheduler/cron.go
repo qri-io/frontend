@@ -37,10 +37,10 @@ type Service interface {
 	Workflow(ctx context.Context, id string) (*Workflow, error)
 	// WorkflowForDataset gets a single scheduled workflow by dataset identifier
 	WorkflowForDataset(ctx context.Context, id string) (*Workflow, error)
-	// Runs gives a log of executed workflows
-	Runs(ctx context.Context, offset, limit int) ([]*RunInfo, error)
-	// GetRun returns a single executed workflow by workflow.LogName
-	GetRun(ctx context.Context, id string, runNumber int) (*RunInfo, error)
+	// RunInfos gives a log of executed workflows
+	RunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error)
+	// GetRunInfo returns a single executed workflow by workflow.LogName
+	GetRunInfo(ctx context.Context, id string, runNumber int) (*RunInfo, error)
 	// // RunLogFile returns a reader for a file at the given name
 	// RunLogFile(ctx context.Context, id string, runNumber int) (io.ReadCloser, error)
 
@@ -128,13 +128,13 @@ func (c *Cron) WorkflowForDataset(ctx context.Context, id string) (*Workflow, er
 	return c.store.GetWorkflowByDatasetID(ctx, id)
 }
 
-// Runs returns a list of workflows that have been executed
-func (c *Cron) Runs(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
-	return c.store.ListRuns(ctx, offset, limit)
+// RunInfos returns a list of workflows that have been executed
+func (c *Cron) RunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
+	return c.store.ListRunInfos(ctx, offset, limit)
 }
 
-// GetRun gives a specific Run by datasetID and run Number
-func (c *Cron) GetRun(ctx context.Context, datasetID string, runNumber int) (*RunInfo, error) {
+// GetRunInfo gives a specific Run by datasetID and run Number
+func (c *Cron) GetRunInfo(ctx context.Context, datasetID string, runNumber int) (*RunInfo, error) {
 	return nil, fmt.Errorf("not finished: service get run by datasetID and runNumber")
 }
 

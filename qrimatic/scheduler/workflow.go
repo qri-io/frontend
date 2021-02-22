@@ -16,7 +16,7 @@ import (
 type WorkflowType string
 
 const (
-	// JTDataset indicates a workflow that RunSet "qri update" on a dataset specified
+	// JTDataset indicates a workflow that RunInfoSet "qri update" on a dataset specified
 	// by Workflow Name. The workflow periodicity is determined by the specified dataset's
 	// Meta.AccrualPeriodicity field. LastRun should closely match the datasets's
 	// latest Commit.Timestamp value
@@ -131,7 +131,7 @@ func (workflow *Workflow) Info() *WorkflowInfo {
 // Advance creates a new run, increments the run count, and sets the next
 // execution wall, and adjusts the Status and LatestStart of the workflow
 func (workflow *Workflow) Advance(triggerID string) (err error) {
-	workflow.CurrentRun, err = NewRun(workflow.ID, workflow.RunCount+1)
+	workflow.CurrentRun, err = NewRunInfo(workflow.ID, workflow.RunCount+1)
 	if err != nil {
 		return err
 	}

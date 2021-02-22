@@ -17,10 +17,10 @@ import (
 type FileStore struct {
 	path string
 
-	lock         sync.Mutex
-	workflows    *WorkflowSet
-	workflowRuns map[string]*RunSet
-	runs         *RunSet
+	lock             sync.Mutex
+	workflows        *WorkflowSet
+	workflowRunInfos map[string]*RunInfoSet
+	runs             *RunInfoSet
 }
 
 // compile-time assertion that FileStore is a Store
@@ -29,10 +29,10 @@ var _ Store = (*FileStore)(nil)
 // NewFileStore creates a workflow store that persists to a file
 func NewFileStore(path string, bus event.Bus) (Store, error) {
 	s := &FileStore{
-		path:         path,
-		workflows:    NewWorkflowSet(),
-		workflowRuns: map[string]*RunSet{},
-		runs:         NewRunSet(),
+		path:             path,
+		workflows:        NewWorkflowSet(),
+		workflowRunInfos: map[string]*RunInfoSet{},
+		runs:             NewRunInfoSet(),
 	}
 
 	s.Subscribe(bus)
@@ -109,7 +109,7 @@ func (s *FileStore) ListWorkflowsByStatus(ctx context.Context, status string, of
 	return workflows[offset:limit], nil
 }
 
-func (s *FileStore) ListRuns(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
+func (s *FileStore) ListRunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	if limit < 0 {
 		limit = len(s.runs.set)
 	}
@@ -183,7 +183,7 @@ func (s *FileStore) PutWorkflow(ctx context.Context, workflow *Workflow) error {
 	s.lock.Unlock()
 
 	if workflow.CurrentRun != nil {
-		if err := s.PutRun(ctx, workflow.CurrentRun); err != nil {
+		if err := s.PutRunInfo(ctx, workflow.CurrentRun); err != nil {
 			return err
 		}
 	}
@@ -201,8 +201,8 @@ func (s *FileStore) DeleteWorkflow(ctx context.Context, id string) error {
 	return ErrNotFound
 }
 
-// GetRun fetches a run by ID
-func (s *FileStore) GetRun(ctx context.Context, id string) (*RunInfo, error) {
+// GetRunInfo fetches a run by ID
+func (s *FileStore) GetRunInfo(ctx context.Context, id string) (*RunInfo, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -214,18 +214,18 @@ func (s *FileStore) GetRun(ctx context.Context, id string) (*RunInfo, error) {
 	return nil, ErrNotFound
 }
 
-func (s *FileStore) GetWorkflowRuns(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
-	runs, ok := s.workflowRuns[workflowID]
+func (s *FileStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
+	ris, ok := s.workflowRunInfos[workflowID]
 	if !ok {
 		return nil, ErrNotFound
 	}
 
 	if limit < 0 {
-		return runs.set[offset:], nil
+		return ris.set[offset:], nil
 	}
 
 	res := make([]*RunInfo, 0, limit)
-	for _, run := range runs.set {
+	for _, run := range ris.set {
 		if offset > 0 {
 			offset--
 			continue
@@ -238,7 +238,7 @@ func (s *FileStore) GetWorkflowRuns(ctx context.Context, workflowID string, offs
 	return res, nil
 }
 
-func (s *FileStore) PutRun(ctx context.Context, run *RunInfo) error {
+func (s *FileStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
 	}
@@ -247,19 +247,19 @@ func (s *FileStore) PutRun(ctx context.Context, run *RunInfo) error {
 	}
 
 	s.lock.Lock()
-	if workflowRuns, ok := s.workflowRuns[run.WorkflowID]; ok {
-		workflowRuns.Add(run)
+	if workflowRunInfos, ok := s.workflowRunInfos[run.WorkflowID]; ok {
+		workflowRunInfos.Add(run)
 	} else {
-		workflowRuns = NewRunSet()
-		workflowRuns.Add(run)
-		s.workflowRuns[run.WorkflowID] = workflowRuns
+		workflowRunInfos = NewRunInfoSet()
+		workflowRunInfos.Add(run)
+		s.workflowRunInfos[run.WorkflowID] = workflowRunInfos
 	}
 	s.runs.Add(run)
 	s.lock.Unlock()
 	return s.writeToFile()
 }
 
-func (s *FileStore) DeleteAllWorkflowRuns(ctx context.Context, workflowID string) error {
+func (s *FileStore) DeleteAllWorkflowRunInfos(ctx context.Context, workflowID string) error {
 	return fmt.Errorf("not finished: FileStore delete all workflow runs")
 }
 
@@ -310,9 +310,9 @@ func (s *FileStore) loadFromFile() (err error) {
 	}
 
 	state := struct {
-		Workflows    *WorkflowSet
-		WorkflowRuns map[string]*RunSet
-		Runs         *RunSet
+		Workflows        *WorkflowSet
+		WorkflowRunInfos map[string]*RunInfoSet
+		Runs             *RunInfoSet
 	}{}
 	if err := json.Unmarshal(data, &state); err != nil {
 		log.Debugw("FileStore deserializing from JSON", "error", err)
@@ -322,8 +322,8 @@ func (s *FileStore) loadFromFile() (err error) {
 	if state.Workflows != nil {
 		s.workflows = state.Workflows
 	}
-	if state.WorkflowRuns != nil {
-		s.workflowRuns = state.WorkflowRuns
+	if state.WorkflowRunInfos != nil {
+		s.workflowRunInfos = state.WorkflowRunInfos
 	}
 	if state.Runs != nil {
 		s.runs = state.Runs
@@ -340,13 +340,13 @@ func (s *FileStore) writeToFile() error {
 // Only use this when you have a surrounding lock
 func (s *FileStore) writeToFileNoLock() error {
 	state := struct {
-		Workflows    *WorkflowSet
-		WorkflowRuns map[string]*RunSet
-		Runs         *RunSet
+		Workflows        *WorkflowSet
+		WorkflowRunInfos map[string]*RunInfoSet
+		Runs             *RunInfoSet
 	}{
-		Workflows:    s.workflows,
-		WorkflowRuns: s.workflowRuns,
-		Runs:         s.runs,
+		Workflows:        s.workflows,
+		WorkflowRunInfos: s.workflowRunInfos,
+		Runs:             s.runs,
 	}
 	data, err := json.Marshal(state)
 	if err != nil {

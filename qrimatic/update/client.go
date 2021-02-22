@@ -132,9 +132,9 @@ func (c *Client) Workflow(ctx context.Context, name *string, workflow *Workflow)
 	return nil
 }
 
-// Runs shows the history of workflow execution
-func (c *Client) Runs(ctx context.Context, p *lib.ListParams, res *[]*RunInfo) error {
-	runs, err := c.sch.Runs(ctx, p.Offset, p.Limit)
+// RunInfos shows the history of workflow execution
+func (c *Client) RunInfos(ctx context.Context, p *lib.ListParams, res *[]*RunInfo) error {
+	runs, err := c.sch.RunInfos(ctx, p.Offset, p.Limit)
 	if err != nil {
 		return err
 	}

@@ -98,10 +98,10 @@ func (s *Server) RunsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) GetRunHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) GetRunInfoHandler(w http.ResponseWriter, r *http.Request) {
 	datasetID := r.FormValue("name")
 	runNumber := apiutil.ReqParamInt(r, "number", 0)
-	run, err := s.sched.GetRun(r.Context(), datasetID, runNumber)
+	run, err := s.sched.GetRunInfo(r.Context(), datasetID, runNumber)
 	if err != nil {
 		apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
 		return
