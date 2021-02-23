@@ -1,21 +1,17 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ReactTooltip from 'react-tooltip'
 
-import DropdownButton, { Option } from '../../chrome/DropdownButton'
+import Button from '../../chrome/Button'
 import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
-import { applyWorkflowTransform, saveAndApplyWorkflowTransform, setRunMode } from './state/workflowActions'
-import { RunMode, selectRunMode, selectWorkflow } from './state/workflowState'
+import { applyWorkflowTransform, saveAndApplyWorkflowTransform } from './state/workflowActions'
+import { selectRunMode, selectWorkflow } from './state/workflowState'
 
 export interface RunBarProps {
  status: RunStatus
  onRun?: () => void
 }
-
-const runModes: Option<RunMode>[] = [
-  { value: 'apply', title: 'Dry Run', description: 'apply transform & preview results without saving'},
-  { value: 'save', title: 'Run & Save', description: 'run script & save results to version history'},
-]
 
 const RunBar: React.FC<RunBarProps> = ({
   status,
@@ -38,25 +34,25 @@ const RunBar: React.FC<RunBarProps> = ({
 
   return (
     <div>
-      <div className='flex'>
-        <div className='flex-2 mr-2'>
+      <div className='flex w-36 items-center'>
+        <div className='mr-4'>
           <div className='inline-block align-middle'>
             <RunStatusIcon state={status} size='md' />
           </div>
         </div>
-        <div className='flex-1 text-right'>
+        <div className='w-36'>
           {(status === "running")
-            ? <button className='relative rounded-md bg-gray-500 font-bold text-white p-1 pr-5 pl-5' onClick={() => { handleCancel() }}>Cancel</button>
-            : <DropdownButton
-                id='dry-run'
-                value={(runMode === 'apply') ? runModes[0] : runModes[1]}
-                onClick={() => { handleRun() }}
-                onChangeValue={(opt: Option<RunMode>) => { dispatch(setRunMode(opt.value)) }}
-                options={runModes}
-                />
+            ? <Button className='w-24' onClick={() => { handleCancel() }}>Cancel</Button>
+            : <div data-tip data-for='dry-run'><Button className='w-24' onClick={() => { handleRun() }}>Dry Run</Button></div>
           }
         </div>
       </div>
+      <ReactTooltip
+        id='dry-run'
+        effect='solid'
+      >
+        Try this script and preview the results without saving
+      </ReactTooltip>
     </div>
   )
 }
