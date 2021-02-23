@@ -1,13 +1,91 @@
 package scheduler
 
-// import (
-// 	"context"
-// 	"fmt"
-// 	"io/ioutil"
-// 	"os"
-// 	"path/filepath"
-// 	"testing"
-// )
+import (
+	"context"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"testing"
+	"time"
+
+	"github.com/google/go-cmp/cmp"
+	"github.com/qri-io/iso8601"
+	"github.com/qri-io/qri/event"
+)
+
+func TestFileStore(t *testing.T) {
+	tmp, err := ioutil.TempDir(os.TempDir(), "TestStoreFile")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmp)
+	newStore := func() Store {
+		store, err := NewFileStore(filepath.Join(tmp, "workflows.json"), event.NilBus)
+		if err != nil {
+			t.Fatalf("creating new store: %s", err)
+		}
+		return store
+	}
+	RunWorkflowStoreTests(t, newStore)
+}
+
+// DurationCompare can be used in cmp.Comparer to create a cmp.Option that allows
+// a cmp.Diff of `iso8601.Duration`s
+func DurationCompare(x, y iso8601.Duration) bool {
+	return x.String() == y.String()
+}
+
+func TestSubscribe(t *testing.T) {
+	tmp, err := ioutil.TempDir(os.TempDir(), "TestStoreFile")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmp)
+
+	ctx := context.Background()
+	bus := event.NewBus(ctx)
+	store, err := NewFileStore(filepath.Join(tmp, "workflows.json"), bus)
+	if err != nil {
+		t.Fatalf("creating new store: %s", err)
+	}
+
+	w, err := NewCronWorkflow("w", "owner_ID", "dataset_ID", "R/PT1H")
+	if err != nil {
+		t.Fatalf("creating workflow: %s", err)
+	}
+	wID := w.ID
+	if err := store.PutWorkflow(ctx, w); err != nil {
+		t.Fatalf("putting workflow into store: %s", err)
+	}
+	expect := w.Copy()
+	expect.Status = "running"
+
+	bus.Publish(ctx, ETWorkflowStarted, expect)
+	// Better way to ensure we have given enough time for the store get the event & update?
+	<-time.After(time.Second)
+
+	got, err := store.GetWorkflow(ctx, wID)
+	if err != nil {
+		t.Fatalf("getting workflow from store: %s", err)
+	}
+	if diff := cmp.Diff(expect, got, cmp.Comparer(DurationCompare)); diff != "" {
+		t.Errorf("result mismatch (-want +got):\n%s", diff)
+	}
+
+	expect.Status = "failed"
+
+	bus.Publish(ctx, ETWorkflowCompleted, expect)
+	// Better way to ensure we have given enough time for the store get the event & update?
+	<-time.After(time.Second)
+
+	got, err = store.GetWorkflow(ctx, wID)
+	if err != nil {
+		t.Fatalf("getting workflow from store: %s", err)
+	}
+	if diff := cmp.Diff(expect, got, cmp.Comparer(DurationCompare)); diff != "" {
+		t.Errorf("result mismatch (-want +got):\n%s", diff)
+	}
+}
 
 // func TestFbWorkflowStore(t *testing.T) {
 // 	tmp, err := ioutil.TempDir(os.TempDir(), "TestFsWorkflowStore")
@@ -15,7 +93,7 @@ package scheduler
 // 		t.Fatal(err)
 // 	}
 // 	defer os.RemoveAll(tmp)
-// 	newStore := func() WorkflowStore {
+// 	newStore := func() Store {
 // 		return NewFlatbufferWorkflowStore(filepath.Join(tmp, "workflows.dat"))
 // 	}
 // 	RunWorkflowStoreTests(t, newStore)

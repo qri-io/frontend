@@ -10,7 +10,7 @@ import (
 	"github.com/multiformats/go-multihash"
 )
 
-// RunMulticodecType is a CID prefix for scheduler.Run content identifiers
+// RunMulticodecType is a CID prefix for scheduler.RunInfo content identifiers
 // TODO(b5) - using a dummy codec number for now. Pick a real one!
 const RunMulticodecType = 2200
 
@@ -23,13 +23,8 @@ func runID(workflowID string, created time.Time) (string, error) {
 	return cid.NewCidV1(RunMulticodecType, multihash.Multihash(mh)).String(), nil
 }
 
-// Run is a record of workflow execution
-// RunSet have one of three execution states, which describe it's position in
-// the execution lifecycle:
-// * unexected: workflow.RunStart == nil && workflow.RunStop == nil
-// * executing: !workflow.RunStart == nil && workflow.RunStop == nil
-// * completed: !workflow.RunStart == nil && !workflow.RunStop == nil
-type Run struct {
+// RunInfo is a record of workflow execution
+type RunInfo struct {
 	ID          string     `json:"ID"`
 	WorkflowID  string     `json:"workflowID"`
 	Number      int        `json:"number"`
@@ -39,15 +34,15 @@ type Run struct {
 	LogFilePath string     `json:"logFilePath,omitempty"`
 }
 
-// NewRun constructs a run pointer
-func NewRun(workflowID string, number int) (*Run, error) {
+// NewRunInfo constructs a run pointer
+func NewRunInfo(workflowID string, number int) (*RunInfo, error) {
 	created := NowFunc()
 	id, err := runID(workflowID, created)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Run{
+	return &RunInfo{
 		ID:         id,
 		WorkflowID: workflowID,
 		Number:     number,
@@ -57,11 +52,11 @@ func NewRun(workflowID string, number int) (*Run, error) {
 
 // Copy allocates a new Run pointer with all fields set to the value of the
 // receiver
-func (r *Run) Copy() *Run {
+func (r *RunInfo) Copy() *RunInfo {
 	if r == nil {
 		return nil
 	}
-	return &Run{
+	return &RunInfo{
 		Number:      r.Number,
 		Start:       r.Start,
 		Stop:        r.Stop,
@@ -72,30 +67,30 @@ func (r *Run) Copy() *Run {
 
 // LogName returns a canonical name string for a run that's executed and saved
 // to a logging system
-func (r *Run) LogName() string {
+func (r *RunInfo) LogName() string {
 	return fmt.Sprintf("%s-%d", r.WorkflowID, r.Number)
 }
 
-// RunSet is a list of RunSet that implements the sort.Interface, sorting a list
-// of RunSet in reverse-chronological-then-alphabetical order
-type RunSet struct {
-	set []*Run
+// RunInfoSet is a list of RunInfoSet that implements the sort.Interface, sorting a list
+// of RunInfoSet in reverse-chronological-then-alphabetical order
+type RunInfoSet struct {
+	set []*RunInfo
 }
 
-// NewRunSet constructs a RunSet.
-func NewRunSet() *RunSet {
-	return &RunSet{}
+// NewRunInfoSet constructs a RunInfoSet.
+func NewRunInfoSet() *RunInfoSet {
+	return &RunInfoSet{}
 }
 
-func (rs RunSet) Len() int { return len(rs.set) }
-func (rs RunSet) Less(i, j int) bool {
+func (rs RunInfoSet) Len() int { return len(rs.set) }
+func (rs RunInfoSet) Less(i, j int) bool {
 	return lessNilTime(rs.set[i].Start, rs.set[j].Start)
 }
-func (rs RunSet) Swap(i, j int) { rs.set[i], rs.set[j] = rs.set[j], rs.set[i] }
+func (rs RunInfoSet) Swap(i, j int) { rs.set[i], rs.set[j] = rs.set[j], rs.set[i] }
 
-func (rs *RunSet) Add(r *Run) {
+func (rs *RunInfoSet) Add(r *RunInfo) {
 	if rs == nil {
-		*rs = RunSet{set: []*Run{r}}
+		*rs = RunInfoSet{set: []*RunInfo{r}}
 		return
 	}
 
@@ -109,7 +104,7 @@ func (rs *RunSet) Add(r *Run) {
 	sort.Sort(rs)
 }
 
-func (rs *RunSet) Remove(id string) (removed bool) {
+func (rs *RunInfoSet) Remove(id string) (removed bool) {
 	for i, run := range rs.set {
 		if run.ID == id {
 			if i+1 == len(rs.set) {
@@ -124,14 +119,14 @@ func (rs *RunSet) Remove(id string) (removed bool) {
 	return false
 }
 
-// MarshalJSON serializes RunSet to an array of Workflows
-func (rs RunSet) MarshalJSON() ([]byte, error) {
+// MarshalJSON serializes RunInfoSet to an array of Workflows
+func (rs RunInfoSet) MarshalJSON() ([]byte, error) {
 	return json.Marshal(rs.set)
 }
 
 // UnmarshalJSON deserializes from a JSON array
-func (rs *RunSet) UnmarshalJSON(data []byte) error {
-	set := []*Run{}
+func (rs *RunInfoSet) UnmarshalJSON(data []byte) error {
+	set := []*RunInfo{}
 	if err := json.Unmarshal(data, &set); err != nil {
 		return err
 	}

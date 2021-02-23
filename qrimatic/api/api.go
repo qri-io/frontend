@@ -50,7 +50,7 @@ func NewServer(inst *lib.Instance) (*Server, error) {
 	var store scheduler.Store
 	// switch cfg.Type {
 	// case "fs":
-	store, err = scheduler.NewFileStore(filepath.Join(path, "workflows.json"))
+	store, err = scheduler.NewFileStore(filepath.Join(path, "workflows.json"), inst.Bus())
 	// case "mem":
 	// 	workflowStore = scheduler.NewMemStore()
 	// 	logStore = scheduler.NewMemStore()

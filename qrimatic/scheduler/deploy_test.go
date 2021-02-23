@@ -7,15 +7,15 @@ import (
 	"testing"
 
 	"github.com/qri-io/dataset"
-	"github.com/qri-io/iso8601"
+	"github.com/qri-io/ioes"
 	"github.com/qri-io/qfs"
 	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/event"
 	"github.com/qri-io/qri/lib"
 	repotest "github.com/qri-io/qri/repo/test"
-	"github.com/qri-io/qrimatic/scheduler"
 )
 
+// requires circular import
 func TestDeploy(t *testing.T) {
 	tr, err := repotest.NewTempRepo("foo", "deploy_test", repotest.NewTestCrypto())
 	if err != nil {
@@ -52,12 +52,20 @@ func TestDeploy(t *testing.T) {
 	}
 	firedEventWg.Wait()
 
-	s, err := NewService(inst)
-	if err != nil {
-		t.Fatal(err)
+	store := NewMemStore(inst.Bus())
+
+	factory := func(ctx context.Context) RunWorkflowFunc {
+		return func(ctx context.Context, stream ioes.IOStreams, workflow *Workflow) error {
+			return nil
+		}
 	}
+
+	// NewService is fro
+	c := NewCron(store, factory, inst.Bus())
+
 	username := cfg.Profile.Peername
-	workflow, err := scheduler.NewCronWorkflow(fmt.Sprintf("%s/dataset_bar", username), "ownerID", "datasetID", "R/PT1H")
+
+	workflow, err := NewCronWorkflow("workflowName", "ownerID", fmt.Sprintf("%s/dataset_bar", username), "R/PT1H")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -66,7 +74,7 @@ func TestDeploy(t *testing.T) {
 		Steps: []*dataset.TransformStep{
 			{Syntax: "starlark", Category: "setup", Script: ""},
 			{Syntax: "starlark", Category: "download", Script: "def download(ctx):\n\treturn"},
-			{Syntax: "starlark", Category: "transform", Script: "def transform(ds, ctx):\n\tds.set_body([[1,2,3]])"},
+			{Syntax: "starlark", Category: "transform", Script: "def transform(ds, ctx):\n\tds.set_body({'first': [1,2,3]})"},
 		},
 	}
 
@@ -75,16 +83,8 @@ func TestDeploy(t *testing.T) {
 		Workflow:  workflow,
 		Transform: tf,
 	}
-	_, err = s.Deploy(ctx, dp)
+	_, err = c.Deploy(ctx, inst, dp)
 	if err != nil {
 		t.Fatal(err)
 	}
-}
-
-func mustRepeatingInterval(s string) iso8601.RepeatingInterval {
-	ri, err := iso8601.ParseRepeatingInterval(s)
-	if err != nil {
-		panic(err)
-	}
-	return ri
 }

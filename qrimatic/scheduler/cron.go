@@ -37,10 +37,10 @@ type Service interface {
 	Workflow(ctx context.Context, id string) (*Workflow, error)
 	// WorkflowForDataset gets a single scheduled workflow by dataset identifier
 	WorkflowForDataset(ctx context.Context, id string) (*Workflow, error)
-	// Runs gives a log of executed workflows
-	Runs(ctx context.Context, offset, limit int) ([]*Run, error)
-	// GetRun returns a single executed workflow by workflow.LogName
-	GetRun(ctx context.Context, id string, runNumber int) (*Run, error)
+	// RunInfos gives a log of executed workflows
+	RunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error)
+	// GetRunInfo returns a single executed workflow by workflow.LogName
+	GetRunInfo(ctx context.Context, id string, runNumber int) (*RunInfo, error)
 	// // RunLogFile returns a reader for a file at the given name
 	// RunLogFile(ctx context.Context, id string, runNumber int) (io.ReadCloser, error)
 
@@ -94,6 +94,25 @@ func (c *Cron) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflo
 	return c.store.ListWorkflows(ctx, offset, limit)
 }
 
+// ListWorkflowsByStatus proxies to the scheduler store for reading workflows by status
+// returns workflows is reverse chronological order by `LatestStart`
+func (c *Cron) ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error) {
+	return c.store.ListWorkflowsByStatus(ctx, status, offset, limit)
+}
+
+// ListRunningCollection converts currently running workflows into `WorkflowInfo`s
+func (c *Cron) ListRunningCollection(ctx context.Context, offset, limit int) ([]*WorkflowInfo, error) {
+	ws, err := c.ListWorkflowsByStatus(context.Background(), StatusRunning, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	wis := []*WorkflowInfo{}
+	for _, w := range ws {
+		wis = append(wis, w.Info())
+	}
+	return wis, nil
+}
+
 // WorkflowForName gets a workflow by it's name (which often matches the dataset name)
 func (c *Cron) WorkflowForName(ctx context.Context, name string) (*Workflow, error) {
 	return c.store.GetWorkflowByName(ctx, name)
@@ -109,13 +128,13 @@ func (c *Cron) WorkflowForDataset(ctx context.Context, id string) (*Workflow, er
 	return c.store.GetWorkflowByDatasetID(ctx, id)
 }
 
-// Runs returns a list of workflows that have been executed
-func (c *Cron) Runs(ctx context.Context, offset, limit int) ([]*Run, error) {
-	return c.store.ListRuns(ctx, offset, limit)
+// RunInfos returns a list of workflows that have been executed
+func (c *Cron) RunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
+	return c.store.ListRunInfos(ctx, offset, limit)
 }
 
-// GetRun gives a specific Run by datasetID and run Number
-func (c *Cron) GetRun(ctx context.Context, datasetID string, runNumber int) (*Run, error) {
+// GetRunInfo gives a specific Run by datasetID and run Number
+func (c *Cron) GetRunInfo(ctx context.Context, datasetID string, runNumber int) (*RunInfo, error) {
 	return nil, fmt.Errorf("not finished: service get run by datasetID and runNumber")
 }
 
@@ -203,22 +222,25 @@ func (c *Cron) Start(ctx context.Context) error {
 	}
 }
 
+// RunWorkflow runs and updates the workflow
+// It emits `ETWorkflowStarted` and `ETWorkflowCompleted` events with the updated
+// workflow events. It is not responsible for storing the resultant workflow.
 func (c *Cron) RunWorkflow(ctx context.Context, workflow *Workflow, triggerID string) {
 	c.runLk.Lock()
 	defer c.runLk.Unlock()
 
 	runner := c.factory(ctx)
 
+	log.Debugf("run workflow: %s", workflow.Name)
+	if err := workflow.Advance(triggerID); err != nil {
+		log.Debug(err)
+	}
+
 	go func(j *Workflow) {
 		if err := c.pub.Publish(ctx, ETWorkflowStarted, j); err != nil {
 			log.Debug(err)
 		}
 	}(workflow.Copy())
-
-	log.Debugf("run workflow: %s", workflow.Name)
-	if err := workflow.Advance(triggerID); err != nil {
-		log.Debug(err)
-	}
 
 	streams := ioes.NewDiscardIOStreams()
 	if lfc, ok := c.store.(LogFileCreator); ok {
@@ -233,34 +255,21 @@ func (c *Cron) RunWorkflow(ctx context.Context, workflow *Workflow, triggerID st
 	if err := runner(ctx, streams, workflow); err != nil {
 		log.Errorf("run workflow: %s error: %s", workflow.Name, err.Error())
 		workflow.CurrentRun.Error = err.Error()
+		workflow.Status = StatusFailed
 	} else {
 		log.Debugf("run workflow: %s success", workflow.Name)
 		workflow.CurrentRun.Error = ""
+		workflow.Status = StatusSucceeded
 	}
 	now := NowFunc()
 	workflow.CurrentRun.Stop = &now
-	workflow.LatestRunStart = workflow.CurrentRun.Start
+	workflow.LatestEnd = &now
 
 	go func(j *Workflow) {
 		if err := c.pub.Publish(ctx, ETWorkflowCompleted, j); err != nil {
 			log.Debug(err)
 		}
 	}(workflow.Copy())
-
-	// the updated workflow that goes to the schedule store shouldn't have a log path
-	// scheduleWorkflow := workflow.Copy()
-	// scheduleWorkflow.LogFilePath = ""
-	// scheduleWorkflow.RunStart = time.Time{}
-	// scheduleWorkflow.RunStop = time.Time{}
-	// scheduleWorkflow.PrevRunStart = workflow.RunStart
-	if err := c.store.PutWorkflow(ctx, workflow); err != nil {
-		log.Error(err)
-	}
-
-	// workflow.Name = workflow.LogName()
-	// if err := c.log.PutWorkflow(ctx, workflow); err != nil {
-	// 	log.Error(err)
-	// }
 }
 
 // Schedule adds a workflow to the cron scheduler

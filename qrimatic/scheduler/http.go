@@ -150,8 +150,8 @@ func (c HTTPClient) UpdateWorkflow(ctx context.Context, workflow *Workflow) erro
 	return fmt.Errorf("not implemented")
 }
 
-// Runs gives a log of executed workflows for a dataset name
-func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*Run, error) {
+// RunInfos gives a log of executed workflows for a dataset name
+func (c HTTPClient) RunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/runs?offset=%d&limit=%d", c.Addr, offset, limit), nil)
 	if err != nil {
 		return nil, err
@@ -166,8 +166,8 @@ func (c HTTPClient) Runs(ctx context.Context, offset, limit int) ([]*Run, error)
 	return decodeJSONRunsResponse(res)
 }
 
-// GetRun returns a single executed workflow by workflow.LogName
-func (c HTTPClient) GetRun(ctx context.Context, logName string, number int) (*Run, error) {
+// GetRunInfo returns a single executed workflow by workflow.LogName
+func (c HTTPClient) GetRunInfo(ctx context.Context, logName string, number int) (*RunInfo, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/run?name=%s", c.Addr, logName), nil)
 	if err != nil {
 		return nil, err
@@ -261,33 +261,18 @@ func decodeJSONWorkflowResponse(res *http.Response) (*Workflow, error) {
 	return env.Data, err
 }
 
-func decodeJSONRunsResponse(res *http.Response) ([]*Run, error) {
+func decodeJSONRunsResponse(res *http.Response) ([]*RunInfo, error) {
 	defer res.Body.Close()
 	env := struct {
-		Data []*Run
+		Data []*RunInfo
 	}{}
 	err := json.NewDecoder(res.Body).Decode(&env)
 	return env.Data, err
 }
 
-func decodeJSONRunResponse(res *http.Response) (*Run, error) {
+func decodeJSONRunResponse(res *http.Response) (*RunInfo, error) {
 	defer res.Body.Close()
-	run := &Run{}
+	run := &RunInfo{}
 	err := json.NewDecoder(res.Body).Decode(run)
 	return run, err
 }
-
-// // ServeHTTP spins up an HTTP server at the specified address
-// func (c *Cron) ServeHTTP(addr string) error {
-// 	m := http.NewServeMux()
-// 	AddCronRoutes(m, c, noopMiddlware)
-// 	s := &http.Server{
-// 		Addr:    addr,
-// 		Handler: m,
-// 	}
-// 	return s.ListenAndServe()
-// }
-
-// func noopMiddlware(h http.HandlerFunc) http.HandlerFunc {
-// 	return h
-// }
