@@ -114,8 +114,20 @@ export function workflowDeployStatus(w?: Workflow): DeployStatus {
   return 'deployed'
 }
 
+export type WorkflowStatus = 
+| 'running'
+| 'succeeded'
+| 'failed'
+
 export interface WorkflowInfo extends VersionInfo {
   id: string
+  latestStart: Date
+  latestEnd: Date
+  status: WorkflowStatus
+}
+
+export function datasetAliasFromWorkflowInfo(wfi: WorkflowInfo): string {
+  return `${wfi.username}/${wfi.name}`
 }
 
 export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
@@ -142,6 +154,9 @@ export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
     commitTime: data.commitTime,
     numVersions: data.numVersions,
 
-    id: data.id || ''
+    id: data.id,
+    latestStart: data.latestStart,
+    latestEnd: data.latestEnd,
+    status: data.status
   }
 }
