@@ -2,6 +2,7 @@ import React from 'react';
 
 export type ButtonType = 'primary'
   | 'light'
+  | 'warning'
   | 'danger'
   | 'dark'
 
@@ -30,6 +31,9 @@ const Button: React.FC<ButtonProps> = ({
       break
     case 'dark':
       colorClasses = 'text-white bg-qrinavy-400 hover:bg-qrinavy-500 focus:ring-qrinavy-400'
+      break
+    case 'warning':
+      colorClasses = 'text-gray-700 bg-yellow-300 hover:bg-yellow-400 focus:ring-yellow-400'
       break
     case 'danger':
       colorClasses = 'text-white bg-red-600 hover:bg-red-700 focus:ring-red-500'

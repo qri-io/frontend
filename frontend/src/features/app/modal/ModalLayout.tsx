@@ -5,7 +5,7 @@ import Icon from '../../../chrome/Icon'
 import Button, { ButtonType } from '../../../chrome/Button'
 import { clearModal } from '../state/appActions'
 
-export type ModalLayoutType = 'info' | 'danger'
+export type ModalLayoutType = 'info' | 'warning' | 'danger'
 
 export interface ModalLayoutProps {
   title: string
@@ -13,6 +13,7 @@ export interface ModalLayoutProps {
   icon?: string
   actionButtonText: string
   action: () => void
+  cancelButtonText?: string
 }
 
 const ModalLayout: React.FC<ModalLayoutProps> = ({
@@ -21,6 +22,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
     icon,
     actionButtonText,
     action,
+    cancelButtonText='Cancel',
     children
   }) => {
 
@@ -39,6 +41,13 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
   let actionButtonType: ButtonType = 'primary'
   let iconBgColorClass = 'bg-qriblue-100'
   let iconColorClass = 'text-qriblue-600'
+
+  if (type === 'warning') {
+    actionButtonType = 'warning'
+    displayIcon = 'exclamationTriangle'
+    iconBgColorClass = 'bg-yellow-100'
+    iconColorClass = 'text-yellow-400'
+  }
 
   if (type === 'danger') {
     actionButtonType = 'danger'
@@ -77,7 +86,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
           onClick={handleCancelButtonClick}
           className='mr-2'
         >
-        Cancel
+         {cancelButtonText}
         </Button>
       </div>
     </>

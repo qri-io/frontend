@@ -9,6 +9,7 @@ export const selectModal = (state: RootState): Modal => state.app.modal
 export enum ModalType {
   none = '',
   schedulePicker = 'schedulePicker',
+  unsavedChanges = 'unsavedChanges',
   deployWorkflow = 'deployWorkflow',
   removeDataset = 'removeDataset',
   logIn = 'logIn',
