@@ -20,5 +20,10 @@ export const deployReducer = createReducer(initialState, {
   'API_WORKFLOW_SUCCESS': (state: DeployState, action) => {
     const w = action.payload.data as Workflow
     state.status[w.id] = workflowDeployStatus(w)
-  }
+  },
+  // on successful deployment, derive deploy state
+  'API_DEPLOY_SUCCESS': (state: DeployState, action) => {
+    const w = action.payload.data.workflow as Workflow
+    state.status[w.id] = workflowDeployStatus(w)
+  },
 })

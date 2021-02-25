@@ -53,7 +53,10 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
         pageSize
       },
       segments: {
-        peername: ref.username,
+        // TODO(b5): this is a hack for now while we don't have session support,
+        // restore ASAP
+        // peername: ref.username,
+        peername: 'me',
         name: ref.name
       },
       map: mapBody
@@ -74,7 +77,7 @@ export function removeDataset (ref: QriRef): ApiActionThunk {
           }
         }
       }
-  
+
       return dispatch(action)
     }
   }

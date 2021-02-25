@@ -5,10 +5,10 @@ import { RunStatus } from '../../qri/run'
 
 interface RunStatusBadgeProps {
   status: RunStatus
-  small?: boolean
+  size?: 'md' | 'sm' | 'xs'
 }
 
-const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, small = false }) => {
+const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, size = 'md' }) => {
 
   let icon = ''
   let displayStatus = ''
@@ -52,14 +52,16 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, small = false }
       break
   }
 
-  if (small) {
+  if (size === 'sm') {
     iconSize = 'sm'
     yPaddingClass = 'py-0.5'
+  } else if (size === 'xs') {
+    iconSize = 'sm'
   }
 
   return (
-    <div className={`${backgroundClass} text-white font-semibold flex items-center ${yPaddingClass} pl-1 pr-2 rounded-xl`}>
-      <Icon icon={icon} className='text-white mr-1' size={iconSize} spin={spin} /> {displayStatus}
+    <div className={`${backgroundClass} text-white font-semibold flex items-center ${yPaddingClass} pl-1 pr-1 rounded-xl`}>
+      <Icon icon={icon} className='text-white' size={iconSize} spin={spin} /> {size !== 'xs' && (<div className='ml-1'>{displayStatus}</div>)}
     </div>
   )
 }

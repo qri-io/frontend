@@ -2,7 +2,7 @@ import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qri/eventLog'
 import { NewWorkflow, Workflow, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
-import { 
+import {
   WORKFLOW_CHANGE_TRIGGER,
   WORKFLOW_CHANGE_TRANSFORM_STEP,
   RUN_EVENT_LOG,
@@ -28,7 +28,7 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
     type: 'workflow',
     qriRef,
     [CALL_API]: {
-      endpoint: `workflow?dataset_id=${qriRef.username}/${qriRef.name}`,
+      endpoint: `workflow?dataset_id=me/${qriRef.name}`,
       method: 'GET',
       map: mapWorkflow
     }

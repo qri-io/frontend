@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { ConnectedRouter } from 'connected-react-router'
 import { useDispatch } from 'react-redux';
-import ReactTooltip from 'react-tooltip'
 
 import { history } from '../../store/store'
 import Routes from '../../routes'
@@ -15,9 +14,6 @@ const App: React.FC<any> = () => {
 
   useEffect(() => {
     dispatch(wsConnect())
-    // this "wires up" all of the tooltips, must be called on update, as tooltips
-    // in descendents can come and go
-    ReactTooltip.rebuild()
   })
 
 
@@ -36,14 +32,6 @@ const App: React.FC<any> = () => {
 
         See useEffect(), which calls rebuild() to re-bind all tooltipsToolti
       */}
-      <ReactTooltip
-        id='global'
-        place='bottom'
-        type='dark'
-        effect='solid'
-        delayShow={50}
-        multiline
-      />
     </div>
   );
 }

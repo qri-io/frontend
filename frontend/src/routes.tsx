@@ -29,6 +29,7 @@ const PrivateRoute: React.FC<any>  = ({ path, children }) => {
 
 
 export default function Routes () {
+  const user = useSelector(selectSessionUser)
 
   return (
     <div className='route-content h-full w-full'>
@@ -51,7 +52,11 @@ export default function Routes () {
         <Route path='/notifications'><NotificationList /></Route>
         <Route path='/notification_settings'><NotificationSettings /></Route>
 
-        <Route path='/'><Splash /></Route>
+        <Route path='/'>
+          {
+            user ? <Redirect to='/dashboard' /> : <Splash />
+          }
+        </Route>
       </Switch>
     </div>
   )
