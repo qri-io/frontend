@@ -33,7 +33,8 @@ interface WorkflowsTableProps {
   clearSelectedTrigger: boolean
   onRowClicked: (row: WorkflowInfo) => void
   onSelectedRowsChange: ({ selectedRows }: { selectedRows: WorkflowInfo[] }) => void
-  dashboard: boolean
+  // simplified: true will hide a number of "verbose" columns in the table
+  simplified?: boolean
 }
 
 // fieldValue returns a WorkflowInfo value for a given field argument
@@ -89,7 +90,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   onRowClicked,
   onSelectedRowsChange,
   clearSelectedTrigger,
-  dashboard=false
+  simplified=false
 }) => {
 
   const dispatch = useDispatch()
@@ -158,7 +159,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     {
       name: 'last run',
       selector: 'lastrun',
-      omit: dashboard,
+      omit: simplified,
       grow: 1,
       sortable: true,
       cell: (row: WorkflowInfo) => {
@@ -188,7 +189,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     {
       name: 'actions',
       selector: 'actions',
-      omit: dashboard,
+      omit: simplified,
       grow: 1,
       cell: (row: WorkflowInfo) => (row.id
           ? <ManualTriggerButton workflowID={row.id} />
@@ -198,7 +199,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     {
       name: '',
       selector: 'hamburger',
-      omit: dashboard,
+      omit: simplified,
       width: '120px',
       // eslint-disable-next-line react/display-name
       cell: (row: WorkflowInfo) => {

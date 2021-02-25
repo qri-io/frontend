@@ -52,12 +52,11 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, size = 'md' }) 
       break
   }
 
-  if (size === 'sm' || size === 'xs') {
-    iconSize = 'sm'
-  }
-
   if (size === 'sm') {
+    iconSize = 'sm'
     yPaddingClass = 'py-0.5'
+  } else if (size === 'xs') {
+    iconSize = 'sm'
   }
 
   return (

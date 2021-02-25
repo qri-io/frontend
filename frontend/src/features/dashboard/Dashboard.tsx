@@ -64,7 +64,7 @@ const Dashboard: React.FC<any> = () => {
                     clearSelectedTrigger={false}
                     onRowClicked={(row: WorkflowInfo) => {}}
                     onSelectedRowsChange={() => {}}
-                    dashboard
+                    simplified
                   />
               }
             </div>

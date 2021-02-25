@@ -9,7 +9,7 @@ import RunStatusIcon from '../run/RunStatusIcon'
 import DeployButtonWithStatusDescription from '../deploy/DeployStatusDescriptionButton'
 import SnackBar from '../snackBar/SnackBar'
 import { RunMode } from './state/workflowState'
-import WorkflowRecentActivity from './WorkflowRecentActivity'
+import SimpleActivityList from '../activityFeed/SimpleActivityList'
 
 export interface WorkflowOutlineProps {
   runMode: RunMode
@@ -67,11 +67,11 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
       </div>
     </div>
     <hr />
-    <div className=''>
+    <div>
       {workflow && <DeployButtonWithStatusDescription workflow={workflow} />}
     </div>
     <hr />
-    <WorkflowRecentActivity />
+    <SimpleActivityList />
     <SnackBar />
   </div>
 )
