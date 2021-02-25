@@ -17,15 +17,14 @@ export interface ModalLayoutProps {
 }
 
 const ModalLayout: React.FC<ModalLayoutProps> = ({
-    title,
-    type='info',
-    icon,
-    actionButtonText,
-    action,
-    cancelButtonText='Cancel',
-    children
-  }) => {
-
+  title,
+  type='info',
+  icon,
+  actionButtonText,
+  action,
+  cancelButtonText='Cancel',
+  children
+}) => {
   const dispatch = useDispatch()
 
   const handleCancelButtonClick = () => {
@@ -37,34 +36,14 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
     dispatch(clearModal())
   }
 
-  let displayIcon = 'info'
-  let actionButtonType: ButtonType = 'primary'
-  let iconBgColorClass = 'bg-qriblue-100'
-  let iconColorClass = 'text-qriblue-600'
-
-  if (type === 'warning') {
-    actionButtonType = 'warning'
-    displayIcon = 'exclamationTriangle'
-    iconBgColorClass = 'bg-yellow-100'
-    iconColorClass = 'text-yellow-400'
-  }
-
-  if (type === 'danger') {
-    actionButtonType = 'danger'
-    displayIcon = 'exclamationTriangle'
-    iconBgColorClass = 'bg-red-100'
-    iconColorClass = 'text-red-600'
-  }
-
-  // allow icon override
-  if (icon) displayIcon = icon
+  let { displayIcon, actionButtonType, iconBgColorClass, iconColorClass } = typeSettings(type)
 
   return (
     <>
       <div className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
         <div className='sm:flex sm:items-start'>
           <div className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10 ${iconBgColorClass}`}>
-            <Icon icon={displayIcon} className={`${iconColorClass}`} />
+            <Icon icon={icon || displayIcon} className={iconColorClass} />
           </div>
           <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
             <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>
@@ -91,6 +70,40 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
       </div>
     </>
   )
+}
+
+interface modalTypeConfig {
+  displayIcon: string
+  actionButtonType: ButtonType
+  iconBgColorClass: string
+  iconColorClass: string
+}
+
+function typeSettings(type: ModalLayoutType): modalTypeConfig {
+  switch (type) {
+    case 'warning':
+      return {
+        actionButtonType: 'warning',
+        displayIcon: 'exclamationTriangle',
+        iconBgColorClass: 'bg-yellow-100',
+        iconColorClass: 'text-yellow-400'
+      }
+   case 'danger':
+     return {
+        actionButtonType: 'danger',
+        displayIcon: 'exclamationTriangle',
+        iconBgColorClass: 'bg-red-100',
+        iconColorClass: 'text-red-600'
+     }
+   default:
+     return {
+        displayIcon: 'info',
+        actionButtonType: 'primary',
+        iconBgColorClass: 'bg-qriblue-100',
+        iconColorClass: 'text-qriblue-600'
+     }
+  }
+
 }
 
 export default ModalLayout
