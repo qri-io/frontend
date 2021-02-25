@@ -5,6 +5,7 @@ import { ModalType, selectModal } from '../state/appState'
 import DeployWorkflowModal from '../../deploy/DeployWorkflowModal'
 import RemoveDatasetModal, { RemoveDatasetModalProps } from '../../dataset/modal/RemoveDatasetModal'
 import ScheduleModal from '../../workflow/modal/ScheduleModal'
+import UnsavedChangesModal from '../../workflow/modal/UnsavedChangesModal'
 import LogInModal from '../../session/modal/LogInModal'
 import SignUpModal from '../../session/modal/SignUpModal'
 
@@ -54,6 +55,8 @@ const Modal: React.FC<any> = () => {
               switch (modal.type) {
                 case ModalType.schedulePicker:
                   return <ScheduleModal {...modal.props} />
+                case ModalType.unsavedChanges:
+                    return <UnsavedChangesModal {...modal.props} />
                 case ModalType.deployWorkflow:
                     return <DeployWorkflowModal {...modal.props} />
                 case ModalType.removeDataset:
