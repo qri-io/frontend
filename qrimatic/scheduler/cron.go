@@ -2,12 +2,14 @@ package scheduler
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 	"time"
 
 	golog "github.com/ipfs/go-log"
 	"github.com/qri-io/ioes"
+	"github.com/qri-io/qri/base/dsfs"
 	"github.com/qri-io/qri/event"
 )
 
@@ -253,9 +255,15 @@ func (c *Cron) RunWorkflow(ctx context.Context, workflow *Workflow, triggerID st
 	}
 
 	if err := runner(ctx, streams, workflow); err != nil {
-		log.Errorf("run workflow: %s error: %s", workflow.Name, err.Error())
-		workflow.CurrentRun.Error = err.Error()
-		workflow.Status = StatusFailed
+		if errors.Is(err, dsfs.ErrNoChanges) {
+			log.Debugf("run workflow: %s no changes", workflow.Name)
+			workflow.CurrentRun.Error = ""
+			workflow.Status = StatusNoChange
+		} else {
+			log.Errorf("run workflow: %s error: %s", workflow.Name, err.Error())
+			workflow.CurrentRun.Error = err.Error()
+			workflow.Status = StatusFailed
+		}
 	} else {
 		log.Debugf("run workflow: %s success", workflow.Name)
 		workflow.CurrentRun.Error = ""

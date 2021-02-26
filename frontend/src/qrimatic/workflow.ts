@@ -17,7 +17,7 @@ export interface Workflow {
 
   latestStart?: string
   latestEnd?: string
-  status: RunStatus
+  status: WorkflowStatus
   
   triggers?: WorkflowTrigger[]
   steps?: TransformStep[]
@@ -114,8 +114,21 @@ export function workflowDeployStatus(w?: Workflow): DeployStatus {
   return 'deployed'
 }
 
+export type WorkflowStatus = 
+| 'running'
+| 'succeeded'
+| 'failed'
+| 'unchanged'
+
 export interface WorkflowInfo extends VersionInfo {
   id: string
+  latestStart?: string
+  latestEnd?: string
+  status: WorkflowStatus
+}
+
+export function datasetAliasFromWorkflowInfo(wfi: WorkflowInfo): string {
+  return `${wfi.username}/${wfi.name}`
 }
 
 export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
@@ -142,6 +155,40 @@ export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
     commitTime: data.commitTime,
     numVersions: data.numVersions,
 
-    id: data.id || ''
+    id: data.id,
+    latestStart: data.latestStart,
+    latestEnd: data.latestEnd,
+    status: data.status
+  }
+}
+
+export function workflowInfoFromWorkflow(wf: Workflow): WorkflowInfo {
+  return {
+    username: wf.versionInfo?.username || '',
+    profileId: wf.versionInfo?.profileId || '',
+    name: wf.versionInfo?.name || '',
+    path: wf.versionInfo?.path || '',
+    
+    fsiPath: wf.versionInfo?.fsiPath || '',
+    foreign: wf.versionInfo?.foreign,
+    published: wf.versionInfo?.published,
+
+    metaTitle: wf.versionInfo?.metaTitle || '',
+    themeList: wf.versionInfo?.themeList || '',
+
+    bodyFormat: wf.versionInfo?.bodyFormat || '-',
+    bodySize: wf.versionInfo?.bodySize,
+    bodyRows: wf.versionInfo?.bodyRows,
+    numErrors: wf.versionInfo?.numErrors,
+
+    commitTitle: wf.versionInfo?.commitTitle,
+    commitMessage: wf.versionInfo?.commitMessage,
+    commitTime: wf.versionInfo?.commitTime,
+    numVersions: wf.versionInfo?.numVersions,
+
+    id: wf.id,
+    latestStart: wf.latestStart,
+    latestEnd: wf.latestEnd,
+    status: wf.status 
   }
 }

@@ -3,7 +3,6 @@ import thunk from 'redux-thunk'
 import { ThunkAction, Action } from '@reduxjs/toolkit';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router'
 import { createBrowserHistory, History } from 'history'
-import { JobState, jobsReducer } from '../features/job/state/jobState';
 import transfersReducer from '../features/transfer/state/transferState';
 import { apiMiddleware } from './api';
 import { RemoteEvents, websocketMiddleware } from '../features/websocket/middleware/websocket';
@@ -20,7 +19,6 @@ export const history = createBrowserHistory()
 
 export interface RootState {
   router: RouterState
-  jobs: JobState
   workflow: WorkflowState
   deploy: DeployState
   transfers: RemoteEvents
@@ -37,7 +35,6 @@ const rootReducer = (h: History) => combineReducers({
   // https://github.com/reduxjs/redux-toolkit/issues/506#issuecomment-614295927
   // router: connectRouter(h) as any as Reducer<RouterState>,
   router: connectRouter(h),
-  jobs: jobsReducer,
   transfers: transfersReducer,
   workflow: workflowReducer,
   app: appReducer,

@@ -12,19 +12,9 @@ import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import DropdownMenu, { DropDownMenuItem } from '../../chrome/DropdownMenu'
 import { pathToWorkflowEditor } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
-import { LogItem } from '../../qri/log';
 import { WorkflowInfo } from '../../qrimatic/workflow';
 
-// TODO (ramfox): this data helps us mock the expected log response from the backend
-// when a log contains run information, then we can remove this
-import activity from '../activityFeed/stories/data/activityLog.json'
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
-
-// helper function to have the `activity` be accepted as a `LogItem[]`
-function convertToLogItemList(list: any[]): LogItem[] {
-  return list as LogItem[]
-}
-const runActivities = convertToLogItemList(activity)
 
 interface WorkflowsTableProps {
   filteredWorkflows: WorkflowInfo[]
@@ -168,19 +158,25 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
         // in the WorkflowInfo. Once the backend supplies these values, we can rip
         // out this section that mocks durations & timestamps for us
         const {
-          runStatus,
-          runDuration,
-          timestamp
-        } = runActivities[Math.floor(Math.random() * runActivities.length)]
+          status,
+          latestStart,
+          latestEnd,
+          commitTime
+        } = row 
+
+        var duration: number | undefined
+        if (latestStart && latestEnd) {
+          duration = (new Date(latestEnd).getTime() - new Date(latestStart).getTime())/1000
+        }
 
         return (
           <div className='flex flex-col'>
             <div className='flex items-center mb-2'>
               <div className='font-bold mr-2'>23</div>
-              <RunStatusBadge status={runStatus} size='sm' />
+              <RunStatusBadge status={status} size='sm' />
             </div>
             <div className='text-gray-500 text-xs'>
-              <Icon icon='clock' size='sm'/> <span><DurationFormat seconds={runDuration} /> | <RelativeTimestamp timestamp={new Date(timestamp)}/></span>
+              <Icon icon='clock' size='sm'/> <span><DurationFormat seconds={duration} /> | <RelativeTimestamp timestamp={new Date(commitTime || '')}/></span>
             </div>
           </div>
         )

@@ -22,7 +22,7 @@ const Dashboard: React.FC<any> = () => {
   const loading = useSelector(selectIsCollectionLoading)
 
   useEffect(() => {
-    dispatch(loadCollection(1,50))
+    loadCollection(dispatch, 1,50)
   }, [dispatch])
 
   return (
