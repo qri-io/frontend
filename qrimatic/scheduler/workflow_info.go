@@ -83,7 +83,7 @@ func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, a
 			wis = append(wis, w.Info())
 			continue
 		}
-		wis = append(wis, &WorkflowInfo{VersionInfo: vi})
+		wis = append(wis, &WorkflowInfo{VersionInfo: vi, ID: vi.Alias()})
 	}
 
 	sort.Slice(wis, func(i, j int) bool {
