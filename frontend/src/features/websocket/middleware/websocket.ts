@@ -6,6 +6,7 @@ import { RootState } from '../../../store/store'
 import { jobScheduled, jobUnscheduled, jobStarted, jobStopped } from '../../job/state/jobActions'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
 import { runEventLog } from '../../workflow/state/workflowActions'
+import { workflowCompleted, workflowStarted } from '../../collection/state/collectionActions'
 
 type DagCompletion = number[]
 
@@ -80,6 +81,14 @@ const ETCronJobStarted = "cron:JobStarted"
 // payload is a Job
 // subscriptions do not block the publisher
 const ETCronJobCompleted = "cron:JobCompleted"
+// ETCronWorkflowStarted fires when a workflow has started running
+// payload is a Workflow
+// subscriptions do not block the publisher
+const ETCronWorkflowStarted = "cron:WorkflowStarted"
+// ETCronWorkflowCompleted fires when a workflow has finished running
+// payload is a Workflow
+// subscriptions do not block the publisher
+const ETCronWorkflowCompleted = "cron:WorkflowCompleted"
 	// ETCronJobScheduled fires when a job is registered for updating, or when
 	// a scheduled job changes
 	// payload is a Job
@@ -166,6 +175,12 @@ const middleware = () => {
           break
         case ETCronJobCompleted:
           dispatch(jobStopped(event.data))
+          break
+        case ETCronWorkflowStarted:
+          dispatch(workflowStarted(event.data))
+          break
+        case ETCronWorkflowCompleted:
+          dispatch(workflowCompleted(event.data))
           break
         default:
           // console.log(`received websocket event: ${event.type}`)
