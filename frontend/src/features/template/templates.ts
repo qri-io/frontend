@@ -4,7 +4,6 @@ import { Workflow } from '../../qrimatic/workflow'
 
 export const CSVDownload: Workflow = {
   id: 'CSVDownload',
-  datasetID: 'me/csv_download_template',
   runCount: 0,
   disabled: false,
 
