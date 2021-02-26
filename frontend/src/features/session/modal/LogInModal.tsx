@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
+import { getActionType } from '../../../store/api'
+import { AnyAction } from '@reduxjs/toolkit'
 
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
@@ -16,6 +18,7 @@ const LogInModal: React.FC = () => {
 
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
+  const [ loginError, setLoginError ] = useState('')
 
   const dispatch = useDispatch()
   const loading = useSelector(selectIsSessionLoading)
@@ -25,9 +28,14 @@ const LogInModal: React.FC = () => {
   }
 
   const handleButtonClick = () => {
-    dispatch(logIn(username, password)).then(() => {
-      dispatch(clearModal())
-    })
+    logIn(username, password)(dispatch)
+      .then((action: AnyAction) => {
+        if (getActionType(action) === 'failure') {
+          setLoginError(action.payload.err.message)
+          return
+        }
+        dispatch(clearModal())
+      })
   }
 
   return (
@@ -51,6 +59,9 @@ const LogInModal: React.FC = () => {
           />
           <Link to='/forgot-password'><div className='text-left text-xs font-semibold'>Forgot your Password?</div></Link>
         </div>
+
+        {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
+
         <Button size='lg' className='w-full mb-6' onClick={handleButtonClick}>
           {loading ? <SyncLoader color='#fff' size='6' /> : 'Log In'}
         </Button>

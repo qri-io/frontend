@@ -28,6 +28,9 @@ export const sessionReducer = createReducer(initialState, {
     }
     state.loading = false
   },
+  'API_LOGIN_FAILURE': (state, action) => {
+    state.loading = false
+  },
   'API_LOGOUT_SUCCESS': (state, action) => {
     state.user = undefined
   },
@@ -38,6 +41,9 @@ export const sessionReducer = createReducer(initialState, {
     state.user = {
       username: action.payload.username
     }
+    state.loading = false
+  },
+  'API_SIGNUP_FAILURE': (state, action) => {
     state.loading = false
   },
 })
