@@ -2,7 +2,6 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import JobList from './features/job/JobList';
 import TemplateList from './features/template/TemplateList';
 import ChangeReport from './features/changes/ChangeReport';
 import CollectionActivityFeed from './features/activityFeed/CollectionActivityFeed';
@@ -46,7 +45,6 @@ export default function Routes () {
         <Route path='/ds/:username/:name'><Dataset /></Route>
 
         <Route path='/run'><Run /></Route>
-        <Route path='/jobs'><JobList /></Route>
         <Route path='/changes'><ChangeReport /></Route>
 
         <Route path='/notifications'><NotificationList /></Route>
