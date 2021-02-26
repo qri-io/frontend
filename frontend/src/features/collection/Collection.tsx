@@ -3,15 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { SyncLoader } from 'react-spinners'
 
-import { loadCollection, loadRunningCollection } from './state/collectionActions'
+import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
 import Page from '../app/Page'
 import WorkflowsTable from './WorkflowsTable'
 import { WorkflowInfo } from '../../qrimatic/workflow'
 import Button from '../../chrome/Button'
 import Icon from '../../chrome/Icon'
-import { getActionType } from '../../store/api'
-import { AnyAction } from '@reduxjs/toolkit'
 
 const Collection: React.FC<any> = () => {
   const dispatch = useDispatch()
@@ -19,18 +17,7 @@ const Collection: React.FC<any> = () => {
   const loading = useSelector(selectIsCollectionLoading)
 
   useEffect(() => {
-    loadCollection(1,50)(dispatch)
-      .then(async (action: AnyAction) => {
-        if (getActionType(action) === 'failure') {
-          console.log("load collection failed:", action.payload.err.message)
-        }
-        return await loadRunningCollection()(dispatch)
-      })
-      .then((action: AnyAction) => {
-        if (getActionType(action) === 'failure') {
-          console.log("loading running collection failed:", action.payload.err.message)
-        }
-      })
+    loadCollection(dispatch, 1, 50)
   }, [dispatch])
 
   return (

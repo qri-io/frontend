@@ -83,6 +83,9 @@ func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, a
 			wis = append(wis, w.Info())
 			continue
 		}
+		// TODO (ramfox): using the dataset alias as the workflow id for now
+		// this should be replaced with the the `InitID`, once that is surfaced
+		// in the `VersionInfo`
 		wis = append(wis, &WorkflowInfo{VersionInfo: vi, ID: vi.Alias()})
 	}
 
