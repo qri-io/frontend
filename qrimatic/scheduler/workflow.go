@@ -31,13 +31,15 @@ const (
 type WorkflowStatus string
 
 const (
-	// StatusRunning indicates a script/step is currently executing
+	// StatusRunning indicates a workflow is currently executing
 	StatusRunning = WorkflowStatus("running")
-	// StatusSucceeded indicates a script/step has completed without error
+	// StatusSucceeded indicates a workflow has completed without error
 	StatusSucceeded = WorkflowStatus("succeeded")
-	// StatusFailed indicates a script/step completed & exited when an unexpected error
+	// StatusFailed indicates a workflow completed & exited when an unexpected error
 	// occured
 	StatusFailed = WorkflowStatus("failed")
+	// StatusNoChange indicates a workflow completed, but no changes occured
+	StatusNoChange = WorkflowStatus("unchanged")
 )
 
 const (
