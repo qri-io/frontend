@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { SyncLoader } from 'react-spinners'
-import { getActionType } from '../../../store/api'
 import { AnyAction } from '@reduxjs/toolkit'
 
+import { ACTION_FAILURE, getActionType } from '../../../store/api'
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
@@ -30,7 +30,7 @@ const LogInModal: React.FC = () => {
   const handleButtonClick = () => {
     logIn(username, password)(dispatch)
       .then((action: AnyAction) => {
-        if (getActionType(action) === 'failure') {
+        if (getActionType(action) === ACTION_FAILURE) {
           setLoginError(action.payload.err.message)
           return
         }

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SyncLoader } from 'react-spinners'
-import { getActionType } from '../../../store/api';
 import { AnyAction } from '@reduxjs/toolkit';
 
+import { ACTION_FAILURE, getActionType } from '../../../store/api';
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
@@ -49,7 +49,7 @@ const SignUpModal: React.FC = () => {
     if (!emailError && !usernameError && !passwordError) {
       signUp(email, username, password)(dispatch)
         .then((action: AnyAction) => {
-          if (getActionType(action) === 'failure') {
+          if (getActionType(action) === ACTION_FAILURE) {
             setSignupError(action.payload.err.message)
             return
           }
