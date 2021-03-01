@@ -22,8 +22,16 @@ export interface DatasetMenuItem {
 
 const Dataset: React.FC<any> = () => {
   const qriRef = newQriRef(useParams())
-  const username = useSelector(selectSessionUser)?.username || 'new'
-  qriRef.username = username
+  const user = useSelector(selectSessionUser)
+
+  // This covers the case where a user created a new workflow before logging in.
+  // If they login while working on the workflow, the `user` will change, but the
+  // params used to generate the `qriRef` will not (because they are generated
+  // from the url, which has not changed). This check ensures that the correct 
+  // username is propagated after login/signup.
+  if (qriRef.username === 'new') {
+    qriRef.username = user.username
+  }
   const dispatch = useDispatch()
   const { url } = useRouteMatch()
 

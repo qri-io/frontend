@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { RootState } from '../../../store/store';
 
-export const selectSessionUser = (state: RootState): User | undefined => state.session.user
+export const selectSessionUser = (state: RootState): User => state.session.user
 export const selectIsSessionLoading = (state: RootState): boolean => state.session.loading
 
 export interface User {
@@ -9,12 +9,16 @@ export interface User {
 }
 
 export interface SessionState {
-  user?: User
+  user: User
   loading: boolean
 }
 
+export const NewUser: User = {
+  username: 'new'
+}
+
 const initialState: SessionState = {
-  user: undefined,
+  user: NewUser,
   loading: false
 }
 
@@ -32,7 +36,7 @@ export const sessionReducer = createReducer(initialState, {
     state.loading = false
   },
   'API_LOGOUT_SUCCESS': (state, action) => {
-    state.user = undefined
+    state.user = NewUser
   },
   'API_SIGNUP_REQUEST': (state, action) => {
     state.loading = true

@@ -25,7 +25,7 @@ const templates = [
 ]
 
 const TemplateList: React.FC<any> = () => {
-  const username = useSelector(selectSessionUser)?.username || 'new'
+  const username = useSelector(selectSessionUser)?.username
   return (
     <div className='flex flex-col h-full bg-gray-100'>
       <NavBar />

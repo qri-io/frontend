@@ -7,7 +7,7 @@ import { Workflow } from '../../qrimatic/workflow'
 import { deployStatusInfoMap } from './deployStatus'
 import { deployWorkflow } from './state/deployActions'
 import { newDeployStatusSelector } from './state/deployState'
-import { selectSessionUser } from '../session/state/sessionState'
+import { NewUser, selectSessionUser } from '../session/state/sessionState'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 
@@ -22,7 +22,7 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
   const { statusIcon, statusIconClass, statusText, message, buttonIcon, buttonClass, buttonText } = deployStatusInfoMap[status]
 
   const handleButtonClick = () => {
-    if (!user) {
+    if (user === NewUser) {
       dispatch(showModal(ModalType.signUp))
       return
     }
