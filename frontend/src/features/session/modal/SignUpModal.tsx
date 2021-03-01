@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SyncLoader } from 'react-spinners'
+import { AnyAction } from '@reduxjs/toolkit';
 
+import { ACTION_FAILURE, getActionType } from '../../../store/api';
 import ExternalLink from '../../../chrome/ExternalLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
@@ -9,18 +11,20 @@ import { showModal, clearModal } from '../../app/state/appActions'
 import { ModalType } from '../../app/state/appState'
 import { signUp } from '../state/sessionActions'
 import { selectIsSessionLoading } from '../state/sessionState'
-import { validateEmail, validateUsername, validatePassword } from '../state/formValidation'
+import { validateEmail, validateUsername, validatePassword, ValidationError } from '../state/formValidation'
 
 const SignUpModal: React.FC = () => {
 
-  const [ email, setEmail ] = useState('')
-  const [ emailError, setEmailError ] = useState(null)
+  const [email, setEmail] = useState('')
+  const [emailError, setEmailError] = useState<ValidationError>(null)
 
-  const [ username, setUsername ] = useState('')
-  const [ usernameError, setUsernameError ] = useState(null)
+  const [username, setUsername] = useState('')
+  const [usernameError, setUsernameError] = useState<ValidationError>(null)
 
-  const [ password, setPassword ] = useState('')
-  const [ passwordError, setPasswordError] = useState(null)
+  const [password, setPassword] = useState('')
+  const [passwordError, setPasswordError] = useState<ValidationError>(null)
+
+  const [signupError, setSignupError] = useState('')
 
   const dispatch = useDispatch()
   const loading = useSelector(selectIsSessionLoading)
@@ -43,9 +47,14 @@ const SignUpModal: React.FC = () => {
     setPasswordError(passwordError)
 
     if (!emailError && !usernameError && !passwordError) {
-      dispatch(signUp(email, username, password)).then((action) => {
-        dispatch(clearModal())
-      })
+      signUp(email, username, password)(dispatch)
+        .then((action: AnyAction) => {
+          if (getActionType(action) === ACTION_FAILURE) {
+            setSignupError(action.payload.err.message)
+            return
+          }
+          dispatch(clearModal())
+        })
     }
   }
 
@@ -78,6 +87,7 @@ const SignUpModal: React.FC = () => {
             error={passwordError}
           />
         </div>
+        {signupError && <div className='text-xs text-red-500 text-left mb-2'>{signupError}</div>}
         <Button size='lg' className='w-full mb-6' onClick={handleButtonClick}>
           {loading ? <SyncLoader color='#fff' size='6' /> : 'Continue'}
         </Button>

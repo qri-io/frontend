@@ -1,6 +1,6 @@
 import { AnyAction, Dispatch } from "@reduxjs/toolkit"
 import { NewWorkflow, newWorkflowInfo, WorkflowInfo, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
-import { ApiAction, ApiActionThunk, CALL_API, getActionType } from "../../../store/api"
+import { ACTION_FAILURE, ApiAction, ApiActionThunk, CALL_API, getActionType } from "../../../store/api"
 import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
 
 function mapWorkflowInfo (data: object | []): WorkflowInfo[] {
@@ -10,13 +10,13 @@ function mapWorkflowInfo (data: object | []): WorkflowInfo[] {
 export function loadCollection(dispatch: Dispatch, offset: number, limit: number) {
   loadCollectionWorkflows(1, 50)(dispatch)
   .then(async (action: AnyAction) => {
-    if (getActionType(action) === 'failure') {
+    if (getActionType(action) === ACTION_FAILURE) {
       console.log("load collection failed:", action.payload.err.message)
     }
     return await loadRunningCollection()(dispatch)
   })
   .then((action: AnyAction) => {
-    if (getActionType(action) === 'failure') {
+    if (getActionType(action) === ACTION_FAILURE) {
       console.log("loading running collection failed:", action.payload.err.message)
     }
   })

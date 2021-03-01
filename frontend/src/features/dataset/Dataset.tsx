@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
 import { useParams } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ import DatasetNavSidebar from './DatasetNavSidebar';
 import DatasetTitleMenu from './DatasetTitleMenu';
 import DeployingScreen from '../deploy/DeployingScreen';
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
+import { selectSessionUser } from '../session/state/sessionState';
 
 export interface DatasetMenuItem {
   text: string
@@ -21,6 +22,16 @@ export interface DatasetMenuItem {
 
 const Dataset: React.FC<any> = () => {
   const qriRef = newQriRef(useParams())
+  const user = useSelector(selectSessionUser)
+
+  // This covers the case where a user created a new workflow before logging in.
+  // If they login while working on the workflow, the `user` will change, but the
+  // params used to generate the `qriRef` will not (because they are generated
+  // from the url, which has not changed). This check ensures that the correct 
+  // username is propagated after login/signup.
+  if (qriRef.username === 'new') {
+    qriRef.username = user.username
+  }
   const dispatch = useDispatch()
   const { url } = useRouteMatch()
 

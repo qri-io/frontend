@@ -15,13 +15,13 @@ import Run from './features/run/Run';
 import Collection from './features/collection/Collection';
 import Dashboard from './features/dashboard/Dashboard';
 import Dataset from './features/dataset/Dataset';
-import { selectSessionUser } from './features/session/state/sessionState'
+import { NewUser, selectSessionUser } from './features/session/state/sessionState'
 
 const PrivateRoute: React.FC<any>  = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
   return (
     <Route path={path}>
-      { user ? <>{children}</> : <Redirect to={{ pathname: '/splash' }} /> }
+      { user !== NewUser ? <>{children}</> : <Redirect to={{ pathname: '/splash' }} /> }
     </Route>
   )
 }
@@ -41,6 +41,7 @@ export default function Routes () {
         <PrivateRoute path='/collection'><Collection /></PrivateRoute>
         <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
+        <Route path='/ds/new/:name'><Dataset /></Route>
         <Route path='/ds/new'><TemplateList /></Route>
         <Route path='/ds/:username/:name'><Dataset /></Route>
 
@@ -52,7 +53,7 @@ export default function Routes () {
 
         <Route path='/'>
           {
-            user ? <Redirect to='/dashboard' /> : <Splash />
+            user !== NewUser ? <Redirect to='/dashboard' /> : <Splash />
           }
         </Route>
       </Switch>

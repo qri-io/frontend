@@ -1,7 +1,9 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import NavBar from '../navbar/NavBar'
+import { selectSessionUser } from '../session/state/sessionState'
 
 const templates = [
   {
@@ -23,6 +25,7 @@ const templates = [
 ]
 
 const TemplateList: React.FC<any> = () => {
+  const username = useSelector(selectSessionUser)?.username
   return (
     <div className='flex flex-col h-full bg-gray-100'>
       <NavBar />
@@ -37,7 +40,7 @@ const TemplateList: React.FC<any> = () => {
             templates.map(({ name, id }) => (
               <div key={name} className='my-2 px-2 overflow-hidden w-full md:w-1/2 lg:w-1/3 xl:w-1/3'>
                 <Link id={id} to={{
-                  pathname: `/ds/me/dataset_${Math.floor(Math.random() * 1000)}`,
+                  pathname: `/ds/${username}/dataset_${Math.floor(Math.random() * 1000)}`,
                   state: { template: id }
                 }}>
                   <div className='border border-gray-300 hover:border-blue-500 rounded bg-white text-sm px-10 py-16 text-center'>

@@ -28,7 +28,7 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
     type: 'workflow',
     qriRef,
     [CALL_API]: {
-      endpoint: `workflow?dataset_id=me/${qriRef.name}`,
+      endpoint: `workflow?dataset_id=${qriRef.username}/${qriRef.name}`,
       method: 'GET',
       map: mapWorkflow
     }

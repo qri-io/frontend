@@ -53,10 +53,7 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
         pageSize
       },
       segments: {
-        // TODO(b5): this is a hack for now while we don't have session support,
-        // restore ASAP
-        // peername: ref.username,
-        peername: 'me',
+        peername: ref.username,
         name: ref.name
       },
       map: mapBody

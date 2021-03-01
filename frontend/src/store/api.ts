@@ -48,10 +48,14 @@ export function apiActionTypes (endpoint: string): [string, string, string] {
   return [`API_${name}_REQUEST`, `API_${name}_SUCCESS`, `API_${name}_FAILURE`]
 }
 
+export const ACTION_REQUEST = 'request'
+export const ACTION_SUCCESS = 'success'
+export const ACTION_FAILURE = 'failure'
+
 export const getActionType = (action = { type: '' }): string => {
-  if (action.type.endsWith('REQUEST')) return 'request'
-  if (action.type.endsWith('SUCCESS')) return 'success'
-  if (action.type.endsWith('FAILURE')) return 'failure'
+  if (action.type.endsWith('REQUEST')) return ACTION_REQUEST
+  if (action.type.endsWith('SUCCESS')) return ACTION_SUCCESS
+  if (action.type.endsWith('FAILURE')) return ACTION_FAILURE
   return ''
 }
 
