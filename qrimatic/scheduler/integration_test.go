@@ -7,9 +7,12 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
+	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qri/repo/gen"
 	repotest "github.com/qri-io/qri/repo/test"
@@ -28,7 +31,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	// TODO (ramfox): until we get multi tenancy the only "username" that
 	// qri will expect is the username of the repo
 	datasetID := fmt.Sprintf("%s/dataset_name", username)
-	w, err := NewCronWorkflow(workflowName, ownerID, datasetID, "R/PT1H")
+	w, err := NewCronWorkflow(workflowName, ownerID, datasetID, "R/PT1S")
 	if err != nil {
 		t.Fatalf("creating workflow: %s", err)
 	}
@@ -40,34 +43,163 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 				{
 					Name:   "transform",
 					Syntax: "starlark",
-					Script: "def transform(ds,ctx):\n  ds.set_body([[1,2,3],[4,5,6]])",
+					Script: `def transform(ds,ctx):
+	b = ds.get_body()
+	if not b:
+		ds.set_body([[1,2,3]])
+	else:
+		b = b + [[b[len(b)-1][0] + 3, b[len(b)-1][1] + 3, b[len(b)-1][2] +3]]
+		ds.set_body(b)`,
+					Category: "transform",
 				},
 			},
 		},
 	}
 	ctx := context.Background()
-	dr, err := tr.cron.Deploy(ctx, tr.inst, dp)
+	// Deploy saves a version of the dataset & schedules the workflow
+	_, err = tr.cron.Deploy(ctx, tr.inst, dp)
 	if err != nil {
 		t.Fatalf("deploying workflow: %s", err)
 	}
-	t.Log(dr)
-	_, err = tr.cron.Workflow(ctx, w.ID)
+
+	// ensure workflow is in the cron store
+	deployedWorkflow, err := tr.cron.Workflow(ctx, w.ID)
 	if err != nil {
 		t.Fatalf("getting workflow from cron: %s", err)
 	}
-	// deploy workflow
-	// check that the workflow is in the store
+	if diff := cmp.Diff(w.ID, deployedWorkflow.ID); diff != "" {
+		t.Errorf("deployed workflow ID mismatch (-want +got):\n%s", diff)
+	}
+	if deployedWorkflow.RunCount != 1 {
+		t.Errorf("deployed workflow run count mismatch: expected 1, got %d", deployedWorkflow.RunCount)
+	}
+
+	// fetch the dataset & compare bodies
+	m := lib.NewDatasetMethods(tr.inst)
+	getParams := &lib.GetParams{
+		Refstr:   datasetID,
+		Selector: "body",
+		All:      true,
+	}
+	getRes, err := m.Get(ctx, getParams)
+	if diff := cmp.Diff("[[1,2,3]]", string(getRes.Bytes)); diff != "" {
+		t.Errorf("deployed dataset body mismatch (-want +got):\n%s", diff)
+	}
+
 	// manually trigger workflow
-	// check that the workflow updates & dataset is different in expected way
-	// adjust trigger time
+	tr.cron.RunWorkflow(ctx, w, w.Triggers[0].Info().ID)
+	manuallyTriggered, err := tr.cron.Workflow(ctx, w.ID)
+	if manuallyTriggered.RunCount != 2 {
+		t.Errorf("manually triggered workflow run count mismatch: expected 2, got %d", manuallyTriggered.RunCount)
+	}
+
+	// fetch the dataset and compare bodies
+	getRes, err = m.Get(ctx, getParams)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff("[[1,2,3],[4,5,6]]", string(getRes.Bytes)); diff != "" {
+		t.Errorf("manually triggered dataset body mismatch (-want +got):\n%s", diff)
+	}
+
+	// update workflow to have new trigger time of 3 seconds
+	ri, err := iso8601.ParseRepeatingInterval("R/PT3S")
+	if err != nil {
+		t.Fatal(err)
+	}
+	newTrigger := NewCronTrigger(w.ID, time.Now(), ri)
+	w.Triggers = []Trigger{newTrigger}
+	if err := tr.cron.UpdateWorkflow(ctx, w); err != nil {
+		t.Fatal(err)
+	}
 	// check that trigger time has updated in store
-	// wait until trigger is supposed to run
-	// check that workflow events are firing in correct time
-	// check that after workflow has run it has updated as expected
-	// update transform & deploy
+	updatedWF, err := tr.cron.Workflow(ctx, w.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(newTrigger, updatedWF.Triggers[0], cmp.Comparer(DurationCompare)); diff != "" {
+		t.Errorf("triggers mismatch (-want +got):\n%s", diff)
+	}
+	// start cron service
+	cancelCtx, cancel := context.WithCancel(ctx)
+
+	go func() {
+		// give trigger enough time to run
+		<-time.After(5 * time.Second)
+		cancel()
+	}()
+
+	if err := tr.cron.Start(cancelCtx); err != nil {
+		t.Fatal(err)
+	}
+
+	// fetch workflow, see that it has triggered
+	cronTriggered, err := tr.cron.Workflow(ctx, w.ID)
+	if err != nil {
+		t.Fatalf("getting workflow from cron: %s", err)
+	}
+	if cronTriggered.RunCount != 3 {
+		t.Errorf("cron triggered workflow run count mismatch: expected 3, got %d", cronTriggered.RunCount)
+	}
+
+	// fetch the dataset and compare bodies
+	getRes, err = m.Get(ctx, getParams)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff("[[1,2,3],[4,5,6],[7,8,9]]", string(getRes.Bytes)); diff != "" {
+		t.Errorf("cron triggered dataset body mismatch (-want +got):\n%s", diff)
+	}
+
+	// update transform in workflow & deploy
+	dp = &DeployParams{
+		Apply:    true,
+		Workflow: cronTriggered,
+		Transform: &dataset.Transform{
+			Steps: []*dataset.TransformStep{
+				{
+					Name:   "transform",
+					Syntax: "starlark",
+					Script: `def transform(ds,ctx):
+	ds.set_body([["one","two","three"]])`,
+					Category: "transform",
+				},
+			},
+		},
+	}
+	// Deploy saves a version of the dataset & schedules the workflow
+	_, err = tr.cron.Deploy(ctx, tr.inst, dp)
+	if err != nil {
+		t.Fatalf("deploying workflow: %s", err)
+	}
+	// ensure workflow is in the cron store
+	transformUpdatedWF, err := tr.cron.Workflow(ctx, w.ID)
+	if err != nil {
+		t.Fatalf("getting workflow from cron: %s", err)
+	}
+	if transformUpdatedWF.RunCount != 4 {
+		t.Errorf("transform updated workflow run count mismatch: expected 4, got %d", transformUpdatedWF.RunCount)
+	}
+
+	// check dataset body is different
+	getRes, err = m.Get(ctx, getParams)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff("[[\"one\",\"two\",\"three\"]]", string(getRes.Bytes)); diff != "" {
+		t.Errorf("updated transform dataset body mismatch (-want +got):\n%s", diff)
+	}
+
+	// undeploy & show there is no workflow
+	if err := tr.cron.Undeploy(ctx, w.ID); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := tr.cron.Workflow(ctx, w.ID); err != ErrNotFound {
+		t.Errorf("error: getting a Workflow that has been undeployed should come back with 'ErrNotFound', got nil error instead")
+	}
 }
 
-// copy pasted from `api` (can't be imported b/c of circular import issues):
+// copy/pasted from `api` (can't be imported b/c of circular import issues):
 // newInstanceRunnerFactory returns a factory function that produces a workflow
 // runner from a qri instance
 func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) RunWorkflowFunc {
