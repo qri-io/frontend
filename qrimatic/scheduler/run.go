@@ -57,6 +57,8 @@ func (r *RunInfo) Copy() *RunInfo {
 		return nil
 	}
 	return &RunInfo{
+		ID:          r.ID,
+		WorkflowID:  r.WorkflowID,
 		Number:      r.Number,
 		Start:       r.Start,
 		Stop:        r.Stop,

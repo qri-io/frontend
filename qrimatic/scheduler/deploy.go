@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/qri/base/dsfs"
@@ -33,6 +34,18 @@ func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) 
 	if p.Workflow.DatasetID == "" {
 		return nil, fmt.Errorf("deploy: DatasetID not set")
 	}
+
+	newWorkflow := true
+	if _, err := c.Workflow(ctx, p.Workflow.ID); err == nil {
+		newWorkflow = false
+	}
+
+	now := time.Now()
+	if newWorkflow {
+		p.Workflow.Created = &now
+	}
+	p.Workflow.LatestStart = &now
+
 	dsm := lib.NewDatasetMethods(inst)
 	saveP := &lib.SaveParams{
 		Ref: p.Workflow.DatasetID, // currently the DatasetID is the Ref
@@ -53,13 +66,19 @@ func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) 
 		}
 	}
 
-	ref := &dsref.Ref{
-		Username: res.Peername,
-		Name:     res.Name,
-	}
-	p.Workflow.Complete(ref, inst.Config().Profile.ID)
+	now = NowFunc()
+	p.Workflow.LatestEnd = &now
+	p.Workflow.RunCount++
+	p.Workflow.Status = StatusSucceeded
 
-	// save workflow
+	if newWorkflow {
+		ref := &dsref.Ref{
+			Username: res.Peername,
+			Name:     res.Name,
+		}
+		p.Workflow.Complete(ref, inst.Config().Profile.ID)
+	}
+
 	err = c.Schedule(ctx, p.Workflow)
 	if err != nil {
 		log.Errorw("deploy scheduling", "error", err)

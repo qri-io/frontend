@@ -117,8 +117,6 @@ func (workflow *Workflow) Complete(ds *dsref.Ref, ownerID string) error {
 	workflow.Name = ds.Human()
 	//TODO (arqu): expand this as this version info is very shallow
 	workflow.VersionInfo = ds.VersionInfo()
-	now := time.Now()
-	workflow.Created = &now
 	workflow.Type = JTDataset
 	workflow.OwnerID = ownerID
 	return nil
