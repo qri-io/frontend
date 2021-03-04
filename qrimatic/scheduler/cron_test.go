@@ -10,6 +10,7 @@ import (
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qri/event"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 func mustRepeatingInterval(s string) iso8601.RepeatingInterval {
@@ -22,21 +23,21 @@ func mustRepeatingInterval(s string) iso8601.RepeatingInterval {
 
 func TestCronDataset(t *testing.T) {
 	updateCount := 0
-	workflow := &Workflow{
+	wf := &workflow.Workflow{
 		Name:      "b5/libp2p_node_count",
 		DatasetID: "dsID",
 		OwnerID:   "ownerID",
-		Type:      JTDataset,
+		Type:      workflow.JTDataset,
 	}
 
 	factory := func(outer context.Context) RunWorkflowFunc {
-		return func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error {
-			switch workflow.Type {
-			case JTDataset:
+		return func(ctx context.Context, streams ioes.IOStreams, wf *workflow.Workflow) error {
+			switch wf.Type {
+			case workflow.JTDataset:
 				updateCount++
 				return nil
 			}
-			t.Fatalf("runner called with invalid workflow: %v", workflow)
+			t.Fatalf("runner called with invalid workflow: %v", wf)
 			return nil
 		}
 	}
@@ -44,9 +45,9 @@ func TestCronDataset(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*1000)
 	defer cancel()
 
-	store := NewMemStore(event.NilBus)
+	store := workflow.NewMemStore(event.NilBus)
 	cron := NewCronInterval(store, factory, event.NilBus, time.Millisecond*50)
-	if err := cron.Schedule(ctx, workflow); err != nil {
+	if err := cron.Schedule(ctx, wf); err != nil {
 		t.Fatal(err)
 	}
 
@@ -71,12 +72,12 @@ func TestCronDataset(t *testing.T) {
 
 	got := logs[0]
 
-	expect := &Workflow{
+	expect := &workflow.Workflow{
 		Name: "b5/libp2p_node_count",
-		Type: JTDataset,
+		Type: workflow.JTDataset,
 	}
 
-	if diff := compareWorkflow(expect, got); diff != "" {
+	if diff := workflow.CompareWorkflows(expect, got); diff != "" {
 		t.Errorf("log workflow mismatch (-want +got):\n%s", diff)
 	}
 }
@@ -88,20 +89,22 @@ func TestCronShellScript(t *testing.T) {
 
 	updateCount := 0
 
-	workflow := &Workflow{
-		Name: "foo.sh",
-		Type: JTShellScript,
+	wf := &workflow.Workflow{
+		ID:        workflow.GenerateWorkflowID(),
+		DatasetID: "test/dataset_id",
+		Name:      "foo.sh",
+		Type:      workflow.JTShellScript,
 	}
 
 	// scriptRunner := LocalShellScriptRunner("testdata")
 	factory := func(outer context.Context) RunWorkflowFunc {
-		return func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error {
-			switch workflow.Type {
-			case JTShellScript:
+		return func(ctx context.Context, streams ioes.IOStreams, wf *workflow.Workflow) error {
+			switch wf.Type {
+			case workflow.JTShellScript:
 				updateCount++
 				return nil
 			}
-			t.Fatalf("runner called with invalid workflow: %v", workflow)
+			t.Fatalf("runner called with invalid workflow: %v", wf)
 			return nil
 		}
 	}
@@ -109,9 +112,9 @@ func TestCronShellScript(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*500)
 	defer cancel()
 
-	store := NewMemStore(event.NilBus)
+	store := workflow.NewMemStore(event.NilBus)
 	cron := NewCron(store, factory, event.NilBus)
-	if err := cron.Schedule(ctx, workflow); err != nil {
+	if err := cron.Schedule(ctx, wf); err != nil {
 		t.Fatal(err)
 	}
 
@@ -136,15 +139,17 @@ func TestCronShellScript(t *testing.T) {
 
 	got := logs[0]
 
-	expect := &Workflow{
-		Name: "foo.sh",
-		Type: JTShellScript,
+	expect := &workflow.Workflow{
+		ID:        wf.ID,
+		DatasetID: wf.DatasetID,
+		Name:      "foo.sh",
+		Type:      workflow.JTShellScript,
 		// RunNumber: 1,
 		// RunStart:  got.RunStart,
 		// RunStop:   got.RunStop,
 	}
 
-	if diff := compareWorkflow(expect, got); diff != "" {
+	if diff := workflow.CompareWorkflows(expect, got); diff != "" {
 		t.Errorf("log workflow mismatch (-want +got):\n%s", diff)
 	}
 }
@@ -153,8 +158,8 @@ func TestRunWorkflow(t *testing.T) {
 	ctx := context.Background()
 
 	expectedEvents := []event.Type{
-		ETWorkflowStarted,
-		ETWorkflowCompleted,
+		workflow.ETWorkflowStarted,
+		workflow.ETWorkflowCompleted,
 	}
 
 	gotEvents := []event.Type{}
@@ -181,12 +186,12 @@ func TestRunWorkflow(t *testing.T) {
 	bus := event.NewBus(ctx)
 	handler := func(ctx context.Context, e event.Event) error {
 		switch e.Type {
-		case ETWorkflowStarted:
-			w, ok := e.Payload.(*Workflow)
+		case workflow.ETWorkflowStarted:
+			w, ok := e.Payload.(*workflow.Workflow)
 			if !ok {
 				t.Fatalf("expected `ETWorkflowStarted` event to emit a *Workflow payload")
 			}
-			if w.Status != StatusRunning {
+			if w.Status != workflow.StatusRunning {
 				t.Errorf("expected `ETWorkflowStarted` event to emit a workflow with status 'running', got %q", w.Status)
 			}
 			if w.LatestStart == nil {
@@ -199,12 +204,12 @@ func TestRunWorkflow(t *testing.T) {
 			gotEvents = append(gotEvents, e.Type)
 			gotEventLock.Unlock()
 			sent <- struct{}{}
-		case ETWorkflowCompleted:
-			w, ok := e.Payload.(*Workflow)
+		case workflow.ETWorkflowCompleted:
+			w, ok := e.Payload.(*workflow.Workflow)
 			if !ok {
 				t.Fatalf("expected `ETWorkflowCompleted` event to emit a *Workflow payload")
 			}
-			if w.Status != StatusSucceeded {
+			if w.Status != workflow.StatusSucceeded {
 				t.Errorf("expected `ETWorkflowCompleted` event to emit a workflow with status 'succeeded', got %q", w.Status)
 			}
 			if w.LatestEnd == nil {
@@ -219,10 +224,10 @@ func TestRunWorkflow(t *testing.T) {
 		}
 		return nil
 	}
-	bus.SubscribeTypes(handler, ETWorkflowStarted, ETWorkflowCompleted)
+	bus.SubscribeTypes(handler, workflow.ETWorkflowStarted, workflow.ETWorkflowCompleted)
 
-	memStore := NewMemStore(event.NilBus)
-	testFunc := func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error {
+	memStore := workflow.NewMemStore(event.NilBus)
+	testFunc := func(ctx context.Context, streams ioes.IOStreams, workflow *workflow.Workflow) error {
 		return nil
 	}
 	testFact := func(ctx context.Context) (runner RunWorkflowFunc) {
@@ -233,7 +238,7 @@ func TestRunWorkflow(t *testing.T) {
 		testFact,
 		bus,
 	)
-	wf, err := NewCronWorkflow("test_workflow", "test_ownerID", "test_datasetID", "R/PT1H")
+	wf, err := workflow.NewCronWorkflow("test_workflow", "test_ownerID", "test_datasetID", "R/PT1H")
 	if err != nil {
 		t.Fatalf("unexpected error making new cron workflow: %s", err)
 	}

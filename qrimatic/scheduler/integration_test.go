@@ -17,6 +17,7 @@ import (
 	"github.com/qri-io/qri/repo/gen"
 	repotest "github.com/qri-io/qri/repo/test"
 	"github.com/qri-io/qri/transform"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 func TestScheduleWorkflowIntegration(t *testing.T) {
@@ -31,7 +32,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	// TODO (ramfox): until we get multi tenancy the only "username" that
 	// qri will expect is the username of the repo
 	datasetID := fmt.Sprintf("%s/dataset_name", username)
-	w, err := NewCronWorkflow(workflowName, ownerID, datasetID, "R/PT1S")
+	w, err := workflow.NewCronWorkflow(workflowName, ownerID, datasetID, "R/PT1S")
 	if err != nil {
 		t.Fatalf("creating workflow: %s", err)
 	}
@@ -91,8 +92,8 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	newTrigger := NewCronTrigger(w.ID, time.Now(), ri)
-	w.Triggers = []Trigger{newTrigger}
+	newTrigger := workflow.NewCronTrigger(w.ID, time.Now(), ri)
+	w.Triggers = []workflow.Trigger{newTrigger}
 	if err := tr.cron.UpdateWorkflow(ctx, w); err != nil {
 		t.Fatal(err)
 	}
@@ -101,7 +102,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := cmp.Diff(newTrigger, updatedWF.Triggers[0], cmp.Comparer(DurationCompare)); diff != "" {
+	if diff := cmp.Diff(newTrigger, updatedWF.Triggers[0], cmp.Comparer(workflow.CompareDurations)); diff != "" {
 		t.Errorf("triggers mismatch (-want +got):\n%s", diff)
 	}
 	// start cron service
@@ -166,7 +167,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	if err := tr.cron.Undeploy(ctx, w.ID); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := tr.cron.Workflow(ctx, w.ID); err != ErrNotFound {
+	if _, err := tr.cron.Workflow(ctx, w.ID); err != workflow.ErrNotFound {
 		t.Errorf("error: getting a Workflow that has been undeployed should come back with 'ErrNotFound', got nil error instead")
 	}
 }
@@ -178,7 +179,7 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) RunW
 	return func(ctx context.Context) RunWorkflowFunc {
 		dsm := lib.NewDatasetMethods(inst)
 
-		return func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error {
+		return func(ctx context.Context, streams ioes.IOStreams, workflow *workflow.Workflow) error {
 			runID := transform.NewRunID()
 
 			p := &lib.SaveParams{
@@ -201,7 +202,7 @@ type SchedulerTestRunner struct {
 	TestCrypto gen.CryptoGenerator
 	repo       *repotest.TempRepo
 	inst       *lib.Instance
-	store      *Store
+	store      *workflow.Store
 	cron       *Cron
 	storePath  string
 	// when we get identity that is separate from the qri repo identity
@@ -245,7 +246,7 @@ func NewSchedulerTestRunner(t *testing.T, prefix string) (*SchedulerTestRunner, 
 		t.Fatal(err)
 	}
 
-	store, err := NewFileStore(filepath.Join(tr.storePath, "workflows.json"), tr.inst.Bus())
+	store, err := workflow.NewFileStore(filepath.Join(tr.storePath, "workflows.json"), tr.inst.Bus())
 	if err != nil {
 		t.Fatal(err)
 	}

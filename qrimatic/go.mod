@@ -19,4 +19,5 @@ require (
 	github.com/qri-io/qfs v0.5.1-0.20201119141805-fb13393b2d1f
 	github.com/qri-io/qri v0.9.14-0.20210217202507-0fa42078cdd7
 	github.com/spf13/cobra v1.0.0
+	google.golang.org/appengine v1.6.5
 )

@@ -1,4 +1,4 @@
-package scheduler
+package workflow
 
 import (
 	"context"
@@ -6,8 +6,6 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qfs"
 	"github.com/qri-io/qri/event"
 )
@@ -54,7 +52,7 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		if len(workflows) != 1 {
 			t.Fatal("expected default get to return inserted workflow")
 		}
-		if diff := compareWorkflow(workflowOne, workflows[0]); diff != "" {
+		if diff := CompareWorkflows(workflowOne, workflows[0]); diff != "" {
 			t.Errorf("stored workflow mismatch (-want +got):\n%s", diff)
 		}
 
@@ -76,7 +74,7 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 			t.Fatal(err)
 		}
 		expect := []*Workflow{workflowTwo, workflowOne}
-		if diff := cmp.Diff(expect, workflows, cmpopts.IgnoreUnexported(iso8601.Duration{})); diff != "" {
+		if diff := cmp.Diff(expect, workflows, cmp.Comparer(CompareDurations)); diff != "" {
 			t.Errorf("workflow slice mismatch (-want +got):\n%s", diff)
 		}
 
@@ -98,7 +96,7 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		if err != nil {
 			t.Errorf("getting workflowThree: %s", err)
 		}
-		if diff := compareWorkflow(workflowThree, gotWorkflowThree); diff != "" {
+		if diff := CompareWorkflows(workflowThree, gotWorkflowThree); diff != "" {
 			t.Errorf("workflowThree mismatch (-want +got):\n%s", diff)
 		}
 
@@ -107,7 +105,7 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 			t.Errorf("listing workflows by status 'succeeded': %e", err)
 		}
 		expect = []*Workflow{workflowThree, workflowTwo}
-		if diff := cmp.Diff(expect, succeeded, cmpopts.IgnoreUnexported(iso8601.Duration{})); diff != "" {
+		if diff := cmp.Diff(expect, succeeded, cmp.Comparer(CompareDurations)); diff != "" {
 			t.Errorf("workflow slice mismatch (-want +got):\n%s", diff)
 		}
 
@@ -123,7 +121,7 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		if len(workflows) != 1 {
 			t.Fatal("expected limit 1 length to equal 1")
 		}
-		if diff := compareWorkflow(workflowTwo, workflows[0]); diff != "" {
+		if diff := CompareWorkflows(workflowTwo, workflows[0]); diff != "" {
 			t.Errorf("workflowTwo mismatch (-want +got):\n%s", diff)
 		}
 
@@ -131,7 +129,7 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if diff := compareWorkflow(updatedWorkflowOne, workflow); diff != "" {
+		if diff := CompareWorkflows(updatedWorkflowOne, workflow); diff != "" {
 			t.Errorf("updated workflowOne mismatch (-want +got):\n%s", diff)
 		}
 
@@ -170,7 +168,7 @@ func RunWorkflowStoreTests(t *testing.T, newStore func() Store) {
 			{"no type", &Workflow{Name: "some_name"}},
 
 			{"invalid periodicity", &Workflow{Name: "some_name", Type: JTDataset}},
-			{"invalid WorkflowType", &Workflow{Name: "some_name", Type: WorkflowType("huh")}},
+			{"invalid WorkflowType", &Workflow{Name: "some_name", Type: Type("huh")}},
 		}
 
 		store := newStore()

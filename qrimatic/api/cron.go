@@ -7,7 +7,7 @@ import (
 	"time"
 
 	apiutil "github.com/qri-io/apiutil"
-	"github.com/qri-io/qrimatic/scheduler"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 // StatusHandler is the qrimatic heath check
@@ -31,26 +31,26 @@ func (s *Server) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 		apiutil.WriteResponse(w, js)
 		return
 	case http.MethodPost:
-		workflow := &scheduler.Workflow{}
+		wf := &workflow.Workflow{}
 
-		if err := json.NewDecoder(r.Body).Decode(workflow); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(wf); err != nil {
 			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 			return
 		}
 
-		if err := s.sched.Schedule(r.Context(), workflow); err != nil {
+		if err := s.sched.Schedule(r.Context(), wf); err != nil {
 			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 			return
 		}
 	case http.MethodPut:
-		workflow := &scheduler.Workflow{}
+		wf := &workflow.Workflow{}
 
-		if err := json.NewDecoder(r.Body).Decode(workflow); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(wf); err != nil {
 			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 			return
 		}
 
-		if err := s.sched.UpdateWorkflow(r.Context(), workflow); err != nil {
+		if err := s.sched.UpdateWorkflow(r.Context(), wf); err != nil {
 			apiutil.WriteErrResponse(w, http.StatusBadRequest, err)
 			return
 		}
@@ -66,9 +66,9 @@ func (s *Server) WorkflowsHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) WorkflowHandler(w http.ResponseWriter, r *http.Request) {
 	dsID := r.FormValue("dataset_id")
-	workflow, err := s.sched.WorkflowForDataset(r.Context(), dsID)
+	wf, err := s.sched.WorkflowForDataset(r.Context(), dsID)
 	if err != nil {
-		if err == scheduler.ErrNotFound {
+		if err == workflow.ErrNotFound {
 			apiutil.WriteErrResponse(w, http.StatusNotFound, err)
 		} else {
 			apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
@@ -77,7 +77,7 @@ func (s *Server) WorkflowHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	apiutil.WriteResponse(w, workflow)
+	apiutil.WriteResponse(w, wf)
 }
 
 func (s *Server) RunsHandler(w http.ResponseWriter, r *http.Request) {
@@ -114,9 +114,9 @@ func (s *Server) GetRunInfoHandler(w http.ResponseWriter, r *http.Request) {
 // via a direct HTTP request
 func (s *Server) WorkflowManualTriggerHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("id")
-	workflow, err := s.sched.Workflow(r.Context(), id)
+	wf, err := s.sched.Workflow(r.Context(), id)
 	if err != nil {
-		if err == scheduler.ErrNotFound {
+		if err == workflow.ErrNotFound {
 			apiutil.WriteErrResponse(w, http.StatusNotFound, err)
 		} else {
 			apiutil.WriteErrResponse(w, http.StatusInternalServerError, err)
@@ -124,7 +124,7 @@ func (s *Server) WorkflowManualTriggerHandler(w http.ResponseWriter, r *http.Req
 		w.Write([]byte(err.Error()))
 		return
 	}
-	go s.sched.RunWorkflow(context.Background(), workflow, "")
+	go s.sched.RunWorkflow(context.Background(), wf, "")
 }
 
 // CollectionHandler returns a list of `WorkflowInfo`s, which include a union of

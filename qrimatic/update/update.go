@@ -9,7 +9,7 @@ import (
 
 	golog "github.com/ipfs/go-log"
 	"github.com/qri-io/dataset"
-	"github.com/qri-io/qrimatic/scheduler"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 var log = golog.Logger("update")
@@ -25,7 +25,7 @@ func PossibleShellScript(path string) bool {
 }
 
 // DatasetToWorkflow converts a dataset to scheduler.Workflow
-func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.DatasetOptions) (workflow *scheduler.Workflow, err error) {
+func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *workflow.DatasetOptions) (w *Workflow, err error) {
 	if periodicity == "" && ds.Meta != nil && ds.Meta.AccrualPeriodicity != "" {
 		periodicity = ds.Meta.AccrualPeriodicity
 	}
@@ -35,43 +35,43 @@ func DatasetToWorkflow(ds *dataset.Dataset, periodicity string, opts *scheduler.
 	}
 
 	name := fmt.Sprintf("%s/%s", ds.Peername, ds.Name)
-	workflow, err = scheduler.NewCronWorkflow(name, "ownerID", name, periodicity)
+	w, err = workflow.NewCronWorkflow(name, "ownerID", name, periodicity)
 	if err != nil {
 		log.Debugw("creating new workflow", "error", err)
 		return nil, err
 	}
 	if ds.Commit != nil {
-		workflow.LatestStart = &ds.Commit.Timestamp
+		w.LatestStart = &ds.Commit.Timestamp
 	}
 	if opts != nil {
-		workflow.Options = opts
+		w.Options = opts
 	}
-	// err = workflow.Validate()
+	// err = w.Validate()
 
 	return
 }
 
-// ShellScriptToWorkflow turns a shell script into scheduler.Workflow
-func ShellScriptToWorkflow(path string, periodicity string, opts *scheduler.ShellScriptOptions) (workflow *scheduler.Workflow, err error) {
+// ShellScriptToWorkflow turns a shell script into workflow.Workflow
+func ShellScriptToWorkflow(path string, periodicity string, opts *workflow.ShellScriptOptions) (w *Workflow, err error) {
 	// // TODO (b5) - confirm file exists & is executable
 
-	// workflow, err = scheduler.NewWorkflow(path, "foo", path, scheduler.JTShellScript, periodicity)
+	// w, err = workflow.NewWorkflow(path, "foo", path, workflow.JTShellScript, periodicity)
 	// if err != nil {
 	// 	return nil, err
 	// }
 
 	// if opts != nil {
-	// 	workflow.Options = opts
+	// 	w.Options = opts
 	// }
 	return
 }
 
-func processWorkflowError(workflow *scheduler.Workflow, errOut *bytes.Buffer, err error) error {
+func processWorkflowError(w *Workflow, errOut *bytes.Buffer, err error) error {
 	if err == nil {
 		return nil
 	}
 
-	if workflow.Type == scheduler.JTDataset && errOut != nil {
+	if w.Type == workflow.JTDataset && errOut != nil {
 		// TODO (b5) - this should be a little more stringent :(
 		if strings.Contains(errOut.String(), "no changes to save") {
 			// TODO (b5) - this should be a concrete error declared in dsfs:

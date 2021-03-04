@@ -10,19 +10,20 @@ import (
 	"github.com/qri-io/qri/base/dsfs"
 	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 // DeployParams represents what we need in order to deploy a workflow
 type DeployParams struct {
 	Apply     bool               `json:"apply"`
-	Workflow  *Workflow          `json:"workflow"`
+	Workflow  *workflow.Workflow          `json:"workflow"`
 	Transform *dataset.Transform `json:"transform"`
 }
 
 // DeployResponse is what we return when we first deploy a workflow
 type DeployResponse struct {
 	RunID    string    `json:"runID"`
-	Workflow *Workflow `json:"workflow"`
+	Workflow *workflow.Workflow `json:"workflow"`
 }
 
 // Deploy takes a workflow and transform and returns a runid and workflow
@@ -69,7 +70,7 @@ func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) 
 	now = NowFunc()
 	p.Workflow.LatestEnd = &now
 	p.Workflow.RunCount++
-	p.Workflow.Status = StatusSucceeded
+	p.Workflow.Status = workflow.StatusSucceeded
 
 	if newWorkflow {
 		ref := &dsref.Ref{

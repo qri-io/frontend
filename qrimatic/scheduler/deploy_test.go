@@ -12,6 +12,7 @@ import (
 	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/event"
 	"github.com/qri-io/qri/lib"
+	"github.com/qri-io/qrimatic/workflow"
 	repotest "github.com/qri-io/qri/repo/test"
 )
 
@@ -52,10 +53,10 @@ func TestDeploy(t *testing.T) {
 	}
 	firedEventWg.Wait()
 
-	store := NewMemStore(inst.Bus())
+	store := workflow.NewMemStore(inst.Bus())
 
 	factory := func(ctx context.Context) RunWorkflowFunc {
-		return func(ctx context.Context, stream ioes.IOStreams, workflow *Workflow) error {
+		return func(ctx context.Context, stream ioes.IOStreams, workflow *workflow.Workflow) error {
 			return nil
 		}
 	}
@@ -65,7 +66,7 @@ func TestDeploy(t *testing.T) {
 
 	username := cfg.Profile.Peername
 
-	workflow, err := NewCronWorkflow("workflowName", "ownerID", fmt.Sprintf("%s/dataset_bar", username), "R/PT1H")
+	workflow, err := workflow.NewCronWorkflow("workflowName", "ownerID", fmt.Sprintf("%s/dataset_bar", username), "R/PT1H")
 	if err != nil {
 		t.Fatal(err)
 	}

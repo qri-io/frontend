@@ -1,4 +1,4 @@
-package scheduler
+package workflow
 
 import "github.com/qri-io/qri/event"
 

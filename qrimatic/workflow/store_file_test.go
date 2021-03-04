@@ -1,4 +1,4 @@
-package scheduler
+package workflow
 
 import (
 	"context"
@@ -8,8 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-	"github.com/qri-io/iso8601"
 	"github.com/qri-io/qri/event"
 )
 
@@ -27,12 +25,6 @@ func TestFileStore(t *testing.T) {
 		return store
 	}
 	RunWorkflowStoreTests(t, newStore)
-}
-
-// DurationCompare can be used in cmp.Comparer to create a cmp.Option that allows
-// a cmp.Diff of `iso8601.Duration`s
-func DurationCompare(x, y iso8601.Duration) bool {
-	return x.String() == y.String()
 }
 
 func TestSubscribe(t *testing.T) {
@@ -68,8 +60,9 @@ func TestSubscribe(t *testing.T) {
 	if err != nil {
 		t.Fatalf("getting workflow from store: %s", err)
 	}
-	if diff := cmp.Diff(expect, got, cmp.Comparer(DurationCompare)); diff != "" {
-		t.Errorf("result mismatch (-want +got):\n%s", diff)
+
+	if diff := CompareWorkflows(expect, got); diff != "" {
+		t.Errorf("workflow mismatch (-want +got):\n%s", diff)
 	}
 
 	expect.Status = "failed"
@@ -82,8 +75,8 @@ func TestSubscribe(t *testing.T) {
 	if err != nil {
 		t.Fatalf("getting workflow from store: %s", err)
 	}
-	if diff := cmp.Diff(expect, got, cmp.Comparer(DurationCompare)); diff != "" {
-		t.Errorf("result mismatch (-want +got):\n%s", diff)
+	if diff := CompareWorkflows(expect, got); diff != "" {
+		t.Errorf("workflow mismatch (-want +got):\n%s", diff)
 	}
 }
 

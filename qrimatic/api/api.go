@@ -16,6 +16,7 @@ import (
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qri/transform"
 	"github.com/qri-io/qrimatic/scheduler"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 var log = golog.Logger("api")
@@ -47,13 +48,13 @@ func NewServer(inst *lib.Instance) (*Server, error) {
 		return nil, err
 	}
 
-	var store scheduler.Store
+	var store workflow.Store
 	// switch cfg.Type {
 	// case "fs":
-	store, err = scheduler.NewFileStore(filepath.Join(path, "workflows.json"), inst.Bus())
+	store, err = workflow.NewFileStore(filepath.Join(path, "workflows.json"), inst.Bus())
 	// case "mem":
-	// 	workflowStore = scheduler.NewMemStore()
-	// 	logStore = scheduler.NewMemStore()
+	// 	workflowStore = workflow.NewMemStore()
+	// 	logStore = workflow.NewMemStore()
 	// default:
 	// 	return fmt.Errorf("unknown cron type: %q", cfg.Type)
 	// }
@@ -87,7 +88,7 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) sche
 	return func(ctx context.Context) scheduler.RunWorkflowFunc {
 		dsm := lib.NewDatasetMethods(inst)
 
-		return func(ctx context.Context, streams ioes.IOStreams, workflow *scheduler.Workflow) error {
+		return func(ctx context.Context, streams ioes.IOStreams, w *workflow.Workflow) error {
 			runID := transform.NewRunID()
 
 			// runState = run.NewState(runID)
@@ -97,7 +98,7 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) sche
 			// }, runID)
 
 			p := &lib.SaveParams{
-				Ref: workflow.DatasetID,
+				Ref: w.DatasetID,
 				Dataset: &dataset.Dataset{
 					Commit: &dataset.Commit{
 						RunID: runID,
@@ -113,34 +114,34 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) sche
 
 // Factory returns a function that can run workflows
 func Factory(context.Context) scheduler.RunWorkflowFunc {
-	return func(ctx context.Context, streams ioes.IOStreams, workflow *scheduler.Workflow) error {
-		log.Debugf("running update: %s", workflow.Name)
+	return func(ctx context.Context, streams ioes.IOStreams, w *workflow.Workflow) error {
+		log.Debugf("running update: %s", w.Name)
 
 		var errBuf *bytes.Buffer
 		// if the workflow type is a dataset, error output is semi-predictable
 		// write to a buffer for better error reporting
-		if workflow.Type == scheduler.JTDataset {
+		if w.Type == workflow.JTDataset {
 			errBuf = &bytes.Buffer{}
 			teedErrOut := io.MultiWriter(streams.ErrOut, errBuf)
 			streams = ioes.NewIOStreams(streams.In, streams.Out, teedErrOut)
 		}
 
-		cmd := WorkflowToCmd(streams, workflow)
+		cmd := WorkflowToCmd(streams, w)
 		if cmd == nil {
-			return fmt.Errorf("unrecognized update type: %s", workflow.Type)
+			return fmt.Errorf("unrecognized update type: %s", w.Type)
 		}
 
 		err := cmd.Run()
-		return processWorkflowError(workflow, errBuf, err)
+		return processWorkflowError(w, errBuf, err)
 	}
 }
 
-func processWorkflowError(workflow *scheduler.Workflow, errOut *bytes.Buffer, err error) error {
+func processWorkflowError(w *workflow.Workflow, errOut *bytes.Buffer, err error) error {
 	if err == nil {
 		return nil
 	}
 
-	if workflow.Type == scheduler.JTDataset && errOut != nil {
+	if w.Type == workflow.JTDataset && errOut != nil {
 		// TODO (b5) - this should be a little more stringent :(
 		if strings.Contains(errOut.String(), "no changes to save") {
 			// TODO (b5) - this should be a concrete error declared in dsfs:
@@ -154,12 +155,12 @@ func processWorkflowError(workflow *scheduler.Workflow, errOut *bytes.Buffer, er
 
 // WorkflowToCmd returns an operating system command that will execute the given workflow
 // wiring operating system in/out/errout to the provided iostreams.
-func WorkflowToCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.Cmd {
-	switch workflow.Type {
-	case scheduler.JTDataset:
-		return datasetSaveCmd(streams, workflow)
-	case scheduler.JTShellScript:
-		return shellScriptCmd(streams, workflow)
+func WorkflowToCmd(streams ioes.IOStreams, w *workflow.Workflow) *exec.Cmd {
+	switch w.Type {
+	case workflow.JTDataset:
+		return datasetSaveCmd(streams, w)
+	case workflow.JTShellScript:
+		return shellScriptCmd(streams, w)
 	default:
 		return nil
 	}
@@ -167,10 +168,10 @@ func WorkflowToCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.C
 
 // datasetSaveCmd configures a "qri save" command based on workflow details
 // wiring operating system in/out/errout to the provided iostreams.
-func datasetSaveCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.Cmd {
-	args := []string{"save", workflow.Name}
+func datasetSaveCmd(streams ioes.IOStreams, w *workflow.Workflow) *exec.Cmd {
+	args := []string{"save", w.Name}
 
-	if o, ok := workflow.Options.(*scheduler.DatasetOptions); ok {
+	if o, ok := w.Options.(*workflow.DatasetOptions); ok {
 		if o.Title != "" {
 			args = append(args, fmt.Sprintf(`--title=%s`, o.Title))
 		}
@@ -216,10 +217,10 @@ func datasetSaveCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.
 // to the provided iostreams.
 // Commands are executed with access to the same enviornment variables as the
 // process the runner is executing in
-func shellScriptCmd(streams ioes.IOStreams, workflow *scheduler.Workflow) *exec.Cmd {
+func shellScriptCmd(streams ioes.IOStreams, w *workflow.Workflow) *exec.Cmd {
 	// TODO (b5) - config and secrets as env vars
 
-	cmd := exec.Command(workflow.Name)
+	cmd := exec.Command(w.Name)
 	cmd.Stderr = streams.ErrOut
 	cmd.Stdout = streams.Out
 	cmd.Stdin = streams.In

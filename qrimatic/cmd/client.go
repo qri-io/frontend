@@ -9,8 +9,8 @@ import (
 	"github.com/qri-io/qri/errors"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
-	"github.com/qri-io/qrimatic/scheduler"
 	"github.com/qri-io/qrimatic/update"
+	"github.com/qri-io/qrimatic/workflow"
 	"github.com/spf13/cobra"
 )
 
@@ -266,8 +266,8 @@ func (client *ClientCommands) Schedule(ctx context.Context, args []string) (err 
 	}
 
 	for _, t := range res.Triggers {
-		if !t.Info().Disabled && t.Info().Type == scheduler.TTCron {
-			crn := t.(*scheduler.CronTrigger)
+		if !t.Info().Disabled && t.Info().Type == workflow.TTCron {
+			crn := t.(*workflow.CronTrigger)
 			fmt.Fprintf(client.ErrOut, "update scheduled, next update: %s\n", crn.NextRunStart)
 		}
 	}
@@ -377,14 +377,14 @@ func (client *ClientCommands) RunUpdate(ctx context.Context, args []string) (err
 	}
 
 	var (
-		name     = args[0]
-		workflow = &update.Workflow{
+		name = args[0]
+		wf   = &update.Workflow{
 			Name: name,
 		}
 	)
 
 	res := &reporef.DatasetRef{}
-	if err := client.updates.Run(ctx, workflow, res); err != nil {
+	if err := client.updates.Run(ctx, wf, res); err != nil {
 		return err
 	}
 

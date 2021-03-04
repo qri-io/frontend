@@ -1,4 +1,4 @@
-package scheduler
+package workflow
 
 import (
 	"encoding/json"
@@ -90,6 +90,7 @@ func (rs RunInfoSet) Less(i, j int) bool {
 }
 func (rs RunInfoSet) Swap(i, j int) { rs.set[i], rs.set[j] = rs.set[j], rs.set[i] }
 
+// Add inserts a RunInfo into the RunInfoSet
 func (rs *RunInfoSet) Add(r *RunInfo) {
 	if rs == nil {
 		*rs = RunInfoSet{set: []*RunInfo{r}}
@@ -106,6 +107,7 @@ func (rs *RunInfoSet) Add(r *RunInfo) {
 	sort.Sort(rs)
 }
 
+// Remove removes a RunInfo from the RunInfoSet by run.ID
 func (rs *RunInfoSet) Remove(id string) (removed bool) {
 	for i, run := range rs.set {
 		if run.ID == id {
