@@ -22,8 +22,8 @@ import (
 func TestScheduleWorkflowIntegration(t *testing.T) {
 
 	username := "integration_test"
-	tr := NewSchedulerTestRunner(t, username)
-	defer tr.Cleanup()
+	tr, cleanup := NewSchedulerTestRunner(t, username)
+	defer cleanup()
 	workflowName := "workflowName"
 	ownerID := "ownerID"
 	// TODO (ramfox): until we replace `datasetID` with `InitID`, qrimatic
@@ -57,8 +57,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	}
 	ctx := context.Background()
 	// Deploy saves a version of the dataset & schedules the workflow
-	_, err = tr.cron.Deploy(ctx, tr.inst, dp)
-	if err != nil {
+	if _, err := tr.cron.Deploy(ctx, tr.inst, dp); err != nil {
 		t.Fatalf("deploying workflow: %s", err)
 	}
 
@@ -67,24 +66,15 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	if err != nil {
 		t.Fatalf("getting workflow from cron: %s", err)
 	}
-	if diff := cmp.Diff(w.ID, deployedWorkflow.ID); diff != "" {
-		t.Errorf("deployed workflow ID mismatch (-want +got):\n%s", diff)
+	if w.ID != deployedWorkflow.ID {
+		t.Errorf("deployed workflow ID mismatch: expected %q, got %q", w.ID, deployedWorkflow.ID)
 	}
 	if deployedWorkflow.RunCount != 1 {
 		t.Errorf("deployed workflow run count mismatch: expected 1, got %d", deployedWorkflow.RunCount)
 	}
 
 	// fetch the dataset & compare bodies
-	m := lib.NewDatasetMethods(tr.inst)
-	getParams := &lib.GetParams{
-		Refstr:   datasetID,
-		Selector: "body",
-		All:      true,
-	}
-	getRes, err := m.Get(ctx, getParams)
-	if diff := cmp.Diff("[[1,2,3]]", string(getRes.Bytes)); diff != "" {
-		t.Errorf("deployed dataset body mismatch (-want +got):\n%s", diff)
-	}
+	AssertBodyEquals(t, tr.inst, datasetID, "[[1,2,3]]")
 
 	// manually trigger workflow
 	tr.cron.RunWorkflow(ctx, w, w.Triggers[0].Info().ID)
@@ -94,13 +84,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	}
 
 	// fetch the dataset and compare bodies
-	getRes, err = m.Get(ctx, getParams)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if diff := cmp.Diff("[[1,2,3],[4,5,6]]", string(getRes.Bytes)); diff != "" {
-		t.Errorf("manually triggered dataset body mismatch (-want +got):\n%s", diff)
-	}
+	AssertBodyEquals(t, tr.inst, datasetID, "[[1,2,3],[4,5,6]]")
 
 	// update workflow to have new trigger time of 3 seconds
 	ri, err := iso8601.ParseRepeatingInterval("R/PT3S")
@@ -143,13 +127,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	}
 
 	// fetch the dataset and compare bodies
-	getRes, err = m.Get(ctx, getParams)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if diff := cmp.Diff("[[1,2,3],[4,5,6],[7,8,9]]", string(getRes.Bytes)); diff != "" {
-		t.Errorf("cron triggered dataset body mismatch (-want +got):\n%s", diff)
-	}
+	AssertBodyEquals(t, tr.inst, datasetID, "[[1,2,3],[4,5,6],[7,8,9]]")
 
 	// update transform in workflow & deploy
 	dp = &DeployParams{
@@ -182,13 +160,7 @@ func TestScheduleWorkflowIntegration(t *testing.T) {
 	}
 
 	// check dataset body is different
-	getRes, err = m.Get(ctx, getParams)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if diff := cmp.Diff("[[\"one\",\"two\",\"three\"]]", string(getRes.Bytes)); diff != "" {
-		t.Errorf("updated transform dataset body mismatch (-want +got):\n%s", diff)
-	}
+	AssertBodyEquals(t, tr.inst, datasetID, "[[\"one\",\"two\",\"three\"]]")
 
 	// undeploy & show there is no workflow
 	if err := tr.cron.Undeploy(ctx, w.ID); err != nil {
@@ -208,12 +180,6 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) RunW
 
 		return func(ctx context.Context, streams ioes.IOStreams, workflow *Workflow) error {
 			runID := transform.NewRunID()
-
-			// runState = run.NewState(runID)
-			// m.inst.bus.SubscribeID(func(ctx context.Context, e event.Event) error {
-			// 	runState.AddTransformEvent(e)
-			// 	return nil
-			// }, runID)
 
 			p := &lib.SaveParams{
 				Ref: workflow.DatasetID,
@@ -246,7 +212,7 @@ type SchedulerTestRunner struct {
 	// beth &User
 }
 
-func (tr *SchedulerTestRunner) Cleanup() {
+func (tr *SchedulerTestRunner) cleanup() {
 	tr.cancel()
 	if tr.storePath != "" {
 		os.RemoveAll(tr.storePath)
@@ -256,7 +222,8 @@ func (tr *SchedulerTestRunner) Cleanup() {
 	}
 }
 
-func NewSchedulerTestRunner(t *testing.T, prefix string) *SchedulerTestRunner {
+func NewSchedulerTestRunner(t *testing.T, prefix string) (*SchedulerTestRunner, func()) {
+	t.Helper()
 	ctx, cancel := context.WithCancel(context.Background())
 	tr := &SchedulerTestRunner{
 		cancel:     cancel,
@@ -273,7 +240,7 @@ func NewSchedulerTestRunner(t *testing.T, prefix string) *SchedulerTestRunner {
 		t.Fatal(err)
 	}
 
-	tr.storePath, err = ioutil.TempDir(os.TempDir(), fmt.Sprintf("%s_scheduler_test_runner_store", prefix))
+	tr.storePath, err = ioutil.TempDir("", fmt.Sprintf("%s_scheduler_test_runner_store", prefix))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -286,5 +253,22 @@ func NewSchedulerTestRunner(t *testing.T, prefix string) *SchedulerTestRunner {
 
 	f := newInstanceRunnerFactory(tr.inst)
 	tr.cron = NewCron(*tr.store, f, tr.inst.Bus())
-	return tr
+	return tr, tr.cleanup
+}
+
+func AssertBodyEquals(t *testing.T, inst *lib.Instance, refstr, expectBody string) {
+	t.Helper()
+	m := lib.NewDatasetMethods(inst)
+	getParams := &lib.GetParams{
+		Refstr:   refstr,
+		Selector: "body",
+		All:      true,
+	}
+	getRes, err := m.Get(context.Background(), getParams)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(expectBody, string(getRes.Bytes)); diff != "" {
+		t.Errorf("dataset body mismatch (-want +got):\n%s", diff)
+	}
 }
