@@ -16,16 +16,6 @@ func NewRootCommand(ctx context.Context, streams ioes.IOStreams, repoPath string
 	}
 
 	cmd.AddCommand(NewServeCommand(ctx, streams, repoPath))
-
-	client, err := NewClientCommands(streams, repoPath)
-	if err != nil {
-		log.Debugf("no client available: %w", err)
-	} else {
-		for _, sub := range client.Commands(ctx) {
-			cmd.AddCommand(sub)
-		}
-	}
-
 	return cmd
 }
 

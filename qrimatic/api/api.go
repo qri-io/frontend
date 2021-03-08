@@ -1,15 +1,14 @@
 package api
 
 import (
-	"bytes"
 	"context"
 	"fmt"
-	"io"
+	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
+	"github.com/gorilla/mux"
 	golog "github.com/ipfs/go-log"
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
@@ -48,16 +47,10 @@ func NewServer(inst *lib.Instance) (*Server, error) {
 		return nil, err
 	}
 
-	var store workflow.Store
-	// switch cfg.Type {
-	// case "fs":
-	store, err = workflow.NewFileStore(filepath.Join(path, "workflows.json"), inst.Bus())
-	// case "mem":
-	// 	workflowStore = workflow.NewMemStore()
-	// 	logStore = workflow.NewMemStore()
-	// default:
-	// 	return fmt.Errorf("unknown cron type: %q", cfg.Type)
-	// }
+	store, err := workflow.NewFileStore(filepath.Join(path, "workflows.json"), inst.Bus())
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO (b5): this will need to be configurable, for now we're restricted to
 	// local execution
@@ -65,16 +58,36 @@ func NewServer(inst *lib.Instance) (*Server, error) {
 
 	svc := scheduler.NewCron(store, factory, inst.Bus())
 	log.Debug("starting update service")
-	// go func() {
-	// 	if err := svc.ServeHTTP(cfg.Addr); err != nil {
-	// 		log.Errorf("starting cron http server: %s", err)
-	// 	}
-	// }()
 
 	return &Server{
 		inst:  inst,
 		sched: svc,
 	}, nil
+}
+
+// AddRoutes registers cron routes with an *http.Mux.
+func (s *Server) AddRoutes(m *mux.Router, prefix string, mw func(http.HandlerFunc) http.HandlerFunc) {
+	route := func(route string) string {
+		return fmt.Sprintf("%s%s", prefix, route)
+	}
+
+	s.AddCronRoutes(m, mw)
+
+	// workflow routes
+	m.HandleFunc(route("/deploy"), mw(s.DeployHandler))
+	m.HandleFunc(route("/undeploy/"), mw(s.UndeployHandler(route("/undeploy/"))))
+}
+
+// AddCronRoutes registers cron endpoints on an *http.Mux
+func (s *Server) AddCronRoutes(m *mux.Router, mw func(http.HandlerFunc) http.HandlerFunc) {
+	m.HandleFunc("/cron", mw(s.StatusHandler))
+	m.HandleFunc("/workflows", mw(s.WorkflowsHandler))
+	m.HandleFunc("/workflows/trigger", mw(s.WorkflowManualTriggerHandler))
+	m.HandleFunc("/collection/running", mw(s.CollectionRunningHandler))
+	m.HandleFunc("/collection", mw(s.CollectionHandler))
+	m.HandleFunc("/workflow", mw(s.WorkflowHandler))
+	m.HandleFunc("/runs", mw(s.RunsHandler))
+	m.HandleFunc("/run", mw(s.GetRunInfoHandler))
 }
 
 // Start runs the cron service, blocking until an error occurs
@@ -91,12 +104,6 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) sche
 		return func(ctx context.Context, streams ioes.IOStreams, w *workflow.Workflow) error {
 			runID := transform.NewRunID()
 
-			// runState = run.NewState(runID)
-			// m.inst.bus.SubscribeID(func(ctx context.Context, e event.Event) error {
-			// 	runState.AddTransformEvent(e)
-			// 	return nil
-			// }, runID)
-
 			p := &lib.SaveParams{
 				Ref: w.DatasetID,
 				Dataset: &dataset.Dataset{
@@ -112,117 +119,8 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) sche
 	}
 }
 
-// Factory returns a function that can run workflows
-func Factory(context.Context) scheduler.RunWorkflowFunc {
-	return func(ctx context.Context, streams ioes.IOStreams, w *workflow.Workflow) error {
-		log.Debugf("running update: %s", w.Name)
-
-		var errBuf *bytes.Buffer
-		// if the workflow type is a dataset, error output is semi-predictable
-		// write to a buffer for better error reporting
-		if w.Type == workflow.JTDataset {
-			errBuf = &bytes.Buffer{}
-			teedErrOut := io.MultiWriter(streams.ErrOut, errBuf)
-			streams = ioes.NewIOStreams(streams.In, streams.Out, teedErrOut)
-		}
-
-		cmd := WorkflowToCmd(streams, w)
-		if cmd == nil {
-			return fmt.Errorf("unrecognized update type: %s", w.Type)
-		}
-
-		err := cmd.Run()
-		return processWorkflowError(w, errBuf, err)
-	}
-}
-
-func processWorkflowError(w *workflow.Workflow, errOut *bytes.Buffer, err error) error {
-	if err == nil {
-		return nil
-	}
-
-	if w.Type == workflow.JTDataset && errOut != nil {
-		// TODO (b5) - this should be a little more stringent :(
-		if strings.Contains(errOut.String(), "no changes to save") {
-			// TODO (b5) - this should be a concrete error declared in dsfs:
-			// dsfs.ErrNoChanges
-			return fmt.Errorf("no changes to save")
-		}
-	}
-
-	return err
-}
-
-// WorkflowToCmd returns an operating system command that will execute the given workflow
-// wiring operating system in/out/errout to the provided iostreams.
-func WorkflowToCmd(streams ioes.IOStreams, w *workflow.Workflow) *exec.Cmd {
-	switch w.Type {
-	case workflow.JTDataset:
-		return datasetSaveCmd(streams, w)
-	case workflow.JTShellScript:
-		return shellScriptCmd(streams, w)
-	default:
-		return nil
-	}
-}
-
-// datasetSaveCmd configures a "qri save" command based on workflow details
-// wiring operating system in/out/errout to the provided iostreams.
-func datasetSaveCmd(streams ioes.IOStreams, w *workflow.Workflow) *exec.Cmd {
-	args := []string{"save", w.Name}
-
-	if o, ok := w.Options.(*workflow.DatasetOptions); ok {
-		if o.Title != "" {
-			args = append(args, fmt.Sprintf(`--title=%s`, o.Title))
-		}
-		if o.Message != "" {
-			args = append(args, fmt.Sprintf(`--message=%s`, o.Message))
-		}
-		if o.Recall != "" {
-			args = append(args, fmt.Sprintf(`--recall=%s`, o.Recall))
-		}
-		if o.BodyPath != "" {
-			args = append(args, fmt.Sprintf(`--body=%s`, o.BodyPath))
-		}
-		if len(o.FilePaths) > 0 {
-			for _, path := range o.FilePaths {
-				args = append(args, fmt.Sprintf(`--file=%s`, path))
-			}
-		}
-
-		// TODO (b5) - config and secrets
-
-		boolFlags := map[string]bool{
-			"--publish":     o.Publish,
-			"--strict":      o.Strict,
-			"--force":       o.Force,
-			"--keep-format": o.ConvertFormatToPrev,
-			"--no-render":   !o.ShouldRender,
-		}
-		for flag, use := range boolFlags {
-			if use {
-				args = append(args, flag)
-			}
-		}
-	}
-
-	cmd := exec.Command("qri", args...)
-	cmd.Stderr = streams.ErrOut
-	cmd.Stdout = streams.Out
-	cmd.Stdin = streams.In
-	return cmd
-}
-
-// shellScriptCmd creates an exec.Cmd, wires operating system in/out/errout
-// to the provided iostreams.
-// Commands are executed with access to the same enviornment variables as the
-// process the runner is executing in
-func shellScriptCmd(streams ioes.IOStreams, w *workflow.Workflow) *exec.Cmd {
-	// TODO (b5) - config and secrets as env vars
-
-	cmd := exec.Command(w.Name)
-	cmd.Stderr = streams.ErrOut
-	cmd.Stdout = streams.Out
-	cmd.Stdin = streams.In
-	return cmd
+func idFromReq(prefix string, r *http.Request) string {
+	path := strings.TrimPrefix(r.URL.Path, prefix)
+	path = strings.TrimPrefix(path, "/")
+	return path
 }
