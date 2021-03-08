@@ -9,6 +9,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 const jsonMimeType = "application/json"
@@ -50,7 +52,7 @@ func (c HTTPClient) Ping() error {
 }
 
 // ListWorkflows by querying an HTTP server
-func (c HTTPClient) ListWorkflows(ctx context.Context, offset, limit int) ([]*Workflow, error) {
+func (c HTTPClient) ListWorkflows(ctx context.Context, offset, limit int) ([]*workflow.Workflow, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflows?offset=%d&limit=%d", c.Addr, offset, limit), nil)
 	if err != nil {
 		return nil, err
@@ -66,7 +68,7 @@ func (c HTTPClient) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wo
 }
 
 // WorkflowForName gets a workflow by it's name (which often matches the dataset name)
-func (c HTTPClient) WorkflowForName(ctx context.Context, name string) (*Workflow, error) {
+func (c HTTPClient) WorkflowForName(ctx context.Context, name string) (*workflow.Workflow, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflow?name=%s", c.Addr, name), nil)
 	if err != nil {
 		return nil, err
@@ -86,7 +88,7 @@ func (c HTTPClient) WorkflowForName(ctx context.Context, name string) (*Workflow
 }
 
 // WorkflowForDataset gets a single scheduled workflow by dataset identifier
-func (c HTTPClient) WorkflowForDataset(ctx context.Context, id string) (*Workflow, error) {
+func (c HTTPClient) WorkflowForDataset(ctx context.Context, id string) (*workflow.Workflow, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflow?dataset_id=%s", c.Addr, id), nil)
 	if err != nil {
 		return nil, err
@@ -106,7 +108,7 @@ func (c HTTPClient) WorkflowForDataset(ctx context.Context, id string) (*Workflo
 }
 
 // Workflow gets a workflow by querying an HTTP server
-func (c HTTPClient) Workflow(ctx context.Context, id string) (*Workflow, error) {
+func (c HTTPClient) Workflow(ctx context.Context, id string) (*workflow.Workflow, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/workflow?id=%s", c.Addr, id), nil)
 	if err != nil {
 		return nil, err
@@ -126,7 +128,7 @@ func (c HTTPClient) Workflow(ctx context.Context, id string) (*Workflow, error) 
 }
 
 // Schedule adds a workflow to the cron scheduler via an HTTP request
-func (c HTTPClient) Schedule(ctx context.Context, workflow *Workflow) error {
+func (c HTTPClient) Schedule(ctx context.Context, workflow *workflow.Workflow) error {
 	return c.postWorkflow(workflow)
 }
 
@@ -146,12 +148,12 @@ func (c HTTPClient) Unschedule(ctx context.Context, name string) error {
 	return maybeErrorResponse(res)
 }
 
-func (c HTTPClient) UpdateWorkflow(ctx context.Context, workflow *Workflow) error {
+func (c HTTPClient) UpdateWorkflow(ctx context.Context, workflow *workflow.Workflow) error {
 	return fmt.Errorf("not implemented")
 }
 
 // RunInfos gives a log of executed workflows for a dataset name
-func (c HTTPClient) RunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
+func (c HTTPClient) RunInfos(ctx context.Context, offset, limit int) ([]*workflow.RunInfo, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/runs?offset=%d&limit=%d", c.Addr, offset, limit), nil)
 	if err != nil {
 		return nil, err
@@ -167,7 +169,7 @@ func (c HTTPClient) RunInfos(ctx context.Context, offset, limit int) ([]*RunInfo
 }
 
 // GetRunInfo returns a single executed workflow by workflow.LogName
-func (c HTTPClient) GetRunInfo(ctx context.Context, logName string, number int) (*RunInfo, error) {
+func (c HTTPClient) GetRunInfo(ctx context.Context, logName string, number int) (*workflow.RunInfo, error) {
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("http://%s/run?name=%s", c.Addr, logName), nil)
 	if err != nil {
 		return nil, err
@@ -206,7 +208,7 @@ func (c HTTPClient) LogFile(ctx context.Context, logName string) (io.ReadCloser,
 	return nil, maybeErrorResponse(res)
 }
 
-func (c HTTPClient) postWorkflow(workflow *Workflow) error {
+func (c HTTPClient) postWorkflow(workflow *workflow.Workflow) error {
 	data, err := json.Marshal(workflow)
 	if err != nil {
 		return err
@@ -241,10 +243,10 @@ func maybeErrorResponse(res *http.Response) error {
 	return fmt.Errorf(string(errData))
 }
 
-func decodeJSONWorkflowsResponse(res *http.Response) ([]*Workflow, error) {
+func decodeJSONWorkflowsResponse(res *http.Response) ([]*workflow.Workflow, error) {
 	defer res.Body.Close()
 	env := struct {
-		Data []*Workflow
+		Data []*workflow.Workflow
 	}{}
 	if err := json.NewDecoder(res.Body).Decode(&env); err != nil {
 		return nil, err
@@ -252,27 +254,27 @@ func decodeJSONWorkflowsResponse(res *http.Response) ([]*Workflow, error) {
 	return env.Data, nil
 }
 
-func decodeJSONWorkflowResponse(res *http.Response) (*Workflow, error) {
+func decodeJSONWorkflowResponse(res *http.Response) (*workflow.Workflow, error) {
 	defer res.Body.Close()
 	env := struct {
-		Data *Workflow
+		Data *workflow.Workflow
 	}{}
 	err := json.NewDecoder(res.Body).Decode(&env)
 	return env.Data, err
 }
 
-func decodeJSONRunsResponse(res *http.Response) ([]*RunInfo, error) {
+func decodeJSONRunsResponse(res *http.Response) ([]*workflow.RunInfo, error) {
 	defer res.Body.Close()
 	env := struct {
-		Data []*RunInfo
+		Data []*workflow.RunInfo
 	}{}
 	err := json.NewDecoder(res.Body).Decode(&env)
 	return env.Data, err
 }
 
-func decodeJSONRunResponse(res *http.Response) (*RunInfo, error) {
+func decodeJSONRunResponse(res *http.Response) (*workflow.RunInfo, error) {
 	defer res.Body.Close()
-	run := &RunInfo{}
+	run := &workflow.RunInfo{}
 	err := json.NewDecoder(res.Body).Decode(run)
 	return run, err
 }

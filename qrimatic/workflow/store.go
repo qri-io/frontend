@@ -1,4 +1,4 @@
-package scheduler
+package workflow
 
 import (
 	"context"
@@ -28,7 +28,7 @@ type Store interface {
 	// times are equal, Workflows hould alpha sort by name
 	// passing a limit of -1 and an offset of 0 returns the entire list of the workflows
 	// filtered by status
-	ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error)
+	ListWorkflowsByStatus(ctx context.Context, status Status, offset, limit int) ([]*Workflow, error)
 
 	ListRunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error)
 	// GetWorkflowByName gets a workflow with the corresponding name field. usually matches
@@ -147,7 +147,7 @@ func (s *memStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wor
 
 // ListWorkflowsByStatus lists workflows filtered by status and ordered in reverse
 // chronological order by `LatestStart`
-func (s *memStore) ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error) {
+func (s *memStore) ListWorkflowsByStatus(ctx context.Context, status Status, offset, limit int) ([]*Workflow, error) {
 	workflows := make([]*Workflow, 0, len(s.workflows.set))
 
 	for _, workflow := range s.workflows.set {
@@ -182,6 +182,7 @@ func (s *memStore) ListWorkflowsByStatus(ctx context.Context, status WorkflowSta
 	return workflows[offset:limit], nil
 }
 
+// ListRunInfos returns a slice of RunInfos
 func (s *memStore) ListRunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	if limit < 0 {
 		limit = len(s.runs.set)
@@ -299,6 +300,7 @@ func (s *memStore) GetRunInfo(ctx context.Context, id string) (*RunInfo, error) 
 	return nil, ErrNotFound
 }
 
+// GetWorkflowRunInfos returns the `RunInfo`s for a specific workflow by `Workflow.ID`
 func (s *memStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
 	ris, ok := s.workflowRunInfos[workflowID]
 	if !ok {
@@ -323,6 +325,7 @@ func (s *memStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, o
 	return res, nil
 }
 
+// PutRunInfo puts a `RunInfo` into the store
 func (s *memStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
@@ -344,6 +347,7 @@ func (s *memStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
 	return nil
 }
 
+// DeleteAllWorkflowRunInfos removes the `RunInfo`s of a specific workflow from the store
 func (s *memStore) DeleteAllWorkflowRunInfos(ctx context.Context, workflowID string) error {
 	return fmt.Errorf("not finished: memStore delete all workflow runs")
 }

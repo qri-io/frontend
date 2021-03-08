@@ -1,4 +1,4 @@
-package scheduler
+package workflow
 
 import (
 	"context"
@@ -65,7 +65,7 @@ func (s *fileStore) ListWorkflows(ctx context.Context, offset, limit int) ([]*Wo
 
 // ListWorkflowsByStatus lists workflows filtered by status and ordered in reverse
 // chronological order by `LatestStart`
-func (s *fileStore) ListWorkflowsByStatus(ctx context.Context, status WorkflowStatus, offset, limit int) ([]*Workflow, error) {
+func (s *fileStore) ListWorkflowsByStatus(ctx context.Context, status Status, offset, limit int) ([]*Workflow, error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -103,6 +103,7 @@ func (s *fileStore) ListWorkflowsByStatus(ctx context.Context, status WorkflowSt
 	return workflows[offset:limit], nil
 }
 
+// ListRunInfos returns a slice of `RunInfo`s
 func (s *fileStore) ListRunInfos(ctx context.Context, offset, limit int) ([]*RunInfo, error) {
 	if limit < 0 {
 		limit = len(s.runs.set)
@@ -208,6 +209,7 @@ func (s *fileStore) GetRunInfo(ctx context.Context, id string) (*RunInfo, error)
 	return nil, ErrNotFound
 }
 
+// GetWorkflowRunInfos gets the `RunInfo`s of a specific workflow, by `Workflow.ID`
 func (s *fileStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, offset, limit int) ([]*RunInfo, error) {
 	ris, ok := s.workflowRunInfos[workflowID]
 	if !ok {
@@ -232,6 +234,7 @@ func (s *fileStore) GetWorkflowRunInfos(ctx context.Context, workflowID string, 
 	return res, nil
 }
 
+// PutRunInfo puts a `RunInfo` into the store
 func (s *fileStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
 	if run.ID == "" {
 		return fmt.Errorf("ID is required")
@@ -253,10 +256,14 @@ func (s *fileStore) PutRunInfo(ctx context.Context, run *RunInfo) error {
 	return s.writeToFile()
 }
 
+// DeleteAllWorkflowRunInfos removes all the RunInfos of a specific workflow
+// TODO (ramfox): not finished
 func (s *fileStore) DeleteAllWorkflowRunInfos(ctx context.Context, workflowID string) error {
 	return fmt.Errorf("not finished: fileStore delete all workflow runs")
 }
 
+// DeleteAllWorkflows removes all the workflow from the filestore
+// TODO (ramfox): not finished
 func (s *fileStore) DeleteAlWorkflows(ctx context.Context) error {
 	return fmt.Errorf("not finished: fileStore delete all workflows")
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qrimatic/api"
-	"github.com/qri-io/qrimatic/scheduler"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 func TestWorkflowFromDataset(t *testing.T) {
@@ -36,10 +36,10 @@ func TestWorkflowFromShellScript(t *testing.T) {
 }
 
 func TestDatasetWorkflowToCmd(t *testing.T) {
-	dsj := &scheduler.Workflow{
-		Type: scheduler.JTDataset,
+	dsj := &Workflow{
+		Type: workflow.JTDataset,
 		Name: "me/foo",
-		Options: &scheduler.DatasetOptions{
+		Options: &workflow.DatasetOptions{
 			Title:    "title",
 			BodyPath: "body/path.csv",
 			FilePaths: []string{
@@ -66,8 +66,8 @@ func TestDatasetWorkflowToCmd(t *testing.T) {
 }
 
 func TestShellScriptWorkflowToCmd(t *testing.T) {
-	dsj := &scheduler.Workflow{
-		Type: scheduler.JTShellScript,
+	dsj := &Workflow{
+		Type: workflow.JTShellScript,
 		Name: "path/to/shell/script.sh",
 	}
 	streams := ioes.NewDiscardIOStreams()

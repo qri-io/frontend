@@ -1133,6 +1133,7 @@ github.com/qri-io/jsonschema v0.2.0 h1:is8lirh3HYwTkC0e+4jL/vWEHwzPLojnl4FWkUoeE
 github.com/qri-io/jsonschema v0.2.0/go.mod h1:g7DPkiOsK1xv6T/Ao5scXRkd+yTFygcANPBaaqW+VrI=
 github.com/qri-io/qfs v0.5.1-0.20201119141805-fb13393b2d1f h1:Oj2N/HRGMcs2NDZWl1K5gFsTifrxQVVE0KyFyUGgn8M=
 github.com/qri-io/qfs v0.5.1-0.20201119141805-fb13393b2d1f/go.mod h1:SU+DUq8+BfHNod1SXzmD8FrNLgPt42aKyQuO3fnFEQI=
+github.com/qri-io/qri v0.9.13 h1:qlssrQTf5znUoZRYZRRSho2Lhm2wbqPZhny+uc28mnw=
 github.com/qri-io/qri v0.9.14-0.20210217202507-0fa42078cdd7 h1:WIx0vfPF209YE9G7Hi3r8BA/NhwYMq1eaq9wfK1r8Mk=
 github.com/qri-io/qri v0.9.14-0.20210217202507-0fa42078cdd7/go.mod h1:Xz+7nbPYWB6XEHvLOSl2vls78FQcK+3xnaZ5Cj+vRzY=
 github.com/qri-io/starlib v0.4.2 h1:ZGzmzT9fOqdluezcwhAZAbTn/v6kMg1tC6ALVjQPhpQ=
@@ -1541,6 +1542,7 @@ google.golang.org/appengine v1.3.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7
 google.golang.org/appengine v1.4.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.5.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.6.1/go.mod h1:i06prIuMbXzDqacNJfV5OdTW448YApPu5ww/cMBSeb0=
+google.golang.org/appengine v1.6.5 h1:tycE03LOZYQNhDpS27tcQdAzLCVMaj7QT2SXxebnpCM=
 google.golang.org/appengine v1.6.5/go.mod h1:8WjMMxjGQR8xUklV/ARdw2HLXBOI7O7uCIDZVag1xfc=
 google.golang.org/genproto v0.0.0-20180817151627-c66870c02cf8/go.mod h1:JiN7NxoALGmiZfu7CAH4rXhgtRTLTxftemlI0sWmxmc=
 google.golang.org/genproto v0.0.0-20180831171423-11092d34479b/go.mod h1:JiN7NxoALGmiZfu7CAH4rXhgtRTLTxftemlI0sWmxmc=

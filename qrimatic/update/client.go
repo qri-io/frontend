@@ -13,6 +13,7 @@ import (
 	reporef "github.com/qri-io/qri/repo/ref"
 	qmapi "github.com/qri-io/qrimatic/api"
 	"github.com/qri-io/qrimatic/scheduler"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 // Client enapsulates logic for scheduled updates
@@ -33,11 +34,11 @@ func NewClient(repoPath string) (*Client, error) {
 	}, nil
 }
 
-// Workflow aliases a scheduler.Workflow, removing the need to import the cron package.
-type Workflow = scheduler.Workflow
+// Workflow aliases a workflow.Workflow, removing the need to import the cron package.
+type Workflow = workflow.Workflow
 
-// RunInfo aliase a scheduler.RunInfo, removing the need to import the cron package.
-type RunInfo = scheduler.RunInfo
+// RunInfo aliase a workflow.RunInfo, removing the need to import the cron package.
+type RunInfo = workflow.RunInfo
 
 // ScheduleParams encapsulates parameters for scheduling updates
 type ScheduleParams struct {
@@ -50,25 +51,25 @@ type ScheduleParams struct {
 }
 
 // Schedule creates a workflow and adds it to the scheduler
-func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *scheduler.Workflow) (err error) {
+func (c *Client) Schedule(ctx context.Context, in *ScheduleParams, out *Workflow) (err error) {
 
-	workflow, err := c.workflowFromScheduleParams(ctx, in)
+	w, err := c.workflowFromScheduleParams(ctx, in)
 	if err != nil {
 		log.Debugw("creating workflow from schedule params", "error", err)
 		return err
 	}
 
-	log.Debugw("scheduling workflow", "workflow", workflow)
-	if err = c.sch.Schedule(ctx, workflow); err != nil {
+	log.Debugw("scheduling workflow", "workflow", w)
+	if err = c.sch.Schedule(ctx, w); err != nil {
 		log.Debugw("scheduling workflow", "error", err)
 		return err
 	}
 
-	*out = *workflow
+	*out = *w
 	return nil
 }
 
-func (c *Client) workflowFromScheduleParams(ctx context.Context, p *ScheduleParams) (workflow *scheduler.Workflow, err error) {
+func (c *Client) workflowFromScheduleParams(ctx context.Context, p *ScheduleParams) (w *Workflow, err error) {
 	if PossibleShellScript(p.Name) {
 		return ShellScriptToWorkflow(p.Name, p.Periodicity, nil)
 	}
@@ -86,9 +87,9 @@ func (c *Client) workflowFromScheduleParams(ctx context.Context, p *SchedulePara
 		return nil, err
 	}
 
-	var o *scheduler.DatasetOptions
+	var o *workflow.DatasetOptions
 	if p.SaveParams != nil {
-		o = &scheduler.DatasetOptions{
+		o = &workflow.DatasetOptions{
 			Title:   p.SaveParams.Title,
 			Message: p.SaveParams.Message,
 			// TODO (arqu): revert once implemented
@@ -122,13 +123,13 @@ func (c *Client) List(ctx context.Context, p *lib.ListParams, workflows *[]*Work
 }
 
 // Workflow gets a workflow by name
-func (c *Client) Workflow(ctx context.Context, name *string, workflow *Workflow) error {
+func (c *Client) Workflow(ctx context.Context, name *string, w *Workflow) error {
 	res, err := c.sch.Workflow(ctx, *name)
 	if err != nil {
 		return err
 	}
 
-	*workflow = *res
+	*w = *res
 	return nil
 }
 
@@ -233,9 +234,9 @@ func (c *Client) Run(ctx context.Context, p *Workflow, res *reporef.DatasetRef) 
 		if err = qfs.AbsPath(&p.Name); err != nil {
 			return
 		}
-		p.Type = scheduler.JTShellScript
+		p.Type = workflow.JTShellScript
 	} else {
-		p.Type = scheduler.JTDataset
+		p.Type = workflow.JTDataset
 	}
 
 	if err := absolutizeWorkflowFilepaths(p); err != nil {
@@ -243,11 +244,11 @@ func (c *Client) Run(ctx context.Context, p *Workflow, res *reporef.DatasetRef) 
 	}
 
 	switch p.Type {
-	case scheduler.JTDataset:
+	case workflow.JTDataset:
 		params := &lib.SaveParams{
 			Ref: p.Name,
 		}
-		if o, ok := p.Options.(*scheduler.DatasetOptions); ok {
+		if o, ok := p.Options.(*workflow.DatasetOptions); ok {
 			params = &lib.SaveParams{
 				Ref:     p.Name,
 				Title:   o.Title,
@@ -269,10 +270,10 @@ func (c *Client) Run(ctx context.Context, p *Workflow, res *reporef.DatasetRef) 
 		*res = reporef.DatasetRef{}
 		err = c.runDatasetUpdate(ctx, params, res)
 
-	case scheduler.JTShellScript:
+	case workflow.JTShellScript:
 		// err = WorkflowToCmd(m.inst.streams, p).Run()
 		err = qmapi.WorkflowToCmd(ioes.NewStdIOStreams(), p).Run()
-	case scheduler.WorkflowType(""):
+	case workflow.Type(""):
 		return fmt.Errorf("update requires a workflow type to run")
 	default:
 		return fmt.Errorf("unrecognized update type: %s", p.Type)
@@ -289,7 +290,7 @@ func (c *Client) Run(ctx context.Context, p *Workflow, res *reporef.DatasetRef) 
 }
 
 func absolutizeWorkflowFilepaths(j *Workflow) error {
-	if o, ok := j.Options.(*scheduler.DatasetOptions); ok {
+	if o, ok := j.Options.(*workflow.DatasetOptions); ok {
 		if err := qfs.AbsPath(&o.BodyPath); err != nil {
 			return err
 		}

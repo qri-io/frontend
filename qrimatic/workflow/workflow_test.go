@@ -1,12 +1,10 @@
-package scheduler
+package workflow
 
 import (
 	"encoding/json"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/qri-io/iso8601"
 )
 
 func TestDatasetOptionsJSON(t *testing.T) {
@@ -47,7 +45,7 @@ func TestWorkflowCopy(t *testing.T) {
 	a := &Workflow{
 		ID:   "id",
 		Name: "name",
-		Type: WorkflowType("FOO"),
+		Type: Type("FOO"),
 		// PrevRunStart: &now,
 		// RunNumber:    1234567890,
 		// RunStart:     &now,
@@ -60,13 +58,9 @@ func TestWorkflowCopy(t *testing.T) {
 		},
 	}
 
-	if diff := compareWorkflow(a, a.Copy()); diff != "" {
+	if diff := CompareWorkflows(a, a.Copy()); diff != "" {
 		t.Errorf("copy mismatch (-want +got):\n%s", diff)
 	}
-}
-
-func compareWorkflow(a, b *Workflow) string {
-	return cmp.Diff(a, b, cmpopts.IgnoreUnexported(iso8601.Duration{}))
 }
 
 func TestWorkflowsJSON(t *testing.T) {
@@ -94,7 +88,7 @@ func TestWorkflowsJSON(t *testing.T) {
 	}
 
 	for i, j := range got {
-		if diff := compareWorkflow(workflows.set[i], j); diff != "" {
+		if diff := CompareWorkflows(workflows.set[i], j); diff != "" {
 			t.Errorf("workflow %d mismatch (-want +got):\n%s", i, diff)
 		}
 	}

@@ -9,7 +9,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
-	"github.com/qri-io/qrimatic/scheduler"
+	"github.com/qri-io/qrimatic/workflow"
 )
 
 // StringerLocation is the function to retrieve the timezone location
@@ -31,7 +31,7 @@ func printItems(w io.Writer, items []fmt.Stringer, offset int) error {
 	return err
 }
 
-type workflowStringer scheduler.Workflow
+type workflowStringer workflow.Workflow
 
 // String assumes Name, Type, Periodicity, and PrevRunStart are present
 func (j workflowStringer) String() string {
@@ -49,7 +49,7 @@ func (j workflowStringer) String() string {
 	return w.String()
 }
 
-type runStringer scheduler.RunInfo
+type runStringer workflow.RunInfo
 
 // String assumes Name, Type, PrevRunStart and ExitStatus are present
 func (j runStringer) String() string {
