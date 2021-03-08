@@ -83,7 +83,7 @@ func TestWorkflowsJSON(t *testing.T) {
 	}
 
 	got := []*Workflow{}
-	if err := json.Unmarshal(data, got); err != nil {
+	if err := json.Unmarshal(data, &got); err != nil {
 		t.Fatal(err)
 	}
 
