@@ -64,7 +64,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
 
   return (
     <>
-      <div id='workflow' className='flex h-full'>
+      <div id='workflow' className='flex h-full w-full'>
         <Prompt
           when={true}
           message={handleBlockedNavigation}

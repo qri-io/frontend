@@ -21,6 +21,10 @@ const templates = [
   {
     name: 'Web Scrape',
     id: 'Webscrape'
+  },
+  {
+    name: "Blank",
+    id: "Blank"
   }
 ]
 

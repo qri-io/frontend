@@ -53,7 +53,7 @@ export default function Routes () {
 
         <Route path='/'>
           {
-            user !== NewUser ? <Redirect to='/dashboard' /> : <Splash />
+            user !== NewUser ? <Redirect to='/collection' /> : <Splash />
           }
         </Route>
       </Switch>

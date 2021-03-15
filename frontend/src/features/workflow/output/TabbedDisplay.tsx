@@ -20,8 +20,8 @@ export const TabbedDisplay: React.FC<TabbedDisplayProps> = (props) => {
     content
   } = props
 
-  return <div className='w-full'>
-    <div className='w-full border-b flex'>
+  return <div>
+    <div className='border-b flex'>
       {
         tabs.map((tab: Tab) => {
           if (tab.name === activeTab) {
@@ -42,7 +42,9 @@ export const TabbedDisplay: React.FC<TabbedDisplayProps> = (props) => {
         })
       }
     </div>
-    {content}
+    <div className='overflow-x-auto'>
+      {content}
+    </div>
 
   </div>
 }
