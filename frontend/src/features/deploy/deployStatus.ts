@@ -15,7 +15,7 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     statusIcon: 'circle',
     statusText: 'Not Deployed',
     statusIconClass: 'text-gray-500',
-    message: 'This workflow is not deployed yet. Edit your script here, use a Dry Run to confirm that it is working, then Deploy it!',
+    message: 'This workflow is not deployed yet. Edit your script & use Dry Run to confirm that it is working, then Deploy it!',
     buttonIcon: 'playCircle',
     buttonClass: 'bg-qriblue-600 hover:bg-qriblue-700',
     buttonText: 'Deploy Workflow',

@@ -36,13 +36,13 @@ export const DatasetPreview: React.FC<DatasetPreviewProps> = ({ data }) => {
   } else {
     const component = getComponentFromDatasetByName(data, componentTab) || `No content for ${componentTab} could be found` 
     content = <div className='p-4 border'>
-      <pre className='max-h-80 overflow-x-hidden overflow-y-auto '>
+      <pre className='max-h-80 overflow-x-hidden overflow-y-auto'>
         {typeof component === 'string'? component : JSON.stringify(component, null, 4)}
       </pre>
     </div>
   }
 
-  return <div id='dataset-preview' className='w-full bg-white'>
+  return <div id='dataset-preview' style={{ width: 1000 }}>
     <TabbedDisplay
       activeTab={componentTab}
       tabs={tabs}

@@ -2,6 +2,32 @@ import { Workflow } from '../../qrimatic/workflow'
 
 // TODO (ramfox): need to formalize possible trigger & on completion types
 
+export const Blank: Workflow = {
+  id: 'Blank',
+  runCount: 0,
+  disabled: false,
+
+  triggers: [
+    // repeat every hour
+    { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
+  ],
+  steps: [
+    { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
+# load("http.star", "http")
+# load("encoding/csv.star", "csv")` },
+    { syntax: 'starlark', category: 'download', name: 'download', script: `# download web assets
+def download(ctx):
+  return None` },
+    { syntax: 'starlark', category: 'transform', name: 'transform', script: `# shape & clean data
+def transform(ds, ctx):
+  csv = ctx.download
+  ds.set_body(csv, parse_as='csv')`}
+  ],
+  onComplete: [
+    { type: 'push', remote: 'https://registry.qri.cloud' }
+  ]
+}
+
 export const CSVDownload: Workflow = {
   id: 'CSVDownload',
   runCount: 0,
@@ -92,7 +118,8 @@ export const Templates: Record<string, Workflow> = {
   'CSVDownload': CSVDownload,
   'APICall': APICall,
   'DatabaseQuery': DatabaseQuery,
-  'Webscrape': Webscrape
+  'Webscrape': Webscrape,
+  'Blank': Blank
 }
 
 export function selectTemplate(id: string): Workflow {

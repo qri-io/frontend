@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Icon from '../../chrome/Icon'
 import { TransformStep } from '../../qri/dataset'
@@ -6,10 +6,8 @@ import { NewRunStep, Run } from '../../qri/run'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStatusIcon from '../run/RunStatusIcon'
-import DeployButtonWithStatusDescription from '../deploy/DeployStatusDescriptionButton'
 import SnackBar from '../snackBar/SnackBar'
 import { RunMode } from './state/workflowState'
-import SimpleActivityList from '../activityFeed/SimpleActivityList'
 
 export interface WorkflowOutlineProps {
   runMode: RunMode
@@ -21,9 +19,20 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
   runMode,
   workflow,
   run
-}) => (
-  <div className='outline h-full w-56 flex-none flex flex-col'>
+}) => {
+  const [showing, setShowing] = useState(true)
+
+  if (!showing) {
+    return (
+      <div className='outline h-full w-10 flex-none flex flex-col py-4 pl-4'>
+        <div className='opacity-20 cursor-pointer' onClick={() => { setShowing(!showing) }} ><Icon icon='arrowRight' /></div>
+      </div>
+    ) 
+  }
+
+  return (<div className='outline h-full w-56 flex-none flex flex-col'>
     <div className='py-4 pl-4 text-left'>
+      <div className='opacity-20 cursor-pointer mb-5' onClick={() => { setShowing(!showing) }} ><Icon icon='arrowLeft' /></div>
       <div className='mb-2'>
         <ScrollTrigger target='triggers'>
           <div className='font-semibold text-gray-900 mb-1 uppercase text-xs'>Triggers</div>
@@ -66,14 +75,8 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
         <Icon icon='cloudUpload' size='sm' className='mr-1'/> <span>push to cloud</span>
       </div>
     </div>
-    <hr />
-    <div>
-      {workflow && <DeployButtonWithStatusDescription workflow={workflow} />}
-    </div>
-    <hr />
-    <SimpleActivityList />
     <SnackBar />
-  </div>
-)
+  </div>)
+}
 
 export default WorkflowOutline

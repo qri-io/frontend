@@ -58,15 +58,12 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
     <div id={`${step.name}-cell`} className='w-full my-4'>
         <ScrollAnchor id={step.name} />
         <header>
-          <div className='text-center w-10 h-100 py-3 float-left'>
-            <h1 className='font-black text-3xl text-gray-300' >{index + 1}</h1>
-          </div>
-          <div className='py-2 px-5'>
+          <div className='py-2 pr-5'>
             {run && <p className='float-right'>{run.duration}</p>}
-            <h3 className='text-lg text-gray-500 font-semibold cursor-pointer' onClick={() => {
+            <h3 className='text-lg text-gray-700 font-semibold cursor-pointer' onClick={() => {
               onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
             }}>{name}{run && <RunStatusIcon state={run.status} />}</h3>
-            <div className='text-xs mb-2'>{description}</div>
+            <div className='text-xs mb-2 text-gray-400'>{description}</div>
           </div>
         </header>
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
