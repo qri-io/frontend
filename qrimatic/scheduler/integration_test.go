@@ -13,8 +13,8 @@ import (
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/iso8601"
+	"github.com/qri-io/qri/auth/key"
 	"github.com/qri-io/qri/lib"
-	"github.com/qri-io/qri/repo/gen"
 	repotest "github.com/qri-io/qri/repo/test"
 	"github.com/qri-io/qri/transform"
 	"github.com/qri-io/qrimatic/workflow"
@@ -199,7 +199,7 @@ func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) RunW
 
 type SchedulerTestRunner struct {
 	cancel     context.CancelFunc
-	TestCrypto gen.CryptoGenerator
+	TestCrypto key.CryptoGenerator
 	repo       *repotest.TempRepo
 	inst       *lib.Instance
 	store      *workflow.Store

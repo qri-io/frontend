@@ -75,6 +75,20 @@ const statusIcons = [
   },
 ]
 
+// react-data-table custom styles
+const customStyles = {
+  headRow: {
+    style: {
+      minHeight: '38px'
+    }
+  },
+  rows: {
+    style: {
+      minHeight: '38px'
+    }
+  }
+}
+
 const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   filteredWorkflows,
   onRowClicked,
@@ -82,22 +96,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   clearSelectedTrigger,
   simplified=false
 }) => {
-
   const dispatch = useDispatch()
-
-  // react-data-table custom styles
-  const customStyles = {
-    headRow: {
-      style: {
-        minHeight: '38px'
-      }
-    },
-    rows: {
-      style: {
-        minHeight: '38px'
-      }
-    }
-  }
 
   const handleButtonClick = (message: string) => {
     alert(message)

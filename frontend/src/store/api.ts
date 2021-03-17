@@ -71,6 +71,7 @@ export interface ApiSegments {
   peerID?: string
   path?: string
   fsi?: boolean
+  selector?: string
 }
 
 interface ApiPagination {
@@ -161,6 +162,9 @@ function apiUrl (endpoint: string, segments?: ApiSegments, query?: ApiQuery, pag
     }
     if (segments.path) {
       url = addToUrl(url, segments.path)
+    }
+    if (segments.selector) {
+      url = addToUrl(url, segments.selector)
     }
   }
 

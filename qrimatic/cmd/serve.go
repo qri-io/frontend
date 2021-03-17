@@ -11,11 +11,11 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/api"
+	"github.com/qri-io/qri/auth/key"
 	"github.com/qri-io/qri/cmd"
 	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
-	"github.com/qri-io/qri/repo/gen"
 	qmapi "github.com/qri-io/qrimatic/api"
 	"github.com/spf13/cobra"
 )
@@ -81,7 +81,7 @@ func (o *ServeOptions) Run(ctx context.Context, streams ioes.IOStreams, repoPath
 }
 
 func setupRepo(ctx context.Context, streams ioes.IOStreams, repoPath string) error {
-	o := cmd.SetupOptions{IOStreams: streams, Generator: gen.NewCryptoSource()}
+	o := cmd.SetupOptions{IOStreams: streams, Generator: key.NewCryptoSource()}
 	cfg := config.DefaultConfig()
 	envVars := map[string]*string{
 		"QRI_SETUP_CONFIG_DATA":      &o.ConfigData,
