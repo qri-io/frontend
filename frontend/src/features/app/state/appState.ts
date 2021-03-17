@@ -30,10 +30,7 @@ const initialState: AppState = {
 }
 
 export const appReducer = createReducer(initialState, {
-  SET_MODAL: setModal,
+  SET_MODAL: (state: AppState, action: ModalAction) => {
+    state.modal = action.modal
+  },
 })
-
-function setModal(state: AppState, action: ModalAction) {
-  state.modal = action.modal
-  return
-}

@@ -1,5 +1,7 @@
 import { CALL_API, ApiActionThunk} from '../../../store/api'
-import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
+import { NewWorkflow, Workflow, workflowInfoFromWorkflow, workflowScriptString } from '../../../qrimatic/workflow'
+import { WorkflowInfoAction } from '../../workflow/state/workflowActions'
+import { DEPLOY_START, DEPLOY_STOP } from './deployState'
 
 export function deployWorkflow(w: Workflow): ApiActionThunk {
   return async (dispatch, getState) => {
@@ -19,5 +21,21 @@ export function deployWorkflow(w: Workflow): ApiActionThunk {
         }
       }
     })
+  }
+}
+
+export function deployStarted(d: Record<string,any>): WorkflowInfoAction {
+  const wf = NewWorkflow(d)
+  return {
+    type: DEPLOY_START,
+    data: workflowInfoFromWorkflow(wf)
+  }
+}
+
+export function deployStopped(d: Record<string,any>): WorkflowInfoAction {
+  const wf = NewWorkflow(d)
+  return {
+    type: DEPLOY_STOP,
+    data: workflowInfoFromWorkflow(wf)
   }
 }
