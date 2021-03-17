@@ -6,6 +6,7 @@ import { RootState } from '../../../store/store'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
 import { runEventLog } from '../../workflow/state/workflowActions'
 import { workflowCompleted, workflowStarted } from '../../collection/state/collectionActions'
+import { deployStarted, deployStopped } from '../../deploy/state/deployActions'
 
 type DagCompletion = number[]
 
@@ -72,14 +73,15 @@ export const ETRemoteClientPullDatasetCompleted = "remoteClient:PullDatasetCompl
 // payload will be a RemoteEvent
 export const ETRemoteClientRemoveDatasetCompleted = "remoteClient:RemoveDatasetCompleted"
 
-// ETCronWorkflowStarted fires when a workflow has started running
+// ETWorkflowStarted fires when a workflow has started running
 // payload is a Workflow
-// subscriptions do not block the publisher
-const ETCronWorkflowStarted = "cron:WorkflowStarted"
-// ETCronWorkflowCompleted fires when a workflow has finished running
+const ETWorkflowStarted = "wf:Started"
+// ETWorkflowCompleted fires when a workflow has finished running
 // payload is a Workflow
-// subscriptions do not block the publisher
-const ETCronWorkflowCompleted = "cron:WorkflowCompleted"
+const ETWorkflowCompleted = "wf:Completed"
+
+const ETWorklowDeployStarted = "wf:DeployStarted"
+const ETWorklowDeployStopped = "wf:DeployStopped"
 
 const middleware = () => {
   let socket: WebSocket | undefined
@@ -146,10 +148,16 @@ const middleware = () => {
         case ETRemoteClientRemoveDatasetCompleted:
           dispatch(removeVersionTransfer(event.data))
           break
-        case ETCronWorkflowStarted:
+        case ETWorklowDeployStarted:
+          dispatch(deployStarted(event.data))
+          break
+        case ETWorklowDeployStopped:
+          dispatch(deployStopped(event.data))
+          break
+        case ETWorkflowStarted:
           dispatch(workflowStarted(event.data))
           break
-        case ETCronWorkflowCompleted:
+        case ETWorkflowCompleted:
           dispatch(workflowCompleted(event.data))
           break
         default:

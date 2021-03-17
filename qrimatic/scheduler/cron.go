@@ -9,6 +9,7 @@ import (
 	"time"
 
 	golog "github.com/ipfs/go-log"
+	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/base/dsfs"
 	"github.com/qri-io/qri/dsref"
@@ -144,22 +145,6 @@ func (c *Cron) GetRunInfo(ctx context.Context, datasetID string, runNumber int) 
 	return nil, fmt.Errorf("not finished: service get run by datasetID and runNumber")
 }
 
-// // LogFile returns a reader for a file at the given name
-// func (c *Cron) LogFile(ctx context.Context, logName string) (io.ReadCloser, error) {
-// 	workflow, err := c.log.workflow.Workflow(ctx, logName)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	if workflow.LogFilePath == "" {
-// 		return ioutil.NopCloser(&bytes.Buffer{}), nil
-// 	}
-
-// 	// TODO (b5): if logs are being stored somewhere other than local this'll break
-// 	// we should add an OpenLogFile method to LogFileCreator & rename the interface
-// 	return os.Open(workflow.LogFilePath)
-// }
-
 // Start initiates the check loop, looking for updates to execute once at every
 // iteration of the configured check interval.
 // Start blocks until the passed context completes
@@ -286,15 +271,10 @@ func (c *Cron) RunWorkflow(ctx context.Context, w *workflow.Workflow, triggerID 
 
 // Schedule adds a workflow to the cron scheduler
 func (c *Cron) Schedule(ctx context.Context, w *workflow.Workflow) (err error) {
-
 	// ensure IDs are aligned to avoid double workflows/scheduling
 	wf, err := c.store.GetWorkflowByDatasetID(ctx, w.DatasetID)
 	if err == nil && (w.ID == "" || w.ID != wf.ID) {
 		return fmt.Errorf("schedule: bad workflow ID")
-	}
-
-	if w.ID == "" && w.OwnerID != "" && w.DatasetID != "" {
-		w.ID = workflow.GenerateWorkflowID()
 	}
 
 	// if we're scheduling a workflow, it means it's enabled
@@ -452,4 +432,109 @@ func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, a
 	})
 
 	return wis, nil
+}
+
+// DeployParams represents what we need in order to deploy a workflow
+type DeployParams struct {
+	Apply     bool               `json:"apply"`
+	Workflow  *workflow.Workflow `json:"workflow"`
+	Transform *dataset.Transform `json:"transform"`
+}
+
+// DeployResponse is what we return when we first deploy a workflow
+type DeployResponse struct {
+	RunID    string             `json:"runID"`
+	Workflow *workflow.Workflow `json:"workflow"`
+}
+
+// Deploy takes a workflow and transform and returns a runid and workflow
+// It applys a transform to a specified dataset and schedules the workflow
+func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) (*DeployResponse, error) {
+	if p.Workflow == nil {
+		return nil, fmt.Errorf("deploy: workflow not set")
+	}
+	if p.Workflow.DatasetID == "" {
+		return nil, fmt.Errorf("deploy: DatasetID not set")
+	}
+
+	wf := p.Workflow
+	bus := inst.Bus()
+
+	newWorkflow := true
+	if _, err := c.Workflow(ctx, wf.ID); err == nil {
+		newWorkflow = false
+	}
+	if wf.ID == "" && wf.OwnerID != "" && wf.DatasetID != "" {
+		wf.ID = workflow.GenerateWorkflowID()
+	}
+
+	now := time.Now()
+	if newWorkflow {
+		wf.Created = &now
+	}
+	wf.LatestStart = &now
+
+	go func() {
+		if err := bus.PublishID(ctx, workflow.ETWorkflowDeployStarted, wf.ID, wf.Info()); err != nil {
+			log.Debugw("async event error", "evt", workflow.ETWorkflowDeployStarted, "workflowID", wf.ID, "err", err)
+		}
+	}()
+	defer func() {
+		go func() {
+			if err := bus.PublishID(ctx, workflow.ETWorkflowDeployStopped, wf.ID, wf.Info()); err != nil {
+				log.Debugw("async event error", "evt", workflow.ETWorkflowDeployStopped, "workflowID", wf.ID, "err", err)
+			}
+		}()
+	}()
+
+	dsm := lib.NewDatasetMethods(inst)
+	saveP := &lib.SaveParams{
+		Ref: wf.DatasetID, // currently the DatasetID is the Ref
+		Dataset: &dataset.Dataset{
+			Transform: p.Transform,
+		},
+		Apply: p.Apply,
+		// Wait: false,
+	}
+	log.Debugw("deploying dataset", "datasetID", saveP.Ref)
+	res, err := dsm.Save(ctx, saveP)
+	if err != nil {
+		if errors.Is(err, dsfs.ErrNoChanges) {
+			err = nil
+		} else {
+			log.Errorw("deploy save dataset", "error", err)
+			return nil, err
+		}
+	}
+
+	now = NowFunc()
+	wf.LatestEnd = &now
+	wf.RunCount++
+	wf.Status = workflow.StatusSucceeded
+
+	if newWorkflow {
+		ref := &dsref.Ref{
+			Username: res.Peername,
+			Name:     res.Name,
+		}
+		wf.Complete(ref, inst.Config().Profile.ID)
+	}
+
+	err = c.Schedule(ctx, wf)
+	if err != nil {
+		log.Errorw("deploy scheduling", "error", err)
+	}
+
+	return &DeployResponse{
+		Workflow: wf,
+	}, err
+}
+
+// Undeploy takes a workflow and removes it from the scheduler
+func (c *Cron) Undeploy(ctx context.Context, workflowID string) error {
+	err := c.Unschedule(ctx, workflowID)
+	if err != nil {
+		log.Errorw("undeploy unscheduling", "error", err)
+	}
+	return err
 }

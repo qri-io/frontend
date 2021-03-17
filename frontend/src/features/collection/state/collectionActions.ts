@@ -1,6 +1,7 @@
 import { AnyAction, Dispatch } from "@reduxjs/toolkit"
 import { NewWorkflow, newWorkflowInfo, WorkflowInfo, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
 import { ACTION_FAILURE, ApiAction, ApiActionThunk, CALL_API, getActionType } from "../../../store/api"
+import { WorkflowInfoAction } from "../../workflow/state/workflowActions"
 import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
 
 function mapWorkflowInfo (data: object | []): WorkflowInfo[] {
@@ -61,11 +62,6 @@ function fetchRunningCollection (): ApiAction {
       map: mapWorkflowInfo
     }
   }
-}
-
-export interface WorkflowInfoAction extends AnyAction {
-  type: string
-  data: WorkflowInfo
 }
 
 // workflowStarted is dispatched by the websocket and users should not need to
