@@ -358,7 +358,7 @@ func (c *Cron) UpdateWorkflow(ctx context.Context, w *workflow.Workflow) error {
 // ListCollection returns a union of datasets and workflows in the form of `Info`s
 // TODO (ramfox): add pagination by timestamp
 func (c *Cron) ListCollection(ctx context.Context, inst *lib.Instance, before, after time.Time) ([]*workflow.Info, error) {
-	m := lib.NewDatasetMethods(inst)
+	m := inst.Dataset()
 	// TODO (ramfox): for now we are fetching everything.
 	p := &lib.ListParams{
 		Offset: 0,
@@ -487,7 +487,7 @@ func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) 
 		}()
 	}()
 
-	dsm := lib.NewDatasetMethods(inst)
+	dsm := inst.Dataset()
 	saveP := &lib.SaveParams{
 		Ref: wf.DatasetID, // currently the DatasetID is the Ref
 		Dataset: &dataset.Dataset{
@@ -517,7 +517,7 @@ func (c *Cron) Deploy(ctx context.Context, inst *lib.Instance, p *DeployParams) 
 			Username: res.Peername,
 			Name:     res.Name,
 		}
-		wf.Complete(ref, inst.Config().Profile.ID)
+		wf.Complete(ref, inst.GetConfig().Profile.ID)
 	}
 
 	err = c.Schedule(ctx, wf)

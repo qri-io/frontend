@@ -46,7 +46,7 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
     type: 'body',
     ref,
     [CALL_API]: {
-      endpoint: 'body',
+      endpoint: 'get',
       method: 'GET',
       pageInfo: {
         page,
@@ -54,7 +54,8 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
       },
       segments: {
         peername: ref.username,
-        name: ref.name
+        name: ref.name,
+        selector: 'body'
       },
       map: mapBody
     }

@@ -13,7 +13,7 @@ import (
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/ioes"
 	"github.com/qri-io/qri/lib"
-	"github.com/qri-io/qri/transform"
+	"github.com/qri-io/qri/transform/run"
 	"github.com/qri-io/qrimatic/scheduler"
 	"github.com/qri-io/qrimatic/workflow"
 )
@@ -99,10 +99,10 @@ func (s *Server) Start(ctx context.Context) error {
 // runner from a qri instance
 func newInstanceRunnerFactory(inst *lib.Instance) func(ctx context.Context) scheduler.RunWorkflowFunc {
 	return func(ctx context.Context) scheduler.RunWorkflowFunc {
-		dsm := lib.NewDatasetMethods(inst)
+		dsm := inst.Dataset()
 
 		return func(ctx context.Context, streams ioes.IOStreams, w *workflow.Workflow) error {
-			runID := transform.NewRunID()
+			runID := run.NewID()
 
 			p := &lib.SaveParams{
 				Ref: w.DatasetID,
