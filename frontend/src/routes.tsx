@@ -15,13 +15,13 @@ import Run from './features/run/Run';
 import Collection from './features/collection/Collection';
 import Dashboard from './features/dashboard/Dashboard';
 import Dataset from './features/dataset/Dataset';
-import { NewUser, selectSessionUser } from './features/session/state/sessionState'
+import { AnonUser, selectSessionUser } from './features/session/state/sessionState'
 
 const PrivateRoute: React.FC<any>  = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
   return (
     <Route path={path}>
-      { user !== NewUser ? <>{children}</> : <Redirect to={{ pathname: '/splash' }} /> }
+      { user !== AnonUser ? <>{children}</> : <Redirect to={{ pathname: '/splash' }} /> }
     </Route>
   )
 }
@@ -53,7 +53,7 @@ export default function Routes () {
 
         <Route path='/'>
           {
-            user !== NewUser ? <Redirect to='/collection' /> : <Splash />
+            user !== AnonUser ? <Redirect to='/collection' /> : <Splash />
           }
         </Route>
       </Switch>

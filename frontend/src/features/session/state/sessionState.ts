@@ -13,12 +13,12 @@ export interface SessionState {
   loading: boolean
 }
 
-export const NewUser: User = {
+export const AnonUser: User = {
   username: 'new'
 }
 
 const initialState: SessionState = {
-  user: NewUser,
+  user: AnonUser,
   loading: false
 }
 
@@ -36,7 +36,7 @@ export const sessionReducer = createReducer(initialState, {
     state.loading = false
   },
   'API_LOGOUT_SUCCESS': (state, action) => {
-    state.user = NewUser
+    state.user = AnonUser
   },
   'API_SIGNUP_REQUEST': (state, action) => {
     state.loading = true

@@ -1,6 +1,7 @@
 import Dataset, { NewDataset } from "../../../qri/dataset";
 import { QriRef } from "../../../qri/ref";
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
+import { RENAME_NEW_DATASET } from "./datasetState";
 
 export const bodyPageSizeDefault = 50
 
@@ -63,19 +64,57 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
 }
 
 export function removeDataset (ref: QriRef): ApiActionThunk {
-    return async (dispatch) => {
-      const action = {
-        type: 'remove',
-        [CALL_API]: {
-          endpoint: 'remove',
-          method: 'DELETE',
-          segments: {
-            peername: ref.username,
-            name: ref.name
-          }
+  return async (dispatch) => {
+    const action = {
+      type: 'remove',
+      [CALL_API]: {
+        endpoint: 'remove',
+        method: 'DELETE',
+        segments: {
+          peername: ref.username,
+          name: ref.name
         }
       }
-
-      return dispatch(action)
     }
+
+    return dispatch(action)
   }
+}
+
+
+export interface RenameDatasetAction {
+  type: string,
+  current: QriRef
+  next: QriRef
+}
+
+export function renameDataset(current: QriRef, next: QriRef): ApiActionThunk | Promise<RenameDatasetAction> {
+  // if no path exists, assume a new dataset & client-side-only rename
+  // TODO(b5): once QriRefs have an initID field, use that as the proper check
+  // for "newness"
+  if (!current.path) {
+    return async () => ({
+      type: RENAME_NEW_DATASET,
+      current,
+      next
+    })
+  }
+
+  return async (dispatch) => {
+    const action = {
+      type: 'rename',
+      [CALL_API]: {
+        endpoint: 'rename',
+        method: 'POST',
+        body: {
+          current,
+          next,
+        },
+        // TODO(b5): this return value is a versionInfo
+        map: mapDataset
+      }
+    }
+
+    return dispatch(action)
+  }
+}

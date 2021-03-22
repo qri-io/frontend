@@ -1,11 +1,29 @@
-import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
+
+import { RootState } from '../../../store/store';
 import Dataset, { NewDataset } from '../../../qri/dataset';
 import { qriRefFromString } from '../../../qri/ref';
+import { RenameDatasetAction } from './datasetActions';
+import { selectSessionUser } from '../../session/state/sessionState';
+
+export const RENAME_NEW_DATASET = 'RENAME_NEW_DATASET'
 
 export const selectDataset = (state: RootState): Dataset => state.dataset.dataset
 
 export const selectIsDatasetLoading = (state: RootState): boolean => state.dataset.loading
+
+export const selectSessionUserCanEditDataset = (state: RootState): boolean => {
+  const u = selectSessionUser(state)
+  if (state.dataset.loading) {
+    return false
+  }
+  // TODO(b5) - this would ideally be checking for an existing dataset ID instead
+  // of a path
+  if (state.dataset.dataset.path === '') {
+    return true
+  }
+  return u.username === state.dataset.dataset.peername
+}
 
 export interface DatasetState {
   dataset: Dataset
@@ -37,5 +55,11 @@ export const datasetReducer = createReducer(initialState, {
     if (state.dataset.peername === ref.username && state.dataset.name === ref.name) {
       state.dataset = NewDataset({})
     }
+  },
+  'API_RENAME_SUCCESS': (state, action) => {
+    // TODO(b5): finish
+  },
+  RENAME_NEW_DATASET: (state: DatasetState, action: RenameDatasetAction) => {
+    state.dataset.name = action.next.name
   }
 })
