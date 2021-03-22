@@ -9,11 +9,11 @@ import DatasetComponents from './DatasetComponents';
 import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
-import DatasetTitleMenu from './DatasetTitleMenu';
 import DeployingScreen from '../deploy/DeployingScreen';
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
 import { selectSessionUser } from '../session/state/sessionState';
 import { selectSessionUserCanEditDataset } from './state/datasetState';
+import DatasetHeader from './DatasetHeader';
 
 export interface DatasetMenuItem {
   text: string
@@ -48,26 +48,21 @@ const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
     dispatch(loadDataset(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
 
-  const menuItems:DatasetMenuItem[] = [
-    { text: 'Dashboard', link: '/dashboard', icon: 'home'},
-    { text: 'Collection', link: '/collection', icon: 'list'},
-    { text: 'Activity Feed', link: '/activity', icon: 'bolt'},
-  ]
-
   return (
     <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
-      <NavBar menuItems={menuItems}>
-        <DatasetTitleMenu qriRef={qriRef} editable={editable} />
-      </NavBar>
+      <NavBar />
       <div className='flex flex-grow overflow-hidden relative'>
         <DatasetNavSidebar qriRef={qriRef} />
-        <Switch>
-          <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
-          <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>
-          <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
-          <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
-          <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
-        </Switch>
+        <div className='flex flex-col flex-grow'>
+          <DatasetHeader qriRef={qriRef} editable={editable} />
+          <Switch>
+            <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
+            <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>
+            <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
+            <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
+            <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
+          </Switch>
+        </div>
         <DeployingScreen qriRef={qriRef} />
       </div>
     </div>
