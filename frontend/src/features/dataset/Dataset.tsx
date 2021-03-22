@@ -6,13 +6,14 @@ import { useParams } from 'react-router-dom';
 import { newQriRef } from '../../qri/ref';
 import Workflow from '../workflow/Workflow';
 import DatasetComponents from './DatasetComponents';
-import { loadBody, loadDataset } from './state/datasetActions'
+import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
 import DatasetTitleMenu from './DatasetTitleMenu';
 import DeployingScreen from '../deploy/DeployingScreen';
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
 import { selectSessionUser } from '../session/state/sessionState';
+import { selectSessionUserCanEditDataset } from './state/datasetState';
 
 export interface DatasetMenuItem {
   text: string
@@ -20,9 +21,16 @@ export interface DatasetMenuItem {
   icon?: string
 }
 
-const Dataset: React.FC<any> = () => {
+export interface DatasetProps {
+  isNew?: boolean
+}
+
+const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
   const qriRef = newQriRef(useParams())
   const user = useSelector(selectSessionUser)
+  const editable = useSelector(selectSessionUserCanEditDataset)
+  const dispatch = useDispatch()
+  const { url } = useRouteMatch()
 
   // This covers the case where a user created a new workflow before logging in.
   // If they login while working on the workflow, the `user` will change, but the
@@ -32,14 +40,13 @@ const Dataset: React.FC<any> = () => {
   if (qriRef.username === 'new') {
     qriRef.username = user.username
   }
-  const dispatch = useDispatch()
-  const { url } = useRouteMatch()
 
   useEffect(() => {
-      const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
-      dispatch(loadDataset(ref))
-      dispatch(loadBody(ref))
-  }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
+    if (isNew) { return }
+
+    const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
+    dispatch(loadDataset(ref))
+  }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
 
   const menuItems:DatasetMenuItem[] = [
     { text: 'Dashboard', link: '/dashboard', icon: 'home'},
@@ -50,7 +57,7 @@ const Dataset: React.FC<any> = () => {
   return (
     <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
       <NavBar menuItems={menuItems}>
-        <DatasetTitleMenu qriRef={qriRef} />
+        <DatasetTitleMenu qriRef={qriRef} editable={editable} />
       </NavBar>
       <div className='flex flex-grow overflow-hidden relative'>
         <DatasetNavSidebar qriRef={qriRef} />

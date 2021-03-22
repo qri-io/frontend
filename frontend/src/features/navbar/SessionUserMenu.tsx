@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
-import { NewUser, selectSessionUser } from '../session/state/sessionState'
+import { AnonUser, selectSessionUser } from '../session/state/sessionState'
 import { logOut } from '../session/state/sessionActions'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
@@ -13,7 +13,7 @@ const SessionUserMenu: React.FC<{}> = () => {
   const user = useSelector(selectSessionUser)
   const dispatch = useDispatch()
 
-  if (user === NewUser) {
+  if (user === AnonUser) {
     const handleLogInClick = () => {
       dispatch(showModal(ModalType.logIn))
     }
