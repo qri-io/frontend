@@ -5,6 +5,7 @@ import Icon from '../../chrome/Icon'
 
 import SessionUserMenu from './SessionUserMenu'
 import { DatasetMenuItem } from '../dataset/Dataset'
+import SearchBox from '../search/SearchBox';
 
 export interface NavBarProps {
   menuItems?: DatasetMenuItem[]
@@ -29,6 +30,7 @@ const NavBar: React.FC<NavBarProps> = ({ menuItems, children }) => {
       <div className="py-2 opacity-0">.</div> {/* forces height */}
       {children}
       <div className='flex ml-auto items-center'>
+        <SearchBox />
         <SessionUserMenu />
       </div>
     </div>

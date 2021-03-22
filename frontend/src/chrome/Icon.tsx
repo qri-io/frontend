@@ -41,12 +41,13 @@ import {
   faExclamationTriangle,
   faQuestion,
   faQuestionCircle,
+  faSearch,
   faShip,
   faSortDown,
   faSpinner,
   faTable,
 
-  IconDefinition
+  IconDefinition,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -114,6 +115,7 @@ const icons: Record<string, IconDefinition> = {
   'structure': faTh,
   'times': faTimes,
   'transform': faCode,
+  'search': faSearch,
   'unknown': faQuestionCircle,
   'exclamationCircle': faExclamationCircle,
   'exclamationTriangle': faExclamationTriangle,
