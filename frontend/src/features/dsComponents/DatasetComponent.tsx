@@ -8,15 +8,18 @@ import Commit from './datasetComponents/Commit'
 import Meta from './datasetComponents/Meta'
 import Structure from './datasetComponents/Structure'
 import Readme from './datasetComponents/Readme'
+import classNames from 'classnames'
 
 export interface DatasetComponentProps {
   dataset: Dataset
   componentName: ComponentName
+  noHeader?: boolean
 }
 
 const DatasetComponent: React.FC<DatasetComponentProps> = ({
   dataset,
-  componentName
+  componentName,
+  noHeader = false
 }) => {
 
   let component: JSX.Element
@@ -44,8 +47,12 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   return (
-    <div className='flex-grow h-full w-full'>
-      <ComponentHeader componentName={componentName} />
+    <div className={classNames(
+      'flex-grow h-full w-full rounded-md bg-white',
+      noHeader && 'rounded-tl-none rounded-tr-none',
+    )}
+    >
+      {!noHeader && <ComponentHeader componentName={componentName} />}
       {component}
     </div>
   )

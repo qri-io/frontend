@@ -37,7 +37,7 @@ export const DatasetComponents: React.FC<DatasetProps> = ({
   // setModal
 }) => {
   if (loading) {
-    return <div className='h-full flex justify-center items-center'><SyncLoader color='#4FC7F3' /></div>
+    return <div className='p-4 h-full flex justify-center items-center'><SyncLoader color='#4FC7F3' /></div>
   }
 
   let dataset = ds
@@ -111,13 +111,17 @@ export const DatasetComponents: React.FC<DatasetProps> = ({
   // )
 
   return (
-    <div className='flex h-full w-full'>
+    <div className='flex flex-col h-full w-full p-4'>
       <ComponentList
         dataset={dataset}
         onClick={setSelectedComponent}
         selectedComponent={selectedComponent}
       />
-      <DatasetComponent dataset={dataset} componentName={selectedComponent} />
+      <DatasetComponent
+        dataset={dataset}
+        componentName={selectedComponent}
+        noHeader
+      />
     </div>
   )
 }

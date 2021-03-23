@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { ComponentName } from '../../qri/dataset'
 import { newQriRef, QriRef } from '../../qri/ref'
-import DSComponents from '../ds_components/DatasetComponents'
+import DSComponents from '../dsComponents/DatasetComponents'
 import { pathToDatasetViewer } from './state/datasetPaths'
 import { selectDataset, selectIsDatasetLoading } from './state/datasetState'
-import { DatasetComponentProps } from '../ds_components/DatasetComponent'
+import { DatasetComponentProps } from '../dsComponents/DatasetComponent'
 import DatasetCommits from '../commits/DatasetCommits'
+import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 
 export interface DatasetComponentsProps {
   qriRef: QriRef
@@ -28,12 +29,15 @@ const DatasetComponents: React.FC<DatasetComponentProps> = ({
   return (
     <div className='w-full flex-grow flex overflow-y-hidden'>
       <DatasetCommits qriRef={qriRef} />
-      <DSComponents
-        dataset={dataset} 
-        loading={loading}
-        selectedComponent={component as ComponentName || 'body'} 
-        setSelectedComponent={setSelectedComponent} 
-      />
+      <div className='flex flex-col h-full w-full'>
+        <CommitSummaryHeader dataset={dataset} />
+        <DSComponents
+          dataset={dataset} 
+          loading={loading}
+          selectedComponent={component as ComponentName || 'body'} 
+          setSelectedComponent={setSelectedComponent} 
+        />
+      </div>
     </div>
   )
 }

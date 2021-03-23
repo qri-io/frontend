@@ -16,7 +16,12 @@ export interface DatasetNavSidebarProps {
 }
 
 const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
-  <div className='side-nav h-full bg-white'>
+  <div className='side-nav h-full bg-white relative'>
+    <div className='absolute top-0 -right-10 w-10 h-10'>
+      <svg className='w-full h-full' width="180" height="180" viewBox="0 0 180 180" fill="none">
+        <path d="M4.19108e-05 180V0H180C72 0 3.05176e-05 86 4.19108e-05 180Z" fill="white"/>
+      </svg>
+    </div>
     {process.env.REACT_APP_FEATURE_WIREFRAMES &&
       <SideNavItem
         id='preview'

@@ -6,12 +6,15 @@ export const WORKFLOW_STARTED = 'WORKFLOW_STARTED'
 export const WORKFLOW_COMPLETED = 'WORKFLOW_COMPLETED'
 
 export const selectCollection = (state: RootState): WorkflowInfo[] => {
-  const collection = state.collection.collection
-  const running = state.collection.running
-  const ids = state.collection.ids
+  const { collection, running, ids } = state.collection
 
   var ordered: WorkflowInfo[] = []
-  running.forEach( (id: string) => {
+  running.forEach((id: string) => {
+    // websocket may notify us about a running workflow that we haven't
+    // loaded locally yet. Return early if id is not in collection
+    if (!collection[id]) {
+      return
+    }
     ordered.push(collection[id])
   })
 

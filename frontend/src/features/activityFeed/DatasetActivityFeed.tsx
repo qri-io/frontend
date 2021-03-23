@@ -13,7 +13,6 @@ export interface DatasetActivityFeedProps {
 const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   qriRef
 }) => {
-
   const logs = useSelector(newDatasetLogsSelector(qriRef))
   const dispatch = useDispatch()
 
@@ -22,11 +21,10 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   },[dispatch, qriRef])
 
   return (
-    <div className='max-w-screen-xl mx-auto px-10 py-20'>
-      <header className='mb-8'>
-        <h1 className='text-2xl font-extrabold'>Activity Feed</h1>
-      </header>
-      <ActivityList log={logs} showDatasetName={false} />
+    <div className='w-full px-10 py-20 overflow-y-auto'>
+      <div className='max-w-screen-md mx-auto bg-white rounded-lg'>
+        <ActivityList log={logs} showDatasetName={false} />
+      </div>
     </div>
   )
 }

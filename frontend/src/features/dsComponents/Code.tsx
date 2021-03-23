@@ -9,8 +9,8 @@ const Code: React.FunctionComponent<CodeProps> = (props: CodeProps) => {
   const lines = data.split('\n')
 
   return (
-    <div style={{ overflowX: 'auto' }} className="code">
-      <pre style={{ float: 'left', margin: '0 20px', color: '#bbb' }}>{lines.map((_, i) => (`${i+1}\n`))}</pre>
+    <div className='text-xs overflow-x-auto'>
+      <pre className='float-left text-right mr-4 text-gray-600'>{lines.map((_, i) => (`${i+1}\n`))}</pre>
       <pre>{data}</pre>
     </div>
   )
