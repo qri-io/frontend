@@ -1,4 +1,13 @@
 import { ComponentName } from "../../../qri/dataset";
+import { QriRef } from "../../../qri/ref";
+
+export function pathToDatasetIssues(ref: QriRef): string {
+  return `/ds/${ref.username}/${ref.name}/issues`
+}
+
+export function pathToDatasetPreview(ref: QriRef): string {
+  return `/ds/${ref.username}/${ref.name}/preview`
+}
 
 export function pathToDatasetViewer(username: string, name: string, componentName?: ComponentName): string {
   return componentName

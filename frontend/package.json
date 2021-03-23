@@ -61,7 +61,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "start-wireframes": "REACT_APP_FEATURE_WIREFRAMES=1 && craco start",
+    "build": "NODE_ENV=prod && craco build",
     "test": "craco test",
     "test-e2e": "NODE_ENV=test && npm run build && jest ./e2e/* --detectOpenHandles",
     "test-e2e-no-build": "NODE_ENV=test && jest ./e2e/* --detectOpenHandles",

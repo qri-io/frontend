@@ -14,36 +14,39 @@ import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrol
 import { deployReducer, DeployState } from '../features/deploy/state/deployState';
 import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
 import { sessionReducer, SessionState } from '../features/session/state/sessionState';
+import { commitsReducer, CommitsState } from '../features/commits/state/commitState';
 
 export const history = createBrowserHistory()
 
 export interface RootState {
-  router: RouterState
-  workflow: WorkflowState
-  deploy: DeployState
-  transfers: RemoteEvents
+  activityFeed: ActivityFeedState,
   app: AppState
   collection: CollectionState
+  commits: CommitsState
   dataset: DatasetState
+  deploy: DeployState
+  router: RouterState
   scroller: ScrollerState
-  activityFeed: ActivityFeedState,
   session: SessionState
+  transfers: RemoteEvents
+  workflow: WorkflowState
 }
 
 const rootReducer = (h: History) => combineReducers({
+  activityFeed: activityFeedReducer,
+  app: appReducer,
+  collection: collectionReducer,
+  commits: commitsReducer,
+  dataset: datasetReducer,
+  deploy: deployReducer,
   // apparently connected-router's types are no good.
   // https://github.com/reduxjs/redux-toolkit/issues/506#issuecomment-614295927
   // router: connectRouter(h) as any as Reducer<RouterState>,
   router: connectRouter(h),
+  scroller: scrollerReducer,
+  session: sessionReducer,
   transfers: transfersReducer,
   workflow: workflowReducer,
-  app: appReducer,
-  collection: collectionReducer,
-  dataset: datasetReducer,
-  scroller: scrollerReducer,
-  deploy: deployReducer,
-  activityFeed: activityFeedReducer,
-  session: sessionReducer
 })
 
 export function configureStore(preloadedState?: any) {

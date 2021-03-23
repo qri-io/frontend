@@ -2,7 +2,7 @@ import React from 'react'
 
 const QriLogo: React.FC<{}> = () => (
   <div className='w-10 h-10 m-1'>
-    <svg version="1.1" x="0px" y="0px" viewBox="0 0 144 144" style={{ 'enable-background' : 'new 0 0 144 144' }}>
+    <svg version="1.1" x="0px" y="0px" viewBox="0 0 144 144" style={{ 'enableBackground' : 'new 0 0 144 144' }}>
       <g>
       	<path style={{ fill: '#FFFFFF' }} d="M109.47,102.63c0,0-1.35,2.67-0.08,4.55c1.27,1.88,4.35,6.43,5.02,7.31c0.66,0.88,2.06,2.89-0.58,5.18
       		s-22.03,13.01-25.95,14.16s-4.05-0.42-4.59-1.77c-0.54-1.35-2.31-7.49-2.99-8.93c-0.68-1.44-2.14-1.32-2.14-1.32l8.12-4.07

@@ -4,9 +4,11 @@ import { QriRef } from '../../qri/ref'
 import SideNavItem from './SideNavItem'
 import TooltipContent from '../../chrome/TooltipContent'
 import {
-  pathToActivityFeed,
+  pathToWorkflowEditor,
   pathToDatasetViewer,
-  pathToWorkflowEditor
+  pathToDatasetIssues,
+  pathToDatasetPreview,
+  pathToActivityFeed,
 } from './state/datasetPaths'
 
 export interface DatasetNavSidebarProps {
@@ -15,6 +17,19 @@ export interface DatasetNavSidebarProps {
 
 const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
   <div className='side-nav h-full bg-white'>
+    {process.env.REACT_APP_FEATURE_WIREFRAMES &&
+      <SideNavItem
+        id='preview'
+        icon='eye'
+        to={pathToDatasetPreview(qriRef)}
+        tooltip={
+          <TooltipContent
+            text='Preview'
+            subtext='Explore the lastest version of this dataset'
+          />
+        }
+      />
+    }
     <SideNavItem
       id='components'
       icon='table'
@@ -48,6 +63,19 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
         />
       }
     />
+    {process.env.REACT_APP_FEATURE_WIREFRAMES &&
+      <SideNavItem
+        id='issues'
+        icon='exclamationTriangle'
+        to={pathToDatasetIssues(qriRef)}
+        tooltip={
+          <TooltipContent
+            text='Issues'
+            subtext='Discuss this dataset'
+          />
+        }
+      />
+    }
   </div>
 )
 

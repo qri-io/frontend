@@ -14,6 +14,8 @@ import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
 import { selectSessionUser } from '../session/state/sessionState';
 import { selectSessionUserCanEditDataset } from './state/datasetState';
 import DatasetHeader from './DatasetHeader';
+import DatasetPreview from '../dsPreview/DatasetPreview';
+import DatasetIssues from '../issues/DatasetIssues';
 
 export interface DatasetMenuItem {
   text: string
@@ -57,10 +59,13 @@ const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
           <DatasetHeader qriRef={qriRef} editable={editable} />
           <Switch>
             <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
-            <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>
-            <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
+            <Route path='/ds/:username/:name/components/:component'><DatasetComponents qriRef={qriRef} /></Route>
             <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
             <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
+            {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/issues'><DatasetIssues qriRef={qriRef} /></Route>}
+            {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/preview' exact><DatasetPreview qriRef={qriRef} /></Route>}
+            {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name' exact><Redirect to={`${url}/preivew`} /></Route>}
+            {!process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>}
           </Switch>
         </div>
         <DeployingScreen qriRef={qriRef} />
