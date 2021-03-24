@@ -363,13 +363,12 @@ export function NewTransformStep(data: Record<string,any>): TransformStep {
 }
 
 export function scriptFromTransform(t: Transform): string {
-  var s = ''
-  t.steps.forEach((step: TransformStep, i: number) => {
+  return t.steps.reduce((acc: string, step: TransformStep, i: number) => {
     if (step.script && step.script !== "") {
-      s += step.script += "\n\n"
+      acc += step.script + "\n\n"
     }
-  })
-  return s
+    return acc
+  }, '')
 }
 
 export interface Readme extends Component {

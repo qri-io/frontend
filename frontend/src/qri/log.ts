@@ -5,6 +5,7 @@ import { RunStatus } from "./run";
 // this field can be removed
 export interface LogItem {
   timestamp: string
+  title: string
   message: string
 
   username: string
@@ -27,6 +28,7 @@ export interface LogItem {
 export function NewLogItem(d: Record<string,any>): LogItem {
   return {
     timestamp: d.timestamp || d.commitTime,
+    title: d.title || d.commitTitle,
     message: d.message || d.commitMessage,
 
     username: d.username,

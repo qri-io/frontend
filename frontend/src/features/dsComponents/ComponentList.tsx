@@ -76,7 +76,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
   const componentNames = Object.keys(dataset)
 
   return (
-    <div className='w-40 flex-none border-r'>
+    <div className='flex'>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
           if (componentNames.includes(name)) {
             var fileStatus: ComponentStatus = 'unmodified'

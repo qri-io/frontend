@@ -1,7 +1,8 @@
 import React from 'react'
-import Dataset, { ComponentName, qriRefFromDataset } from '../../qri/dataset'
 import ComponentHeader from './ComponentHeader'
+import classNames from 'classnames'
 
+import Dataset, { ComponentName, qriRefFromDataset } from '../../qri/dataset'
 import Transform from './datasetComponents/Transform'
 import Body from './datasetComponents/Body'
 import Commit from './datasetComponents/Commit'
@@ -12,11 +13,13 @@ import Readme from './datasetComponents/Readme'
 export interface DatasetComponentProps {
   dataset: Dataset
   componentName: ComponentName
+  noHeader?: boolean
 }
 
 const DatasetComponent: React.FC<DatasetComponentProps> = ({
   dataset,
-  componentName
+  componentName,
+  noHeader = false
 }) => {
 
   let component: JSX.Element
@@ -44,8 +47,14 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   return (
-    <div className='flex-grow h-full w-full'>
-      <ComponentHeader componentName={componentName} />
+    <div
+      className={classNames(
+        'rounded-md bg-white w-full overflow-auto', {
+        'rounded-tl-none' : noHeader,
+        'my-6': !noHeader
+      })}
+    >
+      {!noHeader && <ComponentHeader componentName={componentName} />}
       {component}
     </div>
   )

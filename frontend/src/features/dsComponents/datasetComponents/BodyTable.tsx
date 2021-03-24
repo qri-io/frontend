@@ -114,7 +114,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
     const tableRows = body.map((row, i) => {
       return (
         <tr key={i} className='border-b border-gray-100'>
-          <td key={0}className='bg-gray-200 text-center'>
+          <td key={0}className='bg-white text-center'>
             <div className={cellClasses}>
               {
                 // TODO (ramfox): when we add back pageInfo/fetching
@@ -138,18 +138,21 @@ export default class BodyTable extends React.Component<BodyTableProps> {
     return (
       <div
         id='body-table-container'
-        className='overflow-auto h-full w-full pb-8'
+        className='pb-8'
+        /* setting maxWidth fixes an overflow-x bug affecting parent flex 
+           containers. Observed on Chrome */
+        style={{ maxWidth: 800 }}
         onScroll={() => { this.handleVerticalScrollThrottled() } }
       >
         <table className='table text-xs'>
           <thead className='border-b border-gray-100'>
             <tr>
-              <th className='sticky top-0 h-6 bg-gray-200 font-semibold cursor-pointer p-0'>
+              <th className='sticky top-0 h-6 bg-white font-semibold cursor-pointer p-0'>
                 <div className={cellClasses}>&nbsp;</div>
               </th>
               {headers && headers.map((d: any, j: number) => {
                 return (
-                  <th key={j} className='sticky top-0 h-6 bg-gray-200 font-semibold text-left p-0'>
+                  <th key={j} className='sticky top-0 h-6 bg-white font-semibold text-left p-0'>
                     <div className={cellClasses} >
                       <TypeLabel type={d.type} showLabel={false}/>&nbsp;{d.title}
                     </div>

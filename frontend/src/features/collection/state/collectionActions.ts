@@ -5,6 +5,7 @@ import { WorkflowInfoAction } from "../../workflow/state/workflowActions"
 import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
 
 function mapWorkflowInfo (data: object | []): WorkflowInfo[] {
+  if (!data) { return [] }
   return (data as []).map((data) => newWorkflowInfo(data))
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import { Action } from 'redux'
 
 // import { ApiActionThunk } from '../../../store/api'
@@ -12,12 +12,14 @@ import Dataset,  { Structure, schemaToColumns, ColumnProperties } from '../../..
 
 import BodyTable from './BodyTable'
 import BodyJson from './BodyJson'
+import { useDispatch } from 'react-redux'
+import { loadBody } from '../../dataset/state/datasetActions'
+import { newQriRef } from '../../../qri/ref'
 // import ParseError from '../ParseError'
 // import hasParseError from '../../../utils/hasParseError'
 // import { connectComponentToProps } from '../../../utils/connectComponentToProps'
 
 export interface BodyProps {
-  // qriRef: QriRef
   data: Dataset
   // stats: IStatTypes[]
   // details: Details
@@ -47,26 +49,17 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
   return schemaToColumns(schema)
 }
 
-export const Body: React.FunctionComponent<BodyProps> = (props) => {
-  const {
-    data,
-    // pageInfo,
-    // stats,
-    // details,
-    // setDetailsBar,
-    // fetchBody,
-    // fetchCommitBody,
-    // statusInfo,
-    // qriRef
-  } = props
-
-  // if (hasParseError(statusInfo)) {
-  //   return <ParseError component='body' />
-  // }
-
-  // const showHistory = !!qriRef.path
-
+const Body: React.FunctionComponent<BodyProps> = ({
+  data,
+}) => {
+  const dispatch = useDispatch()
   const { body, structure } = data
+  const { path, name, peername: username } = data
+
+  // list out dependencies on dataset body individually for proper memoization
+  useEffect(() => {
+    dispatch(loadBody(newQriRef({ path, name, username }), 1, 100))
+  }, [dispatch, path, name, username])
 
   if (!body) {
     return (
@@ -127,24 +120,15 @@ export const Body: React.FunctionComponent<BodyProps> = (props) => {
   //   highlightedColumnIndex = details.index
   // }
 
-  if (structure.format === 'csv' && Array.isArray(body)) {
-    return <BodyTable
-    headers={extractColumnHeaders(structure, body)}
-    body={body}
-    // pageInfo={pageInfo}
-    // highlighedColumnIndex={highlightedColumnIndex}
-    // onFetch={handleFetch}
-    // setDetailsBar={stats && handleToggleDetailsBar}
-  />
-  }
-
-
-  return (<BodyJson
-          data={body}
-          // pageInfo={pageInfo}
-          previewWarning={false}
-        />
-  )
+  return (structure.format === 'csv' && Array.isArray(body))
+    ? <BodyTable
+        headers={extractColumnHeaders(structure, body)}
+        body={body}
+      />
+    : <BodyJson
+        data={body}
+        previewWarning={false}
+      />
 }
 
 export default Body

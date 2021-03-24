@@ -5,21 +5,17 @@ import { useParams } from 'react-router-dom';
 
 import { newQriRef } from '../../qri/ref';
 import Workflow from '../workflow/Workflow';
-import DatasetComponents from './DatasetComponents';
+import DatasetComponents from '../dsComponents/DatasetComponents';
 import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
-import DatasetTitleMenu from './DatasetTitleMenu';
 import DeployingScreen from '../deploy/DeployingScreen';
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
 import { selectSessionUser } from '../session/state/sessionState';
 import { selectSessionUserCanEditDataset } from './state/datasetState';
-
-export interface DatasetMenuItem {
-  text: string
-  link: string
-  icon?: string
-}
+import DatasetHeader from './DatasetHeader';
+import DatasetPreview from '../dsPreview/DatasetPreview';
+import DatasetIssues from '../issues/DatasetIssues';
 
 export interface DatasetProps {
   isNew?: boolean
@@ -43,31 +39,28 @@ const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
 
   useEffect(() => {
     if (isNew) { return }
-
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
     dispatch(loadDataset(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
 
-  const menuItems:DatasetMenuItem[] = [
-    { text: 'Dashboard', link: '/dashboard', icon: 'home'},
-    { text: 'Collection', link: '/collection', icon: 'list'},
-    { text: 'Activity Feed', link: '/activity', icon: 'bolt'},
-  ]
-
   return (
-    <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
-      <NavBar menuItems={menuItems}>
-        <DatasetTitleMenu qriRef={qriRef} editable={editable} />
-      </NavBar>
-      <div className='flex flex-grow overflow-hidden relative'>
+    <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#F4F7FC'}}>
+      <NavBar />
+      <div className='flex overflow-hidden w-full'>
         <DatasetNavSidebar qriRef={qriRef} />
-        <Switch>
-          <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
-          <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>
-          <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
-          <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
-          <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
-        </Switch>
+        <div className='flex flex-col flex-grow'>
+          <DatasetHeader qriRef={qriRef} editable={editable} />
+          <Switch>
+            <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
+            <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
+            <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
+            <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
+            <Route path='/ds/:username/:name/preview' exact><DatasetPreview /></Route>
+            {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/issues'><DatasetIssues qriRef={qriRef} /></Route>}
+
+            <Route path='/ds/:username/:name' exact><Redirect to={`${url}/preview`} /></Route>
+          </Switch>
+        </div>
         <DeployingScreen qriRef={qriRef} />
       </div>
     </div>

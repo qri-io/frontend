@@ -10,10 +10,9 @@ import Icon from '../../chrome/Icon'
 import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import DropdownMenu, { DropDownMenuItem } from '../../chrome/DropdownMenu'
-import { pathToWorkflowEditor } from '../dataset/state/datasetPaths'
+import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { WorkflowInfo } from '../../qrimatic/workflow';
-
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
 
 interface WorkflowsTableProps {
@@ -131,7 +130,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       cell: (row: WorkflowInfo) => (
         <div className='py-3'>
           <div className='font-medium text-sm mb-1'>
-            <Link to={pathToWorkflowEditor(row.username, row.name)}>{row.username}/{row.name}</Link>
+            <Link to={pathToDatasetPreview(row)}>{row.username}/{row.name}</Link>
           </div>
           <div className='text-gray-500 text-xs'>
             <span className='mr-3'><Icon icon='hdd' size='sm' className='mr-1' />{numeral(row.bodySize).format('0.0 b')}</span>

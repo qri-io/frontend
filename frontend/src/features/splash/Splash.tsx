@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Page from '../app/Page';
 import Icon from '../../chrome/Icon';
 import Button from '../../chrome/Button';
+import NavBar from '../navbar/NavBar';
 
 const Splash: React.FC<{}> = () => (
-  <Page hideNavItems>
+  <div className='flex flex-col h-full'>
+    <NavBar minimal />
     <div className='max-w-screen-xl mx-auto px-10 py-20'>
       <div className="text-center pb-12 md:pb-16">
         <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4">
@@ -26,7 +27,7 @@ const Splash: React.FC<{}> = () => (
         </div>
       </div>
     </div>
-  </Page>
+  </div>
 )
 
 export default Splash;

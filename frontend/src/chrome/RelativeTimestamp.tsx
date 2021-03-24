@@ -4,11 +4,15 @@ import { formatDistanceToNow } from 'date-fns'
 
 interface RelativeTimestampProps {
   timestamp: Date
+  className?: string
 }
 
-const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({ timestamp }) => (
+const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
+  timestamp,
+  className
+ }) => (
   <span
-    className='relative-timestamp'
+    className={className}
     title={format(timestamp, 'MMM d yyyy, h:mm zz')}
   >
     {formatDistanceToNow(timestamp, { addSuffix: true })}
