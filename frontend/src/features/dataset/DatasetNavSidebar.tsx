@@ -22,19 +22,17 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
         <path d="M4.19108e-05 180V0H180C72 0 3.05176e-05 86 4.19108e-05 180Z" fill="white"/>
       </svg>
     </div>
-    {process.env.REACT_APP_FEATURE_WIREFRAMES &&
-      <SideNavItem
-        id='preview'
-        icon='eye'
-        to={pathToDatasetPreview(qriRef)}
-        tooltip={
-          <TooltipContent
-            text='Preview'
-            subtext='Explore the lastest version of this dataset'
-          />
-        }
-      />
-    }
+    <SideNavItem
+      id='preview'
+      icon='eye'
+      to={pathToDatasetPreview(qriRef)}
+      tooltip={
+        <TooltipContent
+          text='Preview'
+          subtext='Explore the lastest version of this dataset'
+        />
+      }
+    />
     <SideNavItem
       id='components'
       icon='table'

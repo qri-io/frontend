@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Icon from '../../chrome/Icon'
 
 const SearchBox: React.FC<{}> = () => {

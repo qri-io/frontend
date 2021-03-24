@@ -17,12 +17,6 @@ import DatasetHeader from './DatasetHeader';
 import DatasetPreview from '../dsPreview/DatasetPreview';
 import DatasetIssues from '../issues/DatasetIssues';
 
-export interface DatasetMenuItem {
-  text: string
-  link: string
-  icon?: string
-}
-
 export interface DatasetProps {
   isNew?: boolean
 }
@@ -61,12 +55,10 @@ const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
             <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
             <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
             <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
-
+            <Route path='/ds/:username/:name/preview' exact><DatasetPreview /></Route>
             {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/issues'><DatasetIssues qriRef={qriRef} /></Route>}
-            {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/preview' exact><DatasetPreview qriRef={qriRef} /></Route>}
 
-            {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name' exact><Redirect to={`${url}/preivew`} /></Route>}
-            {!process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>}
+            <Route path='/ds/:username/:name' exact><Redirect to={`${url}/preview`} /></Route>
           </Switch>
         </div>
         <DeployingScreen qriRef={qriRef} />

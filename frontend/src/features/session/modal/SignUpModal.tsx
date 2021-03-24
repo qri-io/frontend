@@ -12,6 +12,7 @@ import { ModalType } from '../../app/state/appState'
 import { signUp } from '../state/sessionActions'
 import { selectIsSessionLoading } from '../state/sessionState'
 import { validateEmail, validateUsername, validatePassword, ValidationError } from '../state/formValidation'
+import QriLogo from '../../../chrome/QriLogo';
 
 const SignUpModal: React.FC = () => {
 
@@ -60,7 +61,9 @@ const SignUpModal: React.FC = () => {
 
   return (
     <div className='bg-white py-7 px-5 text-center' style={{ width: '400px'}}>
-      <img className="w-9 mx-auto mb-4" src="https://qri.cloud/assets/apple-touch-icon.png" alt="logo" />
+      <div className='w-10 m-auto'>
+        <QriLogo />
+      </div>
       <div className='text-2xl font-semibold mb-6'>Sign Up for Qrimatic</div>
       <div className='w-64 mx-auto'>
         <div className='mb-6'>

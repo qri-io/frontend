@@ -13,7 +13,6 @@ import DropdownMenu, { DropDownMenuItem } from '../../chrome/DropdownMenu'
 import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { WorkflowInfo } from '../../qrimatic/workflow';
-
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
 
 interface WorkflowsTableProps {

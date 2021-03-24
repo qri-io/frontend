@@ -51,14 +51,6 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
 
 const Body: React.FunctionComponent<BodyProps> = ({
   data,
-  // pageInfo,
-  // stats,
-  // details,
-  // setDetailsBar,
-  // fetchBody,
-  // fetchCommitBody,
-  // statusInfo,
-  // qriRef
 }) => {
   const dispatch = useDispatch()
   const { body, structure } = data
@@ -132,14 +124,9 @@ const Body: React.FunctionComponent<BodyProps> = ({
     ? <BodyTable
         headers={extractColumnHeaders(structure, body)}
         body={body}
-        // pageInfo={pageInfo}
-        // highlighedColumnIndex={highlightedColumnIndex}
-        // onFetch={handleFetch}
-        // setDetailsBar={stats && handleToggleDetailsBar}
       />
     : <BodyJson
         data={body}
-        // pageInfo={pageInfo}
         previewWarning={false}
       />
 }

@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { Action } from 'redux'
 
 import { ComponentStatus, ComponentName } from '../../qri/dataset'
-
 import Icon from '../../chrome/Icon'
 import StatusDot from '../../chrome/StatusDot'
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import Button from '../../chrome/Button'
 
+import Button from '../../chrome/Button'
 import Dataset from '../../qri/dataset'
 
 export interface CommitSummaryHeaderProps {

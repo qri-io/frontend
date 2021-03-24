@@ -16,7 +16,7 @@ interface ActivityListProps {
 
 const ActivityList: React.FC<ActivityListProps> = ({
   log,
-  showDatasetName=true
+  showDatasetName = true
 }) => {
   // react-data-table column definitions
   const columns = [

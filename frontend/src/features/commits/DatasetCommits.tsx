@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SyncLoader } from 'react-spinners';
+
 import Icon from '../../chrome/Icon';
 import { QriRef } from '../../qri/ref';
 import DatasetCommitItem from './DatasetCommitItem';
