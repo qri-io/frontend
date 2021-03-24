@@ -38,7 +38,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
     <SideNavItem
       id='components'
       icon='table'
-      to={pathToDatasetViewer(qriRef.username, qriRef.name)}
+      to={pathToDatasetViewer(qriRef)}
       tooltip={
         <TooltipContent
           text='Components'

@@ -23,7 +23,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
   }, [dispatch, qriRef])
 
   return (
-    <div className='my-1 mx-2 max-w-xs flex-grow overflow-y-hidden flex flex-col text-xs'>
+    <div className='my-1 mx-2 w-1/5 max-w-xs overflow-y-hidden flex flex-col text-xs'>
       <header className='p-2 flex-grow-0'>
         <Icon className='float-left mr-2 mt-1' icon='clock' />
         <h3 className='text-lg font-bold'>History</h3>

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { newQriRef } from '../../qri/ref';
 import Workflow from '../workflow/Workflow';
-import DatasetComponents from './DatasetComponents';
+import DatasetComponents from '../dsComponents/DatasetComponents';
 import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
 import DatasetNavSidebar from './DatasetNavSidebar';
@@ -45,25 +45,26 @@ const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
 
   useEffect(() => {
     if (isNew) { return }
-
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
     dispatch(loadDataset(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
 
   return (
-    <div className='flex flex-col h-full' style={{ backgroundColor: '#F4F7FC'}}>
+    <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#F4F7FC'}}>
       <NavBar />
-      <div className='flex flex-grow overflow-hidden relative'>
+      <div className='flex overflow-hidden w-full'>
         <DatasetNavSidebar qriRef={qriRef} />
         <div className='flex flex-col flex-grow'>
           <DatasetHeader qriRef={qriRef} editable={editable} />
           <Switch>
             <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
-            <Route path='/ds/:username/:name/components/:component'><DatasetComponents qriRef={qriRef} /></Route>
+            <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
             <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
             <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
+
             {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/issues'><DatasetIssues qriRef={qriRef} /></Route>}
             {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/preview' exact><DatasetPreview qriRef={qriRef} /></Route>}
+
             {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name' exact><Redirect to={`${url}/preivew`} /></Route>}
             {!process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name' exact><Redirect to={`${url}/workflow`} /></Route>}
           </Switch>

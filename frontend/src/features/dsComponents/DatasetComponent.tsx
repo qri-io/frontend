@@ -47,10 +47,11 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   return (
-    <div className={classNames(
-      'flex-grow h-full w-full rounded-md bg-white',
-      noHeader && 'rounded-tl-none rounded-tr-none',
-    )}
+    <div
+      className={classNames(
+        'rounded-md bg-white w-full overflow-auto',
+        noHeader && 'rounded-tl-none',
+      )}
     >
       {!noHeader && <ComponentHeader componentName={componentName} />}
       {component}

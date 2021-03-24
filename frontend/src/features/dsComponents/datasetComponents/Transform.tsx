@@ -10,7 +10,7 @@ export interface TransformProps {
 export const TransformComponent: React.FunctionComponent<TransformProps> = ({ 
   data
 }) => (
-  <div className='h-full w-full overflow-auto pb-8 pt-5'>
+  <div className='pb-8 pt-5'>
     <Code data={scriptFromTransform(data)} />
   </div>
 )
