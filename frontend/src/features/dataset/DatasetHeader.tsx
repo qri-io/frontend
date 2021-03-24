@@ -42,7 +42,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   ]
 
   return (
-    <div className="w-full mh-20 p-5 relative">
+    <div className="w-full mh-20 p-8 pb-2 relative">
       <div className='text-lg font-bold relative flex items-baseline group hover:text'>
         <span>{qriRef.username || 'new'} / </span>
         <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />

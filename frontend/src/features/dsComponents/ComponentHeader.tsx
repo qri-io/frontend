@@ -28,12 +28,12 @@ const ComponentHeader: React.FC<ComponentHeaderProps> = ({
 
   const { displayName, icon, tooltip } = displayProps[componentName]
   return (
-    <div className='flex-grow text-sm border-b'>
-      <div className='flex text-sm items-center px-3 py-1'>
+    <div className='flex-grow text-sm'>
+      <div className='flex text-sm items-center px-3 py-4'>
         <div className='w-4 mr-2 text-center' data-tip={tooltip}>
           <Icon icon={icon} size='sm'/>
         </div>
-        <div>
+        <div className='font-bold'>
           {displayName}
         </div>
       </div>

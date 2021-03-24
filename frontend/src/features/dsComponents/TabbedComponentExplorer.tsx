@@ -19,7 +19,9 @@ export const TabbedComponentExplorer: React.FC<TabbedComponentExplorerProps> = (
   setSelectedComponent
 }) => {
   if (loading) {
-    return <div className='p-4 h-full w-full flex justify-center items-center bg-white rounded-md'><SyncLoader color='#4FC7F3' /></div>
+    return (<div className='p-4 h-full w-full flex justify-center items-center bg-white rounded-md'>
+              <SyncLoader color='#4FC7F3' />
+            </div>)
   }
 
   let dataset = ds
