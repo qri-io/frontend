@@ -19,7 +19,7 @@ const DatasetComponents: React.FC<{}> = () => {
   const loading = useSelector(selectIsDatasetLoading)
 
   const setSelectedComponent = (component: ComponentName) => {
-    const dest = newQriRef(Object.assign({}, qriRef, { component }))
+    const dest = newQriRef(Object.assign({}, qriRef, { component : `/${component}` }))
     dispatch(push(pathToDatasetViewer(dest)))
   }
 

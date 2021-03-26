@@ -9,9 +9,13 @@ export function pathToDatasetPreview(ref: QriRef): string {
 }
 
 export function pathToDatasetViewer(ref: QriRef): string {
-  return ref.component
-    ? `/ds/${ref.username}/${ref.name}/components/${ref.component}`
-    : `/ds/${ref.username}/${ref.name}/components`
+  let path = `/ds/${ref.username}/${ref.name}`
+  if (ref.path) {
+    path += `/at${ref.path}`
+  }
+  path += ref.component || "/body"
+
+  return path
 }
 
 export function pathToWorkflowEditor(username: string, name: string): string {

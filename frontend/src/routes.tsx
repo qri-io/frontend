@@ -14,7 +14,7 @@ import ForgotPassword from './features/session/ForgotPassword';
 import Run from './features/run/Run';
 import Collection from './features/collection/Collection';
 import Dashboard from './features/dashboard/Dashboard';
-import Dataset from './features/dataset/Dataset';
+import DatasetRoutes from './features/dataset/DatasetRoutes';
 import { AnonUser, selectSessionUser } from './features/session/state/sessionState'
 
 const PrivateRoute: React.FC<any>  = ({ path, children }) => {
@@ -41,9 +41,8 @@ export default function Routes () {
         <PrivateRoute path='/collection'><Collection /></PrivateRoute>
         <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
-        <Route path='/ds/new/:name'><Dataset /></Route>
         <Route path='/ds/new'><TemplateList /></Route>
-        <Route path='/ds/:username/:name'><Dataset /></Route>
+        <Route path='/ds/:username/:name'><DatasetRoutes /></Route>
 
         <Route path='/run'><Run /></Route>
         <Route path='/changes'><ChangeReport /></Route>

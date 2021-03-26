@@ -1,39 +1,32 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router';
 import { useParams } from 'react-router-dom';
 
-import { newQriRef } from '../../qri/ref';
-import Workflow from '../workflow/Workflow';
-import DatasetComponents from '../dsComponents/DatasetComponents';
-import { loadDataset } from './state/datasetActions'
 import NavBar from '../navbar/NavBar';
+import { newQriRef } from '../../qri/ref';
+import { loadDataset } from './state/datasetActions'
 import DatasetNavSidebar from './DatasetNavSidebar';
-import DeployingScreen from '../deploy/DeployingScreen';
-import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
 import { selectSessionUser } from '../session/state/sessionState';
 import { selectSessionUserCanEditDataset } from './state/datasetState';
 import DatasetHeader from './DatasetHeader';
-import DatasetPreview from '../dsPreview/DatasetPreview';
-import DatasetIssues from '../issues/DatasetIssues';
+import DeployingScreen from '../deploy/DeployingScreen'
 
-export interface DatasetProps {
-  isNew?: boolean
-}
 
-const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
+const DatasetPage: React.FC<{}> = ({ 
+  children
+}) => {
   const qriRef = newQriRef(useParams())
   const user = useSelector(selectSessionUser)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const dispatch = useDispatch()
-  const { url } = useRouteMatch()
+  const isNew = (qriRef.username === 'new')
 
   // This covers the case where a user created a new workflow before logging in.
   // If they login while working on the workflow, the `user` will change, but the
   // params used to generate the `qriRef` will not (because they are generated
   // from the url, which has not changed). This check ensures that the correct 
   // username is propagated after login/signup.
-  if (qriRef.username === 'new') {
+  if (isNew) {
     qriRef.username = user.username
   }
 
@@ -50,16 +43,7 @@ const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
         <DatasetNavSidebar qriRef={qriRef} />
         <div className='flex flex-col flex-grow'>
           <DatasetHeader qriRef={qriRef} editable={editable} />
-          <Switch>
-            <Route path='/ds/:username/:name/workflow'><Workflow qriRef={qriRef} /></Route>
-            <Route path='/ds/:username/:name/components/:component'><DatasetComponents /></Route>
-            <Route path='/ds/:username/:name/components'><Redirect to={`${url}/components/body`} /></Route>
-            <Route path='/ds/:username/:name/history'><DatasetActivityFeed qriRef={qriRef} /></Route>
-            <Route path='/ds/:username/:name/preview' exact><DatasetPreview /></Route>
-            {process.env.REACT_APP_FEATURE_WIREFRAMES && <Route path='/ds/:username/:name/issues'><DatasetIssues qriRef={qriRef} /></Route>}
-
-            <Route path='/ds/:username/:name' exact><Redirect to={`${url}/preview`} /></Route>
-          </Switch>
+          {children}
         </div>
         <DeployingScreen qriRef={qriRef} />
       </div>
@@ -67,4 +51,4 @@ const Dataset: React.FC<DatasetProps> = ({ isNew = false }) => {
   )
 }
 
-export default Dataset;
+export default DatasetPage

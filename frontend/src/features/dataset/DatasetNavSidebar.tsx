@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { QriRef } from '../../qri/ref'
-import SideNavItem from './SideNavItem'
+import DatasetSideNavItem from './DatasetSideNavItem'
 import TooltipContent from '../../chrome/TooltipContent'
 import {
   pathToWorkflowEditor,
@@ -22,7 +22,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
         <path d="M4.19108e-05 180V0H180C72 0 3.05176e-05 86 4.19108e-05 180Z" fill="white"/>
       </svg>
     </div>
-    <SideNavItem
+    <DatasetSideNavItem
       id='preview'
       icon='eye'
       to={pathToDatasetPreview(qriRef)}
@@ -33,7 +33,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
         />
       }
     />
-    <SideNavItem
+    <DatasetSideNavItem
       id='components'
       icon='table'
       to={pathToDatasetViewer(qriRef)}
@@ -44,7 +44,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
         />
       }
     />
-    <SideNavItem
+    <DatasetSideNavItem
       id='workflow-editor'
       icon='code'
       to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
@@ -55,7 +55,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
         />
       }
     />
-    <SideNavItem
+    <DatasetSideNavItem
       id='activity-feed'
       icon='clock'
       to={pathToActivityFeed(qriRef.username, qriRef.name)}
@@ -67,7 +67,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => (
       }
     />
     {process.env.REACT_APP_FEATURE_WIREFRAMES &&
-      <SideNavItem
+      <DatasetSideNavItem
         id='issues'
         icon='exclamationTriangle'
         to={pathToDatasetIssues(qriRef)}

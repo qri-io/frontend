@@ -4,14 +4,14 @@ import ReactTooltip from 'react-tooltip'
 
 import Icon from '../../chrome/Icon';
 
-export interface SideNavItemProps {
+export interface DatasetSideNavItemProps {
   id: string
   icon: string
   to: string
   tooltip?: React.ReactNode
 }
 
-const SideNavItem: React.FC<SideNavItemProps> = ({ id, icon, to, tooltip }) => {
+const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, to, tooltip }) => {
   const { pathname } = useLocation();
   const active = pathname.includes(to)
   return (
@@ -39,4 +39,4 @@ const SideNavItem: React.FC<SideNavItemProps> = ({ id, icon, to, tooltip }) => {
   )
 }
 
-export default SideNavItem
+export default DatasetSideNavItem
