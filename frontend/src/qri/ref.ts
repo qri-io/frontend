@@ -53,11 +53,16 @@ export interface QriRef {
 }
 
 export function newQriRef(d: Record<string,any>): QriRef {
+  let path = d.path
+  if (!path && d.fs && d.hash) {
+    path = `/${d.fs}/${d.hash}`
+  }
+
   return {
     username: d.username || d.peername,
     profileId: d.profileId,
     name: d.name,
-    path: d.path,
+    path,
     component: d.component,
     selector: d.selector,
   }

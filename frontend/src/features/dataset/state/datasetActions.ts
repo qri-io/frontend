@@ -21,6 +21,7 @@ export function loadDataset(ref: QriRef): ApiActionThunk {
 }
 
 function fetchDataset (ref: QriRef): ApiAction {
+  console.log(`fetch dataset`, ref)
   return {
     type: 'dataset',
     ref,
@@ -29,7 +30,8 @@ function fetchDataset (ref: QriRef): ApiAction {
       method: 'GET',
       segments: {
         peername: ref.username,
-        name: ref.name
+        name: ref.name,
+        path: ref.path,
       },
       map: mapDataset
     }
@@ -56,6 +58,7 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
       segments: {
         peername: ref.username,
         name: ref.name,
+        path: ref.path,
         selector: 'body'
       },
       map: mapBody
@@ -72,7 +75,8 @@ export function removeDataset (ref: QriRef): ApiActionThunk {
         method: 'DELETE',
         segments: {
           peername: ref.username,
-          name: ref.name
+          name: ref.name,
+          path: ref.path
         }
       }
     }
