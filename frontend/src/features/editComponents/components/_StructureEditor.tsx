@@ -16,7 +16,7 @@ import LabeledStats from '../../item/LabeledStats'
 import Schema from '../../structure/Schema'
 import ExternalLink from '../../ExternalLink'
 import FormatConfigEditor from '../../structure/FormatConfigEditor'
-import ParseError from '../ParseError'
+import ParseFileError from '../../dsComponents/ParseFileError'
 import { connectComponentToProps } from '../../../utils/connectComponentToProps'
 
 export interface StructureEditorProps extends RouteProps {
@@ -36,7 +36,7 @@ export const StructureEditorComponent: React.FunctionComponent<StructureEditorPr
   }
 
   if (hasParseError(statusInfo)) {
-    return <ParseError component='structure' />
+    return <ParseFileError component='structure' />
   }
 
   if (!data) { return null }

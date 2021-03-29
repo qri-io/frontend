@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SyncLoader } from 'react-spinners'
 import { AnyAction } from '@reduxjs/toolkit';
 
 import { ACTION_FAILURE, getActionType } from '../../../store/api';
@@ -13,6 +12,7 @@ import { signUp } from '../state/sessionActions'
 import { selectIsSessionLoading } from '../state/sessionState'
 import { validateEmail, validateUsername, validatePassword, ValidationError } from '../state/formValidation'
 import QriLogo from '../../../chrome/QriLogo';
+import Spinner from '../../../chrome/Spinner';
 
 const SignUpModal: React.FC = () => {
 
@@ -92,7 +92,7 @@ const SignUpModal: React.FC = () => {
         </div>
         {signupError && <div className='text-xs text-red-500 text-left mb-2'>{signupError}</div>}
         <Button size='lg' className='w-full mb-6' onClick={handleButtonClick}>
-          {loading ? <SyncLoader color='#fff' size='6' /> : 'Continue'}
+          {loading ? <Spinner color='#fff' size='6' /> : 'Continue'}
         </Button>
 
         <div className='mb-3 text-gray-500' style={{ fontSize: '.7rem' }}>

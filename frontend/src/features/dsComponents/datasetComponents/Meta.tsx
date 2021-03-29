@@ -1,7 +1,7 @@
 import React from 'react'
 
 // import Store, { RouteProps } from '../../../models/store'
-import { Meta, Citation, License, User, StandardFieldNames } from '../../../qri/dataset'
+import { Meta, Citation, License, User, standardFieldNames } from '../../../qri/dataset'
 // import { QriRef, qriRefFromRoute } from '../../../models/qriRef'
 
 // import { connectComponentToProps } from '../../../utils/connectComponentToProps'
@@ -47,9 +47,11 @@ const renderURL = (url: string) => (
 const renderArrayItemsTable = (value: any[]) => {
   return (
     <div>
-      {
-        value.map((item, i) => (<div key={i}><KeyValueTable index={i} data={item} /></div>))
-      }
+      {value.map((item, i) => (
+        <div key={i}>
+          <KeyValueTable index={i} data={item} />
+        </div>
+      ))}
     </div>
   )
 }
@@ -109,9 +111,9 @@ export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
 
   // TODO (b5) - this should happen at the point of ingest from the API
   const ignoreFields = ['qri', 'path']
-  const standard = StandardFieldNames.filter((key) => !!data[key])
+  const standard = standardFieldNames.filter((key) => !!data[key])
   const extra = Object.keys(data).filter((key) => {
-    return !(~StandardFieldNames.findIndex((sKey) => (key === sKey)) || ~ignoreFields.findIndex((iKey) => (key === iKey)))
+    return !(~standardFieldNames.findIndex((sKey) => (key === sKey)) || ~ignoreFields.findIndex((iKey) => (key === iKey)))
   })
 
   return (

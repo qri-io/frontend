@@ -181,7 +181,7 @@ export function NewMeta(d: Record<string,any>): Meta {
 }
 
 
-export const StandardFieldNames = [
+export const standardFieldNames = [
   'accessUrl',
   'accrualPeriodicity',
   'citations',

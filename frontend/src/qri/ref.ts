@@ -49,13 +49,18 @@ export interface QriRef {
   // optional: a specific component the user is trying to index into component
   component?: ComponentName 
   // address into dataset structure
-  selector?: string
+  selector?: string[]
 }
 
 export function newQriRef(d: Record<string,any>): QriRef {
   let path = d.path
-  if (!path && d.fs && d.hash) {
+  if (!path && d.fs && d.hash !== "") {
     path = `/${d.fs}/${d.hash}`
+  }
+
+  let selector = d.selector
+  if (typeof selector === 'string') {
+    selector = [selector]
   }
 
   return {
@@ -64,7 +69,7 @@ export function newQriRef(d: Record<string,any>): QriRef {
     name: d.name,
     path,
     component: d.component,
-    selector: d.selector,
+    selector,
   }
 }
 
@@ -137,6 +142,12 @@ export function qriRefIsEmpty (qriRef: QriRef): boolean {
 // aka, have the same username and name
 export function qriRefIsSameDataset (a: QriRef, b: QriRef): boolean {
   return a.username === b.username && a.name === b.name
+}
+
+// humanRef creates a new qri ref with only the username/name part of a refence
+// dropping any path or identifier data
+export function humanRef(ref: QriRef): QriRef {
+  return newQriRef({ username : ref.username, name: ref.name })
 }
 
 // // selectedComponentFromQriRef takes a qriRef and gets the selected component

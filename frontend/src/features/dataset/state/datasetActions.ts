@@ -21,18 +21,13 @@ export function loadDataset(ref: QriRef): ApiActionThunk {
 }
 
 function fetchDataset (ref: QriRef): ApiAction {
-  console.log(`fetch dataset`, ref)
   return {
     type: 'dataset',
     ref,
     [CALL_API]: {
       endpoint: 'get',
       method: 'GET',
-      segments: {
-        peername: ref.username,
-        name: ref.name,
-        path: ref.path,
-      },
+      segments: ref,
       map: mapDataset
     }
   }
@@ -56,10 +51,10 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
         pageSize
       },
       segments: {
-        peername: ref.username,
+        username: ref.username,
         name: ref.name,
         path: ref.path,
-        selector: 'body'
+        selector: ['body']
       },
       map: mapBody
     }

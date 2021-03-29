@@ -1,29 +1,39 @@
 import React from 'react'
+import { useParams } from 'react-router'
 import { useSelector } from 'react-redux'
-import { SyncLoader } from 'react-spinners'
 
 import { selectDataset, selectIsDatasetLoading } from '../dataset/state/datasetState'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 import DatasetComponent from '../dsComponents/DatasetComponent'
 import { ComponentName, getComponentFromDatasetByName } from '../../qri/dataset'
+import Spinner from '../../chrome/Spinner'
+import DownloadDatasetButton from '../download/DownloadDatasetButton'
+import { newQriRef } from '../../qri/ref'
 
 
 const DatasetPreview: React.FC<{}> = () => {
+  const qriRef = newQriRef(useParams())
   const dataset = useSelector(selectDataset)
   const loading = useSelector(selectIsDatasetLoading)
 
   return loading
   ? (<div className='w-full h-full p-4 flex justify-center items-center'>
-      <SyncLoader color='#4FC7F3' />
+      <Spinner color='#4FC7F3' />
     </div>)
   : (
     <div className='w-full h-full p-4 overflow-y-auto'>
-      <CommitSummaryHeader dataset={dataset} />
+      <CommitSummaryHeader dataset={dataset}>
+        <DownloadDatasetButton qriRef={qriRef} />
+      </CommitSummaryHeader>
       <div className='mx-4'>
         {['readme', 'body', 'structure', 'meta']
           .filter((comp) => getComponentFromDatasetByName(dataset, comp))
           .map((componentName, i) => (
-            <DatasetComponent componentName={componentName as ComponentName} dataset={dataset} />
+            <DatasetComponent 
+              key={componentName}
+              componentName={componentName as ComponentName}
+              dataset={dataset}
+            />
           ))
         }
       </div>

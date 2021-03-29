@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { SyncLoader } from 'react-spinners'
 
 import { loadCollection } from '../collection/state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from '../collection/state/collectionState'
@@ -12,7 +11,7 @@ import Button from '../../chrome/Button'
 import Icon from '../../chrome/Icon'
 import ActivityList from '../activityFeed/ActivityList'
 import { LogItem } from '../../qri/log'
-
+import Spinner from '../../chrome/Spinner'
 
 import activity from '../activityFeed/stories/data/activityLog.json'
 
@@ -56,7 +55,7 @@ const Dashboard: React.FC<any> = () => {
             <div className='text-xl font-semibold mb-2'>Recently Edited Datasets</div>
             <div className='rounded shadow border px-4 mb-4 overflow-hidden'>
               { loading
-                ? <div className='h-full w-full flex justify-center items-center'><SyncLoader /></div>
+                ? <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
                 : <WorkflowsTable
                     filteredWorkflows={collection.slice(0,4)}
                     // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
@@ -79,7 +78,7 @@ const Dashboard: React.FC<any> = () => {
           <div className='text-xl font-semibold mb-3'>Recent Activity</div>
           <div className='rounded shadow border px-4 mb-4'>
             { loading
-              ? <div className='h-full w-full flex justify-center items-center'><SyncLoader /></div>
+              ? <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
               : <ActivityList log={activity as LogItem[]}/>
             }
           </div>

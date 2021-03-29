@@ -1,14 +1,9 @@
-import {
-  Middleware,
-  Dispatch,
-  AnyAction
-} from 'redux'
+import { Middleware, Dispatch, AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+
 import { RootState } from './store'
-// import Store from '../models/store'
 import mapError from './mapError'
-// import { FAILED_TO_FETCH } from '../reducers/connection'
-// import { UNAUTHORIZED } from '../reducers/ui'
+import { QriRef } from '../qri/ref'
 
 // CALL_API is a global, unique constant for passing actions to API middleware
 export const CALL_API = Symbol('CALL_API')
@@ -27,7 +22,7 @@ export interface ApiAction extends AnyAction {
     // method is the HTTP method used
     method: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'OPTIONS'
     // segments is a list of parameters used to construct the API request
-    segments?: ApiSegments
+    segments?: QriRef
     // query is an object of query parameters to be appended to the API call URL
     query?: ApiQuery
     // body is the body for POST requests
@@ -61,17 +56,6 @@ export const getActionType = (action = { type: '' }): string => {
 
 export function isApiAction (action = { type: '' }): boolean {
   return !!action.type && action.type.startsWith('API')
-}
-
-// ApiSegments is an interface for all possible query parameters passed to
-// the API
-export interface ApiSegments {
-  peername?: string
-  name?: string
-  peerID?: string
-  path?: string
-  fsi?: boolean
-  selector?: string
 }
 
 interface ApiPagination {
@@ -141,15 +125,15 @@ async function getJSON<T> (url: string, options: FetchOptions): Promise<T> {
   return res as T
 }
 
-function apiUrl (endpoint: string, segments?: ApiSegments, query?: ApiQuery, pageInfo?: ApiPagination): [string, string] {
+function apiUrl (endpoint: string, segments?: QriRef, query?: ApiQuery, pageInfo?: ApiPagination): [string, string] {
   const addToUrl = (url: string, seg: string): string => {
     if (!(url[url.length - 1] === '/' || seg[0] === '/')) url += '/'
     return url + seg
   }
   let url = API_BASE_URL + `/${endpoint}`
   if (segments) {
-    if (segments.peername) {
-      url = addToUrl(url, segments.peername)
+    if (segments.username) {
+      url = addToUrl(url, segments.username)
     }
     if (segments.name) {
       url = addToUrl(url, segments.name)
@@ -164,7 +148,7 @@ function apiUrl (endpoint: string, segments?: ApiSegments, query?: ApiQuery, pag
       url = addToUrl(url, segments.path)
     }
     if (segments.selector) {
-      url = addToUrl(url, segments.selector)
+      url = addToUrl(url, segments.selector.join('/'))
     }
   }
 
@@ -192,7 +176,7 @@ interface FetchOptions {
 async function getAPIJSON<T> (
   endpoint: string,
   method: string,
-  segments?: ApiSegments,
+  segments?: QriRef,
   query?: ApiQuery,
   pageInfo?: ApiPagination,
   body?: object|[]
