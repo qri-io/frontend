@@ -1,18 +1,18 @@
 import React from 'react'
-import { SyncLoader } from 'react-spinners'
 
 import Dataset, { ComponentName, isDatasetEmpty, NewDataset } from '../../qri/dataset'
 import ComponentList from './ComponentList'
 import DatasetComponent from './DatasetComponent'
+import Spinner from '../../chrome/Spinner'
 
-export interface TabbedComponentExplorerProps {
+export interface TabbedComponentViewerProps {
   dataset: Dataset
   selectedComponent: ComponentName
   setSelectedComponent: (name: ComponentName) => void
   loading: boolean
 }
 
-export const TabbedComponentExplorer: React.FC<TabbedComponentExplorerProps> = ({
+export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   dataset: ds,
   loading,
   selectedComponent,
@@ -20,7 +20,7 @@ export const TabbedComponentExplorer: React.FC<TabbedComponentExplorerProps> = (
 }) => {
   if (loading) {
     return (<div className='p-4 h-full w-full flex justify-center items-center bg-white rounded-md'>
-              <SyncLoader color='#4FC7F3' />
+              <Spinner color='#4FC7F3' />
             </div>)
   }
 
@@ -46,4 +46,4 @@ export const TabbedComponentExplorer: React.FC<TabbedComponentExplorerProps> = (
   )
 }
 
-export default TabbedComponentExplorer
+export default TabbedComponentViewer

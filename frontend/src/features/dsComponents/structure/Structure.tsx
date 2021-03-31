@@ -3,12 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 import { Structure } from '../../../qri/dataset'
-
-import fileSize, { abbreviateNumber } from '../fileSize'
-
-import LabeledStats from '../LabeledStats'
-import FormatConfigHistory from '../FormatConfigHistory'
-// import SpinnerWithIcon from './chrome/SpinnerWithIcon'
+import fileSize, { abbreviateNumber } from '../../../utils/fileSize'
+import LabeledStats from '../../../chrome/LabeledStats'
+import FormatConfigHistory from './FormatConfigHistory'
 import Schema from '../schema/Schema'
 
 export interface StructureProps {

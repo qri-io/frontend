@@ -13,6 +13,7 @@ export function loadDatasetCommits(qriRef: QriRef): ApiActionThunk {
 }
 
 function fetchDatasetCommits(qriRef: QriRef): ApiAction {
+  console.log('loading dataset commits', qriRef.username, qriRef.name)
   return {
     type: 'dataset_commits',
     qriRef,

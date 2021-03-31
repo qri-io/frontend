@@ -8,6 +8,7 @@ import DatasetPreview from '../dsPreview/DatasetPreview';
 import DatasetIssues from '../issues/DatasetIssues';
 import DatasetPage from './DatasetPage';
 import { newQriRef } from '../../qri/ref';
+import DatasetEditor from '../dsComponents/DatasetEditor';
 
 const DatasetRoutes: React.FC<{}> = () => {
   const { url } = useRouteMatch()
@@ -44,6 +45,13 @@ const DatasetRoutes: React.FC<{}> = () => {
         <Route path='/ds/:username/:name/issues'>
           <DatasetPage>
             <DatasetIssues qriRef={qriRef} />
+          </DatasetPage>
+        </Route>
+      }
+      {process.env.REACT_APP_FEATURE_WIREFRAMES && 
+        <Route path='/ds/:username/:name/edit'>
+          <DatasetPage>
+            <DatasetEditor />
           </DatasetPage>
         </Route>
       }

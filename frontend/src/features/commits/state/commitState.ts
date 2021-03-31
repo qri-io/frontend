@@ -1,10 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store';
-import { QriRef, refStringFromQriRef } from '../../../qri/ref';
+import { humanRef, QriRef, refStringFromQriRef } from '../../../qri/ref';
 import { LogItem } from '../../../qri/log';
 
 export function newDatasetCommitsSelector(qriRef: QriRef): (state: RootState) => LogItem[] {
+  qriRef = humanRef(qriRef)
   return (state: RootState) => {
     return state.commits.commits[refStringFromQriRef(qriRef)] || []
   }

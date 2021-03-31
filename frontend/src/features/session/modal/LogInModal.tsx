@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { SyncLoader } from 'react-spinners'
 import { AnyAction } from '@reduxjs/toolkit'
 
 import { ACTION_FAILURE, getActionType } from '../../../store/api'
@@ -13,6 +12,7 @@ import { logIn } from '../state/sessionActions'
 import { selectIsSessionLoading } from '../state/sessionState'
 import { ModalType } from '../../app/state/appState'
 import QriLogo from '../../../chrome/QriLogo'
+import Spinner from '../../../chrome/Spinner'
 
 
 const LogInModal: React.FC = () => {
@@ -66,7 +66,7 @@ const LogInModal: React.FC = () => {
         {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
 
         <Button size='lg' className='w-full mb-6' onClick={handleButtonClick}>
-          {loading ? <SyncLoader color='#fff' size={6} /> : 'Log In'}
+          {loading ? <Spinner color='#fff' size={6} /> : 'Log In'}
         </Button>
 
         <div className='mb-3 text-gray-500' style={{ fontSize: '.7rem' }}>

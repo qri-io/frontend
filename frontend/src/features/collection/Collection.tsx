@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { SyncLoader } from 'react-spinners'
 
 import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
@@ -10,6 +9,7 @@ import WorkflowsTable from './WorkflowsTable'
 import { WorkflowInfo } from '../../qrimatic/workflow'
 import Button from '../../chrome/Button'
 import Icon from '../../chrome/Icon'
+import Spinner from '../../chrome/Spinner'
 
 const Collection: React.FC<any> = () => {
   const dispatch = useDispatch()
@@ -35,7 +35,7 @@ const Collection: React.FC<any> = () => {
       </header>
 
         { loading
-          ? <div className='h-full w-full flex justify-center items-center'><SyncLoader /></div>
+          ? <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
           : <WorkflowsTable
               filteredWorkflows={collection}
               // When the clearSelectedTrigger changes value, it triggers the ReactDataTable

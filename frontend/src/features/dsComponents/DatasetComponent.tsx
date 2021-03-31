@@ -1,14 +1,14 @@
 import React from 'react'
-import ComponentHeader from './ComponentHeader'
 import classNames from 'classnames'
 
+import ComponentHeader from './ComponentHeader'
 import Dataset, { ComponentName, qriRefFromDataset } from '../../qri/dataset'
-import Transform from './datasetComponents/Transform'
-import Body from './datasetComponents/Body'
-import Commit from './datasetComponents/Commit'
-import Meta from './datasetComponents/Meta'
-import Structure from './datasetComponents/Structure'
-import Readme from './datasetComponents/Readme'
+import Transform from './transform/Transform'
+import Body from './body/Body'
+import Commit from './commit/Commit'
+import Meta from './meta/Meta'
+import Structure from './structure/Structure'
+import Readme from './readme/Readme'
 
 export interface DatasetComponentProps {
   dataset: Dataset

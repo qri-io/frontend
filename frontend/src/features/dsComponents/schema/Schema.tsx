@@ -5,16 +5,15 @@ import { Schema as ISchema } from '../../../qri/dataset'
 import SchemaItem, { SchemaItemType } from './SchemaItem'
 
 interface SchemaProps {
-  data: ISchema | undefined
+  data?: ISchema
   onChange?: (schema: ISchema, e: React.ChangeEvent) => void
-  // defaults to true
-  editable: boolean
+  editable?: boolean
 }
 
-const Schema: React.FunctionComponent<SchemaProps> = ({
+const Schema: React.FC<SchemaProps> = ({
   data,
   onChange,
-  editable = true
+  editable = false
 }) => {
   if (!data) {
     return <div className='margin'>No schema specified</div>

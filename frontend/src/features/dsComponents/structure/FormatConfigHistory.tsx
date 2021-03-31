@@ -1,6 +1,7 @@
 import React from 'react'
-import { Structure } from '../../qri/dataset'
-import { formatConfigOptions } from './datasetComponents/Structure'
+
+import { Structure } from '../../../qri/dataset'
+import { formatConfigOptions } from './Structure'
 
 export interface FormatConfigHistoryProps {
   structure: Structure

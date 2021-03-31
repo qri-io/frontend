@@ -85,7 +85,6 @@ const ETWorklowDeployStopped = "wf:DeployStopped"
 
 const middleware = () => {
   let socket: WebSocket | undefined
-  console.log('constructing ws middleware')
 
   const onOpen = (dispatch: Dispatch ) => (event: Event) => {
     console.log('websocket opened')

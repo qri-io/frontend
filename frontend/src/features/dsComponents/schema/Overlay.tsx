@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import React, { useCallback } from 'react'
-import Icon from '../../../chrome/Icon'
 import classNames from 'classnames'
+
+import Icon from '../../../chrome/Icon'
 
 interface OverlayProps {
   title?: string

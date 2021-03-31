@@ -1,7 +1,8 @@
 import React from 'react'
+
 import Icon from '../../../chrome/Icon'
 import DynamicEditField from './DynamicEditField'
-import { DataTypes } from '../DataType'
+import { DataTypes } from '../../../chrome/DataType'
 import TypePicker from './TypePicker'
 import classNames from 'classnames'
 

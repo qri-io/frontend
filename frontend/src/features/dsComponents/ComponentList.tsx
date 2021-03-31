@@ -56,6 +56,8 @@ export interface ComponentListProps {
   // components?: SelectedComponent[]
   // status: Status
   selectedComponent: ComponentName
+  // if true components that don't exist will be clickable
+  allowClickMissing?: boolean
 }
 
 const ComponentList: React.FC<ComponentListProps> = ({
@@ -66,19 +68,14 @@ const ComponentList: React.FC<ComponentListProps> = ({
   // components = [],
   selectedComponent,
   // history
+  allowClickMissing = false,
 }) => {
-  // const {
-  //   username = '',
-  //   name: datasetName = '',
-  //   path = ''
-  // } = qriRef
-
   const componentNames = Object.keys(dataset)
 
   return (
     <div className='flex'>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
-          if (componentNames.includes(name)) {
+          if (allowClickMissing || componentNames.includes(name)) {
             var fileStatus: ComponentStatus = 'unmodified'
             // if (status[name]) {
             //   fileStatus = status[name].status
@@ -92,7 +89,6 @@ const ComponentList: React.FC<ComponentListProps> = ({
                 status={fileStatus}
                 selected={selectedComponent === name}
                 tooltip={tooltip}
-                // onClick={(component: SelectedComponent) => history.push(pathToDataset(username, datasetName, path, component))}
                 onClick={onClick}
               />
             )

@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { ChangeStatus } from '../../qri/change'
+import { ChangeStatus } from '../../qri/status'
 
 export interface ComponentChangeIndicatorGroupProps {
   status: ChangeStatus[]

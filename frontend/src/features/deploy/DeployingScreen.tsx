@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import SyncLoader from 'react-spinners/SyncLoader'
+import Spinner from '../../chrome/Spinner'
 
 import { QriRef } from '../../qri/ref'
 import { selectWorkflow } from '../workflow/state/workflowState'
@@ -21,7 +21,7 @@ const DeployingScreen: React.FC<DeployingScreenProps> = ({ qriRef }) => {
   return (
     <div className='absolute h-full flex-grow w-full bg-white z-20 flex flex-col items-center justify-center'>
       <div className='mx-auto mb-8'>
-        <SyncLoader color='#4FC7F3' />
+        <Spinner color='#4FC7F3' />
       </div>
       <div className="text-3xl font-bold leading-tighter tracking-tighter mb-4  mx-auto">
         Deploying workflow...

@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import { ThunkAction, Action } from '@reduxjs/toolkit';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router'
 import { createBrowserHistory, History } from 'history'
+
 import transfersReducer from '../features/transfer/state/transferState';
 import { apiMiddleware } from './api';
 import { RemoteEvents, websocketMiddleware } from '../features/websocket/middleware/websocket';
@@ -15,6 +16,7 @@ import { deployReducer, DeployState } from '../features/deploy/state/deployState
 import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
 import { sessionReducer, SessionState } from '../features/session/state/sessionState';
 import { commitsReducer, CommitsState } from '../features/commits/state/commitState';
+import { datasetEditsReducer, DatasetEditsState } from '../features/dataset/state/editDatasetState';
 
 export const history = createBrowserHistory()
 
@@ -30,6 +32,7 @@ export interface RootState {
   session: SessionState
   transfers: RemoteEvents
   workflow: WorkflowState
+  edits: DatasetEditsState
 }
 
 const rootReducer = (h: History) => combineReducers({
@@ -47,6 +50,7 @@ const rootReducer = (h: History) => combineReducers({
   session: sessionReducer,
   transfers: transfersReducer,
   workflow: workflowReducer,
+  edits: datasetEditsReducer,
 })
 
 export function configureStore(preloadedState?: any) {

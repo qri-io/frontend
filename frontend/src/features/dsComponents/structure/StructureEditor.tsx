@@ -1,50 +1,49 @@
 import React from 'react'
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import Dataset, { Structure as IStructure, Schema as ISchema } from '../../../models/dataset'
 import { ApiActionThunk } from '../../../store/api'
 import fileSize, { abbreviateNumber } from '../../../utils/fileSize'
-import { selectDatasetFromMutations, selectWorkingDatasetIsLoading, selectWorkingDatasetUsername, selectWorkingDatasetName, selectWorkingStatusInfo } from '../../../selections'
-import Store, { StatusInfo, RouteProps } from '../../../models/store'
-import { writeDataset } from '../../../actions/workbench'
-import { QriRef, qriRefFromRoute } from '../../../models/qriRef'
-import hasParseError from '../../../utils/hasParseError'
+import Spinner from '../../../chrome/Spinner'
+import { QriRef } from '../../../qri/ref'
+import { StatusInfo } from '../../../qri/status'
+import { Structure } from '../../../qri/dataset'
+import Icon from '../../../chrome/Icon'
+import ExternalLink from '../../../chrome/ExternalLink'
+import LabeledStats from '../../../chrome/LabeledStats'
+import Schema from '../schema/Schema'
 
-import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
-import LabeledStats from '../../item/LabeledStats'
-import Schema from '../../structure/Schema'
-import ExternalLink from '../../ExternalLink'
-import FormatConfigEditor from '../../structure/FormatConfigEditor'
-import ParseError from '../ParseError'
-import { connectComponentToProps } from '../../../utils/connectComponentToProps'
+// import hasParseError from '../../../utils/hasParseError'
+// import ParseFileError from '../../dsComponents/ParseFileError'
 
-export interface StructureEditorProps extends RouteProps {
+export interface StructureEditorProps {
   qriRef: QriRef
-  data?: IStructure
+  data?: Structure
   showConfig?: boolean
   loading: boolean
-  statusInfo: StatusInfo
+  statusInfo?: StatusInfo
   write?: (peername: string, name: string, dataset: Dataset) => ApiActionThunk | void
 }
 
-export const StructureEditorComponent: React.FunctionComponent<StructureEditorProps> = (props) => {
-  const { data, write, loading, qriRef, statusInfo } = props
-
+export const StructureEditor: React.FC<StructureEditorProps> = ({
+  data,
+  write,
+  loading,
+  qriRef,
+  statusInfo,
+}) => {
   if (loading) {
-    return <SpinnerWithIcon loading />
+    return <Spinner />
   }
 
-  if (hasParseError(statusInfo)) {
-    return <ParseError component='structure' />
-  }
+  // if (hasParseError(statusInfo)) {
+  //   return <ParseFileError component='structure' />
+  // }
 
   if (!data) { return null }
 
   const username = qriRef.username || ''
   const name = qriRef.name || ''
-
   const format = data.format || 'csv'
+
   const handleWriteFormat = (option: string, value: any) => {
     if (!write) return
     // TODO (ramfox): sending over format since a user can replace the body with a body of a different
@@ -73,14 +72,11 @@ export const StructureEditorComponent: React.FunctionComponent<StructureEditorPr
     { 'label': 'depth', 'value': data.depth || '—' }
   ]
 
-  let schema
-  if (data && data.schema) {
-    schema = data.schema
-  }
-
   return (
     <div className='structure'>
-      <div className='stats'><LabeledStats data={stats} size='lg' /></div>
+      <div className='stats'>
+        <LabeledStats data={stats} size='lg' />
+      </div>
       <FormatConfigEditor
         structure={data}
         format={format}
@@ -95,13 +91,13 @@ export const StructureEditorComponent: React.FunctionComponent<StructureEditorPr
               data-tip={'JSON schema that describes the structure of the dataset. Click here to learn more about JSON schemas'}
               className='text-input-tooltip'
             >
-              <FontAwesomeIcon icon={faInfoCircle} size='sm'/>
+              <Icon icon='info' size='sm' />
             </span>
           </ExternalLink>
         </h4>
       </div>
       <Schema
-        data={schema}
+        data={data.schema}
         onChange={handleOnChange}
         editable
       />
@@ -109,20 +105,4 @@ export const StructureEditorComponent: React.FunctionComponent<StructureEditorPr
   )
 }
 
-export default connectComponentToProps(
-  StructureEditorComponent,
-  (state: Store, ownProps: StructureEditorProps) => {
-    return {
-      ...ownProps,
-      qriRef: qriRefFromRoute(ownProps),
-      data: selectDatasetFromMutations(state).structure,
-      loading: selectWorkingDatasetIsLoading(state),
-      peername: selectWorkingDatasetUsername(state),
-      statusInfo: selectWorkingStatusInfo(state, 'structure'),
-      name: selectWorkingDatasetName(state)
-    }
-  },
-  {
-    write: writeDataset
-  }
-)
+export default StructureEditor

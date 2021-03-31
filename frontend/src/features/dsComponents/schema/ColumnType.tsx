@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { DataTypes } from '../DataType'
+import { DataTypes } from '../../../chrome/DataType'
 
 import Icon from '../../../chrome/Icon'
 
