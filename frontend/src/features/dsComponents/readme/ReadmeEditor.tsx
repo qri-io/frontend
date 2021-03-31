@@ -7,7 +7,7 @@ import { hasParseError, StatusInfo } from '../../../qri/status'
 import { NewDataset, NewReadme } from '../../../qri/dataset'
 import { QriRef } from '../../../qri/ref'
 import Spinner from '../../../chrome/Spinner'
-import ParseFileError from '../../dsComponents/ParseFileError'
+import ParseFileError from '../ParseFileError'
 
 // import { refStringFromQriRef, QriRef, qriRefFromRoute } from '../../../models/qriRef'
 // import Store, { StatusInfo, RouteProps } from '../../../models/store'

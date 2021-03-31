@@ -16,7 +16,7 @@ import { deployReducer, DeployState } from '../features/deploy/state/deployState
 import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
 import { sessionReducer, SessionState } from '../features/session/state/sessionState';
 import { commitsReducer, CommitsState } from '../features/commits/state/commitState';
-import { datasetEditsReducer, DatasetEditsState } from '../features/editComponents/state/editDatasetState';
+import { datasetEditsReducer, DatasetEditsState } from '../features/dataset/state/editDatasetState';
 
 export const history = createBrowserHistory()
 

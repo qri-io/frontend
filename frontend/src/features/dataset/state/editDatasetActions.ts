@@ -1,6 +1,6 @@
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
 import { newQriRef, QriRef } from "../../../qri/ref";
-import { mapDataset } from "../../dataset/state/datasetActions";
+import { mapDataset } from "./datasetActions";
 import { EDIT_DATASET } from "./editDatasetState";
 import Dataset from "../../../qri/dataset";
 
@@ -43,23 +43,25 @@ function fetchEditingDatasetHead(ref: QriRef): ApiAction {
   }
 }
 
-export function saveDataset(ds: Dataset): ApiAction {
+export function saveDataset(ds: Dataset): ApiActionThunk {
   const ref = newQriRef({ username: ds.peername, name: ds.name })
-  return {
-    type: 'save',
-    ref,
-    [CALL_API]: {
-      endpoint: `save?refstr=${ref.username}/${ref.name}`,
-      method: 'POST',
-      // segments: ref,
-      map: mapDataset,
-      body: {
-        dataset: ds
+  return async (dispatch, getState) => {
+    return dispatch({
+      type: 'save',
+      ref,
+      [CALL_API]: {
+        endpoint: `save?refstr=${ref.username}/${ref.name}`,
+        method: 'POST',
+        // segments: ref,
+        map: mapDataset,
+        body: {
+          dataset: ds
+        }
+        // body: {
+        //   ref: ref,
+        //   dataset: ds
+        // }
       }
-      // body: {
-      //   ref: ref,
-      //   dataset: ds
-      // }
-    }
+    })
   }
 }

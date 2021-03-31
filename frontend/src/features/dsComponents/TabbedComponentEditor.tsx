@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Dataset, { ComponentName } from '../../qri/dataset'
-import ComponentList from '../dsComponents/ComponentList'
+import ComponentList from './ComponentList'
 import Spinner from '../../chrome/Spinner'
 import ComponentEditor from './ComponentEditor'
 

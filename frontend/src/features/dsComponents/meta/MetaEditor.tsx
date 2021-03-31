@@ -10,6 +10,7 @@ import TextInput from '../../../chrome/forms/TextInput'
 import { Meta } from '../../../qri/dataset'
 import Button from '../../../chrome/Button'
 import TagInput from '../../../chrome/forms/TagInput'
+import CustomMetaEditor from './CustomMetaEditor'
 
 // import hasParseError from '../../../utils/hasParseError'
 // import { writeDataset } from '../../../actions/workbench'
@@ -160,75 +161,17 @@ const fields = [
   }
 ]
 
-// const renderValue = (value: string) => {
-//   switch (typeof value) {
-//     case 'string':
-//     case 'number':
-//       return <span>{value}</span>
-//     case 'object':
-//       return <span>{JSON.stringify(value)}</span>
-//     default:
-//       return <span>{JSON.stringify(value)}</span>
-//   }
-// }
-
-// const renderTable = (keys: string[], data: Meta) => {
-//   return (
-//     <div className='metadata-viewer-table-wrap'>
-//       <table className='metadata-viewer-table'>
-//         <tbody>
-//           {keys.map((key) => {
-//             const value = data[key]
-//             let cellContent = renderValue(value)
-
-//             return (
-//               <tr key={key} className='metadata-viewer-row'>
-//                 <td className='metadata-viewer-key'>{key}</td>
-//                 <td>{cellContent}</td>
-//               </tr>
-//             )
-//           })}
-//         </tbody>
-//       </table>
-//     </div>
-//   )
-// }
-
 const MetaEditor: React.FC<MetaEditorProps> = ({
   data,
   loading = false,
   statusInfo,
   onDatasetChange
 }) => {
-//   const username = qriRef.username || ''
-//   const name = qriRef.name || ''
-//   React.useEffect(ReactTooltip.rebuild, [])
-
+  if (loading) {
+    return <Spinner />
+  }
 //   if (hasParseError(statusInfo)) {
 //     return <ParseError component='meta' />
-//   }
-
-//   const ignoreFields = ['qri', 'path']
-
-//   const handleWrite = (e: React.FocusEvent, target: string = '', value: any = undefined) => {
-//     const v = value || (e && e.target.value)
-//     const t = target || (e && e.target.getAttribute('name')) || ''
-//     const update: any = cloneDeep(data)
-
-//     if (v === '' || v === undefined || v === null || Object.keys(v).length === 0) {
-//       // if the value is empty and the original field is also undefined
-//       // then the blur action was called, but no change was made
-//       // so return early
-//       if (!update[t]) return
-//       delete update[t]
-//     } else {
-//       if (update[t] === v) return
-//       update[t] = v
-//     }
-
-//     write(username, name, {
-//       meta: update
-//     })
 //   }
 
 //   const licenseOptions = [
@@ -253,14 +196,6 @@ const MetaEditor: React.FC<MetaEditorProps> = ({
 //       type: 'GNU Free Documentation License'
 //     }
 //   ]
-
-//   const extra = Object.keys(data).filter((key) => {
-//     return !(~standardFields.findIndex((sKey) => (key === sKey)) || ~ignoreFields.findIndex((iKey) => (key === iKey)))
-//   })
-
-  if (loading) {
-    return <Spinner />
-  }
 
   const handleWrite = (name: string, value: any) => {
     onDatasetChange(['meta', name], value)
@@ -312,41 +247,15 @@ const MetaEditor: React.FC<MetaEditorProps> = ({
               onArrayChange={(e: React.SyntheticEvent, name: string, value: any) => { handleWrite(field.field, value) }}
             />)
           default:
-            return (<p>Unrecognized Input Type: {field.inputType}</p>)
+            return (<p key={field.field}>Unrecognized Input Type: {field.inputType}</p>)
         }
       })}
+      <CustomMetaEditor 
+        data={data}
+        onDatasetChange={handleWrite}
+        />
     </div>
   )
-
-//   return (
-//     <div className='content metadata-viewer-wrap'>
-//       <h4 className='metadata-viewer-title'>
-//         Standard Metadata
-//         &nbsp;
-//         <ExternalLink id='meta-docs' href={`${QRI_IO_URL}/docs/reference/dataset/#meta`}>
-//           <span
-//             data-tip={'Qri\'s common metadata fields.<br/>Click for more info.'}
-//             className='text-input-tooltip'
-//           >
-//             <FontAwesomeIcon icon={faInfoCircle} size='sm'/>
-//           </span>
-//         </ExternalLink>
-//       </h4>
-//       {(extra.length > 0) && <div>
-//         <h4 className='metadata-viewer-title'>
-//           Additional Metadata
-//           &nbsp;
-//           <span
-//             data-tip={'Custom metadata fields. To edit, modify this dataset\'s meta.json file'}
-//             className='text-input-tooltip'
-//           >
-//             <FontAwesomeIcon icon={faInfoCircle} size='sm'/>
-//           </span>
-//         </h4>
-//         {renderTable(extra, data)}
-//       </div>}
-//     </div>
-//   )
 }
 
 export default MetaEditor

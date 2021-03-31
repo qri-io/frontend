@@ -2,7 +2,7 @@ import React from 'react'
 
 import ColumnType from './ColumnType'
 import TypePickerOverlay from './TypePickerOverlay'
-import { DataTypes } from '../DataType'
+import { DataTypes } from '../../../chrome/DataType'
 import TabPicker from './TabPicker'
 
 interface TypePickerProps {

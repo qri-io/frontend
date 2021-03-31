@@ -1,15 +1,15 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import ComponentHeader from '../dsComponents/ComponentHeader'
+import ComponentHeader from './ComponentHeader'
 import Dataset, { ComponentName, qriRefFromDataset } from '../../qri/dataset'
 // import Dataset, { ComponentName, qriRefFromDataset } from '../../qri/dataset'
 // import Transform from '../dsComponents/datasetComponents/Transform'
 // import Body from '../dsComponents/datasetComponents/Body'
 // import Commit from '../dsComponents/datasetComponents/Commit'
 // import Structure from '../dsComponents/datasetComponents/Structure'
-import ReadmeEditor from './components/ReadmeEditor'
-import MetaEditor from './components/MetaEditor'
+import ReadmeEditor from './readme/ReadmeEditor'
+import MetaEditor from './meta/MetaEditor'
 
 export interface ComponentEditorProps {
   dataset: Dataset

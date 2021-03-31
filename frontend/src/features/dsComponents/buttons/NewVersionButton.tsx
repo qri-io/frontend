@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { QriRef } from '../../qri/ref'
-import { pathToDatasetEditor } from '../dataset/state/datasetPaths'
+import { QriRef } from '../../../qri/ref'
+import { pathToDatasetEditor } from '../../dataset/state/datasetPaths'
 
 export interface NewVersionButtonProps {
   qriRef: QriRef

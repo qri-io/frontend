@@ -6,7 +6,7 @@ import Icon from '../../chrome/Icon';
 import Spinner from '../../chrome/Spinner';
 import { newQriRef, QriRef } from '../../qri/ref';
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState';
-import NewVersionButton from '../editComponents/NewVersionButton';
+import NewVersionButton from '../dsComponents/buttons/NewVersionButton';
 import DatasetCommitItem from './DatasetCommitItem';
 import { loadDatasetCommits } from './state/commitActions';
 import { newDatasetCommitsSelector, selectDatasetCommitsLoading } from './state/commitState';

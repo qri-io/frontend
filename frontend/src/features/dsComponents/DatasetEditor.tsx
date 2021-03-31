@@ -7,9 +7,9 @@ import { newQriRef } from '../../qri/ref'
 import DatasetCommits from '../commits/DatasetCommits'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 import TabbedComponentEditor from './TabbedComponentEditor'
-import SaveVersionButton from './SaveVersionButton'
-import { editDataset, loadEditingDatasetHead } from './state/editDatasetActions'
-import { selectDatasetEdits, selectEditingHeadIsLoading } from './state/editDatasetState'
+import SaveVersionButton from './buttons/SaveVersionButton'
+import { editDataset, loadEditingDatasetHead } from '../dataset/state/editDatasetActions'
+import { selectDatasetEdits, selectEditingHeadIsLoading } from '../dataset/state/editDatasetState'
 
 const DatasetEditor: React.FC<{}> = () => {
   const qriRef = newQriRef(useParams())

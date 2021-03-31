@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { scriptFromTransform, Transform } from '../../../qri/dataset'
-import Code from '../Code'
+import Monospace from '../../../chrome/Monospace'
 
 export interface TransformProps {
   data: Transform
@@ -11,7 +11,7 @@ export const TransformComponent: React.FunctionComponent<TransformProps> = ({
   data
 }) => (
   <div className='pb-8 pt-5'>
-    <Code data={scriptFromTransform(data)} />
+    <Monospace data={scriptFromTransform(data)} />
   </div>
 )
 

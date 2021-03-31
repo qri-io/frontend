@@ -1,9 +1,10 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
-import Button from '../../chrome/Button'
-import Dataset from '../../qri/dataset'
-import { saveDataset } from './state/editDatasetActions'
+import Button from '../../../chrome/Button'
+import Dataset, { qriRefFromDataset } from '../../../qri/dataset'
+import { loadDatasetCommits } from '../../commits/state/commitActions'
+import { saveDataset } from '../../dataset/state/editDatasetActions'
 
 export interface SaveVersionButtonProps {
   dataset?: Dataset
@@ -20,6 +21,9 @@ const SaveVersionButton: React.FC<SaveVersionButtonProps> = ({
       onClick={() => {
         if (dataset) {
           dispatch(saveDataset(dataset))
+            .then(() => {
+              dispatch(loadDatasetCommits(qriRefFromDataset(dataset)))
+            })
         }
       }}
     >Save</Button>
