@@ -29,8 +29,9 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
     type: 'workflow',
     qriRef,
     [CALL_API]: {
-      endpoint: `workflow?dataset_id=${qriRef.username}/${qriRef.name}`,
-      method: 'GET',
+      endpoint: `auto/workflow`,
+      method: 'POST',
+      body: { ref: `${qriRef.username}/${qriRef.name}` },
       map: mapWorkflow
     }
   }
@@ -81,7 +82,7 @@ export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
     return dispatch({
       type: 'apply',
       [CALL_API]: {
-        endpoint: 'apply',
+        endpoint: 'auto/apply',
         method: 'POST',
         body: {
           transform: {

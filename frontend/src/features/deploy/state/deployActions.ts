@@ -9,7 +9,7 @@ export function deployWorkflow(w: Workflow): ApiActionThunk {
       type: 'deploy',
       
       [CALL_API]: {
-        endpoint: 'deploy',
+        endpoint: 'auto/deploy',
         method: 'POST',
         body: {
           apply: true,
