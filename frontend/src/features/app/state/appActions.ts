@@ -1,4 +1,4 @@
-import { Modal, ModalType, SET_MODAL } from "./appState";
+import { Modal, ModalType, SET_MODAL, TOGGLE_NAV_EXPANDED } from "./appState";
 
 export interface ModalAction {
   type: string
@@ -19,5 +19,11 @@ export function clearModal(): ModalAction {
   return {
     type: SET_MODAL,
     modal: { type: ModalType.none }
+  }
+}
+
+export function toggleNavExpanded() {
+  return {
+    type: TOGGLE_NAV_EXPANDED,
   }
 }

@@ -7,35 +7,40 @@ import Icon from '../../chrome/Icon';
 export interface DatasetSideNavItemProps {
   id: string
   icon: string
+  label: string
   to: string
+  expanded: boolean
   tooltip?: React.ReactNode
 }
 
-const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, to, tooltip }) => {
+const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, label, to, expanded=true, tooltip }) => {
   const { pathname } = useLocation();
   const active = pathname.includes(to)
   return (
-      <Link to={to} className=''>
-        <div
-          className={`text-center h-10 w-10 m-3 rounded py-2 hover:bg-qriblue hover:text-white transition-all duration-200 ${active ? 'bg-qriblue text-white' : 'text-gray-400'}`}
-          data-tip
-          data-for={id}
-        >
-          <Icon icon={icon} />
-          {tooltip && (
-            <ReactTooltip
-              id={id}
-              place='right'
-              effect='solid'
-              offset={{
-                right: 10
-              }}
-            >
-              {tooltip}
-            </ReactTooltip>
-          )}
-        </div>
+    <div className='mb-4'>
+      <Link to={to} className='font-medium text-qrinavy transition-700 transition-all'>
+        <span data-tip data-for={id}>
+          <Icon className='mr-2' size='md' icon={icon} />
+          <span style={{
+            fontSize: '16px',
+            width: expanded ? 'auto' : 0,
+            display: expanded ? 'inline-block' : 'none'
+          }}>{label}</span>
+        </span>
+        {tooltip && (
+          <ReactTooltip
+            id={id}
+            place='right'
+            effect='solid'
+            offset={{
+              right: 10
+            }}
+          >
+            {tooltip}
+          </ReactTooltip>
+        )}
       </Link>
+    </div>
   )
 }
 

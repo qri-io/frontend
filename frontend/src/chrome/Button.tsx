@@ -23,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({
 
   // primary type
   let colorClasses = 'text-white bg-qriblue-600 hover:bg-qriblue-700 focus:ring-qriblue-500'
-  let sizeClasses = 'font-semibold text-sm px-4 py-2'
+  let sizeClasses = 'text-sm px-4 py-2'
 
   switch(type) {
     case 'light':
@@ -52,7 +52,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type="button"
-      className={`flex items-center inline-flex justify-center rounded-sm shadow-sm bg-white font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 transition-all duration-100 ${colorClasses} ${sizeClasses} ${className}`}
+      className={`flex items-center inline-flex justify-center rounded-md shadow-sm bg-white font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 transition-all duration-100 ${colorClasses} ${sizeClasses} ${className}`}
       onClick={onClick}
     >
       { children }

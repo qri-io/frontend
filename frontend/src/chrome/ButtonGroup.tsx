@@ -16,11 +16,11 @@ export interface ButtonGroupItem {
 const ButtonGroup: React.FC<ButtonGroupProps> = ({
   items,
 }) => (
-  <div className='m-1 text-sm'>
+  <div className='m-1'>
     {items.map(({ text, icon, link }, i) => (
-      <Link className='my-2 mx-4' key={i} to={link}>
-        <Icon className='mr-1' size='md' icon={icon} />
-        <span>{text}</span>
+      <Link className='my-2 mx-4 font-medium text-qrinavy' key={i} to={link}>
+        <Icon className='mr-2' size='md' icon={icon} />
+        <span style={{ fontSize: '16px' }}>{text}</span>
       </Link>
     ))}
   </div>
