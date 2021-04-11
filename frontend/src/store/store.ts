@@ -17,6 +17,7 @@ import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed
 import { sessionReducer, SessionState } from '../features/session/state/sessionState';
 import { commitsReducer, CommitsState } from '../features/commits/state/commitState';
 import { datasetEditsReducer, DatasetEditsState } from '../features/dataset/state/editDatasetState';
+import { WebsocketState, websocketReducer } from '../features/websocket/state/websocketState';
 
 export const history = createBrowserHistory()
 
@@ -33,6 +34,7 @@ export interface RootState {
   transfers: RemoteEvents
   workflow: WorkflowState
   edits: DatasetEditsState
+  websocket: WebsocketState
 }
 
 const rootReducer = (h: History) => combineReducers({
@@ -51,6 +53,7 @@ const rootReducer = (h: History) => combineReducers({
   transfers: transfersReducer,
   workflow: workflowReducer,
   edits: datasetEditsReducer,
+  websocket: websocketReducer
 })
 
 export function configureStore(preloadedState?: any) {

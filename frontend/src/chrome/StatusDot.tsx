@@ -10,11 +10,10 @@ export interface StatusDotProps {
   showNoChanges?: boolean
 }
 
-export const StatusDot: React.FunctionComponent<StatusDotProps> = (props) => {
-  const {
-    status,
-    showNoChanges = false
-  } = props
+export const StatusDot: React.FC<StatusDotProps> = ({
+  status,
+  showNoChanges = false
+}) => {
   let statusTooltip
   let statusColor = ''
   switch (status) {
