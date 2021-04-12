@@ -7,6 +7,25 @@ import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } 
 import { runEventLog } from '../../workflow/state/workflowActions'
 import { workflowCompleted, workflowStarted } from '../../collection/state/collectionActions'
 import { deployStarted, deployStopped } from '../../deploy/state/deployActions'
+import {
+  ETCreatedNewFile,
+  ETModifiedFile,
+  ETDeletedFile,
+  ETRemoteClientPushVersionProgress,
+  ETRemoteClientPushVersionCompleted,
+  // ETRemoteClientPushDatasetCompleted,
+  ETRemoteClientPullVersionProgress,
+  ETRemoteClientPullVersionCompleted,
+  // ETRemoteClientPullDatasetCompleted,
+  ETRemoteClientRemoveDatasetCompleted,
+  ETWorkflowStarted,
+  ETWorkflowCompleted,
+  ETWorklowDeployStarted,
+  ETWorklowDeployStopped,
+} from '../../../qri/events'
+import { wsConnectionChange } from '../state/websocketActions'
+import { WS_CONNECT, WS_DISCONNECT } from '../state/websocketState'
+import { WebsocketState, NewWebsocketState, WSConnectionStatus } from '../state/websocketState';
 
 type DagCompletion = number[]
 
@@ -24,79 +43,51 @@ export interface RemoteEvent {
 
 export type RemoteEvents = Record<string, RemoteEvent>
 
-export const WEBSOCKETS_URL = process.env.REACT_APP_WS_BASE_URL || 'ws://localhost:2503'
-export const WEBSOCKETS_PROTOCOL = 'qri-websocket'
+const WEBSOCKETS_URL = process.env.REACT_APP_WS_BASE_URL || 'ws://localhost:2503'
+const WEBSOCKETS_PROTOCOL = 'qri-websocket'
+const numReconnectAttempts = 2
+const msToAddBeforeReconnectAttempt = 3000
 
-// wsMiddleware manages requests to connect to the qri backend via websockets
-// as well as managing messages that get passed through
-export const wsConnect = () => ({ type: 'WS_CONNECT' })
-export const wsConnecting = () => ({ type: 'WS_CONNECTING' })
-export const wsConnected = () => ({ type: 'WS_CONNECTED' })
-export const wsDisconnect = () => ({ type: 'WS_DISCONNECT' })
-export const wsDisconnected = () => ({ type: 'WS_DISCONNECTED' })
-
-
-// ETCreatedNewFile is the event for creating a new file
-const ETCreatedNewFile = "watchfs:CreatedNewFile"
-// ETModifiedFile is the event for modifying a file
-const ETModifiedFile = "watchfs:ModifiedFile"
-// ETDeletedFile is the event for deleting a file
-const ETDeletedFile = "watchfs:DeletedFile"
-// ETRemoteClientPushVersionProgress indicates a change in progress of a
-// dataset version push. Progress can fire as much as once-per-block.
-// subscriptions do not block the publisher
-// payload will be a RemoteEvent
-export const ETRemoteClientPushVersionProgress = "remoteClient:PushVersionProgress"
-// ETRemoteClientPushVersionCompleted indicates a version successfully pushed
-// to a remote.
-// payload will be a RemoteEvent
-export const ETRemoteClientPushVersionCompleted = "remoteClient:PushVersionCompleted"
-// ETRemoteClientPushDatasetCompleted indicates pushing a dataset
-// (logbook + versions) completed
-// payload will be a RemoteEvent
-export const ETRemoteClientPushDatasetCompleted = "remoteClient:PushDatasetCompleted"
-// ETRemoteClientPullVersionProgress indicates a change in progress of a
-// dataset version pull. Progress can fire as much as once-per-block.
-// subscriptions do not block the publisher
-// payload will be a RemoteEvent
-export const ETRemoteClientPullVersionProgress = "remoteClient:PullVersionProgress"
-// ETRemoteClientPullVersionCompleted indicates a version successfully pulled
-// from a remote.
-// payload will be a RemoteEvent
-export const ETRemoteClientPullVersionCompleted = "remoteClient:PullVersionCompleted"
-// ETRemoteClientPullDatasetCompleted indicates pulling a dataset
-// (logbook + versions) completed
-// payload will be a RemoteEvent
-export const ETRemoteClientPullDatasetCompleted = "remoteClient:PullDatasetCompleted"
-// ETRemoteClientRemoveDatasetCompleted indicates removing a dataset
-// (logbook + versions) remove completed
-// payload will be a RemoteEvent
-export const ETRemoteClientRemoveDatasetCompleted = "remoteClient:RemoveDatasetCompleted"
-
-// ETWorkflowStarted fires when a workflow has started running
-// payload is a Workflow
-const ETWorkflowStarted = "wf:Started"
-// ETWorkflowCompleted fires when a workflow has finished running
-// payload is a Workflow
-const ETWorkflowCompleted = "wf:Completed"
-
-const ETWorklowDeployStarted = "wf:DeployStarted"
-const ETWorklowDeployStopped = "wf:DeployStopped"
+function newReconnectDeadline(): Date {
+  let d = new Date()
+  d.setSeconds(d.getSeconds() + msToAddBeforeReconnectAttempt)
+  return d
+}
 
 const middleware = () => {
   let socket: WebSocket | undefined
-
-  const onOpen = (dispatch: Dispatch ) => (event: Event) => {
-    console.log('websocket opened')
-    if (socket !== undefined) {
-      return
-    }
-    // dispatch(wsConnect())
+  let state: WebsocketState = {
+    status: WSConnectionStatus.disconnected,
   }
 
-  const onClose = (dispatch: Dispatch) => () => {
-    console.log('websocket closed')
-    dispatch(wsDisconnected())
+  const onOpen = (dispatch: Dispatch ) => (event: Event) => {
+    state = {
+      status: WSConnectionStatus.connected,
+      reconnectAttemptsRemaining: 0,
+      reconnectTime: undefined,
+    }
+    const stateCopy = NewWebsocketState(state.status)
+    dispatch(wsConnectionChange(stateCopy))
+  }
+
+  const onClose = (dispatch: Dispatch) => (event: Event) => {
+    // code 1006 is an "Abnormal Closure" where no close frame is sent. Happens
+    // when there isn't a websocket host on the other end (aka: server down)
+    // https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+    if ((event as any).code === 1006) {
+      // connection failed
+      // TODO (b5): here we're re-setting the number of connection attempts to a
+      // number greater than zero on every failed connection, resulting in a
+      // never-ending loop of re-connect attempts every x milliseconds.
+      // We should be letting this value drop to zero, and providing the user
+      // with a "retry" button when 
+      // (reconnectAttemptsRemaning === 0 && WSConnectionStatus === interuupted)
+      state.reconnectAttemptsRemaining = numReconnectAttempts
+    }
+
+    reconnect(dispatch)
+    const stateCopy = NewWebsocketState(state.status, state.reconnectAttemptsRemaining, state.reconnectTime)
+    dispatch(wsConnectionChange(stateCopy))
   }
 
   const onMessage = (dispatch: Dispatch) => (e: MessageEvent) => {
@@ -163,35 +154,56 @@ const middleware = () => {
           // console.log(`received websocket event: ${event.type}`)
       }
     } catch (e) {
+      // TODO(b5): handle this error!
       console.log(`error parsing websocket message: ${e}`)
+    }
+  }
+
+  const connect = (dispatch: Dispatch) => {
+    if (socket !== undefined) {
+      socket.close()
+    }
+    // connect to the remote host
+    socket = new WebSocket(WEBSOCKETS_URL, WEBSOCKETS_PROTOCOL)
+    socket.onmessage = onMessage(dispatch)
+    socket.onclose = onClose(dispatch)
+    socket.onopen = onOpen(dispatch)
+  }
+
+  const reconnect = (dispatch: Dispatch) => {
+    if (state.reconnectAttemptsRemaining && state.reconnectAttemptsRemaining > 0) {
+      state = {
+        status: WSConnectionStatus.interrupted,
+        reconnectAttemptsRemaining: state.reconnectAttemptsRemaining - 1,
+        reconnectTime: newReconnectDeadline()
+      }
+      setTimeout(() => {
+        connect(dispatch)
+      }, msToAddBeforeReconnectAttempt)
+      return
+    }
+
+    // no reconnect attempts remaining, we're just disconnected
+    state = {
+      status: WSConnectionStatus.disconnected,
     }
   }
 
   // middleware
   return (store: Store<RootState>) => (next: Dispatch<AnyAction>) => (action: AnyAction) => {
     switch (action.type) {
-      case 'WS_CONNECT':
-        if (socket !== undefined) {
-          socket.close()
-        }
-        console.log('connecting')
-        // connect to the remote host
-        socket = new WebSocket(WEBSOCKETS_URL, WEBSOCKETS_PROTOCOL)
-        socket.onmessage = onMessage(next)
-        socket.onclose = onClose(next)
-        socket.onopen = onOpen(next)
-
+      case WS_CONNECT:
+        connect(next)
         break
-      case 'WS_DISCONNECT':
+      case WS_DISCONNECT:
         if (socket !== undefined) {
           socket.close()
         }
         socket = undefined
-        console.log('websocket closed')
         break
-      default:
-        return next(action)
     }
+
+    return next(action)
   }
 }
 
