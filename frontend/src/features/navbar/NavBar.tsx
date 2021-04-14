@@ -33,8 +33,8 @@ const NavBar: React.FC<NavBarProps> = ({ minimal = false }) => {
       <div className='flex m-auto items-center'>
         {!minimal && <ButtonGroup items={[
           { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
-          { text: 'My Datasets', link: '/collection', icon: 'mydatasets'},
-          { text: 'Activity feed', link: '/activity', icon: 'activityfeed'},
+          { text: 'My Datasets', link: '/collection', icon: 'myDatasets'},
+          { text: 'Activity feed', link: '/activity', icon: 'activityFeed'},
         ]} />}
       </div>
       <SessionUserMenu />
