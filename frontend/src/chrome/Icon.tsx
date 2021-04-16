@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 import {
@@ -9,10 +8,8 @@ import {
   faBars,
   faBolt,
   faCaretDown,
-  faCaretRight,
   faCheckCircle,
   faCircle,
-  faClock,
   faCloudUploadAlt,
   faCode,
   faGlasses,
@@ -51,10 +48,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
-  faEye,
   faFile
 } from '@fortawesome/free-regular-svg-icons'
 
+import ActivityFeed from './icon/ActivityFeed'
+import CaretLeft from './icon/CaretLeft'
+import CaretRight from './icon/CaretRight'
+import Clock from './icon/Clock'
+import Code from './icon/Code'
+import Commit from './icon/Commit'
+import Dashboard from './icon/Dashboard'
+import Eye from './icon/Eye'
+import History from './icon/History'
+import MyDatasets from './icon/MyDatasets'
+import SkinnySearch from './icon/SkinnySearch'
 
 interface IconProps {
   // name of the icon
@@ -70,7 +77,7 @@ interface IconProps {
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg'
 
-const icons: Record<string, IconDefinition> = {
+const faIcons: Record<string, IconDefinition> = {
   'any': faQuestion,
   'array': faQuestionCircle,
   'arrowLeft': faArrowLeft,
@@ -80,17 +87,13 @@ const icons: Record<string, IconDefinition> = {
   'bolt': faBolt,
   'boolean': faToggleOn,
   'caretDown': faCaretDown,
-  'caretRight': faCaretRight,
   'check': faCheck,
   'checkCircle': faCheckCircle,
   'circle': faCircle,
-  'clock': faClock,
   'close': faCheck, // TODO (b5) - close icon def
   'cloudUpload': faCloudUploadAlt,
-  'code': faCode,
   'ellipsisH': faEllipsisH,
   'envelope': faEnvelope,
-  'eye': faEye,
   'exclamationCircle': faExclamationCircle,
   'exclamationTriangle': faExclamationTriangle,
   'file': faFile,
@@ -132,8 +135,6 @@ const sizes: {[key: string]: FontAwesomeIconProps['size']} = {
   'lg': '2x'
 }
 
-export const iconsList = Object.keys(icons)
-
 const Icon: React.FunctionComponent<IconProps> = ({
   icon = 'unknown',
   size = 'md',
@@ -142,17 +143,27 @@ const Icon: React.FunctionComponent<IconProps> = ({
   spin
 }) => {
 
-  if (icon === 'commit') {
-    return (
-      <svg aria-hidden='true' focusable='false' className={classNames(className, 'svg-inline--fa', `fa-${sizes[size]}`)} role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 91'>
-        <circle id='Oval' stroke='currentColor' strokeWidth='10' cx='26' cy='45' r='21' fill='none'></circle>
-        <line x1='26.5' y1='4.5' x2='26.5' y2='22.5' id='Line' stroke='currentColor' strokeWidth='10' strokeLinecap='square'></line>
-        <line x1='26.5' y1='66.5' x2='26.5' y2='86.5' id='Line' stroke='currentColor' strokeWidth='10' strokeLinecap='square'></line>
-      </svg>
-    )
+  const faIconsList = Object.keys(faIcons)
+
+  const customIcons: {[key: string]: any} = {
+    activityFeed: <ActivityFeed className={className} />,
+    caretLeft: <CaretLeft className={className} />,
+    caretRight: <CaretRight className={className} />,
+    clock: <Clock className={className} />,
+    code: <Code className={className} />,
+    commit: <Commit className={className} />,
+    dashboard: <Dashboard className={className} />,
+    eye: <Eye className={className} />,
+    history: <History className={className} />,
+    myDatasets: <MyDatasets className={className} />,
+    skinnySearch: <SkinnySearch className={className} />
   }
 
-  return <FontAwesomeIcon rotation={rotation} size={sizes[size]} icon={icons[icon]} className={className} spin={spin} />
+  if (faIconsList.includes(icon)) {
+    return <FontAwesomeIcon rotation={rotation} size={sizes[size]} icon={faIcons[icon]} className={className} spin={spin} />
+  }
+
+  return customIcons[icon]
 }
 
 export default Icon

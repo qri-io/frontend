@@ -10,17 +10,21 @@ const SearchBox: React.FC<{}> = () => {
   }
 
   return (
-    <form className="my-1 mx-2 relative rounded-md shadow-sm">
+    <form className="my-1 mx-2 relative rounded-md shadow-sm w-48" >
       <input
-        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full px-2 sm:text-sm border-gray-300 rounded-md"
+        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-400 rounded-lg"
+        style={{
+          padding: '15px'
+        }}
         id='search'
         name='search'
         type='text'
         value={stateValue || ''}
-        placeholder='search'
         onChange={handleOnChange}
       />
-      <Icon className='absolute right-3 top-3 text-gray-500' size='sm' icon='search' />
+      <span className='absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400'>
+        <Icon size='md' icon='skinnySearch' />
+      </span>
     </form>
   )
 }
