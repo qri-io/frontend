@@ -1,8 +1,9 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
+import classNames from 'classnames'
 
-import Icon from '../../chrome/Icon';
+import Icon from '../../chrome/Icon'
 
 export interface DatasetSideNavItemProps {
   id: string
@@ -18,14 +19,18 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, label
   const active = pathname.includes(to)
   return (
     <div className='mb-4'>
-      <Link to={to} className='font-medium text-qrinavy transition-700 transition-all'>
+      <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-blush-600', {
+        'text-blush-600': active
+      })}>
         <span data-tip data-for={id}>
-          <Icon className='mr-2' size='md' icon={icon} />
-          <span style={{
-            fontSize: '16px',
-            width: expanded ? 'auto' : 0,
-            display: expanded ? 'inline-block' : 'none'
-          }}>{label}</span>
+          <div className='flex'>
+            <Icon className='mr-2' size='md' icon={icon} />
+            <span style={{
+              fontSize: '16px',
+              width: expanded ? 'auto' : 0,
+              display: expanded ? 'inline-block' : 'none'
+            }}>{label}</span>
+          </div>
         </span>
         {tooltip && (
           <ReactTooltip

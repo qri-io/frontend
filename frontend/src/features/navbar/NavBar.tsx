@@ -18,7 +18,7 @@ const NavBar: React.FC<NavBarProps> = ({ minimal = false }) => {
   const expanded = useSelector(selectNavExpanded)
 
   return (
-    <div className='bg-white text-qrinavy-700 text-bold flex items-center' style={{
+    <div className='bg-white text-qrinavy-700 text-bold flex items-center pr-8' style={{
       height: '110px',
       paddingTop: '30px',
       paddingBottom: '30px',
@@ -33,8 +33,7 @@ const NavBar: React.FC<NavBarProps> = ({ minimal = false }) => {
       <div className='flex m-auto items-center'>
         {!minimal && <ButtonGroup items={[
           { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
-          { text: 'My Datasets', link: '/collection', icon: 'myDatasets'},
-          { text: 'Activity feed', link: '/activity', icon: 'activityFeed'},
+          { text: 'My Datasets', link: '/collection', icon: 'myDatasets'}
         ]} />}
       </div>
       <SessionUserMenu />

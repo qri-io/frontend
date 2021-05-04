@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
 
@@ -6,14 +6,17 @@ import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
-import { QriRef } from '../../qri/ref';
+import { QriRef } from '../../qri/ref'
+import DatasetInfoItem from './DatasetInfoItem'
+import Button from '../../chrome/Button'
+
 
 export interface DatasetHeaderProps {
   qriRef: QriRef
   editable?: boolean
 }
 
-const DatasetHeader: React.FC<DatasetHeaderProps> = ({ 
+const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   qriRef,
   editable = false
 }) => {
@@ -42,14 +45,40 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   ]
 
   return (
-    <div className="w-full mh-20 p-8 pb-2 relative">
-      <div className='text-lg font-bold relative flex items-baseline group hover:text'>
-        <span>{qriRef.username || 'new'} / </span>
-        <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
-        {editable && <DropdownMenu items={menuItems}>
-          <Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />
-        </DropdownMenu>}
+    <div className="w-full pt-9 px-8 relative">
+      <div className='flex'>
+        <div className='flex-grow'>
+          <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1'>
+            <span>{qriRef.username || 'new'} / </span>
+            <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
+            {editable && <DropdownMenu items={menuItems}>
+              <Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />
+            </DropdownMenu>}
+          </div>
+
+          <div className='text-2xl text-qrinavy-500 font-black group hover:text mb-3'>
+            {qriRef.name}
+          </div>
+
+          <div className='flex mb-5'>
+            <DatasetInfoItem icon='automationFilled' label='automated' />
+            <DatasetInfoItem icon='disk' label='59 MB' />
+            <DatasetInfoItem icon='download' label='418 downloads' />
+            <DatasetInfoItem icon='follower' label='130 followers' />
+            <DatasetInfoItem icon='lock' label='private' />
+          </div>
+        </div>
+        <div className='flex items-center content-center'>
+          <Button className='mr-3' type='light'>
+            Follow
+          </Button>
+          <Button type='secondary'>
+            <Icon icon='globe' size='lg' className='mr-2' /> Share
+          </Button>
+          <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
+        </div>
       </div>
+      <div className='border-b-2' />
     </div>
   )
 }
