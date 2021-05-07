@@ -37,14 +37,14 @@ const DatasetEditor: React.FC<{}> = () => {
   return (
     <div className='flex-grow flex overflow-hidden'>
       <DatasetCommits qriRef={qriRef} />
-      <div className='flex flex-col w-4/5 overflow-x-hidden'>
+      <div className='flex flex-col flex-grow overflow-x-hidden'>
         <CommitSummaryHeader dataset={dataset}>
           <SaveVersionButton dataset={dataset} />
         </CommitSummaryHeader>
         <TabbedComponentEditor
           dataset={dataset}
           loading={loading}
-          selectedComponent={component} 
+          selectedComponent={component}
           setSelectedComponent={(c: ComponentName) => { setComponent(c) }}
           onDatasetChange={dsChangeHandler}
         />

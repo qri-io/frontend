@@ -27,15 +27,15 @@ const DatasetComponents: React.FC<{}> = () => {
   return (
     <div className='flex-grow flex overflow-hidden'>
       <DatasetCommits qriRef={qriRef} />
-      <div className='flex flex-col w-4/5 overflow-x-hidden'>
+      <div className='flex flex-col flex-grow overflow-x-hidden pt-4 pr-7'>
         <CommitSummaryHeader dataset={dataset}>
           <DownloadDatasetButton qriRef={qriRef} />
         </CommitSummaryHeader>
         <TabbedComponentViewer
           dataset={dataset}
           loading={loading}
-          selectedComponent={qriRef.component as ComponentName || 'body'} 
-          setSelectedComponent={setSelectedComponent} 
+          selectedComponent={qriRef.component as ComponentName || 'body'}
+          setSelectedComponent={setSelectedComponent}
         />
       </div>
     </div>

@@ -8,7 +8,7 @@ import StatusDot from '../../chrome/StatusDot'
 
 export interface ComponentItemProps {
   displayName: string
-
+  name: ComponentName
   color?: 'light' | 'dark'
   icon?: string
   filename?: string
@@ -22,6 +22,7 @@ export interface ComponentItemProps {
 export const ComponentItem: React.FC<ComponentItemProps> = ({
   status = 'unmodified',
   disabled = false,
+  name,
   displayName,
   selected,
   onClick,
@@ -33,22 +34,25 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   return (
     <div
       id={`${displayName.toLowerCase()}-status`}
-      className={classNames('flex mw-40 mr-1 py-3 px-5 rounded-tr-md rounded-tl-md text-sm font-light group', {
+      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-3 rounded-tr-lg rounded-tl-lg group justify-center', {
         'selected': selected,
         'bg-white': selected,
+        'text-blush-600': selected,
         'bg-gray-200': !selected,
         'text-gray-400': disabled,
-        'hover:cursor-pointer': !disabled
+        'text-qrinavy': !disabled,
+        'hover:cursor-pointer': !disabled,
+        'w-1/4': displayName === 'Data'
       })}
       onClick={() => {
         if (onClick && displayName) {
-          onClick(displayName.toLowerCase() as ComponentName)
+          onClick(name)
         }
       }}
     >
       {icon && <Icon icon={icon} size='sm' className='mt-1 mr-3' color={disabled ? 'medium' : color} />}
       <div>
-        <div className='font-bold'>{displayName}</div>
+        <div className='font-medium'>{displayName}</div>
         <div>{filename}</div>
       </div>
       <StatusDot status={status} />
