@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 export type ButtonType = 'primary'
+  | 'secondary'
   | 'light'
   | 'warning'
   | 'danger'
@@ -24,16 +25,17 @@ const Button: React.FC<ButtonProps> = ({
   <button
     type="button"
     className={classNames(
-      'inline-flex items-center justify-center rounded-md shadow-sm bg-white font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 transition-all duration-100',
+      'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 transition-all duration-100',
       className,
       {
         'text-md px-3 py-1': (size === 'sm'),
-        'text-sm px-4 py-2': (size === 'md'),
+        'text-sm px-4 h-10': (size === 'md'),
         'text-md px-8 py-3': (size === 'lg'),
       },
       {
         'text-white bg-qriblue-600 hover:bg-qriblue-700 focus:ring-qriblue-500': (type === 'primary'),
-        'text-gray-700 hover:bg-gray-50 border border-gray-300 focus:ring-indigo-500': (type === 'light'),
+        'text-white bg-blush-600 hover:bg-blush-700 focus:ring-blush-50': (type === 'secondary'),
+        'text-gray-700 border border-gray-700 focus:ring-indigo-500': (type === 'light'),
         'text-white bg-qrinavy-400 hover:bg-qrinavy-500 focus:ring-qrinavy-400': (type === 'dark'),
         'text-gray-700 bg-yellow-300 hover:bg-yellow-400 focus:ring-yellow-400': (type === 'warning'),
         'text-white bg-red-600 hover:bg-red-700 focus:ring-red-500': (type === 'danger'),

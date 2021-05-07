@@ -12,18 +12,19 @@ const SearchBox: React.FC<{}> = () => {
   return (
     <form className="my-1 mx-2 relative rounded-md shadow-sm w-48" >
       <input
-        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-400 rounded-lg"
+        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-xs border-gray-400 rounded-lg tracking-wider placeholder-gray-600 placeholder-opacity-50"
         style={{
-          padding: '15px'
+          padding: '8px 8px 10px 8px'
         }}
         id='search'
         name='search'
         type='text'
+        placeholder='Search'
         value={stateValue || ''}
         onChange={handleOnChange}
       />
-      <span className='absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400'>
-        <Icon size='md' icon='skinnySearch' />
+      <span className='absolute inset-y-0 right-0 flex items-center pr-2 text-gray-400'>
+        <Icon size='sm' icon='skinnySearch' />
       </span>
     </form>
   )

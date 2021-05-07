@@ -52,14 +52,21 @@ import {
 } from '@fortawesome/free-regular-svg-icons'
 
 import ActivityFeed from './icon/ActivityFeed'
+import AutomationFilled from './icon/AutomationFilled'
 import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
 import Clock from './icon/Clock'
 import Code from './icon/Code'
 import Commit from './icon/Commit'
 import Dashboard from './icon/Dashboard'
+import Disk from './icon/Disk'
+import Download from './icon/Download'
+import EllipsesVertical from './icon/EllipsesVertical'
 import Eye from './icon/Eye'
+import Follower from './icon/Follower'
+import Globe from './icon/Globe'
 import History from './icon/History'
+import Lock from './icon/Lock'
 import MyDatasets from './icon/MyDatasets'
 import SkinnySearch from './icon/SkinnySearch'
 
@@ -146,17 +153,24 @@ const Icon: React.FunctionComponent<IconProps> = ({
   const faIconsList = Object.keys(faIcons)
 
   const customIcons: {[key: string]: any} = {
-    activityFeed: <ActivityFeed className={className} />,
-    caretLeft: <CaretLeft className={className} />,
-    caretRight: <CaretRight className={className} />,
-    clock: <Clock className={className} />,
-    code: <Code className={className} />,
-    commit: <Commit className={className} />,
-    dashboard: <Dashboard className={className} />,
-    eye: <Eye className={className} />,
-    history: <History className={className} />,
-    myDatasets: <MyDatasets className={className} />,
-    skinnySearch: <SkinnySearch className={className} />
+    activityFeed: <ActivityFeed className={className} size={size} />,
+    automationFilled: <AutomationFilled className={className} size={size} />,
+    caretLeft: <CaretLeft className={className} size={size} />,
+    caretRight: <CaretRight className={className} size={size} />,
+    clock: <Clock className={className} size={size} />,
+    code: <Code className={className} size={size} />,
+    commit: <Commit className={className} size={size} />,
+    dashboard: <Dashboard className={className} size={size} />,
+    disk: <Disk className={className} size={size} />,
+    download: <Download className={className} size={size} />,
+    ellipsesVertical: <EllipsesVertical className={className} size={size} />,
+    eye: <Eye className={className} size={size} />,
+    follower: <Follower className={className} size={size} />,
+    globe: <Globe className={className} size={size} />,
+    history: <History className={className} size={size} />,
+    lock: <Lock className={className} size={size} />,
+    myDatasets: <MyDatasets className={className} size={size} />,
+    skinnySearch: <SkinnySearch className={className} size={size} />
   }
 
   if (faIconsList.includes(icon)) {

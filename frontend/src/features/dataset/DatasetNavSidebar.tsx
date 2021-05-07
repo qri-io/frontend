@@ -30,7 +30,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
 
   return (
     <div className={`side-nav pl-9 h-full bg-white relative pt-9 ${expanded ? 'w-52' : 'w-24'}`}>
-      <div className='mb-9 flex align-center'>
+      <div className='mb-9 flex align-center flex'>
         <div
           className='text-gray-400 text-sm font-medium mr-4 leading-6 transition-all duration-700'
           style={{
@@ -40,8 +40,8 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         >
           DATASET MENU
         </div>
-        <div className='cursor-pointer' onClick={toggleExpanded}>
-          <Icon icon={expanded ? 'caretLeft' : 'caretRight'} size='sm' />
+        <div className='cursor-pointer flex items-center w-6' onClick={toggleExpanded}>
+          <Icon className='m-auto' icon={expanded ? 'caretLeft' : 'caretRight'} size='xs' />
         </div>
       </div>
       <div className="absolute top-0 -right-10 w-10 h-10 bg-white" />
