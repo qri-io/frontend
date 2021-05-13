@@ -45,7 +45,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   ]
 
   return (
-    <div className="w-full pt-9 px-8 relative">
+    <div className="w-full pt-9 px-7 relative">
       <div className='flex'>
         <div className='flex-grow'>
           <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1'>
@@ -61,7 +61,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           </div>
 
           <div className='flex mb-5'>
-            <DatasetInfoItem icon='automationFilled' label='automated' />
+            <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-olive-300' />
             <DatasetInfoItem icon='disk' label='59 MB' />
             <DatasetInfoItem icon='download' label='418 downloads' />
             <DatasetInfoItem icon='follower' label='130 followers' />
@@ -69,7 +69,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           </div>
         </div>
         <div className='flex items-center content-center'>
-          <Button className='mr-3' type='light'>
+          <Button className='mr-3' type='light' filled={false}>
             Follow
           </Button>
           <Button type='secondary'>

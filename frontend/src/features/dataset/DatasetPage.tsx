@@ -12,7 +12,7 @@ import DatasetHeader from './DatasetHeader';
 import DeployingScreen from '../deploy/DeployingScreen'
 
 
-const DatasetPage: React.FC<{}> = ({ 
+const DatasetPage: React.FC<{}> = ({
   children
 }) => {
   const qriRef = newQriRef(useParams())
@@ -24,7 +24,7 @@ const DatasetPage: React.FC<{}> = ({
   // This covers the case where a user created a new workflow before logging in.
   // If they login while working on the workflow, the `user` will change, but the
   // params used to generate the `qriRef` will not (because they are generated
-  // from the url, which has not changed). This check ensures that the correct 
+  // from the url, which has not changed). This check ensures that the correct
   // username is propagated after login/signup.
   if (isNew) {
     qriRef.username = user.username
@@ -41,7 +41,7 @@ const DatasetPage: React.FC<{}> = ({
       <NavBar />
       <div className='flex overflow-hidden w-full'>
         <DatasetNavSidebar qriRef={qriRef} />
-        <div className='flex flex-col flex-grow'>
+        <div className='flex flex-col flex-grow overflow-hidden'>
           <DatasetHeader qriRef={qriRef} editable={editable} />
           {children}
         </div>

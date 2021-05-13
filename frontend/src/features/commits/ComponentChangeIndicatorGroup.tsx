@@ -7,10 +7,10 @@ export interface ComponentChangeIndicatorGroupProps {
 }
 
 const ComponentChangeIndicatorGroup: React.FC<ComponentChangeIndicatorGroupProps> = ({ status }) => (
-  <div className='mt-1 -ml-1 w-full flex'>
+  <div className='mt-1 w-full flex justify-between'>
     {status.map((v, i) => (
       <div key={i} className={classNames(
-        'h-2 m-1 flex-grow rounded-lg',
+        'h-2 rounded-lg w-5',
         {
           'border border-gray-400': (v === ChangeStatus.nonexistant),
           'bg-gray-400': (v === ChangeStatus.unchanged),

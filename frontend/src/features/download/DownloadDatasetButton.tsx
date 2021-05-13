@@ -11,7 +11,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
   qriRef
 }) => {
   return (
-    <Button onClick={() => { alert(`unfinished: download ${qriRef.username}/${qriRef.name}`)}}>Download</Button>
+    <Button onClick={() => { alert(`unfinished: download ${qriRef.username}/${qriRef.name}`)}} type='primary-outline' size='sm'>Download</Button>
   )
 }
 

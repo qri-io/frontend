@@ -29,7 +29,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   }
 
   return (
-    <div className={`side-nav pl-9 h-full bg-white relative pt-9 ${expanded ? 'w-52' : 'w-24'}`}>
+    <div className={`side-nav pl-9 h-full bg-white relative pt-9 flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
       <div className='mb-9 flex align-center flex'>
         <div
           className='text-gray-400 text-sm font-medium mr-4 leading-6 transition-all duration-700'
@@ -78,7 +78,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
       <DatasetSideNavItem
         id='workflow-editor'
         icon='code'
-        label='Automation'
+        label='Workflow'
         to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
         expanded={expanded}
         tooltip={
@@ -91,7 +91,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
       <DatasetSideNavItem
         id='activity-feed'
         icon='clock'
-        label='Activity feed'
+        label='Run Log'
         to={pathToActivityFeed(qriRef.username, qriRef.name)}
         expanded={expanded}
         tooltip={

@@ -24,7 +24,7 @@ const displayProps: Record<ComponentName,ComponentDisplayProps> = {
     name: 'meta',
     displayName: 'Meta',
     tooltip: 'the dataset\'s title, description, tags, etc',
-    icon: 'meta'
+    icon: 'tags'
   },
   'body': {
     name: 'body',

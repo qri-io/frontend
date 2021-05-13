@@ -1,6 +1,10 @@
 import React from 'react'
 
 import Dataset from '../../qri/dataset'
+import Icon from '../../chrome/Icon'
+import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
+import UsernameWithIcon from '../../chrome/UsernameWithIcon'
+
 
 export interface CommitSummaryHeaderProps {
   dataset: Dataset
@@ -11,19 +15,31 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
   children
 }) => {
   const { commit, path } = dataset
-  return (
-    <div className='min-height-200 p-4 m-4 rounded-lg bg-white'>
-      <div className='float-right'>
-        {children}
-      </div>
-      <div>
-        <h4 className='text-lg font-bold'>{commit?.title}</h4>
-        <div className='mt-1'>
-          <span className='text-xs font-mono'>{path}</span>
+  if (commit) {
+    return (
+      <div className='min-height-200 mt-2 py-4 px-8 rounded-lg bg-white flex'>
+        <div className='flex-grow'>
+          <div className='text-xs text-gray-400 font-medium mb-2'>Version Info</div>
+          <div className='text-qrinavy text-sm flex items-center mb-1'>
+            <Icon icon='commit' size='sm' className='-ml-2' />
+            <div className='font-medium'>{path.substr(path.length - 7)}</div>
+            <div className='mx-3 text-gray-400'>|</div>
+            <div className=''>{commit.title}</div>
+          </div>
+          <div className='flex items-center text-gray-400'>
+            <RelativeTimestampWithIcon timestamp={new Date(commit.timestamp)} className='mr-4' />
+            <UsernameWithIcon username='chriswhong' className='mt-0.5' />
+          </div>
+        </div>
+        <div className='flex items-center'>
+          {children}
         </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  return null
 }
+
 
 export default CommitSummaryHeader

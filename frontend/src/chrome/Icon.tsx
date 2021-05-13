@@ -2,7 +2,6 @@ import React from 'react'
 
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 import {
-  faArchive,
   faArrowLeft,
   faArrowRight,
   faBars,
@@ -12,7 +11,6 @@ import {
   faCircle,
   faCloudUploadAlt,
   faCode,
-  faGlasses,
   faProjectDiagram,
   faEllipsisH,
   faEnvelope,
@@ -25,14 +23,12 @@ import {
   faCheck,
   faPen,
   faMinusCircle,
-  faTags,
   faPlayCircle,
   faPlay,
   faPlus,
   faPlusCircle,
   faPauseCircle,
   faTimes,
-  faTh,
   faToggleOn,
   faExclamationCircle,
   faExclamationTriangle,
@@ -53,6 +49,8 @@ import {
 
 import ActivityFeed from './icon/ActivityFeed'
 import AutomationFilled from './icon/AutomationFilled'
+import Body from './icon/Body'
+import Brackets from './icon/Brackets'
 import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
 import Clock from './icon/Clock'
@@ -68,7 +66,12 @@ import Globe from './icon/Globe'
 import History from './icon/History'
 import Lock from './icon/Lock'
 import MyDatasets from './icon/MyDatasets'
+import Readme from './icon/Readme'
 import SkinnySearch from './icon/SkinnySearch'
+import Structure from './icon/Structure'
+import Tags from './icon/Tags'
+
+
 
 interface IconProps {
   // name of the icon
@@ -82,7 +85,7 @@ interface IconProps {
   spin?: boolean
 }
 
-export type IconSize = 'xs' | 'sm' | 'md' | 'lg'
+export type IconSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg'
 
 const faIcons: Record<string, IconDefinition> = {
   'any': faQuestion,
@@ -90,7 +93,6 @@ const faIcons: Record<string, IconDefinition> = {
   'arrowLeft': faArrowLeft,
   'arrowRight': faArrowRight,
   'bars': faBars,
-  'body': faArchive,
   'bolt': faBolt,
   'boolean': faToggleOn,
   'caretDown': faCaretDown,
@@ -109,7 +111,6 @@ const faIcons: Record<string, IconDefinition> = {
   'info': faInfo,
   'integer': faHashtag,
   'list': faList,
-  'meta': faTags,
   'minusCircle': faMinusCircle,
   'null': faQuestionCircle,
   'number': faHashtag,
@@ -122,13 +123,11 @@ const faIcons: Record<string, IconDefinition> = {
   'plus': faPlus,
   'plusCircle': faPlusCircle,
   'projectDiagram': faProjectDiagram,
-  'readme': faGlasses,
   'search': faSearch,
   'ship': faShip,
   'sortDown': faSortDown,
   'spinner': faSpinner,
   'string': faFont,
-  'structure': faTh,
   'table': faTable,
   'times': faTimes,
   'transform': faCode,
@@ -155,6 +154,8 @@ const Icon: React.FunctionComponent<IconProps> = ({
   const customIcons: {[key: string]: any} = {
     activityFeed: <ActivityFeed className={className} size={size} />,
     automationFilled: <AutomationFilled className={className} size={size} />,
+    body: <Body className={className} size={size} />,
+    brackets: <Brackets className={className} size={size} />,
     caretLeft: <CaretLeft className={className} size={size} />,
     caretRight: <CaretRight className={className} size={size} />,
     clock: <Clock className={className} size={size} />,
@@ -170,7 +171,10 @@ const Icon: React.FunctionComponent<IconProps> = ({
     history: <History className={className} size={size} />,
     lock: <Lock className={className} size={size} />,
     myDatasets: <MyDatasets className={className} size={size} />,
-    skinnySearch: <SkinnySearch className={className} size={size} />
+    readme: <Readme className={className} size={size} />,
+    skinnySearch: <SkinnySearch className={className} size={size} />,
+    structure: <Structure className={className} size={size} />,
+    tags: <Tags className={className} size={size} />
   }
 
   if (faIconsList.includes(icon)) {

@@ -21,15 +21,15 @@ const DatasetPreview: React.FC<{}> = () => {
       <Spinner color='#4FC7F3' />
     </div>)
   : (
-    <div className='w-full h-full p-4 overflow-y-auto'>
+    <div className='w-full h-full py-4 px-7 overflow-y-auto'>
       <CommitSummaryHeader dataset={dataset}>
         <DownloadDatasetButton qriRef={qriRef} />
       </CommitSummaryHeader>
-      <div className='mx-4'>
+      <div>
         {['readme', 'body', 'structure', 'meta']
           .filter((comp) => getComponentFromDatasetByName(dataset, comp))
           .map((componentName, i) => (
-            <DatasetComponent 
+            <DatasetComponent
               key={componentName}
               componentName={componentName as ComponentName}
               dataset={dataset}

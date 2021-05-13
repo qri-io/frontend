@@ -12,10 +12,16 @@ import ComponentItem from './ComponentItem'
 
 export const componentsInfo = [
   {
-    name: 'commit',
-    displayName: 'Commit',
-    tooltip: 'info about the latest changes to the dataset',
-    icon: 'commit'
+    name: 'body',
+    displayName: 'Data',
+    tooltip: 'the structured content of the dataset',
+    icon: 'body'
+  },
+  {
+    name: 'structure',
+    displayName: 'Structure',
+    tooltip: 'the structure of the dataset',
+    icon: 'structure'
   },
   {
     name: 'readme',
@@ -27,25 +33,13 @@ export const componentsInfo = [
     name: 'meta',
     displayName: 'Meta',
     tooltip: 'the dataset\'s title, description, tags, etc',
-    icon: 'meta'
-  },
-  {
-    name: 'body',
-    displayName: 'Body',
-    tooltip: 'the structured content of the dataset',
-    icon: 'body'
-  },
-  {
-    name: 'structure',
-    displayName: 'Structure',
-    tooltip: 'the structure of the dataset',
-    icon: 'structure'
+    icon: 'tags'
   },
   {
     name: 'transform',
-    displayName: 'Transform',
+    displayName: 'Script',
     tooltip: 'automation script',
-    icon: 'transform'
+    icon: 'brackets'
   }
 ]
 
@@ -72,8 +66,8 @@ const ComponentList: React.FC<ComponentListProps> = ({
 }) => {
   const componentNames = Object.keys(dataset)
 
-  return (
-    <div className='flex'>
+    return (
+    <div className='flex w-full'>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
           if (allowClickMissing || componentNames.includes(name)) {
             var fileStatus: ComponentStatus = 'unmodified'
@@ -84,6 +78,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
             return (
               <ComponentItem
                 key={name}
+                name={name}
                 displayName={displayName}
                 icon={icon}
                 status={fileStatus}

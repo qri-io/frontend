@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 export interface CustomIconProps {
   className?: string
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 
 const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
@@ -11,7 +11,11 @@ const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
   size,
   children
 }) => {
-  let dimension = 24
+  let dimension = 22
+
+  if (size === '2xs') {
+    dimension = 12
+  }
 
   if (size === 'xs') {
     dimension = 14
@@ -22,7 +26,7 @@ const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
   }
 
   if (size === 'lg') {
-    dimension = 22
+    dimension = 24
   }
 
   return (
