@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-
 
 import SessionUserMenu from './SessionUserMenu'
 import SearchBox from '../search/SearchBox'
@@ -9,13 +8,13 @@ import QriLogo from '../../chrome/QriLogo'
 import ButtonGroup from '../../chrome/ButtonGroup'
 import { selectNavExpanded } from '../app/state/appState'
 
-
 export interface NavBarProps {
   minimal?: boolean
 }
 
 const NavBar: React.FC<NavBarProps> = ({ minimal = false }) => {
   const expanded = useSelector(selectNavExpanded)
+  const location = useLocation()
 
   return (
     <div className='bg-white text-qrinavy-700 text-bold flex items-center pr-8' style={{
@@ -31,10 +30,15 @@ const NavBar: React.FC<NavBarProps> = ({ minimal = false }) => {
       </Link>
       {!minimal && <SearchBox />}
       <div className='flex m-auto items-center'>
-        {!minimal && <ButtonGroup items={[
-          { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
-          { text: 'My Datasets', link: '/collection', icon: 'myDatasets'}
-        ]} />}
+        {!minimal && (
+          <ButtonGroup
+            items={[
+              { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
+              { text: 'My Datasets', link: '/collection', icon: 'myDatasets'}
+            ]}
+            currentPathname={location.pathname}
+          />
+        )}
       </div>
       <SessionUserMenu />
     </div>
