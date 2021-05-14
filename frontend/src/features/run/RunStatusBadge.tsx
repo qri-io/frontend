@@ -1,68 +1,46 @@
 import React from 'react'
+import classNames from 'classnames'
 
-import Icon, { IconSize } from '../../chrome/Icon'
 import { RunStatus } from '../../qri/run'
 
 interface RunStatusBadgeProps {
   status: RunStatus
-  size?: 'md' | 'sm' | 'xs'
 }
 
-const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, size = 'md' }) => {
+const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
 
-  let icon = ''
   let displayStatus = ''
-  let backgroundClass = ''
-  let iconSize: IconSize = 'md'
-  let spin = false
-  let yPaddingClass = 'py-1'
+  let colorClass = ''
 
   switch(status) {
     case 'waiting':
+      displayStatus = 'Waiting'
+      colorClass = 'text-qrinavy-300'
       break
+
     case 'running':
-      icon = 'spinner'
       displayStatus = 'Running'
-      backgroundClass = 'bg-blue-500'
-      spin = true
+      colorClass = 'text-qrinavy-500'
       break
 
     case 'succeeded':
-      icon = 'checkCircle'
       displayStatus = 'Success'
-      backgroundClass = 'bg-green-500'
+      colorClass = 'text-olive-300'
       break
 
     case 'failed':
-      icon = 'exclamationCircle'
       displayStatus = 'Failed'
-      backgroundClass = 'bg-red-500'
+      colorClass = 'text-blush-600'
       break
 
     case 'unchanged':
-      icon = 'minusCircle'
       displayStatus = 'No Changes'
-      backgroundClass = 'bg-blue-500'
+      colorClass = 'text-qriblue-500'
       break
-    default:
-      icon = 'pen'
-      displayStatus = 'Manual Edit'
-      backgroundClass = 'bg-gray-500 pl-2' // additional left padding for pen icon
-      iconSize = 'sm'
-      break
-  }
-
-  if (size === 'sm') {
-    iconSize = 'sm'
-    yPaddingClass = 'py-0.5'
-  } else if (size === 'xs') {
-    iconSize = 'sm'
   }
 
   return (
-    <div className={`${backgroundClass} text-white font-semibold flex items-center ${yPaddingClass} pl-1 pr-1 rounded-xl`}>
-      <Icon icon={icon} className='text-white' size={iconSize} spin={spin} /> {size !== 'xs' && (<div className='ml-1'>{displayStatus}</div>)}
-    </div>
+    <div className={classNames('text-sm font-medium tracking-wider', colorClass)}>{displayStatus}</div>
   )
 }
 
