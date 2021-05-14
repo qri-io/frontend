@@ -16,14 +16,11 @@ import { WorkflowInfo } from '../../qrimatic/workflow';
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
 import DatasetInfoItem from '../../chrome/DatasetInfoItem'
 
-import { RunStatus } from '../../qri/run'
-
 interface WorkflowsTableProps {
   filteredWorkflows: WorkflowInfo[]
   // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
   // to its internal the selections
   clearSelectedTrigger: boolean
-  onRowClicked: (row: WorkflowInfo) => void
   onSelectedRowsChange: ({ selectedRows }: { selectedRows: WorkflowInfo[] }) => void
   // simplified: true will hide a number of "verbose" columns in the table
   simplified?: boolean
@@ -139,7 +136,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       cell: (row: WorkflowInfo) => (
         <div className='flex items-center truncate'>
           <div className='w-8 mr-2'>
-            <Icon icon='automationFilled' className='text-olive-300' />
+            <Icon icon='automationFilled' className='text-qrigreen' />
           </div>
           <div className='truncate'>
             <div className='mb-1'>
@@ -171,16 +168,11 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
         // in the WorkflowInfo. Once the backend supplies these values, we can rip
         // out this section that mocks durations & timestamps for us
         const {
-          // status,
+          status,
           latestStart,
           latestEnd,
           commitTime
         } = row
-
-        const statuses = ['waiting', 'running', 'succeeded', 'failed', 'unchanged', undefined]
-        const status = statuses[Math.floor(Math.random()*statuses.length)]
-
-        console.log(row.name, status, 'foo')
 
         var duration: number | undefined
         if (latestStart && latestEnd) {
@@ -306,7 +298,6 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       noHeader
       selectableRows
       selectableRowsComponent={() => <Icon icon='checkbox' />}
-      onRowClicked={onRowClicked}
       onSelectedRowsChange={onSelectedRowsChange}
       clearSelectedRows={clearSelectedTrigger}
       style={{

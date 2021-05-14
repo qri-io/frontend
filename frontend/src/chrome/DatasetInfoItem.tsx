@@ -10,7 +10,7 @@ interface DatasetInfoItemProps {
 }
 
 // TODO(chriswhong): make the prop a user object, or pass in icon URL as a separate prop
-const DatasetInfoItem: React.FunctionComponent<DatasetInfoItemProps> = ({
+const DatasetInfoItem: React.FC<DatasetInfoItemProps> = ({
   icon,
   text,
   className

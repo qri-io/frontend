@@ -25,12 +25,12 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
 
     case 'succeeded':
       displayStatus = 'Success'
-      colorClass = 'text-olive-300'
+      colorClass = 'text-qrigreen'
       break
 
     case 'failed':
       displayStatus = 'Failed'
-      colorClass = 'text-blush-600'
+      colorClass = 'text-qripink'
       break
 
     case 'unchanged':

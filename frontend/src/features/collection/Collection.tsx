@@ -48,8 +48,7 @@ const Collection: React.FC<any> = () => {
                     // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
                     // to its internal the selections
                     clearSelectedTrigger={false}
-                    onRowClicked={(row: WorkflowInfo) => {}}
-                    onSelectedRowsChange={() => {}}
+                    onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
                     containerHeight={tableContainerHeight}
                   />
               }

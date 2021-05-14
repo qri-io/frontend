@@ -16,6 +16,11 @@ const NavBar: React.FC<NavBarProps> = ({ minimal = false }) => {
   const expanded = useSelector(selectNavExpanded)
   const location = useLocation()
 
+  const buttonItems = [
+    { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
+    { text: 'My Datasets', link: '/collection', icon: 'myDatasets'}
+  ]
+
   return (
     <div className='bg-white text-qrinavy-700 text-bold flex items-center pr-8' style={{
       height: '110px',
@@ -32,11 +37,8 @@ const NavBar: React.FC<NavBarProps> = ({ minimal = false }) => {
       <div className='flex m-auto items-center'>
         {!minimal && (
           <ButtonGroup
-            items={[
-              { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
-              { text: 'My Datasets', link: '/collection', icon: 'myDatasets'}
-            ]}
-            currentPathname={location.pathname}
+            items={buttonItems}
+            selectedIndex={buttonItems.findIndex((d) => location.pathname === d.link)}
           />
         )}
       </div>

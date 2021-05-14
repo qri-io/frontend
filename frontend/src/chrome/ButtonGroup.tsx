@@ -6,7 +6,7 @@ import Icon from './Icon'
 
 export interface ButtonGroupProps {
   items: ButtonGroupItem[]
-  currentPathname: string
+  selectedIndex?: number
 }
 
 export interface ButtonGroupItem {
@@ -17,14 +17,14 @@ export interface ButtonGroupItem {
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({
   items,
-  currentPathname
+  selectedIndex = -1
 }) => (
   <div className='m-1 flex'>
     {items.map(({ text, icon, link }, i) => {
-      const selected = currentPathname === link
+      const selected = selectedIndex === i
       return (
         <Link className={classNames('my-2 mx-4 font-medium text-qrinavy', {
-          'text-blush-600': selected
+          'text-qripink': selected
         })} key={i} to={link}>
           <div className='flex items-center'>
             <Icon className='mr-2' size='md' icon={icon} />
