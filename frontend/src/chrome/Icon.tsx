@@ -53,25 +53,31 @@ import Body from './icon/Body'
 import Brackets from './icon/Brackets'
 import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
+import Checkbox from './icon/Checkbox'
 import Clock from './icon/Clock'
 import Code from './icon/Code'
 import Commit from './icon/Commit'
 import Dashboard from './icon/Dashboard'
+import Discord from './icon/Discord'
 import Disk from './icon/Disk'
 import Download from './icon/Download'
 import EllipsesVertical from './icon/EllipsesVertical'
 import Eye from './icon/Eye'
 import Follower from './icon/Follower'
+import Github from './icon/Github'
 import Globe from './icon/Globe'
 import History from './icon/History'
 import Lock from './icon/Lock'
 import MyDatasets from './icon/MyDatasets'
+import Page from './icon/Page'
+import PlayCircle from './icon/PlayCircle'
 import Readme from './icon/Readme'
+import Rows from './icon/Rows'
 import SkinnySearch from './icon/SkinnySearch'
 import Structure from './icon/Structure'
 import Tags from './icon/Tags'
-
-
+import Twitter from './icon/Twitter'
+import Youtube from './icon/Youtube'
 
 interface IconProps {
   // name of the icon
@@ -119,7 +125,6 @@ const faIcons: Record<string, IconDefinition> = {
   'pauseCircle': faPauseCircle,
   'pen': faPen,
   'play': faPlay,
-  'playCircle': faPlayCircle,
   'plus': faPlus,
   'plusCircle': faPlusCircle,
   'projectDiagram': faProjectDiagram,
@@ -158,23 +163,31 @@ const Icon: React.FunctionComponent<IconProps> = ({
     brackets: <Brackets className={className} size={size} />,
     caretLeft: <CaretLeft className={className} size={size} />,
     caretRight: <CaretRight className={className} size={size} />,
+    checkbox: <Checkbox className={className} size={size} />,
     clock: <Clock className={className} size={size} />,
     code: <Code className={className} size={size} />,
     commit: <Commit className={className} size={size} />,
     dashboard: <Dashboard className={className} size={size} />,
+    discord: <Discord className={className} size={size} />,
     disk: <Disk className={className} size={size} />,
     download: <Download className={className} size={size} />,
     ellipsesVertical: <EllipsesVertical className={className} size={size} />,
     eye: <Eye className={className} size={size} />,
     follower: <Follower className={className} size={size} />,
+    github: <Github className={className} size={size} />,
     globe: <Globe className={className} size={size} />,
     history: <History className={className} size={size} />,
     lock: <Lock className={className} size={size} />,
     myDatasets: <MyDatasets className={className} size={size} />,
+    page: <Page className={className} size={size} />,
+    playCircle: <PlayCircle className={className} size={size} />,
     readme: <Readme className={className} size={size} />,
+    rows: <Rows className={className} size={size} />,
     skinnySearch: <SkinnySearch className={className} size={size} />,
     structure: <Structure className={className} size={size} />,
-    tags: <Tags className={className} size={size} />
+    tags: <Tags className={className} size={size} />,
+    twitter: <Twitter className={className} size={size} />,
+    youtube: <Youtube className={className} size={size} />
   }
 
   if (faIconsList.includes(icon)) {
