@@ -19,8 +19,8 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, label
   const active = pathname.includes(to)
   return (
     <div className='mb-4'>
-      <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-blush-600', {
-        'text-blush-600': active
+      <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
+        'text-qripink': active
       })}>
         <span data-tip data-for={id}>
           <div className='flex'>

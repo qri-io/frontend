@@ -61,7 +61,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           </div>
 
           <div className='flex mb-5'>
-            <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-olive-300' />
+            <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />
             <DatasetInfoItem icon='disk' label='59 MB' />
             <DatasetInfoItem icon='download' label='418 downloads' />
             <DatasetInfoItem icon='follower' label='130 followers' />

@@ -37,7 +37,7 @@ const DatasetPage: React.FC<{}> = ({
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
 
   return (
-    <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#F4F7FC'}}>
+    <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#f3f4f6'}}>
       <NavBar />
       <div className='flex overflow-hidden w-full'>
         <DatasetNavSidebar qriRef={qriRef} />

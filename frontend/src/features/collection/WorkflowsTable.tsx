@@ -7,23 +7,24 @@ import { Link } from 'react-router-dom'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import Icon from '../../chrome/Icon'
-import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
+import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import DropdownMenu, { DropDownMenuItem } from '../../chrome/DropdownMenu'
 import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { WorkflowInfo } from '../../qrimatic/workflow';
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
+import DatasetInfoItem from '../../chrome/DatasetInfoItem'
 
 interface WorkflowsTableProps {
   filteredWorkflows: WorkflowInfo[]
   // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
   // to its internal the selections
   clearSelectedTrigger: boolean
-  onRowClicked: (row: WorkflowInfo) => void
   onSelectedRowsChange: ({ selectedRows }: { selectedRows: WorkflowInfo[] }) => void
   // simplified: true will hide a number of "verbose" columns in the table
   simplified?: boolean
+  containerHeight: number
 }
 
 // fieldValue returns a WorkflowInfo value for a given field argument
@@ -76,16 +77,39 @@ const statusIcons = [
 
 // react-data-table custom styles
 const customStyles = {
+  table: {
+    style: {
+      paddingRight: '26px',
+      paddingLeft: '26px'
+    },
+  },
+  tableWrapper: {
+    style: {
+      display: 'flex'
+    },
+  },
   headRow: {
     style: {
-      minHeight: '38px'
+      minHeight: '68px'
     }
+  },
+  headCells: {
+    style: {
+      fontSize: '1rem', // text-base
+      lineHeight: '1.5rem', // text-base
+      color: '#1B3356' // qrinavy
+    },
   },
   rows: {
     style: {
-      minHeight: '38px'
+      minHeight: '68px'
     }
-  }
+  },
+  expanderCell: {
+    style: {
+      flex: '0 0 36px',
+    },
+  },
 }
 
 const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
@@ -93,7 +117,8 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   onRowClicked,
   onSelectedRowsChange,
   clearSelectedTrigger,
-  simplified=false
+  simplified=false,
+  containerHeight
 }) => {
   const dispatch = useDispatch()
 
@@ -104,51 +129,38 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   // react-data-table column definitions
   const columns = [
     {
-      selector: 'status',
-      sortable: true,
-      width: '48px',
-      style: {
-        paddingRight: 0
-      },
-      cell: (row: WorkflowInfo) => {
-
-        // TODO(b5): WorkflowInfo is missing data required to report paused state
-        const { icon, color } = row.id ? statusIcons[0] : statusIcons[2]
-
-        return (
-          <div className={`mx-auto ${color}`} style={{ fontSize: '1.5rem' }} >
-            <Icon icon={icon} />
-          </div>
-        )
-      }
-    },
-    {
-      name: 'name',
+      name: 'Name',
       selector: 'name',
       sortable: true,
-      grow: 2,
+      grow: 1,
       cell: (row: WorkflowInfo) => (
-        <div className='py-3'>
-          <div className='font-medium text-sm mb-1'>
-            <Link to={pathToDatasetPreview(row)}>{row.username}/{row.name}</Link>
+        <div className='flex items-center truncate'>
+          <div className='w-8 mr-2'>
+            <Icon icon='automationFilled' className='text-qrigreen' />
           </div>
-          <div className='text-gray-500 text-xs'>
-            <span className='mr-3'><Icon icon='hdd' size='sm' className='mr-1' />{numeral(row.bodySize).format('0.0 b')}</span>
-            <span className='mr-3'><Icon icon='bars' size='sm' className='mr-1' />{numeral(row.bodyRows).format('0,0a')} rows</span>
-            <span className='mr-3'><Icon icon='file' size='sm' className='mr-1' />{row.bodyFormat}</span>
-            {row.commitTime && (
-              <span className='mr-3'><Icon icon='clock' size='sm' className='mr-1' /><RelativeTimestamp timestamp={new Date(row.commitTime)}/></span>
-            )}
-
+          <div className='truncate'>
+            <div className='mb-1'>
+              <Link to={pathToDatasetPreview(row)}>
+                <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-medium text-qrinavy ' />
+              </Link>
+            </div>
+            <div className='flex text-xs overflow-y-hidden'>
+              <DatasetInfoItem icon='disk' text={numeral(row.bodySize).format('0.0 b')} />
+              <DatasetInfoItem icon='rows' text={numeral(row.bodyRows).format('0,0a')} />
+              <DatasetInfoItem icon='page' text={row.bodyFormat} />
+              {row.commitTime && (
+                <DatasetInfoItem icon='clock' text={<RelativeTimestamp timestamp={new Date(row.commitTime)}/>} />
+              )}
+            </div>
           </div>
         </div>
       )
     },
     {
-      name: 'last run',
+      name: 'Last Run',
       selector: 'lastrun',
       omit: simplified,
-      grow: 1,
+      width: '180px',
       sortable: true,
       cell: (row: WorkflowInfo) => {
 
@@ -160,31 +172,51 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
           latestStart,
           latestEnd,
           commitTime
-        } = row 
+        } = row
 
         var duration: number | undefined
         if (latestStart && latestEnd) {
           duration = (new Date(latestEnd).getTime() - new Date(latestStart).getTime())/1000
         }
 
+        // if status is not defined, show nothing in this column
+        if (status === undefined) {
+          return <>&nbsp;</>
+        }
+
         return (
           <div className='flex flex-col'>
-            <div className='flex items-center mb-2'>
-              <div className='font-bold mr-2'>23</div>
-              <RunStatusBadge status={status} size='sm' />
+            <div className='flex items-center'>
+              <div className='text-sm mr-2'>#23</div>
+              <DatasetInfoItem icon='clock' text={<RelativeTimestamp timestamp={new Date(commitTime || '')}/>} />
             </div>
             <div className='text-gray-500 text-xs'>
-              <Icon icon='clock' size='sm'/> <span><DurationFormat seconds={duration} /> | <RelativeTimestamp timestamp={new Date(commitTime || '')}/></span>
+              <RunStatusBadge status={status}/>
             </div>
           </div>
         )
       }
     },
     {
-      name: 'actions',
+      name: 'Triggers',
+      style: {
+        flexShrink: 0
+      },
+      selector: 'triggers',
+      omit: simplified,
+      width: '160px',
+      cell: (row: WorkflowInfo) => (
+        <div className='tracking-wider font-medium text-qrinavy'>Schedule, Run When, Webhook</div>
+      )
+    },
+    {
+      name: 'Actions',
+      style: {
+        flexShrink: 0
+      },
       selector: 'actions',
       omit: simplified,
-      grow: 1,
+      width: '90px',
       cell: (row: WorkflowInfo) => (row.id
           ? <ManualTriggerButton workflowID={row.id} />
           : '--'
@@ -192,9 +224,12 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     },
     {
       name: '',
+      style: {
+        flexShrink: 0
+      },
       selector: 'hamburger',
       omit: simplified,
-      width: '120px',
+      width: '60px',
       // eslint-disable-next-line react/display-name
       cell: (row: WorkflowInfo) => {
         const hamburgerItems: DropDownMenuItem[] = [
@@ -249,19 +284,25 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     }
   ]
 
+
   return (
     <ReactDataTable
-      overflowY
       columns={columns}
       data={filteredWorkflows}
       customStyles={customStyles}
       sortFunction={customSort}
       highlightOnHover
       pointerOnHover
+      fixedHeader
+      fixedHeaderScrollHeight={`${String(containerHeight - 68)}px`}
       noHeader
-      onRowClicked={onRowClicked}
+      selectableRows
+      selectableRowsComponent={() => <Icon icon='checkbox' />}
       onSelectedRowsChange={onSelectedRowsChange}
       clearSelectedRows={clearSelectedTrigger}
+      style={{
+        background: 'blue'
+      }}
     />
   )
 }

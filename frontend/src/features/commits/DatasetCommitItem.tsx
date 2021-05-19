@@ -26,7 +26,7 @@ const DatasetCommitItem: React.FC<DatasetCommitItemProps> = ({
 }) => (
     <li className='flex items-stretch text-qrinavy tracking-wider'>
       <div className='relative w-4 mr-5 flex-shrink-0'>
-        <div className={classNames('absolute top-5 w-4 h-4 rounded-3xl bg-gray-300', active && 'bg-blush-600')}>&nbsp;</div>
+        <div className={classNames('absolute top-5 w-4 h-4 rounded-3xl bg-gray-300', active && 'bg-qripink')}>&nbsp;</div>
         <div className='relative line-container w-0.5 mx-auto h-full'>
           {!first && <div className='absolute top-0 w-full h-3 bg-gray-300 rounded'>&nbsp;</div>}
           {!last && <div className='absolute top-11 bottom-0 w-full bg-gray-300 rounded'>&nbsp;</div>}
@@ -35,7 +35,7 @@ const DatasetCommitItem: React.FC<DatasetCommitItemProps> = ({
       <Link className={classNames('block rounded-md p-4 mb-6 w-full overflow-x-hidden', active && 'bg-white', !active && 'text-gray-400 border border-gray-300')} to={pathToDatasetViewer(newQriRef(logItem))}>
         <div className='flex mb-1'>
           <UsernameWithIcon username={logItem.username} />
-          <div className='flex-grow-0 text-olive-300'>
+          <div className='flex-grow-0 text-qrigreen'>
             <Icon icon='automationFilled' size='sm'/>
           </div>
         </div>

@@ -13,22 +13,21 @@ export interface ManualTriggerButtonProps  {
 const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ workflowID }) => {
   const dispatch = useDispatch()
   return (
-    <div data-for={workflowID} data-tip>
-      <Button
-        onClick={() => { dispatch(manualTriggerWorkflow(workflowID)) }}
-        size='sm'
-
+    <div
+      className='mx-auto'
+      data-for={workflowID}
+      data-tip
+      onClick={() => { dispatch(manualTriggerWorkflow(workflowID)) }}
+    >
+      <Icon icon='playCircle' size='lg' className='text-qriblue'/>
+      <ReactTooltip
+        id={workflowID}
+        place='bottom'
+        effect='solid'
+        delayShow={500}
       >
-        <Icon icon='play' size='xs'/>
-        <ReactTooltip
-          id={workflowID}
-          place='bottom'
-          effect='solid'
-          delayShow={500}
-        >
-          Run Now
-        </ReactTooltip>
-      </Button>
+        Run Now
+      </ReactTooltip>
     </div>
   )
 }

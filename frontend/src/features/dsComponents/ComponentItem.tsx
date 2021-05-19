@@ -37,7 +37,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
       className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-3 rounded-tr-lg rounded-tl-lg group justify-center', {
         'selected': selected,
         'bg-white': selected,
-        'text-blush-600': selected,
+        'text-qripink': selected,
         'bg-gray-200': !selected,
         'text-gray-400': disabled,
         'text-qrinavy': !disabled,

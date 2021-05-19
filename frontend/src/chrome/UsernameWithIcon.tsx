@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 
 interface UsernameWithIconProps {
   username: string
@@ -10,13 +11,13 @@ const UsernameWithIcon: React.FunctionComponent<UsernameWithIconProps> = ({
   username,
   className
 }) => (
-   <div className={`flex flex-grow text-xs tracking-wider leading-snug ${className}`}>
-     <div className='rounded-xl inline-block mr-1 bg-cover' style={{
+   <div className={classNames('flex text-xs tracking-wider leading-snug', className)}>
+     <div className='rounded-xl inline-block mr-1 bg-cover flex-shrink-0' style={{
        height: '18px',
        width: '18px',
        backgroundImage: 'url(https://qri-user-images.storage.googleapis.com/1570029763701.png)'
      }}></div>
-     {username}
+     <p className='truncate'>{username}</p>
    </div>
 )
 
