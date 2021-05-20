@@ -60,13 +60,13 @@ const SignUpModal: React.FC = () => {
   }
 
   return (
-    <div className='bg-white py-7 px-5 text-center' style={{ width: '400px'}}>
-      <div className='w-10 m-auto'>
-        <QriLogo />
+    <div className='bg-white py-9 px-5 text-center' style={{ width: '440px'}}>
+      <div className='w-10 m-auto mb-4'>
+        <QriLogo size='sm'/>
       </div>
-      <div className='text-2xl font-semibold mb-6'>Sign Up for Qrimatic</div>
-      <div className='w-64 mx-auto'>
-        <div className='mb-6'>
+      <div className='text-3xl font-black mb-8 text-qrinavy'>Sign Up for Qri</div>
+      <div className='w-72 mx-auto'>
+        <div className='mb-8'>
           <TextInput
             name='email'
             placeholder='Email'
@@ -91,17 +91,17 @@ const SignUpModal: React.FC = () => {
           />
         </div>
         {signupError && <div className='text-xs text-red-500 text-left mb-2'>{signupError}</div>}
-        <Button size='lg' className='w-full mb-6' onClick={handleButtonClick}>
+        <Button size='sm' className='w-full mb-6' onClick={handleButtonClick}>
           {loading ? <Spinner color='#fff' size='6' /> : 'Continue'}
         </Button>
 
-        <div className='mb-3 text-gray-500' style={{ fontSize: '.7rem' }}>
+        <div className='mb-3 text-qrigray-400 tracking-wider text-xs'>
           By continuing, you agree to Qri's <ExternalLink to='https://qri.io/legal/tos'>Terms of Service</ExternalLink> & <ExternalLink to='https://qri.io/legal/privacy-policy'>Privacy Policy</ExternalLink>.
         </div>
 
         <hr className='w-20 mx-auto mb-3'/>
 
-        <div className='text-xs font-semibold hover:cursor-pointer' onClick={handleLogInClick}>
+        <div className='text-qrinavy text-xs font-medium hover:cursor-pointer' onClick={handleLogInClick}>
           Already on Qri?  Log In
         </div>
       </div>

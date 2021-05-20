@@ -34,7 +34,7 @@ const Button: React.FC<ButtonProps> = ({
         'text-md px-8 py-3': (size === 'lg'),
       },
       {
-        'text-white bg-qriblue-600 hover:bg-qriblue-700 focus:ring-qriblue-500': (type === 'primary'),
+        'text-white bg-qriblue hover:bg-qriblue-600 focus:ring-qriblue': (type === 'primary'),
         'text-qriblue text-sm font-medium border-2 border-qriblue box-border': (type === 'primary-outline'),
         'text-white bg-qripink-600 hover:bg-qripink-700 focus:ring-qripink-500': (type === 'secondary'),
         'text-gray-700 border border-gray-700 focus:ring-indigo-500': (type === 'light'),

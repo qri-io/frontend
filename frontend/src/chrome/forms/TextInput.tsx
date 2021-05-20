@@ -45,14 +45,14 @@ const TextInput: React.FC<TextInputProps> = ({
 
   return (
     <div className='mb-2'>
-      <div className="mt-1 mb-1 relative rounded-md shadow-sm">
+      <div className="mt-1 mb-2 relative rounded-md shadow-sm">
         {label && <InputLabel
           label={label}
           tooltip={labelTooltip}
           tooltipFor={name}
         />}
         <input
-          className="focus:ring-indigo-500 focus:border-indigo-500 block w-full px-2 sm:text-sm border-gray-300 rounded-md"
+          className="focus:ring-indigo-500 focus:border-indigo-500 block w-full px-2 text-md border-qrigray-300 rounded-md placeholder-qrigray-400 rounded-lg"
           id={name}
           name={name}
           type={type}
