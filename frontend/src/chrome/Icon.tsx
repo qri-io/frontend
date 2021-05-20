@@ -23,7 +23,6 @@ import {
   faCheck,
   faPen,
   faMinusCircle,
-  faPlayCircle,
   faPlay,
   faPlus,
   faPlusCircle,
@@ -56,6 +55,7 @@ import CaretRight from './icon/CaretRight'
 import Checkbox from './icon/Checkbox'
 import Clock from './icon/Clock'
 import Code from './icon/Code'
+import Columns from './icon/Columns'
 import Commit from './icon/Commit'
 import Dashboard from './icon/Dashboard'
 import Discord from './icon/Discord'
@@ -64,6 +64,7 @@ import Download from './icon/Download'
 import EllipsesVertical from './icon/EllipsesVertical'
 import Eye from './icon/Eye'
 import Follower from './icon/Follower'
+import FullScreen from './icon/FullScreen'
 import Github from './icon/Github'
 import Globe from './icon/Globe'
 import History from './icon/History'
@@ -166,6 +167,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     checkbox: <Checkbox className={className} size={size} />,
     clock: <Clock className={className} size={size} />,
     code: <Code className={className} size={size} />,
+    columns: <Columns className={className} size={size} />,
     commit: <Commit className={className} size={size} />,
     dashboard: <Dashboard className={className} size={size} />,
     discord: <Discord className={className} size={size} />,
@@ -174,6 +176,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     ellipsesVertical: <EllipsesVertical className={className} size={size} />,
     eye: <Eye className={className} size={size} />,
     follower: <Follower className={className} size={size} />,
+    fullScreen: <FullScreen className={className} size={size} />,
     github: <Github className={className} size={size} />,
     globe: <Globe className={className} size={size} />,
     history: <History className={className} size={size} />,
