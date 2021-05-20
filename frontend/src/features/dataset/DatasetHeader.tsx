@@ -13,11 +13,13 @@ import Button from '../../chrome/Button'
 
 export interface DatasetHeaderProps {
   qriRef: QriRef
+  noBorder?: boolean
   editable?: boolean
 }
 
 const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   qriRef,
+  noBorder,
   editable = false
 }) => {
   const dispatch = useDispatch()
@@ -45,7 +47,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   ]
 
   return (
-    <div className="w-full pt-9 px-7 relative">
+    <div className="w-full">
       <div className='flex'>
         <div className='flex-grow'>
           <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1'>
@@ -78,7 +80,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
         </div>
       </div>
-      <div className='border-b-2' />
+      {!noBorder && <div className='border-b-2' />}
     </div>
   )
 }

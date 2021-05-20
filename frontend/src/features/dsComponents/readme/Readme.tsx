@@ -33,7 +33,7 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
     return null
   }
   return (
-    <div className='p-3 h-full w-full overflow-auto pb-8'>
+    <div className='h-full w-full'>
       <div
         // use "editor-preview" class to piggie-back off the simplemde styling
         className="markdown-body"
