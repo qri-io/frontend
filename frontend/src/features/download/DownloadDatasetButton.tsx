@@ -15,10 +15,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
 }) => {
   return (
     <Button onClick={() => { alert(`unfinished: download ${qriRef.username}/${qriRef.name}`)}} type='primary-outline' size='sm'>
-    {!small && 'Download'}
-    {small && (
-      <Icon icon='download' />
-    )}
+    {small ? <Icon icon='download' /> : 'Download'}
     </Button>
   )
 }

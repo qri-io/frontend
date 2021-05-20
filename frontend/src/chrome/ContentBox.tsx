@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 
 interface ContentBoxProps {
-  className?: String
+  className?: string
 }
 
 const ContentBox: React.FC<ContentBoxProps> = ({

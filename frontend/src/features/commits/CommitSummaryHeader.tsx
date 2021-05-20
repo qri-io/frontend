@@ -4,7 +4,7 @@ import Dataset from '../../qri/dataset'
 import Icon from '../../chrome/Icon'
 import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
-
+import commitishFromPath from '../../utils/commitishFromPath'
 
 export interface CommitSummaryHeaderProps {
   dataset: Dataset
@@ -22,7 +22,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
           <div className='text-xs text-gray-400 font-medium mb-2'>Version Info</div>
           <div className='text-qrinavy text-sm flex items-center mb-1'>
             <Icon icon='commit' size='sm' className='-ml-2' />
-            <div className='font-medium'>{path.substr(path.length - 7)}</div>
+            <div className='font-medium'>{commitishFromPath(path)}</div>
             <div className='mx-3 text-gray-400'>|</div>
             <div className=''>{commit.title}</div>
           </div>

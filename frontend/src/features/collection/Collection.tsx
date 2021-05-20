@@ -7,9 +7,7 @@ import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
 import PageWithFooter from '../app/PageWithFooter'
 import WorkflowsTable from './WorkflowsTable'
-import { WorkflowInfo } from '../../qrimatic/workflow'
 import Button from '../../chrome/Button'
-import Icon from '../../chrome/Icon'
 import Spinner from '../../chrome/Spinner'
 
 const Collection: React.FC<any> = () => {

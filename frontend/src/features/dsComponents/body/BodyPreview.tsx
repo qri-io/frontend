@@ -13,7 +13,7 @@ import { newQriRef } from '../../../qri/ref'
 import Icon from '../../../chrome/Icon'
 
 export interface BodyProps {
-  data: Dataset
+  dataset: Dataset
 }
 
 const extractColumnHeaders = (structure: Structure, value: any[]): ColumnProperties[] => {
@@ -31,12 +31,17 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
   return schemaToColumns(schema)
 }
 
-const Body: React.FunctionComponent<BodyProps> = ({
-  data,
+const Body: React.FC<BodyProps> = ({
+  dataset,
 }) => {
   const dispatch = useDispatch()
-  const { body, structure } = data
-  const { path, name, peername: username } = data
+  const {
+    body,
+    structure,
+    path,
+    name,
+    peername: username
+  } = dataset
 
   // list out dependencies on dataset body individually for proper memoization
   useEffect(() => {
@@ -84,7 +89,7 @@ const Body: React.FunctionComponent<BodyProps> = ({
         (structure.format === 'csv' && Array.isArray(body))
           ? <BodyTable
               headers={headers}
-              body={body.slice(0, 100)}
+              body={body.slice(0, 100)} //TODO(chriswhong): fetch previews/paginated body properly so we aren't rendering extremely large tables
             />
           : <BodyJson
               data={body}

@@ -57,24 +57,6 @@ const customSort = (rows: WorkflowInfo[], field: string, direction: 'asc' | 'des
   })
 }
 
-const statusIcons = [
-  {
-    id: 'deployed',
-    icon: 'playCircle',
-    color: 'text-qriblue'
-  },
-  {
-    id: 'paused',
-    icon: 'pauseCircle',
-    color: 'text-gray-300'
-  },
-  {
-    id: 'notDeployed',
-    icon: 'circle',
-    color: 'text-gray-300'
-  },
-]
-
 // react-data-table custom styles
 const customStyles = {
   table: {
@@ -169,15 +151,8 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
         // out this section that mocks durations & timestamps for us
         const {
           status,
-          latestStart,
-          latestEnd,
           commitTime
         } = row
-
-        var duration: number | undefined
-        if (latestStart && latestEnd) {
-          duration = (new Date(latestEnd).getTime() - new Date(latestStart).getTime())/1000
-        }
 
         // if status is not defined, show nothing in this column
         if (status === undefined) {

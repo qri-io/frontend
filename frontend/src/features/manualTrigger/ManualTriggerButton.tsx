@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 
-import Button from '../../chrome/Button'
 import Icon from '../../chrome/Icon'
 import { manualTriggerWorkflow } from './state/manualTriggerActions'
 
