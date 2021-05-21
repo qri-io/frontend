@@ -22,7 +22,7 @@ export const ExternalLink: React.FunctionComponent<ExternalLinkProps> = ({
     href={to}
     target='_blank'
     rel="noopener noreferrer"
-    className={`text-blue-500 hover:text-blue-600 hover:cursor-pointer ${className}`}
+    className={`text-qriblue hover:text-qriblue-600 hover:cursor-pointer ${className}`}
     data-tip={tooltip}
   >
     {children}
