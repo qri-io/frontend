@@ -4,7 +4,7 @@ import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router'
 import Workflow from '../workflow/Workflow';
 import DatasetComponents from '../dsComponents/DatasetComponents';
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
-import DatasetPreview from '../dsPreview/DatasetPreview';
+import DatasetPreviewPage from '../dsPreview/DatasetPreviewPage';
 import DatasetIssues from '../issues/DatasetIssues';
 import DatasetPage from './DatasetPage';
 import { newQriRef } from '../../qri/ref';
@@ -37,25 +37,23 @@ const DatasetRoutes: React.FC<{}> = () => {
         </DatasetPage>
       </Route>
       <Route path='/ds/:username/:name/preview' exact>
-        <DatasetPage>
-          <DatasetPreview />
-        </DatasetPage>
+        <DatasetPreviewPage qriRef={qriRef} />
       </Route>
-      {process.env.REACT_APP_FEATURE_WIREFRAMES && 
+      {process.env.REACT_APP_FEATURE_WIREFRAMES &&
         <Route path='/ds/:username/:name/issues'>
           <DatasetPage>
             <DatasetIssues qriRef={qriRef} />
           </DatasetPage>
         </Route>
       }
-      {process.env.REACT_APP_FEATURE_WIREFRAMES && 
+      {process.env.REACT_APP_FEATURE_WIREFRAMES &&
         <Route path='/ds/:username/:name/edit'>
           <DatasetPage>
             <DatasetEditor />
           </DatasetPage>
         </Route>
       }
-      
+
       <Route path='/ds/:username/:name/at/:fs/:hash/components'>
         <Redirect to={`/ds/${qriRef.username}/${qriRef.name}/at/${qriRef.path}/body`} />
       </Route>

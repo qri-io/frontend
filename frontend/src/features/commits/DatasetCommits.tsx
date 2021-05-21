@@ -30,7 +30,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
   }, [dispatch, qriRef.username, qriRef.name])
 
   return (
-    <div className='pt-4 pl-7 overflow-y-hidden flex flex-col text-xs flex-shrink-0' style={{ width: '325px'}}>
+    <div className='pt-4 overflow-y-hidden flex flex-col text-xs flex-shrink-0' style={{ width: '325px'}}>
       <header className='flex-grow-0 mb-4'>
         <h3 className='text-2xl text-qrinavy-500 font-black'>History</h3>
         <div className='text-xs text-gray-400 tracking-wider'>{commits.length} versions</div>

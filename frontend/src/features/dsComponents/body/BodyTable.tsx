@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 // import * as _ from 'underscore'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faSync } from '@fortawesome/free-solid-svg-icons'
@@ -38,7 +39,8 @@ interface BodyTableProps {
 //   return Math.abs(scrollTop + offsetHeight - scrollHeight) < buffer
 // }
 
-const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap border-r border-gray-100 '
+const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap border-r border-gray-200 '
+
 
 export default class BodyTable extends React.Component<BodyTableProps> {
   constructor (props: BodyTableProps) {
@@ -113,9 +115,9 @@ export default class BodyTable extends React.Component<BodyTableProps> {
 
     const tableRows = body.map((row, i) => {
       return (
-        <tr key={i} className='border-b border-gray-100'>
+        <tr key={i} className='border-b border-gray-200'>
           <td key={0}className='bg-white text-center'>
-            <div className={cellClasses}>
+            <div className={classNames(cellClasses, 'text-qrinavy-500')}>
               {
                 // TODO (ramfox): when we add back pageInfo/fetching
                 // we should use the page number, page size, and the row index (i)
@@ -127,7 +129,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
           {row.map((d: any, j: number) => {
             return (
               <td key={j + 1}>
-                <div className={cellClasses}>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
+                <div className={classNames(cellClasses, 'text-qrigray-400')}>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
               </td>
             )
           })}
@@ -138,22 +140,21 @@ export default class BodyTable extends React.Component<BodyTableProps> {
     return (
       <div
         id='body-table-container'
-        className='pb-8'
-        /* setting maxWidth fixes an overflow-x bug affecting parent flex 
+        /* setting maxWidth fixes an overflow-x bug affecting parent flex
            containers. Observed on Chrome */
         style={{ maxWidth: 800 }}
         onScroll={() => { this.handleVerticalScrollThrottled() } }
       >
         <table className='table text-xs'>
-          <thead className='border-b border-gray-100'>
+          <thead className='border-b border-gray-200'>
             <tr>
-              <th className='sticky top-0 h-6 bg-white font-semibold cursor-pointer p-0'>
-                <div className={cellClasses}>&nbsp;</div>
+              <th className='sticky top-0 h-6 bg-white cursor-pointer p-0'>
+                <div className={classNames(cellClasses, 'border-r border-b leading-4')}>&nbsp;</div>
               </th>
               {headers && headers.map((d: any, j: number) => {
                 return (
-                  <th key={j} className='sticky top-0 h-6 bg-white font-semibold text-left p-0'>
-                    <div className={cellClasses} >
+                  <th key={j} className='sticky top-0 h-6 bg-white font-medium text-left p-0'>
+                    <div className={classNames(cellClasses, 'text-qrinavy text-sm border-r border-b leading-4')} >
                       <TypeLabel type={d.type} showLabel={false}/>&nbsp;{d.title}
                     </div>
                   </th>

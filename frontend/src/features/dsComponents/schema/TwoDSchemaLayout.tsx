@@ -29,13 +29,13 @@ export const TypeLabel: React.FunctionComponent<TypeLabelProps> = ({ type, showL
   } else {
     switch (type) {
       case 'string':
-        icon = <span className='font-serif font-bold text-gray-500'>T</span>
+        icon = <span className='font-bold text-qrigray-300'>A</span>
         break
       case 'number':
-        icon = <span className='font-serif font-bold text-gray-500'>1.0</span>
+        icon = <span className='font-bold text-qrigray-300'>#</span>
         break
       case 'integer':
-        icon = <span className='font-serif font-bold text-gray-500'>1</span>
+        icon = <span className='font-bold text-qrigray-300'>#</span>
         break
       case 'boolean':
         icon = <FontAwesomeIcon icon={faToggleOn} size='xs'/>

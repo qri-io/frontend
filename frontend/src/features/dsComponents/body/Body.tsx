@@ -123,7 +123,7 @@ const Body: React.FunctionComponent<BodyProps> = ({
   return (structure.format === 'csv' && Array.isArray(body))
     ? <BodyTable
         headers={extractColumnHeaders(structure, body)}
-        body={body}
+        body={body.slice(0, 100)} // TODO(chriswhong): fetch previews/paginated body properly so we aren't rendering extremely large tables
       />
     : <BodyJson
         data={body}
