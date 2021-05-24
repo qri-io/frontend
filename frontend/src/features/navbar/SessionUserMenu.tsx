@@ -1,13 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import { AnonUser, selectSessionUser } from '../session/state/sessionState'
 import { logOut } from '../session/state/sessionActions'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import Button from '../../chrome/Button'
+import ExternalLink from '../../chrome/ExternalLink'
+
+const navbarLinkClassNames = 'text-qriblue font-medium hover:text-qriblue-800 hover:cursor-pointer transition-all duration-100'
 
 const SessionUserMenu: React.FC<{}> = () => {
   const user = useSelector(selectSessionUser)
@@ -17,18 +19,17 @@ const SessionUserMenu: React.FC<{}> = () => {
     const handleLogInClick = () => {
       dispatch(showModal(ModalType.logIn))
     }
-  
+
     const handleSignUpClick = () => {
       dispatch(showModal(ModalType.signUp))
     }
 
     return (
       <>
-        <div
-          className='mr-4 hover:text-qriblue-200 hover:cursor-pointer transition-all duration-100'
+        <div className={navbarLinkClassNames}
           onClick={handleLogInClick}
         >Log In</div>
-        <Button onClick={handleSignUpClick}>
+        <Button onClick={handleSignUpClick} size='sm' className='ml-8'>
           Sign Up
         </Button>
       </>
@@ -37,8 +38,8 @@ const SessionUserMenu: React.FC<{}> = () => {
 
   const menuItems = [
     {
-      text: 'Documentation',
-      link: 'https://qri.io/docs'
+      text: 'Profile',
+      link: '/profile'
     },
     {
       text: 'Send Feedback',
@@ -51,11 +52,17 @@ const SessionUserMenu: React.FC<{}> = () => {
   ]
 
   return (
-    <div className="relative">
-      <DropdownMenu items={menuItems}>
-        <p className=' font-bold text-white relative flex items-baseline group hover:text'>
-          {user.username} <Icon icon='sortDown' className='ml-3'/>
-        </p>
+    <div className="relative flex items-center">
+      <ExternalLink
+        to='https://qri.io/docs'
+        className={navbarLinkClassNames}
+      >Help</ExternalLink>
+      <DropdownMenu items={menuItems} className='ml-8'>
+        <div className='rounded-2xl inline-block bg-cover flex-shrink-0' style={{
+          height: '30px',
+          width: '30px',
+          backgroundImage: 'url(https://qri-user-images.storage.googleapis.com/1570029763701.png)'
+        }}></div>
       </DropdownMenu>
     </div>
   )
