@@ -25,13 +25,18 @@ export interface ApiAction extends AnyAction {
     segments?: QriRef
     // query is an object of query parameters to be appended to the API call URL
     query?: ApiQuery
-    // body is the body for POST requests
+    // body is the JSON body for POST requests
     body?: object|[]
+    // form is the form data for POST requests (overrides body)
+    // deprecated: form will be removed, don't add callers that populate form
+    form?: object
     // pageInfo is the pagination information
     pageInfo?: ApiPagination
     // map is a function
     // map defaults to the identity function
     map?: (data: any) => any
+    // token is a json web token.  It is normally read from state, but can also be passed in
+    token?: string
   }
 }
 
@@ -169,7 +174,8 @@ function apiUrl (endpoint: string, segments?: QriRef, query?: ApiQuery, pageInfo
 interface FetchOptions {
   method: string
   headers: Record<string, string>
-  body?: string
+  body?: string | FormData
+  form?: object
 }
 
 // getAPIJSON constructs an API url & fetches a JSON response
@@ -179,7 +185,9 @@ async function getAPIJSON<T> (
   segments?: QriRef,
   query?: ApiQuery,
   pageInfo?: ApiPagination,
-  body?: object|[]
+  body?: object|[],
+  form?: object,
+  token?: string
 ): Promise<T> {
   const [url, err] = apiUrl(endpoint, segments, query, pageInfo)
   if (err) {
@@ -188,19 +196,40 @@ async function getAPIJSON<T> (
   const options: FetchOptions = {
     method,
     headers: {
-      'Content-Type': 'application/json',
       'Accept': 'application/json'
     }
   }
-  if (body) options.body = JSON.stringify(body)
+
+  if (body) {
+    options.headers['Content-Type'] = 'application/json'
+    options.body = JSON.stringify(body)
+  }
+
+  // TODO(chriswhong): the API should always accept JSON bodies,
+  // but in development we encounted some endpoints that want form data
+  // form can be removed once the API no longer requires it
+  // if form exists, build a FormData object and set it to options.body
+  if (form) {
+    const formData = new FormData()
+    Object.keys(form).forEach((key) => { formData.append(key, form[key])})
+    options.body = formData
+  }
+
+  if (token) {
+    options.headers = {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`
+    }
+  }
+
   return getJSON(url, options)
 }
 
 // apiMiddleware manages requests to the qri JSON API
-export const apiMiddleware: Middleware = () => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
+export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
   if (action[CALL_API]) {
     let data: APIResponseEnvelope
-    let { endpoint = '', method, map = identityFunc, segments, query, body, pageInfo } = action[CALL_API]
+    let { endpoint = '', method, map = identityFunc, segments, query, body, pageInfo, form, token = '' } = action[CALL_API]
     const [REQ_TYPE, SUCC_TYPE, FAIL_TYPE] = apiActionTypes(action.type)
 
     next({
@@ -210,8 +239,11 @@ export const apiMiddleware: Middleware = () => (next: Dispatch<AnyAction>) => as
       segments
     })
 
+
+    // TODO: validate token
+
     try {
-      data = await getAPIJSON(endpoint, method, segments, query, pageInfo, body)
+      data = await getAPIJSON(endpoint, method, segments, query, pageInfo, body, form, token)
     } catch (err) {
       return next({
         ...action,

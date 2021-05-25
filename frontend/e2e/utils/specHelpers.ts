@@ -4,7 +4,7 @@ import TestQrimaticBackend from './testQrimaticServe'
 import TestQrimaticFrontend from './testFrontendServe'
 
 const FRONTEND_URL_BASE = process.env.FRONTEND_URL_BASE || 'http://localhost:3000'
-const BACKEND_URL_BASE = process.env.BACKEND_URL_BASE || 'http://localhost:2503'
+const BACKEND_URL_BASE = process.env.BACKEND_URL_BASE || 'http://localhost:3002'
 
 const confirmServiceIsLive = async (url: string) => {
   let backoffMilliseconds = 1000

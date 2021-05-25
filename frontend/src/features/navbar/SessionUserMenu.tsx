@@ -61,7 +61,7 @@ const SessionUserMenu: React.FC<{}> = () => {
         <div className='rounded-2xl inline-block bg-cover flex-shrink-0' style={{
           height: '30px',
           width: '30px',
-          backgroundImage: 'url(https://qri-user-images.storage.googleapis.com/1570029763701.png)'
+          backgroundImage: `url(${user.profile})`
         }}></div>
       </DropdownMenu>
     </div>

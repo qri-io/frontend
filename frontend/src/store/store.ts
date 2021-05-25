@@ -16,7 +16,7 @@ import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrol
 import { searchReducer, SearchState } from '../features/search/state/searchState';
 import { deployReducer, DeployState } from '../features/deploy/state/deployState';
 import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
-import { sessionReducer, SessionState } from '../features/session/state/sessionState';
+import { sessionReducer, SessionState, AnonUser } from '../features/session/state/sessionState';
 import { commitsReducer, CommitsState } from '../features/commits/state/commitState';
 import { datasetEditsReducer, DatasetEditsState } from '../features/dataset/state/editDatasetState';
 import { WebsocketState, websocketReducer } from '../features/websocket/state/websocketState';
@@ -62,6 +62,23 @@ const rootReducer = (h: History) => combineReducers({
   websocket: websocketReducer
 })
 
+function setAuthState(state: any) {
+  try {
+    if (state.session.token) {
+      localStorage.setItem('state.auth.token', JSON.stringify((state.session || {}).token));
+    } else {
+      localStorage.removeItem('state.auth.token')
+    }
+
+
+    if (state.session.token && (state.session.token !== AnonUser)) {
+      localStorage.setItem('state.auth.user', JSON.stringify((state.session || {}).user));
+    } else {
+      localStorage.removeItem('state.auth.user')
+    }
+  } catch (err) { return undefined; }
+}
+
 export function configureStore(preloadedState?: any) {
   const composeEnhancer: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
   const store = createStore(
@@ -76,6 +93,11 @@ export function configureStore(preloadedState?: any) {
       ),
     ),
   )
+
+  // automatically sync store.session.token with localstorage
+  store.subscribe(() => {
+    setAuthState(store.getState())
+  });
 
   // // Hot reloading
   // if (module.hot) {
