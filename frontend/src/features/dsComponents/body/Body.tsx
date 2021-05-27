@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 // import { Action } from 'redux'
 
+import Dataset,  { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
+import BodyTable from './BodyTable'
+import BodyJson from './BodyJson'
+import { loadBody } from '../../dataset/state/datasetActions'
+import { newQriRef } from '../../../qri/ref'
 // import { ApiActionThunk } from '../../../store/api'
 // import { DetailsType, StatsDetails, Details } from '../../../models/details'
-import Dataset,  { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
 // import { RouteProps } from '../../../models/store'
 // import { fetchBody, fetchCommitBody } from '../../../actions/api'
 // import { setDetailsBar } from '../../../actions/ui'
 // import { selectDataset, selectWorkingDataset, selectDatasetStats, selectWorkingStats, selectDetails, selectDatasetBodyPageInfo, selectWorkingDatasetBodyPageInfo, selectWorkingStatusInfo } from '../../../selections'
 // import { QriRef, qriRefFromRoute } from '../../../models/qriRef'
-
-import BodyTable from './BodyTable'
-import BodyJson from './BodyJson'
-import { useDispatch } from 'react-redux'
-import { loadBody } from '../../dataset/state/datasetActions'
-import { newQriRef } from '../../../qri/ref'
 // import ParseError from '../ParseError'
 // import hasParseError from '../../../utils/hasParseError'
 // import { connectComponentToProps } from '../../../utils/connectComponentToProps'
 
 export interface BodyProps {
   data: Dataset
+  preview?: boolean
   // stats: IStatTypes[]
   // details: Details
   // pageInfo: PageInfo
@@ -49,8 +49,9 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
   return schemaToColumns(schema)
 }
 
-const Body: React.FunctionComponent<BodyProps> = ({
+const Body: React.FC<BodyProps> = ({
   data,
+  preview = false
 }) => {
   const dispatch = useDispatch()
   const { body, structure } = data
@@ -58,8 +59,9 @@ const Body: React.FunctionComponent<BodyProps> = ({
 
   // list out dependencies on dataset body individually for proper memoization
   useEffect(() => {
+    if (preview) { return }
     dispatch(loadBody(newQriRef({ path, name, username }), 1, 100))
-  }, [dispatch, path, name, username])
+  }, [preview, dispatch, path, name, username])
 
   if (!body) {
     return (

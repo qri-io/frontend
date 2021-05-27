@@ -21,6 +21,9 @@ const BigSearchBox: React.FC<BigSearchBoxProps> = ({ onSubmit, value='', classNa
     onSubmit(stateValue)
   }
 
+  // updates state if the value prop changes in parent components
+  // allows a user to search for a term using the global search box and have it show up
+  // in this search box after navigation to /search
   React.useEffect(() => {
     setStateValue(value)
   }, [value])

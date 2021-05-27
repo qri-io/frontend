@@ -15,7 +15,7 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
 
   const refCallback = useCallback((el: HTMLDivElement) =>{
     if (el !== null) {
-      fetch(`${API_BASE_URL}/render/${qriRefStr}`)
+      fetch(`${API_BASE_URL}/dataset_summary/readme?path=${qriRef.path}`)
         .then(async (res) => {
           return res.text()
         })
