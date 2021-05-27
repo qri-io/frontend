@@ -14,7 +14,7 @@ import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { WorkflowInfo } from '../../qrimatic/workflow';
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
-import DatasetInfoItem from '../../chrome/DatasetInfoItem'
+import DatasetInfoItem from '../dataset/DatasetInfoItem'
 
 interface WorkflowsTableProps {
   filteredWorkflows: WorkflowInfo[]
@@ -127,11 +127,11 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
               </Link>
             </div>
             <div className='flex text-xs overflow-y-hidden'>
-              <DatasetInfoItem icon='disk' text={numeral(row.bodySize).format('0.0 b')} />
-              <DatasetInfoItem icon='rows' text={numeral(row.bodyRows).format('0,0a')} />
-              <DatasetInfoItem icon='page' text={row.bodyFormat} />
+              <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} />
+              <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} />
+              <DatasetInfoItem icon='page' label={row.bodyFormat} />
               {row.commitTime && (
-                <DatasetInfoItem icon='clock' text={<RelativeTimestamp timestamp={new Date(row.commitTime)}/>} />
+                <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(row.commitTime)}/>} />
               )}
             </div>
           </div>
@@ -163,7 +163,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
           <div className='flex flex-col'>
             <div className='flex items-center'>
               <div className='text-sm mr-2'>#23</div>
-              <DatasetInfoItem icon='clock' text={<RelativeTimestamp timestamp={new Date(commitTime || '')}/>} />
+              <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(commitTime || '')}/>} />
             </div>
             <div className='text-gray-500 text-xs'>
               <RunStatusBadge status={status}/>
