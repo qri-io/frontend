@@ -21,6 +21,10 @@ const BigSearchBox: React.FC<BigSearchBoxProps> = ({ onSubmit, value='', classNa
     onSubmit(stateValue)
   }
 
+  React.useEffect(() => {
+    setStateValue(value)
+  }, [value])
+
   return (
     <form className={classNames("relative rounded-md shadow-sm w-full", className)} onSubmit={handleSubmit}>
       <input

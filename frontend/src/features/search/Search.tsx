@@ -48,7 +48,7 @@ const Search: React.FC<{}> = () => {
 
   return (
     <div className='flex flex-col h-full w-full overflow-y-scroll' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6'}}>
-      <NavBar />
+      <NavBar showSearch={false} />
       <div className='flex-grow w-full py-9'>
         <div className='w-4/5 max-w-screen-lg mx-auto mb-2'>
           <div className='text-qrinavy text-4xl font-bold mb-3'>Dataset Search</div>
