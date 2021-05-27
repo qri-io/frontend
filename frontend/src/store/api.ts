@@ -203,7 +203,7 @@ export const apiMiddleware: Middleware = () => (next: Dispatch<AnyAction>) => as
     let { endpoint = '', method, map = identityFunc, segments, query, body, pageInfo } = action[CALL_API]
     const [REQ_TYPE, SUCC_TYPE, FAIL_TYPE] = apiActionTypes(action.type)
 
-    next({ 
+    next({
       ...action,
       type: REQ_TYPE,
       pageInfo,
@@ -236,7 +236,8 @@ export const apiMiddleware: Middleware = () => (next: Dispatch<AnyAction>) => as
           query,
           pageInfo,
           segments
-        }
+        },
+        pagination: data.pagination
       }
     })
   }
