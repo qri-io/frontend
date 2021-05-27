@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import TemplateList from './features/template/TemplateList';
 import ChangeReport from './features/changes/ChangeReport';
+import Search from './features/search/Search';
 import CollectionActivityFeed from './features/activityFeed/CollectionActivityFeed';
 import NotificationList from './features/notification/NotificationList';
 import NotificationSettings from './features/notification/NotificationSettings';
@@ -46,6 +47,8 @@ export default function Routes () {
 
         <Route path='/run'><Run /></Route>
         <Route path='/changes'><ChangeReport /></Route>
+
+        <Route path='/search'><Search /></Route>
 
         <Route path='/notifications'><NotificationList /></Route>
         <Route path='/notification_settings'><NotificationSettings /></Route>

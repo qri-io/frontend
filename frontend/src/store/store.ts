@@ -12,6 +12,7 @@ import { AppState, appReducer } from '../features/app/state/appState';
 import { CollectionState, collectionReducer } from '../features/collection/state/collectionState';
 import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
 import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
+import { searchReducer, SearchState } from '../features/search/state/searchState';
 import { deployReducer, DeployState } from '../features/deploy/state/deployState';
 import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
 import { sessionReducer, SessionState } from '../features/session/state/sessionState';
@@ -30,6 +31,7 @@ export interface RootState {
   deploy: DeployState
   router: RouterState
   scroller: ScrollerState
+  search: SearchState
   session: SessionState
   transfers: RemoteEvents
   workflow: WorkflowState
@@ -49,6 +51,7 @@ const rootReducer = (h: History) => combineReducers({
   // router: connectRouter(h) as any as Reducer<RouterState>,
   router: connectRouter(h),
   scroller: scrollerReducer,
+  search: searchReducer,
   session: sessionReducer,
   transfers: transfersReducer,
   workflow: workflowReducer,

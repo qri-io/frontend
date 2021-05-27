@@ -4,8 +4,8 @@ import ReactTooltip from 'react-tooltip'
 import Icon from '../../chrome/Icon'
 
 export interface DatasetInfoItemProps {
-  icon: string
-  label: string
+  icon: string | JSX.Element
+  label: string | JSX.Element
   tooltip?: string
   iconClassName?: string
 }
@@ -20,8 +20,8 @@ const DatasetInfoItem: React.FC<DatasetInfoItemProps> = ({
 
   return (
     <div className='text-qrinavy-500 text-sm flex items-center inline-block mr-5'>
-      <div className='mr-1'>
-        <Icon icon={icon} size='sm' className={iconClassName} />
+      <div className='mr-1 flex items-center'>
+        {(typeof icon === 'string') ? <Icon icon={icon} size='sm' className={iconClassName} /> : icon }
       </div>
       {label}
       {tooltip && (

@@ -114,10 +114,12 @@ module.exports = {
   variants: {
     extend: {
       fontWeight: ['hover'],
-      cursor: ['hover']
+      cursor: ['hover'],
+      borderWidth: ['last']
     },
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
   ],
 }
