@@ -5,7 +5,7 @@ interface QriLogoProps {
   size?: 'sm' | 'md'
 }
 
-const QriLogo: React.FC<QriLogoProps> = ({ size }) => (
+const QriLogo: React.FC<QriLogoProps> = ({ size='md' }) => (
   <div className={classNames('m-1', {
     'w-11 h-11': size === 'md',
     'w-9 h-9': size === 'sm',

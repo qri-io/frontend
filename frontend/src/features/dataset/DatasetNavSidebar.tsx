@@ -1,5 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames'
 
 import { QriRef } from '../../qri/ref'
 import DatasetSideNavItem from './DatasetSideNavItem'
@@ -30,7 +31,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
 
   return (
     <div className={`side-nav pl-9 h-full bg-white relative pt-9 flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
-      <div className='mb-9 flex align-center flex'>
+      <div className='mb-9 flex align-center items-center'>
         <div
           className='text-gray-400 text-sm font-medium mr-4 leading-6 transition-all duration-700'
           style={{
@@ -40,7 +41,13 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         >
           DATASET MENU
         </div>
-        <div className='cursor-pointer flex items-center w-6' onClick={toggleExpanded}>
+        <div
+          className={classNames('cursor-pointer flex items-center w-6 transition duration-300 ease-in-out transform', {
+            'hover:-translate-x-1': expanded,
+            'hover:translate-x-1': !expanded,
+          })}
+          onClick={toggleExpanded}
+        >
           <Icon className='m-auto' icon={expanded ? 'caretLeft' : 'caretRight'} size='xs' />
         </div>
       </div>

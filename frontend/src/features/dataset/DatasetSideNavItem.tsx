@@ -23,7 +23,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, label
         'text-qripink': active
       })}>
         <span data-tip data-for={id}>
-          <div className='flex'>
+          <div className='flex items-center'>
             <Icon className='mr-2' size='md' icon={icon} />
             <span style={{
               fontSize: '16px',

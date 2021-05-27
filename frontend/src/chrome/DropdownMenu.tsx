@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom'
-import ExternalLink from './ExternalLink'
+import classNames from 'classnames'
 
+import ExternalLink from './ExternalLink'
 import Icon from './Icon'
 
 export interface DropDownMenuItem {
@@ -19,10 +20,16 @@ export interface DropDownMenuItem {
 interface DropdownMenuProps {
   items: DropDownMenuItem[]
   alignLeft?: boolean
+  className?: string
 }
 
 // itemProps will be passed into the onClick handler for each item in the dropdown
-const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, alignLeft=false }) => {
+const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  children,
+  items,
+  alignLeft=false,
+  className=''
+}) => {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
 
@@ -41,8 +48,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, items, alignLeft=
   }, [handleClickOutside])
 
   return (
-    <div ref={ref} className='relative inline-block text-left'>
-      <div onClick={() => { setOpen(!open) }} className='cursor-pointer'>
+    <div ref={ref} className={classNames('relative inline-block text-left', className)}>
+      <div onClick={() => { setOpen(!open) }} className='cursor-pointer flex items-center'>
         {children}
       </div>
       {open && (
