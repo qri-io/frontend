@@ -1,84 +1,129 @@
-import { AnyAction } from '@reduxjs/toolkit'
-
 import { ApiAction, ApiActionThunk, CALL_API} from '../../../store/api'
 
+// logIn will get a token from the API, then use that token to immediately get User data
 export function logIn (username: string, password: string): ApiActionThunk {
   return async (dispatch) => {
     dispatch({
-      type: 'API_LOGIN_REQUEST'
+      type: 'LOGIN_REQUEST'
     })
 
-    // TODO (ramfox): we want the frontend to have some sense of identity that
-    // is tied to the backend, and until we have an actual login/signup process
-    // we are hijacking this to use the actual username that is recognized by
-    // the backend
-    // if the username typed into the login is not the username the qri node
-    // goes by, we error
-    // this should be replaced by an actual login process that validates the
-    // password and gives the browser a token it can use to properly communicate
-    // with the backend
-    var peername = ''
-    await dispatch(fetchUsername()).then((action: AnyAction) => {
-      peername = action.payload.data
-    })
-    if (peername !== username) {
-      return (dispatch({
-        type: 'API_LOGIN_FAILURE',
-        payload: {
-          err: {
-            message: `unrecognized username "${username}"`
-          }
-        }
-      }))
-    }
+    try {
+      // get the json web token
+      const tokenResponse = await dispatch(fetchToken(username, password))
 
-    return dispatch({
-      type: 'API_LOGIN_SUCCESS',
-      payload: {
-        username: peername
+      if (tokenResponse.type === 'API_TOKEN_FAILURE') {
+        throw new Error(`Login failed: ${tokenResponse.payload.err.message}`)
       }
-    })
+
+      const token = tokenResponse.payload.data.access_token
+
+      // get user data
+      // pass access_token directly to fetchSession so it can be used immediately
+      const userResponse = await dispatch(fetchSession(token))
+
+      if (userResponse.type === 'API_SESSION_FAILURE') {
+        throw new Error(`Could not get user: ${userResponse.payload.err.message}`)
+      }
+
+      const user = userResponse.payload.data
+
+      return dispatch({
+        type: 'LOGIN_SUCCESS',
+        user,
+        token
+      })
+    } catch (e) {
+      return dispatch({
+        type: 'LOGIN_FAILURE',
+        error: e.toString()
+      })
+    }
   }
 }
 
 export function logOut (): ApiActionThunk {
   return async (dispatch) => {
-    return dispatch({
-      type: 'API_LOGOUT_SUCCESS',
-      payload: {}
-    })
+    return dispatch({ type: 'LOGOUT_SUCCESS' })
   }
 }
 
 export function signUp (email: string, username: string, password: string): ApiActionThunk {
-  // TODO (ramfox): until we have a proper sign up process (that takes a password)
-  // and allows the user to have its own identity on the qri node that is separate
-  // from the id assocaited with the qri node itself, let's disable this 
-  // the failure dispatches a message to the user saying that there is no
-  // way to currently signup
   return async (dispatch) => {
-    return dispatch({
-      type: 'API_SIGNUP_FAILURE',
-      payload: {
-        err: {
-          message: "signup is currently disabled"
-        }
-      }
+    dispatch({
+      type: 'SIGNUP_REQUEST'
     })
+
+    try {
+      // get the json web token
+      const signupResponse = await dispatch(fetchSignup(email, username, password))
+
+      if (signupResponse.type === 'API_SIGNUP_FAILURE') {
+        throw new Error(`Signup failed: ${signupResponse.payload.err.message}`)
+      }
+
+      const token = signupResponse.payload.data.access_token
+
+      // get user data
+      // pass access_token directly to fetchSession so it can be used immediately
+      const userResponse = await dispatch(fetchSession(token))
+
+      if (userResponse.type === 'API_SESSION_FAILURE') {
+        throw new Error(`Could not get user: ${userResponse.payload.err.message}`)
+      }
+
+      const user = userResponse.payload.data
+
+      return dispatch({
+        type: 'SIGNUP_SUCCESS',
+        user,
+        token
+      })
+    } catch (e) {
+      return dispatch({
+        type: 'SIGNUP_FAILURE',
+        error: e.toString()
+      })
+    }
   }
 }
 
-function mapUsername(profile: Record<string, any>): string {
-  return profile.peername
+export function fetchSignup(email: string, username: string, password: string): ApiAction {
+  return {
+    type: 'signup',
+    [CALL_API]: {
+      endpoint: 'identity/profile/new?__code=409',
+      method: 'POST',
+      body: {
+        email,
+        username,
+        password
+      }
+    }
+  }
 }
 
-export function fetchUsername(): ApiAction {
+
+
+export function fetchToken(username: string, password: string): ApiAction {
+  return {
+    type: 'token',
+    [CALL_API]: {
+      endpoint: 'oauth/token?grant_type=password',
+      method: 'POST',
+      form: {
+        username,
+        password
+      }
+    }
+  }
+}
+
+export function fetchSession(accessToken: string): ApiAction {
   return {
     type: 'session',
     [CALL_API]: {
-      endpoint: 'me',
-      method: 'GET',
-      map: mapUsername
+      endpoint: 'identity/session',
+      token: accessToken
     }
   }
 }

@@ -51,7 +51,7 @@ const SignUpModal: React.FC = () => {
       signUp(email, username, password)(dispatch)
         .then((action: AnyAction) => {
           if (getActionType(action) === ACTION_FAILURE) {
-            setSignupError(action.payload.err.message)
+            setSignupError(action.error)
             return
           }
           dispatch(clearModal())

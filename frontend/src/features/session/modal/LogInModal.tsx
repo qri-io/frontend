@@ -32,7 +32,7 @@ const LogInModal: React.FC = () => {
     logIn(username, password)(dispatch)
       .then((action: AnyAction) => {
         if (getActionType(action) === ACTION_FAILURE) {
-          setLoginError(action.payload.err.message)
+          setLoginError(action.error)
           return
         }
         dispatch(clearModal())
