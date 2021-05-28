@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
 
 import { newQriRef } from '../../qri/ref';
-import { selectDsPreview, selectIsDsPreviewLoading } from './state/dsPreviewState'
+import { selectDsPreview } from './state/dsPreviewState'
 import { loadDsPreview } from './state/dsPreviewActions'
-import DatasetComponent from '../dsComponents/DatasetComponent'
 import Spinner from '../../chrome/Spinner'
 import ContentBox from '../../chrome/ContentBox'
 import Icon from '../../chrome/Icon'
@@ -19,6 +18,8 @@ import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 import DeployingScreen from '../deploy/DeployingScreen'
 import commitishFromPath from '../../utils/commitishFromPath'
+import Readme from '../dsComponents/readme/Readme'
+import { qriRefFromDataset } from '../../qri/dataset'
 
 
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState';
@@ -32,7 +33,6 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   qriRef
 }) => {
   const dataset = useSelector(selectDsPreview)
-  const loading = useSelector(selectIsDsPreviewLoading)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const dispatch = useDispatch()
 
@@ -50,32 +50,37 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
     dispatch(loadDsPreview(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path ])
 
-
   return (
     <div className='flex flex-col h-full w-full bg-qrigray-100'>
       <NavBar />
       <div className='flex overflow-hidden w-full'>
         <DatasetNavSidebar qriRef={qriRef} />
-        {loading
+        {!dataset
         ? (<div className='w-full h-full p-4 flex justify-center items-center'>
             <Spinner color='#4FC7F3' />
           </div>)
         : (
           <div className='overflow-y-scroll overflow-x-hidden flex-grow relative flex'>
-            <div className='max-w-screen-lg mx-auto py-9 flex-grow'>
+            <div className='max-w-screen-lg mx-auto p-9 w-full flex-grow'>
               <DatasetHeader qriRef={qriRef} editable={editable} noBorder />
               <div className='-ml-2 -mr-3 mb-5'>
                 <div className='w-7/12 px-2 inline-block align-top' style={{ height: readmeContainerHeight}}>
                   <ContentBox className='flex flex-col h-full'>
                     <ContentBoxTitle title='Readme'/>
                     <div className='flex-grow overflow-hidden'>
-                      <DatasetComponent
-                        key='readme'
-                        componentName={'readme'}
-                        dataset={dataset}
-                      />
+                      {
+                        dataset.readme ? (
+                          <Readme qriRef={qriRefFromDataset(dataset)} />
+                        ) : (
+                          <div className='h-full w-full flex items-center'>
+                            <div className='text-center mx-auto text-sm'>
+                              No Readme
+                            </div>
+                          </div>
+                        )
+                      }
                     </div>
-                    {!expandReadme && (<div className='text-qriblue text-sm cursor-pointer' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+                    {!expandReadme && (<div className='text-qriblue text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                   </ContentBox>
                 </div>
                 <div ref={versionInfoContainer} className='w-5/12 px-3 inline-block align-top'>
@@ -87,9 +92,9 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                           <Icon icon='commit' size='sm' className='-ml-2' />
                           <div className='font-medium'>{commitishFromPath(dataset.path)}</div>
                         </div>
-                        <div className='text-sm text-qrinavy mb-2'>{dataset.commit && dataset.commit.title}</div>
+                        <div className='text-sm text-qrinavy mb-2'>{dataset.commit?.title}</div>
                         <div className='flex items-center text-gray-400'>
-                          <RelativeTimestampWithIcon timestamp={new Date(dataset.commit && dataset.commit.timestamp)} className='mr-3' />
+                          <RelativeTimestampWithIcon timestamp={new Date(dataset.commit?.timestamp)} className='mr-3' />
                           <UsernameWithIcon username='chriswhong' className='mt-0.5' />
                         </div>
                       </div>
@@ -97,12 +102,12 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     </div>
                     {/* Bottom of the box */}
 
-                    {dataset.meta && dataset.meta.description && (
-                      <div className='pt-4 text-gray-400 text-xs tracking-wider mb-2'>{dataset.meta.description}</div>
-                    )}
 
-                    {dataset.meta && dataset.meta.keywords && dataset.meta.keywords.map((keyword) => {
-                      return <div key={keyword} className='leading-tight text-gray-400 text-xs tracking-wider inline-block border border-qrigray-400 rounded-md px-2 py-1 mr-2'>{keyword}</div>
+                    <div className='pt-4 text-gray-400 text-xs tracking-wider mb-2'>{(dataset.meta?.description) || 'No Description'}</div>
+
+
+                    {dataset.meta?.keywords?.map((keyword) => {
+                      return <div key={keyword} className='leading-tight text-gray-400 text-xs tracking-wider inline-block border border-qrigray-400 rounded-md px-2 py-1 mr-1 mb-1'>{keyword}</div>
                     })}
                   </ContentBox>
                 </div>

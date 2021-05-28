@@ -12,8 +12,8 @@ const ConnectionStatus: React.FC<{}> = () => {
   }
 
   return (
-    <div className='flex'>
-      <div className='mt-1'>
+    <div className='flex items-center'>
+      <div className=''>
         <StatusDot showNoChanges status={componentStatusFromWSConnectionStatus(state.status)} />
       </div>
       <div className='ml-2'>
@@ -27,7 +27,7 @@ const ConnectionStatus: React.FC<{}> = () => {
               return "Connecting"
             case WSConnectionStatus.interrupted:
               return "Reconnecting..."
-            default: 
+            default:
               return null
           }
         })()}

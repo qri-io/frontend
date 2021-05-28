@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
-import { refStringFromQriRef, QriRef } from '../../../qri/ref'
+import { QriRef } from '../../../qri/ref'
 import { API_BASE_URL } from '../../../store/api'
 
 export interface ReadmeProps {
@@ -11,26 +11,33 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
   const { qriRef } = props
   const [hasReadme, setHasReadme] = React.useState(true)
 
-  const qriRefStr = refStringFromQriRef(qriRef)
-
   const refCallback = useCallback((el: HTMLDivElement) =>{
     if (el !== null) {
       fetch(`${API_BASE_URL}/dataset_summary/readme?path=${qriRef.path}`)
-        .then(async (res) => {
-          return res.text()
+        .then((res) => {
+          if (res.ok) {
+            return res.text()
+          } else {
+            return Promise.reject('error 404')
+          }
         })
-        .then((render) => {
-          if (!render) { setHasReadme(false) }
-          el.innerHTML = render
+        .then((renderedReadme) => {
+          el.innerHTML = renderedReadme
         })
-
-      const render = "<h1>Heading</h1><p>Lorem Ipsum Dolor</p><p><strong>bold text</strong></p><h2>Heading 2</h2>"
-      el.innerHTML = render
+        .catch((e) => {
+          setHasReadme(false)
+        })
     }
-  }, [qriRefStr])
+  }, [qriRef.path])
 
   if (!hasReadme) {
-    return null
+    return (
+      <div className='h-full w-full flex items-center'>
+        <div className='text-center mx-auto text-sm'>
+          Error fetching readme
+        </div>
+      </div>
+    )
   }
   return (
     <div className='h-full w-full'>

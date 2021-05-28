@@ -1,15 +1,12 @@
 // TODO(chriswhong): BodyPreview and Body should be combined since they share a lot of the same logic
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import numeral from 'numeral'
 
 import Dataset,  { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
 
 import BodyTable from './BodyTable'
 import BodyJson from './BodyJson'
-import { useDispatch } from 'react-redux'
-import { loadBody } from '../../dataset/state/datasetActions'
-import { newQriRef } from '../../../qri/ref'
 import Icon from '../../../chrome/Icon'
 
 export interface BodyProps {
@@ -34,19 +31,10 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
 const Body: React.FC<BodyProps> = ({
   dataset,
 }) => {
-  const dispatch = useDispatch()
   const {
     body,
     structure,
-    path,
-    name,
-    peername: username
   } = dataset
-
-  // list out dependencies on dataset body individually for proper memoization
-  useEffect(() => {
-    dispatch(loadBody(newQriRef({ path, name, username }), 1, 100))
-  }, [dispatch, path, name, username])
 
   if (!body) {
     return (

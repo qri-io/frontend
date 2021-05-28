@@ -115,7 +115,8 @@ module.exports = {
     extend: {
       fontWeight: ['hover'],
       cursor: ['hover'],
-      borderWidth: ['last']
+      borderWidth: ['last'],
+      margin: ['last']
     },
   },
   plugins: [
