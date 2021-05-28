@@ -11,6 +11,7 @@ import { workflowReducer, WorkflowState } from '../features/workflow/state/workf
 import { AppState, appReducer } from '../features/app/state/appState';
 import { CollectionState, collectionReducer } from '../features/collection/state/collectionState';
 import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
+import { dsPreviewReducer, DsPreviewState } from '../features/dsPreview/state/dsPreviewState';
 import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
 import { searchReducer, SearchState } from '../features/search/state/searchState';
 import { deployReducer, DeployState } from '../features/deploy/state/deployState';
@@ -28,6 +29,7 @@ export interface RootState {
   collection: CollectionState
   commits: CommitsState
   dataset: DatasetState
+  dsPreview: DsPreviewState
   deploy: DeployState
   router: RouterState
   scroller: ScrollerState
@@ -46,6 +48,7 @@ const rootReducer = (h: History) => combineReducers({
   commits: commitsReducer,
   dataset: datasetReducer,
   deploy: deployReducer,
+  dsPreview: dsPreviewReducer,
   // apparently connected-router's types are no good.
   // https://github.com/reduxjs/redux-toolkit/issues/506#issuecomment-614295927
   // router: connectRouter(h) as any as Reducer<RouterState>,

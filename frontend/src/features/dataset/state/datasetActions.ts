@@ -6,7 +6,7 @@ import { RENAME_NEW_DATASET } from "./datasetState";
 export const bodyPageSizeDefault = 50
 
 export function mapDataset(d: object | []): Dataset {
-  return NewDataset((d as Record<string,any>).dataset)
+  return NewDataset((d as Record<string,any>))
 }
 
 export function mapBody (d: {data: Body}): Body {
@@ -25,7 +25,7 @@ function fetchDataset (ref: QriRef): ApiAction {
     type: 'dataset',
     ref,
     [CALL_API]: {
-      endpoint: 'get',
+      endpoint: 'dataset_summary',
       method: 'GET',
       segments: ref,
       map: mapDataset

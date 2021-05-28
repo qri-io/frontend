@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
 
-import { selectDataset, selectIsDatasetLoading } from '../dataset/state/datasetState'
+import { newQriRef } from '../../qri/ref';
+import { selectDsPreview, selectIsDsPreviewLoading } from './state/dsPreviewState'
+import { loadDsPreview } from './state/dsPreviewActions'
 import DatasetComponent from '../dsComponents/DatasetComponent'
 import Spinner from '../../chrome/Spinner'
 import ContentBox from '../../chrome/ContentBox'
@@ -18,6 +20,7 @@ import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 import DeployingScreen from '../deploy/DeployingScreen'
 import commitishFromPath from '../../utils/commitishFromPath'
 
+
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState';
 import { QriRef } from '../../qri/ref'
 
@@ -28,9 +31,10 @@ interface DatasetPreviewPageProps {
 const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   qriRef
 }) => {
-  const dataset = useSelector(selectDataset)
-  const loading = useSelector(selectIsDatasetLoading)
+  const dataset = useSelector(selectDsPreview)
+  const loading = useSelector(selectIsDsPreviewLoading)
   const editable = useSelector(selectSessionUserCanEditDataset)
+  const dispatch = useDispatch()
 
   const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions();
   const [expandReadme, setExpandReadme] = useState(false)
@@ -40,6 +44,12 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   if (expandReadme) {
     readmeContainerHeight = 'auto'
   }
+
+  useEffect(() => {
+    const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
+    dispatch(loadDsPreview(ref))
+  }, [dispatch, qriRef.username, qriRef.name, qriRef.path ])
+
 
   return (
     <div className='flex flex-col h-full w-full bg-qrigray-100'>
