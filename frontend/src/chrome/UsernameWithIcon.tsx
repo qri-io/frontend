@@ -11,7 +11,7 @@ const UsernameWithIcon: React.FunctionComponent<UsernameWithIconProps> = ({
   username,
   className
 }) => (
-   <div className={classNames('flex text-xs tracking-wider leading-snug', className)}>
+   <div className={classNames('flex items-center text-xs tracking-wider leading-snug', className)}>
      <div className='rounded-xl inline-block mr-1 bg-cover flex-shrink-0' style={{
        height: '18px',
        width: '18px',

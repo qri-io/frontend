@@ -39,7 +39,7 @@ interface BodyTableProps {
 //   return Math.abs(scrollTop + offsetHeight - scrollHeight) < buffer
 // }
 
-const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap border-r border-gray-200 '
+const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap border-r border-gray-200 max-w-xs'
 
 
 export default class BodyTable extends React.Component<BodyTableProps> {

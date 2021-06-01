@@ -33,7 +33,7 @@ const DatasetCommitItem: React.FC<DatasetCommitItemProps> = ({
         </div>
       </div>
       <Link className={classNames('block rounded-md p-4 mb-6 w-full overflow-x-hidden', active && 'bg-white', !active && 'text-gray-400 border border-gray-300')} to={pathToDatasetViewer(newQriRef(logItem))}>
-        <div className='flex mb-1'>
+        <div className='flex mb-1 justify-between'>
           <UsernameWithIcon username={logItem.username} />
           <div className='flex-grow-0 text-qrigreen'>
             <Icon icon='automationFilled' size='sm'/>

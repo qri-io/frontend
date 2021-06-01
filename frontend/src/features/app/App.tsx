@@ -18,7 +18,7 @@ const App: React.FC<any> = () => {
   })
 
   return (
-    <div id='app' className='flex flex-col h-screen w-screen'>
+    <div id='app' className='flex flex-col h-screen w-screen' style={{ minWidth: '1100px' }}>
       <ConnectedRouter history={history}>
         <Modal />
         <Routes />
