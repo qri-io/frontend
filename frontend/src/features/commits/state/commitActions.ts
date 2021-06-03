@@ -17,8 +17,11 @@ function fetchDatasetCommits(qriRef: QriRef): ApiAction {
     type: 'dataset_commits',
     qriRef,
     [CALL_API]: {
-      endpoint: `history/${qriRef.username}/${qriRef.name}`,
-      method: 'GET',
+      endpoint: `history/`,
+      method: 'POST',
+      body: {
+        ref: `${qriRef.username}/${qriRef.name}`
+      },
       map: mapCommits
     }
   }
