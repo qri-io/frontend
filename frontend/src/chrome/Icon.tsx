@@ -6,7 +6,6 @@ import {
   faArrowRight,
   faBars,
   faBolt,
-  faCaretDown,
   faCheckCircle,
   faCircle,
   faCloudUploadAlt,
@@ -52,6 +51,7 @@ import Body from './icon/Body'
 import Brackets from './icon/Brackets'
 import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
+import CaretDown from './icon/CaretDown'
 import Checkbox from './icon/Checkbox'
 import Clock from './icon/Clock'
 import Code from './icon/Code'
@@ -102,7 +102,6 @@ const faIcons: Record<string, IconDefinition> = {
   'bars': faBars,
   'bolt': faBolt,
   'boolean': faToggleOn,
-  'caretDown': faCaretDown,
   'check': faCheck,
   'checkCircle': faCheckCircle,
   'circle': faCircle,
@@ -164,6 +163,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     brackets: <Brackets className={className} size={size} />,
     caretLeft: <CaretLeft className={className} size={size} />,
     caretRight: <CaretRight className={className} size={size} />,
+    caretDown: <CaretDown className={className} size={size} />,
     checkbox: <Checkbox className={className} size={size} />,
     clock: <Clock className={className} size={size} />,
     code: <Code className={className} size={size} />,
@@ -197,7 +197,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     return <FontAwesomeIcon rotation={rotation} size={sizes[size]} icon={faIcons[icon]} className={className} spin={spin} />
   }
 
-  return customIcons[icon]
+  return customIcons[icon] || '?'
 }
 
 export default Icon

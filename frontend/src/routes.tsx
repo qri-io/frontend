@@ -17,6 +17,7 @@ import Collection from './features/collection/Collection';
 import Dashboard from './features/dashboard/Dashboard';
 import DatasetRoutes from './features/dataset/DatasetRoutes';
 import { AnonUser, selectSessionUser } from './features/session/state/sessionState'
+import UserProfile from './features/userProfile/UserProfile'
 
 const PrivateRoute: React.FC<any>  = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
@@ -52,6 +53,10 @@ export default function Routes () {
 
         <Route path='/notifications'><NotificationList /></Route>
         <Route path='/notification_settings'><NotificationSettings /></Route>
+
+        <Route path='/:username' exact><UserProfile /></Route>
+        <Route path='/:username/following'><UserProfile path='/following' /></Route>
+
 
         <Route path='/'>
           {

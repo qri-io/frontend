@@ -5,9 +5,6 @@ import querystring from 'querystring'
 
 import Icon from '../chrome/Icon'
 
-import { QueryParams } from '../qri/queryParams'
-
-
 export interface PageInfo {
   resultCount: number
   page: number
@@ -20,7 +17,7 @@ export interface PageChangeObject {
 
 interface PageControlProps {
   pageInfo: PageInfo
-  queryParams: QueryParams
+  queryParams: Record<string, any>
   showRange?: boolean
   onPageChange: (o:PageChangeObject) => void
 }

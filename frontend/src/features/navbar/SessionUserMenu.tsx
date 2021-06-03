@@ -39,7 +39,7 @@ const SessionUserMenu: React.FC<{}> = () => {
   const menuItems = [
     {
       text: 'Profile',
-      link: '/profile'
+      link: `/${user.username}`
     },
     {
       text: 'Send Feedback',
