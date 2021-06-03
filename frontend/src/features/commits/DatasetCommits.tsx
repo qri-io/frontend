@@ -22,8 +22,15 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
   const commits = useSelector(newDatasetCommitsSelector(qriRef))
   const loading = useSelector(selectDatasetCommitsLoading)
   const editable = useSelector(selectSessionUserCanEditDataset)
-  const { fs, hash } = useParams()
+  let { fs, hash } = useParams()
+
+  // if there are no fs/hash in the URL, set it to the fs/hash of the latest commit
+  if ((!fs && !hash) && commits.length) {
+    [,fs, hash] = commits[0].path.split('/')
+  }
+
   const path = `/${fs}/${hash}`
+
 
   useEffect(() => {
     dispatch(loadDatasetCommits(newQriRef({ username: qriRef.username, name: qriRef.name })))
@@ -33,7 +40,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
     <div className='pt-4 overflow-y-hidden flex flex-col text-xs flex-shrink-0' style={{ width: '325px'}}>
       <header className='flex-grow-0 mb-4'>
         <h3 className='text-2xl text-qrinavy-500 font-black'>History</h3>
-        <div className='text-xs text-gray-400 tracking-wider'>{commits.length === 1 ? 'version' : 'versions'}</div>
+        <div className='text-xs text-gray-400 tracking-wider'>{commits.length} {commits.length === 1 ? 'version' : 'versions'}</div>
       </header>
       <ul className='block flex-grow overflow-y-auto pb-40 pr-8'>
         <HistorySearchBox />
