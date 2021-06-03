@@ -13,15 +13,12 @@ import Readme from './readme/Readme'
 export interface DatasetComponentProps {
   dataset: Dataset
   componentName: ComponentName
-  noHeader?: boolean
 }
 
 const DatasetComponent: React.FC<DatasetComponentProps> = ({
   dataset,
   componentName,
-  noHeader = false
 }) => {
-
   let component: JSX.Element
   switch (componentName) {
     case 'body':
@@ -48,14 +45,14 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
 
   return (
     <div
-      className={classNames(
-        'rounded-md bg-white w-full overflow-auto', {
-        'rounded-tl-none' : noHeader,
-        'my-6': !noHeader
-      })}
+      className='rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col'
     >
-      {!noHeader && <ComponentHeader componentName={componentName} />}
-      {component}
+      <ComponentHeader>
+        &nbsp;
+      </ComponentHeader>
+      <div className='overflow-auto flex-grow'>
+        {component}
+      </div>
     </div>
   )
 }
