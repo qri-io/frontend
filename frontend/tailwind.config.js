@@ -116,7 +116,8 @@ module.exports = {
       fontWeight: ['hover'],
       cursor: ['hover'],
       borderWidth: ['last'],
-      margin: ['last']
+      margin: ['last'],
+      padding: ['first', 'last']
     },
   },
   plugins: [

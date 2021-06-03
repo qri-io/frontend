@@ -19,7 +19,7 @@ const DatasetInfoItem: React.FC<DatasetInfoItemProps> = ({
 
 
   return (
-    <div className='text-qrinavy-500 text-sm flex items-center inline-block mr-5'>
+    <div className='text-qrinavy-500 text-sm flex items-center inline-block mr-5 mb-2'>
       <div className='mr-1 flex items-center'>
         {(typeof icon === 'string') ? <Icon icon={icon} size='sm' className={iconClassName} /> : icon }
       </div>

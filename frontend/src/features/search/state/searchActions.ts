@@ -1,12 +1,10 @@
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
 
-import { NewSearchResult } from '../../../qri/search'
+import { NewSearchResult, SearchParams } from '../../../qri/search'
 
-export const searchPageSizeDefault = 25
-
-export function loadSearchResults(q: string, page: number = 1, pageSize: number = searchPageSizeDefault): ApiActionThunk {
+export function loadSearchResults(searchParams: SearchParams): ApiActionThunk {
   return async (dispatch, getState) => {
-    return dispatch(fetchSearchResults(q, page, pageSize))
+    return dispatch(fetchSearchResults(searchParams))
   }
 }
 
@@ -14,17 +12,25 @@ const mapSearchResults = (results) => {
   return results.map((d) => NewSearchResult(d))
 }
 
-function fetchSearchResults (q: string, page: number, pageSize: number): ApiAction {
+const mapFrontendParams = (frontendParams: SearchParams) => {
+  // map frontend 'sort' param to backend 'orderBy'
+  return {
+    q: frontendParams.q,
+    orderBy: frontendParams.sort === 'recentlyupdated' ? 'created,desc' : 'name,asc'
+  }
+}
+
+function fetchSearchResults (searchParams: SearchParams): ApiAction {
   return {
     type: 'search',
     [CALL_API]: {
       endpoint: 'search',
       method: 'GET',
       pageInfo: {
-        page,
-        pageSize
+        page: searchParams.page,
+        pageSize: searchParams.pageSize
       },
-      query: { q },
+      query: mapFrontendParams(searchParams),
       map: mapSearchResults
     }
   }

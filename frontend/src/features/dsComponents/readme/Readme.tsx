@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 
 import { QriRef } from '../../../qri/ref'
 import { API_BASE_URL } from '../../../store/api'

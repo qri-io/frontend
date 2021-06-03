@@ -22,10 +22,10 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset }) => {
       followStats
     } = dataset
     const datasetReference = `${peername}/${name}`
-    let { title, description } = meta
-    if (title === undefined) {
-      title = datasetReference
-    }
+
+    const title = meta?.title || datasetReference
+
+    const description = meta?.description
 
     const timestamp = new Date(commit.timestamp)
 
@@ -38,11 +38,11 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset }) => {
     )
 
     return (
-      <div key={datasetReference} className='pt-5 pb-6 border-b border-qrigray-200 last:border-b-0'>
+      <div key={datasetReference} className='pt-5 pb-6 border-b border-qrigray-200 last:border-b-0 first:pt-0 last:pb-0'>
         <Link to={`/ds/${datasetReference}`}><div className='text-sm text-gray-400 relative flex items-baseline group hover:text mb-2 font-mono hover:underline'>{datasetReference}</div></Link>
         <Link to={`/ds/${datasetReference}`}><div className='text-xl text-qrinavy-500 font-medium hover:text hover:underline mb-3'>{title}</div></Link>
-        {description && (<div className='text-sm text-qrigray hover:text line-clamp-3 mb-3'>{description}</div>)}
-        <div className='flex items-center'>
+        <div className='text-sm text-qrigray hover:text line-clamp-3 mb-3'>{description || 'No Description'}</div>
+        <div className='flex items-center flex-wrap'>
           <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={timestamp} />} />
           <DatasetInfoItem icon={userIcon} label={peername} />
           <DatasetInfoItem icon='disk' label={numeral(structure.length).format('0.0b')} />

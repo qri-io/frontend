@@ -12,17 +12,32 @@ export interface PageInfo {
 export interface SearchParams {
   q: string
   sort: '' | 'name' | 'recentlyupdated'
-  page?: number
-  pagesize?: number
+  page: number
+  pageSize: number
 }
+
+const DEFAULT_SORT = 'recentlyupdated'
+const DEFAULT_PAGE = 1
+const DEFAULT_PAGESIZE = 25
 
 export function NewSearchParams(d: Record<string,any>): SearchParams {
   return {
     q: d.q || '',
-    sort: d.sort || 'recentlyupdated',
-    page: d.page,
-    pagesize: d.pagesize,
+    sort: d.sort || DEFAULT_SORT,
+    page: d.page || DEFAULT_PAGE,
+    pageSize: d.pageSize || DEFAULT_PAGESIZE
   }
+}
+
+export function CleanSearchParams(d: SearchParams): Record<string, any> {
+  const cleanParams:any = {
+    q: d.q
+  }
+  if (d.sort !== DEFAULT_SORT) { cleanParams.sort = d.sort }
+  if (d.page !== DEFAULT_PAGE) { cleanParams.page = d.page }
+  if (d.pageSize !== DEFAULT_PAGESIZE) { cleanParams.pageSize = d.pageSize }
+
+  return cleanParams
 }
 
 export interface SearchResult extends Dataset {

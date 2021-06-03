@@ -10,11 +10,13 @@ export interface DropDownMenuItem {
   // link overrides `onClick`, ie if you have both link and onClick set, only
   // the link will work
   link?: string
-  onClick?: (e?: React.MouseEvent) => void
+  active: boolean
   text: string
   disabled?: boolean
   // icon: options are found in the `Icon` component
   icon?: string
+  onClick?: (e?: React.MouseEvent) => void
+
 }
 
 interface DropdownMenuProps {
@@ -60,16 +62,16 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
           aria-labelledby="options-menu"
           style={{ minWidth: '9rem' }}
         >
-          <div className="py-1" onClick={ () => setOpen(false) }>
-            {items && items.map(({ link, onClick, text, icon='', disabled=false }, i) => {
-              let linkButtonClass = 'w-full block text-left px-4 py-2 text-sm whitespace-nowrap overflow-hidden'
+          <div className="py-1 flex flex-col" onClick={ () => setOpen(false) }>
+            {items && items.map(({ link, active, onClick, text, icon='', disabled=false }, i) => {
+              let linkButtonClass = 'text-left text-xs px-2 py-0.5 mx-2 my-1 whitespace-nowrap rounded-md'
               if (!disabled) {
-                linkButtonClass = `${linkButtonClass} hover:pointer text-gray-700 hover:bg-gray-100 hover:text-gray-900`
+                linkButtonClass = `${linkButtonClass} hover:pointer text-qrigray-400 hover:bg-gray-100`
               } else {
                 linkButtonClass = `${linkButtonClass} text-gray-400`
               }
 
-              const content = <span>{icon && <Icon icon={icon} className='mr-2' size='sm' />}{text}</span>
+              const content = <span className={classNames({ 'text-qripink font-semibold': active })}>{icon && <Icon icon={icon} className='mr-2' size='sm' />}{text}</span>
 
               if (link) {
                 if (link.startsWith('http')) {
