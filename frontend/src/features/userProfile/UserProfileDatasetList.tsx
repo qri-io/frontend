@@ -1,4 +1,5 @@
 import React from 'react'
+import ContentLoader from 'react-content-loader'
 
 import ContentBox from '../../chrome/ContentBox'
 import PageControl from '../../chrome/PageControl'
@@ -26,6 +27,7 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
   const {
     results,
     pageInfo,
+    loading
   } = paginatedResults
 
   const {
@@ -61,7 +63,19 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
       <ContentBox className='mb-6 rounded-tl-none pt-5 pb-5 pr-5 pl-5'>
         <div className='flex items-center justify-between border-b pb-5'>
           <div className='text-qrigray'>
-            Page {page} of {totalPages}
+            {
+              loading ? (
+                <ContentLoader
+                  width={100}
+                  height={20}
+                >
+                  <rect y="0" width="100" height="18" rx="6"/>
+                </ContentLoader>
+              ) : (
+                <>Page {page} of {totalPages}</>
+              )
+            }
+
           </div>
           <DropdownMenu items={menuItems} className='ml-8'>
             <div className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 py-2 cursor-pointer'>
@@ -70,7 +84,7 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
             </div>
           </DropdownMenu>
         </div>
-        <DatasetList datasets={results} />
+        <DatasetList datasets={results} loading={loading} />
       </ContentBox>
       <PageControl
         pageInfo={pageInfo}

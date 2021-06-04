@@ -5,6 +5,7 @@ import { PageInfo, SearchResult } from '../../../qri/search'
 import { UserProfile, NewUserProfile } from '../../../qri/userProfile'
 
 export const selectUserProfile = (state: RootState): UserProfile => state.userProfile.profile
+export const selectUserProfileLoading = (state: RootState): boolean => state.userProfile.loading
 export const selectUserProfileDatasets = (state: RootState): PaginatedResults => state.userProfile.datasets
 export const selectUserProfileFollowing = (state: RootState): PaginatedResults => state.userProfile.following
 

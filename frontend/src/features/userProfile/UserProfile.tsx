@@ -10,6 +10,7 @@ import {
 } from './state/userProfileActions'
 import {
   selectUserProfile,
+  selectUserProfileLoading,
   selectUserProfileDatasets,
   selectUserProfileFollowing,
 } from './state/userProfileState'
@@ -34,6 +35,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
   const history = useHistory()
 
   const profile = useSelector(selectUserProfile)
+  const loading = useSelector(selectUserProfileLoading)
 
   const paginatedDatasetResults = useSelector(selectUserProfileDatasets)
   const paginatedFollowingResults = useSelector(selectUserProfileFollowing)
@@ -101,7 +103,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
       <div className='flex-grow w-full py-9'>
         <div className='mx-auto flex' style={{ maxWidth: '1040px' }}>
           <div className='flex-auto'>
-              <UserProfileHeader profile={profile} />
+              <UserProfileHeader profile={profile} loading={loading} />
               <ContentTabs
                 tabs={tabs}
               />

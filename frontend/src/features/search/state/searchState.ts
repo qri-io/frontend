@@ -5,6 +5,8 @@ import { SearchResult, PageInfo } from '../../../qri/search'
 
 export const selectSearchResults = (state: RootState): SearchResult[] => state.search.results
 export const selectSearchPageInfo = (state: RootState): PageInfo => state.search.pageInfo
+export const selectSearchLoading = (state: RootState): boolean => state.search.loading
+
 
 export interface SearchState {
   results: SearchResult[]
