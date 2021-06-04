@@ -12,7 +12,7 @@ function fetchDsPreview (ref: QriRef): ApiAction {
     type: 'datasetpreview',
     ref,
     [CALL_API]: {
-      endpoint: 'dataset_summary',
+      endpoint: 'ds/get',
       method: 'GET',
       segments: ref
     }

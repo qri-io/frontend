@@ -9,6 +9,7 @@ export type RunStatus =
 
 export interface Workflow {
   id: string
+  ref: string
   ownerID?: string
   datasetID?: string
 
@@ -29,6 +30,7 @@ export interface Workflow {
 export function NewWorkflow(data: Record<string,any>): Workflow {
   return {
     id: data.id || '',
+    ref: data.ref || '',
     datasetID: data.datasetID,
     ownerID: data.ownerID,
 
