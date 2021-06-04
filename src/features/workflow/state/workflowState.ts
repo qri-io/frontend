@@ -112,9 +112,9 @@ export const workflowReducer = createReducer(initialState, {
     // UPDATE: we're now passing the ref as a prop in workflow fetching actions
     // (see deploy reducer for an example usage), we should be able to add in this
     // ref check
-    const steps = state.workflow.steps
+    // const steps = state.workflow.steps
     state.workflow = w
-    state.workflow.steps = steps
+    // state.workflow.steps = steps
   },
 })
 

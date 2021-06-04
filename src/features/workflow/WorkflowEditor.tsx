@@ -49,7 +49,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
         <WorkflowTriggersEditor triggers={workflow.triggers} />
         <ScrollAnchor id='script' />
         <section className='bg-white shadow-sm mb-4'>
-            <div className='bg-white sticky top-0 z-10 p-4 flex shadow-sm'>
+            <div className='bg-white top-0 z-10 p-4 flex shadow-sm'>
               <div className='flex-grow'>
                   <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Script</h2>
                 <div className='text-xs'>Use code to download source data, transform it, and commit the next version of this dataset</div>
@@ -63,7 +63,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
                 r = (run?.steps && run?.steps.length >= i) ? run.steps[i] : NewRunStep({ status: "waiting" })
               }
               return (<WorkflowCell
-                key={i}
+                key={step.category}
                 index={i}
                 step={step}
                 run={r}

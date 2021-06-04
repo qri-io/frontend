@@ -41,6 +41,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
 }) => {
   const { syntax, name, script } = step
   const description = nameLookup(name)
+  console.log(script)
 
   let editor: React.ReactElement
   switch (syntax) {

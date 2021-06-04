@@ -130,8 +130,11 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       grow: 1,
       cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
-          <div className='w-8 mr-2 flex-shrink-0'>
-            <Icon icon='automationFilled' className='text-qrigreen' />
+          <div className='w-8 mr-2'>
+            {row.workflowID
+              ? <Icon icon='automationFilled' className='text-qrigreen' />
+              : <Icon icon='automationFilled' className='text-gray' />
+            }
           </div>
           <div className='truncate'>
             <div className='mb-1'>
