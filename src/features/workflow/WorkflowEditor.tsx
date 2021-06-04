@@ -63,7 +63,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
               }
               return (
                 <WorkflowCell
-                  key={i}
+                  key={step.category}
                   index={i}
                   step={step}
                   run={r}
