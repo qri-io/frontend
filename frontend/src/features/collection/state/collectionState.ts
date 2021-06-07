@@ -1,14 +1,14 @@
 import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import { datasetAliasFromWorkflowInfo, WorkflowInfo } from '../../../qrimatic/workflow';
+import { datasetAliasFromVersionInfo, VersionInfo } from '../../../qri/versionInfo';
 
 export const WORKFLOW_STARTED = 'WORKFLOW_STARTED'
 export const WORKFLOW_COMPLETED = 'WORKFLOW_COMPLETED'
 
-export const selectCollection = (state: RootState): WorkflowInfo[] => {
-  const { collection, running, ids } = state.collection
+export const selectCollection = (state: RootState): VersionInfo[] => {
+  const { collection, running } = state.collection
 
-  var ordered: WorkflowInfo[] = []
+  var ordered: VersionInfo[] = []
   running.forEach((id: string) => {
     // websocket may notify us about a running workflow that we haven't
     // loaded locally yet. Return early if id is not in collection
@@ -18,7 +18,7 @@ export const selectCollection = (state: RootState): WorkflowInfo[] => {
     ordered.push(collection[id])
   })
 
-  ids.forEach( (id: string) => {
+  Object.keys(collection).forEach( (id: string) => {
     if (running.includes(id)) {
       return
     }
@@ -31,13 +31,10 @@ export const selectIsCollectionLoading = (state: RootState): boolean => state.co
 
 export interface CollectionState {
   // collection is a record of all the workflow infos
-  collection: Record<string, WorkflowInfo>
+  collection: Record<string, VersionInfo>
   // running contains the ids of the currently running workflows in reverse chronological
   // order based on latestRunTime
   running: string[]
-  // ids contains the ids of all the workflows in reverse chronological order based
-  // on commitTime
-  ids: string[]
   collectionLoading: boolean
   runningLoading: boolean
 }
@@ -45,7 +42,6 @@ export interface CollectionState {
 const initialState: CollectionState = {
   collection: {},
   running: [],
-  ids: [],
   collectionLoading: true,
   runningLoading: true
 }
@@ -57,9 +53,8 @@ export const collectionReducer = createReducer(initialState, {
     state.collectionLoading = true
   },
   'API_COLLECTION_SUCCESS': (state, action) => {
-    action.payload.data.forEach((workflow: WorkflowInfo) => {
-      state.collection[workflow.id] = workflow
-      state.ids.push(workflow.id)
+    action.payload.data.forEach((d: VersionInfo) => {
+      state.collection[d.initID] = d
     })
     state.collectionLoading = false
   },
@@ -72,10 +67,10 @@ export const collectionReducer = createReducer(initialState, {
   },
   'API_RUNNING_SUCCESS': (state, action) => {
     var running: string[] = []
-    action.payload.data.forEach( (workflow: WorkflowInfo) => {
-      var alias = workflow.id
+    action.payload.data.forEach( (workflow: VersionInfo) => {
+      var alias = workflow.initID
       if (alias === '') {
-        alias = datasetAliasFromWorkflowInfo(workflow)
+        alias = datasetAliasFromVersionInfo(workflow)
       }
       state.collection[alias] = workflow
       running.push(alias)

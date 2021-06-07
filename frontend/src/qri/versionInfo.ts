@@ -7,6 +7,7 @@ import { QriRef } from "./ref";
 // contains, and a subset of a Dataset, which fully describes a single version
 export interface VersionInfo {
   // reference details
+  initID: string
   username: string      // human-readble name of the owner of this dataset
   profileId: string     // user identifier
   name: string          // dataset name
@@ -28,15 +29,23 @@ export interface VersionInfo {
   commitMessage?: string // commit description message
   commitTime?: string    // commit.Timestamp field, time of version creation
   numVersions?: number  // number of commits in history
+
+  workflowID?: string // workflow identifier
+  workflowTriggerDescription?: string
+
+  runID?: string
+  runStatus?: string
+  runDuration?: number
 }
 
 export function newVersionInfo(data: Record<string,any>): VersionInfo {
   return {
+    initID: data.initID || '',
     username: data.username || '',
     profileId: data.profileId || '',
     name: data.name || '',
     path: data.path || '',
-    
+
     fsiPath: data.fsiPath || '',
     foreign: data.foreign,
     published: data.published,
@@ -52,8 +61,19 @@ export function newVersionInfo(data: Record<string,any>): VersionInfo {
     commitTitle: data.commitTitle,
     commitMessage: data.commitMessage,
     commitTime: data.commitTime,
-    numVersions: data.numVersions
+    numVersions: data.numVersions,
+
+    workflowID: data.workflowID,
+    workflowTriggerDescription: data.workflowTriggerDescription,
+
+    runID: data.runID,
+    runStatus: data.runStatus,
+    runDuration: data.runDuration,
   }
+}
+
+export function datasetAliasFromVersionInfo(vi: VersionInfo): string {
+  return `${vi.username}/${vi.name}`
 }
 
 export function qriRefFromVersionInfo (vi: VersionInfo): QriRef {
@@ -63,4 +83,15 @@ export function qriRefFromVersionInfo (vi: VersionInfo): QriRef {
     name: vi.name,
     path: vi.path
   }
+}
+
+export function filterVersionInfos(collection: VersionInfo[], searchString: string): VersionInfo[] {
+  return collection.filter((d) => [
+      d.username,
+      d.name,
+      d.metaTitle,
+      d.themeList,
+      d.path,
+    ].findIndex((f: string) => f.includes(searchString)) > -1
+  )
 }

@@ -4,6 +4,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { RootState } from './store'
 import mapError from './mapError'
 import { QriRef } from '../qri/ref'
+import { selectSessionToken } from '../features/session/state/sessionState'
 
 // CALL_API is a global, unique constant for passing actions to API middleware
 export const CALL_API = Symbol('CALL_API')
@@ -229,18 +230,25 @@ async function getAPIJSON<T> (
 export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
   if (action[CALL_API]) {
     let data: APIResponseEnvelope
-    let { endpoint = '', method, map = identityFunc, segments, query, body, pageInfo, form, token = '' } = action[CALL_API]
+    let { endpoint = '', method, map = identityFunc, segments, query, body, pageInfo, form, token: tokenFromAction } = action[CALL_API]
     const [REQ_TYPE, SUCC_TYPE, FAIL_TYPE] = apiActionTypes(action.type)
+
+    const tokenFromState = selectSessionToken(getState())
+
+    // we still need a token from the action symbol for when the user first logs
+    // in and we need to make an immediate call for user details
+    const token = tokenFromAction || tokenFromState
 
     next({
       ...action,
       type: REQ_TYPE,
       pageInfo,
+      token,
       segments
     })
 
 
-    // TODO: validate token
+    // TODO(chriswhong): validate token
 
     try {
       data = await getAPIJSON(endpoint, method, segments, query, pageInfo, body, form, token)

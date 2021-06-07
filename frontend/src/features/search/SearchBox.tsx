@@ -4,6 +4,7 @@ import classNames from 'classnames'
 
 import Icon from '../../chrome/Icon'
 
+const DEBOUNCE_TIMER = 500
 
 interface SearchBoxProps {
   onChange?: (q: string) => void
@@ -12,8 +13,6 @@ interface SearchBoxProps {
 }
 
 const SearchBox: React.FC<SearchBoxProps> = ({ onChange, onSubmit, dark = false }) => {
-  const DEBOUNCE_TIMER = 500
-
   const [stateValue, setStateValue] = React.useState('')
   const [debouncedValue] = useDebounce(stateValue, DEBOUNCE_TIMER)
 

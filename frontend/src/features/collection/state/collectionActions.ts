@@ -1,73 +1,40 @@
-import { AnyAction, Dispatch } from "@reduxjs/toolkit"
-import { NewWorkflow, newWorkflowInfo, WorkflowInfo, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
-import { ACTION_FAILURE, ApiAction, ApiActionThunk, CALL_API, getActionType } from "../../../store/api"
-import { WorkflowInfoAction } from "../../workflow/state/workflowActions"
+import { NewWorkflow, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
+import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
+import { ApiAction, CALL_API } from "../../../store/api"
+import { VersionInfoAction } from "../../workflow/state/workflowActions"
 import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
 
-function mapWorkflowInfo (data: object | []): WorkflowInfo[] {
+function mapVersionInfo (data: object | []): VersionInfo[] {
   if (!data) { return [] }
-  return (data as []).map((data) => newWorkflowInfo(data))
+  return (data as []).map((data) => newVersionInfo(data))
 }
 
-export function loadCollection(dispatch: Dispatch, offset: number, limit: number) {
-  loadCollectionWorkflows(1, 50)(dispatch)
-  .then(async (action: AnyAction) => {
-    if (getActionType(action) === ACTION_FAILURE) {
-      console.log("load collection failed:", action.payload.err.message)
-    }
-    return await loadRunningCollection()(dispatch)
-  })
-  .then((action: AnyAction) => {
-    if (getActionType(action) === ACTION_FAILURE) {
-      console.log("loading running collection failed:", action.payload.err.message)
-    }
-  })
-}
-
-// loadCollectionWorkflows fetches all the workflows and datasets as WorkflowInfos
-export function loadCollectionWorkflows (page: number = 1, pageSize = 50): ApiActionThunk {
+export function loadCollection() {
   return async (dispatch, getState) => {
-    // TODO (b5) - check state before making a network request
-    return dispatch(fetchCollection(page, pageSize))
+    return dispatch(fetchCollection())
   }
 }
 
-// loadRunningCollection fetches all currently running workflow as WorkflowInfos
-export function loadRunningCollection (): ApiActionThunk {
-  return async (dispatch, getState) => {
-    return dispatch(fetchRunningCollection())
-  }
-}
 
-function fetchCollection (page: number = 1, pageSize: number = 50): ApiAction {
+function fetchCollection (): ApiAction {
   return {
     type: 'collection',
     [CALL_API]: {
-      endpoint: 'collection',
-      method: 'GET',
-      pageInfo: {
-        page,
-        pageSize
+      endpoint: 'list',
+      method: 'POST',
+      body: {
+        offset: 0,
+        limit: 300 // TODO(chriswhong): For now, we assume the client has the entire collection and can sort and filter locally
       },
-      map: mapWorkflowInfo
+      map: mapVersionInfo
     }
   }
 }
 
-function fetchRunningCollection (): ApiAction {
-  return {
-    type: 'running',
-    [CALL_API]: {
-      endpoint: 'collection/running',
-      method: 'GET',
-      map: mapWorkflowInfo
-    }
-  }
-}
 
 // workflowStarted is dispatched by the websocket and users should not need to
 // dispatch it anywhere else
-export function workflowStarted(workflow: Record<string, any>): WorkflowInfoAction {
+export function workflowStarted(workflow: Record<string, any>): VersionInfoAction {
   const wf = NewWorkflow(workflow)
   return {
     type: WORKFLOW_STARTED,
@@ -77,7 +44,7 @@ export function workflowStarted(workflow: Record<string, any>): WorkflowInfoActi
 
 // workflowCompleted is dispatched by the websocket and users should not need to
 // dispatch it anywhere else
-export function workflowCompleted(workflow: Record<string, any>): WorkflowInfoAction {
+export function workflowCompleted(workflow: Record<string, any>): VersionInfoAction {
   const wf = NewWorkflow(workflow)
   return {
     type: WORKFLOW_COMPLETED,
