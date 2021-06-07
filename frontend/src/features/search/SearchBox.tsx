@@ -1,28 +1,47 @@
 import React from 'react'
+import { useDebounce } from 'use-debounce'
+import classNames from 'classnames'
 
 import Icon from '../../chrome/Icon'
 
+
 interface SearchBoxProps {
-  onSubmit: (q: string) => void
+  onChange?: (q: string) => void
+  onSubmit?: (q: string) => void
+  dark?: boolean
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
+const SearchBox: React.FC<SearchBoxProps> = ({ onChange, onSubmit, dark = false }) => {
+  const DEBOUNCE_TIMER = 500
+
   const [stateValue, setStateValue] = React.useState('')
+  const [debouncedValue] = useDebounce(stateValue, DEBOUNCE_TIMER)
+
+  React.useEffect(() => {
+    if (onChange) {
+      onChange(stateValue)
+    }
+  }, [debouncedValue])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     setStateValue(e.target.value)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
-    onSubmit(stateValue)
+    if (onSubmit) {
+      onSubmit(stateValue)
+    }
   }
-
 
   return (
     <form className="my-1 mx-2 relative rounded-md shadow-sm w-48" onSubmit={handleSubmit}>
       <input
-        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-xs border-gray-400 rounded-lg tracking-wider placeholder-gray-600 placeholder-opacity-50"
+        className={classNames('focus:ring-qriblue block w-full sm:text-xs rounded-lg tracking-wider bg-transparent placeholder-opacity-50', {
+          'border-gray-400 placeholder-gray-600': !dark,
+          'border-qrinavy placeholder-qrinavy': dark
+        })}
         style={{
           padding: '8px 8px 10px 8px'
         }}
@@ -33,7 +52,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
         value={stateValue || ''}
         onChange={handleChange}
       />
-      <span className='absolute inset-y-0 right-0 flex items-center pr-2 text-gray-400'>
+      <span className={classNames('absolute inset-y-0 right-0 flex items-center pr-2', {
+        'text-gray-400': !dark,
+        'text-qrinavy': dark
+      })}>
         <Icon size='sm' icon='skinnySearch' />
       </span>
     </form>
