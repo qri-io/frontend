@@ -2,9 +2,14 @@ import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
 import queryString from 'query-string'
+import ContentLoader from 'react-content-loader'
 
 import { loadSearchResults } from './state/searchActions'
-import { selectSearchResults, selectSearchPageInfo } from './state/searchState'
+import {
+  selectSearchResults,
+  selectSearchPageInfo,
+  selectSearchLoading
+} from './state/searchState'
 import NavBar from '../navbar/NavBar';
 import BigSearchBox from './BigSearchBox';
 import PageControl, { PageChangeObject } from '../../chrome/PageControl'
@@ -26,6 +31,7 @@ const Search: React.FC<{}> = () => {
   // get search results and accompanying pageInfo from the store
   const searchResults = useSelector(selectSearchResults)
   const pageInfo = useSelector(selectSearchPageInfo)
+  const loading = useSelector(selectSearchLoading)
 
   const searchParams = NewSearchParams(queryString.parse(search))
   const { q, page, sort } = searchParams
@@ -96,17 +102,35 @@ const Search: React.FC<{}> = () => {
       <NavBar showSearch={false} />
       <div className='flex-grow w-full py-9'>
         <div className='w-4/5 max-w-screen-lg mx-auto mb-10'>
-          <div className='flex items-center'>
-            <div className='flex-grow'>
-              <div className='text-qrinavy text-3xl font-black mb-2'>Dataset Search</div>
-              <div className='text-qrigray-400 text-sm mb-4'>{pageInfo.resultCount} datasets found matching '{q}'</div>
-            </div>
-            <DropdownMenu items={menuItems} className='ml-8'>
-              <div className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 py-2 cursor-pointer'>
-                Sort By
-                <Icon icon='caretDown' size='2xs' className='ml-3' />
-              </div>
-            </DropdownMenu>
+        <div className='text-qrinavy text-3xl font-black mb-2'>Dataset Search</div>
+          <div className='flex items-center mb-2 h-8'>
+            {searchResults.length > 0 ? (
+              <>
+                <div className='flex-grow'>
+                  <div className='text-qrigray-400 text-sm '>
+                    { loading ? (
+                      <ContentLoader
+                        width={300}
+                        height={20}
+                      >
+                        <rect y="0" width="300" height="18" rx="6"/>
+                      </ContentLoader>
+                    ) : (
+                      <>{pageInfo.resultCount} datasets found matching '{q}'</>
+                    )}
+                  </div>
+                </div>
+                <DropdownMenu items={menuItems} className='ml-8'>
+                  <div className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 py-2 cursor-pointer'>
+                    Sort By
+                    <Icon icon='caretDown' size='2xs' className='ml-3' />
+                  </div>
+                </DropdownMenu>
+              </>
+            ):(
+              <>&nbsp;</>
+            )}
+
           </div>
           <BigSearchBox onSubmit={handleSearchSubmit} value={q}/>
         </div>
@@ -117,6 +141,7 @@ const Search: React.FC<{}> = () => {
               <ContentBox className='mb-6'>
                 <DatasetList
                   datasets={searchResults}
+                  loading={loading}
                 />
               </ContentBox>
               <PageControl
