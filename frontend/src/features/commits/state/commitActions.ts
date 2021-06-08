@@ -17,7 +17,7 @@ function fetchDatasetCommits(qriRef: QriRef): ApiAction {
     type: 'dataset_commits',
     qriRef,
     [CALL_API]: {
-      endpoint: `history/`,
+      endpoint: `ds/activity`,
       method: 'POST',
       body: {
         ref: `${qriRef.username}/${qriRef.name}`
