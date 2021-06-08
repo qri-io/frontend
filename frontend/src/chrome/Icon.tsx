@@ -54,6 +54,7 @@ import CaretRight from './icon/CaretRight'
 import CaretDown from './icon/CaretDown'
 import Checkbox from './icon/Checkbox'
 import Clock from './icon/Clock'
+import Close from './icon/Close'
 import Code from './icon/Code'
 import Columns from './icon/Columns'
 import Commit from './icon/Commit'
@@ -105,7 +106,6 @@ const faIcons: Record<string, IconDefinition> = {
   'check': faCheck,
   'checkCircle': faCheckCircle,
   'circle': faCircle,
-  'close': faCheck, // TODO (b5) - close icon def
   'cloudUpload': faCloudUploadAlt,
   'ellipsisH': faEllipsisH,
   'envelope': faEnvelope,
@@ -166,6 +166,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     caretDown: <CaretDown className={className} size={size} />,
     checkbox: <Checkbox className={className} size={size} />,
     clock: <Clock className={className} size={size} />,
+    close: <Close className={className} size={size} />,
     code: <Code className={className} size={size} />,
     columns: <Columns className={className} size={size} />,
     commit: <Commit className={className} size={size} />,
