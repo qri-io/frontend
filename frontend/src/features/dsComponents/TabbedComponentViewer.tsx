@@ -40,7 +40,6 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
       <DatasetComponent
         dataset={dataset}
         componentName={selectedComponent}
-        noHeader
       />
     </div>
   )
