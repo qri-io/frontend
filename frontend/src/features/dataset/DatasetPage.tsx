@@ -7,7 +7,7 @@ import { newQriRef } from '../../qri/ref';
 import { loadDataset } from './state/datasetActions'
 import DatasetNavSidebar from './DatasetNavSidebar';
 import { selectSessionUser } from '../session/state/sessionState';
-import { selectSessionUserCanEditDataset } from './state/datasetState';
+import { selectSessionUserCanEditDataset, selectDataset } from './state/datasetState';
 import DatasetHeader from './DatasetHeader';
 import DeployingScreen from '../deploy/DeployingScreen'
 
@@ -16,6 +16,7 @@ const DatasetPage: React.FC<{}> = ({
   children
 }) => {
   const qriRef = newQriRef(useParams())
+  const dataset = useSelector(selectDataset)
   const user = useSelector(selectSessionUser)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const dispatch = useDispatch()
@@ -42,7 +43,7 @@ const DatasetPage: React.FC<{}> = ({
       <div className='flex overflow-hidden w-full'>
         <DatasetNavSidebar qriRef={qriRef} />
         <div className='flex flex-col flex-grow overflow-hidden px-7 pb-7 pt-9'>
-          <DatasetHeader qriRef={qriRef} editable={editable} />
+          <DatasetHeader dataset={dataset} editable={editable} />
           {children}
         </div>
         <DeployingScreen qriRef={qriRef} />

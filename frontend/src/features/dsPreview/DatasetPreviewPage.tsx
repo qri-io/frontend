@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
+import { useInView } from 'react-intersection-observer'
+import classNames from 'classnames'
 
 import { newQriRef } from '../../qri/ref';
 import { selectDsPreview } from './state/dsPreviewState'
@@ -12,6 +14,7 @@ import ContentBoxTitle from '../../chrome/ContentBoxTitle'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
+import Button from '../../chrome/Button'
 import BodyPreview from '../dsComponents/body/BodyPreview'
 import DatasetHeader from '../dataset/DatasetHeader'
 import NavBar from '../navbar/NavBar'
@@ -35,6 +38,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   const dataset = useSelector(selectDsPreview)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const dispatch = useDispatch()
+
+  const { ref: stickyHeaderTriggerRef, inView } = useInView({
+    threshold: 0.6,
+    initialInView: true
+  });
 
   const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions();
   const [expandReadme, setExpandReadme] = useState(false)
@@ -60,9 +68,39 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
             <Spinner color='#4FC7F3' />
           </div>)
         : (
-          <div className='overflow-y-scroll overflow-x-hidden flex-grow relative flex'>
-            <div className='max-w-screen-lg mx-auto p-9 w-full flex-grow'>
-              <DatasetHeader qriRef={qriRef} editable={editable} noBorder />
+          <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
+            {/* begin sticky header */}
+            <div className={classNames('sticky top-0 bg-white border border-qrigray-200', {
+              'invisible -top-16 h-0': inView,
+              'visible top-0 transition-all': !inView
+            })} style={{
+              borderTopLeftRadius: '20px'
+            }}>
+              <div className='px-8 pt-4 pb-3 flex'>
+                <div className='flex-grow'>
+                  <div className='text-xs text-gray-400 font-mono'>
+                    {dataset.peername}/{dataset.name}
+                  </div>
+                  <div className='text-normal text-qrinavy font-semibold'>
+                    {dataset.meta?.title || dataset.name}
+                  </div>
+                </div>
+                <div className='flex items-center content-center'>
+                  <Button className='mr-3' type='light' filled={false}>
+                    Follow
+                  </Button>
+                  <Button className='mr-3' type='secondary'>
+                    <Icon icon='globe' size='lg' className='mr-2' /> Share
+                  </Button>
+                  <DownloadDatasetButton qriRef={qriRef} type='primary' small />
+                </div>
+              </div>
+            </div>
+            {/* end sticky header */}
+            <div className='max-w-screen-lg mx-auto p-9 w-full h-full'>
+              <div ref={stickyHeaderTriggerRef}>
+                <DatasetHeader dataset={dataset} editable={editable} noBorder />
+              </div>
               <div className='-ml-2 -mr-3 mb-5'>
                 <div className='w-7/12 px-2 inline-block align-top' style={{ height: readmeContainerHeight}}>
                   <ContentBox className='flex flex-col h-full'>
@@ -98,14 +136,10 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                           <UsernameWithIcon username='chriswhong' className='mt-0.5' />
                         </div>
                       </div>
-                      <DownloadDatasetButton qriRef={qriRef} small/>
+                      <DownloadDatasetButton qriRef={qriRef} small light />
                     </div>
                     {/* Bottom of the box */}
-
-
                     <div className='pt-4 text-gray-400 text-xs tracking-wider mb-2'>{(dataset.meta?.description) || 'No Description'}</div>
-
-
                     {dataset.meta?.keywords?.map((keyword) => {
                       return <div key={keyword} className='leading-tight text-gray-400 text-xs tracking-wider inline-block border border-qrigray-400 rounded-md px-2 py-1 mr-1 mb-1'>{keyword}</div>
                     })}
