@@ -76,8 +76,8 @@ export function NewDataset(d: Record<string,any>): Dataset {
 
 export const ComponentNames = ['commit', 'meta', 'structure', 'readme', 'body', 'transform', 'viz', 'stats']
 
-export type ComponentName = 
- | 'readme' 
+export type ComponentName =
+ | 'readme'
  | 'meta'
  | 'body'
  | 'structure'
@@ -412,4 +412,19 @@ export function schemaToColumns (schema: Schema): ColumnProperties[] {
 
 function isJSONSchema7 (x: any): x is JSONSchema7 {
   return (x as JSONSchema7).type !== undefined
+}
+
+export function extractColumnHeaders (structure: Structure, value: any[]): ColumnProperties[] {
+  if (!structure || !value) {
+    return []
+  }
+  const schema = structure.schema
+
+  if (!schema) {
+    const firstRow = value && value[0]
+    if (!firstRow) return []
+    return firstRow.map((d: any, i: number) => `field_${i + 1}`)
+  }
+
+  return schemaToColumns(schema)
 }

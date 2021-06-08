@@ -1,7 +1,7 @@
 import React from 'react'
 import numeral from 'numeral'
 
-import Dataset, { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
+import Dataset, { Structure, schemaToColumns, ColumnProperties, extractColumnHeaders } from '../../../qri/dataset'
 import Icon from '../../../chrome/Icon'
 import IconLink from '../../../chrome/IconLink'
 
@@ -11,28 +11,12 @@ interface BodyHeaderProps {
   showExpand?: boolean
 }
 
-const extractColumnHeaders = (structure: Structure, value: any[]): ColumnProperties[] => {
-  if (!structure || !value) {
-    return []
-  }
-  const schema = structure.schema
-
-  if (!schema) {
-    const firstRow = value && value[0]
-    if (!firstRow) return []
-    return firstRow.map((d: any, i: number) => `field_${i + 1}`)
-  }
-
-  return schemaToColumns(schema)
-}
-
 const Body: React.FC<BodyHeaderProps> = ({
   data,
   onToggleExpanded,
   showExpand = true
 }) => {
   const { structure, body } = data
-
   const headers = extractColumnHeaders(structure, body)
 
   return (

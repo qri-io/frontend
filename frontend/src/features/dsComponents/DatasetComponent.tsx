@@ -37,23 +37,18 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
       break
     case 'meta':
       component = <Meta data={dataset.meta}/>
-      componentHeader = null
       break
     case 'commit':
       component = <Commit data={dataset.commit}/>
-      componentHeader = null
       break
     case 'structure':
       component = <Structure data={dataset.structure}/>
-      componentHeader = null
       break
     case 'transform':
       component = <Transform data={dataset.transform}/>
-      componentHeader = null
       break
     case 'readme':
       component = <Readme qriRef={qriRefFromDataset(dataset)}/>
-      componentHeader = null
       break
     default:
       component = <div>Unknown component</div>
