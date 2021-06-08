@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { useDispatch } from 'react-redux';
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
@@ -12,23 +12,23 @@ import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import DropdownMenu, { DropDownMenuItem } from '../../chrome/DropdownMenu'
 import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
-import { WorkflowInfo } from '../../qrimatic/workflow';
+import { VersionInfo } from '../../qri/versionInfo';
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 
 interface WorkflowsTableProps {
-  filteredWorkflows: WorkflowInfo[]
+  filteredWorkflows: VersionInfo[]
   // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
   // to its internal the selections
   clearSelectedTrigger: boolean
-  onSelectedRowsChange: ({ selectedRows }: { selectedRows: WorkflowInfo[] }) => void
+  onSelectedRowsChange: ({ selectedRows }: { selectedRows: VersionInfo[] }) => void
   // simplified: true will hide a number of "verbose" columns in the table
   simplified?: boolean
   containerHeight: number
 }
 
-// fieldValue returns a WorkflowInfo value for a given field argument
-const fieldValue = (row: WorkflowInfo, field: string) => {
+// fieldValue returns a VersionInfo value for a given field argument
+const fieldValue = (row: VersionInfo, field: string) => {
   switch (field) {
     case 'name':
       return `${row['username']}/${row['name']}`
@@ -44,7 +44,7 @@ const fieldValue = (row: WorkflowInfo, field: string) => {
 }
 // column sort function for react-data-table
 // defines the actual string to sort on when a sortable column is clicked
-const customSort = (rows: WorkflowInfo[], field: string, direction: 'asc' | 'desc') => {
+const customSort = (rows: VersionInfo[], field: string, direction: 'asc' | 'desc') => {
   return rows.sort((a, b) => {
     const aVal = fieldValue(a, field)
     const bVal = fieldValue(b, field)
@@ -96,10 +96,9 @@ const customStyles = {
 
 const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   filteredWorkflows,
-  onRowClicked,
   onSelectedRowsChange,
   clearSelectedTrigger,
-  simplified=false,
+  simplified = false,
   containerHeight
 }) => {
   const dispatch = useDispatch()
@@ -115,9 +114,9 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       selector: 'name',
       sortable: true,
       grow: 1,
-      cell: (row: WorkflowInfo) => (
+      cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
-          <div className='w-8 mr-2'>
+          <div className='w-8 mr-2 flex-shrink-0'>
             <Icon icon='automationFilled' className='text-qrigreen' />
           </div>
           <div className='truncate'>
@@ -127,11 +126,11 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
               </Link>
             </div>
             <div className='flex text-xs overflow-y-hidden'>
-              <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} />
-              <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} />
-              <DatasetInfoItem icon='page' label={row.bodyFormat} />
+              <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} small />
+              <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} small />
+              <DatasetInfoItem icon='page' label={row.bodyFormat} small />
               {row.commitTime && (
-                <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(row.commitTime)}/>} />
+                <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(row.commitTime)}/>} small />
               )}
             </div>
           </div>
@@ -144,10 +143,10 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       omit: simplified,
       width: '180px',
       sortable: true,
-      cell: (row: WorkflowInfo) => {
+      cell: (row: VersionInfo) => {
 
         // TODO (ramfox): the activity feed expects more content than currently exists
-        // in the WorkflowInfo. Once the backend supplies these values, we can rip
+        // in the VersionInfo. Once the backend supplies these values, we can rip
         // out this section that mocks durations & timestamps for us
         const {
           status,
@@ -180,8 +179,9 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       selector: 'triggers',
       omit: simplified,
       width: '160px',
-      cell: (row: WorkflowInfo) => (
-        <div className='tracking-wider font-medium text-qrinavy'>Schedule, Run When, Webhook</div>
+      cell: (row: VersionInfo) => (row.id
+          ? <div className='tracking-wider font-medium text-qrinavy'>Schedule, Run When, Webhook</div>
+          : '—'
       )
     },
     {
@@ -192,9 +192,9 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       selector: 'actions',
       omit: simplified,
       width: '90px',
-      cell: (row: WorkflowInfo) => (row.id
+      cell: (row: VersionInfo) => (row.id
           ? <ManualTriggerButton workflowID={row.id} />
-          : '--'
+          : '—'
       )
     },
     {
@@ -206,7 +206,7 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       omit: simplified,
       width: '60px',
       // eslint-disable-next-line react/display-name
-      cell: (row: WorkflowInfo) => {
+      cell: (row: VersionInfo) => {
         const hamburgerItems: DropDownMenuItem[] = [
           {
             onClick: () => { handleButtonClick("renaming not yet implemented") },
@@ -272,7 +272,9 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       fixedHeaderScrollHeight={`${String(containerHeight - 68)}px`}
       noHeader
       selectableRows
-      selectableRowsComponent={() => <Icon icon='checkbox' />}
+      selectableRowsComponent={forwardRef((props, ref) => (
+        <Icon icon='checkbox' />
+      ))}
       onSelectedRowsChange={onSelectedRowsChange}
       clearSelectedRows={clearSelectedTrigger}
       style={{
