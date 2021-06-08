@@ -1,13 +1,11 @@
 // TODO(chriswhong): BodyPreview and Body should be combined since they share a lot of the same logic
-
 import React from 'react'
-import numeral from 'numeral'
 
 import Dataset,  { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
-
 import BodyTable from './BodyTable'
 import BodyJson from './BodyJson'
-import Icon from '../../../chrome/Icon'
+import BodyHeader from './BodyHeader'
+import ComponentHeader from '../ComponentHeader'
 
 export interface BodyProps {
   dataset: Dataset
@@ -59,19 +57,9 @@ const Body: React.FC<BodyProps> = ({
 
   return (
     <div className='w-full h-full flex flex-col'>
-      <div className='flex mb-3'>
-        <div className='flex flex-grow text-sm text-qrigray-400'>
-          <div className='mr-4 flex items-center'>
-            <Icon icon='rows' size='2xs' className='mr-1'/> {numeral(structure.entries).format('0,0')} rows
-          </div>
-          <div className='mr-4 flex items-center'>
-            <Icon icon='columns' size='2xs' className='mr-1'/> {numeral(headers.length).format('0,0')} columns
-          </div>
-        </div>
-        <div>
-          <Icon icon='fullScreen' size='sm'/>
-        </div>
-      </div>
+      <ComponentHeader>
+        <BodyHeader data={dataset} showExpand={false} />
+      </ComponentHeader>
       <div className='overflow-scroll border border-gray-200'>
       {
         (structure.format === 'csv' && Array.isArray(body))

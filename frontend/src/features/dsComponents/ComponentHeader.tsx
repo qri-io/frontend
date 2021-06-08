@@ -2,7 +2,7 @@ import React from 'react'
 
 const ComponentHeader: React.FC<{}> = ({ children }) => {
   return (
-    <div className='flex-grow text-sm px-8 py-3 border-b'>
+    <div className='flex-grow text-sm py-3 border-b'>
       {children}
     </div>
   )
