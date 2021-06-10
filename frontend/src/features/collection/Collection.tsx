@@ -53,6 +53,8 @@ const Collection: React.FC<any> = () => {
     resultsContent = <div className='h-full w-full flex justify-center items-center text-qrigray-400'> No datasets found for&nbsp;<span className='font-semibold'>{searchString}</span></div>
   }
 
+  console.log('renderingCollection')
+
   return (
     <PageWithFooter>
       <div className='h-full' style={{ backgroundColor: '#f3f4f6'}}>
@@ -68,7 +70,7 @@ const Collection: React.FC<any> = () => {
             </div>
 
             <div className='w-1/2 flex items-center justify-end'>
-              <SearchBox onChange={handleSearchChange} dark />
+              <SearchBox onChange={handleSearchChange} placeholder='Filter' dark />
               <Link to='/ds/new'>
                 <Button type='secondary'>
                   New Dataset
