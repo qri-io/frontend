@@ -18,34 +18,37 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, label
   const { pathname } = useLocation();
   const active = pathname.includes(to)
   return (
-    <div className='mb-4'>
-      <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
-        'text-qripink': active
-      })}>
-        <span data-tip data-for={id}>
-          <div className='flex items-center'>
-            <Icon className='mr-2' size='md' icon={icon} />
-            <span style={{
-              fontSize: '16px',
-              width: expanded ? 'auto' : 0,
-              display: expanded ? 'inline-block' : 'none'
-            }}>{label}</span>
-          </div>
-        </span>
-        {tooltip && (
-          <ReactTooltip
-            id={id}
-            place='right'
-            effect='solid'
-            offset={{
-              right: 10
-            }}
-          >
-            {tooltip}
-          </ReactTooltip>
-        )}
-      </Link>
-    </div>
+    <>
+      <div className='mb-4 inline-block'>
+        <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
+          'text-qripink': active
+        })}>
+          <span data-tip data-for={id}>
+            <div className='flex items-center'>
+              <Icon className='mr-2' size='md' icon={icon} />
+              <span style={{
+                fontSize: '16px',
+                width: expanded ? 'auto' : 0,
+                display: expanded ? 'inline-block' : 'none'
+              }}>{label}</span>
+            </div>
+          </span>
+          {tooltip && (
+            <ReactTooltip
+              id={id}
+              place='right'
+              effect='solid'
+              offset={{
+                right: 20
+              }}
+            >
+              {tooltip}
+            </ReactTooltip>
+          )}
+        </Link>
+      </div>
+      <br/>
+    </>
   )
 }
 
