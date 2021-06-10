@@ -123,20 +123,22 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 </div>
                 <div ref={versionInfoContainer} className='w-5/12 px-3 inline-block align-top'>
                   <ContentBox>
-                    <div className='flex items-center border-b pb-4 mb-4'>
-                      <div className='flex-grow'>
+                    <div className='flex items-center border-b pb-4'>
+                      <div className='flex-grow truncate'>
                         <ContentBoxTitle title='Version Info' />
                         <div className='text-qrinavy text-sm flex items-center mb-0'>
                           <Icon icon='commit' size='sm' className='-ml-2' />
                           <div className='font-medium'>{commitishFromPath(dataset.path)}</div>
                         </div>
-                        <div className='text-sm text-qrinavy mb-2'>{dataset.commit?.title}</div>
+                        <div className='text-sm text-qrinavy mb-2 truncate' title={dataset.commit?.title}>{dataset.commit?.title}</div>
                         <div className='flex items-center text-gray-400'>
                           <RelativeTimestampWithIcon timestamp={new Date(dataset.commit?.timestamp)} className='mr-3' />
                           <UsernameWithIcon username='chriswhong' className='mt-0.5' />
                         </div>
                       </div>
-                      <DownloadDatasetButton qriRef={qriRef} small light />
+                      <div className='ml-4'>
+                        <DownloadDatasetButton qriRef={qriRef} small light />
+                      </div>
                     </div>
                     {/* Bottom of the box */}
                     <ContentBoxTitle title='Description' />
