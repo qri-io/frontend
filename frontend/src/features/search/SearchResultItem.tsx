@@ -43,8 +43,8 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading=fa
       itemContent = (
         <>
           <Link to={`/ds/${humanRef}`}><div className='text-sm text-gray-400 relative flex items-baseline group hover:text mb-2 font-mono hover:underline'>{humanRef}</div></Link>
-          <Link to={`/ds/${humanRef}`}><div className='text-xl text-qrinavy-500 font-medium hover:text hover:underline mb-3'>{title}</div></Link>
-          <div className='text-sm text-qrigray hover:text line-clamp-3 mb-3'>{meta?.description || 'No Description'}</div>
+          <Link to={`/ds/${humanRef}`}><div className='text-xl text-qrinavy-500 font-medium hover:text hover:underline mb-1'>{title}</div></Link>
+          <div className='text-sm text-qrigray hover:text line-clamp-3 mb-2'>{meta?.description || 'No Description'}</div>
           <div className='flex items-center flex-wrap'>
             <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={timestamp} />} />
             { meta?.structure?.length && <DatasetInfoItem icon='disk' label={numeral(meta.structure.length).format('0.0b')} />}
@@ -60,7 +60,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading=fa
     }
 
     return (
-      <div className='pt-5 pb-6 border-b border-qrigray-200 last:border-b-0 first:pt-0 last:pb-0'>
+      <div className='pt-5 pb-3 border-b border-qrigray-200 last:border-b-0 first:pt-0 last:pb-0'>
         {itemContent}
       </div>
     )

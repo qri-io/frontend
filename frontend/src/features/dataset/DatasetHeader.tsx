@@ -49,9 +49,9 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
     <div className="w-full">
       <div className='flex'>
         <div className='flex-grow'>
-          <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1'>
-            <span>{dataset.peername || 'new'} / </span>
-            <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={dataset.name} />
+          <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1 font-mono'>
+            <span>{qriRef.username || 'new'} / </span>
+            <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
             {editable && <DropdownMenu items={menuItems}>
               <Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />
             </DropdownMenu>}

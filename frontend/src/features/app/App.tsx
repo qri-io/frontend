@@ -13,9 +13,9 @@ import SnackBar from '../snackBar/SnackBar';
 const App: React.FC<any> = () => {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(wsConnect())
-  })
+  // useEffect(() => {
+  //   dispatch(wsConnect())
+  // })
 
   return (
     <div id='app' className='flex flex-col h-screen w-screen' style={{ minWidth: '1100px' }}>
