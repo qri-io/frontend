@@ -33,27 +33,34 @@ const Collection: React.FC<any> = () => {
 
   let resultsContent = (
     <WorkflowsTable
-        filteredWorkflows={collection}
-        // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
-        // to its internal the selections
-        clearSelectedTrigger={false}
-        onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
-        containerHeight={tableContainerHeight}
-        searchString={searchString}
-      />
+      filteredWorkflows={collection}
+      // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
+      // to its internal the selections
+      clearSelectedTrigger={false}
+      onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
+      containerHeight={tableContainerHeight}
+      searchString={searchString}
+    />
   )
 
   // if loading, show a spinner
   if (loading) {
-    resultsContent = <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
+    resultsContent = (
+      <div className='h-full w-full flex justify-center items-center'>
+        <Spinner color='#4FC7F3' />
+      </div>
+    )
   }
 
   // if no results, show a message
-  if (collection.length === 0) {
-    resultsContent = <div className='h-full w-full flex justify-center items-center text-qrigray-400'> No datasets found for&nbsp;<span className='font-semibold'>{searchString}</span></div>
+  if (!loading && collection.length === 0) {
+    resultsContent = (
+      <div className='h-full w-full flex justify-center items-center text-qrigray-400'>
+        No datasets found for&nbsp;
+        <span className='font-semibold'>{searchString}</span>
+      </div>
+    )
   }
-
-  console.log('renderingCollection')
 
   return (
     <PageWithFooter>
