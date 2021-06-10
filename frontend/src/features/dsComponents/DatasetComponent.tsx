@@ -54,6 +54,16 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
       component = <div>Unknown component</div>
   }
 
+  let componentContent = (
+    <div className='p-4'>
+      {component}
+    </div>
+  )
+
+  if (componentName === 'body') {
+    componentContent = component
+  }
+
   return (
     <>
     <div
@@ -63,7 +73,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
         {componentHeader}
       </ComponentHeader>
       <div className='overflow-auto flex-grow'>
-        {component}
+        {componentContent}
       </div>
     </div>
     {/* full screen component view functions as a modal */}
