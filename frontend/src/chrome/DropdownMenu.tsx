@@ -76,8 +76,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
               if (link) {
                 if (link.startsWith('http')) {
                   return (
-                    <ExternalLink to={link} key={i}>
-                      <button className={linkButtonClass} role="menuitem">
+                    <ExternalLink to={link} key={i} className={linkButtonClass}>
+                      <button  role="menuitem">
                         {content}
                       </button>
                     </ExternalLink>
@@ -85,8 +85,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                 }
 
                 return (
-                  <Link to={link} key={i}>
-                    <button className={linkButtonClass} role="menuitem">
+                  <Link to={link} key={i} className={linkButtonClass}>
+                    <button role="menuitem">
                       {content}
                     </button>
                   </Link>
