@@ -50,7 +50,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       <div className='flex'>
         <div className='flex-grow'>
           <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1 font-mono'>
-            <span>{qriRef.username || 'new'} / </span>
+            <span>{qriRef.username || 'new'}/</span>
             <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
             {editable && <DropdownMenu items={menuItems}>
               <Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />
