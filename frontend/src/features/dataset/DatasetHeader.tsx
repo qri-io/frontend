@@ -6,19 +6,18 @@ import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
-import { QriRef } from '../../qri/ref'
+import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import DatasetInfoItem from './DatasetInfoItem'
 import Button from '../../chrome/Button'
 
-
 export interface DatasetHeaderProps {
-  qriRef: QriRef
+  dataset: Dataset
   border?: boolean
   editable?: boolean
 }
 
 const DatasetHeader: React.FC<DatasetHeaderProps> = ({
-  qriRef,
+  dataset,
   border = false,
   editable = false
 }) => {
@@ -30,10 +29,10 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   }
 
   const handleRename = (_:string, value:string) => {
-    dispatch(renameDataset(qriRef, { username: qriRef.username, name: value }))
+    dispatch(renameDataset(qriRefFromDataset(dataset), { username: dataset.username, name: value }))
     // TODO(b5): we should be chaining this route replacement after successful
     // dispatch with a "then" off the renameDataset action
-    const newPath = history.location.pathname.replace(qriRef.name, value)
+    const newPath = history.location.pathname.replace(dataset.name, value)
     console.log('routing from ', history.location.pathname, ' to ', newPath)
     history.replace(newPath)
   }
@@ -51,15 +50,15 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       <div className='flex'>
         <div className='flex-grow'>
           <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1'>
-            <span>{qriRef.username || 'new'} / </span>
-            <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
+            <span>{dataset.peername || 'new'} / </span>
+            <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={dataset.name} />
             {editable && <DropdownMenu items={menuItems}>
               <Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />
             </DropdownMenu>}
           </div>
 
           <div className='text-2xl text-qrinavy-500 font-black group hover:text mb-3'>
-            {qriRef.name}
+            {dataset.meta?.title || dataset.name}
           </div>
 
           <div className='flex mb-5'>
