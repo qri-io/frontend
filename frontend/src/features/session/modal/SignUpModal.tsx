@@ -71,14 +71,14 @@ const SignUpModal: React.FC = () => {
             name='email'
             placeholder='Email'
             value={email}
-            onChange={(e) => { setEmail(e.target.value)  }}
+            onChange={(value) => { setEmail(value)  }}
             error={emailError}
           />
           <TextInput
             name='username'
             placeholder='Username'
             value={username}
-            onChange={(e) => { setUsername(e.target.value)  }}
+            onChange={(value) => { setUsername(value)  }}
             error={usernameError}
           />
           <TextInput
@@ -86,7 +86,7 @@ const SignUpModal: React.FC = () => {
             type='password'
             placeholder='Password'
             value={password}
-            onChange={(e) => { setPassword(e.target.value)  }}
+            onChange={(value) => { setPassword(value)  }}
             error={passwordError}
           />
         </div>

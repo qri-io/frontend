@@ -224,7 +224,7 @@ const MetaEditor: React.FC<MetaEditorProps> = ({
               type='text'
               value={data[field.field]}
               placeholder={field.placeholder}
-              onChange={(e: React.FormEvent) => { handleWrite(field.field, e.target.value) }}
+              onChange={(value) => { handleWrite(field.field, value) }}
               maxLength={field.maxLength}
             />)
           case 'textarea':
@@ -250,7 +250,7 @@ const MetaEditor: React.FC<MetaEditorProps> = ({
             return (<p key={field.field}>Unrecognized Input Type: {field.inputType}</p>)
         }
       })}
-      <CustomMetaEditor 
+      <CustomMetaEditor
         data={data}
         onDatasetChange={handleWrite}
         />
