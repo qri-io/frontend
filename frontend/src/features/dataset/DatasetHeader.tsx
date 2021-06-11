@@ -28,8 +28,10 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
     alert(message)
   }
 
+  const qriRef = qriRefFromDataset(dataset)
+
   const handleRename = (_:string, value:string) => {
-    dispatch(renameDataset(qriRefFromDataset(dataset), { username: dataset.username, name: value }))
+    dispatch(renameDataset(qriRef, { username: dataset.username, name: value }))
     // TODO(b5): we should be chaining this route replacement after successful
     // dispatch with a "then" off the renameDataset action
     const newPath = history.location.pathname.replace(dataset.name, value)
