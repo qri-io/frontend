@@ -5,8 +5,8 @@ import Icon, { IconSize } from './Icon'
 interface IconLinkProps {
   icon: string
   link?: string
-  onClick?: () => void
   size?: IconSize
+  onClick?: () => void
 }
 
 const IconLink: React.FC<IconLinkProps> = ({

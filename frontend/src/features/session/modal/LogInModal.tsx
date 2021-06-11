@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 
 import { ACTION_FAILURE, getActionType } from '../../../store/api'
-import ExternalLink from '../../../chrome/ExternalLink'
+import TextLink from '../../../chrome/TextLink'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
 import { showModal, clearModal } from '../../app/state/appActions'
@@ -70,13 +70,13 @@ const LogInModal: React.FC = () => {
         </Button>
 
         <div className='mb-3 text-qrigray-400 tracking-wider text-xs'>
-          By continuing, you agree to Qri's <ExternalLink to='https://qri.io/legal/tos'>Terms of Service</ExternalLink> & <ExternalLink to='https://qri.io/legal/privacy-policy'>Privacy Policy</ExternalLink>.
+          By continuing, you agree to Qri's <TextLink to='https://qri.io/legal/tos'>Terms of Service</TextLink> & <TextLink to='https://qri.io/legal/privacy-policy'>Privacy Policy</TextLink>.
         </div>
 
         <hr className='w-20 mx-auto mb-3'/>
 
-        <div className='text-qrinavy text-xs font-medium hover:cursor-pointer' onClick={handleSignUpClick}>
-          Not on Qri yet? Sign Up
+        <div className='text-qrinavy text-xs font-medium'>
+          Not on Qri yet? <TextLink onClick={handleSignUpClick}>Sign Up</TextLink>
         </div>
       </div>
     </div>
