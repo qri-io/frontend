@@ -23,7 +23,7 @@ const PrivateRoute: React.FC<any>  = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
   return (
     <Route path={path}>
-      { user !== AnonUser ? <>{children}</> : <Redirect to={{ pathname: '/splash' }} /> }
+      { user !== AnonUser ? <>{children}</> : <Redirect to={{ pathname: '/' }} /> }
     </Route>
   )
 }
