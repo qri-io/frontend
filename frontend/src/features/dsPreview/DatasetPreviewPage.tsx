@@ -123,7 +123,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 </div>
                 <div ref={versionInfoContainer} className='w-5/12 px-3 inline-block align-top'>
                   <ContentBox>
-                    <div className='flex items-center border-b pb-4'>
+                    <div className='flex items-center border-b pb-4 mb-3'>
                       <div className='flex-grow truncate'>
                         <ContentBoxTitle title='Version Info' />
                         <div className='text-qrinavy text-sm flex items-center mb-0'>
