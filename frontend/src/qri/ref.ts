@@ -2,8 +2,6 @@
 
 import { ComponentName } from "./dataset"
 
-import { API_BASE_URL } from '../store/api'
-
 // QriRef models a reference to a user, dataset, or part of a dataset within Qri
 // We use "QriRef" instead of "Ref" to disambiguate with the react "ref"
 // property.
@@ -150,17 +148,6 @@ export function qriRefIsSameDataset (a: QriRef, b: QriRef): boolean {
 // dropping any path or identifier data
 export function humanRef(ref: QriRef): QriRef {
   return newQriRef({ username : ref.username, name: ref.name })
-}
-
-// downloadLinkFromQriRef creates a download link
-export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): string {
-  console.log('theRef', ref)
-  let pathSegment = ref.path ? `/at${ref.path}` : ''
-
-  if (body) {
-    return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}/body.csv`
-  }
-  return `${API_BASE_URL}/download/${ref.username}/${ref.name}${pathSegment}`
 }
 
 // // selectedComponentFromQriRef takes a qriRef and gets the selected component

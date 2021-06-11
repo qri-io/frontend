@@ -1,7 +1,8 @@
-import Dataset, { NewDataset } from "../../../qri/dataset";
-import { QriRef } from "../../../qri/ref";
-import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
-import { RENAME_NEW_DATASET } from "./datasetState";
+import Dataset, { NewDataset } from "../../../qri/dataset"
+import { QriRef } from "../../../qri/ref"
+import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
+import { RENAME_NEW_DATASET } from "./datasetState"
+import { API_BASE_URL } from '../../../store/api'
 
 export const bodyPageSizeDefault = 50
 
@@ -18,6 +19,17 @@ export function loadDataset(ref: QriRef): ApiActionThunk {
     // TODO (b5) - check state before making a network request
     return dispatch(fetchDataset(ref))
   }
+}
+
+// downloadLinkFromQriRef creates a download link
+export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): string {
+  console.log('theRef', ref)
+  let pathSegment = ref.path ? `/at${ref.path}` : ''
+
+  if (body) {
+    return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}/body.csv`
+  }
+  return `${API_BASE_URL}/download/${ref.username}/${ref.name}${pathSegment}`
 }
 
 function fetchDataset (ref: QriRef): ApiAction {

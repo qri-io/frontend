@@ -26,7 +26,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
             <div className='mx-3 text-gray-400'>|</div>
             <div className=''>{commit.title}</div>
           </div>
-          <div className='flex items-center text-gray-400'>
+          <div className='flex items-centern text-xs text-gray-400'>
             <RelativeTimestampWithIcon timestamp={new Date(commit.timestamp)} className='mr-4' />
             <UsernameWithIcon username='chriswhong' className='mt-0.5' />
           </div>

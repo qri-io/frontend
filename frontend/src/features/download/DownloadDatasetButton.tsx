@@ -4,10 +4,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import Button, { ButtonType } from '../../chrome/Button'
 import Icon from '../../chrome/Icon'
 import IconLink from '../../chrome/IconLink'
-import { QriRef, downloadLinkFromQriRef } from '../../qri/ref'
+import { QriRef } from '../../qri/ref'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import { selectSessionUser } from '../session/state/sessionState'
+import { downloadLinkFromQriRef } from '../dataset/state/datasetActions'
 
 export interface DownloadDatasetButtonProps {
   qriRef: QriRef
