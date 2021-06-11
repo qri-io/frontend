@@ -14,6 +14,7 @@ export interface ButtonProps {
   type?: ButtonType
   size?: 'sm' | 'md' | 'lg'
   className?: string
+  submit?: boolean
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,10 +22,11 @@ const Button: React.FC<ButtonProps> = ({
   size='md',
   className,
   onClick,
+  submit = false,
   children
 }) => (
   <button
-    type="button"
+    type={submit ? 'submit' : 'button'}
     className={classNames(
       'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 transition-all duration-100',
       className,
