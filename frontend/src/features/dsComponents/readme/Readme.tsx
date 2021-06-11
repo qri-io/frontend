@@ -33,7 +33,7 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
   if (!hasReadme) {
     return (
       <div className='h-full w-full flex items-center'>
-        <div className='text-center mx-auto text-sm'>
+        <div className='text-center mx-auto text-sm text-qrigray-400'>
           Error fetching readme
         </div>
       </div>
