@@ -58,7 +58,7 @@ const Body: React.FC<BodyProps> = ({
   return (
     <div className='w-full h-full flex flex-col'>
       <ComponentHeader>
-        <BodyHeader data={dataset} showExpand={false} />
+        <BodyHeader dataset={dataset} showExpand={false} />
       </ComponentHeader>
       <div className='overflow-scroll border border-gray-200'>
       {

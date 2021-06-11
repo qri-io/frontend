@@ -25,7 +25,7 @@ import Readme from '../dsComponents/readme/Readme'
 import { qriRefFromDataset } from '../../qri/dataset'
 
 
-import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState';
+import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 import { QriRef } from '../../qri/ref'
 
 interface DatasetPreviewPageProps {
@@ -35,9 +35,9 @@ interface DatasetPreviewPageProps {
 const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   qriRef
 }) => {
+  const dispatch = useDispatch()
   const dataset = useSelector(selectDsPreview)
   const editable = useSelector(selectSessionUserCanEditDataset)
-  const dispatch = useDispatch()
 
   const { ref: stickyHeaderTriggerRef, inView } = useInView({
     threshold: 0.6,
@@ -123,7 +123,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 </div>
                 <div ref={versionInfoContainer} className='w-5/12 px-3 inline-block align-top'>
                   <ContentBox>
-                    <div className='flex items-center border-b pb-4'>
+                    <div className='flex items-center border-b pb-4 mb-4'>
                       <div className='flex-grow'>
                         <ContentBoxTitle title='Version Info' />
                         <div className='text-qrinavy text-sm flex items-center mb-0'>
@@ -139,9 +139,8 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                       <DownloadDatasetButton qriRef={qriRef} small light />
                     </div>
                     {/* Bottom of the box */}
-
+                    <ContentBoxTitle title='Description' />
                     <div className='pt-4 text-gray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
-
                     {dataset.meta?.keywords?.map((keyword) => {
                       return <div key={keyword} className='leading-tight text-gray-400 text-xs tracking-wider inline-block border border-qrigray-400 rounded-md px-2 py-1 mr-1 mb-1'>{keyword}</div>
                     })}

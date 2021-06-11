@@ -47,7 +47,7 @@ export interface QriRef {
   // commit hash, eg: /ipfs/QmY9WcXXUnHJbYRA28LRctiL4qu4y...
   path?: string
   // optional: a specific component the user is trying to index into component
-  component?: ComponentName 
+  component?: ComponentName
   // address into dataset structure
   selector?: string[]
 }

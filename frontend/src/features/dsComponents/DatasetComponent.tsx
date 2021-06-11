@@ -33,7 +33,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   switch (componentName) {
     case 'body':
       component = <Body data={dataset} />
-      componentHeader = <BodyHeader data={dataset} onToggleExpanded={handleToggleExpanded} showExpand={!expanded}/>
+      componentHeader = <BodyHeader dataset={dataset} onToggleExpanded={handleToggleExpanded} showExpand={!expanded}/>
       break
     case 'meta':
       component = <Meta data={dataset.meta}/>
