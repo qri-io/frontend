@@ -23,7 +23,7 @@ const TextLink: React.FC<TextLinkProps> = ({
   children
 }) => {
 
-  const combinedClassNames = classNames('hover:cursor-pointer transition-all duration-100', colorClassName, className)
+  const combinedClassNames = classNames('hover:cursor-pointer hover:underline transition-all duration-100', colorClassName, className)
 
   if (to) {
     if (to.indexOf('http') === 0) {

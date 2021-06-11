@@ -9,6 +9,7 @@ import { renameDataset } from './state/datasetActions'
 import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import DatasetInfoItem from './DatasetInfoItem'
 import Button from '../../chrome/Button'
+import TextLink from '../../chrome/TextLink'
 
 export interface DatasetHeaderProps {
   dataset: Dataset
@@ -52,7 +53,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       <div className='flex'>
         <div className='flex-grow'>
           <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1 font-mono'>
-            <span>{qriRef.username || 'new'}/</span>
+            <TextLink to={`/${qriRef.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</TextLink>/
             <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
             {editable && <DropdownMenu items={menuItems}>
               <Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />

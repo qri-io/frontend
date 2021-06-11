@@ -14,6 +14,7 @@ import ContentBoxTitle from '../../chrome/ContentBoxTitle'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
+import TextLink from '../../chrome/TextLink'
 import Button from '../../chrome/Button'
 import BodyPreview from '../dsComponents/body/BodyPreview'
 import DatasetHeader from '../dataset/DatasetHeader'
@@ -79,7 +80,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
               <div className='px-8 pt-4 pb-3 flex'>
                 <div className='flex-grow'>
                   <div className='text-xs text-gray-400 font-mono'>
-                    {dataset.peername}/{dataset.name}
+                    <TextLink to={`/${dataset.peername}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.peername || 'new'}</TextLink>/{dataset.name}
                   </div>
                   <div className='text-normal text-qrinavy font-semibold'>
                     {dataset.meta?.title || dataset.name}
