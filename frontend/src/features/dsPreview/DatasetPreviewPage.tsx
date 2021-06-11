@@ -139,7 +139,9 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                       <DownloadDatasetButton qriRef={qriRef} small light />
                     </div>
                     {/* Bottom of the box */}
-                    <div className='pt-4 text-gray-400 text-xs tracking-wider mb-2'>{(dataset.meta?.description) || 'No Description'}</div>
+
+                    <div className='pt-4 text-gray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
+
                     {dataset.meta?.keywords?.map((keyword) => {
                       return <div key={keyword} className='leading-tight text-gray-400 text-xs tracking-wider inline-block border border-qrigray-400 rounded-md px-2 py-1 mr-1 mb-1'>{keyword}</div>
                     })}
