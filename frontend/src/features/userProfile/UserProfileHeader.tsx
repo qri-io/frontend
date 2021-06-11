@@ -55,9 +55,9 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ profile, loading 
         { !loading && (
           <>
             <div className='flex justify-end mb-2'>
-              <IconLink icon='github' link='https://github.com/chriswhong' />
-              <IconLink icon='twitter' link='https://twitter.com/chriswhong' />
-              <IconLink icon='globe' link='https://chriswhong.com' />
+              <IconLink icon='github' className='ml-2' link='https://github.com/chriswhong' />
+              <IconLink icon='twitter' className='ml-2' link='https://twitter.com/chriswhong' />
+              <IconLink icon='globe' className='ml-2' link='https://chriswhong.com' />
             </div>
             <div className='text-xs text-qrigray-400'>Qri user since {format(fromUnixTime(created), 'yyyy')}</div>
           </>

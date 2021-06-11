@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, Link } from 'react-router-dom'
 import queryString from 'query-string'
 import ContentLoader from 'react-content-loader'
 
@@ -17,6 +17,7 @@ import Footer from '../footer/Footer'
 import { NewSearchParams } from '../../qri/search'
 import DatasetList from '../../chrome/DatasetList'
 import ContentBox from '../../chrome/ContentBox'
+import TextLink from '../../chrome/TextLink'
 import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import { CleanSearchParams } from '../../qri/search'
@@ -97,13 +98,46 @@ const Search: React.FC<{}> = () => {
     }
   ]
 
+  // shown if user lands on /search with no query params
+  let resultsContent = (
+    <div className='text-center font-semibold text-sm'>
+      <span className='text-qrigray-400 mr-4'>Try:</span>
+      <TextLink to='/search?q=transportation' className='mr-6'>transportation</TextLink>
+      <TextLink to='/search?q=census' className='mr-6'>census</TextLink>
+      <TextLink to='/search?q=covid-19'>covid-19</TextLink>
+    </div>
+  )
+
+  if (q) {
+    if (searchResults.length > 0) {
+      resultsContent = (
+        <>
+          <ContentBox className='mb-6'>
+            <DatasetList
+              datasets={searchResults}
+              loading={loading}
+            />
+          </ContentBox>
+          <PageControl
+            pageInfo={pageInfo}
+            queryParams={CleanSearchParams(searchParams)}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )
+    } else {
+      resultsContent = <div className='text-center'>No results found for '{q}'</div>
+    }
+  }
+
   return (
     <div className='flex flex-col h-full w-full overflow-y-scroll' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6'}}>
       <NavBar showSearch={false} />
       <div className='flex-grow w-full py-9'>
-        <div className='w-4/5 max-w-screen-lg mx-auto mb-10'>
-        <div className='text-qrinavy text-3xl font-black mb-2'>Dataset Search</div>
-          <div className='flex items-center mb-2 h-8'>
+        <div className='w-4/5 max-w-screen-lg mx-auto'>
+        <div className='text-qrinavy text-3xl font-black mb-4'>Dataset Search</div>
+          <BigSearchBox onSubmit={handleSearchSubmit} value={q} className='mb-4'/>
+          <div className='flex items-center mb-4 h-8'>
             {searchResults.length > 0 ? (
               <>
                 <div className='flex-grow'>
@@ -130,29 +164,10 @@ const Search: React.FC<{}> = () => {
             ):(
               <>&nbsp;</>
             )}
-
           </div>
-          <BigSearchBox onSubmit={handleSearchSubmit} value={q}/>
         </div>
         <div className='w-4/5 max-w-screen-lg mx-auto'>
-          {
-            (searchResults.length > 0) ?
-            <>
-              <ContentBox className='mb-6'>
-                <DatasetList
-                  datasets={searchResults}
-                  loading={loading}
-                />
-              </ContentBox>
-              <PageControl
-                pageInfo={pageInfo}
-                queryParams={CleanSearchParams(searchParams)}
-                onPageChange={handlePageChange}
-              />
-            </> : (
-              <div className='text-center'>No results found for '{q}'</div>
-            )
-          }
+          { resultsContent }
         </div>
       </div>
       <div className='bg-white flex-shrink-0'>

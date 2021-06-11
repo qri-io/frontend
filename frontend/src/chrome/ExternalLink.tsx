@@ -4,7 +4,6 @@ export interface ExternalLinkProps {
   id?: string
   to: string
   children: React.ReactNode
-  // providing className prop will override the component's color classes
   className?: string
   tooltip?: string
 }
@@ -23,7 +22,7 @@ export const ExternalLink: React.FunctionComponent<ExternalLinkProps> = ({
     href={to}
     target='_blank'
     rel="noopener noreferrer"
-    className={`${className || 'text-qriblue hover:text-qriblue-600'} hover:cursor-pointer`}
+    className={className}
     data-tip={tooltip}
   >
     {children}
