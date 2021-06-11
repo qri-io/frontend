@@ -57,10 +57,10 @@ const Body: React.FC<BodyProps> = ({
 
   return (
     <div className='w-full h-full flex flex-col'>
-      <ComponentHeader>
+      <ComponentHeader border={false}>
         <BodyHeader dataset={dataset} showExpand={false} />
       </ComponentHeader>
-      <div className='overflow-scroll border border-gray-200'>
+      <div className='overflow-scroll'>
       {
         (structure.format === 'csv' && Array.isArray(body))
           ? <BodyTable

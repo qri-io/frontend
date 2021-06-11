@@ -1,8 +1,15 @@
 import React from 'react'
+import classNames from 'classnames'
 
-const ComponentHeader: React.FC<{}> = ({ children }) => {
+interface ComponentHeaderProps {
+  border?: boolean
+}
+
+const ComponentHeader: React.FC<ComponentHeaderProps> = ({ border = true, children }) => {
   return (
-    <div className='flex-grow text-sm py-3 border-b'>
+    <div className={classNames('flex-grow text-sm py-3', {
+      'border-b': border
+    })}>
       {children}
     </div>
   )
