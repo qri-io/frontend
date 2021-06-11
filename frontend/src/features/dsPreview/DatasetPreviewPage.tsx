@@ -61,7 +61,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   return (
     <div className='flex flex-col h-full w-full bg-qrigray-100'>
       <NavBar />
-      <div className='flex overflow-hidden w-full'>
+      <div className='flex overflow-hidden w-full flex-grow'>
         <DatasetNavSidebar qriRef={qriRef} />
         {!dataset
         ? (<div className='w-full h-full p-4 flex justify-center items-center'>
