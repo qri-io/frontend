@@ -6,7 +6,7 @@ import useDimensions from 'react-use-dimensions'
 import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
 import PageWithFooter from '../app/PageWithFooter'
-import WorkflowsTable from './WorkflowsTable'
+import CollectionTable from './CollectionTable'
 import Button from '../../chrome/Button'
 import Spinner from '../../chrome/Spinner'
 import SearchBox from '../search/SearchBox'
@@ -32,7 +32,7 @@ const Collection: React.FC<any> = () => {
   const collection = searchString ? filterVersionInfos(fullCollection, searchString) : fullCollection
 
   let resultsContent = (
-    <WorkflowsTable
+    <CollectionTable
       filteredWorkflows={collection}
       // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
       // to its internal the selections

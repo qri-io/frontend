@@ -29,6 +29,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, label
               <span style={{
                 fontSize: '16px',
                 width: expanded ? 'auto' : 0,
+                // inline-block is necessary here so that the tooltip appears just to the right of the text
                 display: expanded ? 'inline-block' : 'none'
               }}>{label}</span>
             </div>

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+ import React, { forwardRef } from 'react'
 import { useDispatch } from 'react-redux';
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
@@ -16,7 +16,7 @@ import { VersionInfo } from '../../qri/versionInfo';
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 
-interface WorkflowsTableProps {
+interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
   // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
   // to its internal the selections
@@ -108,7 +108,7 @@ const customStyles = {
   },
 }
 
-const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
+const CollectionTable: React.FC<CollectionTableProps> = ({
   filteredWorkflows,
   onSelectedRowsChange,
   clearSelectedTrigger,
@@ -299,4 +299,4 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
   )
 }
 
-export default WorkflowsTable
+export default CollectionTable

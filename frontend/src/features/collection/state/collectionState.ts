@@ -24,14 +24,10 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
     }
     ordered.push(collection[id])
   })
-  return ordered.sort((a, b) => {
-    const aVal = `${a.username}/${a.name}`
-    const bVal = `${b.username}/${b.name}`
-    if (aVal === bVal) {
-      return 0
-    } else {
-      return (aVal < bVal) ? -1 : 1
-    }
+  return ordered.sort((a,b) => {
+    if (a.username === b.username && a.name === b.name) { return 0 }
+    else if (a.username < b.username ||  a.name < b.name) { return -1 }
+    return 1
   })
 }
 
