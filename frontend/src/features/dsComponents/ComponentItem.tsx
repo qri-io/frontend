@@ -34,7 +34,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   return (
     <div
       id={`${displayName.toLowerCase()}-status`}
-      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-3 rounded-tr-lg rounded-tl-lg group justify-center', {
+      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-2 rounded-tr-lg rounded-tl-lg group justify-center', {
         'selected': selected,
         'bg-white': selected,
         'text-qripink': selected,

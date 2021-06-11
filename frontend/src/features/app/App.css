@@ -60,3 +60,10 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #B8B8B8;
 }
+
+
+/* override styling for custom sort icon in react-data-table */
+.__rdt_custom_sort_icon__ {
+  padding: 3px;
+  box-sizing: border-box;
+}

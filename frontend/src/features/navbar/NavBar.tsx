@@ -44,7 +44,7 @@ const NavBar: React.FC<NavBarProps> = ({
           <div className={`font-medium text-2xl ml-2 ${expanded ? 'block' : 'hidden'}`}>Qri</div>
         </div>
       </Link>
-      {!minimal && showSearch && <SearchBox onSubmit={handleSearchSubmit} />}
+      {!minimal && showSearch && <SearchBox onSubmit={handleSearchSubmit} placeholder='Search for Datasets' />}
       <div className='flex m-auto items-center'>
         {!minimal && (
           <ButtonGroup

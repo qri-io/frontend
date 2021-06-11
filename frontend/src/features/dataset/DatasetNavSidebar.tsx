@@ -65,7 +65,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         tooltip={
           <TooltipContent
             text='Preview'
-            subtext='Explore the lastest version of this dataset'
+            subtext='View an overview of this Dataset'
           />
         }
       />
@@ -78,7 +78,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         tooltip={
           <TooltipContent
             text='Components'
-            subtext='Explore the lastest version of this dataset'
+            subtext='Explore the version history of this Dataset'
           />
         }
       />

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+ import React, { forwardRef } from 'react'
 import { useDispatch } from 'react-redux';
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
@@ -16,7 +16,7 @@ import { VersionInfo } from '../../qri/versionInfo';
 import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 
-interface WorkflowsTableProps {
+interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
   // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
   // to its internal the selections
@@ -45,7 +45,7 @@ const fieldValue = (row: VersionInfo, field: string) => {
 // column sort function for react-data-table
 // defines the actual string to sort on when a sortable column is clicked
 const customSort = (rows: VersionInfo[], field: string, direction: 'asc' | 'desc') => {
-  return rows.sort((a, b) => {
+  const sorted = rows.sort((a, b) => {
     const aVal = fieldValue(a, field)
     const bVal = fieldValue(b, field)
     if (aVal === bVal) {
@@ -55,7 +55,21 @@ const customSort = (rows: VersionInfo[], field: string, direction: 'asc' | 'desc
     }
     return (direction === 'asc') ? 1 : -1
   })
+
+  // custom sort functions in react-data-table-component must return a new array
+  return sorted.slice(0)
 }
+
+// based on 'caretDown' but needs a custom viewbox and a custom css rule in App.css to show properly in react-data-table
+const customSortIcon = (
+  <svg
+    viewBox="-6 -6 36 36"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M22 7.09524L12 17L2 7.09524" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
 
 // react-data-table custom styles
 const customStyles = {
@@ -94,7 +108,7 @@ const customStyles = {
   },
 }
 
-const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
+const CollectionTable: React.FC<CollectionTableProps> = ({
   filteredWorkflows,
   onSelectedRowsChange,
   clearSelectedTrigger,
@@ -259,7 +273,6 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
     }
   ]
 
-
   return (
     <ReactDataTable
       columns={columns}
@@ -280,8 +293,10 @@ const WorkflowsTable: React.FC<WorkflowsTableProps> = ({
       style={{
         background: 'blue'
       }}
+      defaultSortField='name'
+      sortIcon={customSortIcon}
     />
   )
 }
 
-export default WorkflowsTable
+export default CollectionTable

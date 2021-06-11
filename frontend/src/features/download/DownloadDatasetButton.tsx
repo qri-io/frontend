@@ -47,7 +47,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     }
   } else { // returns <Button>
     let buttonContent = (
-      <Button type='primary-outline' size='sm'>
+      <Button type='primary-outline' size='sm' className='px-1.5'>
         {small ? <Icon icon='download' /> : 'Download'}
       </Button>
     )

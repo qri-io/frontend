@@ -43,7 +43,7 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
     <div className='h-full w-full'>
       <div
         // use "editor-preview" class to piggie-back off the simplemde styling
-        className="markdown-body px-8 py-6"
+        className="markdown-body"
         ref={refCallback}
       >loading...
       </div>

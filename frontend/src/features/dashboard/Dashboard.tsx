@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { loadCollection } from '../collection/state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from '../collection/state/collectionState'
 import Page from '../app/Page'
-import WorkflowsTable from '../collection/WorkflowsTable'
+import CollectionTable from '../collection/CollectionTable'
 import { WorkflowInfo } from '../../qrimatic/workflow'
 import Button from '../../chrome/Button'
 import Icon from '../../chrome/Icon'
@@ -56,7 +56,7 @@ const Dashboard: React.FC<any> = () => {
             <div className='rounded shadow border px-4 mb-4 overflow-hidden'>
               { loading
                 ? <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
-                : <WorkflowsTable
+                : <CollectionTable
                     filteredWorkflows={collection.slice(0,4)}
                     // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
                     // to its internal the selections

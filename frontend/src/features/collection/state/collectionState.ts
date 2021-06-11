@@ -24,7 +24,11 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
     }
     ordered.push(collection[id])
   })
-  return ordered
+  return ordered.sort((a,b) => {
+    if (a.username === b.username && a.name === b.name) { return 0 }
+    else if (a.username < b.username ||  a.name < b.name) { return -1 }
+    return 1
+  })
 }
 
 export const selectIsCollectionLoading = (state: RootState): boolean => state.collection.collectionLoading && state.collection.runningLoading

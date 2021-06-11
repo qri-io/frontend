@@ -1,3 +1,5 @@
+const { fontFamily } = require('tailwindcss/defaultTheme')
+
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
@@ -109,6 +111,10 @@ module.exports = {
           '900': '#4C1D95',
         },
       },
+      fontFamily: {
+        ...fontFamily,
+        mono: ['CourierPrime', 'monospace']
+      }
     },
   },
   variants: {
@@ -123,5 +129,5 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),
-  ],
+  ]
 }

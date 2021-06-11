@@ -6,7 +6,7 @@ import useDimensions from 'react-use-dimensions'
 import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
 import PageWithFooter from '../app/PageWithFooter'
-import WorkflowsTable from './WorkflowsTable'
+import CollectionTable from './CollectionTable'
 import Button from '../../chrome/Button'
 import Spinner from '../../chrome/Spinner'
 import SearchBox from '../search/SearchBox'
@@ -32,25 +32,34 @@ const Collection: React.FC<any> = () => {
   const collection = searchString ? filterVersionInfos(fullCollection, searchString) : fullCollection
 
   let resultsContent = (
-    <WorkflowsTable
-        filteredWorkflows={collection}
-        // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
-        // to its internal the selections
-        clearSelectedTrigger={false}
-        onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
-        containerHeight={tableContainerHeight}
-        searchString={searchString}
-      />
+    <CollectionTable
+      filteredWorkflows={collection}
+      // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
+      // to its internal the selections
+      clearSelectedTrigger={false}
+      onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
+      containerHeight={tableContainerHeight}
+      searchString={searchString}
+    />
   )
 
   // if loading, show a spinner
   if (loading) {
-    resultsContent = <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
+    resultsContent = (
+      <div className='h-full w-full flex justify-center items-center'>
+        <Spinner color='#4FC7F3' />
+      </div>
+    )
   }
 
   // if no results, show a message
-  if (collection.length === 0) {
-    resultsContent = <div className='h-full w-full flex justify-center items-center text-qrigray-400'> No datasets found for&nbsp;<span className='font-semibold'>{searchString}</span></div>
+  if (!loading && collection.length === 0) {
+    resultsContent = (
+      <div className='h-full w-full flex justify-center items-center text-qrigray-400'>
+        No datasets found for&nbsp;
+        <span className='font-semibold'>{searchString}</span>
+      </div>
+    )
   }
 
   return (
@@ -68,7 +77,7 @@ const Collection: React.FC<any> = () => {
             </div>
 
             <div className='w-1/2 flex items-center justify-end'>
-              <SearchBox onChange={handleSearchChange} dark />
+              <SearchBox onChange={handleSearchChange} placeholder='Filter' dark />
               <Link to='/ds/new'>
                 <Button type='secondary'>
                   New Dataset

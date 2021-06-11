@@ -55,11 +55,6 @@ export const CommitEditorComponent: React.FunctionComponent<CommitEditorProps> =
     setIsValid(valid)
   }, [title, message, status])
 
-  const handleChange = (e: React.ChangeEvent) => {
-    if (e.target.name === 'title') setCommitTitle(e.target.value)
-    if (e.target.name === 'message') setCommitMessage(e.target.value)
-  }
-
   const handleSubmit = (event: any) => {
     event.preventDefault()
     if (isValid) {
@@ -89,7 +84,7 @@ export const CommitEditorComponent: React.FunctionComponent<CommitEditorProps> =
           type='text'
           value={title}
           placeHolder='Add a title'
-          onChange={handleChange}
+          onChange={(value) => { setCommitTitle(value) }}
           maxLength={600}
         />
         <TextAreaInput
@@ -98,7 +93,7 @@ export const CommitEditorComponent: React.FunctionComponent<CommitEditorProps> =
           labelTooltip={'Provide a detailed description of the<br/>changes being made in this commit (optional)'}
           value={message}
           placeHolder='Add a message'
-          onChange={handleChange}
+          onChange={(e) => { setCommitMessage(e.target.value) }}
           maxLength={600}
           rows={12}
         />

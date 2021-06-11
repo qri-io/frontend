@@ -101,6 +101,34 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: 'CourierPrime';
+  src: url('./fonts/CourierPrime-Regular.ttf') format('ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CourierPrime';
+  src: url('./fonts/CourierPrime-Italic.ttf') format('ttf');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'CourierPrime';
+  src: url('./fonts/CourierPrime-Bold.ttf') format('ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CourierPrime';
+  src: url('./fonts/CourierPrime-BoldItalic.ttf') format('ttf');
+  font-weight: 700;
+  font-style: italic;
+}
+
 body {
   margin: 0;
   font-family: "Roboto", sans-serif;
@@ -109,7 +137,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'CourierPrime',
     monospace;
 }
 

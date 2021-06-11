@@ -50,14 +50,14 @@ const LogInModal: React.FC = () => {
           <TextInput
             name='username'
             value={username}
-            onChange={(e) => { setUsername(e.target.value)  }}
+            onChange={(value) => { setUsername(value)  }}
             placeholder='Username'
           />
           <TextInput
             name='password'
             type='password'
             value={password}
-            onChange={(e) => { setPassword(e.target.value)  }}
+            onChange={(value) => { setPassword(value)  }}
             placeholder='Password'
           />
           <Link to='/forgot-password'><div className='text-left text-qrinavy text-xs font-medium'>Forgot your Password?</div></Link>

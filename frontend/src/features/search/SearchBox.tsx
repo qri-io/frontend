@@ -9,10 +9,16 @@ const DEBOUNCE_TIMER = 500
 interface SearchBoxProps {
   onChange?: (q: string) => void
   onSubmit?: (q: string) => void
+  placeholder?: string
   dark?: boolean
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ onChange, onSubmit, dark = false }) => {
+const SearchBox: React.FC<SearchBoxProps> = ({
+  onChange,
+  onSubmit,
+  placeholder = 'Search',
+  dark = false
+}) => {
   const [stateValue, setStateValue] = React.useState('')
   const [debouncedValue] = useDebounce(stateValue, DEBOUNCE_TIMER)
 
@@ -37,7 +43,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onChange, onSubmit, dark = false 
   return (
     <form className="my-1 mx-2 relative rounded-md shadow-sm w-48" onSubmit={handleSubmit}>
       <input
-        className={classNames('focus:ring-qriblue block w-full sm:text-xs rounded-lg tracking-wider bg-transparent placeholder-opacity-50', {
+        className={classNames('focus:ring-qripink focus:border-qripink block w-full sm:text-xs rounded-lg tracking-wider bg-transparent placeholder-opacity-50', {
           'border-gray-400 placeholder-gray-600': !dark,
           'border-qrinavy placeholder-qrinavy': dark
         })}
@@ -47,7 +53,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onChange, onSubmit, dark = false 
         id='search'
         name='search'
         type='text'
-        placeholder='Search'
+        placeholder={placeholder}
         value={stateValue || ''}
         onChange={handleChange}
       />

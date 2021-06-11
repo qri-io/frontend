@@ -12,7 +12,7 @@ interface TextInputProps {
   label?: string
   labelTooltip?: string
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void | undefined
-  onChange?: (e: React.ChangeEvent) => void | undefined
+  onChange?: (value: string) => void | undefined
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   placeholder?: string
   white?: boolean
@@ -35,12 +35,13 @@ const TextInput: React.FC<TextInputProps> = ({
   const [stateValue, setStateValue] = React.useState(value)
 
   React.useEffect(() => {
-    if (value !== stateValue) setStateValue(value)
-  }, [value, stateValue])
+    if (onChange) {
+      onChange(stateValue)
+    }
+  }, [stateValue, onChange])
 
   const handleOnChange = (e: React.ChangeEvent) => {
-    if (onChange) onChange(e)
-    else setStateValue(e.target.value)
+    setStateValue(e.target.value)
   }
 
   return (
