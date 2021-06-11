@@ -127,11 +127,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                       <div className='flex-grow truncate'>
                         <ContentBoxTitle title='Version Info' />
                         <div className='text-qrinavy text-sm flex items-center mb-0'>
-                          <Icon icon='commit' size='sm' className='-ml-2' />
+                          <Icon icon='commit' size='sm' className='-ml-1.5' />
                           <div className='font-medium'>{commitishFromPath(dataset.path)}</div>
                         </div>
                         <div className='text-sm text-qrinavy mb-2 truncate' title={dataset.commit?.title}>{dataset.commit?.title}</div>
-                        <div className='flex items-center text-gray-400'>
+                        <div className='flex items-center text-gray-400 text-xs'>
                           <RelativeTimestampWithIcon timestamp={new Date(dataset.commit?.timestamp)} className='mr-3' />
                           <UsernameWithIcon username='chriswhong' className='mt-0.5' />
                         </div>
