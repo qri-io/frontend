@@ -18,7 +18,7 @@ const defaultColorClassname = 'text-qriblue hover:text-qriblue-800'
 const TextLink: React.FC<TextLinkProps> = ({
   to='',
   onClick,
-  className,
+  className='',
   colorClassName = defaultColorClassname,
   children
 }) => {

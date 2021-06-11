@@ -9,10 +9,11 @@ import PageWithFooter from '../app/PageWithFooter'
 import CollectionTable from './CollectionTable'
 import Button from '../../chrome/Button'
 import Spinner from '../../chrome/Spinner'
+import TextLink from '../../chrome/TextLink'
 import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
 
-const Collection: React.FC<any> = () => {
+const Collection: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const fullCollection = useSelector(selectCollection)
   const loading = useSelector(selectIsCollectionLoading)
@@ -58,6 +59,17 @@ const Collection: React.FC<any> = () => {
       <div className='h-full w-full flex justify-center items-center text-qrigray-400'>
         No datasets found for&nbsp;
         <span className='font-semibold'>{searchString}</span>
+      </div>
+    )
+  }
+
+  // if no results in the full collection (new user), show a nudge
+  if (!loading && fullCollection.length === 0) {
+    resultsContent = (
+      <div className='h-full w-full flex justify-center items-center text-qrigray-400'>
+        <div className='text-center'>
+          You don't have any datasets!<br/> You can push datasets using <TextLink to='https://qri.io/docs/getting-started/qri-cli-quickstart'>qri CLI</TextLink>.
+        </div>
       </div>
     )
   }
