@@ -69,7 +69,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
     <div
       className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col transform transition-all px-4', {})}
     >
-      <ComponentHeader>
+      <ComponentHeader border={componentName !== 'body'}>
         {componentHeader}
       </ComponentHeader>
       <div className='overflow-auto flex-grow'>

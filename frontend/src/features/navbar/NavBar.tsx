@@ -7,6 +7,8 @@ import SearchBox from '../search/SearchBox'
 import QriLogo from '../../chrome/QriLogo'
 import ButtonGroup from '../../chrome/ButtonGroup'
 import { selectNavExpanded } from '../app/state/appState'
+import { AnonUser, selectSessionUser } from '../session/state/sessionState'
+
 
 export interface NavBarProps {
   minimal?: boolean
@@ -18,6 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({
   showSearch = true
 }) => {
   const expanded = useSelector(selectNavExpanded)
+  const user = useSelector(selectSessionUser)
   const location = useLocation()
   const history = useHistory()
 
@@ -46,7 +49,7 @@ const NavBar: React.FC<NavBarProps> = ({
       </Link>
       {!minimal && showSearch && <SearchBox onSubmit={handleSearchSubmit} placeholder='Search for Datasets' />}
       <div className='flex m-auto items-center'>
-        {!minimal && (
+        {!minimal && (user !== AnonUser) && (
           <ButtonGroup
             items={buttonItems}
             selectedIndex={buttonItems.findIndex((d) => location.pathname === d.link)}

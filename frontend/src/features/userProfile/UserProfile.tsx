@@ -122,7 +122,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
               }}></div>
               <div>
                 <div className='text-qrinavy text-sm font-semibold'>{profile.name}</div>
-                <div className='text-qrigray-400 text-xs'>{profile.username}</div>
+                <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
               </div>
             </div>
           </div>

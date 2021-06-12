@@ -14,6 +14,7 @@ import ContentBoxTitle from '../../chrome/ContentBoxTitle'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
+import TextLink from '../../chrome/TextLink'
 import Button from '../../chrome/Button'
 import BodyPreview from '../dsComponents/body/BodyPreview'
 import DatasetHeader from '../dataset/DatasetHeader'
@@ -79,7 +80,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
               <div className='px-8 pt-4 pb-3 flex'>
                 <div className='flex-grow'>
                   <div className='text-xs text-gray-400 font-mono'>
-                    {dataset.peername}/{dataset.name}
+                    <TextLink to={`/${dataset.peername}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.peername || 'new'}</TextLink>/{dataset.name}
                   </div>
                   <div className='text-normal text-qrinavy font-semibold'>
                     {dataset.meta?.title || dataset.name}
@@ -123,15 +124,15 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 </div>
                 <div ref={versionInfoContainer} className='w-5/12 px-3 inline-block align-top'>
                   <ContentBox>
-                    <div className='flex items-center border-b pb-4'>
+                    <div className='flex items-center border-b pb-4 mb-3'>
                       <div className='flex-grow truncate'>
                         <ContentBoxTitle title='Version Info' />
                         <div className='text-qrinavy text-sm flex items-center mb-0'>
-                          <Icon icon='commit' size='sm' className='-ml-2' />
+                          <Icon icon='commit' size='sm' className='-ml-1.5' />
                           <div className='font-medium'>{commitishFromPath(dataset.path)}</div>
                         </div>
                         <div className='text-sm text-qrinavy mb-2 truncate' title={dataset.commit?.title}>{dataset.commit?.title}</div>
-                        <div className='flex items-center text-gray-400'>
+                        <div className='flex items-center text-gray-400 text-xs'>
                           <RelativeTimestampWithIcon timestamp={new Date(dataset.commit?.timestamp)} className='mr-3' />
                           <UsernameWithIcon username='chriswhong' className='mt-0.5' />
                         </div>
@@ -142,7 +143,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     </div>
                     {/* Bottom of the box */}
                     <ContentBoxTitle title='Description' />
-                    <div className='pt-4 text-gray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
+                    <div className='text-gray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
                     {dataset.meta?.keywords?.map((keyword) => {
                       return <div key={keyword} className='leading-tight text-gray-400 text-xs tracking-wider inline-block border border-qrigray-400 rounded-md px-2 py-1 mr-1 mb-1'>{keyword}</div>
                     })}

@@ -28,7 +28,8 @@ const LogInModal: React.FC = () => {
     dispatch(showModal(ModalType.signUp))
   }
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault()
     logIn(username, password)(dispatch)
       .then((action: AnyAction) => {
         if (getActionType(action) === ACTION_FAILURE) {
@@ -46,29 +47,30 @@ const LogInModal: React.FC = () => {
       </div>
       <div className='text-3xl font-black mb-8 text-qrinavy'>Welcome to Qri</div>
       <div className='w-72 mx-auto'>
-        <div className='mb-8'>
-          <TextInput
-            name='username'
-            value={username}
-            onChange={(value) => { setUsername(value)  }}
-            placeholder='Username'
-          />
-          <TextInput
-            name='password'
-            type='password'
-            value={password}
-            onChange={(value) => { setPassword(value)  }}
-            placeholder='Password'
-          />
-          <Link to='/forgot-password'><div className='text-left text-qrinavy text-xs font-medium'>Forgot your Password?</div></Link>
-        </div>
+        <form>
+          <div className='mb-8'>
+            <TextInput
+              name='username'
+              value={username}
+              onChange={(value) => { setUsername(value)  }}
+              placeholder='Username'
+            />
+            <TextInput
+              name='password'
+              type='password'
+              value={password}
+              onChange={(value) => { setPassword(value)  }}
+              placeholder='Password'
+            />
+            <Link to='/forgot-password'><div className='text-left text-qrinavy text-xs font-medium'>Forgot your Password?</div></Link>
+          </div>
 
-        {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
+          {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
 
-        <Button size='sm' className='w-full mb-6' onClick={handleButtonClick}>
-          {loading ? <Spinner color='#fff' size={6} /> : 'Log In'}
-        </Button>
-
+          <Button size='sm' className='w-full mb-6' onClick={handleButtonClick} submit>
+            {loading ? <Spinner color='#fff' size={6} /> : 'Log In'}
+          </Button>
+        </form>
         <div className='mb-3 text-qrigray-400 tracking-wider text-xs'>
           By continuing, you agree to Qri's <TextLink to='https://qri.io/legal/tos'>Terms of Service</TextLink> & <TextLink to='https://qri.io/legal/privacy-policy'>Privacy Policy</TextLink>.
         </div>

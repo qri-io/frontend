@@ -39,7 +39,7 @@ interface BodyTableProps {
 //   return Math.abs(scrollTop + offsetHeight - scrollHeight) < buffer
 // }
 
-const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap border-r border-gray-200 max-w-xs'
+const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap max-w-xs'
 
 
 export default class BodyTable extends React.Component<BodyTableProps> {
@@ -115,8 +115,8 @@ export default class BodyTable extends React.Component<BodyTableProps> {
 
     const tableRows = body.map((row, i) => {
       return (
-        <tr key={i} className='border-b border-gray-200'>
-          <td key={0}className='bg-white text-center'>
+        <tr key={i} className=''>
+          <td key={0}className='bg-white text-center border-r border-b border-gray-200'>
             <div className={classNames(cellClasses, 'text-qrinavy-500')}>
               {
                 // TODO (ramfox): when we add back pageInfo/fetching
@@ -128,7 +128,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
           </td>
           {row.map((d: any, j: number) => {
             return (
-              <td key={j + 1}>
+              <td key={j + 1} className='border-r border-b border-gray-200'>
                 <div className={classNames(cellClasses, 'text-qrigray-400')}>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
               </td>
             )
@@ -145,16 +145,16 @@ export default class BodyTable extends React.Component<BodyTableProps> {
         style={{ maxWidth: 800 }}
         onScroll={() => { this.handleVerticalScrollThrottled() } }
       >
-        <table className='table text-xs'>
-          <thead className='border-b border-gray-200'>
+        <table className='table text-xs border-separate border-l border-gray-200' style={{ borderSpacing: 0 }}>
+          <thead className='sticky top-0'>
             <tr>
-              <th className='sticky top-0 h-6 bg-white cursor-pointer p-0'>
-                <div className={classNames(cellClasses, 'border-r border-b leading-4')}>&nbsp;</div>
+              <th className=' h-6 bg-white p-0 border-t border-r border-b border-gray-200'>
+                <div className={classNames(cellClasses, 'leading-4')}>&nbsp;</div>
               </th>
               {headers && headers.map((d: any, j: number) => {
                 return (
-                  <th key={j} className='sticky top-0 h-6 bg-white font-medium text-left p-0'>
-                    <div className={classNames(cellClasses, 'text-qrinavy text-sm border-r border-b leading-4')} >
+                  <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-gray-200'>
+                    <div className={classNames(cellClasses, 'text-qrinavy text-sm leading-4')} >
                       <TypeLabel type={d.type} showLabel={false}/>&nbsp;{d.title}
                     </div>
                   </th>

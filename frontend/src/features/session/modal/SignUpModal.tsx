@@ -35,7 +35,8 @@ const SignUpModal: React.FC = () => {
     dispatch(showModal(ModalType.logIn))
   }
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault()
     // validate email
     const emailError = validateEmail(email)
     setEmailError(emailError)
@@ -66,35 +67,36 @@ const SignUpModal: React.FC = () => {
       </div>
       <div className='text-3xl font-black mb-8 text-qrinavy'>Sign Up for Qri</div>
       <div className='w-72 mx-auto'>
-        <div className='mb-8'>
-          <TextInput
-            name='email'
-            placeholder='Email'
-            value={email}
-            onChange={(value) => { setEmail(value)  }}
-            error={emailError}
-          />
-          <TextInput
-            name='username'
-            placeholder='Username'
-            value={username}
-            onChange={(value) => { setUsername(value)  }}
-            error={usernameError}
-          />
-          <TextInput
-            name='password'
-            type='password'
-            placeholder='Password'
-            value={password}
-            onChange={(value) => { setPassword(value)  }}
-            error={passwordError}
-          />
-        </div>
-        {signupError && <div className='text-xs text-red-500 text-left mb-2'>{signupError}</div>}
-        <Button size='sm' className='w-full mb-6' onClick={handleButtonClick}>
-          {loading ? <Spinner color='#fff' size='6' /> : 'Continue'}
-        </Button>
-
+        <form>
+          <div className='mb-8'>
+            <TextInput
+              name='email'
+              placeholder='Email'
+              value={email}
+              onChange={(value) => { setEmail(value)  }}
+              error={emailError}
+            />
+            <TextInput
+              name='username'
+              placeholder='Username'
+              value={username}
+              onChange={(value) => { setUsername(value)  }}
+              error={usernameError}
+            />
+            <TextInput
+              name='password'
+              type='password'
+              placeholder='Password'
+              value={password}
+              onChange={(value) => { setPassword(value)  }}
+              error={passwordError}
+            />
+          </div>
+          {signupError && <div className='text-xs text-red-500 text-left mb-2'>{signupError}</div>}
+          <Button size='sm' className='w-full mb-6' onClick={handleButtonClick} submit>
+            {loading ? <Spinner color='#fff' size='6' /> : 'Continue'}
+          </Button>
+        </form>
         <div className='mb-3 text-qrigray-400 tracking-wider text-xs'>
           By continuing, you agree to Qri's <TextLink to='https://qri.io/legal/tos'>Terms of Service</TextLink> & <TextLink to='https://qri.io/legal/privacy-policy'>Privacy Policy</TextLink>.
         </div>
