@@ -60,14 +60,14 @@ jobs:
     docker:
       - image: circleci/node:14.15
 
-    working_directory: ~/repo/frontend
+    working_directory: ~/repo
 
     steps:
     - checkout:
         path: ~/repo
     - run:
         name: Check for changes
-        command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo/frontend
+        command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo
     - restore_cache:
         keys:
           - v1-dependencies-{{ checksum "package.json" }}
@@ -93,7 +93,7 @@ jobs:
     docker:
       - image: google/cloud-sdk
 
-    working_directory: /root/project/frontend
+    working_directory: /root/project
 
     steps:
     - checkout:
@@ -127,58 +127,6 @@ jobs:
           image: gcr.io/qri-io/qrimatic-fe
           tag: $CIRCLE_SHA1
 
-  engine-test:
-    working_directory: ~/qm/qrimatic
-    docker:
-    - image: circleci/golang:1.15
-      environment:
-        GO111MODULE: "on"
-        GOPROXY: "https://proxy.golang.org"
-        GOSUMDB: "off"
-    environment:
-      TEST_RESULTS: /tmp/test-results
-    # resource_class requires a paid circleci plan:
-    resource_class: medium
-    steps:
-    - checkout:
-        path: ~/qm
-    - run:
-        name: Check for changes
-        command: ../.circleci/exit_if_path_not_changed.sh ~/qm/qrimatic
-
-  engine-image-push:
-    working_directory: ~/qm/qrimatic
-    docker:
-    - image: google/cloud-sdk
-    steps:
-    - checkout:
-        path: ~/qm
-    - setup_remote_docker
-    - run:
-        name: Build docker image
-        command: docker build --rm=false -t gcr.io/qri-io/qrimatic-engine:$CIRCLE_SHA1 .
-    - run:
-        name: Push image to Google Container Registry, add 'latest' tag
-        command: ../.circleci/publish_to_gcr.sh gcr.io/qri-io/qrimatic-engine $CIRCLE_SHA1
-
-
-  engine-prod-deploy:
-    machine: true
-    steps:
-      - checkout
-      - gcp-gke/install
-      - gcp-gke/update-kubeconfig-with-credentials:
-          cluster: qri-cloud-prod-cluster
-          install-kubectl: true
-          perform-login: true
-      - rolling-update-stateful-set:
-          namespace: qrimatic
-          cluster: qri-cloud-prod-cluster
-          statefulset: qrimatic-engine-qme-prod
-          container: qrimatic-engine
-          image: gcr.io/qri-io/qrimatic-engine
-          tag: $CIRCLE_SHA1
-
 workflows:
   frontend:
     jobs:
@@ -193,23 +141,6 @@ workflows:
       - frontend-prod-deploy:
           requires:
             - frontend-image-push
-          filters:
-            branches:
-              only:
-                - master
-  engine:
-    jobs:
-      - engine-test
-      - engine-image-push:
-          requires:
-          - engine-test
-          filters:
-            branches:
-              only:
-              - master
-      - engine-prod-deploy:
-          requires:
-            - engine-image-push
           filters:
             branches:
               only:
