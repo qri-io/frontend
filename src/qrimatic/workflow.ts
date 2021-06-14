@@ -50,8 +50,6 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
 }
 
 export interface WorkflowTrigger {
-  id:         string,
-  workflowID: string,
   type:       string,
   disabled?:   boolean,
 

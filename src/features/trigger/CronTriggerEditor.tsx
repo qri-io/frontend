@@ -23,8 +23,8 @@ const CronTriggerEditor: React.FC<TriggerEditorProps> = ({
         <option value="R/PT1H">Hour</option>
         <option value="R/PT1D">Day</option>
         <option value="R/PT1W">Week</option>
-        <option value="R/PT1M0D0H">Month</option>
-        <option value="R/PT3M0D0H">Quarter</option>
+        <option value="R/PT1M">Month</option>
+        <option value="R/PT3M">Quarter</option>
       </select>
     </div>
   )
