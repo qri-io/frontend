@@ -53,7 +53,7 @@ const initialState: WorkflowState = {
     disabled: false,
 
     triggers: [
-      { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
+      { type: 'cron', enabled: true, periodicity: 'R/PT1D' }
     ],
     steps: [
       { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
