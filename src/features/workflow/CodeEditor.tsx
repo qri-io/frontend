@@ -63,37 +63,39 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
   });
 
   return (
-    <MonacoEditor
-      ref={ref}
-      height={(lineCount * LINE_HEIGHT) + PADDING}
-      value={script as any as string}
-      onChange={(script: string) => {
-        onChange(script)
+    <div className='rounded-lg overflow-hidden'>
+      <MonacoEditor
+        ref={ref}
+        height={(lineCount * LINE_HEIGHT) + PADDING}
+        value={script as any as string}
+        onChange={(script: string) => {
+          onChange(script)
 
-        if (ref) {
-          handleSetLineCount(ref.current?.editor?.getModel()?.getLineCount() || 4)
-        }
-      }}
-      language='python'
-      theme='qri-theme'
-      options={{
-        scrollbar:{
-          vertical: "hidden",
-          horizontalScrollbarSize: 4,
-          alwaysConsumeMouseWheel: false
-        },
-        scrollBeyondLastLine: false,
-        minimap: {
-          enabled: false
-        },
-        padding: {
-          top: 10,
-          bottom: 10
-        }
-      }}
-      editorDidMount={handleEditorDidMount}
-      editorWillMount={handleEditorWillMount}
-    />
+          if (ref) {
+            handleSetLineCount(ref.current?.editor?.getModel()?.getLineCount() || 4)
+          }
+        }}
+        language='python'
+        theme='qri-theme'
+        options={{
+          scrollbar:{
+            vertical: "hidden",
+            horizontalScrollbarSize: 4,
+            alwaysConsumeMouseWheel: false
+          },
+          scrollBeyondLastLine: false,
+          minimap: {
+            enabled: false
+          },
+          padding: {
+            top: 10,
+            bottom: 10
+          }
+        }}
+        editorDidMount={handleEditorDidMount}
+        editorWillMount={handleEditorWillMount}
+      />
+    </div>
   )
 }
 

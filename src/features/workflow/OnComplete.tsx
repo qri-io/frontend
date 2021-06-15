@@ -1,7 +1,8 @@
 import React from 'react'
 
-import ScrollAnchor from '../scroller/ScrollAnchor';
-import Block from './Block';
+import ScrollAnchor from '../scroller/ScrollAnchor'
+import Block from './Block'
+import ContentBox from '../../chrome/ContentBox'
 
 const onCompleteItems = [
   {
@@ -20,15 +21,19 @@ const onCompleteItems = [
 
 const OnComplete: React.FC<any> = () => {
   return (
-    <div className='p-4 bg-white shadow-sm mb-4'>
+    <ContentBox className='mb-7' paddingClassName='px-5 py-4'>
         <ScrollAnchor id='on-completion' />
         <h2 className='text-2xl font-semibold text-gray-600'>On Completion</h2>
-        <div className='text-xs mb-2'>Configure actions that will happen when the workflow succeeds</div>
-        <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
-          {onCompleteItems.map((d, i) => (<Block key={i} {...d} />))}
+        <div className='text-sm text-qrigray-400 mb-3'>Configure actions that will happen when the workflow succeeds</div>
+        <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
+          {onCompleteItems.map((d, i) => (
+            <Block key={i} name={d.name}>
+              <div className='text-xs text-qrigray-400'>{d.description}</div>
+            </Block>
+          ))}
         </div>
-      </div>
+      </ContentBox>
   )
 }
 
-export default OnComplete;
+export default OnComplete

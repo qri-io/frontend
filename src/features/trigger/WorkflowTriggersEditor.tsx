@@ -1,13 +1,14 @@
 import React from 'react'
-import { useDispatch } from 'react-redux';
-import { WorkflowTrigger } from '../../qrimatic/workflow';
+import { useDispatch } from 'react-redux'
+import { WorkflowTrigger } from '../../qrimatic/workflow'
 
-import { showModal } from '../app/state/appActions';
-import { ModalType } from '../app/state/appState';
-import ScrollAnchor from '../scroller/ScrollAnchor';
-import Block from '../workflow/Block';
-import { changeWorkflowTrigger } from '../workflow/state/workflowActions';
-import CronTriggerEditor from './CronTriggerEditor';
+import { showModal } from '../app/state/appActions'
+import { ModalType } from '../app/state/appState'
+import ScrollAnchor from '../scroller/ScrollAnchor'
+import Block from '../workflow/Block'
+import { changeWorkflowTrigger } from '../workflow/state/workflowActions'
+import CronTriggerEditor from './CronTriggerEditor'
+import ContentBox from '../../chrome/ContentBox'
 
 export interface WorkflowTriggersEditorProps {
   triggers?: WorkflowTrigger[]
@@ -36,24 +37,24 @@ export interface TriggerEditorProps {
 const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
   triggers = []
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   return (
-    <section className='p-4 mb-4'>
-        <ScrollAnchor id='triggers'/>
-        <h2 className='text-2xl font-semibold text-gray-600 mb-1'>Triggers</h2>
-        <div className='text-xs mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
-        <div className='grid grid-flow-col grid-cols-3 -mx-2 overflow-hidden'>
-          {triggers.map((trigger: WorkflowTrigger, i) => {
-            switch (trigger.type) {
-              case 'cron':
-                return <CronTriggerEditor key={i} trigger={trigger} onChange={(t: WorkflowTrigger) => { dispatch(changeWorkflowTrigger(i, t)) }}/>
-              default:
-                return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
-            }
-          })}
-        </div>
-      </section>
-    )
+    <ContentBox className='mb-7' paddingClassName='px-5 py-4'>
+      <ScrollAnchor id='triggers'/>
+      <h2 className='text-2xl font-medium text-qrinavy mb-1'>Triggers</h2>
+      <div className='text-sm text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
+      <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
+        {triggers.map((trigger: WorkflowTrigger, i) => {
+          switch (trigger.type) {
+            case 'cron':
+              return <CronTriggerEditor key={i} trigger={trigger} onChange={(t: WorkflowTrigger) => { dispatch(changeWorkflowTrigger(i, t)) }}/>
+            default:
+              return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
+          }
+        })}
+      </div>
+    </ContentBox>
+  )
 }
 
-export default WorkflowTriggersEditor;
+export default WorkflowTriggersEditor

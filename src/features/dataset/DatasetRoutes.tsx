@@ -1,14 +1,14 @@
 import React from 'react'
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
+import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router'
 
-import Workflow from '../workflow/Workflow';
-import DatasetComponents from '../dsComponents/DatasetComponents';
-import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed';
-import DatasetPreviewPage from '../dsPreview/DatasetPreviewPage';
-import DatasetIssues from '../issues/DatasetIssues';
-import DatasetPage from './DatasetPage';
-import { newQriRef } from '../../qri/ref';
-import DatasetEditor from '../dsComponents/DatasetEditor';
+import WorkflowPage from '../workflow/WorkflowPage'
+import DatasetComponents from '../dsComponents/DatasetComponents'
+import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed'
+import DatasetPreviewPage from '../dsPreview/DatasetPreviewPage'
+import DatasetIssues from '../issues/DatasetIssues'
+import DatasetPage from './DatasetPage'
+import { newQriRef } from '../../qri/ref'
+import DatasetEditor from '../dsComponents/DatasetEditor'
 
 const DatasetRoutes: React.FC<{}> = () => {
   const { url } = useRouteMatch()
@@ -27,9 +27,7 @@ const DatasetRoutes: React.FC<{}> = () => {
       </Route>
 
       <Route path='/ds/:username/:name/workflow'>
-        <DatasetPage>
-          <Workflow qriRef={qriRef} />
-        </DatasetPage>
+        <WorkflowPage qriRef={qriRef} />
       </Route>
       <Route path='/ds/:username/:name/history'>
         <DatasetPage>
@@ -74,4 +72,4 @@ const DatasetRoutes: React.FC<{}> = () => {
   )
 }
 
-export default DatasetRoutes;
+export default DatasetRoutes
