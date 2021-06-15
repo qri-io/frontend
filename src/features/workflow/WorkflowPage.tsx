@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useDimensions from 'react-use-dimensions'
 import { useInView } from 'react-intersection-observer'
 
 import { newQriRef } from '../../qri/ref'
@@ -17,11 +16,11 @@ import Workflow from './Workflow'
 import Scroller from '../scroller/Scroller'
 
 
-interface DatasetPreviewPageProps {
+interface WorkflowPageProps {
   qriRef: QriRef
 }
 
-const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
+const WorkflowPage: React.FC<WorkflowPageProps> = ({
   qriRef
 }) => {
   const dispatch = useDispatch()
@@ -60,7 +59,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
           </div>)
         : (
             <Scroller className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
-              <DatasetMiniHeader dataset={dataset} show={inView} />
+              <DatasetMiniHeader dataset={dataset} hide={!inView} />
               <div className='p-7 w-full'>
                 <div ref={stickyHeaderTriggerRef}>
                   <DatasetHeader dataset={dataset} editable={editable} />
@@ -75,4 +74,4 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   )
 }
 
-export default DatasetPreviewPage
+export default WorkflowPage
