@@ -68,7 +68,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
           </div>)
         : (
           <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
-            <DatasetMiniHeader dataset={dataset} show={inView} />
+            <DatasetMiniHeader dataset={dataset} hide={!inView} />
             <div className='max-w-screen-lg mx-auto p-7 w-full h-full'>
               <div ref={stickyHeaderTriggerRef}>
                 <DatasetHeader dataset={dataset} editable={editable} noBorder />

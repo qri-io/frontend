@@ -9,19 +9,19 @@ import DownloadDatasetButton from '../download/DownloadDatasetButton'
 
 export interface DatasetHeaderProps {
   dataset: Dataset
-  show: boolean
+  hide: boolean
 }
 
 const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   dataset,
-  show,
+  hide,
   children
 }) => {
   const qriRef = qriRefFromDataset(dataset)
   return (
     <div className={classNames('sticky top-0 bg-white border border-qrigray-200 z-10', {
-      'invisible -top-16 h-0': show,
-      'visible top-0 transition-all': !show
+      'invisible -top-16 h-0': !hide,
+      'visible top-0 transition-all': !hide
     })} style={{
       borderTopLeftRadius: '20px'
     }}>
