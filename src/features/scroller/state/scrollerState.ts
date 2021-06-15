@@ -5,16 +5,16 @@ import { SetScrollerPosAction, SetScrollAnchorAction } from './scrollerActions';
 
 // SCROLLER_DEFAULT_TOP_OFFSET how far from the top of the scroller
 // to place the scrolled element by default
-export const SCROLLER_DEFAULT_TOP_OFFSET = 180
+export const SCROLLER_DEFAULT_TOP_OFFSET = 80
 
 export const SET_SCROLLER_POS = 'SET_SCROLLER_POS'
-export const SET_SCROLL_ELEMENT = 'SET_SCROLL_ELEMENT' 
+export const SET_SCROLL_ELEMENT = 'SET_SCROLL_ELEMENT'
 
 export interface ScrollerState {
   // scrollPos, when this changes it triggers the workflow editor to adjust it's
   // scroll position
   scrollerPos: number
-  // scrollAnchorID is the id of an anchor tag in the `ScrollTo` component that 
+  // scrollAnchorID is the id of an anchor tag in the `ScrollTo` component that
   // we want to show up in view
   scrollAnchorID: string
 }

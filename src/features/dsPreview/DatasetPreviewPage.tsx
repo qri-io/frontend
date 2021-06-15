@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
 import { useInView } from 'react-intersection-observer'
-import classNames from 'classnames'
 
 import { newQriRef } from '../../qri/ref';
 import { selectDsPreview } from './state/dsPreviewState'
@@ -14,10 +13,9 @@ import ContentBoxTitle from '../../chrome/ContentBoxTitle'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
-import TextLink from '../../chrome/TextLink'
-import Button from '../../chrome/Button'
 import BodyPreview from '../dsComponents/body/BodyPreview'
 import DatasetHeader from '../dataset/DatasetHeader'
+import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 import DeployingScreen from '../deploy/DeployingScreen'
@@ -70,35 +68,8 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
           </div>)
         : (
           <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
-            {/* begin sticky header */}
-            <div className={classNames('sticky top-0 bg-white border border-qrigray-200', {
-              'invisible -top-16 h-0': inView,
-              'visible top-0 transition-all': !inView
-            })} style={{
-              borderTopLeftRadius: '20px'
-            }}>
-              <div className='px-8 pt-4 pb-3 flex'>
-                <div className='flex-grow'>
-                  <div className='text-xs text-gray-400 font-mono'>
-                    <TextLink to={`/${dataset.peername}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.peername || 'new'}</TextLink>/{dataset.name}
-                  </div>
-                  <div className='text-normal text-qrinavy font-semibold'>
-                    {dataset.meta?.title || dataset.name}
-                  </div>
-                </div>
-                <div className='flex items-center content-center'>
-                  <Button className='mr-3' type='light' filled={false}>
-                    Follow
-                  </Button>
-                  <Button className='mr-3' type='secondary'>
-                    <Icon icon='globe' size='lg' className='mr-2' /> Share
-                  </Button>
-                  <DownloadDatasetButton qriRef={qriRef} type='primary' small />
-                </div>
-              </div>
-            </div>
-            {/* end sticky header */}
-            <div className='max-w-screen-lg mx-auto p-9 w-full h-full'>
+            <DatasetMiniHeader dataset={dataset} show={inView} />
+            <div className='max-w-screen-lg mx-auto p-7 w-full h-full'>
               <div ref={stickyHeaderTriggerRef}>
                 <DatasetHeader dataset={dataset} editable={editable} noBorder />
               </div>

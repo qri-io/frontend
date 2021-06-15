@@ -46,7 +46,7 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
   }
 
   return (
-    <div className='py-4 pl-4'>
+    <div>
       <div className='mb-2' >
         <Icon icon={statusIcon} className={`text-gray-300 mr-3 ${statusIconClass}`} size='md' />
         <span className='text-sm font-semibold text-gray-600'>{statusText}</span>

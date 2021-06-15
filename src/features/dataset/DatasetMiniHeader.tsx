@@ -14,7 +14,8 @@ export interface DatasetHeaderProps {
 
 const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   dataset,
-  show
+  show,
+  children
 }) => {
   const qriRef = qriRefFromDataset(dataset)
   return (
@@ -34,13 +35,17 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           </div>
         </div>
         <div className='flex items-center content-center'>
-          <Button className='mr-3' type='light' filled={false}>
-            Follow
-          </Button>
-          <Button className='mr-3' type='secondary'>
-            <Icon icon='globe' size='lg' className='mr-2' /> Share
-          </Button>
-          <DownloadDatasetButton qriRef={qriRef} type='primary' small />
+          {children || (
+            <>
+              <Button className='mr-3' type='light' filled={false}>
+                Follow
+              </Button>
+              <Button className='mr-3' type='secondary'>
+                <Icon icon='globe' size='lg' className='mr-2' /> Share
+              </Button>
+              <DownloadDatasetButton qriRef={qriRef} type='primary' small />
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -2,17 +2,16 @@ import React from 'react'
 
 export interface BlockProps {
   name: string
-  description: string
   onClick?: () => void
 }
 
-const Block: React.FC<any> = ({ name, description, onClick }) => (
-  <div className='my-2 px-2' onClick={onClick}>
-    <div className='bg-gray-100 px-4 py-2 rounded mt-1 border-b border-gray-300 cursor-pointer hover:bg-gray-100'>
-      <div className='font-semibold pb-1'>{name}</div>
-      <div className='text-xs'>{description}</div>
+const Block: React.FC<any> = ({ name, children,onClick }) => (
+  <div className='px-2 w-1/3 py-2' onClick={onClick}>
+    <div className='bg-white px-3 py-2 shadow-even cursor-pointer rounded-lg h-full'>
+      <div className='text-sm font-semibold pb-1'>{name}</div>
+      {children}
     </div>
   </div>
 )
 
-export default Block;
+export default Block

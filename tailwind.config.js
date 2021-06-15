@@ -1,4 +1,4 @@
-const { fontFamily } = require('tailwindcss/defaultTheme')
+const { fontFamily, boxShadow } = require('tailwindcss/defaultTheme')
 
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
@@ -114,6 +114,10 @@ module.exports = {
       fontFamily: {
         ...fontFamily,
         mono: ['CourierPrime', 'monospace']
+      },
+      boxShadow: {
+        ...boxShadow,
+        even: '0px 0px 5px rgba(0, 0, 0, 0.1)'
       }
     },
   },
