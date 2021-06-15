@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useDimensions from 'react-use-dimensions'
 import { useInView } from 'react-intersection-observer'
 
 import { newQriRef } from '../../qri/ref'

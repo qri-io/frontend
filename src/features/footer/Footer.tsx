@@ -1,6 +1,5 @@
 import React from 'react'
 
-import Icon from '../../chrome/Icon'
 import TextLink from '../../chrome/TextLink'
 import IconLink from '../../chrome/IconLink'
 
