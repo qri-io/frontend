@@ -108,7 +108,7 @@ jobs:
         command: docker build --rm=false -t gcr.io/qri-io/qrimatic-fe:$CIRCLE_SHA1 .
     - run:
         name: Push image to Google Container Registry, add 'latest' tag
-        command: ../.circleci/publish_to_gcr.sh gcr.io/qri-io/qrimatic-fe $CIRCLE_SHA1
+        command: .circleci/publish_to_gcr.sh gcr.io/qri-io/qrimatic-fe $CIRCLE_SHA1
   
   frontend-prod-deploy:
     machine: true
