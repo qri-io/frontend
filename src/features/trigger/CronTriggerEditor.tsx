@@ -1,14 +1,14 @@
 import React from 'react'
 
 import { TriggerEditorProps } from './WorkflowTriggersEditor'
+import Block from '../workflow/Block'
 
 const CronTriggerEditor: React.FC<TriggerEditorProps> = ({
   trigger,
   onChange
 }) => {
   return (
-    <div className='bg-white px-4 py-2 w-2/3 rounded mt-1 border-b border-gray-300 cursor-pointer'>
-      <h3 className='text-lg font-semibold'>Cron Interval</h3>
+    <Block name='Schedule'>
       <span className="text-sm leading-6 font-medium text-gray-700 mr-1" id="modal-headline">Run this script every</span>
       <select className='text-gray-800 font-semibold border-b bg-gray-100' value={trigger.periodicity} onChange={(e: any) => {
         onChange({
@@ -26,7 +26,7 @@ const CronTriggerEditor: React.FC<TriggerEditorProps> = ({
         <option value="R/PT1M0D0H">Month</option>
         <option value="R/PT3M0D0H">Quarter</option>
       </select>
-    </div>
+    </Block>
   )
 }
 

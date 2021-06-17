@@ -1,7 +1,6 @@
 import React from 'react'
 
 import SearchResultItem from '../features/search/SearchResultItem'
-import SearchResultItemSkeleton from '../features/search/SearchResultItemSkeleton'
 
 import { SearchResult } from '../qri/search'
 

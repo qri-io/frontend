@@ -31,7 +31,6 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading=fa
         name,
         meta,
         commit,
-        structure,
         stats,
         followStats
       } = dataset

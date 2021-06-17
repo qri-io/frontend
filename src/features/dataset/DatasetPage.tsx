@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
-import NavBar from '../navbar/NavBar';
-import { newQriRef } from '../../qri/ref';
+import NavBar from '../navbar/NavBar'
+import { newQriRef } from '../../qri/ref'
 import { loadDataset } from './state/datasetActions'
-import DatasetNavSidebar from './DatasetNavSidebar';
-import { selectSessionUser } from '../session/state/sessionState';
-import { selectSessionUserCanEditDataset, selectDataset } from './state/datasetState';
-import DatasetHeader from './DatasetHeader';
+import DatasetNavSidebar from './DatasetNavSidebar'
+import { selectSessionUser } from '../session/state/sessionState'
+import { selectSessionUserCanEditDataset, selectDataset } from './state/datasetState'
+import DatasetHeader from './DatasetHeader'
 import DeployingScreen from '../deploy/DeployingScreen'
 
 
@@ -42,7 +42,7 @@ const DatasetPage: React.FC<{}> = ({
       <NavBar />
       <div className='flex overflow-hidden w-full'>
         <DatasetNavSidebar qriRef={qriRef} />
-        <div className='flex flex-col flex-grow overflow-hidden px-7 pb-7 pt-9'>
+        <div className='flex flex-col flex-grow overflow-hidden p-7'>
           <DatasetHeader dataset={dataset} editable={editable} />
           {children}
         </div>

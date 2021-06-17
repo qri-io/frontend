@@ -55,19 +55,19 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div id={`${step.name}-cell`} className='w-full my-4'>
+    <div id={`${step.name}-cell`} className='w-full mb-4'>
         <ScrollAnchor id={step.name} />
         <header>
-          <div className='py-2 pr-5'>
+          <div className=''>
             {run && <p className='float-right'>{run.duration}</p>}
-            <h3 className='text-lg text-gray-700 font-semibold cursor-pointer' onClick={() => {
+            <h3 className='text-sm text-qrinavy font-semibold cursor-pointer mb-0.5' onClick={() => {
               onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
             }}>{name}{run && <RunStatusIcon state={run.status} />}</h3>
-            <div className='text-xs mb-2 text-gray-400'>{description}</div>
+            <div className='text-xs mb-2.5 text-gray-400'>{description}</div>
           </div>
         </header>
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-        {(collapseState === 'all' || collapseState === 'only-output') && <Output data={run?.output} />}
+        {(collapseState === 'all' || collapseState === 'only-output') && run?.output && <Output data={run?.output} />}
       </div>
   )
 }
