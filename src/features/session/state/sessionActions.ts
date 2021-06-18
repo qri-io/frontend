@@ -18,8 +18,8 @@ export function logIn (username: string, password: string): ApiActionThunk {
       const token = tokenResponse.payload.data.access_token
 
       // get user data
-      // pass access_token directly to fetchSession so it can be used immediately
-      const userResponse = await dispatch(fetchSession(token))
+      // pass access_token directly to fetchUserProfile so it can be used immediately
+      const userResponse = await dispatch(fetchUserProfile(token))
 
       if (userResponse.type === 'API_SESSION_FAILURE') {
         throw new Error(`Could not get user: ${userResponse.payload.err.message}`)
@@ -64,8 +64,8 @@ export function signUp (email: string, username: string, password: string): ApiA
       const token = signupResponse.payload.data.access_token
 
       // get user data
-      // pass access_token directly to fetchSession so it can be used immediately
-      const userResponse = await dispatch(fetchSession(token))
+      // pass access_token directly to fetchUserProfile so it can be used immediately
+      const userResponse = await dispatch(fetchUserProfile(token))
 
       if (userResponse.type === 'API_SESSION_FAILURE') {
         throw new Error(`Could not get user: ${userResponse.payload.err.message}`)
@@ -118,11 +118,12 @@ export function fetchToken(username: string, password: string): ApiAction {
   }
 }
 
-export function fetchSession(accessToken: string): ApiAction {
+export function fetchUserProfile(accessToken: string): ApiAction {
   return {
-    type: 'session',
+    type: 'profile',
     [CALL_API]: {
-      endpoint: 'identity/session',
+      endpoint: 'profile',
+      method: 'POST',
       token: accessToken
     }
   }
