@@ -1,4 +1,5 @@
 import { EventLogLine, EventLogLineType } from "./eventLog"
+import { Dataset } from './dataset'
 
 export type RunStatus =
   | 'waiting'
@@ -17,6 +18,7 @@ export interface Run {
   duration?: string
 
   steps: RunStep[]
+  dsPreview?: Dataset
 }
 
 export function NewRun(data: Record<string,any>): Run {
@@ -96,7 +98,6 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
     case EventLogLineType.ETPrint:
     case EventLogLineType.ETError:
     case EventLogLineType.ETReference:
-    case EventLogLineType.ETDatasetPreview:
     case EventLogLineType.ETChangeReport:
     case EventLogLineType.ETHistory:
     case EventLogLineType.ETProfile:
@@ -104,6 +105,10 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
     case EventLogLineType.ETVersionPulled:
       appendStepOutputLog(run, line)
       break;
+
+    case EventLogLineType.ETDatasetPreview:
+      run.dsPreview = line.data as Dataset
+
   }
   return run
 }
