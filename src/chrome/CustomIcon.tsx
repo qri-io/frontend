@@ -4,11 +4,13 @@ import classNames from 'classnames'
 export interface CustomIconProps {
   className?: string
   size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  spin: boolean
 }
 
 const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
   className,
   size,
+  spin=false,
   children
 }) => {
   let dimension = 22
@@ -31,7 +33,9 @@ const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
 
   return (
     <svg
-      className={classNames(className)}
+      className={classNames(className, {
+        'animate-spin-slow': spin
+      })}
       width={dimension}
       height={dimension}
       viewBox="0 0 24 24"
