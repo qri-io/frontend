@@ -37,7 +37,7 @@ const RunBar: React.FC<RunBarProps> = ({
       <div className='flex w-36 items-center'>
         <div className='mr-4'>
           <div className='inline-block align-middle'>
-            <RunStatusIcon state={status} size='md' />
+            <RunStatusIcon status={status} size='md' className='ml-2' />
           </div>
         </div>
         <div className='w-36'>

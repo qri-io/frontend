@@ -6,11 +6,11 @@ import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
 import OnComplete from './OnComplete'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
 import { changeWorkflowTransformStep } from './state/workflowActions'
-import RunBar from './RunBar'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import { RunMode } from './state/workflowState'
 import ContentBox from '../../chrome/ContentBox'
+import WorkflowDatasetPreview from './WorkflowDatasetPreview'
 
 export interface WorkflowEditorProps {
   runMode: RunMode
@@ -48,13 +48,12 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
         <WorkflowTriggersEditor triggers={workflow.triggers} />
         <ContentBox className='mb-7' paddingClassName='px-5 py-4'>
           <ScrollAnchor id='script' />
-          <section className='bg-white mb-4'>
+          <section className='bg-white mb-4 border-b-2 border-qrigray-100 mb-7'>
             <div className='bg-white top-0 z-10 flex mb-3'>
               <div className='flex-grow'>
                 <h2 className='text-2xl font-medium text-qrinavy mb-1'>Script</h2>
                 <div className='text-sm text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
               </div>
-              <RunBar status={run ? run.status : "waiting" } onRun={() => {setCollapseStates({})}} />
             </div>
             {workflow.steps && workflow.steps.map((step, i) => {
               let r
@@ -94,6 +93,12 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
               onChangeScript={() => {}}
               />}
           </section>
+          <h3 className='text-sm text-qrinavy font-semibold cursor-pointer mb-0.5'>
+            New Version Preview
+          </h3>
+          <div className='text-xs mb-2.5 text-gray-400'>Your script will create a new version of this dataset.</div>
+          <ScrollAnchor id='new-version-preview' />
+          <WorkflowDatasetPreview dataset={run?.dsPreview}/>
         </ContentBox>
         <OnComplete />
       </div>
