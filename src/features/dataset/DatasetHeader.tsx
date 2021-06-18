@@ -17,10 +17,15 @@ export interface DatasetHeaderProps {
   editable?: boolean
 }
 
+// DatasetHeader and DatasetMiniHeader now accept children which will be displayed
+// in the right side where the default buttons are located. This is useful for
+// overriding the download button with the dry run button in the workflow editor
+
 const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   dataset,
   border = false,
-  editable = false
+  editable = false,
+  children
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -73,13 +78,17 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           </div>
         </div>
         <div className='flex items-center content-center'>
-          <Button className='mr-3' type='light' filled={false}>
-            Follow
-          </Button>
-          <Button type='secondary'>
-            <Icon icon='globe' size='lg' className='mr-2' /> Share
-          </Button>
-          <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
+          {children || (
+            <>
+              <Button className='mr-3' type='light' filled={false}>
+                Follow
+              </Button>
+              <Button type='secondary'>
+                <Icon icon='globe' size='lg' className='mr-2' /> Share
+              </Button>
+              <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
+            </>
+          )}
         </div>
       </div>
       {border && <div className='border-b-2' />}
