@@ -47,8 +47,10 @@ export function NewDataset(d: Record<string,any>): Dataset {
     peername: d.peername || '',
     name: d.name || '',
     path: d.path || '',
-    body: d.body,
     bodyPath: d.bodyPath
+  }
+  if (d.body) {
+    dataset.body = d.body
   }
   if (d.commit) {
     dataset.commit = NewCommit(d.commit)
