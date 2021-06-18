@@ -7,7 +7,7 @@ import HistorySearchBox from '../search/HistorySearchBox'
 import { newQriRef, QriRef } from '../../qri/ref';
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState';
 import NewVersionButton from '../dsComponents/buttons/NewVersionButton';
-import DatasetCommitItem from './DatasetCommitItem';
+import DatasetCommitListItem from './DatasetCommitListItem';
 import { loadDatasetCommits } from './state/commitActions';
 import { newDatasetCommitsSelector, selectDatasetCommitsLoading } from './state/commitState';
 
@@ -46,7 +46,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
         <HistorySearchBox />
         {editable && <li><NewVersionButton qriRef={qriRef} /></li>}
         {commits.map((logItem, i) => (
-          <DatasetCommitItem
+          <DatasetCommitListItem
             key={i}
             logItem={logItem}
             active={logItem.path === path}
