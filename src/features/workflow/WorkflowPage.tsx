@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useInView } from 'react-intersection-observer'
 
@@ -11,8 +12,11 @@ import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 import DeployingScreen from '../deploy/DeployingScreen'
 import { selectSessionUserCanEditDataset, selectDataset } from '../dataset/state/datasetState'
+import { selectLatestRun } from './state/workflowState'
 import { QriRef } from '../../qri/ref'
+import { NewDataset } from '../../qri/dataset'
 import Workflow from './Workflow'
+import RunBar from './RunBar'
 import Scroller from '../scroller/Scroller'
 
 
@@ -24,10 +28,12 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
   qriRef
 }) => {
   const dispatch = useDispatch()
-  const dataset = useSelector(selectDataset)
+  let dataset = useSelector(selectDataset)
   const editable = useSelector(selectSessionUserCanEditDataset)
-  const isNew = (qriRef.username === 'new')
+  const latestRun = useSelector(selectLatestRun)
+  let { username, name } = useParams()
 
+  const isNew = (qriRef.username === 'new')
   const { ref: stickyHeaderTriggerRef, inView } = useInView({
     threshold: 0.7,
     initialInView: true
@@ -42,11 +48,24 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
     qriRef.username = user.username
   }
 
+  // if the dataset name and peername are empty, make a mock dataset for rendering the headers
+  if (dataset.peername === '') {
+    dataset = NewDataset({
+      peername: username,
+      name,
+      meta: {
+        title: 'New Dataset from Workflow'
+      }
+    })
+  }
+
   useEffect(() => {
     if (isNew) { return }
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
     dispatch(loadDataset(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
+
+  const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />
 
   return (
     <div className='flex flex-col h-full w-full bg-qrigray-100'>
@@ -59,10 +78,14 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
           </div>)
         : (
             <Scroller className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
-              <DatasetMiniHeader dataset={dataset} hide={!inView} />
+              <DatasetMiniHeader dataset={dataset} hide={!inView}>
+                {runBar}
+              </DatasetMiniHeader>
               <div className='p-7 w-full'>
                 <div ref={stickyHeaderTriggerRef}>
-                  <DatasetHeader dataset={dataset} editable={editable} />
+                  <DatasetHeader dataset={dataset} editable={editable}>
+                    {runBar}
+                  </DatasetHeader>
                 </div>
                 <Workflow qriRef={qriRef}/>
               </div>
