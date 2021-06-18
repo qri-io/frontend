@@ -118,6 +118,9 @@ module.exports = {
       boxShadow: {
         ...boxShadow,
         even: '0px 0px 5px rgba(0, 0, 0, 0.1)'
+      },
+      animation: {
+        'spin-slow': 'spin 3s linear infinite'
       }
     },
   },

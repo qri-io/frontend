@@ -53,6 +53,9 @@ import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
 import CaretDown from './icon/CaretDown'
 import Checkbox from './icon/Checkbox'
+import CircleCheck from './icon/CircleCheck'
+import CircleDash from './icon/CircleDash'
+import CircleX from './icon/CircleX'
 import Clock from './icon/Clock'
 import Close from './icon/Close'
 import Code from './icon/Code'
@@ -69,6 +72,7 @@ import FullScreen from './icon/FullScreen'
 import Github from './icon/Github'
 import Globe from './icon/Globe'
 import History from './icon/History'
+import Loader from './icon/Loader'
 import Lock from './icon/Lock'
 import MyDatasets from './icon/MyDatasets'
 import Page from './icon/Page'
@@ -165,6 +169,9 @@ const Icon: React.FunctionComponent<IconProps> = ({
     caretRight: <CaretRight className={className} size={size} />,
     caretDown: <CaretDown className={className} size={size} />,
     checkbox: <Checkbox className={className} size={size} />,
+    circleCheck: <CircleCheck className={className} size={size} />,
+    circleDash: <CircleDash className={className} size={size} />,
+    circleX: <CircleX className={className} size={size} />,
     clock: <Clock className={className} size={size} />,
     close: <Close className={className} size={size} />,
     code: <Code className={className} size={size} />,
@@ -181,6 +188,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     github: <Github className={className} size={size} />,
     globe: <Globe className={className} size={size} />,
     history: <History className={className} size={size} />,
+    loader: <Loader className={className} size={size} />,
     lock: <Lock className={className} size={size} />,
     myDatasets: <MyDatasets className={className} size={size} />,
     page: <Page className={className} size={size} />,
