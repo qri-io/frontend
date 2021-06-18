@@ -1,35 +1,64 @@
 import React from 'react'
+import classNames from 'classnames'
 
-import Icon from '../../chrome/Icon'
+import Icon, { IconSize } from '../../chrome/Icon'
 import { RunStatus } from '../../qri/run'
 
 export interface RunStatusIconProps {
-  state: RunStatus
-  size?: "sm" | "xs" | "md" | "lg"
+  status: RunStatus
+  className?: string
+  size?: IconSize
 }
 
-const RunStatusIcon: React.FC<RunStatusIconProps> = ({ state, size='sm' }) => (
-  <span className='text-sm pl-2'>
-    {((s: RunStatus) => {
-      switch (s) {
-        case 'waiting':
-          return <span className='text-gray-400'><Icon icon='circle' size={size}/></span>
-        case 'running':
-          return <span className='text-blue-500'><Icon icon='spinner' size={size} spin /></span>
-        case 'succeeded':
-          return <span className='text-green-500'><Icon icon='check' size={size}/></span>
-        case 'failed':
-          return <span className='text-red-500'><Icon icon='exclamationCircle' size={size} /></span>
-        case 'unchanged':
-          // TODO(b5): consider an icon for "cached" here?
-          return <span className='text-blue-500'><Icon icon='minusCircle' size={size} spin /></span>
-        case 'skipped':
-          return <span className='text-blue-500'><Icon icon='minusCircle' size={size} spin /></span>
-        case '':
-          return null
-      }
-    })(state)}
-  </span>
-)
+interface StatusMapping {
+  icon: string
+  color: string
+}
+
+type StatusMappings = {
+  [key in RunStatus]: StatusMapping
+}
+
+// map RunStatus to icon, color
+const statusMappings: StatusMappings = {
+  waiting: {
+    icon: 'circleDash',
+    color: 'qrigray-400'
+  },
+  running: {
+    icon: 'loader',
+    color: 'qrigray-400'
+  },
+  succeeded: {
+    icon: 'circleCheck',
+    color: 'qrigreen'
+  },
+  failed: {
+    icon: 'circleX',
+    color: 'qrired-700'
+  },
+  unchanged: {
+    icon: 'circleDash',
+    color: 'blue'
+  },
+  skipped: {
+    icon: 'circleDash',
+    color: 'blue'
+  },
+  '': {
+    icon: 'circleDash',
+    color: 'blue'
+  }
+}
+
+export const colorFromRunStatus = (status: RunStatus) => {
+  return statusMappings[status].color
+}
+
+const RunStatusIcon: React.FC<RunStatusIconProps> = ({ status, className, size='sm' }) => {
+  const { icon, color } = statusMappings[status]
+
+  return <Icon icon={icon} size={size} className={classNames(`text-${color}`, className)}/>
+}
 
 export default RunStatusIcon
