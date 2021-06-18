@@ -19,7 +19,6 @@ export function mapWorkflow(d: object | []): Workflow {
   const wf = data.workflow || {}
   wf.steps = data.dataset?.transform?.steps
   wf.ref = data.ref
-  console.log(wf)
 
   return NewWorkflow(wf)
 }
