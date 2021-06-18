@@ -66,19 +66,17 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
 
   return (
     <>
-    <div
-      className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col transform transition-all px-4', {})}
-    >
+
       <ComponentHeader border={componentName !== 'body'}>
         {componentHeader}
       </ComponentHeader>
       <div className='overflow-auto flex-grow'>
         {componentContent}
       </div>
-    </div>
+
     {/* full screen component view functions as a modal */}
     { expanded && (
-        <div className="fixed top-0 right-0 bottom-0 left-0 inset-0 transition-opacity" aria-hidden="true">
+        <div className="fixed top-0 right-0 bottom-0 left-0 inset-0 transition-opacity z-20" aria-hidden="true">
           <div className="absolute inset-0 bg-gray-200 p-4 flex">
             <ContentBox className='flex-grow flex flex-col'>
               <div className='flex'>

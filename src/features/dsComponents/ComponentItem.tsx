@@ -16,6 +16,8 @@ export interface ComponentItemProps {
   status?: ComponentStatus
   disabled?: boolean
   tooltip?: string
+  // for showing a gray border around the selected tab to contrast with white background
+  border?: boolean
   onClick?: (component: ComponentName) => Action | void
 }
 
@@ -28,13 +30,14 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   onClick,
   icon,
   filename,
-  color = 'dark'
+  color = 'dark',
+  border = false
 }) => {
 
   return (
     <div
       id={`${displayName.toLowerCase()}-status`}
-      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-2 rounded-tr-lg rounded-tl-lg group justify-center', {
+      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-2 rounded-tr-lg rounded-tl-lg group justify-center relative -bottom-0.5', {
         'selected': selected,
         'bg-white': selected,
         'text-qripink': selected,
@@ -42,7 +45,8 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
         'text-gray-400': disabled,
         'text-qrinavy': !disabled,
         'hover:cursor-pointer': !disabled,
-        'w-1/4': displayName === 'Data'
+        'w-1/4': displayName === 'Data',
+        'border-grigray-200 border-t-2 border-r-2 border-l-2': border
       })}
       onClick={() => {
         if (onClick && displayName) {
