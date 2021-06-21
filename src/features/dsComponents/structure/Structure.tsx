@@ -1,11 +1,7 @@
 import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 import { Structure } from '../../../qri/dataset'
-import fileSize, { abbreviateNumber } from '../../../utils/fileSize'
 import LabeledStats from '../../../chrome/LabeledStats'
-import FormatConfigHistory from './FormatConfigHistory'
 import Schema from '../schema/Schema'
 
 export interface StructureProps {
@@ -56,16 +52,6 @@ export const formatConfigOptions: { [key: string]: FormatConfigOption } = {
   }
 }
 
-export function getStats (data: Structure): any[] {
-  return [
-    { 'label': 'format', 'value': data.format ? data.format.toUpperCase() : 'unknown' },
-    { 'label': 'body size', 'value': data.length ? fileSize(data.length) : '—' },
-    { 'label': 'entries', 'value': abbreviateNumber(data.entries) || '—' },
-    { 'label': 'errors', 'value': data.errCount ? abbreviateNumber(data.errCount) : '—' },
-    { 'label': 'depth', 'value': data.depth || '—' }
-  ]
-}
-
 export const StructureComponent: React.FunctionComponent<StructureProps> = ({data}) => {
 
   if (!data) return null
@@ -80,25 +66,8 @@ export const StructureComponent: React.FunctionComponent<StructureProps> = ({dat
   }
 
   return (
-    <div className='h-full w-full overflow-auto'>
-      <div>
-        <LabeledStats data={getStats(data)} size='lg' />
-        <FormatConfigHistory structure={data} />
-        <div>
-          <div className='text-sm font-semibold mb-2'>
-            Schema
-            &nbsp;
-            <a id='json-schema' href='https://json-schema.org/' target='_blank' rel='noreferrer'>
-              <span
-                data-tip={'JSON schema that describes the structure of the dataset. Click here to learn more about JSON schemas'}
-                className='text-input-tooltip'
-              >
-                <FontAwesomeIcon icon={faInfoCircle} size='sm'/>
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
+    <div className='h-full w-full overflow-x-hidden px-4 pb-4'>
+      <LabeledStats data={data} size='lg' />
       <Schema
         data={schema}
         editable={false}

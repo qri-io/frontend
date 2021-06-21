@@ -9,6 +9,7 @@ import { Meta, Citation, License, User, standardFieldNames } from '../../../qri/
 // import { selectDataset, selectDatasetIsLoading } from '../../../selections'
 import ExternalLink from '../../../chrome/ExternalLink'
 import KeyValueTable from '../KeyValueTable'
+import MetaChips from '../../../chrome/MetaChips'
 // import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
 
 interface MetaProps {
@@ -27,12 +28,6 @@ const renderValue = (value: string | string[] | object) => {
       return <span>{JSON.stringify(value)}</span>
   }
 }
-
-const renderChips = (value: string[] | undefined) => (
-  <div>
-    {value && value.map((d, i) => (<span key={i} className='text-xs rounded bg-gray-300 px-2 py-1 mr-2'>{d}</span>))}
-  </div>
-)
 
 const renderLicense = (license: License) => (
   <ExternalLink href={license.url}>
@@ -62,7 +57,7 @@ const renderMultiStructured = (value: User[] | Citation[]) => {
 
 const renderTable = (keys: string[], data: Meta) => {
   return (
-    <div className='border rounded-md'>
+    <div>
       <table className='keyvalue-table'>
         <tbody>
           {keys.map((key) => {
@@ -72,7 +67,7 @@ const renderTable = (keys: string[], data: Meta) => {
               case 'theme':
               case 'keywords':
               case 'language':
-                cellContent = renderChips(value)
+                cellContent = <MetaChips words={value} />
                 break
               case 'license':
                 cellContent = renderLicense(value)
@@ -92,9 +87,9 @@ const renderTable = (keys: string[], data: Meta) => {
             }
 
             return (
-              <tr key={key} className='border-b'>
-                <td className='p-2 font-semibold text-xs text-right'>{key}</td>
-                <td id={`meta-${key}`} className='p-2'>{cellContent}</td>
+              <tr key={key}>
+                <td className='p-2 font-semibold text-sm text-left text-qrinavy capitalize'>{key}</td>
+                <td id={`meta-${key}`} className='p-2 text-sm text-qrigray-400'>{cellContent}</td>
               </tr>
             )
           })}
@@ -117,12 +112,12 @@ export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
   })
 
   return (
-    <div className='p-3 h-full w-full overflow-auto pb-8'>
-      <div className='text-sm font-semibold mb-2'>Standard Metadata</div>
+    <div className='h-full w-full overflow-auto'>
+      <div className='text-xl font-normal text-qrinavy font-medium mb-2'>Standard Metadata</div>
       {renderTable(standard, data)}
 
       {(extra.length > 0) && <div>
-        <h4 className='text-sm font-semibold mb-2'>Additional Metadata</h4>
+        <h4 className='text-xl font-normal text-qrinavy font-medium mb-2'>Additional Metadata</h4>
         {renderTable(extra, data)}
       </div>}
     </div>

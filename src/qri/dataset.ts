@@ -1,5 +1,8 @@
 import { JSONSchema7 } from "json-schema"
+
 import { QriRef } from "./ref"
+import fileSize, { abbreviateNumber } from '../utils/fileSize'
+
 
 export interface Dataset {
   peername: string
@@ -230,6 +233,32 @@ export interface Structure extends Component {
   errCount: number
   formatConfig?: CSVFormatConfig | JSONFormatConfig | XLSXFormatConfig
   schema?: Schema
+}
+
+export interface Stat {
+  label: string
+  value: any
+  /**
+   * if the value is a file, we should be displaying it differently than a regular
+   * number. This only affects values with `number` types. Defaults to `false`
+   */
+  inBytes?: boolean
+  /**
+   * delta is only used for numerical values, intended to show the difference
+   * between this number and some other value. negative numbers are showing in
+   * red, positive in green
+   */
+  delta?: number
+}
+
+export function getStats (data: Structure): Stat[] {
+  return [
+    { 'label': 'format', 'value': data.format ? data.format.toUpperCase() : 'unknown' },
+    { 'label': 'body size', 'value': data.length ? fileSize(data.length) : '—' },
+    { 'label': 'entries', 'value': abbreviateNumber(data.entries) || '—' },
+    { 'label': 'errors', 'value': data.errCount ? abbreviateNumber(data.errCount) : '—' },
+    { 'label': 'depth', 'value': data.depth || '—' }
+  ]
 }
 
 export type BodyDataFormat =
