@@ -1106,3 +1106,8 @@ code {
   margin: 0 .2em .25em -1.6em;
   vertical-align: middle;
 }
+
+/* override react-tooltip styles */
+.light-tooltip {
+  @apply rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-100 p-4 !important;
+}
