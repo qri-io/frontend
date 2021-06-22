@@ -11,7 +11,9 @@ import { RunMode } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import ContentBox from '../../chrome/ContentBox'
+import DeployButton from '../deploy/DeployButton'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
+
 
 export interface WorkflowEditorProps {
   runMode: RunMode
@@ -114,6 +116,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
             <WorkflowDatasetPreview dataset={run?.dsPreview}/>
           </ContentBox>
           <OnComplete />
+          <DeployButton workflow={workflow} />
         </div>
       </div>
     </Hotkeys>

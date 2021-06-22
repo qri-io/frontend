@@ -3,7 +3,7 @@ import { DeployStatus } from "../../qrimatic/workflow"
 export interface DeployStatusInfo {
   statusIcon: string
   statusText: string
-  statusIconClass: string
+  color: string
   message: string
   buttonIcon: string
   buttonClass: string
@@ -12,17 +12,17 @@ export interface DeployStatusInfo {
 
 export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
   'undeployed': {
-    statusIcon: 'circle',
+    statusIcon: 'deployCircle',
     statusText: 'Not Deployed',
-    statusIconClass: 'text-gray-500',
+    color: 'text-qrigray-400',
     message: 'This workflow is not deployed yet. Edit your script & use Dry Run to confirm that it is working, then Deploy it!',
     buttonIcon: 'playCircle',
     buttonClass: 'bg-qriblue-600 hover:bg-qriblue-700',
     buttonText: 'Deploy Workflow',
   },
   'deployed': {
-    statusIcon: 'playCircle',
-    statusIconClass: 'text-green-500',
+    statusIcon: 'deployCircle',
+    color: 'text-green-500',
     statusText: 'Deployed',
     message : 'This workflow is deployed and will run based on the triggers you’ve defined.',
     buttonIcon: 'pauseCircle',
@@ -30,8 +30,8 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     buttonText: 'Pause Workflow'
   },
   'deploying': {
-    statusIcon: 'playCircle',
-    statusIconClass: 'text-green-500',
+    statusIcon: 'deployCircle',
+    color: 'text-green-500',
     statusText: 'Deploying',
     message : '',
     buttonIcon: 'pauseCircle',
@@ -39,17 +39,17 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     buttonText: 'Cancel'
   },
   'drafting': {
-    statusIcon: 'circle',
+    statusIcon: 'deployCircle',
     statusText: 'Undeployed Changes',
-    statusIconClass: 'text-gray-500',
+    color: 'text-gray-500',
     message: 'This version is deployed, but drafted changes to this script are not yet live.',
     buttonIcon: 'playCircle',
     buttonClass: 'bg-qriblue-600 hover:bg-qriblue-700',
     buttonText: 'Deploy Changes',
   },
   'paused': {
-    statusIcon: 'playCircle',
-    statusIconClass: 'text-green-500',
+    statusIcon: 'deployCircle',
+    color: 'text-green-500',
     statusText: 'Paused',
     message : 'This workflow is paused. All triggers will be ignored until resumed',
     buttonIcon: 'pauseCircle',

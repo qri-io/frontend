@@ -7,7 +7,7 @@ import { Workflow } from '../../qrimatic/workflow'
 import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { RunMode } from './state/workflowState'
-import DeployButtonWithStatusDescription from '../deploy/DeployStatusDescriptionButton'
+import DeployStatusIndicator from '../deploy/DeployStatusIndicator'
 import DatasetCommit from '../commits/DatasetCommit'
 
 
@@ -96,8 +96,10 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
 
           <ScrollTrigger target='on-completion'><div className='font-semibold text-qrinavy mb-2'>On Completion</div></ScrollTrigger>
 
+          <hr className='mb-4'/>
+
           <div className="mb-20">
-            {workflow && <DeployButtonWithStatusDescription workflow={workflow} />}
+            {workflow && <DeployStatusIndicator workflow={workflow} />}
           </div>
         </div>
       </div>

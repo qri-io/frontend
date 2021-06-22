@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Icon from '../../chrome/Icon'
 import Button from '../../chrome/Button'
 import { Workflow } from '../../qrimatic/workflow'
 import { deployStatusInfoMap } from './deployStatus'
@@ -19,7 +18,7 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
   const dispatch = useDispatch()
   const status = useSelector(newDeployStatusSelector(workflow.id))
   const user = useSelector(selectSessionUser)
-  const { statusIcon, statusIconClass, statusText, message, buttonIcon, buttonClass, buttonText } = deployStatusInfoMap[status]
+  const { buttonText } = deployStatusInfoMap[status]
 
   const handleButtonClick = () => {
     if (user === AnonUser) {
@@ -46,19 +45,13 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
   }
 
   return (
-    <div>
-      <div className='mb-2' >
-        <Icon icon={statusIcon} className={`text-gray-300 mr-3 ${statusIconClass}`} size='md' />
-        <span className='text-sm font-semibold text-gray-600'>{statusText}</span>
-      </div>
-      <div className='text-xs mb-4'>{message}</div>
-      <Button
-        className={`w-full  ${buttonClass}`}
-        onClick={handleButtonClick}
-      >
-        <Icon icon={buttonIcon} className='text-sm mr-2'/> {buttonText}
-      </Button>
-    </div>
+    <Button
+      type='secondary'
+      className={`w-full`}
+      onClick={handleButtonClick}
+    >
+      {buttonText}
+    </Button>
   )
 }
 
