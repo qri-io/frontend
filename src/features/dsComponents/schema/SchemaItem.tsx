@@ -1,6 +1,5 @@
 import React from 'react'
 
-import Icon from '../../../chrome/Icon'
 import DynamicEditField from './DynamicEditField'
 import { DataTypes } from '../../../chrome/DataType'
 import TypePicker from './TypePicker'
@@ -27,7 +26,7 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
   data,
   editable = true
 }) => {
-  const [expanded, setExpanded] = React.useState(false)
+  const [expanded, ] = React.useState(false)
 
   const handleDynamicEditChange = (name: string, value: string, e?: React.SyntheticEvent) => {
     const d = { ...data }
@@ -60,59 +59,54 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
     if (onChange) onChange(d, e)
   }
 
+  const tdCellClassName = 'border-r border-b border-gray-200 break-words'
+  const cellClassName = 'px-2 py-2 break-words'
+
+
   // TODO (ramfox): do we have max lengths for title, description?
   return (
     <tr className={classNames('schema-item', { 'expanded': expanded, 'top': data.row === 0 })} key={data.row}>
-      <td className='py-2 pl-2 border-b w-6 flex-none' onClick={() => setExpanded((prev) => !prev)} >
-        <Icon icon={expanded ? 'caretDown' : 'caretRight'} size='md' color='medium'/>
+      <td className={classNames('whitespace-nowrap', tdCellClassName)}>
+        <div className={cellClassName}>
+          <DynamicEditField
+            row={data.row}
+            name='title'
+            placeholder='title'
+            value={data.title || ''}
+            onChange={handleDynamicEditChange}
+            allowEmpty={false}
+            large
+            minWidth={100}
+            expanded={expanded}
+            editable={editable}
+          />
+        </div>
       </td>
-      <td className='py-2 pl-2 border-b flex-none'>
-        <DynamicEditField
-          row={data.row}
-          name='title'
-          placeholder='title'
-          value={data.title || ''}
-          onChange={handleDynamicEditChange}
-          allowEmpty={false}
-          large
-          minWidth={100}
-          expanded={expanded}
-          editable={editable}
-        />
+      <td className={classNames('whitespace-nowrap', tdCellClassName)}>
+        <div className={classNames('text-qrigray-400', cellClassName)}>
+          <TypePicker
+            name={data.row}
+            onPickType={handleTypePickerChange}
+            type={data.type}
+            expanded={expanded}
+            editable={editable}
+          />
+        </div>
       </td>
-      <td className='py-2 pl-2 border-b type-picker-cell flex-grow'>
-        <TypePicker
-          name={data.row}
-          onPickType={handleTypePickerChange}
-          type={data.type}
-          expanded={expanded}
-          editable={editable}
-        />
-      </td>
-      <td className='py-2 pl-2 border-b flex-grow'>
-        <DynamicEditField
-          row={data.row}
-          name='description'
-          placeholder='description'
-          value={data.description || ''}
-          onChange={handleDynamicEditChange}
-          allowEmpty expanded={expanded}
-          minWidth={100}
-          editable={editable}
-        />
-      </td>
-      <td className='py-2 pl-2 border-b'>
-        <DynamicEditField
-          row={data.row}
-          name='validation'
-          placeholder='validation'
-          value={data.validation || ''}
-          onChange={handleDynamicEditChange}
-          allowEmpty expanded={expanded}
-          minWidth={100}
-          editable={editable}
-        />
-      </td>
+      <td className={classNames('w-full', tdCellClassName)}>
+        <div className={classNames('text-qrigray-400', cellClassName)}>
+          <DynamicEditField
+              row={data.row}
+              name='description'
+              placeholder='description'
+              value={data.description || ''}
+              onChange={handleDynamicEditChange}
+              allowEmpty expanded={expanded}
+              minWidth={100}
+              editable={editable}
+            />
+          </div>
+        </td>
     </tr>
   )
 }

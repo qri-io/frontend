@@ -145,7 +145,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
         style={{ maxWidth: 800 }}
         onScroll={() => { this.handleVerticalScrollThrottled() } }
       >
-        <table className='table text-xs border-separate border-l border-gray-200' style={{ borderSpacing: 0 }}>
+        <table className='table text-xs border-separate border-l border-gray-200 ml-4 pr-4 mb-4 ' style={{ borderSpacing: 0 }}>
           <thead className='sticky top-0'>
             <tr>
               <th className=' h-6 bg-white p-0 border-t border-r border-b border-gray-200'>

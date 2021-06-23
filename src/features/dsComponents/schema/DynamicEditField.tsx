@@ -140,7 +140,15 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
   }
 
   return (
-    <div style={{ minWidth }} className={classNames('overflow-hidden whitespace-pre min-h-full overflow-ellipsis', { 'invalid': !isValid, 'dynamic-edit-field-large': large, 'focused': focused, 'dynamic-edit-field-editable': editable })} >
+    <div
+      style={{ minWidth }}
+      className={classNames('whitespace-pre min-h-full', {
+        'invalid': !isValid,
+        'dynamic-edit-field-large': large,
+        'focused': focused,
+        'dynamic-edit-field-editable': editable
+      })}
+    >
       <div
         suppressContentEditableWarning={true}
         className={classNames({ 'expanded': expanded })}

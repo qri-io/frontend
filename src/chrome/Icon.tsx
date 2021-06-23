@@ -17,7 +17,6 @@ import {
   faHashtag,
   faHome,
   faHdd,
-  faInfo,
   faList,
   faCheck,
   faPen,
@@ -73,6 +72,7 @@ import Github from './icon/Github'
 import Globe from './icon/Globe'
 import History from './icon/History'
 import Loader from './icon/Loader'
+import Info from './icon/Info'
 import Lock from './icon/Lock'
 import MyDatasets from './icon/MyDatasets'
 import Page from './icon/Page'
@@ -118,7 +118,6 @@ const faIcons: Record<string, IconDefinition> = {
   'file': faFile,
   'hdd': faHdd,
   'home': faHome,
-  'info': faInfo,
   'integer': faHashtag,
   'list': faList,
   'minusCircle': faMinusCircle,
@@ -188,6 +187,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     github: <Github className={className} size={size} />,
     globe: <Globe className={className} size={size} />,
     history: <History className={className} size={size} />,
+    info: <Info className={className} size={size} />,
     loader: <Loader className={className} size={size} />,
     lock: <Lock className={className} size={size} />,
     myDatasets: <MyDatasets className={className} size={size} />,

@@ -22,10 +22,9 @@ import DeployingScreen from '../deploy/DeployingScreen'
 import commitishFromPath from '../../utils/commitishFromPath'
 import Readme from '../dsComponents/readme/Readme'
 import { qriRefFromDataset } from '../../qri/dataset'
-
-
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 import { QriRef } from '../../qri/ref'
+import MetaChips from '../../chrome/MetaChips'
 
 interface DatasetPreviewPageProps {
   qriRef: QriRef
@@ -115,9 +114,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     {/* Bottom of the box */}
                     <ContentBoxTitle title='Description' />
                     <div className='text-gray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
-                    {dataset.meta?.keywords?.map((keyword) => {
-                      return <div key={keyword} className='leading-tight text-gray-400 text-xs tracking-wider inline-block border border-qrigray-400 rounded-md px-2 py-1 mr-1 mb-1'>{keyword}</div>
-                    })}
+                    {dataset.meta?.keywords && <MetaChips words={dataset.meta.keywords} />}
                   </ContentBox>
                 </div>
               </div>

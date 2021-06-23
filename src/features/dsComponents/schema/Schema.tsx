@@ -32,30 +32,46 @@ const Schema: React.FC<SchemaProps> = ({
     if (onChange) onChange(s, e)
   }
 
+  const thCellClassName = 'px-2 py-2 whitespace-nowrap max-w-xs'
+
+  const thClassName = 'h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-gray-200 text-qrinavy capitalize text-sm'
+
   return (
-    <table className='w-full'>
-      <thead>
-        <tr className='border-t border-b uppercase' style={{ fontSize: '.7rem' }}>
-          <th className='py-2 pl-2'></th>
-          <th className='py-2 pl-2'>title</th>
-          <th className='py-2 pl-2'>type</th>
-          <th className='py-2 pl-2'>description</th>
-          <th className='py-2 pl-2'>validation</th>
-        </tr>
-      </thead>
-      <tbody>
-        {items.map((item: SchemaItemType, i: number) => {
-          return (
-            <SchemaItem
-              onChange={onChange && onChangeHandler}
-              data={{ ...item, row: i }}
-              editable={editable}
-              key={i}
-            />
-          )
-        })}
-      </tbody>
-    </table>
+    <div className='overflow-x-scroll'>
+      <table className='table text-xs border-separate border-l border-gray-200 w-full tracking-wider break-words' style={{ borderSpacing: 0 }}>
+        <thead>
+          <tr className='border-t border-b uppercase' style={{ fontSize: '.7rem' }}>
+            <th className={thClassName}>
+              <div className={thCellClassName}>
+                title
+              </div>
+            </th>
+            <th className={thClassName}>
+              <div className={thCellClassName}>
+                type
+              </div>
+            </th>
+            <th className={thClassName}>
+              <div className={thCellClassName}>
+                description
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item: SchemaItemType, i: number) => {
+            return (
+              <SchemaItem
+                onChange={onChange && onChangeHandler}
+                data={{ ...item, row: i }}
+                editable={editable}
+                key={i}
+              />
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 }
 

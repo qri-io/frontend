@@ -3,7 +3,6 @@ import { RunStep } from '../../qri/run'
 import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
-import RunStatusIcon from '../run/RunStatusIcon'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 
 export interface WorkflowCellProps {

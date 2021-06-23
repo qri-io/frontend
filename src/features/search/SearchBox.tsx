@@ -26,7 +26,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     if (onChange) {
       onChange(stateValue)
     }
-  }, [debouncedValue])
+  }, [debouncedValue, onChange, stateValue])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
