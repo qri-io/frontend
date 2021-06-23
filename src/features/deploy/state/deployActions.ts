@@ -3,29 +3,6 @@ import { NewWorkflow, Workflow, workflowInfoFromWorkflow, workflowScriptString }
 import { WorkflowInfoAction } from '../../workflow/state/workflowActions'
 import { DEPLOY_START, DEPLOY_STOP } from './deployState'
 
-// const deployParams = {
-//   "apply": true,
-//   "workflow": {
-//     "deployed": true,
-//     "triggers": [
-//       {"type": "cron", "enabled": true, "periodicity": "R/PT1D" }
-//     ]
-//   },
-//   "ref": "me/example_one",
-//   "dataset": {
-//     "transform" : {
-//       "steps": [
-//         {
-//           "name": "transform",
-//           "syntax": "starlark",
-//           "category": "transform",
-//           "script": "def transform(ds, ctx):\n  ds.set_body([[1,2,3], [4,5,6], [7,8,9]])"
-//         }
-//       ]
-//     }
-//   }
-// }
-
 export function deployWorkflow(w: Workflow): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch({
