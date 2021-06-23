@@ -59,7 +59,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
     dispatch(loadUserProfile(usernameParam))
     dispatch(loadUserProfileDatasets(usernameParam, userProfileParams))
     dispatch(loadUserProfileFollowing(usernameParam, userProfileParams))
-  }, [usernameParam, page, sort, dispatch])
+  }, [usernameParam, page, sort, dispatch, userProfileParams])
 
   // merges new query params with existing params, updates history
   const updateQueryParams = (newQueryParams: Record<string, any>) => {

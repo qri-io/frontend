@@ -66,7 +66,6 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   return (
-    <>
     <div
       className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col transform transition-all', {})}
     >
@@ -105,7 +104,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
           </div>
         </div>
     )}
-    </>
+    </div>
   )
 }
 

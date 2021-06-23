@@ -17,7 +17,6 @@ import {
   faHashtag,
   faHome,
   faHdd,
-  faInfo,
   faList,
   faCheck,
   faPen,

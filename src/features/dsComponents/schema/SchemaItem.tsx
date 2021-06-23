@@ -26,7 +26,7 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
   data,
   editable = true
 }) => {
-  const [expanded, setExpanded] = React.useState(false)
+  const [expanded, ] = React.useState(false)
 
   const handleDynamicEditChange = (name: string, value: string, e?: React.SyntheticEvent) => {
     const d = { ...data }
