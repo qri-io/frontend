@@ -1,17 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react'
 import MonacoEditor from 'react-monaco-editor'
+import classNames from 'classnames'
 
 export interface CodeEditorProps {
   script: string
-  onChange: (newValue: string) => void
   disabled?: boolean
+  // determines whether the Component should render with rounded corners on the bottom
+  standalone?: boolean
+  onChange: (newValue: string) => void
 }
 
 const LINE_HEIGHT = 19
 const MIN_LINE_COUNT = 4
 const PADDING = 15
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({
+  script,
+  standalone = true,
+  onChange
+}) => {
   const ref = useRef<MonacoEditor>(null)
 
   const [lineCount, setLineCount] = useState(MIN_LINE_COUNT)
@@ -63,7 +70,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ script, onChange }) => {
   });
 
   return (
-    <div className='rounded-lg overflow-hidden'>
+    <div className={classNames('rounded-t-lg overflow-hidden', {
+      'rounded-b-lg': standalone
+    })}>
       <MonacoEditor
         ref={ref}
         height={(lineCount * LINE_HEIGHT) + PADDING}

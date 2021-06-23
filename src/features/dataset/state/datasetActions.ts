@@ -23,7 +23,6 @@ export function loadDataset(ref: QriRef): ApiActionThunk {
 
 // downloadLinkFromQriRef creates a download link
 export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): string {
-  console.log('theRef', ref)
   let pathSegment = ref.path ? `/at${ref.path}` : ''
 
   if (body) {

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ComponentName } from '../../qri/dataset'
 import { newQriRef } from '../../qri/ref'
-import DatasetCommits from '../commits/DatasetCommits'
+import DatasetCommitList from '../commits/DatasetCommitList'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 import TabbedComponentEditor from './TabbedComponentEditor'
 import SaveVersionButton from './buttons/SaveVersionButton'
@@ -36,7 +36,7 @@ const DatasetEditor: React.FC<{}> = () => {
 
   return (
     <div className='flex-grow flex overflow-hidden'>
-      <DatasetCommits qriRef={qriRef} />
+      <DatasetCommitList qriRef={qriRef} />
       <div className='flex flex-col flex-grow overflow-x-hidden'>
         <CommitSummaryHeader dataset={dataset}>
           <SaveVersionButton dataset={dataset} />

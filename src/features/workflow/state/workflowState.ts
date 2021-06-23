@@ -53,7 +53,7 @@ const initialState: WorkflowState = {
     disabled: false,
 
     triggers: [
-      { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
+      { type: 'cron', enabled: true, periodicity: 'R/PT1D' }
     ],
     steps: [
       { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
@@ -112,9 +112,9 @@ export const workflowReducer = createReducer(initialState, {
     // UPDATE: we're now passing the ref as a prop in workflow fetching actions
     // (see deploy reducer for an example usage), we should be able to add in this
     // ref check
-    const steps = state.workflow.steps
+    // const steps = state.workflow.steps
     state.workflow = w
-    state.workflow.steps = steps
+    // state.workflow.steps = steps
   },
 })
 

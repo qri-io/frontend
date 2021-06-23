@@ -7,12 +7,17 @@ import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import Icon from '../../chrome/Icon'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 
-export interface DatasetHeaderProps {
+export interface DatasetMiniHeaderProps {
   dataset: Dataset
   hide: boolean
 }
 
-const DatasetHeader: React.FC<DatasetHeaderProps> = ({
+// DatasetHeader and DatasetMiniHeader now accept children which will be displayed
+// in the right side where the default buttons are located. This is useful for
+// overriding the download button with the dry run button in the workflow editor
+
+
+const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
   dataset,
   hide,
   children
@@ -53,4 +58,4 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 }
 
 
-export default DatasetHeader;
+export default DatasetMiniHeader;

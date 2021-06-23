@@ -45,7 +45,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   let editor: React.ReactElement
   switch (syntax) {
     case 'starlark':
-      editor = <CodeEditor script={script} onChange={(v) => { onChangeScript(index, v) }} disabled={!!run} />
+      editor = <CodeEditor script={script} onChange={(v) => { onChangeScript(index, v) }} disabled={!!run} standalone={!run?.output} />
       break;
     case 'qri':
       editor = <></>
@@ -62,12 +62,12 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
             {run && <p className='float-right'>{run.duration}</p>}
             <h3 className='text-sm text-qrinavy font-semibold cursor-pointer mb-0.5' onClick={() => {
               onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
-            }}>{name}{run && <RunStatusIcon state={run.status} />}</h3>
+            }}>{name}</h3>
             <div className='text-xs mb-2.5 text-gray-400'>{description}</div>
           </div>
         </header>
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-        {(collapseState === 'all' || collapseState === 'only-output') && run?.output && <Output data={run?.output} />}
+        {(collapseState === 'all' || collapseState === 'only-output') && run?.output && <Output data={run?.output} status={run?.status} />}
       </div>
   )
 }

@@ -1,8 +1,8 @@
-import { NewWorkflow, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
-import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
 import { ApiAction, CALL_API } from "../../../store/api"
-import { VersionInfoAction } from "../../workflow/state/workflowActions"
+import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
+import { NewWorkflow, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
 import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
+import { AnyAction } from "redux"
 
 function mapVersionInfo (data: object | []): VersionInfo[] {
   if (!data) { return [] }
@@ -14,7 +14,6 @@ export function loadCollection() {
     return dispatch(fetchCollection())
   }
 }
-
 
 function fetchCollection (): ApiAction {
   return {
@@ -31,10 +30,9 @@ function fetchCollection (): ApiAction {
   }
 }
 
-
 // workflowStarted is dispatched by the websocket and users should not need to
 // dispatch it anywhere else
-export function workflowStarted(workflow: Record<string, any>): VersionInfoAction {
+export function workflowStarted(workflow: Record<string, any>): AnyAction {
   const wf = NewWorkflow(workflow)
   return {
     type: WORKFLOW_STARTED,
@@ -44,7 +42,7 @@ export function workflowStarted(workflow: Record<string, any>): VersionInfoActio
 
 // workflowCompleted is dispatched by the websocket and users should not need to
 // dispatch it anywhere else
-export function workflowCompleted(workflow: Record<string, any>): VersionInfoAction {
+export function workflowCompleted(workflow: Record<string, any>): AnyAction {
   const wf = NewWorkflow(workflow)
   return {
     type: WORKFLOW_COMPLETED,

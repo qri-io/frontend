@@ -53,7 +53,6 @@ const initialState: CollectionState = {
 export const collectionReducer = createReducer(initialState, {
   'API_COLLECTION_REQUEST': (state, action) => {
     state.collection = {}
-    state.ids = []
     state.collectionLoading = true
   },
   'API_COLLECTION_SUCCESS': (state, action) => {

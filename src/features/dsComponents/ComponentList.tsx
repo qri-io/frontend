@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 
 import Dataset, { ComponentStatus, ComponentName } from '../../qri/dataset'
 import ComponentItem from './ComponentItem'
@@ -9,8 +10,14 @@ import ComponentItem from './ComponentItem'
 // import { selectDatasetStatus, selectDatasetComponentsList } from '../../selections'
 // import { components as componentsInfo } from './WorkingComponentList'
 
+interface ComponentInfo {
+  name: ComponentName,
+  displayName: string,
+  tooltip: string,
+  icon: string
+}
 
-export const componentsInfo = [
+export const componentsInfo:ComponentInfo[] = [
   {
     name: 'body',
     displayName: 'Data',
@@ -46,12 +53,14 @@ export const componentsInfo = [
 export interface ComponentListProps {
   // qriRef: QriRef
   dataset: Dataset
-  onClick: (component: ComponentName) => void
+  onClick?: (component: ComponentName) => void
   // components?: SelectedComponent[]
   // status: Status
-  selectedComponent: ComponentName
+  selectedComponent?: ComponentName
   // if true components that don't exist will be clickable
   allowClickMissing?: boolean
+  // for showing a gray border around the selected tab to contrast with white background
+  border?: boolean
 }
 
 const ComponentList: React.FC<ComponentListProps> = ({
@@ -63,11 +72,12 @@ const ComponentList: React.FC<ComponentListProps> = ({
   selectedComponent,
   // history
   allowClickMissing = false,
+  border = false,
 }) => {
   const componentNames = Object.keys(dataset)
 
     return (
-    <div className='flex w-full'>
+    <div className={classNames('flex w-full', { 'border-b-2': border })}>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
           if (allowClickMissing || componentNames.includes(name)) {
             var fileStatus: ComponentStatus = 'unmodified'
@@ -85,6 +95,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
                 selected={selectedComponent === name}
                 tooltip={tooltip}
                 onClick={onClick}
+                border={border}
               />
             )
           }

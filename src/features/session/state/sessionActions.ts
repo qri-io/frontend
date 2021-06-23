@@ -25,7 +25,13 @@ export function logIn (username: string, password: string): ApiActionThunk {
         throw new Error(`Could not get user: ${userResponse.payload.err.message}`)
       }
 
-      const user = userResponse.payload.data
+      // TODO(chriswhong): workaround to get a username and photo from the local session response
+      // remove once this is talking to qri cloud backend
+      const user = {
+        username: userResponse.payload.data.peername,
+        profile: userResponse.payload.data.photo,
+        ...userResponse.payload.data
+      }
 
       return dispatch({
         type: 'LOGIN_SUCCESS',

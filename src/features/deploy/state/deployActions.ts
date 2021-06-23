@@ -7,16 +7,19 @@ export function deployWorkflow(w: Workflow): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch({
       type: 'deploy',
-      
+
       [CALL_API]: {
-        endpoint: 'deploy',
+        endpoint: 'auto/deploy',
         method: 'POST',
         body: {
           apply: true,
           workflow: w,
-          transform: {
-            scriptBytes: btoa(workflowScriptString(w)),
-            steps: w.steps
+          ref: w.ref,
+          dataset: {
+            transform: {
+              scriptBytes: btoa(workflowScriptString(w)),
+              steps: w.steps
+            },
           }
         }
       }

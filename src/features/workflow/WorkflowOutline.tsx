@@ -8,6 +8,7 @@ import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { RunMode } from './state/workflowState'
 import DeployButtonWithStatusDescription from '../deploy/DeployStatusDescriptionButton'
+import DatasetCommit from '../commits/DatasetCommit'
 
 
 export interface WorkflowOutlineProps {
@@ -45,7 +46,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <div className='mb-2'>
             <ScrollTrigger target='script'>
               <div className='font-semibold text-qrinavy mb-2'>
-                Script {(run && run.status === "running") && <div className='float-right text-blue-500'> <Icon icon='spinner' spin /></div>}
+                Script {(run && run.status === "running") && <div className='float-right'><RunStatusIcon status='running' /></div>}
               </div>
             </ScrollTrigger>
           </div>
@@ -59,7 +60,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
                 <ScrollTrigger target={step.name} key={i}>
                   <div className='text-sm mb-0.5 text-qrigray-400 capitalize'>
                     {step.name}
-                    {r && <div className='float-right text-green-500'><RunStatusIcon state={r.status || "waiting"} /></div>}
+                    {r && <div className='float-right text-green-500'><RunStatusIcon status={r.status || "waiting"} className='ml-2' /></div>}
                   </div>
                 </ScrollTrigger>
               )
@@ -71,6 +72,28 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
               </div>
             </ScrollTrigger>}
           </div>
+          <hr/>
+          <ScrollTrigger target='new-version-preview'>
+            <div className='text-sm text-qrigray-400 pt-2 pb-1'>New Version Preview</div>
+            { /*
+              TODO(chriswhong): we need the backend to return a timestamp for the dry run and a commit message in order to render this commit box
+              this can be a proper LogItem or we can modify the props for DatasetCommit, or make a new component, this is a placeholder
+            */}
+            {run?.dsPreview ? (
+              <DatasetCommit
+                logItem={{
+                  timestamp: Date.parse(new Date(new Date().getTime() - 5 * 1000)),
+                  title: 'new version from workflow'
+                }}
+                active
+              />
+            ) : (
+              <div className='text-xs block rounded-md px-3 pt-2 pb-3 mb-6 w-full overflow-x-hidden text-qrigray-400 border border-qrigray-300'>
+                Such Empty
+              </div>
+            )}
+          </ScrollTrigger>
+
           <ScrollTrigger target='on-completion'><div className='font-semibold text-qrinavy mb-2'>On Completion</div></ScrollTrigger>
 
           <div className="mb-20">
