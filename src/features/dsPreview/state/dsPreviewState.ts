@@ -21,8 +21,28 @@ export const dsPreviewReducer = createReducer(initialState, {
     state.preview = undefined
     state.loading = true
   },
+  'API_DATASETPREVIEWFETCHDONE_REQUEST': (state) => {
+    state.loading = true
+  },
+  'API_DATASETPREVIEWBODY_REQUEST': (state) => {
+    state.loading = true
+  },
+  'API_DATASETPREVIEWREADME_REQUEST': (state) => {
+    state.loading = true
+  },
   'API_DATASETPREVIEW_SUCCESS': (state, action) => {
     state.preview = action.payload.data
+  },
+  'API_DATASETPREVIEWBODY_SUCCESS': (state, action) => {
+    state.preview.body = action.payload.data
+  },
+  'API_DATASETPREVIEWREADME_SUCCESS': (state, action) => {
+    state.preview.readme = action.payload.data
+  },
+  'API_DATASETPREVIEWFETCHDONE_SUCCESS': (state) => {
+    state.loading = false
+  },
+  'API_DATASETPREVIEWFETCHDONE_FAILURE': (state) => {
     state.loading = false
   },
   'API_DATASETPREVIEW_FAILURE': (state) => {

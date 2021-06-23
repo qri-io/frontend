@@ -150,14 +150,12 @@ function apiUrl (endpoint: string, segments?: QriRef, query?: ApiQuery, pageInfo
     if (segments.peerID) {
       url = addToUrl(url, segments.peerID)
     }
-    // TODO(b5): restore! this is causing issues with updated backend API routes
-    // somehwere.
-    // if (segments.path) {
-    //   url = addToUrl(url, segments.path)
-    // }
-    // if (segments.selector) {
-    //   url = addToUrl(url, segments.selector.join('/'))
-    // }
+    if (segments.path) {
+      url = addToUrl(url, segments.path)
+    }
+    if (segments.selector) {
+      url = addToUrl(url, segments.selector.join('/'))
+    }
   }
 
   if (query) {

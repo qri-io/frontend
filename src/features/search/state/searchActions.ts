@@ -24,13 +24,15 @@ function fetchSearchResults (searchParams: SearchParams): ApiAction {
   return {
     type: 'search',
     [CALL_API]: {
-      endpoint: 'search',
-      method: 'GET',
+      endpoint: 'remote/search',
+      method: 'POST',
+      body: {
+        query: mapFrontendParams(searchParams),
+      },
       pageInfo: {
         page: searchParams.page,
         pageSize: searchParams.pageSize
       },
-      query: mapFrontendParams(searchParams),
       map: mapSearchResults
     }
   }

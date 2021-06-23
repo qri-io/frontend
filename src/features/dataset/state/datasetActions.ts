@@ -36,7 +36,7 @@ function fetchDataset (ref: QriRef): ApiAction {
     type: 'dataset',
     ref,
     [CALL_API]: {
-      endpoint: 'dataset_summary',
+      endpoint: 'ds/get',
       method: 'GET',
       segments: ref,
       map: mapDataset
@@ -55,7 +55,7 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
     type: 'body',
     ref,
     [CALL_API]: {
-      endpoint: 'get',
+      endpoint: 'ds/get',
       method: 'GET',
       pageInfo: {
         page,
