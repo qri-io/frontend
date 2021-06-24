@@ -9,12 +9,17 @@ import { newDeployStatusSelector } from './state/deployState'
 import { AnonUser, selectSessionUser } from '../session/state/sessionState'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
+import { RunStatus } from '../../qri/run'
 
 export interface DeployStatusDescriptionButtonProps {
   workflow: Workflow
+  runStatus: RunStatus
 }
 
-const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonProps> = ({ workflow }) => {
+const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonProps> = ({
+  workflow,
+  runStatus
+}) => {
   const dispatch = useDispatch()
   const status = useSelector(newDeployStatusSelector(workflow.id))
   const user = useSelector(selectSessionUser)
@@ -28,7 +33,7 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
 
     switch (status) {
       case 'undeployed': // undeployed -> deploy
-        dispatch(deployWorkflow(workflow))
+        dispatch(showModal(ModalType.deploy))
         break;
       case 'deployed': // deployed -> pause
         alert('pausing workflow not yet implemented');
@@ -44,11 +49,13 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
     }
   }
 
+  // TODO(chriswhong): add more validation logic to determine whether the deploy button should be disabled
   return (
     <Button
       type='secondary'
       className='w-full'
       onClick={handleButtonClick}
+      disabled={runStatus !== 'succeeded'}
     >
       {buttonText}
     </Button>

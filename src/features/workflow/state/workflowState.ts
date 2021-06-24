@@ -28,6 +28,7 @@ export const selectLatestRun = (state: RootState): Run | undefined => {
 }
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
+export const selectWorkflowQriRef = (state: RootState): QriRef => state.workflow.qriRef
 export const selectRunMode = (state: RootState): RunMode => state.workflow.runMode
 
 export type RunMode =

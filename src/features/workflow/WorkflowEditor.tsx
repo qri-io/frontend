@@ -120,8 +120,8 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
           </ContentBox>
           <OnComplete />
           <div className='mt-6'>
-            <DeployButton workflow={workflow} />
             <ScrollAnchor id='deploy-button' />
+            <DeployButton workflow={workflow} runStatus={run?.status ? run.status : 'waiting'} />
           </div>
         </div>
       </div>

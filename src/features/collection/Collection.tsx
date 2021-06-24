@@ -93,7 +93,7 @@ const Collection: React.FC<{}> = () => {
             <div className='w-1/2 flex items-center justify-end'>
               <SearchBox onChange={handleSearchChange} placeholder='Filter' dark />
               <Link to={{
-                pathname: `/ds/${username}/dataset_${Math.floor(Math.random() * 1000)}/workflow`,
+                pathname: `/ds/${username}/dataset_${Math.floor(Math.random() * 1000)}/workflow/new`,
                 state: {
                   showSplashModal: true,
                   template: 'CSVDownload'
