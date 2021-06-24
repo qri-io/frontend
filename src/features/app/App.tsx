@@ -7,8 +7,12 @@ import Routes from '../../routes'
 import Modal from './modal/Modal'
 import { wsConnect } from '../websocket/state/websocketActions';
 
-import './App.css';
 import SnackBar from '../snackBar/SnackBar';
+
+import './App.css';
+// import styles for react-responsive-carousel, used in workflow splash modal
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+
 
 const App: React.FC<any> = () => {
   const dispatch = useDispatch()

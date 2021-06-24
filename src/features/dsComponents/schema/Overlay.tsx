@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react'
 import classNames from 'classnames'
 
-import Icon from '../../../chrome/Icon'
+import CloseButton from '../../../chrome/CloseButton'
 
 interface OverlayProps {
   title?: string
@@ -62,7 +62,7 @@ const Overlay: React.FunctionComponent<OverlayProps> = ({
     >
       {title && <div className='title-bar'>
         <div className='label x-small'>{title}</div>
-        <div className='pointer' onClick={onCancel}><Icon icon='close' size='xs' /></div>
+        <CloseButton size='xs' onClick={onCancel}/>
       </div>}
       {navigation && <div className='nav'>{navigation}</div>}
       <div className='content'>{children}</div>

@@ -15,6 +15,7 @@ import { ModalType } from '../app/state/appState'
 
 interface WorkflowLocationState {
   template: string
+  showSplashModal?: boolean
 }
 
 export interface WorkflowProps {
@@ -34,6 +35,10 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   useEffect(() => {
     if (location.state && location.state.template) {
       dispatch(setWorkflow(selectTemplate(location.state.template)))
+    }
+
+    if (location.state && location.state.showSplashModal) {
+      dispatch(showModal(ModalType.workflowSplash))
     }
   }, [dispatch, location.state])
 
