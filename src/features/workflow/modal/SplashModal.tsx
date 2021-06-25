@@ -6,6 +6,9 @@ import Button from '../../../chrome/Button'
 import { clearModal } from '../../app/state/appActions'
 import IconButton from '../../../chrome/IconButton'
 
+// import styles for react-responsive-carousel, used in workflow splash modal
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+
 const SignUpModal: React.FC = () => {
   const dispatch = useDispatch()
 
@@ -24,10 +27,7 @@ const SignUpModal: React.FC = () => {
         showStatus={false}
         showArrows={false}
         showThumbs={false}
-        interval={3000}
         showIndicators
-        infiniteLoop
-        autoPlay
       >
          <div className='mb-12 flex'>
            <div className='text-2xl font-bold mr-3 leading-tight'>

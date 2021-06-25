@@ -7,6 +7,7 @@ import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { applyWorkflowTransform, saveAndApplyWorkflowTransform } from './state/workflowActions'
 import { selectRunMode, selectWorkflow } from './state/workflowState'
+import { platform } from '../../utils/platform'
 
 export interface RunBarProps {
  status: RunStatus
@@ -32,7 +33,7 @@ const RunBar: React.FC<RunBarProps> = ({
 
   const handleCancel = () => { alert('cannot cancel runs yet') }
 
-  const isMac = navigator.platform.indexOf('Mac') > -1
+  const isMac = (platform() === 'mac')
 
   return (
     <div>

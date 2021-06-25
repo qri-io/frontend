@@ -12,7 +12,7 @@ interface IconButtonProps {
   onClick: () => void
 }
 
-const IconButton: React.FunctionComponent<IconButtonProps> = ({
+const IconButton: React.FC<IconButtonProps> = ({
   className,
   icon,
   size = 'md',

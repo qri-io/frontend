@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   type='primary',
   size='md',
   className,
-  onClick,
+  onClick= () => {},
   submit = false,
   disabled = false,
   children
@@ -50,7 +50,7 @@ const Button: React.FC<ButtonProps> = ({
         'text-white bg-red-600 hover:bg-red-700 focus:ring-red-500': (type === 'danger'),
       }
     )}
-    onClick={disabled ? () => {} : onClick}
+    onClick={onClick}
     disabled={disabled}
   >
     {children}

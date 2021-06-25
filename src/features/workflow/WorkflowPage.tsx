@@ -52,8 +52,6 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
   const segments = useLocation().pathname.split('/')
   const isNewWorkflow = segments[segments.length - 1] === 'new'
 
-
-
   // if the dataset name and peername are empty, make a mock dataset for rendering the headers
   if (dataset.peername === '') {
     dataset = NewDataset({
