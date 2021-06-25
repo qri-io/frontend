@@ -24,7 +24,7 @@ interface PageControlProps {
 
 // pass in pageInfo prop to show pagination info and controls
 const PageControl: React.FC<PageControlProps> = ({
-  pageInfo,
+  pageInfo = {},
   queryParams,
   showRange = true,
   onPageChange

@@ -40,7 +40,7 @@ const Search: React.FC<{}> = () => {
   // if the query string ever changes, fetch new data
   useEffect(() => {
     dispatch(loadSearchResults(searchParams))
-  }, [q, page, sort, dispatch, searchParams])
+  }, [q, page, sort, dispatch])
 
   // handle new search term input
   const handleSearchSubmit = (newQ:string) => {
