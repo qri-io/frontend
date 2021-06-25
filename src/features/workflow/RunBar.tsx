@@ -32,6 +32,8 @@ const RunBar: React.FC<RunBarProps> = ({
 
   const handleCancel = () => { alert('cannot cancel runs yet') }
 
+  const isMac = navigator.platform.indexOf('Mac') > -1
+
   return (
     <div>
       <div className='flex w-36 items-center'>
@@ -51,7 +53,7 @@ const RunBar: React.FC<RunBarProps> = ({
         id='dry-run'
         effect='solid'
       >
-        Try this script and preview the results without saving
+        Try this script and preview the results without saving ({isMac ? '⌘' : 'Ctrl'}+↵)
       </ReactTooltip>
     </div>
   )
