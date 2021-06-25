@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useLocation } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useInView } from 'react-intersection-observer'
 
@@ -48,6 +48,12 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
     qriRef.username = user.username
   }
 
+  // determine if the workflow is new by reading /new at the end of the pathname
+  const segments = useLocation().pathname.split('/')
+  const isNewWorkflow = segments[segments.length - 1] === 'new'
+
+
+
   // if the dataset name and peername are empty, make a mock dataset for rendering the headers
   if (dataset.peername === '') {
     dataset = NewDataset({
@@ -83,7 +89,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
               </DatasetMiniHeader>
               <div className='p-7 w-full'>
                 <div ref={stickyHeaderTriggerRef}>
-                  <DatasetHeader dataset={dataset} editable={editable}>
+                  <DatasetHeader dataset={dataset} editable={editable} showInfo={!isNewWorkflow}>
                     {runBar}
                   </DatasetHeader>
                 </div>

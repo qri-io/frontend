@@ -15,6 +15,7 @@ export interface DatasetHeaderProps {
   dataset: Dataset
   border?: boolean
   editable?: boolean
+  showInfo?: boolean
 }
 
 // DatasetHeader and DatasetMiniHeader now accept children which will be displayed
@@ -25,6 +26,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   dataset,
   border = false,
   editable = false,
+  showInfo = true,
   children
 }) => {
   const dispatch = useDispatch()
@@ -56,7 +58,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   return (
     <div className="w-full">
       <div className='flex'>
-        <div className='flex-grow'>
+        <div className='flex-grow pb-5'>
           <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1 font-mono'>
             <TextLink to={`/${qriRef.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</TextLink>/
             <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
@@ -68,14 +70,15 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           <div className='text-2xl text-qrinavy-500 font-black group hover:text mb-3'>
             {dataset.meta?.title || dataset.name}
           </div>
-
-          <div className='flex mb-5'>
-            <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />
-            <DatasetInfoItem icon='disk' label='59 MB' />
-            <DatasetInfoItem icon='download' label='418 downloads' />
-            <DatasetInfoItem icon='follower' label='130 followers' />
-            <DatasetInfoItem icon='lock' label='private' />
-          </div>
+          {showInfo && (
+            <div className='flex'>
+              <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />
+              <DatasetInfoItem icon='disk' label='59 MB' />
+              <DatasetInfoItem icon='download' label='418 downloads' />
+              <DatasetInfoItem icon='follower' label='130 followers' />
+              <DatasetInfoItem icon='lock' label='private' />
+            </div>
+          )}
         </div>
         <div className='flex items-center content-center'>
           {children || (
