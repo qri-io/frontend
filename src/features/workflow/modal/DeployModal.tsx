@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Button from '../../../chrome/Button'
 import Icon from '../../../chrome/Icon'
 import { clearModal } from '../../app/state/appActions'
-import CloseButton from '../../../chrome/CloseButton'
+import IconButton from '../../../chrome/IconButton'
 import TextInput from '../../../chrome/forms/TextInput'
 // import { saveAndApplyWorkflowTransform } from '../state/workflowActions'
 import { selectWorkflowQriRef } from '../state/workflowState'
@@ -89,7 +89,7 @@ const DeployModal: React.FC = () => {
     <div className='bg-white p-8 text-left text-qrinavy' style={{ width: '440px'}}>
       <div className='flex'>
         <div className='flex-grow text-3xl font-black mb-6'>{heading}</div>
-        <CloseButton className='ml-10' onClick={handleClose}/>
+        <IconButton icon='close' className='ml-10' onClick={handleClose}/>
       </div>
       <div className='mb-6'>
         <div className='mb-3'>{subHeading}</div>

@@ -1,17 +1,20 @@
-// CloseButton renders an X icon that behaves like a button, useful for closing modals
+// IconButton renders an icon that behaves like a button, useful for closing modals with an X,
+// or adding things with a +
 import React from 'react'
 import classNames from 'classnames'
 
 import Icon, { IconSize } from './Icon'
 
-interface CloseButtonProps {
+interface IconButtonProps {
   className?: string
+  icon: string
   size?: IconSize
   onClick: () => void
 }
 
-const CloseButton: React.FunctionComponent<CloseButtonProps> = ({
+const IconButton: React.FunctionComponent<IconButtonProps> = ({
   className,
+  icon,
   size = 'md',
   onClick
 }) => (
@@ -22,8 +25,8 @@ const CloseButton: React.FunctionComponent<CloseButtonProps> = ({
     )}
     onClick={onClick}
   >
-    <Icon icon='close' size={size} />
+    <Icon icon={icon} size={size} />
   </div>
 )
 
-export default CloseButton
+export default IconButton

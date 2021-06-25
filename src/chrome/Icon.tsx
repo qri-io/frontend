@@ -78,6 +78,7 @@ import Lock from './icon/Lock'
 import MyDatasets from './icon/MyDatasets'
 import Page from './icon/Page'
 import PlayCircle from './icon/PlayCircle'
+import Plus from './icon/Plus'
 import Readme from './icon/Readme'
 import Rocket from './icon/Rocket'
 import Rows from './icon/Rows'
@@ -196,6 +197,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     myDatasets: <MyDatasets className={className} size={size} />,
     page: <Page className={className} size={size} />,
     playCircle: <PlayCircle className={className} size={size} />,
+    plus: <Plus className={className} size={size} />,
     readme: <Readme className={className} size={size} />,
     rocket: <Rocket className={className} size={size} />,
     rows: <Rows className={className} size={size} />,

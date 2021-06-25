@@ -4,7 +4,7 @@ import { Carousel } from 'react-responsive-carousel'
 
 import Button from '../../../chrome/Button'
 import { clearModal } from '../../app/state/appActions'
-import CloseButton from '../../../chrome/CloseButton'
+import IconButton from '../../../chrome/IconButton'
 
 const SignUpModal: React.FC = () => {
   const dispatch = useDispatch()
@@ -17,7 +17,7 @@ const SignUpModal: React.FC = () => {
     <div className='bg-white p-8 text-left text-qrinavy' style={{ width: '440px'}}>
       <div className='flex'>
         <div className='flex-grow text-3xl font-black mb-8'>Welcome to the workflow editor!</div>
-        <CloseButton className='ml-10' onClick={handleClose}/>
+        <IconButton icon='close' className='ml-10' onClick={handleClose}/>
       </div>
 
       <Carousel
