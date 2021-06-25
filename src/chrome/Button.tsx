@@ -15,7 +15,7 @@ export interface ButtonProps {
   size?: 'sm' | 'md' | 'lg'
   className?: string
   submit?: boolean
-  disabled: boolean
+  disabled?: boolean
 }
 
 const Button: React.FC<ButtonProps> = ({
