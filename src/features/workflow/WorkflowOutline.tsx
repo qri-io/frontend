@@ -99,7 +99,9 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <hr className='mb-4'/>
 
           <div className="mb-20">
-            {workflow && <DeployStatusIndicator workflow={workflow} />}
+            <ScrollTrigger target='deploy-button'>
+              {workflow && <DeployStatusIndicator workflow={workflow} />}
+            </ScrollTrigger>
           </div>
         </div>
       </div>

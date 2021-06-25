@@ -119,7 +119,10 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
             <WorkflowDatasetPreview dataset={run?.dsPreview}/>
           </ContentBox>
           <OnComplete />
-          <DeployButton workflow={workflow} />
+          <div className='mt-6'>
+            <DeployButton workflow={workflow} />
+            <ScrollAnchor id='deploy-button' />
+          </div>
         </div>
       </div>
     </Hotkeys>

@@ -47,7 +47,7 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
   return (
     <Button
       type='secondary'
-      className={`w-full`}
+      className='w-full'
       onClick={handleButtonClick}
     >
       {buttonText}
