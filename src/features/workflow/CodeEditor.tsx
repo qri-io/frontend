@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import MonacoEditor from 'react-monaco-editor'
+import { KeyMod, KeyCode } from "monaco-editor/esm/vs/editor/editor.api";
 import classNames from 'classnames'
 
 export interface CodeEditorProps {
@@ -8,6 +9,7 @@ export interface CodeEditorProps {
   // determines whether the Component should render with rounded corners on the bottom
   standalone?: boolean
   onChange: (newValue: string) => void
+  onRun?: () => void
 }
 
 const LINE_HEIGHT = 19
@@ -17,7 +19,8 @@ const PADDING = 15
 const CodeEditor: React.FC<CodeEditorProps> = ({
   script,
   standalone = true,
-  onChange
+  onChange,
+  onRun = () => {}
 }) => {
   const ref = useRef<MonacoEditor>(null)
 
@@ -32,16 +35,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }
 
   const handleEditorWillMount = (monaco: any) => {
-    if (monaco.editor) {
-      monaco.editor.defineTheme("qri-theme", {
-          base: 'vs',
-          inherit: true,
-          rules: [],
-          colors: {
-            'editor.background': '#f4f6f8',
-        	}
-      });
-    }
+    monaco?.editor?.defineTheme("qri-theme", {
+        base: 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#f4f6f8',
+      	}
+    });
   }
 
   useEffect(() => {
@@ -58,11 +59,22 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [theEditor])
 
   const handleEditorDidMount = (editor: MonacoEditor['editor']) => {
+    editor?.addAction({
+      id: "executeCurrentAndAdvance",
+      label: "Execute Block and Advance",
+      keybindings: [KeyMod.CtrlCmd | KeyCode.Enter],
+      contextMenuGroupId: "2_execution",
+      precondition: "editorTextFocus && !suggestWidgetVisible && !renameInputVisible && !inSnippetMode && !quickFixWidgetVisible",
+      run: () => {
+        onRun()
+      },
+    });
+
     setTheEditor(editor)
   }
 
   const handleResize = () => {
-    if (theEditor) theEditor.layout()
+    theEditor?.layout()
   }
 
   useEffect(() => {

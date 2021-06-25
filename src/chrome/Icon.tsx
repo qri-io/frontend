@@ -61,6 +61,7 @@ import Code from './icon/Code'
 import Columns from './icon/Columns'
 import Commit from './icon/Commit'
 import Dashboard from './icon/Dashboard'
+import DeployCircle from './icon/DeployCircle'
 import Discord from './icon/Discord'
 import Disk from './icon/Disk'
 import Download from './icon/Download'
@@ -177,6 +178,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     columns: <Columns className={className} size={size} />,
     commit: <Commit className={className} size={size} />,
     dashboard: <Dashboard className={className} size={size} />,
+    deployCircle: <DeployCircle className={className} size={size} />,
     discord: <Discord className={className} size={size} />,
     disk: <Disk className={className} size={size} />,
     download: <Download className={className} size={size} />,
