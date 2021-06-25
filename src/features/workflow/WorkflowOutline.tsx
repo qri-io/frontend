@@ -74,7 +74,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           </div>
           <hr/>
           <ScrollTrigger target='new-version-preview'>
-            <div className='text-sm text-qrigray-400 pt-2 pb-1'>New Version Preview</div>
+            <div className='text-sm text-qrigray-400 pt-2 pb-1'>Output</div>
             { /*
               TODO(chriswhong): we need the backend to return a timestamp for the dry run and a commit message in order to render this commit box
               this can be a proper LogItem or we can modify the props for DatasetCommit, or make a new component, this is a placeholder
