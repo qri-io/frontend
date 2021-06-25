@@ -53,9 +53,7 @@ const initialState: WorkflowState = {
     runCount: 0,
     disabled: false,
 
-    triggers: [
-      { type: 'cron', enabled: true, periodicity: 'R/PT1D' }
-    ],
+    triggers: [],
     steps: [
       { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
       { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
@@ -106,7 +104,7 @@ export const workflowReducer = createReducer(initialState, {
     // workflow we're editing matches the one coming from a successful API call,
     // but in the future we'll need to work out a way to only update on workflow
     // match, even when the dataset is fetched by qriRef. Two options:
-    //   * modify the definintion of a workflow to always include this info 
+    //   * modify the definintion of a workflow to always include this info
     // (basically *don't* switch datasetID to only be InitIDs in the future, always use full refs)
     //   * include the id we requested in the response action
     // Personally, I'm a fan of the latter

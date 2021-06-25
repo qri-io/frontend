@@ -9,6 +9,7 @@ import Block from '../workflow/Block'
 import { changeWorkflowTrigger } from '../workflow/state/workflowActions'
 import CronTriggerEditor from './CronTriggerEditor'
 import ContentBox from '../../chrome/ContentBox'
+import IconButton from '../../chrome/IconButton'
 
 export interface WorkflowTriggersEditorProps {
   triggers?: WorkflowTrigger[]
@@ -41,8 +42,16 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
   return (
     <ContentBox className='mb-7' paddingClassName='px-5 py-4'>
       <ScrollAnchor id='triggers'/>
-      <h2 className='text-2xl font-medium text-qrinavy mb-1'>Triggers</h2>
-      <div className='text-sm text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
+      <div className='flex'>
+        <div className='flex-grow'>
+          <h2 className='text-2xl font-medium text-qrinavy mb-1'>Triggers</h2>
+          <div className='text-sm text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
+        </div>
+        <div className='flex items-center'>
+          {/* TODO(chriswhong): build UI for adding triggers */}
+          <IconButton icon='plus' onClick={() => {}} />
+        </div>
+      </div>
       <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
         {triggers.map((trigger: WorkflowTrigger, i) => {
           switch (trigger.type) {
