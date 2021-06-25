@@ -13,7 +13,7 @@ export interface DeployStatusIndicatorProps {
 
 const DeployStatusIndicator: React.FC<DeployStatusIndicatorProps> = ({ workflow }) => {
   const status = useSelector(newDeployStatusSelector(workflow.id))
-  const { statusIcon, color, statusText, message } = deployStatusInfoMap[status]
+  const { statusIcon, color, statusText } = deployStatusInfoMap[status]
 
   return (
     <div>

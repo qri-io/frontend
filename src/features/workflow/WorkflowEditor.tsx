@@ -45,9 +45,11 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
     return 'all'
   }
 
+  const runScript = () => { dispatch(applyWorkflowTransform(workflow)) }
+
   const onKeyDown = (keyName: string) => {
     if (keyName === 'cmd+enter') {
-      dispatch(applyWorkflowTransform(workflow))
+      runScript()
     }
   }
 
@@ -79,6 +81,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
                     index={i}
                     step={step}
                     run={r}
+                    onRun={runScript}
                     collapseState={collapseState(step.name, r)}
                     onChangeCollapse={(v) => {
                       const update = Object.assign({}, collapseStates as any)
