@@ -110,12 +110,12 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
                 />}
             </section>
             <h3 className='text-sm text-qrinavy font-semibold cursor-pointer mb-0.5'>
-              Output
+              Result
             </h3>
 
-            <div className='text-xs mb-2.5 text-gray-400'>Your script will create a new version of this dataset.</div>
+            <div className='text-xs mb-2.5 text-gray-400'>Preview the results of your script here</div>
 
-            <ScrollAnchor id='new-version-preview' />
+            <ScrollAnchor id='result' />
             <WorkflowDatasetPreview dataset={run?.dsPreview}/>
           </ContentBox>
           <OnComplete />
