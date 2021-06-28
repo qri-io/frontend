@@ -86,6 +86,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
                   title: 'new version from workflow'
                 }}
                 active
+                isLink={false}
               />
             ) : (
               <div className='text-xs block rounded-md px-3 pt-3 pb-4 mb-6 w-full overflow-x-hidden text-qrigray-400 border border-qrigray-300'>
