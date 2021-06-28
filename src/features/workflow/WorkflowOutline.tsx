@@ -88,8 +88,8 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
                 active
               />
             ) : (
-              <div className='text-xs block rounded-md px-3 pt-2 pb-3 mb-6 w-full overflow-x-hidden text-qrigray-400 border border-qrigray-300'>
-                Such Empty
+              <div className='text-xs block rounded-md px-3 pt-3 pb-4 mb-6 w-full overflow-x-hidden text-qrigray-400 border border-qrigray-300'>
+                Click <span className='border rounded-sm px-1'>Dry Run</span> to preview the output of this script
               </div>
             )}
           </ScrollTrigger>
