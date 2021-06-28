@@ -7,6 +7,7 @@ import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { applyWorkflowTransform, saveAndApplyWorkflowTransform } from './state/workflowActions'
 import { selectRunMode, selectWorkflow } from './state/workflowState'
+import { platform } from '../../utils/platform'
 
 export interface RunBarProps {
  status: RunStatus
@@ -32,6 +33,8 @@ const RunBar: React.FC<RunBarProps> = ({
 
   const handleCancel = () => { alert('cannot cancel runs yet') }
 
+  const isMac = (platform() === 'mac')
+
   return (
     <div>
       <div className='flex w-36 items-center'>
@@ -51,7 +54,7 @@ const RunBar: React.FC<RunBarProps> = ({
         id='dry-run'
         effect='solid'
       >
-        Try this script and preview the results without saving
+        Try this script and preview the results without saving ({isMac ? '⌘' : 'Ctrl'}+↵)
       </ReactTooltip>
     </div>
   )

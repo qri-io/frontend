@@ -8,6 +8,8 @@ import ScheduleModal from '../../workflow/modal/ScheduleModal'
 import UnsavedChangesModal from '../../workflow/modal/UnsavedChangesModal'
 import LogInModal from '../../session/modal/LogInModal'
 import SignUpModal from '../../session/modal/SignUpModal'
+import WorkflowSplashModal from '../../workflow/modal/SplashModal'
+import DeployModal from '../../workflow/modal/DeployModal'
 
 import { clearModal } from '../state/appActions'
 
@@ -65,6 +67,10 @@ const Modal: React.FC<any> = () => {
                     return <LogInModal {...modal.props} />
                 case ModalType.signUp:
                     return <SignUpModal {...modal.props} />
+                case ModalType.workflowSplash:
+                    return <WorkflowSplashModal {...modal.props} />
+                case ModalType.deploy:
+                    return <DeployModal {...modal.props} />
                 default:
                   return null
               }

@@ -33,10 +33,7 @@ export const CSVDownload: Workflow = {
   runCount: 0,
   disabled: false,
 
-  triggers: [
-    // repeat every hour
-    { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
-  ],
+  triggers: [],
   steps: [
     { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
 load("http.star", "http")
@@ -74,7 +71,7 @@ export const APICall: Workflow = {
   onComplete: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
-} 
+}
 
 export const DatabaseQuery: Workflow = {
   id: 'DatabaseQuery',
@@ -93,13 +90,13 @@ export const DatabaseQuery: Workflow = {
   onComplete: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
-} 
+}
 
 export const Webscrape: Workflow = {
   id: 'Webscrape',
   runCount: 0,
   disabled: false,
-  
+
   triggers: [
     // repeat every hour
     { id: '', workflowID: '', type: 'cron', periodicity: 'R/PT1H' }
@@ -112,7 +109,7 @@ export const Webscrape: Workflow = {
   onComplete: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
-} 
+}
 
 export const Templates: Record<string, Workflow> = {
   'CSVDownload': CSVDownload,

@@ -15,14 +15,16 @@ export interface ButtonProps {
   size?: 'sm' | 'md' | 'lg'
   className?: string
   submit?: boolean
+  disabled?: boolean
 }
 
 const Button: React.FC<ButtonProps> = ({
   type='primary',
   size='md',
   className,
-  onClick,
+  onClick= () => {},
   submit = false,
+  disabled = false,
   children
 }) => (
   <button
@@ -30,6 +32,9 @@ const Button: React.FC<ButtonProps> = ({
     className={classNames(
       'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 transition-all duration-100',
       className,
+      {
+        'cursor-default bg-opacity-40 hover:bg-opacity-40': disabled
+      },
       {
         'text-sm px-2 h-9 ': (size === 'sm'),
         'text-sm px-4 h-10': (size === 'md'),
@@ -46,6 +51,7 @@ const Button: React.FC<ButtonProps> = ({
       }
     )}
     onClick={onClick}
+    disabled={disabled}
   >
     {children}
   </button>

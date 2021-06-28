@@ -15,7 +15,9 @@ export enum ModalType {
   deployWorkflow = 'deployWorkflow',
   removeDataset = 'removeDataset',
   logIn = 'logIn',
-  signUp = 'signUp'
+  signUp = 'signUp',
+  workflowSplash = 'workflowSplash',
+  deploy = 'deploy'
 }
 
 export interface Modal<P = {}> {

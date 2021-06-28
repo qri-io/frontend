@@ -1,5 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 
 import { QriRef } from '../../qri/ref'
@@ -28,6 +29,11 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const toggleExpanded = () => {
     dispatch(toggleNavExpanded())
   }
+
+  // determine if the workflow is new by reading /new at the end of the pathname
+  const segments = useLocation().pathname.split('/')
+  const isNewWorkflow = segments[segments.length - 1] === 'new'
+
 
   return (
     <div className={`side-nav pl-9 h-full bg-white relative pt-9 flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
@@ -68,6 +74,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
             subtext='View an overview of this Dataset'
           />
         }
+        disabled={isNewWorkflow}
       />
       <DatasetSideNavItem
         id='components'
@@ -81,6 +88,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
             subtext='Explore the version history of this Dataset'
           />
         }
+        disabled={isNewWorkflow}
       />
       <DatasetSideNavItem
         id='workflow-editor'
@@ -107,6 +115,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
             subtext='Inspect recent job activity and updates'
           />
         }
+        disabled={isNewWorkflow}
       />
       {process.env.REACT_APP_FEATURE_WIREFRAMES &&
         <DatasetSideNavItem
@@ -120,6 +129,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
               subtext='Discuss this dataset'
             />
           }
+          disabled={isNewWorkflow}
         />
       }
     </div>

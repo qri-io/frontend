@@ -12,40 +12,69 @@ export interface DatasetSideNavItemProps {
   to: string
   expanded: boolean
   tooltip?: React.ReactNode
+  disabled?: boolean
 }
 
-const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({ id, icon, label, to, expanded=true, tooltip }) => {
+const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
+  id,
+  icon,
+  label,
+  to,
+  expanded=true,
+  tooltip,
+  disabled = false
+}) => {
   const { pathname } = useLocation();
   const active = pathname.includes(to)
+
+  const content = (
+    <>
+      <span data-tip data-for={id}>
+        <div className='flex items-center'>
+          <Icon className='mr-2' size='md' icon={icon} />
+          <span style={{
+            fontSize: '16px',
+            width: expanded ? 'auto' : 0,
+            // inline-block is necessary here so that the tooltip appears just to the right of the text
+            display: expanded ? 'inline-block' : 'none'
+          }}>{label}</span>
+        </div>
+      </span>
+      {tooltip && (
+        <ReactTooltip
+          id={id}
+          place='right'
+          effect='solid'
+          offset={{
+            right: 20
+          }}
+        >
+          {tooltip}
+        </ReactTooltip>
+      )}
+    </>
+  )
+
+  if (disabled) {
+    return (
+      <>
+        <div className='mb-4 inline-block'>
+          <div className='font-medium text-qrigray-300 cursor-pointer'>
+            {content}
+          </div>
+        </div>
+        <br/>
+      </>
+    )
+  }
+
   return (
     <>
       <div className='mb-4 inline-block'>
         <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
           'text-qripink': active
         })}>
-          <span data-tip data-for={id}>
-            <div className='flex items-center'>
-              <Icon className='mr-2' size='md' icon={icon} />
-              <span style={{
-                fontSize: '16px',
-                width: expanded ? 'auto' : 0,
-                // inline-block is necessary here so that the tooltip appears just to the right of the text
-                display: expanded ? 'inline-block' : 'none'
-              }}>{label}</span>
-            </div>
-          </span>
-          {tooltip && (
-            <ReactTooltip
-              id={id}
-              place='right'
-              effect='solid'
-              offset={{
-                right: 20
-              }}
-            >
-              {tooltip}
-            </ReactTooltip>
-          )}
+          {content}
         </Link>
       </div>
       <br/>

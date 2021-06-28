@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @font-face {
   font-family: 'Roboto';
   src: url('./fonts/Roboto-Thin-webfont.woff') format('woff');
@@ -1110,4 +1109,13 @@ code {
 /* override react-tooltip styles */
 .light-tooltip {
   @apply rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-100 p-4 !important;
+}
+
+/* override react-responsive-carousel control dot styles */
+.carousel .control-dots .dot {
+  @apply bg-qrigray-400 shadow-none !important;
+}
+
+.carousel .control-dots .dot.selected {
+  @apply bg-qripink !important;
 }
