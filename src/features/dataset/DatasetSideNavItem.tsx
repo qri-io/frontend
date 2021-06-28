@@ -58,7 +58,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   if (disabled) {
     return (
       <>
-        <div className='mb-4 inline-block'>
+        <div className='mb-4 inline-block h-6'>
           <div className='font-medium text-qrigray-300 cursor-pointer'>
             {content}
           </div>
@@ -70,7 +70,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
 
   return (
     <>
-      <div className='mb-4 inline-block'>
+      <div className='mb-4 inline-block h-6'>
         <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
           'text-qripink': active
         })}>

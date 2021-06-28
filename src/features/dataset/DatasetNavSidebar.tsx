@@ -43,7 +43,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
 
   return (
     <div className={`side-nav pl-9 h-full bg-white relative pt-9 flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
-      <div className='mb-9 flex align-center items-center'>
+      <div className='mb-9 flex align-center items-center h-6'>
         <div
           className='text-gray-400 text-sm font-medium mr-4 leading-6 transition-all duration-700'
           style={{
