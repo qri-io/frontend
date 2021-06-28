@@ -28,7 +28,7 @@ export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): stri
   if (body) {
     return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}/body.csv`
   }
-  return `${API_BASE_URL}/download/${ref.username}/${ref.name}${pathSegment}`
+  return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}?format=zip`
 }
 
 function fetchDataset (ref: QriRef): ApiAction {
