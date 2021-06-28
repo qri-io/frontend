@@ -66,7 +66,7 @@ export const StructureComponent: React.FunctionComponent<StructureProps> = ({dat
   }
 
   return (
-    <div className='h-full w-full overflow-x-hidden px-4 pb-4'>
+    <div className='h-full w-full overflow-x-hidden pb-4'>
       <LabeledStats data={data} size='lg' />
       <Schema
         data={schema}
