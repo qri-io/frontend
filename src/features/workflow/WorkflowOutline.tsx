@@ -40,6 +40,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <div className='mb-2'>
             <ScrollTrigger target='triggers'>
               <div className='font-semibold text-qrinavy mb-1'>Triggers</div>
+              <div className='text-qrigray-400'>—</div>
               <div className='mb-4'></div>
             </ScrollTrigger>
           </div>
@@ -95,7 +96,10 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
             )}
           </ScrollTrigger>
 
-          <ScrollTrigger target='on-completion'><div className='font-semibold text-qrinavy mb-2'>On Completion</div></ScrollTrigger>
+          <ScrollTrigger target='on-completion'>
+            <div className='font-semibold text-qrinavy mb-1'>On Completion</div>
+            <div className='text-qrigray-400'>—</div>
+          </ScrollTrigger>
 
           <hr className='mb-4'/>
 
