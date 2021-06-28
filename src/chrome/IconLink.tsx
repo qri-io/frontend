@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import ExternalLink from './ExternalLink'
 import Icon, { IconSize } from './Icon'
 
@@ -6,6 +7,7 @@ interface IconLinkProps {
   icon: string
   link?: string
   size?: IconSize
+  className?: string
   onClick?: () => void
 }
 
@@ -13,14 +15,15 @@ const IconLink: React.FC<IconLinkProps> = ({
   icon,
   link,
   size='sm',
+  className,
   onClick
 }) => {
-  const classNames = 'text-qrinavy hover:text-qripink hover:cursor-pointer'
+  const linkClassNames = 'text-qrinavy hover:text-qripink hover:cursor-pointer'
 
   if (link) {
     return (
-      <div className='ml-2'>
-        <ExternalLink to={link} className={classNames}>
+      <div className={classNames('ml-2', className)}>
+        <ExternalLink to={link} className={linkClassNames}>
           <Icon icon={icon} size={size} />
         </ExternalLink>
       </div>
@@ -28,8 +31,8 @@ const IconLink: React.FC<IconLinkProps> = ({
   }
 
   return (
-    <div className='ml-2'>
-      <div className={classNames} onClick={onClick}>
+    <div className={classNames('ml-2', className)}>
+      <div className={linkClassNames} onClick={onClick}>
         <Icon icon={icon} size={size} />
       </div>
     </div>
