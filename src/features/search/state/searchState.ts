@@ -34,7 +34,7 @@ export const searchReducer = createReducer(initialState, {
   'API_SEARCH_SUCCESS': (state: SearchState, action) => {
     state.results = action.payload.data
     state.loading = false
-    state.pageInfo = action.payload.pagination
+    state.pageInfo = action.payload.pagination || {}
   },
   'API_SEARCH_FAILURE': (state: SearchState) => {
     state.loading = false

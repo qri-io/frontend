@@ -28,7 +28,7 @@ export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): stri
   if (body) {
     return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}/body.csv`
   }
-  return `${API_BASE_URL}/download/${ref.username}/${ref.name}${pathSegment}`
+  return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}?format=zip`
 }
 
 function fetchDataset (ref: QriRef): ApiAction {
@@ -36,7 +36,7 @@ function fetchDataset (ref: QriRef): ApiAction {
     type: 'dataset',
     ref,
     [CALL_API]: {
-      endpoint: 'dataset_summary',
+      endpoint: 'ds/get',
       method: 'GET',
       segments: ref,
       map: mapDataset
@@ -55,7 +55,7 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
     type: 'body',
     ref,
     [CALL_API]: {
-      endpoint: 'get',
+      endpoint: 'ds/get',
       method: 'GET',
       pageInfo: {
         page,

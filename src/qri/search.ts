@@ -52,37 +52,38 @@ export interface SearchResult extends Dataset {
 }
 
 export function NewSearchResult(d: Record<string,any>): SearchResult {
-  const ds = NewDataset(d)
+  const dv = d.value
+  const ds = NewDataset(dv)
   let stats
-  let followStats
-  let issueStats
+  let followStats = {}
+  let issueStats = {}
 
-  if (d.stats) {
+  if (dv.stats) {
     stats = {
-      downloadCount: d.stats.download_count,
-      pullCount: d.stats.pull_count,
-      viewCount: d.stats.view_count
+      downloadCount: dv.stats.download_count,
+      pullCount: dv.stats.pull_count,
+      viewCount: dv.stats.view_count
     }
   }
 
-  if (d.follow_stats) {
+  if (dv.follow_stats) {
     followStats = {
-      followCount: d.follow_stats.follow_count,
-      followStatus: d.follow_stats.follow_status
+      followCount: dv.follow_stats.follow_count,
+      followStatus: dv.follow_stats.follow_status
     }
   }
 
-  if (d.issue_stats) {
+  if (dv.issue_stats) {
     issueStats = {
-      openIssues: d.issue_stats.open_issues,
-      closedIssues: d.issue_stats.closed_issues
+      openIssues: dv.issue_stats.open_issues,
+      closedIssues: dv.issue_stats.closed_issues
     }
   }
 
   return {
     ...ds,
     stats,
-    followStats: d.followStats || followStats,
-    issueStats: d.issueStats || issueStats
+    followStats: dv.followStats || followStats,
+    issueStats: dv.issueStats || issueStats
   }
 }

@@ -1,44 +1,29 @@
 import React, { useCallback } from 'react'
 
-import { QriRef } from '../../../qri/ref'
-import { API_BASE_URL } from '../../../store/api'
+import Dataset from '../../../qri/dataset'
 
 export interface ReadmeProps {
-  qriRef: QriRef
+  dataset: Dataset
 }
 
-export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => {
-  const { qriRef } = props
-  const [hasReadme, setHasReadme] = React.useState(true)
-
+export const ReadmeComponent: React.FC<ReadmeProps> = ({ dataset }) => {
+  const readme = dataset.readme?.script
   const refCallback = useCallback((el: HTMLDivElement) =>{
-    if (el !== null) {
-      fetch(`${API_BASE_URL}/dataset_summary/readme?path=${qriRef.path}`)
-        .then((res) => {
-          if (res.ok) {
-            return res.text()
-          } else {
-            return Promise.reject('error 404')
-          }
-        })
-        .then((renderedReadme) => {
-          el.innerHTML = renderedReadme
-        })
-        .catch((e) => {
-          setHasReadme(false)
-        })
+    if (readme) {
+      el.innerHTML = readme
     }
-  }, [qriRef.path])
+  }, [readme])
 
-  if (!hasReadme) {
+  if (!readme) {
     return (
       <div className='h-full w-full flex items-center'>
         <div className='text-center mx-auto text-sm text-qrigray-400'>
-          Error fetching readme
+          no readme
         </div>
       </div>
     )
   }
+
   return (
     <div className='h-full w-full'>
       <div
@@ -51,5 +36,4 @@ export const ReadmeComponent: React.FunctionComponent<ReadmeProps> = (props) => 
   )
 }
 
-// TODO (b5) - this doesn't need to be a container at all
 export default ReadmeComponent

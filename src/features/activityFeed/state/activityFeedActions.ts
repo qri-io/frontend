@@ -17,8 +17,11 @@ function fetchDatasetLogs(qriRef: QriRef): ApiAction {
     type: 'dataset_logs',
     qriRef,
     [CALL_API]: {
-      endpoint: `history/${qriRef.username}/${qriRef.name}`,
-      method: 'GET',
+      endpoint: `ds/activity`,
+      method: 'POST',
+      body: {
+        ref: `${qriRef.username}/${qriRef.name}`
+      },
       map: mapLogs
     }
   }

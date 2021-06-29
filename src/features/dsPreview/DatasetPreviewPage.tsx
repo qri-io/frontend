@@ -21,7 +21,6 @@ import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 import DeployingScreen from '../deploy/DeployingScreen'
 import commitishFromPath from '../../utils/commitishFromPath'
 import Readme from '../dsComponents/readme/Readme'
-import { qriRefFromDataset } from '../../qri/dataset'
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 import { QriRef } from '../../qri/ref'
 import MetaChips from '../../chrome/MetaChips'
@@ -79,7 +78,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     <div className='flex-grow overflow-hidden'>
                       {
                         dataset.readme ? (
-                          <Readme qriRef={qriRefFromDataset(dataset)} />
+                          <Readme dataset={dataset} />
                         ) : (
                           <div className='h-full w-full flex items-center'>
                             <div className='text-center mx-auto text-sm'>
