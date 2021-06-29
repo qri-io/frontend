@@ -6,6 +6,7 @@ import WorkflowCell from './WorkflowCell'
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
 import OnComplete from './OnComplete'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
+import { Dataset } from '../../qri/dataset'
 import { changeWorkflowTransformStep, applyWorkflowTransform } from './state/workflowActions'
 import { RunMode } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
@@ -13,15 +14,23 @@ import ScrollAnchor from '../scroller/ScrollAnchor'
 import ContentBox from '../../chrome/ContentBox'
 import DeployButton from '../deploy/DeployButton'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
+import { QriRef } from '../../qri/ref'
+
 
 
 export interface WorkflowEditorProps {
+  qriRef: QriRef
   runMode: RunMode
   workflow: Workflow
   run?: Run
 }
 
-const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow }) => {
+const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
+  qriRef,
+  runMode,
+  run,
+  workflow
+}) => {
   const dispatch = useDispatch()
 
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
@@ -51,6 +60,23 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
     if (keyName === 'cmd+enter') {
       runScript()
     }
+  }
+
+  // appends username, name, and meta.title to a dry run's preview, useful for
+  // display of downstream components that expect these as part of a Dataset (e.g. fullscreen body)
+  const appendRefAndMeta = (dsPreview: Dataset) => {
+    if (dsPreview) {
+      return {
+        peername: qriRef.username,
+        name: qriRef.name,
+        meta: {
+          title: 'Dry Run Data Preview'
+        },
+        ...dsPreview
+      }
+    }
+
+    return dsPreview
   }
 
   return (
@@ -116,7 +142,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ runMode, run, workflow 
             <div className='text-xs mb-2.5 text-gray-400'>Preview the results of your script here</div>
 
             <ScrollAnchor id='result' />
-            <WorkflowDatasetPreview dataset={run?.dsPreview}/>
+            <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
           </ContentBox>
           <OnComplete />
           <div className='mt-6'>

@@ -11,14 +11,16 @@ import DownloadDatasetButton from '../../download/DownloadDatasetButton'
 
 interface BodyHeaderProps {
   dataset: Dataset
-  onToggleExpanded?: () => void
   showExpand?: boolean
+  showDownload?: boolean
+  onToggleExpanded?: () => void
 }
 
 const BodyHeader: React.FC<BodyHeaderProps> = ({
   dataset,
   onToggleExpanded,
-  showExpand = true
+  showExpand = true,
+  showDownload = true
 }) => {
   const { structure, body } = dataset
   const headers = extractColumnHeaders(structure, body)
@@ -33,7 +35,7 @@ const BodyHeader: React.FC<BodyHeaderProps> = ({
           <Icon icon='columns' size='2xs' className='mr-1'/> {numeral(headers.length).format('0,0')} columns
         </div>
       </div>
-      <DownloadDatasetButton qriRef={qriRefFromDataset(dataset)} asIconLink body />
+      {showDownload && <DownloadDatasetButton qriRef={qriRefFromDataset(dataset)} asIconLink body />}
       {showExpand && <IconLink icon='fullScreen' onClick={onToggleExpanded} />}
     </div>
   )

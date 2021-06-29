@@ -81,7 +81,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
           message={handleBlockedNavigation}
         />
         <WorkflowOutline workflow={workflow} run={latestRun} runMode={runMode} />
-        <WorkflowEditor workflow={workflow} run={latestRun} runMode={runMode} />
+        <WorkflowEditor qriRef={qriRef} workflow={workflow} run={latestRun} runMode={runMode} />
         { !shouldPrompt && redirectTo && <Redirect to={redirectTo} /> }
       </div>
     </>
