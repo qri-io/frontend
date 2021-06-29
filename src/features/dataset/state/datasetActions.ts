@@ -77,12 +77,10 @@ export function removeDataset (ref: QriRef): ApiActionThunk {
     const action = {
       type: 'remove',
       [CALL_API]: {
-        endpoint: 'remove',
-        method: 'DELETE',
-        segments: {
-          peername: ref.username,
-          name: ref.name,
-          path: ref.path
+        endpoint: 'ds/remove',
+        method: 'POST',
+        body: {
+          ref: `${ref.username}/${ref.name}`
         }
       }
     }

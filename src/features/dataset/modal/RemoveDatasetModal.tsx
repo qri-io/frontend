@@ -19,7 +19,7 @@ const RemoveDatasetModal: React.FC<RemoveDatasetModalProps> = ({ username, name 
     removeDataset({username, name})(dispatch)
       .then((action: AnyAction) => {
         if (action.type.includes('SUCCESS')) {
-          loadCollection(dispatch, 1, 50)
+          dispatch(loadCollection())
           return
         }
         // TODO (ramfox): when we add in toasts, this should be replaced with a
