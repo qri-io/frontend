@@ -1,12 +1,27 @@
-import { QriRef } from "../../../qri/ref";
+import { QriRef, refStringFromQriRef } from "../../../qri/ref";
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
 
 export function loadDsPreview(ref: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
-    await Promise.all([dispatch(fetchDsPreview(ref))])
-    dispatch(fetchDsPreviewBody(ref))
-    dispatch(fetchDsPreviewReadme(ref))
-    return dispatch(fetchPreviewDone(ref))
+    dispatch({ type: 'DS_PREVIEW_REQUEST' })
+
+    try {
+      await Promise.all([
+        dispatch(fetchDsPreview(ref)),
+        dispatch(fetchDsPreviewBody(ref)),
+        dispatch(fetchDsPreviewReadme(ref)),
+      ])
+
+      return dispatch({ 
+        type: 'DS_PREVIEW_SUCCESS',
+        ref
+      })
+    } catch (e) {
+      return dispatch({ 
+        type: 'DS_PREVIEW_FAILURE',
+        error: e.toString(),
+      })
+    }
   }
 }
 
@@ -14,7 +29,7 @@ export const bodyPageSizeDefault = 50
 
 function fetchDsPreview (ref: QriRef): ApiAction {
   return {
-    type: 'datasetpreview',
+    type: 'preview',
     ref,
     [CALL_API]: {
       endpoint: 'ds/get',
@@ -26,7 +41,7 @@ function fetchDsPreview (ref: QriRef): ApiAction {
 
 function fetchDsPreviewBody (ref: QriRef, page: number = 1, pageSize: number = bodyPageSizeDefault): ApiAction {
   return {
-    type: 'datasetpreviewbody',
+    type: 'previewbody',
     ref,
     [CALL_API]: {
       endpoint: 'ds/get',
@@ -47,24 +62,15 @@ function fetchDsPreviewBody (ref: QriRef, page: number = 1, pageSize: number = b
 
 function fetchDsPreviewReadme (ref: QriRef): ApiAction {
   return {
-    type: 'datasetpreviewreadme',
+    type: 'previewreadme',
     ref,
     [CALL_API]: {
-      endpoint: 'ds/get',
-      method: 'GET',
-      segments: {
-        username: ref.username,
-        name: ref.name,
-        path: ref.path,
-        selector: ['readme']
-      },
+      endpoint: 'ds/render',
+      method: 'POST',
+      body: {
+        ref: refStringFromQriRef(ref),
+        selector: 'readme'
+      }
     }
-  }
-}
-
-function fetchPreviewDone (ref: QriRef): ApiAction {
-  return {
-    type: 'datasetpreviewfetchdone',
-    ref
   }
 }
