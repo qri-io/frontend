@@ -42,11 +42,17 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
     }
   }, [dispatch, location.state])
 
+  // determine if the workflow is new by reading /new at the end of the pathname
+  const segments = location.pathname.split('/')
+  const isNewWorkflow = segments[segments.length - 1] === 'new'
+
   useEffect(() => {
     // TODO (b5) - highly-unlikely but possible race condition here. loading workflow
     // should be chained in a promise
     dispatch(setWorkflowRef(qriRef))
-    dispatch(loadWorkflowByDatasetRef(qriRef))
+    if (!isNewWorkflow) {
+      dispatch(loadWorkflowByDatasetRef(qriRef))
+    }
   }, [dispatch, qriRef])
 
   const handleBlockedNavigation = (nextLocation: Location ) => {
