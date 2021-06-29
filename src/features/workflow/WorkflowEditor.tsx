@@ -69,9 +69,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
       return {
         peername: qriRef.username,
         name: qriRef.name,
-        meta: {
-          title: 'Dry Run Data Preview'
-        },
+        meta: dsPreview.meta || { title: 'Workflow Result' },
         ...dsPreview
       }
     }

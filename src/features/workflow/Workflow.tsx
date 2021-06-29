@@ -33,11 +33,11 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const [ redirectTo, setRedirectTo ] = useState('')
 
   useEffect(() => {
-    if (location.state && location.state.template) {
+    if (location.state?.template) {
       dispatch(setWorkflow(selectTemplate(location.state.template)))
     }
 
-    if (location.state && location.state.showSplashModal) {
+    if (location.state?.showSplashModal) {
       dispatch(showModal(ModalType.workflowSplash))
     }
   }, [dispatch, location.state])
