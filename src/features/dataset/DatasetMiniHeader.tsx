@@ -9,7 +9,7 @@ import DownloadDatasetButton from '../download/DownloadDatasetButton'
 
 export interface DatasetMiniHeaderProps {
   dataset: Dataset
-  hide: boolean
+  show: boolean
 }
 
 // DatasetHeader and DatasetMiniHeader now accept children which will be displayed
@@ -19,16 +19,17 @@ export interface DatasetMiniHeaderProps {
 
 const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
   dataset,
-  hide,
+  show,
   children
 }) => {
   const qriRef = qriRefFromDataset(dataset)
   return (
-    <div className={classNames('sticky top-0 bg-white border border-qrigray-200 z-10', {
-      'invisible -top-16 h-0': !hide,
-      'visible top-0 transition-all': !hide
+    <div className={classNames('sticky bg-white border border-qrigray-200 z-10', {
+      'invisible -top-16 h-0': !show,
+      'visible top-0': show
     })} style={{
-      borderTopLeftRadius: '20px'
+      borderTopLeftRadius: '20px',
+      transition: 'top 150ms cubic-bezier(0.4, 0, 0.2, 1)'
     }}>
       <div className='px-7 pt-4 pb-3 flex z-10'>
         <div className='flex-grow'>

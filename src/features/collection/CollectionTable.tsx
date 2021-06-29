@@ -1,4 +1,4 @@
- import React, { forwardRef } from 'react'
+import React, { forwardRef } from 'react'
 import { useDispatch } from 'react-redux';
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
@@ -188,19 +188,20 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         )
       }
     },
-    {
-      name: 'Triggers',
-      style: {
-        flexShrink: 0
-      },
-      selector: 'triggers',
-      omit: simplified,
-      width: '160px',
-      cell: (row: VersionInfo) => (row.id
-          ? <div className='tracking-wider font-medium text-qrinavy'>Schedule, Run When, Webhook</div>
-          : '—'
-      )
-    },
+    // let's hide the Triggers column for now, to provide more room for the name column on narrow screens
+    // {
+    //   name: 'Triggers',
+    //   style: {
+    //     flexShrink: 0
+    //   },
+    //   selector: 'triggers',
+    //   omit: simplified,
+    //   width: '160px',
+    //   cell: (row: VersionInfo) => (row.id
+    //       ? <div className='tracking-wider font-medium text-qrinavy'>Schedule, Run When, Webhook</div>
+    //       : '—'
+    //   )
+    // },
     {
       name: 'Actions',
       style: {

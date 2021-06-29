@@ -82,7 +82,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
           </div>)
         : (
             <Scroller className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
-              <DatasetMiniHeader dataset={dataset} hide={!inView}>
+              <DatasetMiniHeader dataset={dataset} show={!inView}>
                 {runBar}
               </DatasetMiniHeader>
               <div className='p-7 w-full'>

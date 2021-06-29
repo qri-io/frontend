@@ -31,11 +31,27 @@ const Footer: React.FC<{}> = () => (
     <div className='flex flex-grow justify-end'>
       {
         [
-          { icon: 'github' },
-          { icon: 'youtube' },
-          { icon: 'twitter' },
-          { icon: 'discord' }
-        ].map(({ icon }, i) => <IconLink key={i} icon={icon} size='md' className='ml-5' />)
+          { icon: 'github',
+            link: 'https://github.com/qri-io',
+          },
+          { icon: 'youtube',
+            link: 'https://www.youtube.com/channel/UC7E3_hURgFO2mVCLDwPSyOQ',
+          },
+          { icon: 'twitter',
+            link: 'https://twitter.com/qri_io',
+          },
+          { icon: 'discord',
+            link: 'https://discordapp.com/invite/thkJHKj',
+          }
+        ].map(({ icon, link }, i) => (
+          <IconLink
+            key={i}
+            icon={icon}
+            size='md'
+            link={link}
+            className='ml-5'
+          />
+        ))
       }
     </div>
   </div>

@@ -28,6 +28,12 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
 
   const toggleExpanded = () => {
     dispatch(toggleNavExpanded())
+    // the monaco code components in CodeEditor are listening for 'resize' so they can
+    // set their width.  A small delay is necessary here so that the CodeEditor resize
+    // works properly after collapsing the dataset menu
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 5)
   }
 
   // determine if the workflow is new by reading /new at the end of the pathname
@@ -37,7 +43,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
 
   return (
     <div className={`side-nav pl-9 h-full bg-white relative pt-9 flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
-      <div className='mb-9 flex align-center items-center'>
+      <div className='mb-9 flex align-center items-center h-6'>
         <div
           className='text-gray-400 text-sm font-medium mr-4 leading-6 transition-all duration-700'
           style={{

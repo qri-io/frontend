@@ -40,6 +40,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <div className='mb-2'>
             <ScrollTrigger target='triggers'>
               <div className='font-semibold text-qrinavy mb-1'>Triggers</div>
+              <div className='text-qrigray-400'>—</div>
               <div className='mb-4'></div>
             </ScrollTrigger>
           </div>
@@ -73,8 +74,8 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
             </ScrollTrigger>}
           </div>
           <hr/>
-          <ScrollTrigger target='new-version-preview'>
-            <div className='text-sm text-qrigray-400 pt-2 pb-1'>Output</div>
+          <ScrollTrigger target='result'>
+            <div className='text-sm text-qrigray-400 pt-2 pb-1'>Result</div>
             { /*
               TODO(chriswhong): we need the backend to return a timestamp for the dry run and a commit message in order to render this commit box
               this can be a proper LogItem or we can modify the props for DatasetCommit, or make a new component, this is a placeholder
@@ -86,15 +87,19 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
                   title: 'new version from workflow'
                 }}
                 active
+                isLink={false}
               />
             ) : (
-              <div className='text-xs block rounded-md px-3 pt-2 pb-3 mb-6 w-full overflow-x-hidden text-qrigray-400 border border-qrigray-300'>
-                Such Empty
+              <div className='text-xs block rounded-md px-3 pt-3 pb-4 mb-6 w-full overflow-x-hidden text-qrigray-400 border border-qrigray-300'>
+                Click <span className='border rounded-sm px-1'>Dry Run</span> to preview the result of this script
               </div>
             )}
           </ScrollTrigger>
 
-          <ScrollTrigger target='on-completion'><div className='font-semibold text-qrinavy mb-2'>On Completion</div></ScrollTrigger>
+          <ScrollTrigger target='on-completion'>
+            <div className='font-semibold text-qrinavy mb-1'>On Completion</div>
+            <div className='text-qrigray-400'>—</div>
+          </ScrollTrigger>
 
           <hr className='mb-4'/>
 
