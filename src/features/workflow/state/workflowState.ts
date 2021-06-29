@@ -97,6 +97,12 @@ export const workflowReducer = createReducer(initialState, {
       }
     }
   },
+  'API_WORKFLOW_REQUEST': (state, action) => {
+    // reset workflow and lastRunID to initialState values
+    state.runMode = initialState.runMode
+    state.workflow = initialState.workflow
+    state.lastRunID = undefined
+  },
   'API_WORKFLOW_SUCCESS': (state, action) => {
     const w = action.payload.data as Workflow
     // TODO (b5) - right now we only use the single-workflow fetch endpoint in one
