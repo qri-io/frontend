@@ -110,6 +110,10 @@ module.exports = {
           '800': '#5B21B6',
           '900': '#4C1D95',
         },
+        warningyellow: {
+          DEFAULT: '#F2D925',
+          '600': '#DAC325'
+        }
       },
       fontFamily: {
         ...fontFamily,
