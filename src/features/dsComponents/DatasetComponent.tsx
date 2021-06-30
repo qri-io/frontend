@@ -16,11 +16,14 @@ import IconLink from '../../chrome/IconLink'
 export interface DatasetComponentProps {
   dataset: Dataset
   componentName: ComponentName
+  // preview will cause the body component to render only what is in dataset and not fetch more data
+  preview?: boolean
 }
 
 const DatasetComponent: React.FC<DatasetComponentProps> = ({
   dataset,
   componentName,
+  preview = false
 }) => {
   const [ expanded, setExpanded ] = useState(false)
 
@@ -32,8 +35,15 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   let componentHeader: JSX.Element | null = null
   switch (componentName) {
     case 'body':
-      component = <Body data={dataset} />
-      componentHeader = <BodyHeader dataset={dataset} onToggleExpanded={handleToggleExpanded} showExpand={!expanded}/>
+      component = <Body data={dataset} preview={preview} />
+      componentHeader = (
+        <BodyHeader
+          dataset={dataset}
+          onToggleExpanded={handleToggleExpanded}
+          showDownload={!preview}
+          showExpand={!expanded}
+        />
+      )
       break
     case 'meta':
       component = <Meta data={dataset.meta}/>
@@ -67,7 +77,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
 
   return (
     <div
-      className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col transform transition-all', {})}
+      className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col', {})}
     >
       <ComponentHeader border={!['body', 'structure'].includes(componentName)}>
         {componentHeader}

@@ -1,5 +1,5 @@
 import Dataset, { NewDataset } from "../../../qri/dataset"
-import { QriRef } from "../../../qri/ref"
+import { QriRef, refStringFromQriRef } from "../../../qri/ref"
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
 import { RENAME_NEW_DATASET } from "./datasetState"
 import { API_BASE_URL } from '../../../store/api'
@@ -77,12 +77,10 @@ export function removeDataset (ref: QriRef): ApiActionThunk {
     const action = {
       type: 'remove',
       [CALL_API]: {
-        endpoint: 'remove',
-        method: 'DELETE',
-        segments: {
-          peername: ref.username,
-          name: ref.name,
-          path: ref.path
+        endpoint: 'ds/remove',
+        method: 'POST',
+        body: {
+          ref: refStringFromQriRef(ref)
         }
       }
     }

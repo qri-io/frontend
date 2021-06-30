@@ -22,6 +22,7 @@ const WorkflowDatasetPreview: React.FC<WorkflowDatasetPreviewProps> = ({
           selectedComponent={selectedComponent}
           setSelectedComponent={(component: ComponentName) => { setSelectedComponent(component) }}
           border
+          preview
         />
       ) : (
         <TabbedComponentViewer

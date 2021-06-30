@@ -13,6 +13,8 @@ export interface TabbedComponentViewerProps {
   loading?: boolean
   // border is used to display TabbedComponentViewer over a white background e.g. on the workflow editor
   border?: boolean
+  // preview will cause the body component to render only what is in dataset and not fetch more data
+  preview?: boolean
 }
 
 export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
@@ -21,6 +23,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   selectedComponent,
   setSelectedComponent,
   border = false,
+  preview = false,
   children
 }) => {
   if (loading) {
@@ -46,7 +49,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
         border
       />
       <div
-        className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex-grow flex flex-col transform transition-all px-4', {
+        className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex-grow flex flex-col px-4', {
           'border-r-2 border-b-2 border-l-2 border-qrigray-200 rounded-b-lg': border
         })}
       >
@@ -55,6 +58,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
             <DatasetComponent
               dataset={dataset}
               componentName={selectedComponent}
+              preview={preview}
             />
           )
         }

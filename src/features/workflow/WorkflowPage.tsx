@@ -64,7 +64,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
   }
 
   useEffect(() => {
-    if (isNew) { return }
+    if (isNew || isNewWorkflow) { return }
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
     dispatch(loadDataset(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
@@ -91,7 +91,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
                     {runBar}
                   </DatasetHeader>
                 </div>
-                <Workflow qriRef={qriRef}/>
+                <Workflow qriRef={qriRef} />
               </div>
             </Scroller>
           )}
