@@ -32,10 +32,10 @@ const RemoveDatasetModal: React.FC<RemoveDatasetModalProps> = ({ username, name 
     <ModalLayout
       title='Remove Dataset'
       type='danger'
-      actionButtonText='I understand, remove it'
+      actionButtonText='I Understand, Remove it'
       action={onRemove}
     >
-      <p className='mb-4'>Are you sure you want to remove the dataset <span className='font-semibold'>{username}/{name}</span>?</p>
+      <p className='mb-2'>Are you sure you want to remove the dataset <span className='font-semibold'>{username}/{name}</span>?</p>
       <p>This action cannot be undone.</p>
     </ModalLayout>
   )

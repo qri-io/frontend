@@ -46,7 +46,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
         dataset={dataset}
         onClick={setSelectedComponent}
         selectedComponent={selectedComponent}
-        border
+        border={border}
       />
       <div
         className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex-grow flex flex-col px-4', {

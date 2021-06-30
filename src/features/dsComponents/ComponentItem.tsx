@@ -37,7 +37,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   return (
     <div
       id={`${displayName.toLowerCase()}-status`}
-      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-2 rounded-tr-lg rounded-tl-lg group justify-center relative -bottom-0.5', {
+      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-2 rounded-tr-lg rounded-tl-lg group justify-center relative', {
         'selected': selected,
         'bg-white': selected,
         'text-qripink': selected,
@@ -46,7 +46,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
         'text-qrinavy': !disabled,
         'hover:cursor-pointer': !disabled,
         'w-1/4': displayName === 'Data',
-        'border-grigray-200 border-t-2 border-r-2 border-l-2': border
+        'border-grigray-200 border-t-2 border-r-2 border-l-2 -bottom-0.5': border
       })}
       onClick={() => {
         if (onClick && displayName) {

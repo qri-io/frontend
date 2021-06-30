@@ -1,13 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 
-export type ButtonType = 'primary'
-  | 'primary-outline'
-  | 'secondary'
-  | 'light'
-  | 'warning'
-  | 'danger'
-  | 'dark'
+export type ButtonType = 'primary' // light blue button with white text
+  | 'primary-outline' // light blue outline button, thick border
+  | 'secondary' // pink button with white text
+  | 'warning' // yellow button with dark text
+  | 'danger' // red button with white text
+  | 'light' // gray outline and text, thin border, e.g. cancel button for modal
+  | 'dark' // dark outline and text, thin border, e.g. follow button
 
 export interface ButtonProps {
   onClick?: () => void
@@ -30,24 +30,24 @@ const Button: React.FC<ButtonProps> = ({
   <button
     type={submit ? 'submit' : 'button'}
     className={classNames(
-      'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-medium focus:outline-none focus:ring focus:ring-offset ring-offset-transparent mt-0 transition-all duration-100',
+      'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-medium focus:outline-none focus:ring-none mt-0 transition-all duration-100',
       className,
       {
         'cursor-default bg-opacity-40 hover:bg-opacity-40': disabled
       },
       {
-        'text-sm px-2 h-9 ': (size === 'sm'),
+        'text-sm px-2.5 h-9 ': (size === 'sm'),
         'text-sm px-4 h-10': (size === 'md'),
         'text-md px-8 py-3': (size === 'lg'),
       },
       {
-        'text-white bg-qriblue hover:bg-qriblue-600 focus:ring-qriblue': (type === 'primary'),
+        'text-white bg-qriblue hover:bg-qriblue-600': (type === 'primary'),
         'text-qriblue hover:text-qriblue-600 text-sm font-medium border-2 border-qriblue hover:border-qriblue-600 box-border': (type === 'primary-outline'),
-        'text-white bg-qripink hover:bg-qripink-600 focus:ring-qripink': (type === 'secondary'),
-        'text-gray-700 hover:text-qripink border border-gray-700 hover:border-qripink focus:ring-indigo-500': (type === 'light'),
-        'text-white bg-qrinavy-400 hover:bg-qrinavy-500 focus:ring-qrinavy-400': (type === 'dark'),
-        'text-gray-700 bg-yellow-300 hover:bg-yellow-400 focus:ring-yellow-400': (type === 'warning'),
-        'text-white bg-red-600 hover:bg-red-700 focus:ring-red-500': (type === 'danger'),
+        'text-white bg-qripink hover:bg-qripink-600': (type === 'secondary'),
+        'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
+        'text-white bg-qrired-700 hover:bg-qrired-900': (type === 'danger'),
+        'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),
+        'text-qrigray-900 hover:text-qripink border border-qrigray-900 hover:border-qripink': (type === 'dark'),
       }
     )}
     onClick={onClick}

@@ -43,7 +43,7 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
         <div className='flex items-center content-center'>
           {children || (
             <>
-              <Button className='mr-3' type='light' filled={false}>
+              <Button className='mr-3' type='dark'>
                 Follow
               </Button>
               <Button className='mr-3' type='secondary'>

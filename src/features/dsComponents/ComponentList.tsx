@@ -104,6 +104,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
               key={name}
               displayName={displayName}
               icon={icon}
+              border={border}
               disabled
             />
           )
