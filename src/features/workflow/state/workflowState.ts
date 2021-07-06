@@ -124,9 +124,8 @@ export const workflowReducer = createReducer(initialState, {
 })
 
 function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerAction) {
-  if (state.workflow.triggers && state.workflow.triggers.length > action.index) {
-    state.workflow.triggers[action.index] = action.trigger
-  }
+  // TODO(chriswhong): allow for more than one trigger
+  state.workflow.triggers = [action.trigger]
   return
 }
 

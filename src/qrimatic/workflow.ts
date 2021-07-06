@@ -19,7 +19,7 @@ export interface Workflow {
   latestStart?: string
   latestEnd?: string
   status: WorkflowStatus
-  
+
   triggers?: WorkflowTrigger[]
   steps?: TransformStep[]
   onComplete?: WorkflowHook[]
@@ -49,8 +49,14 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
   }
 }
 
+export type WorkflowTriggerType = 'cron' | 'webhook' | 'dataset'
+
+export interface CronTrigger extends WorkflowTrigger {
+  periodicity: string // ISO8601 repeating interval (R/{starttime}/{interval})
+}
+
 export interface WorkflowTrigger {
-  type:       string,
+  type:       WorkflowTriggerType,
   disabled?:   boolean,
 
   runCount?:      number,
@@ -84,7 +90,7 @@ export function NewWorkflowHook(data: Record<string,any>): WorkflowHook {
 }
 
 export function workflowScriptString(w: Workflow): string {
-  if (!w.steps) { 
+  if (!w.steps) {
     return ''
   }
 
@@ -96,7 +102,7 @@ export function workflowScriptString(w: Workflow): string {
   }, '')
 }
 
-export type DeployStatus = 
+export type DeployStatus =
   | 'undeployed'
   | 'deployed'
   | 'deploying'
@@ -114,7 +120,7 @@ export function workflowDeployStatus(w?: Workflow): DeployStatus {
   return 'deployed'
 }
 
-export type WorkflowStatus = 
+export type WorkflowStatus =
 | 'running'
 | 'succeeded'
 | 'failed'
@@ -137,7 +143,7 @@ export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
     profileId: data.profileId || '',
     name: data.name || '',
     path: data.path || '',
-    
+
     fsiPath: data.fsiPath || '',
     foreign: data.foreign,
     published: data.published,
@@ -168,7 +174,7 @@ export function workflowInfoFromWorkflow(wf: Workflow): WorkflowInfo {
     profileId: wf.versionInfo?.profileId || '',
     name: wf.versionInfo?.name || '',
     path: wf.versionInfo?.path || '',
-    
+
     fsiPath: wf.versionInfo?.fsiPath || '',
     foreign: wf.versionInfo?.foreign,
     published: wf.versionInfo?.published,
@@ -189,6 +195,6 @@ export function workflowInfoFromWorkflow(wf: Workflow): WorkflowInfo {
     id: wf.id,
     latestStart: wf.latestStart,
     latestEnd: wf.latestEnd,
-    status: wf.status 
+    status: wf.status
   }
 }

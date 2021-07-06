@@ -10,6 +10,7 @@ import LogInModal from '../../session/modal/LogInModal'
 import SignUpModal from '../../session/modal/SignUpModal'
 import WorkflowSplashModal from '../../workflow/modal/SplashModal'
 import DeployModal from '../../workflow/modal/DeployModal'
+import AddTriggerModal from '../../trigger/modal/AddTriggerModal'
 
 import { clearModal } from '../state/appActions'
 
@@ -25,7 +26,7 @@ const Modal: React.FC<any> = () => {
   }, [dispatch, maskRef])
 
   useEffect(() => {
-    const close = (e) => {
+    const close = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
         dispatch(clearModal())
       }
@@ -71,6 +72,8 @@ const Modal: React.FC<any> = () => {
                   return <WorkflowSplashModal {...modal.props} />
               case ModalType.deploy:
                   return <DeployModal {...modal.props} />
+              case ModalType.addTrigger:
+                  return <AddTriggerModal {...modal.props} />
               default:
                 return null
             }
