@@ -34,16 +34,16 @@ const SessionUserMenu: React.FC<{}> = () => {
 
   const menuItems = [
     {
-      text: 'Profile',
+      label: 'Profile',
       link: `/${user.username}`
     },
     {
-      text: 'Send Feedback',
+      label: 'Send Feedback',
       link: 'https://qri.io/contact'
     },
     {
       onClick: () => { dispatch(logOut()) },
-      text: 'Log Out',
+      label: 'Log Out',
     }
   ]
 

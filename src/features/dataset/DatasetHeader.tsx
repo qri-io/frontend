@@ -50,7 +50,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   const menuItems = [
     {
       onClick: () => { handleButtonClick("duplicating not yet implemented") },
-      text: 'Duplicate...',
+      label: 'Duplicate...',
       disabled: true
     }
   ]

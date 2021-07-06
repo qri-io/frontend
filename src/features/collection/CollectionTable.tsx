@@ -228,27 +228,27 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         const hamburgerItems: DropDownMenuItem[] = [
           {
             onClick: () => { handleButtonClick("renaming not yet implemented") },
-            text: 'Rename...',
+            label: 'Rename...',
             disabled: true
           },
           {
             onClick: () => { handleButtonClick("duplicating not yet implemented")},
-            text: 'Duplicate...',
+            label: 'Duplicate...',
             disabled: true
           },
           {
             onClick: () => { handleButtonClick("export not yet implemented")},
-            text: 'Export...',
+            label: 'Export...',
             disabled: true
           },
           {
             onClick: () => { handleButtonClick("run now not yet implemented")},
-            text: 'Run Now',
+            label: 'Run Now',
             disabled: true
           },
           {
             onClick: () => { handleButtonClick("pause not yet implemented")},
-            text: 'Pause Workflow',
+            label: 'Pause Workflow',
             disabled: true
           },
           {
@@ -263,7 +263,8 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
                 )
               )
             },
-            text: 'Remove...'
+            id: 'remove',
+            label: 'Remove...'
           }
         ]
         return (

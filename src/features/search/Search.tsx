@@ -87,12 +87,12 @@ const Search: React.FC<{}> = () => {
 
   const menuItems = [
     {
-      text: 'Dataset Name',
+      label: 'Dataset Name',
       active: sort === 'name',
       onClick: () => { updateQueryParams({ sort: 'name' }) }
     },
     {
-      text: 'Recently Updated',
+      label: 'Recently Updated',
       active: sort === 'recentlyupdated',
       onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
     }

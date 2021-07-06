@@ -1,3 +1,7 @@
+// DropdownMenu can be used a controlled input to choose from multiple values (e.g. choosing trigger options)
+// or as a list of links/function triggers (e.g. the user menu)
+// DropdownMenu only renders the list of options on click, the element to be clicked must be passed in as a child
+
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
@@ -6,31 +10,39 @@ import ExternalLink from './ExternalLink'
 import Icon from './Icon'
 
 export interface DropDownMenuItem {
-  // link is the url string that clicking this item can send the user
-  // link overrides `onClick`, ie if you have both link and onClick set, only
-  // the link will work
-  link?: string
-  active: boolean
-  text: string
+  // label is the text that will be displayed to the user
+  label: string
+  // disabled will show the item, but it will not be clickable
   disabled?: boolean
   // icon: options are found in the `Icon` component
   icon?: string
-  onClick?: (e?: React.MouseEvent) => void
-
+  // value will be passed to the onChange function
+  value?: string
+  // if link exists in a DropDownMenuItem, clicking the item will not trigger onChange,
+  // and will navigate to the link
+  link?: string
+  // if onClick exists in a DropDownMenuItem, clicking the item will not trigger onChange,
+  // and will execute the onClick function
+  onClick?: () => void
 }
 
 interface DropdownMenuProps {
+  // the value of the selected menu item, which will be shown as highlighted
+  selectedValue?: string
   items: DropDownMenuItem[]
   alignLeft?: boolean
   className?: string
+  onChange?: (value: string) => void
 }
 
 // itemProps will be passed into the onClick handler for each item in the dropdown
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
-  children,
+  selectedValue,
   items,
   alignLeft=false,
-  className=''
+  className='',
+  onChange=() => {},
+  children
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
@@ -50,7 +62,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   }, [handleClickOutside])
 
   return (
-    <div ref={ref} className={classNames('relative inline-block text-left', className)}>
+    <div ref={ref} className={classNames('relative inline-block text-left w-full', className)}>
       <div onClick={() => { setOpen(!open) }} className='cursor-pointer flex items-center'>
         {children}
       </div>
@@ -63,20 +75,26 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
           style={{ minWidth: '9rem' }}
         >
           <div className="py-1 flex flex-col" onClick={ () => setOpen(false) }>
-            {items && items.map(({ link, active, onClick, text, icon='', disabled=false }, i) => {
-              let linkButtonClass = 'text-left text-xs px-2 py-0.5 mx-2 my-1 whitespace-nowrap rounded-md'
-              if (!disabled) {
-                linkButtonClass = `${linkButtonClass} hover:pointer text-qrigray-400 hover:bg-gray-100`
-              } else {
-                linkButtonClass = `${linkButtonClass} text-gray-400`
-              }
+            {items && items.map(({
+              link,
+              value,
+              onClick,
+              label,
+              icon = '',
+              disabled = false
+            }, i) => {
 
-              const content = <span className={classNames({ 'text-qripink font-semibold': active })}>{icon && <Icon icon={icon} className='mr-2' size='sm' />}{text}</span>
+              const menuItemClassName = classNames('text-left text-xs px-2 py-0.5 mx-2 my-1 whitespace-nowrap rounded-md', {
+                'hover:pointer text-qrigray-400 hover:bg-gray-100': !disabled,
+                'text-qrigray-300': disabled
+              })
+
+              const content = <span className={classNames({ 'text-qripink font-semibold': selectedValue && (selectedValue === value) })}>{icon && <Icon icon={icon} className='mr-2' size='sm' />}{label}</span>
 
               if (link) {
                 if (link.startsWith('http')) {
                   return (
-                    <ExternalLink to={link} key={i} className={linkButtonClass}>
+                    <ExternalLink to={link} key={i} className={menuItemClassName}>
                       <button  role="menuitem">
                         {content}
                       </button>
@@ -85,7 +103,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                 }
 
                 return (
-                  <Link to={link} key={i} className={linkButtonClass}>
+                  <Link to={link} key={i} className={menuItemClassName}>
                     <button role="menuitem">
                       {content}
                     </button>
@@ -93,10 +111,20 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                 )
               }
 
+              const handleItemClick = () => {
+                if (onClick) {
+                  onClick()
+                }
+
+                if (onChange && value) {
+                  onChange(value)
+                }
+              }
+
               return (
                 <button
-                  onClick={onClick}
-                  className={linkButtonClass}
+                  onClick={handleItemClick}
+                  className={menuItemClassName}
                   role="menuitem"
                   key={i}
                 >

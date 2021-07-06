@@ -40,12 +40,12 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
 
   const menuItems = [
     {
-      text: 'Dataset Name',
+      label: 'Dataset Name',
       active: sort === 'name',
       onClick: () => { onParamsUpdate({ sort: 'name' }) }
     },
     {
-      text: 'Recently Updated',
+      label: 'Recently Updated',
       active: sort === 'recentlyupdated',
       onClick: () => { onParamsUpdate({ sort: 'recentlyupdated' }) }
     }
