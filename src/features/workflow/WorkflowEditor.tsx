@@ -4,7 +4,7 @@ import Hotkeys from 'react-hot-keys'
 
 import WorkflowCell from './WorkflowCell'
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
-import OnComplete from './OnComplete'
+import Hooks from './Hooks'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
 import { Dataset } from '../../qri/dataset'
 import { changeWorkflowTransformStep, applyWorkflowTransform } from './state/workflowActions'
@@ -142,7 +142,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
             <ScrollAnchor id='result' />
             <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
           </ContentBox>
-          <OnComplete />
+          <Hooks />
           <div className='mt-6'>
             <ScrollAnchor id='deploy-button' />
             <DeployButton workflow={workflow} runStatus={run?.status ? run.status : 'waiting'} />
