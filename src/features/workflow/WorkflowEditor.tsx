@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Hotkeys from 'react-hot-keys'
 
@@ -54,7 +54,16 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
     return 'all'
   }
 
-  const runScript = () => { dispatch(applyWorkflowTransform(workflow)) }
+  // necessary so that runScript has the latest workflow when it is executed
+  // without it, runScript was firing the initialState of `workflow`
+  const workflowRef = useRef(workflow)
+  useEffect(() => {
+    workflowRef.current = workflow
+  }, [workflow])
+
+  const runScript = () => {
+    dispatch(applyWorkflowTransform(workflowRef.current))
+  }
 
   const onKeyDown = (keyName: string) => {
     if (keyName === 'cmd+enter') {
