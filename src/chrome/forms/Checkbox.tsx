@@ -16,8 +16,9 @@ const Checkbox: React.FC<CheckboxProps> = ({
   <div className='cursor-pointer flex items-center' onClick={onChange}>
     <Icon icon={value ? 'checkboxChecked' : 'checkbox'} className={classNames('mr-2', {
       'text-qripink': value,
+      'text-qrigray': !value
     })} />
-    {label && (<div className='text-sm'>{label}</div>)}
+    {label && (<div className='text-xs'>{label}</div>)}
   </div>
 )
 

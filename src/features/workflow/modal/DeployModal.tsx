@@ -7,13 +7,21 @@ import Icon from '../../../chrome/Icon'
 import { clearModal } from '../../app/state/appActions'
 import IconButton from '../../../chrome/IconButton'
 import TextInput from '../../../chrome/forms/TextInput'
-// import { saveAndApplyWorkflowTransform } from '../state/workflowActions'
-import { selectWorkflowQriRef } from '../state/workflowState'
+import Checkbox from '../../../chrome/forms/Checkbox'
+import { deployWorkflow } from '../state/workflowActions'
+import { selectWorkflow, selectWorkflowQriRef } from '../state/workflowState'
 import { validateDatasetName } from '../../session/state/formValidation'
+import { Workflow } from '../../../qrimatic/workflow'
 
-const DeployModal: React.FC = () => {
+interface DeployModalProps {
+  workflow: Workflow
+}
+
+const DeployModal: React.FC<DeployModalProps> = () => {
+
   const dispatch = useDispatch()
   const qriRef = useSelector(selectWorkflowQriRef)
+  const workflow = useSelector(selectWorkflow)
 
   // determine if the workflow is new by reading /new at the end of the pathname
   const segments = useLocation().pathname.split('/')
@@ -23,6 +31,7 @@ const DeployModal: React.FC = () => {
 
   const [ dsName, setDsName ] = useState(qriRef.name)
   const [ dsNameError, setDsNameError ] = useState()
+  const [ runNow, setRunNow ] = useState(false)
 
   const handleClose = () => {
     dispatch(clearModal())
@@ -54,19 +63,21 @@ const DeployModal: React.FC = () => {
 
   const readyToDeploy = checkReadyToDeploy()
 
-  console.log(readyToDeploy)
-
   const handleDeployClick = () => {
-    alert('Deploy!')
-    //TODO(chriswhong): figure out actions on deploy
-    // dispatch(saveAndApplyWorkflowTransform())
+
+    const newDatasetQriRef = {
+      ...qriRef,
+      name: dsName
+    }
+
+    dispatch(deployWorkflow(newDatasetQriRef, workflow, runNow))
   }
 
   let heading = 'You\'re almost there!'
   let subHeading = 'We need one more thing before you can deploy'
 
   let content = (
-    <div className='text-sm'>
+    <div className='text-sm mb-4'>
       <div className='text-qrinavy font-semibold mb-1'>Dataset name *</div>
       <div className='text-qrigray-400 mb-2'>Give your dataset a descriptive, machine-friendly name</div>
       <TextInput
@@ -96,6 +107,7 @@ const DeployModal: React.FC = () => {
 
         {content}
         {/* TODO(chriswhong): add other predeployment checks like triggers and completion tasks */}
+        <Checkbox label='Run on Deploy' value={runNow} onChange={() => { setRunNow(!runNow) }} />
       </div>
       <Button
         size='sm'

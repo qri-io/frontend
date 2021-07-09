@@ -22,7 +22,7 @@ export interface Workflow {
 
   triggers?: WorkflowTrigger[]
   steps?: TransformStep[]
-  onComplete?: WorkflowHook[]
+  hooks?: WorkflowHook[]
 
   versionInfo?: VersionInfo
 }
@@ -43,7 +43,7 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
 
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
     steps: data.steps && data.steps.map(NewTransformStep),
-    onComplete: data.onComplete && data.onComplete.map(NewWorkflowHook),
+    hooks: data.hooks && data.hooks.map(NewWorkflowHook),
 
     versionInfo: data.versionInfo
   }

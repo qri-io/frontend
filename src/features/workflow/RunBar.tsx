@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip'
 import Button from '../../chrome/Button'
 import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
-import { applyWorkflowTransform, saveAndApplyWorkflowTransform } from './state/workflowActions'
+import { applyWorkflowTransform, deployWorkflow } from './state/workflowActions'
 import { selectRunMode, selectWorkflow } from './state/workflowState'
 import { platform } from '../../utils/platform'
 
@@ -26,8 +26,9 @@ const RunBar: React.FC<RunBarProps> = ({
     if (onRun) { onRun() }
     if (runMode === 'apply') {
       dispatch(applyWorkflowTransform(workflow))
-    } else if (runMode === 'save') {
-      dispatch(saveAndApplyWorkflowTransform(workflow))
+    }
+    else if (runMode === 'save') {
+      dispatch(deployWorkflow(workflow))
     }
   }
 

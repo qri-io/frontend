@@ -101,27 +101,27 @@ export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
   }
 }
 
-export function saveAndApplyWorkflowTransform(w: Workflow): ApiActionThunk {
+export function deployWorkflow(qriRef: QriRef, w: Workflow, run: boolean): ApiActionThunk {
   return async (dispatch, getState) => {
-    throw new Error("we need to ajust the save API endpoint before workflow saving can work")
-
-    // return dispatch({
-    //   type: 'save',
-    //   [CALL_API]: {
-    //     endpoint: 'save',
-    //     method: 'POST',
-    //     body: {
-    //       apply: true,
-    //       ref: w.datasetID,
-    //       dataset: {
-    //         transform: {
-    //           scriptBytes: btoa(workflowScriptString(w)),
-    //           steps: w.steps
-    //         }
-    //       }
-    //     },
-    //   }
-    // })
+    return dispatch({
+      type: 'save',
+      [CALL_API]: {
+        endpoint: 'auto/deploy',
+        method: 'POST',
+        body: {
+          run,
+          workflow: w,
+          dataset: {
+            username: qriRef.username,
+            name: qriRef.name,
+            transform: {
+              scriptBytes: btoa(workflowScriptString(w)),
+              steps: w.steps
+            }
+          }
+        },
+      }
+    })
   }
 }
 
