@@ -20,7 +20,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
       <div className="text-sm leading-6 font-medium text-gray-700 mr-1" id="modal-headline">When should Qri run this workflow?</div>
       <div className='flex flex-wrap -mx-1'>
         <div className='my-1 px-1 w-1/2'>
-          <Select 
+          <Select
             value={schedule.periodicity}
             onChange={(value: string) => {
               onChange(triggerFromSchedule({
@@ -64,7 +64,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
                 }}
                 type='time'
                 value={schedule.time}
-                onChange={(e) => { 
+                onChange={(e) => {
                   onChange(triggerFromSchedule({
                     ...schedule,
                     time: e.target.value,
