@@ -30,33 +30,23 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
     loading
   } = paginatedResults
 
-  const {
-    page,
-  } = pageInfo
-
-  const {
-    sort
-  } = userProfileParams
-
-  const menuItems = [
-    {
-      label: 'Dataset Name',
-      active: sort === 'name',
-      onClick: () => { onParamsUpdate({ sort: 'name' }) }
-    },
-    {
-      label: 'Recently Updated',
-      active: sort === 'recentlyupdated',
-      onClick: () => { onParamsUpdate({ sort: 'recentlyupdated' }) }
-    }
-  ]
-
+  const { page } = pageInfo
+  const { sort } = userProfileParams
   const totalPages = Math.ceil( pageInfo.resultCount / pageInfo.pageSize )
 
   // handle page change from PageControl
   const handlePageChange = ({ selected: pageIndex }: PageChangeObject) => {
     onParamsUpdate({ page: pageIndex + 1 })
   }
+
+  const handleSortChange = (sort: 'name' | 'recentlyupdated') => {
+    onParamsUpdate({ sort, page: pageIndex })
+  }
+
+  const dropdownSortIcon = <div className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 py-2 cursor-pointer'>
+    Sort By
+    <Icon icon='caretDown' size='2xs' className='ml-3' />
+  </div>
 
   return (
     <>
@@ -77,12 +67,22 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
             }
 
           </div>
-          <DropdownMenu items={menuItems} className='ml-8'>
-            <div className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 py-2 cursor-pointer'>
-              Sort By
-              <Icon icon='caretDown' size='2xs' className='ml-3' />
-            </div>
-          </DropdownMenu>
+          <DropdownMenu
+            icon={dropdownSortIcon}
+            className='ml-8'
+            items={[
+              {
+                label: 'Dataset Name',
+                active: sort === 'name',
+                onClick: () => { handleSortChange('name') }
+              },
+              {
+                label: 'Recently Updated',
+                active: sort === 'recentlyupdated',
+                onClick: () => { handleSortChange('recentlyupdated') },
+              }
+            ]}
+          />
         </div>
         <DatasetList datasets={results} loading={loading} />
       </ContentBox>

@@ -33,22 +33,22 @@ const DatasetTitleMenu: React.FC<DatasetTitleMenuProps> = ({
     history.replace(newPath)
   }
 
-  const menuItems = [
-    {
-      onClick: () => { handleButtonClick("duplicating not yet implemented") },
-      label: 'Duplicate...',
-      disabled: true
-    }
-  ]
-
   return (
     <div className="relative">
       <p className=' font-bold text-white relative flex items-baseline group hover:text'>
         <span className='opacity-70'>{qriRef.username} / </span>
         <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
-        {editable && <DropdownMenu items={menuItems}>
-          <Icon icon='sortDown' className='ml-3'/>
-        </DropdownMenu>}
+        {editable && 
+          <DropdownMenu 
+            icon={<Icon icon='sortDown' className='ml-3'/>}
+            items={[
+              {
+                label: 'Duplicate...',
+                disabled: true,
+                onClick: () => { handleButtonClick("duplicating not yet implemented") }
+              }
+            ]}
+          />}
       </p>
     </div>
   )

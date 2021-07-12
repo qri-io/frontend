@@ -10,7 +10,7 @@ import CronTriggerEditor from '../../trigger/CronTriggerEditor'
 import { WorkflowTrigger, WorkflowTriggerType } from '../../../qrimatic/workflow'
 import { changeWorkflowTrigger } from '../../workflow/state/workflowActions'
 
-interface AddTriggerModalProps {
+export interface AddTriggerModalProps {
   type?: WorkflowTriggerType | ''
   triggers?: WorkflowTrigger[]
 }
@@ -19,8 +19,6 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
   type: initialType = '',
   triggers: initialTriggers
 }) => {
-
-
   const dispatch = useDispatch()
 
   // type sets the initial display of this modal.

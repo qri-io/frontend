@@ -9,11 +9,11 @@ import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import { parseHourlyStart, parseDailyStart,  } from './util'
 
-export interface CronTriggerDisplayProps {
+export interface CronTriggerProps {
   trigger: WorkflowTrigger
 }
 
-const CronTriggerDisplay: React.FC<CronTriggerDisplayProps> = ({
+const CronTrigger: React.FC<CronTriggerProps> = ({
   trigger
 }) => {
 
@@ -72,4 +72,4 @@ const CronTriggerDisplay: React.FC<CronTriggerDisplayProps> = ({
   )
 }
 
-export default CronTriggerDisplay
+export default CronTrigger

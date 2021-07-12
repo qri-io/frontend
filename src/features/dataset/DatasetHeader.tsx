@@ -31,12 +31,11 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const qriRef = qriRefFromDataset(dataset)
 
   const handleButtonClick = (message: string) => {
     alert(message)
   }
-
-  const qriRef = qriRefFromDataset(dataset)
 
   const handleRename = (_:string, value:string) => {
     dispatch(renameDataset(qriRef, { username: dataset.username, name: value }))
@@ -47,14 +46,6 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
     history.replace(newPath)
   }
 
-  const menuItems = [
-    {
-      onClick: () => { handleButtonClick("duplicating not yet implemented") },
-      label: 'Duplicate...',
-      disabled: true
-    }
-  ]
-
   return (
     <div className="w-full">
       <div className='flex'>
@@ -62,9 +53,17 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1 font-mono'>
             <TextLink to={`/${qriRef.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</TextLink>/
             <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
-            {editable && <DropdownMenu items={menuItems}>
-              <Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />
-            </DropdownMenu>}
+            {editable &&
+              <DropdownMenu
+                icon={<Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />}
+                items={[
+                  {
+                    label: 'Duplicate...',
+                    disabled: true,
+                    onClick: () => { handleButtonClick("duplicating not yet implemented") } 
+                  }
+                ]}
+              />}
           </div>
 
           <div className='text-2xl text-qrinavy-500 font-black group hover:text mb-3'>

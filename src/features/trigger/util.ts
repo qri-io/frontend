@@ -1,8 +1,8 @@
 import getMinutes from 'date-fns/getMinutes'
 import format from 'date-fns/format'
 
-import { DropDownMenuItem } from '../../chrome/DropdownMenu'
 import { WorkflowTrigger } from '../../qrimatic/workflow'
+import { SelectOption } from '../../chrome/Select'
 
 // for hourly cron triggers, only these values are valid for specifying the minutes
 export type HourlyTriggerMinutes = '00' | '15' | '30' | '45'
@@ -16,29 +16,13 @@ export const getTwoDigitMinutes = (time: string) => {
     }) as HourlyTriggerMinutes
 }
 
-interface HourlyTriggerMinutesMenuItem extends DropDownMenuItem {
-  value: HourlyTriggerMinutes
-}
-
 // used to specify the minutes for hourly triggers
 // this is used as labels/values for DropdownMenu, and as a lookup object
-export const hourlyItems: HourlyTriggerMinutesMenuItem[] = [
-  {
-    label: 'on the hour',
-    value: '00'
-  },
-  {
-    label: 'on the 1/4-hour',
-    value: '15'
-  },
-  {
-    label: 'on the half-hour',
-    value: '30'
-  },
-  {
-    label: 'on the 3/4-hour',
-    value: '45'
-  }
+export const hourlyItems: SelectOption[] = [
+  { value: '00', label: 'on the hour' },
+  { value: '15', label: 'on the 1/4-hour' },
+  { value: '30', label: 'on the half-hour' },
+  { value: '45', label: 'on the 3/4-hour' }
 ]
 
 // given a starttime as an ISO8601 timestamp, get the minutes and return the corresponding label
@@ -53,11 +37,11 @@ export const parseDailyStart = (startTime: string) => {
 }
 
 // takes an ISO8601 scheduled interval, returns scheduleUIConfig object
-export const scheduleFromPeriodicity = (periodicity: string) => {
+export const scheduleFromPeriodicity = (periodicity: string = ''): Schedule => {
   const [, startTime, interval] = periodicity.split('/')
 
   const defaultScheduleUIConfig = {
-    periodicity: 'daily',
+    periodicity: 'P1D',
     minutes: '00',
     time: '21:00'
   }
@@ -66,48 +50,25 @@ export const scheduleFromPeriodicity = (periodicity: string) => {
     case 'PT10M':
       return {
         ...defaultScheduleUIConfig,
-        periodicity: 'ten-minutes',
+        periodicity: interval,
         minutes: '00',
       } as Schedule
     case 'P1H':
       return {
         ...defaultScheduleUIConfig,
-        periodicity: 'hourly',
+        periodicity: interval,
         minutes: getTwoDigitMinutes(startTime)
       } as Schedule
     case 'P1D':
       return {
         ...defaultScheduleUIConfig,
-        periodicity: 'daily',
+        periodicity: interval,
         time: format(new Date(startTime), 'HH:mm'),
       } as Schedule
+     default:
+       return defaultScheduleUIConfig
   }
 }
-
-export const periodicityItems: DropDownMenuItem[] = [
-  {
-    label: 'Every 10 Minutes',
-    value: 'ten-minutes'
-  },
-  {
-    label: 'Every Hour',
-    value: 'hourly'
-  },
-  {
-    label: 'Every Day',
-    value: 'daily'
-  },
-  // {
-  //   id: 'weekly',
-  //   label: 'Every Week',
-  //   value: '1W'
-  // },
-  // {
-  //   id: 'monthly',
-  //   label: 'Month',
-  //   value: '1M'
-  // }
-]
 
 // Schedule stores the value for each UI element used to create cron triggers
 // periodicity is always defined, minutes is needed when periodicity is 'hourly',
@@ -120,66 +81,63 @@ export interface Schedule {
 }
 
 // convert the UI values into a valid CronTrigger
-export const triggerFromSchedule = (schedule: Schedule) => {
+export const triggerFromSchedule = (schedule: Schedule): WorkflowTrigger => {
   // convert the UI settings into a valid WorkflowTrigger
   let periodicity
   let startTime
   const today = new Date()
 
   // for every 10 minutes, periodicity is 'R/PT10M'
-  if (schedule.periodicity === 'ten-minutes') {
+  switch (schedule.periodicity) {
+    case 'PT10M':
+      // get most recent previous hour, the ten-minutes interval will run at 00, 10, 20, 30, ...
+      startTime = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        today.getHours(),
+        0,
+        0
+      ).toISOString()
+    
+      periodicity = `R/${startTime}/PT10M`
+      break
+    case 'P1H':
+      // for hourly, periodicity is R/P1H and startTime is the next instance of 
+      // the minutes selected by the user
+      // get most recent previous hour, add minutes, convert to ISO8601
+      startTime = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        today.getHours(),
+        parseInt(schedule.minutes),
+        0
+      ).toISOString()
 
-    // get most recent previous hour, the ten-minutes interval will run at 00, 10, 20, 30, ...
-    const startTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      today.getHours(),
-      0,
-      0
-    ).toISOString()
+      periodicity = `R/${startTime}/P1H`
+      break
+     case 'P1D':
+       // time is in HH:MM format in local time (24 hour hours)
+      const [hours, minutes] = schedule.time.split(':')
 
-    periodicity = `R/${startTime}/PT10M`
+      // get ISO8601 string for today at the specified hours+minutes
+      startTime = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        parseInt(hours),
+        parseInt(minutes),
+        0
+      ).toISOString()
+
+      periodicity = `R/${startTime}/P1D`
+      break
   }
 
-  // for hourly, periodicity is R/PT1H and startTime is the next instance of the minutes selected by the user
-  if (schedule.periodicity === 'hourly') {
-
-    // get most recent previous hour, add minutes, convert to ISO8601
-    startTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      today.getHours(),
-      parseInt(schedule.minutes),
-      0
-    ).toISOString()
-
-    periodicity = `R/${startTime}/P1H`
-  }
-
-  if (schedule.periodicity === 'daily') {
-    // time is in HH:MM format in local time (24 hour hours)
-    const [hours, minutes] = schedule.time.split(':')
-
-    // get ISO8601 string for today at the specified hours+minutes
-    const startTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      parseInt(hours),
-      parseInt(minutes),
-      0
-    ).toISOString()
-
-    periodicity = `R/${startTime}/P1D`
-  }
-
-  const trigger: WorkflowTrigger = {
+  return {
     type: 'cron',
     enabled: true,
     periodicity,
   }
-
-  return trigger
 }

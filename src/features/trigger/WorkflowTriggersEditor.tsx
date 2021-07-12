@@ -6,7 +6,7 @@ import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import Block from '../workflow/Block'
-import CronTriggerDisplay from './CronTriggerDisplay'
+import CronTrigger from './CronTrigger'
 import ContentBox from '../../chrome/ContentBox'
 import Icon from '../../chrome/Icon'
 import Button from '../../chrome/Button'
@@ -49,11 +49,11 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
           </div>
         )}
       </div>
-      <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
+      <div className='flex flex-wrap -mx-2 overflow-hidden'>
         {triggers.map((trigger: WorkflowTrigger, i) => {
           switch (trigger.type) {
             case 'cron':
-              return <CronTriggerDisplay key={i} trigger={trigger} />
+              return <CronTrigger key={i} trigger={trigger} />
             default:
               return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
           }
