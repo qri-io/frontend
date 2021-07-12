@@ -85,19 +85,6 @@ const Search: React.FC<{}> = () => {
     history.push({ search: newParamsObject.toString() })
   }
 
-  const menuItems = [
-    {
-      text: 'Dataset Name',
-      active: sort === 'name',
-      onClick: () => { updateQueryParams({ sort: 'name' }) }
-    },
-    {
-      text: 'Recently Updated',
-      active: sort === 'recentlyupdated',
-      onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
-    }
-  ]
-
   // shown if user lands on /search with no query params
   let resultsContent = (
     <div className='text-center font-semibold text-sm'>
@@ -130,6 +117,11 @@ const Search: React.FC<{}> = () => {
     }
   }
 
+  const sortIcon = <div className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 py-2 cursor-pointer'>
+    Sort By
+    <Icon icon='caretDown' size='2xs' className='ml-3' />
+  </div>
+
   return (
     <div className='flex flex-col h-full w-full overflow-y-scroll' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6'}}>
       <NavBar showSearch={false} />
@@ -154,12 +146,22 @@ const Search: React.FC<{}> = () => {
                     )}
                   </div>
                 </div>
-                <DropdownMenu items={menuItems} className='ml-8'>
-                  <div className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 py-2 cursor-pointer'>
-                    Sort By
-                    <Icon icon='caretDown' size='2xs' className='ml-3' />
-                  </div>
-                </DropdownMenu>
+                <DropdownMenu 
+                  icon={sortIcon}
+                  className='ml-8'
+                  items={[
+                      {
+                        label: 'Dataset Name',
+                        active: sort === 'name',
+                        onClick: () => { updateQueryParams({ sort: 'name' }) }
+                      },
+                      {
+                        label: 'Recently Updated',
+                        active: sort === 'recentlyupdated',
+                        onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
+                      }
+                    ]}
+                  />
               </>
             ):(
               <>&nbsp;</>

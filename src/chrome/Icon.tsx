@@ -48,6 +48,7 @@ import ActivityFeed from './icon/ActivityFeed'
 import AutomationFilled from './icon/AutomationFilled'
 import Body from './icon/Body'
 import Brackets from './icon/Brackets'
+import Calendar from './icon/Calendar'
 import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
 import CaretDown from './icon/CaretDown'
@@ -167,6 +168,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     automationFilled: <AutomationFilled className={className} size={size} />,
     body: <Body className={className} size={size} />,
     brackets: <Brackets className={className} size={size} />,
+    calendar: <Calendar className={className} size={size} />,
     caretLeft: <CaretLeft className={className} size={size} />,
     caretRight: <CaretRight className={className} size={size} />,
     caretDown: <CaretDown className={className} size={size} />,

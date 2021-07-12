@@ -9,7 +9,7 @@ import { ModalType } from '../app/state/appState'
 import Icon from '../../chrome/Icon'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
-import DropdownMenu, { DropDownMenuItem } from '../../chrome/DropdownMenu'
+import DropdownMenu from '../../chrome/DropdownMenu'
 import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { VersionInfo } from '../../qri/versionInfo';
@@ -225,52 +225,52 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       width: '60px',
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => {
-        const hamburgerItems: DropDownMenuItem[] = [
-          {
-            onClick: () => { handleButtonClick("renaming not yet implemented") },
-            text: 'Rename...',
-            disabled: true
-          },
-          {
-            onClick: () => { handleButtonClick("duplicating not yet implemented")},
-            text: 'Duplicate...',
-            disabled: true
-          },
-          {
-            onClick: () => { handleButtonClick("export not yet implemented")},
-            text: 'Export...',
-            disabled: true
-          },
-          {
-            onClick: () => { handleButtonClick("run now not yet implemented")},
-            text: 'Run Now',
-            disabled: true
-          },
-          {
-            onClick: () => { handleButtonClick("pause not yet implemented")},
-            text: 'Pause Workflow',
-            disabled: true
-          },
-          {
-            onClick: () => {
-              dispatch(
-                showModal(
-                  ModalType.removeDataset,
-                  {
-                    username: row.username,
-                    name: row.name
-                  }
-                )
-              )
-            },
-            text: 'Remove...'
-          }
-        ]
         return (
           <div className='mx-auto text-gray-500'>
-            <DropdownMenu items={hamburgerItems}>
-              <Icon icon='ellipsisH' size='md'/>
-            </DropdownMenu>
+            <DropdownMenu
+              icon={<Icon icon='ellipsisH' size='md'/>}
+              items={[
+                {
+                  label: 'Rename...',
+                  disabled: true,
+                  onClick: () => { handleButtonClick("renaming not yet implemented") },
+                },
+                {
+                  label: 'Duplicate...',
+                  disabled: true,
+                  onClick: () => { handleButtonClick("duplicating not yet implemented")},
+                },
+                {
+                  label: 'Export...',
+                  disabled: true,
+                  onClick: () => { handleButtonClick("export not yet implemented")},
+                },
+                {
+                  label: 'Run Now',
+                  disabled: true,
+                  onClick: () => { handleButtonClick("run now not yet implemented")},
+                },
+                {
+                  label: 'Pause Workflow',
+                  disabled: true,
+                  onClick: () => { handleButtonClick("pause not yet implemented")},
+                },
+                {
+                  label: 'Remove...',
+                  onClick: () => {
+                    dispatch(
+                      showModal(
+                        ModalType.removeDataset,
+                        {
+                          username: row.username,
+                          name: row.name
+                        }
+                      )
+                    )
+                  },
+                }
+              ]}
+            />
           </div>
         )
       }
