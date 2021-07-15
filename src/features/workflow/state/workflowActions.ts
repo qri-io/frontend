@@ -101,30 +101,6 @@ export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
   }
 }
 
-export function deployWorkflow(qriRef: QriRef, w: Workflow, run: boolean): ApiActionThunk {
-  return async (dispatch, getState) => {
-    return dispatch({
-      type: 'save',
-      [CALL_API]: {
-        endpoint: 'auto/deploy',
-        method: 'POST',
-        body: {
-          run,
-          workflow: w,
-          dataset: {
-            username: qriRef.username,
-            name: qriRef.name,
-            transform: {
-              scriptBytes: btoa(workflowScriptString(w)),
-              steps: w.steps
-            }
-          }
-        },
-      }
-    })
-  }
-}
-
 export interface EventLogAction {
   type: string
   data: EventLogLine

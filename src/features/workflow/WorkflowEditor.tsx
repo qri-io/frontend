@@ -22,14 +22,16 @@ export interface WorkflowEditorProps {
   qriRef: QriRef
   runMode: RunMode
   workflow: Workflow
+  isDirty: boolean
   run?: Run
 }
 
 const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   qriRef,
   runMode,
-  run,
-  workflow
+  workflow,
+  isDirty,
+  run
 }) => {
   const dispatch = useDispatch()
 
@@ -76,6 +78,10 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
 
     return dsPreview
   }
+
+  const isNew = qriRef.username === '' && qriRef.name === ''
+
+  // to deploy, the workflow must have a RunStatus of succeeded and isDirty = true
 
   return (
     <Hotkeys
@@ -145,7 +151,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
           <Hooks />
           <div className='mt-6'>
             <ScrollAnchor id='deploy-button' />
-            <DeployButton workflow={workflow} runStatus={run?.status ? run.status : 'waiting'} />
+            <DeployButton isNew={isNew} disabled={!isDirty} />
           </div>
         </div>
       </div>

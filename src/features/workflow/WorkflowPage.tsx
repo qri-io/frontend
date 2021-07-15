@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams, useLocation } from 'react-router'
+import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useInView } from 'react-intersection-observer'
 
@@ -10,8 +10,8 @@ import DatasetHeader from '../dataset/DatasetHeader'
 import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
-import DeployingScreen from '../deploy/DeployingScreen'
 import { selectSessionUserCanEditDataset, selectDataset } from '../dataset/state/datasetState'
+import { loadWorkflowByDatasetRef, setWorkflowRef } from './state/workflowActions'
 import { selectLatestRun } from './state/workflowState'
 import { QriRef } from '../../qri/ref'
 import { NewDataset } from '../../qri/dataset'
@@ -24,36 +24,23 @@ interface WorkflowPageProps {
   qriRef: QriRef
 }
 
-const WorkflowPage: React.FC<WorkflowPageProps> = ({
-  qriRef
-}) => {
+const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
   let dataset = useSelector(selectDataset)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const latestRun = useSelector(selectLatestRun)
   let { username, name } = useParams()
 
-  const isNew = (qriRef.username === 'new')
   const { ref: stickyHeaderTriggerRef, inView } = useInView({
     threshold: 0.7,
     initialInView: true
   });
 
-  // This covers the case where a user created a new workflow before logging in.
-  // If they login while working on the workflow, the `user` will change, but the
-  // params used to generate the `qriRef` will not (because they are generated
-  // from the url, which has not changed). This check ensures that the correct
-  // username is propagated after login/signup.
+  // if qriRef is empty, this is a new workflow
+  const isNew = qriRef.username === '' && qriRef.name === ''
+
+  // if new, make a mock dataset for rendering the headers
   if (isNew) {
-    qriRef.username = user.username
-  }
-
-  // determine if the workflow is new by reading /new at the end of the pathname
-  const segments = useLocation().pathname.split('/')
-  const isNewWorkflow = segments[segments.length - 1] === 'new'
-
-  // if the dataset name and peername are empty, make a mock dataset for rendering the headers
-  if (dataset.peername === '') {
     dataset = NewDataset({
       peername: username,
       name,
@@ -63,11 +50,15 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
     })
   }
 
+  // don't fetch the dataset if this is a new workflow
   useEffect(() => {
-    if (isNew || isNewWorkflow) { return }
+    dispatch(setWorkflowRef(qriRef))
+    if (isNew) { return }
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
     dispatch(loadDataset(ref))
-  }, [dispatch, qriRef.username, qriRef.name, qriRef.path, isNew])
+    dispatch(loadWorkflowByDatasetRef(qriRef))
+
+  }, [])
 
   const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />
 
@@ -87,7 +78,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
               </DatasetMiniHeader>
               <div className='p-7 w-full'>
                 <div ref={stickyHeaderTriggerRef}>
-                  <DatasetHeader dataset={dataset} editable={editable} showInfo={!isNewWorkflow}>
+                  <DatasetHeader dataset={dataset} editable={editable} showInfo={!isNew}>
                     {runBar}
                   </DatasetHeader>
                 </div>
@@ -95,7 +86,6 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
               </div>
             </Scroller>
           )}
-        <DeployingScreen qriRef={qriRef} />
       </div>
     </div>
   )

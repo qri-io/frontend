@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import ReactCanvasConfetti from 'react-canvas-confetti'
+import classNames from 'classnames'
 
 import Button from '../../../chrome/Button'
 import Icon from '../../../chrome/Icon'
@@ -8,30 +10,61 @@ import { clearModal } from '../../app/state/appActions'
 import IconButton from '../../../chrome/IconButton'
 import TextInput from '../../../chrome/forms/TextInput'
 import Checkbox from '../../../chrome/forms/Checkbox'
-import { deployWorkflow } from '../state/workflowActions'
+import { deployWorkflow } from '../../deploy/state/deployActions'
+import { setWorkflowRef } from '../state/workflowActions'
 import { selectWorkflow, selectWorkflowQriRef } from '../state/workflowState'
 import { validateDatasetName } from '../../session/state/formValidation'
 import { Workflow } from '../../../qrimatic/workflow'
+import RunStatusIcon from '../../run/RunStatusIcon'
+import { selectDeployStatus } from '../../deploy/state/deployState'
+import { selectSessionUser } from '../../session/state/sessionState'
 
 interface DeployModalProps {
   workflow: Workflow
 }
 
 const DeployModal: React.FC<DeployModalProps> = () => {
-
   const dispatch = useDispatch()
+  const history = useHistory()
+
   const qriRef = useSelector(selectWorkflowQriRef)
   const workflow = useSelector(selectWorkflow)
+  const deployStatus = useSelector(selectDeployStatus(qriRef))
+  const { username } = useSelector(selectSessionUser)
 
   // determine if the workflow is new by reading /new at the end of the pathname
   const segments = useLocation().pathname.split('/')
-  const isNew = segments[segments.length - 1] === 'new'
+  const isNew = segments[2] === 'new'
 
-  const originalDsName = (' ' + qriRef.name).slice(1)
-
-  const [ dsName, setDsName ] = useState(qriRef.name)
+  // local state
+  const [ dsName, setDsName ] = useState('')
   const [ dsNameError, setDsNameError ] = useState()
   const [ runNow, setRunNow ] = useState(false)
+  const [ deploying, setDeploying ] = useState(false)
+
+  useEffect(() => {
+    // when user edits dataset name, make sure it gets written to the workflow's qriref
+    if (isNew) {
+      dispatch(setWorkflowRef({
+        username,
+        name: dsName
+      }))
+    }
+  }, [ dsName, dispatch, username ])
+
+  // listen for deployStatus changes
+  useEffect(() => {
+    // the moment of triumph!
+    if (deployStatus === 'deployed') {
+      // navigate to the new dataset's workflow!
+      history.push({
+        pathname: `/ds/${qriRef.username}/${qriRef.name}/workflow`,
+      })
+    }
+
+    // TODO(chriswhong): listen for 'failed' status here and react accordingly
+  }, [ deployStatus, history, isNew, qriRef ])
+
 
   const handleClose = () => {
     dispatch(clearModal())
@@ -44,34 +77,24 @@ const DeployModal: React.FC<DeployModalProps> = () => {
     setDsName(value)
   }
 
+  const handleDeployClick = () => {
+    setDeploying(true)
+    dispatch(deployWorkflow(qriRef, workflow, runNow))
+  }
+
   // determine whether all conditions are met for proceeding
   const checkReadyToDeploy = () => {
-    let ready = true
 
     if (isNew) {
-      if (dsName === originalDsName) {
-        ready = false
-      }
-
-      if (dsName.length === 0) {
-        ready = false
-      }
+      // if the name exists and is valid
+      if (!dsName.length || dsNameError) { return false }
     }
 
-    return ready
+    return true
   }
 
   const readyToDeploy = checkReadyToDeploy()
 
-  const handleDeployClick = () => {
-
-    const newDatasetQriRef = {
-      ...qriRef,
-      name: dsName
-    }
-
-    dispatch(deployWorkflow(newDatasetQriRef, workflow, runNow))
-  }
 
   let heading = 'You\'re almost there!'
   let subHeading = 'We need one more thing before you can deploy'
@@ -96,28 +119,94 @@ const DeployModal: React.FC<DeployModalProps> = () => {
     content = <></>
   }
 
-  return (
-    <div className='bg-white p-8 text-left text-qrinavy' style={{ width: '440px'}}>
-      <div className='flex'>
-        <div className='flex-grow text-3xl font-black mb-6'>{heading}</div>
-        <IconButton icon='close' className='ml-10' onClick={handleClose}/>
-      </div>
-      <div className='mb-6'>
-        <div className='mb-3'>{subHeading}</div>
 
-        {content}
-        {/* TODO(chriswhong): add other predeployment checks like triggers and completion tasks */}
-        <Checkbox label='Run on Deploy' value={runNow} onChange={() => { setRunNow(!runNow) }} />
+  let deployingContent = (
+    <>
+      <RunStatusIcon status={'running'} size='lg' className='text-qrinavy mb-2' />
+      <div className='font-semibold text-xl mb-2'>Deploying Workflow</div>
+      <div className='text-sm text-qrigray'>Standby... this won't take long.</div>
+    </>
+  )
+
+  if (deployStatus === 'deployed') {
+    deployingContent = (
+      <>
+        <RunStatusIcon status={'succeeded'} size='lg' className='text-green mb-2' />
+        <div className='font-semibold text-xl mb-2'>Workflow Deployed</div>
+        <div className='text-sm text-qrigray'>You're all set! Sit back and let the data flow.</div>
+      </>
+    )
+  }
+
+  if (deployStatus === 'failed') {
+    deployingContent = (
+      <>
+        <RunStatusIcon status={'failed'} size='lg' className='text-green mb-2' />
+        <div className='font-semibold text-xl mb-2'>Deploy Failed</div>
+        <div className='text-sm text-qrigray'>Sorry, something went wrong...</div>
+      </>
+    )
+  }
+
+  const showButton = ['deployed', 'failed'].includes(deployStatus)
+  let buttonText = 'Done'
+  let buttonType = 'primary'
+
+  if (deployStatus === 'failed') {
+    buttonText = 'Close'
+    buttonType = 'light'
+  }
+
+  return (
+    <div style={{ width: '440px', height: 400 }}>
+      <div className={classNames('absolute w-full h-full bg-white p-8 transition-all duration-300 bg-white p-8 text-left text-qrinavy flex flex-col z-10', {
+        'left-0': !deploying,
+        '-left-full': deploying
+      })}>
+        <div className='flex'>
+          <div className='flex-grow text-3xl font-black mb-6'>{heading}</div>
+          <IconButton icon='close' className='ml-10' onClick={handleClose}/>
+        </div>
+        <div className='mb-6 flex-grow'>
+          <div className='mb-3'>{subHeading}</div>
+
+          {content}
+          {/* TODO(chriswhong): add other predeployment checks like triggers and completion tasks */}
+          <Checkbox label='Run on Deploy' value={runNow} onChange={() => { setRunNow(!runNow) }} />
+        </div>
+        <Button
+          size='sm'
+          type='secondary'
+          className='w-full mt-2'
+          onClick={handleDeployClick}
+          submit
+          disabled={!readyToDeploy}>
+          <Icon icon='rocket' className='mr-2' /> Deploy
+        </Button>
       </div>
-      <Button
-        size='sm'
-        type='secondary'
-        className='w-full mt-2'
-        onClick={handleDeployClick}
-        submit
-        disabled={!readyToDeploy}>
-        <Icon icon='rocket' className='mr-2' /> Deploy
-      </Button>
+
+      <div className='flex flex-col h-full w-full p-8'>
+        <div className='flex-grow flex items-center mx-auto'>
+          <div className='text-center'>
+            {deployingContent}
+          </div>
+        </div>
+        <ReactCanvasConfetti
+          // set the styles as for a usual react component
+          style={{
+            position: 'fixed',
+            width: '100%',
+            height: '100%',
+            zIndex: -1
+          }}
+          fire={deployStatus === 'deployed'}
+        />
+        <Button size='sm' type={buttonType} className={classNames('w-full mt-2', {
+          'invisible': !showButton
+        })} onClick={handleClose} submit>
+          {buttonText}
+        </Button>
+      </div>
     </div>
   )
 }

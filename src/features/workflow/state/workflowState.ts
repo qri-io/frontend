@@ -1,9 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit'
+import DeepEqual from 'deep-equal'
 
 import { RootState } from '../../../store/store';
 import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction, RunModeAction } from './workflowActions';
 import { NewRunFromEventLog, Run } from '../../../qri/run';
-import { Workflow } from '../../../qrimatic/workflow';
+import { Workflow, WorkflowBase } from '../../../qrimatic/workflow';
 import { EventLogLine } from '../../../qri/eventLog';
 import Dataset from '../../../qri/dataset';
 import { QriRef } from '../../../qri/ref';
@@ -30,6 +31,8 @@ export const selectLatestRun = (state: RootState): Run | undefined => {
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
 export const selectWorkflowQriRef = (state: RootState): QriRef => state.workflow.qriRef
 export const selectRunMode = (state: RootState): RunMode => state.workflow.runMode
+export const selectWorkflowIsDirty = (state: RootState): boolean => state.workflow.isDirty
+
 
 export type RunMode =
   | 'apply'
@@ -38,8 +41,10 @@ export type RunMode =
 export interface WorkflowState {
   runMode: RunMode
   // reference the workflow editor is manipulating
-  qriRef?: QriRef,
-  workflow: Workflow,
+  qriRef?: QriRef
+  workflow: Workflow
+  workflowBase: WorkflowBase
+  isDirty: boolean
 
   lastRunID?: string,
   events: EventLogLine[],
@@ -54,15 +59,15 @@ const initialState: WorkflowState = {
     disabled: false,
 
     triggers: [],
-    steps: [
-      { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load_ds("b5/world_bank_population")` },
-      { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
-      { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
-    ],
-    onComplete: [
-      { type: 'push', remote: 'https://registry.qri.cloud' },
-    ]
+    steps: [],
+    hooks: []
   },
+  workflowBase: {
+    triggers: [],
+    steps: [],
+    hooks: []
+  },
+  isDirty: false,
   events: []
 }
 
@@ -94,6 +99,9 @@ export const workflowReducer = createReducer(initialState, {
     if (state.qriRef?.name === d.name) {
       if (d.transform?.steps) {
         state.workflow.steps = d.transform.steps
+        state.workflow.datasetID = d.path
+
+        state.workflowBase.steps = d.transform.steps
       }
     }
   },
@@ -121,7 +129,19 @@ export const workflowReducer = createReducer(initialState, {
     state.workflow = w
     // state.workflow.steps = steps
   },
+  'API_DEPLOY_SUCCESS': (state, action) => {
+    state.isDirty = false
+  }
 })
+
+function calculateIsDirty(state: WorkflowState) {
+  const workflowCompare = {
+    triggers: state.workflow.triggers,
+    steps: state.workflow.steps,
+    hooks: state.workflow.hooks
+  }
+  return !DeepEqual(workflowCompare, state.workflowBase)
+}
 
 function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerAction) {
   // TODO(chriswhong): allow for more than one trigger
@@ -133,6 +153,13 @@ function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowSt
   if (state.workflow.steps) {
     state.workflow.steps[action.index].script = action.script
   }
+
+  state.isDirty = calculateIsDirty(state)
+  // clear out events after an edit to reset dry run RunStatus
+  state.events = []
+
+
+
   return
 }
 
@@ -143,6 +170,11 @@ function addRunEvent(state: WorkflowState, action: EventLogAction) {
 
 function setWorkflow(state: WorkflowState, action: SetWorkflowAction) {
   state.workflow = action.workflow
+  state.workflowBase = {
+    triggers: action.workflow.triggers,
+    steps: action.workflow.steps,
+    hooks: action.workflow.hooks
+  }
   state.events = []
   return
 }

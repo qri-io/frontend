@@ -43,5 +43,11 @@ export const ETWorkflowStarted = "wf:Started"
 // payload is a Workflow
 export const ETWorkflowCompleted = "wf:Completed"
 
-export const ETWorklowDeployStarted = "wf:DeployStarted"
-export const ETWorklowDeployStopped = "wf:DeployStopped"
+export const ETAutomationDeployStart = "automation:DeployStart"
+export const ETAutomationDeployEnd = "automation:DeployEnd"
+
+export const ETAutomationDeploySaveWorkflowStart = "automation:DeploySaveWorkflowStart"
+export const ETAutomationDeploySaveWorkflowEnd = "automation:DeploySaveWorkflowEnd"
+
+export const ETAutomationDeploySaveDatasetStart = "automation:DeploySaveDatasetStart"
+export const ETAutomationDeploySaveDatasetEnd = "automation:DeploySaveDatasetEnd"

@@ -6,7 +6,14 @@ import { RootState } from '../../../store/store'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
 import { runEventLog } from '../../workflow/state/workflowActions'
 import { workflowCompleted, workflowStarted } from '../../collection/state/collectionActions'
-import { deployStarted, deployStopped } from '../../deploy/state/deployActions'
+import {
+  deployStarted,
+  deployEnded,
+  deploySaveWorkflowStarted,
+  deploySaveWorkflowEnded,
+  deploySaveDatasetStarted,
+  deploySaveDatasetEnded
+} from '../../deploy/state/deployActions'
 import {
   ETCreatedNewFile,
   ETModifiedFile,
@@ -20,8 +27,12 @@ import {
   ETRemoteClientRemoveDatasetCompleted,
   ETWorkflowStarted,
   ETWorkflowCompleted,
-  ETWorklowDeployStarted,
-  ETWorklowDeployStopped,
+  ETAutomationDeployStart,
+  ETAutomationDeployEnd,
+  ETAutomationDeploySaveDatasetStart,
+  ETAutomationDeploySaveDatasetEnd,
+  ETAutomationDeploySaveWorkflowStart,
+  ETAutomationDeploySaveWorkflowEnd,
 } from '../../../qri/events'
 import { wsConnectionChange } from '../state/websocketActions'
 import { WS_CONNECT, WS_DISCONNECT } from '../state/websocketState'
@@ -80,7 +91,7 @@ const middleware = () => {
       // number greater than zero on every failed connection, resulting in a
       // never-ending loop of re-connect attempts every x milliseconds.
       // We should be letting this value drop to zero, and providing the user
-      // with a "retry" button when 
+      // with a "retry" button when
       // (reconnectAttemptsRemaning === 0 && WSConnectionStatus === interuupted)
       state.reconnectAttemptsRemaining = numReconnectAttempts
     }
@@ -138,18 +149,31 @@ const middleware = () => {
         case ETRemoteClientRemoveDatasetCompleted:
           dispatch(removeVersionTransfer(event.data))
           break
-        case ETWorklowDeployStarted:
-          dispatch(deployStarted(event.data))
-          break
-        case ETWorklowDeployStopped:
-          dispatch(deployStopped(event.data))
-          break
         case ETWorkflowStarted:
           dispatch(workflowStarted(event.data))
           break
         case ETWorkflowCompleted:
           dispatch(workflowCompleted(event.data))
           break
+        case ETAutomationDeployStart:
+          dispatch(deployStarted(event.data, event.sessionID))
+          break
+        case ETAutomationDeployEnd:
+          dispatch(deployEnded(event.data, event.sessionID))
+          break
+        case ETAutomationDeploySaveWorkflowStart:
+          dispatch(deploySaveWorkflowStarted(event.data, event.sessionID))
+          break
+        case ETAutomationDeploySaveWorkflowEnd:
+          dispatch(deploySaveWorkflowEnded(event.data, event.sessionID))
+          break
+        case ETAutomationDeploySaveDatasetStart:
+          dispatch(deploySaveDatasetStarted(event.data, event.sessionID))
+          break
+        case ETAutomationDeploySaveDatasetEnd:
+          dispatch(deploySaveDatasetEnded(event.data, event.sessionID))
+          break
+
         default:
           // console.log(`received websocket event: ${event.type}`)
       }

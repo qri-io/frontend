@@ -29,7 +29,6 @@ def transform(ds, ctx):
 }
 
 export const CSVDownload: Workflow = {
-  id: 'CSVDownload',
   runCount: 0,
   disabled: false,
 
@@ -49,9 +48,7 @@ def transform(ds, ctx):
   # set the dataset body
   ds.set_body(csv, parse_as='csv')`}
   ],
-  hooks: [
-    { type: 'push', remote: 'https://registry.qri.cloud' }
-  ]
+  hooks: []
 }
 
 export const APICall: Workflow = {

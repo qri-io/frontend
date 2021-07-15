@@ -18,6 +18,7 @@ import Dashboard from './features/dashboard/Dashboard';
 import DatasetRoutes from './features/dataset/DatasetRoutes';
 import { AnonUser, selectSessionUser } from './features/session/state/sessionState'
 import UserProfile from './features/userProfile/UserProfile'
+import WorkflowPage from './features/workflow/WorkflowPage'
 
 const PrivateRoute: React.FC<any>  = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
@@ -42,6 +43,10 @@ export default function Routes () {
         <PrivateRoute path='/dashboard'><Dashboard /></PrivateRoute>
         <PrivateRoute path='/collection'><Collection /></PrivateRoute>
         <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
+
+        <Route path='/workflow/new'>
+          <WorkflowPage qriRef={{ username: '', name: '' }} />
+        </Route>
 
         <Route path='/ds/new'><TemplateList /></Route>
         <Route path='/ds/:username/:name'><DatasetRoutes /></Route>

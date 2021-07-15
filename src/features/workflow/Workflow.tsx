@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Prompt, Redirect } from 'react-router'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Location } from 'history'
 
 import WorkflowOutline from './WorkflowOutline'
-import { selectLatestRun, selectRunMode, selectWorkflow } from './state/workflowState'
-import { loadWorkflowByDatasetRef, setWorkflow, setWorkflowRef } from './state/workflowActions'
+import { selectLatestRun, selectRunMode, selectWorkflow, selectWorkflowIsDirty } from './state/workflowState'
+import { setWorkflow } from './state/workflowActions'
 import { selectTemplate } from '../template/templates'
 import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
@@ -28,13 +28,14 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const workflow = useSelector(selectWorkflow)
   const latestRun = useSelector(selectLatestRun)
   const runMode = useSelector(selectRunMode)
+  const isDirty = useSelector(selectWorkflowIsDirty)
 
-  const [ shouldPrompt, setShouldPrompt ] = useState(true)
   const [ redirectTo, setRedirectTo ] = useState('')
 
   useEffect(() => {
     if (location.state?.template) {
-      dispatch(setWorkflow(selectTemplate(location.state.template)))
+      const template = selectTemplate(location.state.template)
+      dispatch(setWorkflow(template))
     }
 
     if (location.state?.showSplashModal) {
@@ -42,31 +43,20 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
     }
   }, [dispatch, location.state])
 
-  // determine if the workflow is new by reading /new at the end of the pathname
-  const segments = location.pathname.split('/')
-  const isNewWorkflow = segments[segments.length - 1] === 'new'
-
-  useEffect(() => {
-    // TODO (b5) - highly-unlikely but possible race condition here. loading workflow
-    // should be chained in a promise
-    dispatch(setWorkflowRef(qriRef))
-    if (!isNewWorkflow) {
-      dispatch(loadWorkflowByDatasetRef(qriRef))
-    }
-  }, [dispatch, qriRef])
+  const isNew = qriRef.username === '' && qriRef.name === ''
 
   const handleBlockedNavigation = (nextLocation: Location ) => {
-    // TODO(chriswhong): actually use app state to determine if navigation should be blocked
-
+    if (redirectTo) { return true }
     // do nothing if user clicks the link for the active route
     if (nextLocation.pathname === location.pathname) {
       return true
     }
 
-    if (shouldPrompt) {
-      setRedirectTo(nextLocation.pathname)
+    if (isDirty) {
       dispatch(showModal(ModalType.unsavedChanges, {
-        action: () => { setShouldPrompt(false)}
+        action: () => {
+          setRedirectTo(nextLocation.pathname)
+        }
       }))
       return false
     }
@@ -81,8 +71,8 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
           message={handleBlockedNavigation}
         />
         <WorkflowOutline workflow={workflow} run={latestRun} runMode={runMode} />
-        <WorkflowEditor qriRef={qriRef} workflow={workflow} run={latestRun} runMode={runMode} />
-        { !shouldPrompt && redirectTo && <Redirect to={redirectTo} /> }
+        <WorkflowEditor qriRef={qriRef} workflow={workflow} run={latestRun} runMode={runMode} isDirty={isDirty} />
+        { redirectTo && <Redirect to={redirectTo} /> }
       </div>
     </>
   )

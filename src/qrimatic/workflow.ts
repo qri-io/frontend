@@ -27,6 +27,13 @@ export interface Workflow {
   versionInfo?: VersionInfo
 }
 
+// stores only the things we need to track to compute dirty/drafting state
+export interface WorkflowBase {
+  triggers?: WorkflowTrigger[]
+  steps?: TransformStep[]
+  hooks?: WorkflowHook[]
+}
+
 export function NewWorkflow(data: Record<string,any>): Workflow {
   return {
     id: data.id || '',
@@ -108,6 +115,7 @@ export type DeployStatus =
   | 'deploying'
   | 'drafting'
   | 'paused'
+  | 'failed'
 
 export function workflowDeployStatus(w?: Workflow): DeployStatus {
   if (!w) {

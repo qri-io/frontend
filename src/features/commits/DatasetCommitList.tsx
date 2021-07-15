@@ -26,7 +26,9 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
 
   // if there are no fs/hash in the URL, set it to the fs/hash of the latest commit
   if ((!fs && !hash) && commits.length) {
-    [,fs, hash] = commits[0].path.split('/')
+    if (commits[0].path) {
+      [,fs, hash] = commits[0].path.split('/')
+    }
   }
 
   const path = `/${fs}/${hash}`
