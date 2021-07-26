@@ -101,30 +101,6 @@ export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
   }
 }
 
-export function saveAndApplyWorkflowTransform(w: Workflow): ApiActionThunk {
-  return async (dispatch, getState) => {
-    throw new Error("we need to ajust the save API endpoint before workflow saving can work")
-
-    // return dispatch({
-    //   type: 'save',
-    //   [CALL_API]: {
-    //     endpoint: 'save',
-    //     method: 'POST',
-    //     body: {
-    //       apply: true,
-    //       ref: w.datasetID,
-    //       dataset: {
-    //         transform: {
-    //           scriptBytes: btoa(workflowScriptString(w)),
-    //           steps: w.steps
-    //         }
-    //       }
-    //     },
-    //   }
-    // })
-  }
-}
-
 export interface EventLogAction {
   type: string
   data: EventLogLine

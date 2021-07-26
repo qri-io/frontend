@@ -22,9 +22,16 @@ export interface Workflow {
 
   triggers?: WorkflowTrigger[]
   steps?: TransformStep[]
-  onComplete?: WorkflowHook[]
+  hooks?: WorkflowHook[]
 
   versionInfo?: VersionInfo
+}
+
+// stores only the things we need to track to compute dirty/drafting state
+export interface WorkflowBase {
+  triggers?: WorkflowTrigger[]
+  steps?: TransformStep[]
+  hooks?: WorkflowHook[]
 }
 
 export function NewWorkflow(data: Record<string,any>): Workflow {
@@ -43,7 +50,7 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
 
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
     steps: data.steps && data.steps.map(NewTransformStep),
-    onComplete: data.onComplete && data.onComplete.map(NewWorkflowHook),
+    hooks: data.hooks && data.hooks.map(NewWorkflowHook),
 
     versionInfo: data.versionInfo
   }
@@ -108,6 +115,7 @@ export type DeployStatus =
   | 'deploying'
   | 'drafting'
   | 'paused'
+  | 'failed'
 
 export function workflowDeployStatus(w?: Workflow): DeployStatus {
   if (!w) {

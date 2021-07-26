@@ -26,12 +26,13 @@ const Select: React.FC<SelectProps> = ({
   </div>)
 
   return (
-    <DropdownMenu 
+    <DropdownMenu
       icon={label}
       alignLeft
       items={options.map((option) => {
         return {
           ...option,
+          active: value === option.value,
           onClick: () => { onChange(option.value) }
         }
       })}

@@ -12,13 +12,11 @@ import Spinner from '../../chrome/Spinner'
 import TextLink from '../../chrome/TextLink'
 import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
-import { selectSessionUser } from '../session/state/sessionState'
 
 const Collection: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const fullCollection = useSelector(selectCollection)
   const loading = useSelector(selectIsCollectionLoading)
-  const username = useSelector(selectSessionUser)?.username
 
   const [ searchString, setSearchString ] = useState('')
 
@@ -93,7 +91,7 @@ const Collection: React.FC<{}> = () => {
             <div className='w-1/2 flex items-center justify-end'>
               <SearchBox onChange={handleSearchChange} placeholder='Filter' dark />
               <Link to={{
-                pathname: `/ds/${username}/dataset_${Math.floor(Math.random() * 1000)}/workflow/new`,
+                pathname: `/workflow/new`,
                 state: {
                   showSplashModal: true,
                   template: 'CSVDownload'

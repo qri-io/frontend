@@ -23,13 +23,12 @@ def transform(ds, ctx):
   csv = ctx.download
   ds.set_body(csv, parse_as='csv')`}
   ],
-  onComplete: [
+  hooks: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 }
 
 export const CSVDownload: Workflow = {
-  id: 'CSVDownload',
   runCount: 0,
   disabled: false,
 
@@ -49,9 +48,7 @@ def transform(ds, ctx):
   # set the dataset body
   ds.set_body(csv, parse_as='csv')`}
   ],
-  onComplete: [
-    { type: 'push', remote: 'https://registry.qri.cloud' }
-  ]
+  hooks: []
 }
 
 export const APICall: Workflow = {
@@ -68,7 +65,7 @@ export const APICall: Workflow = {
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
     { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
   ],
-  onComplete: [
+  hooks: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 }
@@ -87,7 +84,7 @@ export const DatabaseQuery: Workflow = {
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
     { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
   ],
-  onComplete: [
+  hooks: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 }
@@ -106,7 +103,7 @@ export const Webscrape: Workflow = {
     { syntax: 'starlark', category: 'download', name: 'download', script: `def download(ctx):\n\treturn "your download here"` },
     { syntax: 'starlark', category: 'transform', name: 'transform', script: 'def transform(ds,ctx):\n\tds.set_body([[1,2,3],[4,5,6]])' }
   ],
-  onComplete: [
+  hooks: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
   ]
 }

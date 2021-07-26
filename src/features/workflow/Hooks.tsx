@@ -4,7 +4,7 @@ import ScrollAnchor from '../scroller/ScrollAnchor'
 import Block from './Block'
 import ContentBox from '../../chrome/ContentBox'
 
-const onCompleteItems = [
+const hooks = [
   {
     name: 'Push to Qri Cloud',
     description: 'If the workflow results in a new version of the dataset, it will be published on qri.cloud'
@@ -26,7 +26,7 @@ const OnComplete: React.FC<any> = () => {
         <h2 className='text-2xl font-semibold text-gray-600'>On Completion</h2>
         <div className='text-sm text-qrigray-400 mb-3'>Configure actions that will happen when the workflow succeeds</div>
         <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
-          {onCompleteItems.map((d, i) => (
+          {hooks.map((d, i) => (
             <Block key={i} name={d.name}>
               <div className='text-xs text-qrigray-400'>{d.description}</div>
             </Block>

@@ -53,6 +53,7 @@ import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
 import CaretDown from './icon/CaretDown'
 import Checkbox from './icon/Checkbox'
+import CheckboxChecked from './icon/CheckboxChecked'
 import CircleCheck from './icon/CircleCheck'
 import CircleDash from './icon/CircleDash'
 import CircleX from './icon/CircleX'
@@ -173,6 +174,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     caretRight: <CaretRight className={className} size={size} />,
     caretDown: <CaretDown className={className} size={size} />,
     checkbox: <Checkbox className={className} size={size} />,
+    checkboxChecked: <CheckboxChecked className={className} size={size} />,
     circleCheck: <CircleCheck className={className} size={size} />,
     circleDash: <CircleDash className={className} size={size} />,
     circleX: <CircleX className={className} size={size} />,

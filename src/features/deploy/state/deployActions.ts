@@ -1,44 +1,99 @@
 import { CALL_API, ApiActionThunk} from '../../../store/api'
-import { NewWorkflow, Workflow, workflowInfoFromWorkflow, workflowScriptString } from '../../../qrimatic/workflow'
-import { WorkflowInfoAction } from '../../workflow/state/workflowActions'
-import { DEPLOY_START, DEPLOY_STOP } from './deployState'
+import { QriRef, refStringFromQriRef } from '../../../qri/ref'
+import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
+import {
+  DEPLOY_START,
+  DEPLOY_END,
+  DEPLOY_SAVEWORKFLOW_START,
+  DEPLOY_SAVEWORKFLOW_END,
+  DEPLOY_SAVEDATASET_START,
+  DEPLOY_SAVEDATASET_END,
+} from './deployState'
 
-export function deployWorkflow(w: Workflow): ApiActionThunk {
+export interface DeployEvent {
+  datasetID: string
+  error: string
+  ref: string
+  runID: string
+  workflowID: string
+}
+
+export interface DeployEventAction {
+  type: string
+  data: DeployEvent
+  sessionID: string
+}
+
+export function deployWorkflow(qriRef: QriRef, w: Workflow, run: boolean): ApiActionThunk {
+  // this is where we strip the steps from the workflow and add them to dataset
   return async (dispatch, getState) => {
     return dispatch({
       type: 'deploy',
-
       [CALL_API]: {
         endpoint: 'auto/deploy',
         method: 'POST',
+        requestID: refStringFromQriRef(qriRef),
         body: {
-          apply: true,
+          run,
           workflow: w,
-          ref: w.ref,
           dataset: {
+            peername: qriRef.username,
+            name: qriRef.name,
             transform: {
               scriptBytes: btoa(workflowScriptString(w)),
               steps: w.steps
-            },
+            }
           }
-        }
+        },
       }
     })
   }
 }
 
-export function deployStarted(d: Record<string,any>): WorkflowInfoAction {
-  const wf = NewWorkflow(d)
+export function deployStarted(data: DeployEvent, sessionID: string): DeployEventAction {
   return {
     type: DEPLOY_START,
-    data: workflowInfoFromWorkflow(wf)
+    data,
+    sessionID
   }
 }
 
-export function deployStopped(d: Record<string,any>): WorkflowInfoAction {
-  const wf = NewWorkflow(d)
+export function deployEnded(data: DeployEvent, sessionID: string): DeployEventAction {
   return {
-    type: DEPLOY_STOP,
-    data: workflowInfoFromWorkflow(wf)
+    type: DEPLOY_END,
+    data,
+    sessionID
+  }
+}
+
+export function deploySaveWorkflowStarted(data: DeployEvent, sessionID: string): DeployEventAction {
+  return {
+    type: DEPLOY_SAVEWORKFLOW_START,
+    data,
+    sessionID
+  }
+}
+
+export function deploySaveWorkflowEnded(data: DeployEvent, sessionID: string): DeployEventAction {
+  return {
+    type: DEPLOY_SAVEWORKFLOW_END,
+    data,
+    sessionID
+  }
+}
+
+export function deploySaveDatasetStarted(data: DeployEvent, sessionID: string): DeployEventAction {
+  return {
+    type: DEPLOY_SAVEDATASET_START,
+    data,
+    sessionID
+  }
+}
+
+export function deploySaveDatasetEnded(data: DeployEvent, sessionID: string): DeployEventAction {
+  return {
+    type: DEPLOY_SAVEDATASET_END,
+    data,
+    sessionID
   }
 }

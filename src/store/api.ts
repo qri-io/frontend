@@ -38,6 +38,9 @@ export interface ApiAction extends AnyAction {
     map?: (data: any) => any
     // token is a json web token.  It is normally read from state, but can also be passed in
     token?: string
+    // local identifier for the request (useful for attaching a dataset ref),
+    // not sent to server
+    requestID?: string
   }
 }
 
@@ -230,7 +233,18 @@ async function getAPIJSON<T> (
 export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
   if (action[CALL_API]) {
     let data: APIResponseEnvelope
-    let { endpoint = '', method, map = identityFunc, segments, query, body, pageInfo, form, token: tokenFromAction } = action[CALL_API]
+    let {
+      endpoint = '',
+      method,
+      map = identityFunc,
+      segments,
+      query,
+      body,
+      pageInfo,
+      form,
+      token: tokenFromAction,
+      requestID = ''
+    } = action[CALL_API]
     const [REQ_TYPE, SUCC_TYPE, FAIL_TYPE] = apiActionTypes(action.type)
 
     const tokenFromState = selectSessionToken(getState())
@@ -257,6 +271,7 @@ export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAc
         ...action,
         type: FAIL_TYPE,
         payload: {
+          requestID,
           err,
           request: {
             query,
@@ -271,6 +286,7 @@ export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAc
       ...action,
       type: SUCC_TYPE,
       payload: {
+        requestID,
         data: map(data.data),
         request: {
           query,
