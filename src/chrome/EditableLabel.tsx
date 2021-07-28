@@ -1,11 +1,14 @@
 import classNames from 'classnames'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+
+import { ValidationError } from '../features/session/state/formValidation'
 
 export interface EditableLabelProps {
   name: string
   value: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   readOnly?: boolean
+  validator?: (name: string) => ValidationError
   onChange: (name: string, value: string) => void
 }
 
@@ -14,46 +17,78 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
   value,
   size = 'md',
   readOnly = false,
+  validator,
   onChange
 }) => {
   const [editing, setEditing] = useState(false)
   const [edit, setEdit] = useState(value)
 
-  // TODO (b5) - double-clicking doesn't focus the newly created input element.
-  // it should. Might need to "useRef" for this sort of thing
+  const inputEl = useRef(null)
+
+  // if a new value prop is passed in, update local state
+  useEffect(() => {
+    setEdit(value)
+  }, [value])
+
+  useEffect(() => {
+    inputEl.current?.select()
+
+    // escape key press
+    const close = (e: KeyboardEvent) => {
+      if (e.keyCode === 27) {
+        setEdit(value)
+        setEditing(false)
+      }
+    }
+
+    // add/remove listener for escape key
+    if (editing) {
+      window.addEventListener('keydown', close)
+    } else {
+      window.removeEventListener('keydown', close)
+    }
+  }, [editing])
+
   const handleLabelClick = () => {
     if (readOnly) { return }
-    editing ? handleClose() : setEditing(true)
+    if (!editing) { setEditing(true) }
   }
-  const handleClose = () => {
-    onChange(name, edit)
-    setEditing(false)
-  }
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case 'Enter':
-        e.preventDefault()
-        onChange(name, edit)
-        setEditing(false)
-        break
-      case 'Escape':
-        e.preventDefault()
-        onChange(name, value)
-        setEditing(false)
-        break
+    // apply the change
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      onChange(name, edit)
+      setEditing(false)
     }
+  }
+
+  const handleChange = (e: any) => {
+    const newValue = e.target.value
+    if (validator) {
+      const error = validator(newValue)
+      if (!error) { setEdit(newValue) }
+    } else {
+      setEdit(newValue)
+    }
+  }
+
+  const handleBlur = (e: any) => {
+    setEditing(false)
   }
 
   return (editing
     ? <input
+        ref={inputEl}
         type='text'
-        className='bg-transparent w-max'
+        className='border-qrigray-400 focus:ring-0 block w-full rounded-lg bg-transparent'
         value={edit}
         onKeyPress={handleKeyPress}
-        onChange={(e: any)=>{setEdit(e.target.value)}}
-        onBlur={handleClose}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        autoFocus
       />
-    : <h3 className={classNames({ 'cursor-pointer' : !readOnly })} onClick={handleLabelClick}>{value}</h3>
+    : <h3 className={classNames({ 'cursor-pointer whitespace-nowrap' : !readOnly })} onClick={handleLabelClick}>{value}</h3>
   )
 }
 
