@@ -10,6 +10,8 @@ import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import DatasetInfoItem from './DatasetInfoItem'
 import Button from '../../chrome/Button'
 import TextLink from '../../chrome/TextLink'
+import { validateDatasetName } from '../session/state/formValidation'
+
 
 export interface DatasetHeaderProps {
   dataset: Dataset
@@ -38,21 +40,29 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   }
 
   const handleRename = (_:string, value:string) => {
-    dispatch(renameDataset(qriRef, { username: dataset.username, name: value }))
-    // TODO(b5): we should be chaining this route replacement after successful
-    // dispatch with a "then" off the renameDataset action
-    const newPath = history.location.pathname.replace(dataset.name, value)
-    console.log('routing from ', history.location.pathname, ' to ', newPath)
-    history.replace(newPath)
+    renameDataset(qriRef, { username: dataset.peername, name: value })(dispatch)
+      .then(({ type }) => {
+        if (type === 'API_RENAME_SUCCESS') {
+          const newPath = history.location.pathname.replace(dataset.name, value)
+          console.log('routing from ', history.location.pathname, ' to ', newPath)
+          history.replace(newPath)
+        }
+      })
   }
 
   return (
     <div className="w-full">
       <div className='flex'>
         <div className='flex-grow pb-5'>
-          <div className='text-md text-gray-400 relative flex items-baseline group hover:text pb-1 font-mono'>
-            <TextLink to={`/${qriRef.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</TextLink>/
-            <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
+          <div className='text-md text-gray-400 relative flex items-center group hover:text pb-1 font-mono h-10'>
+            <TextLink to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</TextLink>/
+            <EditableLabel
+              readOnly={!editable}
+              name='name'
+              onChange={handleRename}
+              value={qriRef.name}
+              validator={validateDatasetName}
+            />
             {editable &&
               <DropdownMenu
                 icon={<Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />}
@@ -60,7 +70,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                   {
                     label: 'Duplicate...',
                     disabled: true,
-                    onClick: () => { handleButtonClick("duplicating not yet implemented") } 
+                    onClick: () => { handleButtonClick("duplicating not yet implemented") }
                   }
                 ]}
               />}

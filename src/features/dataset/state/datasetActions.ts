@@ -1,5 +1,5 @@
 import Dataset, { NewDataset } from "../../../qri/dataset"
-import { QriRef, refStringFromQriRef } from "../../../qri/ref"
+import { QriRef, refStringFromQriRef, humanRef } from "../../../qri/ref"
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
 import { RENAME_NEW_DATASET } from "./datasetState"
 import { API_BASE_URL } from '../../../store/api'
@@ -8,10 +8,6 @@ export const bodyPageSizeDefault = 50
 
 export function mapDataset(d: object | []): Dataset {
   return NewDataset((d as Record<string,any>))
-}
-
-export function mapBody (d: {data: Body}): Body {
-  return d.data
 }
 
 export function loadDataset(ref: QriRef): ApiActionThunk {
@@ -66,8 +62,7 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
         name: ref.name,
         path: ref.path,
         selector: ['body']
-      },
-      map: mapBody
+      }
     }
   }
 }
@@ -96,7 +91,7 @@ export interface RenameDatasetAction {
   next: QriRef
 }
 
-export function renameDataset(current: QriRef, next: QriRef): ApiActionThunk | Promise<RenameDatasetAction> {
+export function renameDataset(current: QriRef, next: QriRef): ApiActionThunk {
   // if no path exists, assume a new dataset & client-side-only rename
   // TODO(b5): once QriRefs have an initID field, use that as the proper check
   // for "newness"
@@ -112,11 +107,11 @@ export function renameDataset(current: QriRef, next: QriRef): ApiActionThunk | P
     const action = {
       type: 'rename',
       [CALL_API]: {
-        endpoint: 'rename',
+        endpoint: 'ds/rename',
         method: 'POST',
         body: {
-          current,
-          next,
+          current: refStringFromQriRef(humanRef(current)),
+          next: refStringFromQriRef(humanRef(next)),
         },
         // TODO(b5): this return value is a versionInfo
         map: mapDataset

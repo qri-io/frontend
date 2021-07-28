@@ -58,7 +58,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
     dispatch(loadDataset(ref))
     dispatch(loadWorkflowByDatasetRef(qriRef))
 
-  }, [])
+  }, [ qriRef ])
 
   const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />
 
