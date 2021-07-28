@@ -1,8 +1,9 @@
 import React, { forwardRef } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux'
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
 import { Link } from 'react-router-dom'
+import classNames from 'classnames'
 
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
@@ -12,8 +13,8 @@ import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
-import { VersionInfo } from '../../qri/versionInfo';
-import ManualTriggerButton from '../manualTrigger/ManualTriggerButton';
+import { VersionInfo } from '../../qri/versionInfo'
+import ManualTriggerButton from '../manualTrigger/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 
 interface CollectionTableProps {
@@ -131,10 +132,10 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
           <div className='w-8 mr-2'>
-            {row.workflowID
-              ? <Icon icon='automationFilled' className='text-qrigreen' />
-              : <Icon icon='automationFilled' className='text-gray' />
-            }
+            <Icon icon='automationFilled' className={classNames('text-qrigreen', {
+              'visible': row.workflowID,
+              'invisible': !row.workflowID
+            })}/>
           </div>
           <div className='truncate'>
             <div className='mb-1'>
