@@ -46,7 +46,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
       </header>
       <ul className='block flex-grow overflow-y-auto pb-40 pr-8'>
         <HistorySearchBox />
-        {editable && <li><NewVersionButton qriRef={qriRef} /></li>}
+        {editable && <NewVersionButton qriRef={qriRef} />}
         {commits.map((logItem, i) => (
           <DatasetCommitListItem
             key={i}
