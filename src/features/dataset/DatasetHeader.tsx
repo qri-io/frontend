@@ -42,7 +42,6 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
     // TODO(b5): we should be chaining this route replacement after successful
     // dispatch with a "then" off the renameDataset action
     const newPath = history.location.pathname.replace(dataset.name, value)
-    console.log('routing from ', history.location.pathname, ' to ', newPath)
     history.replace(newPath)
   }
 
@@ -60,7 +59,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                   {
                     label: 'Duplicate...',
                     disabled: true,
-                    onClick: () => { handleButtonClick("duplicating not yet implemented") } 
+                    onClick: () => { handleButtonClick("duplicating not yet implemented") }
                   }
                 ]}
               />}

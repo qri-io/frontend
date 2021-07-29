@@ -56,6 +56,7 @@ import Checkbox from './icon/Checkbox'
 import CheckboxChecked from './icon/CheckboxChecked'
 import CircleCheck from './icon/CircleCheck'
 import CircleDash from './icon/CircleDash'
+import CircleWarning from './icon/CircleWarning'
 import CircleX from './icon/CircleX'
 import Clock from './icon/Clock'
 import Close from './icon/Close'
@@ -177,6 +178,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     checkboxChecked: <CheckboxChecked className={className} size={size} />,
     circleCheck: <CircleCheck className={className} size={size} />,
     circleDash: <CircleDash className={className} size={size} />,
+    circleWarning: <CircleWarning className={className} size={size} />,
     circleX: <CircleX className={className} size={size} />,
     clock: <Clock className={className} size={size} />,
     close: <Close className={className} size={size} />,

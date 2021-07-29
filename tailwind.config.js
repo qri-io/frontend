@@ -111,8 +111,14 @@ module.exports = {
           '900': '#4C1D95',
         },
         warningyellow: {
+          500: '#F2D925',
           DEFAULT: '#F2D925',
-          '600': '#DAC325'
+          600: '#DAC325'
+        },
+        dangerred: {
+          500: '#B91C1C',
+          DEFAULT: '#B91C1C',
+          600: '#991B1B'
         }
       },
       fontFamily: {

@@ -29,8 +29,12 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
     dispatch(showModal(ModalType.addTrigger))
   }
 
+  let noTriggersWarning = ''
+  if (triggers.length === 0) {
+    noTriggersWarning = 'This workflow does not have any triggers defined.  Once deployed, it will only run when triggered manually.'
+  }
   return (
-    <ContentBox className='mb-7' paddingClassName='px-5 py-4'>
+    <ContentBox className='mb-7' paddingClassName='px-5 py-4' warning={noTriggersWarning}>
       <ScrollAnchor id='triggers'/>
       <div className='flex'>
         <div className='flex-grow'>

@@ -18,6 +18,7 @@ import { Workflow } from '../../../qrimatic/workflow'
 import RunStatusIcon from '../../run/RunStatusIcon'
 import { selectDeployStatus } from '../../deploy/state/deployState'
 import { selectSessionUser } from '../../session/state/sessionState'
+import WarningDialog from '../WarningDialog'
 
 interface DeployModalProps {
   workflow: Workflow
@@ -158,7 +159,7 @@ const DeployModal: React.FC<DeployModalProps> = () => {
   }
 
   return (
-    <div style={{ width: '440px', height: 400 }}>
+    <div style={{ width: 440, height: 440 }}>
       <div className={classNames('absolute w-full h-full bg-white p-8 transition-all duration-300 bg-white p-8 text-left text-qrinavy flex flex-col z-10', {
         'left-0': !deploying,
         '-left-full': deploying
@@ -177,12 +178,15 @@ const DeployModal: React.FC<DeployModalProps> = () => {
         <Button
           size='sm'
           type='secondary'
-          className='w-full mt-2'
+          className='w-full mt-2 flex-shrink-0'
           onClick={handleDeployClick}
           submit
           disabled={!readyToDeploy}>
           <Icon icon='rocket' className='mr-2' /> Deploy
         </Button>
+        {workflow.triggers?.length === 0 && (
+          <WarningDialog text='This workflow does not have any triggers defined.  Once deployed, it will only run when triggered manually.'/>
+        )}
       </div>
 
       <div className='flex flex-col h-full w-full p-8'>

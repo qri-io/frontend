@@ -4,7 +4,7 @@ import classNames from 'classnames'
 export interface CustomIconProps {
   className?: string
   size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  spin: boolean
+  spin?: boolean
 }
 
 const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
