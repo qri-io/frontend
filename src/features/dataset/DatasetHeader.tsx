@@ -44,7 +44,6 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       .then(({ type }) => {
         if (type === 'API_RENAME_SUCCESS') {
           const newPath = history.location.pathname.replace(dataset.name, value)
-          console.log('routing from ', history.location.pathname, ' to ', newPath)
           history.replace(newPath)
         }
       })
@@ -52,35 +51,39 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 
   return (
     <div className="w-full">
-      <div className='flex'>
-        <div className='flex-grow pb-5'>
-          <div className='text-md text-gray-400 relative flex items-center group hover:text pb-1 font-mono h-10'>
-            <TextLink to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</TextLink>/
-            <EditableLabel
-              readOnly={!editable}
-              name='name'
-              onChange={handleRename}
-              value={qriRef.name}
-              validator={validateDatasetName}
-            />
-            {editable &&
-              <DropdownMenu
-                icon={<Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />}
-                items={[
-                  {
-                    label: 'Duplicate...',
-                    disabled: true,
-                    onClick: () => { handleButtonClick("duplicating not yet implemented") }
-                  }
-                ]}
-              />}
-          </div>
+      <div className='flex mb-5'>
+        <div className='flex-grow'>
+          {/* don't show the username/name when creating a new dataset with the workflow editor */}
+          { qriRef.username && (
+            <div className='text-md text-gray-400 relative flex items-center group hover:text pb-1 font-mono h-10'>
+              <TextLink to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</TextLink>/
+              <EditableLabel
+                readOnly={!editable}
+                name='name'
+                onChange={handleRename}
+                value={qriRef.name}
+                validator={validateDatasetName}
+              />
+              {editable &&
+                <DropdownMenu
+                  icon={<Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />}
+                  items={[
+                    {
+                      label: 'Duplicate...',
+                      disabled: true,
+                      onClick: () => { handleButtonClick("duplicating not yet implemented") }
+                    }
+                  ]}
+                />}
+            </div>
+          )}
 
-          <div className='text-2xl text-qrinavy-500 font-black group hover:text mb-3'>
+
+          <div className='text-2xl text-qrinavy-500 font-black group hover:text'>
             {dataset.meta?.title || dataset.name}
           </div>
           {showInfo && (
-            <div className='flex'>
+            <div className='flex mt-3'>
               <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />
               <DatasetInfoItem icon='disk' label='59 MB' />
               <DatasetInfoItem icon='download' label='418 downloads' />
