@@ -75,10 +75,7 @@ export const customSortIcon = (
 // react-data-table custom styles
 export const customStyles = {
   table: {
-    style: {
-      paddingRight: '26px',
-      paddingLeft: '26px'
-    },
+
   },
   tableWrapper: {
     style: {
@@ -87,7 +84,9 @@ export const customStyles = {
   },
   headRow: {
     style: {
-      minHeight: '68px'
+      minHeight: '68px',
+      paddingRight: '26px',
+      paddingLeft: '26px'
     }
   },
   headCells: {
@@ -99,7 +98,9 @@ export const customStyles = {
   },
   rows: {
     style: {
-      minHeight: '68px'
+      minHeight: '68px',
+      paddingRight: '26px',
+      paddingLeft: '26px'
     }
   },
   expanderCell: {
