@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { QriRef } from '../../qri/ref'
+import useDimensions from 'react-use-dimensions'
 
 import ActivityList from './ActivityList'
 import { loadDatasetLogs } from './state/activityFeedActions'
@@ -13,18 +14,24 @@ export interface DatasetActivityFeedProps {
 const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   qriRef
 }) => {
+
   const logs = useSelector(newDatasetLogsSelector(qriRef))
   const dispatch = useDispatch()
+
+  const [tableContainer, { height: tableContainerHeight }] = useDimensions()
+
 
   useEffect(() => {
     dispatch(loadDatasetLogs(qriRef))
   },[dispatch, qriRef])
 
   return (
-    <div className='w-full px-10 py-20 overflow-y-auto'>
-      <div className='max-w-screen-md mx-auto bg-white rounded-lg'>
-        <ActivityList log={logs} showDatasetName={false} />
-      </div>
+    <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
+      <ActivityList
+        log={logs}
+        showDatasetName={false}
+        containerHeight={tableContainerHeight}
+      />
     </div>
   )
 }
