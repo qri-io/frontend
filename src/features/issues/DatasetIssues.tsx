@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { QriRef } from '../../qri/ref'
+import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 
 export interface DatasetIssuesProps {
   qriRef: QriRef
@@ -8,7 +9,10 @@ export interface DatasetIssuesProps {
 
 const DatasetIssues: React.FC<DatasetIssuesProps> = ({ qriRef }) => {
   return (
-    <h1 className='text-2xl'>Issues</h1>
+    <DatasetFixedLayout>
+      <h1 className='text-2xl'>Issues</h1>
+    </DatasetFixedLayout>
+
   )
 }
 

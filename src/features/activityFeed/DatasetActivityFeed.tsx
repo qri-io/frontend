@@ -6,6 +6,8 @@ import useDimensions from 'react-use-dimensions'
 import ActivityList from './ActivityList'
 import { loadDatasetLogs } from './state/activityFeedActions'
 import { newDatasetLogsSelector } from './state/activityFeedState'
+import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
+
 
 export interface DatasetActivityFeedProps {
   qriRef: QriRef
@@ -26,13 +28,15 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   },[dispatch, qriRef])
 
   return (
-    <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
-      <ActivityList
-        log={logs}
-        showDatasetName={false}
-        containerHeight={tableContainerHeight}
-      />
-    </div>
+    <DatasetFixedLayout>
+      <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
+        <ActivityList
+          log={logs}
+          showDatasetName={false}
+          containerHeight={tableContainerHeight}
+        />
+      </div>
+    </DatasetFixedLayout>
   )
 }
 
