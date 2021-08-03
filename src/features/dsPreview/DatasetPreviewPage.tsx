@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
-import { useInView } from 'react-intersection-observer'
 
 import { newQriRef } from '../../qri/ref';
 import { selectDsPreview } from './state/dsPreviewState'
@@ -14,14 +13,11 @@ import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import BodyPreview from '../dsComponents/body/BodyPreview'
-import DatasetHeader from '../dataset/DatasetHeader'
-import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
-import NavBar from '../navbar/NavBar'
-import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
+
+import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
 import DeployingScreen from '../deploy/DeployingScreen'
 import commitishFromPath from '../../utils/commitishFromPath'
 import Readme from '../dsComponents/readme/Readme'
-import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 import { QriRef } from '../../qri/ref'
 import MetaChips from '../../chrome/MetaChips'
 
@@ -34,12 +30,6 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
 }) => {
   const dispatch = useDispatch()
   const dataset = useSelector(selectDsPreview)
-  const editable = useSelector(selectSessionUserCanEditDataset)
-
-  const { ref: stickyHeaderTriggerRef, inView } = useInView({
-    threshold: 0.6,
-    initialInView: true
-  });
 
   const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions();
   const [expandReadme, setExpandReadme] = useState(false)
@@ -56,21 +46,13 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path ])
 
   return (
-    <div className='flex flex-col h-full w-full bg-qrigray-100'>
-      <NavBar />
-      <div className='flex overflow-hidden w-full flex-grow'>
-        <DatasetNavSidebar qriRef={qriRef} />
-        {!dataset
+    <>
+        {dataset?.peername === ''
         ? (<div className='w-full h-full p-4 flex justify-center items-center'>
             <Spinner color='#4FC7F3' />
           </div>)
         : (
-          <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
-            <DatasetMiniHeader dataset={dataset} show={!inView} />
-            <div className='max-w-screen-lg mx-auto p-7 w-full h-full'>
-              <div ref={stickyHeaderTriggerRef}>
-                <DatasetHeader dataset={dataset} editable={editable} noBorder />
-              </div>
+            <DatasetScrollLayout contentClassName='max-w-screen-lg mx-auto'>
               <div className='-ml-2 -mr-3 mb-5'>
                 <div className='w-7/12 px-2 inline-block align-top' style={{ height: readmeContainerHeight}}>
                   <ContentBox className='flex flex-col h-full'>
@@ -123,14 +105,10 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                   <BodyPreview dataset={dataset} />
                 </div>
               </ContentBox>
-              {/* bottom padding */}
-              <div className='pb-5 h-0'>&nbsp;</div>
-              </div>
-            </div>
+            </DatasetScrollLayout>
           )}
         <DeployingScreen qriRef={qriRef} />
-      </div>
-    </div>
+        </>
   )
 }
 

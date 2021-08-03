@@ -19,6 +19,8 @@ import DatasetRoutes from './features/dataset/DatasetRoutes';
 import { AnonUser, selectSessionUser } from './features/session/state/sessionState'
 import UserProfile from './features/userProfile/UserProfile'
 import WorkflowPage from './features/workflow/WorkflowPage'
+import DatasetWrapper from './features/dsComponents/DatasetWrapper'
+
 
 const PrivateRoute: React.FC<any>  = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
@@ -45,7 +47,9 @@ export default function Routes () {
         <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
         <Route path='/workflow/new'>
-          <WorkflowPage qriRef={{ username: '', name: '' }} />
+          <DatasetWrapper>
+            <WorkflowPage qriRef={{ username: '', name: '' }} />
+          </DatasetWrapper>
         </Route>
 
         <Route path='/ds/new'><TemplateList /></Route>
