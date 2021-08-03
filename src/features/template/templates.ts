@@ -5,7 +5,7 @@ import { Workflow } from '../../qrimatic/workflow'
 export const Blank: Workflow = {
   id: 'Blank',
   runCount: 0,
-  disabled: false,
+  active: true,
 
   triggers: [
     // repeat every hour
@@ -30,7 +30,7 @@ def transform(ds, ctx):
 
 export const CSVDownload: Workflow = {
   runCount: 0,
-  disabled: false,
+  active: true,
 
   triggers: [],
   steps: [
@@ -54,7 +54,7 @@ def transform(ds, ctx):
 export const APICall: Workflow = {
   id: 'APICall',
   runCount: 0,
-  disabled: false,
+  active: true,
 
   triggers: [
     // repeat every hour
@@ -73,7 +73,7 @@ export const APICall: Workflow = {
 export const DatabaseQuery: Workflow = {
   id: 'DatabaseQuery',
   runCount: 0,
-  disabled: false,
+  active: true,
 
   triggers: [
     // repeat every hour
@@ -92,7 +92,7 @@ export const DatabaseQuery: Workflow = {
 export const Webscrape: Workflow = {
   id: 'Webscrape',
   runCount: 0,
-  disabled: false,
+  active: true,
 
   triggers: [
     // repeat every hour

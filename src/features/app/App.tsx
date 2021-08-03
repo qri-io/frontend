@@ -6,8 +6,8 @@ import { history } from '../../store/store'
 import Routes from '../../routes'
 import Modal from './modal/Modal'
 import { wsConnect } from '../websocket/state/websocketActions'
-
 import SnackBar from '../snackBar/SnackBar'
+import ToastRenderer from '../toast/ToastRenderer'
 
 import './App.css'
 
@@ -24,6 +24,7 @@ const App: React.FC<any> = () => {
         <Modal />
         <Routes />
         <SnackBar />
+        <ToastRenderer />
       </ConnectedRouter>
     </div>
   )

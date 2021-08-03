@@ -99,11 +99,11 @@ export const triggerFromSchedule = (schedule: Schedule): WorkflowTrigger => {
         0,
         0
       ).toISOString()
-    
+
       periodicity = `R/${startTime}/PT10M`
       break
     case 'P1H':
-      // for hourly, periodicity is R/P1H and startTime is the next instance of 
+      // for hourly, periodicity is R/P1H and startTime is the next instance of
       // the minutes selected by the user
       // get most recent previous hour, add minutes, convert to ISO8601
       startTime = new Date(
@@ -137,7 +137,7 @@ export const triggerFromSchedule = (schedule: Schedule): WorkflowTrigger => {
 
   return {
     type: 'cron',
-    enabled: true,
+    active: true,
     periodicity,
   }
 }

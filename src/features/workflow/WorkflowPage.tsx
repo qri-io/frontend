@@ -52,13 +52,14 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
 
   // don't fetch the dataset if this is a new workflow
   useEffect(() => {
+    console.log('workflowpage useEffect', qriRef)
     dispatch(setWorkflowRef(qriRef))
     if (isNew) { return }
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
     dispatch(loadDataset(ref))
     dispatch(loadWorkflowByDatasetRef(qriRef))
 
-  }, [ qriRef ])
+  }, [])
 
   const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />
 
