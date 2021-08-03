@@ -23,20 +23,20 @@ export function mapWorkflow(d: object | []): Workflow {
   return NewWorkflow(wf)
 }
 
-export function loadWorkflowByDatasetRef(qriRef: QriRef): ApiActionThunk {
+export function loadWorkflowByDatasetID(datasetID: string): ApiActionThunk {
+  console.log('herehere', datasetID)
   return async (dispatch, getState) => {
-    return dispatch(fetchWorkflowByDatasetRef(qriRef))
+    return dispatch(fetchWorkflowByDatasetID(datasetID))
   }
 }
 
-function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
+function fetchWorkflowByDatasetID(datasetID: string): ApiAction {
   return {
     type: 'workflow',
-    qriRef,
     [CALL_API]: {
       endpoint: 'auto/workflow',
       method: 'POST',
-      body: { ref: `${qriRef.username}/${qriRef.name}` },
+      body: { datasetID },
       map: mapWorkflow
     }
   }

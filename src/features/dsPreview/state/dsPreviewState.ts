@@ -41,6 +41,7 @@ export const dsPreviewReducer = createReducer(initialState, {
     state.loading = false
   },
   'API_PREVIEW_SUCCESS': (state, action) => {
+    console.log(action.payload.data)
     state.preview = {
       ...state.preview,
       ...action.payload.data
