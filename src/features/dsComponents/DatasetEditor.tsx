@@ -10,6 +10,7 @@ import TabbedComponentEditor from './TabbedComponentEditor'
 import SaveVersionButton from './buttons/SaveVersionButton'
 import { editDataset, loadEditingDatasetHead } from '../dataset/state/editDatasetActions'
 import { selectDatasetEdits, selectEditingHeadIsLoading } from '../dataset/state/editDatasetState'
+import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 
 const DatasetEditor: React.FC<{}> = () => {
   const qriRef = newQriRef(useParams())
@@ -35,21 +36,23 @@ const DatasetEditor: React.FC<{}> = () => {
   }
 
   return (
-    <div className='flex-grow flex overflow-hidden'>
-      <DatasetCommitList qriRef={qriRef} />
-      <div className='flex flex-col flex-grow overflow-x-hidden'>
-        <CommitSummaryHeader dataset={dataset}>
-          <SaveVersionButton dataset={dataset} />
-        </CommitSummaryHeader>
-        <TabbedComponentEditor
-          dataset={dataset}
-          loading={loading}
-          selectedComponent={component}
-          setSelectedComponent={(c: ComponentName) => { setComponent(c) }}
-          onDatasetChange={dsChangeHandler}
-        />
+    <DatasetFixedLayout>
+      <div className='flex-grow flex overflow-hidden'>
+        <DatasetCommitList qriRef={qriRef} />
+        <div className='flex flex-col flex-grow overflow-x-hidden'>
+          <CommitSummaryHeader dataset={dataset}>
+            <SaveVersionButton dataset={dataset} />
+          </CommitSummaryHeader>
+          <TabbedComponentEditor
+            dataset={dataset}
+            loading={loading}
+            selectedComponent={component}
+            setSelectedComponent={(c: ComponentName) => { setComponent(c) }}
+            onDatasetChange={dsChangeHandler}
+          />
+        </div>
       </div>
-    </div>
+    </DatasetFixedLayout>
   )
 }
 

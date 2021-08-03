@@ -1,8 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store';
-import { humanRef, QriRef, refStringFromQriRef } from '../../../qri/ref';
-import { LogItem } from '../../../qri/log';
+import { RootState } from '../../../store/store'
+import { humanRef, QriRef, refStringFromQriRef } from '../../../qri/ref'
+import { LogItem } from '../../../qri/log'
 
 export function newDatasetCommitsSelector(qriRef: QriRef): (state: RootState) => LogItem[] {
   qriRef = humanRef(qriRef)
@@ -38,7 +38,7 @@ export const commitsReducer = createReducer(initialState, {
   },
   'API_DATASET_COMMITS_SUCCESS': (state, action) => {
     const ls = action.payload.data as LogItem[]
-    state.commits[refStringFromQriRef(action.qriRef)] = ls
+    state.commits[refStringFromQriRef(action.qriRef)] = ls.filter(d => d.path)
     state.loading = false
   },
 })

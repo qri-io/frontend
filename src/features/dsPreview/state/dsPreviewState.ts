@@ -1,24 +1,32 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
-import { Dataset } from '../../../qri/dataset'
+import { Dataset, NewDataset } from '../../../qri/dataset'
 
 export const selectDsPreview = (state: RootState): any => state.dsPreview.preview
 
 export const selectIsDsPreviewLoading = (state: RootState): boolean => state.dsPreview.loading
 
 export interface DsPreviewState {
-  preview?: Dataset
+  preview: Dataset
   loading: boolean
 }
 
 const initialState: DsPreviewState = {
+  preview: NewDataset({}),
   loading: false
 }
 
 export const dsPreviewReducer = createReducer(initialState, {
+
+
+
+  'API_PREVIEW_REQUEST': (state) => {
+    state.preview = NewDataset({})
+    state.loading = true
+  },
+
   'DS_PREVIEW_REQUEST': (state) => {
-    state.preview = undefined
     state.loading = true
   },
   'DS_PREVIEW_SUCCESS': (state) => {
@@ -33,7 +41,10 @@ export const dsPreviewReducer = createReducer(initialState, {
     state.loading = false
   },
   'API_PREVIEW_SUCCESS': (state, action) => {
-    state.preview = action.payload.data
+    state.preview = {
+      ...state.preview,
+      ...action.payload.data
+    }
   },
 
   'API_PREVIEWBODY_REQUEST': (state) => {

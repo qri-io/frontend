@@ -7,17 +7,17 @@ export function loadDsPreview(ref: QriRef): ApiActionThunk {
 
     try {
       await Promise.all([
-        dispatch(fetchDsPreview(ref)),
+        // dispatch(fetchDsPreview(ref)),
         dispatch(fetchDsPreviewBody(ref)),
         dispatch(fetchDsPreviewReadme(ref)),
       ])
 
-      return dispatch({ 
+      return dispatch({
         type: 'DS_PREVIEW_SUCCESS',
         ref
       })
     } catch (e) {
-      return dispatch({ 
+      return dispatch({
         type: 'DS_PREVIEW_FAILURE',
         error: e.toString(),
       })
@@ -27,7 +27,7 @@ export function loadDsPreview(ref: QriRef): ApiActionThunk {
 
 export const bodyPageSizeDefault = 50
 
-function fetchDsPreview (ref: QriRef): ApiAction {
+export function fetchDsPreview (ref: QriRef): ApiAction {
   return {
     type: 'preview',
     ref,
