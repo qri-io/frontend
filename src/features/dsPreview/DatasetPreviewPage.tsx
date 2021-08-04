@@ -85,7 +85,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                         <div className='text-sm text-qrinavy mb-2 truncate' title={dataset.commit?.title}>{dataset.commit?.title}</div>
                         <div className='flex items-center text-gray-400 text-xs'>
                           <RelativeTimestampWithIcon timestamp={new Date(dataset.commit?.timestamp)} className='mr-3' />
-                          <UsernameWithIcon username='chriswhong' className='mt-0.5' />
+                          <UsernameWithIcon username={dataset.peername} className='mt-0.5' />
                         </div>
                       </div>
                       <div className='ml-4'>

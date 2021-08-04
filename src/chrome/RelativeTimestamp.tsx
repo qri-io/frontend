@@ -10,13 +10,26 @@ interface RelativeTimestampProps {
 const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
   timestamp,
   className
- }) => (
-  <span
-    className={className}
-    title={format(timestamp, 'MMM d yyyy, h:mm zz')}
-  >
-    {formatDistanceToNow(timestamp, { addSuffix: true })}
-  </span>
-)
+}) => {
+  let timeFromNowAbbreviation = formatDistanceToNow(timestamp, { addSuffix: true })
+
+  // manipulate the output of date-fns formatDistanceToNow() for shorter screen renders
+  timeFromNowAbbreviation = timeFromNowAbbreviation
+    .replace('about ', '')
+    .replace(' hours ago', 'h')
+    .replace('less than', '<')
+    .replace('a minute', '1')
+    .replace(/ minutes? ago/, 'm')
+
+  return (
+    <span
+      className={className}
+      title={format(timestamp, 'MMM d yyyy, h:mm zz')}
+    >
+      {timeFromNowAbbreviation}
+    </span>
+  )
+}
+
 
 export default RelativeTimestamp

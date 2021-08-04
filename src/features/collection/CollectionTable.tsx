@@ -232,31 +232,31 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
             <DropdownMenu
               icon={<Icon icon='ellipsisH' size='md'/>}
               items={[
-                {
-                  label: 'Rename...',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("renaming not yet implemented") },
-                },
-                {
-                  label: 'Duplicate...',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("duplicating not yet implemented")},
-                },
-                {
-                  label: 'Export...',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("export not yet implemented")},
-                },
-                {
-                  label: 'Run Now',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("run now not yet implemented")},
-                },
-                {
-                  label: 'Pause Workflow',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("pause not yet implemented")},
-                },
+                // {
+                //   label: 'Rename...',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("renaming not yet implemented") },
+                // },
+                // {
+                //   label: 'Duplicate...',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("duplicating not yet implemented")},
+                // },
+                // {
+                //   label: 'Export...',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("export not yet implemented")},
+                // },
+                // {
+                //   label: 'Run Now',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("run now not yet implemented")},
+                // },
+                // {
+                //   label: 'Pause Workflow',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("pause not yet implemented")},
+                // },
                 {
                   label: 'Remove...',
                   onClick: () => {
@@ -279,6 +279,9 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
     }
   ]
 
+  // TODO(chriswhong): implement selectable rows and multi-row actions
+  // uncomment `selectableRows` etc below
+
   return (
     <ReactDataTable
       columns={columns}
@@ -290,12 +293,12 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       fixedHeader
       fixedHeaderScrollHeight={`${String(containerHeight - 68)}px`}
       noHeader
-      selectableRows
-      selectableRowsComponent={forwardRef((props, ref) => (
-        <Icon icon='checkbox' />
-      ))}
-      onSelectedRowsChange={onSelectedRowsChange}
-      clearSelectedRows={clearSelectedTrigger}
+      // selectableRows
+      // selectableRowsComponent={forwardRef((props, ref) => (
+      //   <Icon icon='checkbox' />
+      // ))}
+      // onSelectedRowsChange={onSelectedRowsChange}
+      // clearSelectedRows={clearSelectedTrigger}
       style={{
         background: 'blue'
       }}

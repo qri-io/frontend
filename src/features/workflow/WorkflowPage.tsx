@@ -6,7 +6,7 @@ import { newQriRef } from '../../qri/ref'
 import Spinner from '../../chrome/Spinner'
 import { loadDataset } from '../dataset/state/datasetActions'
 import { selectDsPreview } from '../dsPreview/state/dsPreviewState'
-import { loadWorkflowByDatasetID, setWorkflowRef } from './state/workflowActions'
+import { loadWorkflowByDatasetRef, setWorkflowRef } from './state/workflowActions'
 import { selectLatestRun } from './state/workflowState'
 import { QriRef } from '../../qri/ref'
 import { NewDataset } from '../../qri/dataset'
@@ -45,13 +45,12 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   useEffect(() => {
     dispatch(setWorkflowRef(qriRef))
     if (isNew) { return }
-    // const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
-    // dispatch(loadDataset(ref))
+    const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
+    dispatch(loadWorkflowByDatasetRef(qriRef))
   }, [])
 
   useEffect(() => {
     if (dataset.id) {
-      dispatch(loadWorkflowByDatasetID(dataset.id))
     }
   }, [dataset])
 
