@@ -20,15 +20,15 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
       <div className='min-height-200 py-4 px-8 rounded-lg bg-white flex'>
         <div className='flex-grow'>
           <div className='text-xs text-gray-400 font-medium mb-2'>Version Info</div>
-          <div className='text-qrinavy text-sm flex items-center mb-1'>
+          <div className='text-qrinavy text-sm flex items-center mb-2'>
             <Icon icon='commit' size='sm' className='-ml-2' />
             <div className='font-medium'>{commitishFromPath(path)}</div>
             <div className='mx-3 text-gray-400'>|</div>
             <div className=''>{commit.title}</div>
           </div>
           <div className='flex items-centern text-xs text-gray-400'>
+            <UsernameWithIcon username={dataset.peername} className='mr-3' />
             <RelativeTimestampWithIcon timestamp={new Date(commit.timestamp)} className='mr-4' />
-            <UsernameWithIcon username='chriswhong' className='mt-0.5' />
           </div>
         </div>
         <div className='flex items-center'>

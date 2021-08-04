@@ -41,7 +41,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   }
 
   return (
-    <div className={'flex flex-col w-full mt-1 pt-4 h-full'}>
+    <div className={'flex flex-col w-full mt-1 pt-4 h-full min-h-0'}>
       <ComponentList
         dataset={dataset}
         onClick={setSelectedComponent}

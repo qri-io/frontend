@@ -77,8 +77,8 @@ const Collection: React.FC<{}> = () => {
   return (
     <PageWithFooter>
       <div className='h-full' style={{ backgroundColor: '#f3f4f6'}}>
-        <div className='h-full w-9/12 mx-auto pt-10 pb-8 flex flex-col'>
-          <header className='mb-8 flex text-qrinavy items-end'>
+        <div className='h-full w-9/12 mx-auto pt-7 pb-7 flex flex-col'>
+          <header className='mb-7 flex text-qrinavy items-end'>
             <div className='flex-grow flex items-center justify-start'>
               <h1 className='text-3xl font-extrabold mb-1'>My Datasets </h1>
               <div>

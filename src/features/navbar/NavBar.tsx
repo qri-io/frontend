@@ -37,9 +37,8 @@ const NavBar: React.FC<NavBarProps> = ({
 
   return (
     <div className='bg-white text-qrinavy-700 text-bold flex items-center pr-8 font-medium' style={{
-      height: '110px',
-      paddingTop: '30px',
-      paddingBottom: '30px',
+      paddingTop: '24px',
+      paddingBottom: '24px',
     }}>
       <Link className='mr-5' to='/'>
         <div className={`flex align-center items-center justify-center ${expanded ? 'w-52' : 'w-24'}`}>

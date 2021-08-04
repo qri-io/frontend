@@ -27,7 +27,7 @@ const DatasetComponents: React.FC<{}> = () => {
   return (
     <div className='flex-grow flex overflow-hidden'>
       <DatasetCommitList qriRef={qriRef} />
-      <div className='flex flex-col flex-grow overflow-x-hidden'>
+      <div className='flex flex-col flex-grow overflow-hidden'>
         <CommitSummaryHeader dataset={dataset}>
           <DownloadDatasetButton qriRef={qriRef} />
         </CommitSummaryHeader>
