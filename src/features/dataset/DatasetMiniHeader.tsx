@@ -31,15 +31,19 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
       borderTopLeftRadius: '20px',
       transition: 'top 150ms cubic-bezier(0.4, 0, 0.2, 1)'
     }}>
-      <div className='px-7 pt-4 pb-3 flex z-10'>
+      <div className='px-7 pt-4 pb-3 flex items-center z-10'>
         <div className='flex-grow'>
-          <div className='text-xs text-gray-400 font-mono'>
-            <TextLink to={`/${dataset.peername}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.peername || 'new'}</TextLink>/{dataset.name}
-          </div>
+          { qriRef.username && (
+            <div className='text-xs text-gray-400 font-mono'>
+              <TextLink to={`/${dataset.peername}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.peername || 'new'}</TextLink>/{dataset.name}
+            </div>
+          )}
           <div className='text-normal text-qrinavy font-semibold'>
             {dataset.meta?.title || dataset.name}
           </div>
         </div>
+
+
         <div className='flex items-center content-center'>
           {children || (
             <>
