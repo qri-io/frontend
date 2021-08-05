@@ -62,7 +62,7 @@ const customSort = (rows: VersionInfo[], field: string, direction: 'asc' | 'desc
 }
 
 // based on 'caretDown' but needs a custom viewbox and a custom css rule in App.css to show properly in react-data-table
-const customSortIcon = (
+export const customSortIcon = (
   <svg
     viewBox="-6 -6 36 36"
     fill="none"
@@ -73,12 +73,9 @@ const customSortIcon = (
 )
 
 // react-data-table custom styles
-const customStyles = {
+export const customStyles = {
   table: {
-    style: {
-      paddingRight: '26px',
-      paddingLeft: '26px'
-    },
+
   },
   tableWrapper: {
     style: {
@@ -87,7 +84,9 @@ const customStyles = {
   },
   headRow: {
     style: {
-      minHeight: '68px'
+      minHeight: '68px',
+      paddingRight: '26px',
+      paddingLeft: '26px'
     }
   },
   headCells: {
@@ -99,7 +98,9 @@ const customStyles = {
   },
   rows: {
     style: {
-      minHeight: '68px'
+      minHeight: '68px',
+      paddingRight: '26px',
+      paddingLeft: '26px'
     }
   },
   expanderCell: {

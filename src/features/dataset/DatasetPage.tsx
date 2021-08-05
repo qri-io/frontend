@@ -40,7 +40,7 @@ const DatasetPage: React.FC<{}> = ({
   return (
     <div className='flex flex-col h-full w-full' style={{ backgroundColor: '#f3f4f6'}}>
       <NavBar />
-      <div className='flex overflow-hidden w-full'>
+      <div className='flex overflow-hidden w-full flex-grow'>
         <DatasetNavSidebar qriRef={qriRef} />
         <div className='flex flex-col flex-grow overflow-hidden p-7'>
           <DatasetHeader dataset={dataset} editable={editable} />
