@@ -35,7 +35,7 @@ const SessionUserMenu: React.FC<{}> = () => {
   }
 
   const icon = <div
-    className='rounded-2xl inline-block bg-cover flex-shrink-0' 
+    className='rounded-2xl inline-block bg-cover flex-shrink-0'
     style={{
       height: '30px',
       width: '30px',
@@ -46,13 +46,14 @@ const SessionUserMenu: React.FC<{}> = () => {
     <div className="relative flex items-center font-medium">
       <TextLink to='https://qri.io/docs'>Help</TextLink>
       <DropdownMenu icon={icon} className='ml-8' items={[
-        {
-          label: <Link to={`/${user.username}`}>Profile</Link>
-        },
+        // TODO(chriswhong): restore when Profiles are implemented
+        // {
+        //   label: <Link to={`/${user.username}`}>Profile</Link>
+        // },
         {
           label: <ExternalLink to='https://qri.io/contact'>Send Feedback</ExternalLink>
         },
-        { 
+        {
           label: 'Log Out',
           onClick: () => { dispatch(logOut()) }
         }
