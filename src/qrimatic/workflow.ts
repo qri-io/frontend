@@ -13,7 +13,7 @@ export interface Workflow {
   ownerID?: string
   datasetID?: string
 
-  disabled: boolean
+  active: boolean
   runCount: number
 
   latestStart?: string
