@@ -30,8 +30,8 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
           <Icon icon='automationFilled' size='sm'/>
         </div>
       </div>
-      <div className='flex flex-col text-qrigray-400'>
-        <div className='mb-1'>{logItem.username && <UsernameWithIcon username={logItem.username} iconWidth={14} className='mr-2' />}</div>
+      <div className='flex items-center text-qrigray-400'>
+        {logItem.username && <UsernameWithIcon username={logItem.username} iconWidth={14} className='mr-2' />}
         <RelativeTimestampWithIcon timestamp={new Date(logItem.timestamp)} />
       </div>
       {/* TODO(chriswhong): restore when we can add component change indicators <ComponentChangeIndicatorGroup status={[2,1,2,3,4]} />*/}
