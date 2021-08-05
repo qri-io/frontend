@@ -40,7 +40,7 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
   }
 
   return (
-    <div className={classNames('text-sm font-medium tracking-wider', colorClass)}>{displayStatus}</div>
+    <div className={classNames('text-sm font-semibold tracking-wider', colorClass)}>{displayStatus}</div>
   )
 }
 

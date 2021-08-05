@@ -8,20 +8,24 @@ import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import Icon from '../../chrome/Icon'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
+import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
+import DatasetInfoItem from '../dataset/DatasetInfoItem'
 
 interface ActivityListProps {
   log: LogItem[]
   showDatasetName?: boolean
+  containerHeight: number
 }
 
 const ActivityList: React.FC<ActivityListProps> = ({
   log,
-  showDatasetName = true
+  showDatasetName = true,
+  containerHeight
 }) => {
   // react-data-table column definitions
   const columns = [
     {
-      name: 'status',
+      name: 'Status',
       selector: 'status',
       width: '200px',
       cell: (row: LogItem) => <RunStatusBadge status={row.runStatus} />
@@ -41,38 +45,40 @@ const ActivityList: React.FC<ActivityListProps> = ({
       }
     },
     {
-      name: 'start',
+      name: 'Time',
       selector: 'start',
-      width: '100px',
       cell: (row: LogItem) => {
-        return <div><RelativeTimestamp timestamp={new Date(row.timestamp)} /></div>
+        return (
+          <div className='text-qrigray-400 flex flex-col text-xs'>
+            <div className='mb-1'>
+              <RelativeTimestamp timestamp={new Date(row.timestamp)} />
+            </div>
+            <div className='flex items-center'>
+              <Icon icon='clock' size='2xs' className='mr-1' />
+              <DurationFormat seconds={Math.ceil(row.runDuration / 1000000000)} />
+            </div>
+          </div>
+        )
+
       }
     },
     {
-      name: 'duration',
-      selector: 'duration',
-      width: '100px',
-      cell: (row: LogItem) => {
-        return <div><DurationFormat seconds={Math.ceil(row.runDuration / 1000000000)} /></div>
-      }
-    },
-    {
-      name: 'commit',
+      name: 'Commit',
       selector: 'name',
-      width: '300px',
       cell: (row: LogItem) => {
         if (!['failed', 'unchanged'].includes(row.runStatus)) {
+          const versionLink = `/ds/${row.username}/${row.name}/at${row.path}/body`
           return (
-            <div className='p-3'>
-              <div className='font-medium text-sm mb-1'>
-                {row.path && <div className='font-mono'><Icon icon='commit' size='sm'/> {row.path.substring(row.path.length - 7)}</div>}
+            <Link to={versionLink}>
+              <div className='font-semibold text-sm mb-1 text-qrinavy'>
+                {row.path && <div><Icon icon='commit' size='sm'/> {row.path.split('/')[2].substring(0, 8)}</div>}
               </div>
-              <div className='text-gray-500 text-xs'>
-                <span className='mr-4'><Icon icon='hdd' size='sm' className='mr-1' />{numeral(row.bodySize).format('0.0 b')}</span>
-                <span className='mr-4'><Icon icon='bars' size='sm' className='mr-1' />{numeral(row.bodyRows).format('0,0a')} rows</span>
-                <span className='mr-3'><Icon icon='file' size='sm' className='mr-1' />{row.bodyFormat}</span>
+              <div className='flex text-xs overflow-y-hidden'>
+                <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} small />
+                <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} small />
+                <DatasetInfoItem icon='page' label={row.bodyFormat} small />
               </div>
-            </div>
+            </Link>
           )
         } else {
           return <div className='w-full'>--</div>
@@ -81,11 +87,20 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
   ]
 
+  // borrows styles and icons from CollectionTable
   return (
     <ReactDataTable
       columns={columns}
       data={log}
+      customStyles={customStyles}
+      fixedHeader
+      fixedHeaderScrollHeight={`${String(containerHeight - 68)}px`}
       noHeader
+      style={{
+        background: 'blue'
+      }}
+      defaultSortField='name'
+      sortIcon={customSortIcon}
     />
   )
 }
