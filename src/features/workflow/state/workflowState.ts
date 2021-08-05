@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 import DeepEqual from 'deep-equal'
+import _ from 'lodash'
 
 import { RootState } from '../../../store/store';
 import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction, RunModeAction } from './workflowActions';
@@ -26,6 +27,14 @@ export const selectLatestRun = (state: RootState): Run | undefined => {
     return NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events)
   }
   return undefined
+}
+
+export const selectRunsFromEventLog = (state: RootState): any => {
+  const { events } = state.workflow
+  const unique = [...new Set(events.map(d => d.sessionID))]
+  return unique.map((d) => {
+    return NewRunFromEventLog(d, events)
+  })
 }
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
@@ -56,7 +65,7 @@ const initialState: WorkflowState = {
     id: '',
     datasetID: 'fake_id',
     runCount: 0,
-    disabled: false,
+    active: true,
 
     triggers: [],
     steps: [],
