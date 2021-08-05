@@ -5,6 +5,8 @@ import { RootState } from './store'
 import mapError from './mapError'
 import { QriRef } from '../qri/ref'
 import { selectSessionToken } from '../features/session/state/sessionState'
+import { logOut } from '../features/session/state/sessionActions'
+
 
 // CALL_API is a global, unique constant for passing actions to API middleware
 export const CALL_API = Symbol('CALL_API')
@@ -230,7 +232,7 @@ async function getAPIJSON<T> (
 }
 
 // apiMiddleware manages requests to the qri JSON API
-export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
+export const apiMiddleware: Middleware = ({ getState, dispatch }) => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
   if (action[CALL_API]) {
     let data: APIResponseEnvelope
     let {
@@ -267,6 +269,12 @@ export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAc
     try {
       data = await getAPIJSON(endpoint, method, segments, query, pageInfo, body, form, token)
     } catch (err) {
+
+      // log out the user if meta.error includes "token is expired"
+      if (err.message.includes('token is expired')) {
+        dispatch(logOut())
+      }
+
       return next({
         ...action,
         type: FAIL_TYPE,

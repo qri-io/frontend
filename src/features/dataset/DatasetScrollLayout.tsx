@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import { newQriRef } from '../../qri/ref'
 import { Dataset } from '../../qri/dataset'
-import { selectDsPreview } from '../dsPreview/state/dsPreviewState'
+import { selectDatasetHead } from '../dataset/state/datasetState'
 import { selectSessionUser } from '../session/state/sessionState'
 import { selectSessionUserCanEditDataset } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
@@ -25,7 +25,7 @@ const DatasetFixedLayout: React.FC<DatasetFixedLayoutProps> = ({
   children
 }) => {
   const qriRef = newQriRef(useParams())
-  const dsPreview = useSelector(selectDsPreview)
+  const dsPreview = useSelector(selectDatasetHead)
   const user = useSelector(selectSessionUser)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const isNew = (qriRef.username === 'new')

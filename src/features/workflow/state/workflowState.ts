@@ -63,9 +63,12 @@ const initialState: WorkflowState = {
   runMode: 'apply',
   workflow: {
     id: '',
-    datasetID: 'fake_id',
+    ref:'',
+    initID: 'fake_id',
+
+    active: false,
     runCount: 0,
-    active: true,
+    status: 'unchanged',
 
     triggers: [],
     steps: [],
@@ -102,13 +105,13 @@ export const workflowReducer = createReducer(initialState, {
   // listen for dataset fetching actions, if the reference of the fetched dataset
   // matches the ref the workbench reducer is tuned to, load the transform script
   // into the workbench
-  'API_DATASET_SUCCESS': (state, action) => {
+  'API_DATASETHEAD_SUCCESS': (state, action) => {
     const d = action.payload.data as Dataset
     // TODO (b5) - this should check peername *and* confirm the loaded version is HEAD
     if (state.qriRef?.name === d.name) {
       if (d.transform?.steps) {
         state.workflow.steps = d.transform.steps
-        state.workflow.datasetID = d.path
+        state.workflow.initID = d.path
 
         state.workflowBase.steps = d.transform.steps
       }
@@ -117,7 +120,7 @@ export const workflowReducer = createReducer(initialState, {
   'API_WORKFLOW_REQUEST': (state, action) => {
     // reset workflow and lastRunID to initialState values
     state.runMode = initialState.runMode
-    state.workflow = initialState.workflow
+    // state.workflow = initialState.workflow
     state.lastRunID = undefined
   },
   'API_WORKFLOW_SUCCESS': (state, action) => {
@@ -135,7 +138,10 @@ export const workflowReducer = createReducer(initialState, {
     // (see deploy reducer for an example usage), we should be able to add in this
     // ref check
     // const steps = state.workflow.steps
-    state.workflow = w
+    state.workflow = {
+      ...w,
+      steps: state.workflow.steps
+    }
     // state.workflow.steps = steps
   },
   'API_DEPLOY_SUCCESS': (state, action) => {

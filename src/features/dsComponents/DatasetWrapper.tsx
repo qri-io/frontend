@@ -8,7 +8,7 @@ import { useParams } from 'react-router'
 import { useDispatch } from 'react-redux'
 
 import { newQriRef } from '../../qri/ref'
-import { fetchDsPreview } from '../dsPreview/state/dsPreviewActions'
+import { loadDatasetHead } from '../dataset/state/datasetActions'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 
@@ -18,7 +18,7 @@ const DatasetWrapper: React.FC<{}> = ({ children }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchDsPreview(qriRef))
+    dispatch(loadDatasetHead(qriRef))
   }, [ qriRef.username, qriRef.name])
 
   return (

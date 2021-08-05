@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { newQriRef } from '../../qri/ref'
 import Spinner from '../../chrome/Spinner'
 import { loadDataset } from '../dataset/state/datasetActions'
-import {selectDataset } from '../dataset/state/datasetState'
+import { selectDatasetHead } from '../dataset/state/datasetState'
 import { loadWorkflowByDatasetRef, setWorkflowRef } from './state/workflowActions'
 import { selectLatestRun } from './state/workflowState'
 import { QriRef } from '../../qri/ref'
@@ -21,9 +21,10 @@ interface WorkflowPageProps {
 
 const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
-  let dataset = useSelector(selectDataset)
+  let dataset = useSelector(selectDatasetHead)
   const latestRun = useSelector(selectLatestRun)
   let { username, name } = useParams()
+
 
   // if qriRef is empty, this is a new workflow
   const isNew = qriRef.username === '' && qriRef.name === ''
@@ -44,10 +45,13 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
     dispatch(setWorkflowRef(qriRef))
     if (isNew) { return }
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
-    dispatch(loadDataset(ref))
     dispatch(loadWorkflowByDatasetRef(qriRef))
-
   }, [])
+
+  useEffect(() => {
+    if (dataset.id) {
+    }
+  }, [dataset])
 
   const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />
 
@@ -58,7 +62,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
           <Spinner color='#4FC7F3' />
         </div>)
       : (
-            <DatasetScrollLayout headerChildren={runBar}>
+            <DatasetScrollLayout dataset={dataset} headerChildren={runBar}>
               <Scroller>
                 <Workflow qriRef={qriRef} />
               </Scroller>

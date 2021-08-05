@@ -121,3 +121,71 @@ export function renameDataset(current: QriRef, next: QriRef): ApiActionThunk {
     return dispatch(action)
   }
 }
+
+export function loadDatasetHead(ref: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchDatasetHead(ref))
+  }
+}
+
+export function fetchDatasetHead (ref: QriRef): ApiAction {
+  return {
+    type: 'datasethead',
+    ref,
+    [CALL_API]: {
+      endpoint: 'ds/get',
+      method: 'GET',
+      segments: ref
+    }
+  }
+}
+
+export function loadDatasetHeadBody(ref: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchDatasetHeadBody(ref))
+  }
+}
+
+
+
+function fetchDatasetHeadBody (ref: QriRef, page: number = 1, pageSize: number = bodyPageSizeDefault): ApiAction {
+  return {
+    type: 'datasetheadbody',
+    ref,
+    [CALL_API]: {
+      endpoint: 'ds/get',
+      method: 'GET',
+      pageInfo: {
+        page,
+        pageSize
+      },
+      segments: {
+        username: ref.username,
+        name: ref.name,
+        path: ref.path,
+        selector: ['body']
+      },
+    }
+  }
+}
+
+export function loadDatasetHeadReadme(ref: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchDatasetHeadReadme(ref))
+  }
+}
+
+function fetchDatasetHeadReadme (ref: QriRef): ApiAction {
+  return {
+    type: 'datasetheadreadme',
+    ref,
+    [CALL_API]: {
+      endpoint: 'ds/render',
+      method: 'POST',
+      body: {
+        ref: refStringFromQriRef(ref),
+        selector: 'readme'
+      }
+    }
+  }
+}

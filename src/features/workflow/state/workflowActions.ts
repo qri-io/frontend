@@ -15,12 +15,9 @@ import {
 import { AnyAction } from 'redux'
 
 export function mapWorkflow(d: object | []): Workflow {
-  const data = (d as Record<string,any>)
-  const wf = data.workflow || {}
-  wf.steps = data.dataset?.transform?.steps
-  wf.ref = data.ref
+  // const data = (d as Record<string,any>)
 
-  return NewWorkflow(wf)
+  return NewWorkflow(d)
 }
 
 export function loadWorkflowByDatasetRef(qriRef: QriRef): ApiActionThunk {

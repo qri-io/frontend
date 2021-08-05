@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
 
 import { newQriRef } from '../../qri/ref';
-import { selectDsPreview } from './state/dsPreviewState'
-import { loadDsPreview } from './state/dsPreviewActions'
+import { selectDatasetHead } from './state/datasetState'
+import { loadDatasetHeadBody, loadDatasetHeadReadme } from './state/datasetActions'
 import Spinner from '../../chrome/Spinner'
 import ContentBox from '../../chrome/ContentBox'
 import Icon from '../../chrome/Icon'
@@ -29,7 +29,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   qriRef
 }) => {
   const dispatch = useDispatch()
-  const dataset = useSelector(selectDsPreview)
+  const dataset = useSelector(selectDatasetHead)
 
   const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions();
   const [expandReadme, setExpandReadme] = useState(false)
@@ -42,7 +42,8 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
 
   useEffect(() => {
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
-    dispatch(loadDsPreview(ref))
+    dispatch(loadDatasetHeadBody(ref))
+    dispatch(loadDatasetHeadReadme(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path ])
 
   return (
@@ -85,7 +86,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                         <div className='text-sm text-qrinavy mb-2 truncate' title={dataset.commit?.title}>{dataset.commit?.title}</div>
                         <div className='flex items-center text-gray-400 text-xs'>
                           <RelativeTimestampWithIcon timestamp={new Date(dataset.commit?.timestamp)} className='mr-3' />
-                          <UsernameWithIcon username='chriswhong' className='mt-0.5' />
+                          <UsernameWithIcon username={dataset.peername} className='mt-0.5' />
                         </div>
                       </div>
                       <div className='ml-4'>

@@ -11,7 +11,7 @@ export interface Workflow {
   id: string
   ref: string
   ownerID?: string
-  datasetID?: string
+  initID?: string
 
   active: boolean
   runCount: number
@@ -38,10 +38,10 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
   return {
     id: data.id || '',
     ref: data.ref || '',
-    datasetID: data.datasetID,
+    initID: data.initID,
     ownerID: data.ownerID,
 
-    disabled: data.disabled || false,
+    active: data.active || false,
     runCount: data.runCount || 0,
 
     latestStart: data.latestStart,
@@ -64,12 +64,15 @@ export interface CronTrigger extends WorkflowTrigger {
 
 export interface WorkflowTrigger {
   type:       WorkflowTriggerType,
-  disabled?:   boolean,
+  active?:   boolean,
+  id?: string
 
   runCount?:      number,
+  nextRunStart?:  string,
   lastRunID?:     string,
   lastRunStart?:  string,
   lastRunStatus?: string,
+  periodicity?:   string
   [key: string]: any
 }
 
@@ -78,7 +81,8 @@ export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
     id: data.id || '',
     workflowID: data.workflowID || '',
     type: data.type,
-    disabled: data.disabled || false,
+    active: data.active || false,
+    ...data
   }
 }
 

@@ -10,12 +10,11 @@ export interface WorkflowDatasetPreviewProps {
 const WorkflowDatasetPreview: React.FC<WorkflowDatasetPreviewProps> = ({
   dataset
 }) => {
-
   const [ selectedComponent, setSelectedComponent ] = useState<ComponentName>('body')
 
   return (
     <div style={{ height: '65vh' }}>
-      {dataset ? (
+      {dataset && dataset.body ? (
         <TabbedComponentViewer
           dataset={dataset}
           loading={false}
