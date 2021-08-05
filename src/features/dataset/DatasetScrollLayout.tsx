@@ -12,13 +12,13 @@ import { selectSessionUserCanEditDataset } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
 import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
 
-interface DatasetFixedLayoutProps {
+interface DatasetScrollLayoutProps {
   dataset?: Dataset
   headerChildren?: JSX.Element
   contentClassName?: string
 }
 
-const DatasetFixedLayout: React.FC<DatasetFixedLayoutProps> = ({
+const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
   dataset,
   headerChildren,
   contentClassName = '',
@@ -67,4 +67,4 @@ const DatasetFixedLayout: React.FC<DatasetFixedLayoutProps> = ({
 
 
 
-export default DatasetFixedLayout
+export default DatasetScrollLayout

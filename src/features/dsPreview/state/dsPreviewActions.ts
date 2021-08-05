@@ -7,6 +7,8 @@ export function loadDsPreview(ref: QriRef): ApiActionThunk {
 
     try {
       await Promise.all([
+        // for the moment we don't get a preview explicitly because we already
+        // have what we need in state.dataset 
         // dispatch(fetchDsPreview(ref)),
         dispatch(fetchDsPreviewBody(ref)),
         dispatch(fetchDsPreviewReadme(ref)),

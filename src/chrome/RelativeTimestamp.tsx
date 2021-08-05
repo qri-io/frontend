@@ -12,11 +12,10 @@ const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
   className
 }) => {
   let timeFromNowAbbreviation = formatDistanceToNow(timestamp, { addSuffix: true })
-
   // manipulate the output of date-fns formatDistanceToNow() for shorter screen renders
   timeFromNowAbbreviation = timeFromNowAbbreviation
     .replace('about ', '')
-    .replace(' hours ago', 'h')
+    .replace(/ hours? ago/, 'h')
     .replace('less than ', '<')
     .replace(/ minutes? ago/, 'm')
     .replace('a', '1')
