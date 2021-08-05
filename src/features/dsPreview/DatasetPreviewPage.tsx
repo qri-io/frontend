@@ -77,19 +77,16 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                   <ContentBox>
                     <div className='flex items-center border-b pb-4 mb-3'>
                       <div className='flex-grow truncate'>
-                        <ContentBoxTitle title='Version Info' />
-                        <div className='text-qrinavy text-sm flex items-center mb-0'>
-                          <Icon icon='commit' size='sm' className='-ml-1.5' />
-                          <div className='font-medium'>{commitishFromPath(dataset.path)}</div>
+                        <ContentBoxTitle title='Latest Version' />
+                        <div className='text-qrinavy font-semibold text-sm flex items-center mb-2'>
+                          <div className=''>{dataset.commit?.title}</div>
                         </div>
-                        <div className='text-sm text-qrinavy mb-2 truncate' title={dataset.commit?.title}>{dataset.commit?.title}</div>
-                        <div className='flex items-center text-gray-400 text-xs'>
-                          <RelativeTimestampWithIcon timestamp={new Date(dataset.commit?.timestamp)} className='mr-3' />
-                          <UsernameWithIcon username='chriswhong' className='mt-0.5' />
+                        <div className='flex items-center text-xs text-gray-400'>
+                          <UsernameWithIcon username={dataset.peername} className='mr-3' />
+                          <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit?.timestamp)} />
+                          <Icon icon='commit' size='sm' className='-ml-2' />
+                          <div className=''>{commitishFromPath(dataset.path)}</div>
                         </div>
-                      </div>
-                      <div className='ml-4'>
-                        <DownloadDatasetButton qriRef={qriRef} small light />
                       </div>
                     </div>
                     {/* Bottom of the box */}
