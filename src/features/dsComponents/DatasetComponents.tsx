@@ -32,7 +32,7 @@ const DatasetComponents: React.FC<{}> = () => {
 
 
   return (
-    <DatasetFixedLayout>
+    <DatasetFixedLayout headerChildren={<></>}>
       <div className='flex-grow flex overflow-hidden'>
         <DatasetCommitList qriRef={qriRef} />
         <div className='flex flex-col flex-grow overflow-hidden'>

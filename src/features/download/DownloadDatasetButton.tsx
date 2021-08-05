@@ -24,9 +24,10 @@ export interface DownloadDatasetButtonProps {
 
 const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
   qriRef,
+  small=false,
+  type='primary-outline',
   asIconLink=false,
   body=false,
-  small=false
 }) => {
   const dispatch = useDispatch()
 
@@ -47,8 +48,8 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     }
   } else { // returns <Button>
     let buttonContent = (
-      <Button type='primary-outline' size='sm' className='px-1.5'>
-        {small ? <Icon icon='download' /> : 'Download'}
+      <Button type={type} size='sm' className='px-1.5'>
+        <Icon icon='download' /> {!small && <span className='ml-2'>Download</span>}
       </Button>
     )
 
