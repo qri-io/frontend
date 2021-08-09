@@ -96,12 +96,16 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                   </ContentBox>
                 </div>
               </div>
-              <ContentBox className='h-full flex flex-col'>
-                <ContentBoxTitle title='Data' />
-                <div className='flex-grow overflow-hidden relative'>
-                  <BodyPreview dataset={dataset} />
-                </div>
-              </ContentBox>
+              <div className='overflow-hidden' style={{
+                height: 'calc(100vh - 215px)'
+              }}>
+                <ContentBox className='h-full overflow-hidden flex flex-col'>
+                  <div className='flex flex-col h-full overflow-hidden'>
+                    <ContentBoxTitle title='Data' />
+                    <BodyPreview dataset={dataset} />
+                  </div>
+                </ContentBox>
+              </div>
             </DatasetScrollLayout>
           )}
         <DeployingScreen qriRef={qriRef} />
