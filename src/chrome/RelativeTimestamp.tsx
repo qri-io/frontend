@@ -19,6 +19,9 @@ const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
     .replace(/ hours? ago/, 'h')
     .replace(/ minutes? ago/, 'm')
     .replace(/ days? ago/, 'd')
+    .replace(/ weeks? ago/, 'w')
+    .replace(/ months? ago/, 'mo')
+    .replace(/ years? ago/, 'y')
     .replace('a', '1')
 
   return (
