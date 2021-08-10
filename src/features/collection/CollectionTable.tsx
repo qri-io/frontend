@@ -62,7 +62,7 @@ const customSort = (rows: VersionInfo[], field: string, direction: 'asc' | 'desc
 }
 
 // based on 'caretDown' but needs a custom viewbox and a custom css rule in App.css to show properly in react-data-table
-const customSortIcon = (
+export const customSortIcon = (
   <svg
     viewBox="-6 -6 36 36"
     fill="none"
@@ -73,12 +73,9 @@ const customSortIcon = (
 )
 
 // react-data-table custom styles
-const customStyles = {
+export const customStyles = {
   table: {
-    style: {
-      paddingRight: '26px',
-      paddingLeft: '26px'
-    },
+
   },
   tableWrapper: {
     style: {
@@ -87,7 +84,9 @@ const customStyles = {
   },
   headRow: {
     style: {
-      minHeight: '68px'
+      minHeight: '68px',
+      paddingRight: '26px',
+      paddingLeft: '26px'
     }
   },
   headCells: {
@@ -99,7 +98,9 @@ const customStyles = {
   },
   rows: {
     style: {
-      minHeight: '68px'
+      minHeight: '68px',
+      paddingRight: '26px',
+      paddingLeft: '26px'
     }
   },
   expanderCell: {
@@ -231,31 +232,31 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
             <DropdownMenu
               icon={<Icon icon='ellipsisH' size='md'/>}
               items={[
-                {
-                  label: 'Rename...',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("renaming not yet implemented") },
-                },
-                {
-                  label: 'Duplicate...',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("duplicating not yet implemented")},
-                },
-                {
-                  label: 'Export...',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("export not yet implemented")},
-                },
-                {
-                  label: 'Run Now',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("run now not yet implemented")},
-                },
-                {
-                  label: 'Pause Workflow',
-                  disabled: true,
-                  onClick: () => { handleButtonClick("pause not yet implemented")},
-                },
+                // {
+                //   label: 'Rename...',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("renaming not yet implemented") },
+                // },
+                // {
+                //   label: 'Duplicate...',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("duplicating not yet implemented")},
+                // },
+                // {
+                //   label: 'Export...',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("export not yet implemented")},
+                // },
+                // {
+                //   label: 'Run Now',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("run now not yet implemented")},
+                // },
+                // {
+                //   label: 'Pause Workflow',
+                //   disabled: true,
+                //   onClick: () => { handleButtonClick("pause not yet implemented")},
+                // },
                 {
                   label: 'Remove...',
                   onClick: () => {
@@ -278,6 +279,9 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
     }
   ]
 
+  // TODO(chriswhong): implement selectable rows and multi-row actions
+  // uncomment `selectableRows` etc below
+
   return (
     <ReactDataTable
       columns={columns}
@@ -289,12 +293,12 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       fixedHeader
       fixedHeaderScrollHeight={`${String(containerHeight - 68)}px`}
       noHeader
-      selectableRows
-      selectableRowsComponent={forwardRef((props, ref) => (
-        <Icon icon='checkbox' />
-      ))}
-      onSelectedRowsChange={onSelectedRowsChange}
-      clearSelectedRows={clearSelectedTrigger}
+      // selectableRows
+      // selectableRowsComponent={forwardRef((props, ref) => (
+      //   <Icon icon='checkbox' />
+      // ))}
+      // onSelectedRowsChange={onSelectedRowsChange}
+      // clearSelectedRows={clearSelectedTrigger}
       style={{
         background: 'blue'
       }}

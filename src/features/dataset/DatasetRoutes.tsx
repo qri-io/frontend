@@ -1,3 +1,10 @@
+// All dataset routes share DatasetWrapper, which handles the rendering of the
+// dataset menu and fetches dsPreview (the latest version of the dataset)
+// All routes use dsPreview to render the dataset header, so it is always needed
+// regardless of th other dataset content being displayed
+
+// DatasetPreviewPage fetches the other necessary parts of the preview (body + readme)
+
 import React from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router'
 
@@ -6,9 +13,9 @@ import DatasetComponents from '../dsComponents/DatasetComponents'
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed'
 import DatasetPreviewPage from '../dsPreview/DatasetPreviewPage'
 import DatasetIssues from '../issues/DatasetIssues'
-import DatasetPage from './DatasetPage'
 import { newQriRef } from '../../qri/ref'
 import DatasetEditor from '../dsComponents/DatasetEditor'
+import DatasetWrapper from '../dsComponents/DatasetWrapper'
 
 const DatasetRoutes: React.FC<{}> = () => {
   const { url } = useRouteMatch()
@@ -21,54 +28,53 @@ const DatasetRoutes: React.FC<{}> = () => {
   const qriRef = newQriRef(useParams())
 
   return (
-    <Switch>
-      <Route path='/ds/:username/:name' exact>
-        <Redirect to={`${url}/preview`} />
-      </Route>
+    <DatasetWrapper>
+      <Switch>
+        <Route path='/ds/:username/:name' exact>
+          <Redirect to={`${url}/preview`} />
+        </Route>
 
-      <Route path='/ds/:username/:name/workflow'>
-        <WorkflowPage qriRef={qriRef} />
-      </Route>
-      <Route path='/ds/:username/:name/history'>
-        <DatasetPage>
+        <Route path='/ds/:username/:name/workflow'>
+          <WorkflowPage qriRef={qriRef} />
+        </Route>
+
+        <Route path='/ds/:username/:name/history'>
           <DatasetActivityFeed qriRef={qriRef} />
-        </DatasetPage>
-      </Route>
-      <Route path='/ds/:username/:name/preview' exact>
-        <DatasetPreviewPage qriRef={qriRef} />
-      </Route>
-      {process.env.REACT_APP_FEATURE_WIREFRAMES &&
-        <Route path='/ds/:username/:name/issues'>
-          <DatasetPage>
-            <DatasetIssues qriRef={qriRef} />
-          </DatasetPage>
         </Route>
-      }
-      {process.env.REACT_APP_FEATURE_WIREFRAMES &&
-        <Route path='/ds/:username/:name/edit'>
-          <DatasetPage>
-            <DatasetEditor />
-          </DatasetPage>
-        </Route>
-      }
 
-      <Route path='/ds/:username/:name/at/:fs/:hash/components'>
-        <Redirect to={`/ds/${qriRef.username}/${qriRef.name}/at/${qriRef.path}/body`} />
-      </Route>
-      <Route path='/ds/:username/:name/at/:fs/:hash/:component'>
-        <DatasetPage>
+        <Route path='/ds/:username/:name/preview' exact>
+          <DatasetPreviewPage qriRef={qriRef} />
+        </Route>
+
+        {process.env.REACT_APP_FEATURE_WIREFRAMES &&
+          <Route path='/ds/:username/:name/issues'>
+            <DatasetIssues qriRef={qriRef} />
+          </Route>
+        }
+
+        {process.env.REACT_APP_FEATURE_WIREFRAMES &&
+          <Route path='/ds/:username/:name/edit'>
+            <DatasetEditor />
+          </Route>
+        }
+
+        <Route path='/ds/:username/:name/at/:fs/:hash/components'>
+          <Redirect to={`/ds/${qriRef.username}/${qriRef.name}/at/${qriRef.path}/body`} />
+        </Route>
+
+        <Route path='/ds/:username/:name/at/:fs/:hash/:component'>
           <DatasetComponents />
-        </DatasetPage>
-      </Route>
-      <Route path='/ds/:username/:name/components'>
-        <Redirect to={`/ds/${qriRef.username}/${qriRef.name}/body`} />
-      </Route>
-      <Route path='/ds/:username/:name/:component'>
-        <DatasetPage>
+        </Route>
+
+        <Route path='/ds/:username/:name/components'>
+          <Redirect to={`/ds/${qriRef.username}/${qriRef.name}/body`} />
+        </Route>
+
+        <Route path='/ds/:username/:name/:component'>
           <DatasetComponents />
-        </DatasetPage>
-      </Route>
-    </Switch>
+        </Route>
+      </Switch>
+    </DatasetWrapper>
   )
 }
 
