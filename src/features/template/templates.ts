@@ -1,6 +1,4 @@
 import { Workflow } from '../../qrimatic/workflow'
-import { Dataset } from '../../qri/dataset'
-
 
 // TODO (ramfox): need to formalize possible trigger & on completion types
 
@@ -31,22 +29,25 @@ def transform(ds, ctx):
 }
 
 export const CSVDownload: Dataset = {
+  meta: {
+    title: 'New Dataset from Workflow'
+  },
   transform: {
     steps: [
       { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
-  load("http.star", "http")
-  load("encoding/csv.star", "csv")` },
+load("http.star", "http")
+load("encoding/csv.star", "csv")` },
       { syntax: 'starlark', category: 'download', name: 'download', script: `# get the popular baby names dataset as a csv
-  def download(ctx):
-    csvDownloadUrl = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"
-    return http.get(csvDownloadUrl).body()` },
+def download(ctx):
+  csvDownloadUrl = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"
+  return http.get(csvDownloadUrl).body()` },
       { syntax: 'starlark', category: 'transform', name: 'transform', script: `# set the body
-  def transform(ds, ctx):
-    # ctx.download is whatever download() returned
-    csv = ctx.download
-    # set the dataset body
-    ds.set_body(csv, parse_as='csv')`}
-    ],
+def transform(ds, ctx):
+  # ctx.download is whatever download() returned
+  csv = ctx.download
+  # set the dataset body
+  ds.set_body(csv, parse_as='csv')`}
+    ]
   }
 }
 

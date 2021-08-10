@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { newQriRef } from '../../qri/ref'
 import Spinner from '../../chrome/Spinner'
 import { loadDataset } from '../dataset/state/datasetActions'
-import {selectDataset } from '../dataset/state/datasetState'
+import { selectWorkflowDataset } from '../workflow/state/workflowState'
 import { loadWorkflowByDatasetRef, setWorkflowRef } from './state/workflowActions'
 import { selectLatestRun } from './state/workflowState'
 import { QriRef } from '../../qri/ref'
@@ -21,7 +21,7 @@ interface WorkflowPageProps {
 
 const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
-  let dataset = useSelector(selectDataset)
+  let dataset = useSelector(selectWorkflowDataset)
   const latestRun = useSelector(selectLatestRun)
   let { username, name } = useParams()
 
@@ -58,7 +58,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
           <Spinner color='#4FC7F3' />
         </div>)
       : (
-            <DatasetScrollLayout headerChildren={runBar}>
+            <DatasetScrollLayout dataset={dataset} headerChildren={runBar}>
               <Scroller>
                 <Workflow qriRef={qriRef} />
               </Scroller>

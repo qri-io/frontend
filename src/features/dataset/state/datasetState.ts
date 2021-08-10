@@ -62,9 +62,5 @@ export const datasetReducer = createReducer(initialState, {
   },
   RENAME_NEW_DATASET: (state: DatasetState, action: RenameDatasetAction) => {
     state.dataset.name = action.next.name
-  },
-  SET_TEMPLATE: (state: DatasetState, action: SetTemplateAction) => {
-    state.dataset = action.dataset
-    return
   }
 })

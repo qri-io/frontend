@@ -16,7 +16,6 @@ export interface CronTriggerProps {
 const CronTrigger: React.FC<CronTriggerProps> = ({
   trigger
 }) => {
-
   const dispatch = useDispatch()
 
   // on edit, open AddTriggerModal and pass in the correct type and array of WorkflowTrigger

@@ -9,9 +9,9 @@ export type RunStatus =
 
 export interface Workflow {
   id: string
-  initID: string
-  ownerID: string
-  created: string
+  initID?: string
+  ownerID?: string
+  created?: string
   active: boolean
   triggers?: WorkflowTrigger[]
   hooks?: WorkflowHook[]
@@ -27,22 +27,12 @@ export interface WorkflowBase {
 export function NewWorkflow(data: Record<string,any>): Workflow {
   return {
     id: data.id || '',
-    ref: data.ref || '',
     initID: data.initID,
     ownerID: data.ownerID,
-
-    active: data.active || false,
-    runCount: data.runCount || 0,
-
-    latestStart: data.latestStart,
-    latestEnd: data.latestEnd,
-    status: data.status,
-
+    created: data.created,
+    active: data.active,
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
-    steps: data.steps && data.steps.map(NewTransformStep),
     hooks: data.hooks && data.hooks.map(NewWorkflowHook),
-
-    versionInfo: data.versionInfo
   }
 }
 
@@ -53,22 +43,19 @@ export interface CronTrigger extends WorkflowTrigger {
 }
 
 export interface WorkflowTrigger {
-  type:       WorkflowTriggerType,
-  disabled?:   boolean,
-
-  runCount?:      number,
-  lastRunID?:     string,
-  lastRunStart?:  string,
-  lastRunStatus?: string,
-  [key: string]: any
+  id: string
+  active?:  boolean,
+  type: WorkflowTriggerType,
+  nextRunStart: string
 }
 
 export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
   return {
     id: data.id || '',
-    workflowID: data.workflowID || '',
+    active: data.active || true,
     type: data.type,
-    disabled: data.disabled || false,
+    nextRunStart: data.nextRunStart,
+    ...data
   }
 }
 

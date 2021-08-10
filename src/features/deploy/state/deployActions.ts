@@ -1,6 +1,7 @@
 import { CALL_API, ApiActionThunk} from '../../../store/api'
 import { QriRef, refStringFromQriRef } from '../../../qri/ref'
 import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
+import { Dataset } from '../../../qri/dataset'
 import {
   DEPLOY_START,
   DEPLOY_END,
@@ -24,7 +25,7 @@ export interface DeployEventAction {
   sessionID: string
 }
 
-export function deployWorkflow(qriRef: QriRef, w: Workflow, run: boolean): ApiActionThunk {
+export function deployWorkflow(qriRef: QriRef, w: Workflow, d: Dataset, run: boolean): ApiActionThunk {
   // this is where we strip the steps from the workflow and add them to dataset
   return async (dispatch, getState) => {
     return dispatch({
@@ -41,7 +42,7 @@ export function deployWorkflow(qriRef: QriRef, w: Workflow, run: boolean): ApiAc
             name: qriRef.name,
             transform: {
               scriptBytes: btoa(workflowScriptString(w)),
-              steps: w.steps
+              steps: d.transform.steps
             }
           }
         },

@@ -14,12 +14,14 @@ import DatasetCommit from '../commits/DatasetCommit'
 export interface WorkflowOutlineProps {
   runMode: RunMode
   workflow?: Workflow
+  dataset: Dataset
   run?: Run
 }
 
 const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
   runMode,
   workflow,
+  dataset,
   run
 }) => {
   const [showing, setShowing] = useState(true)
@@ -52,7 +54,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
             </ScrollTrigger>
           </div>
           <div className='mb-2'>
-            {workflow && workflow.steps?.map((step: TransformStep, i: number) => {
+            {dataset?.transform?.steps && dataset.transform.steps.map((step: TransformStep, i: number) => {
               let r
               if (run) {
                 r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: "waiting" })

@@ -1,6 +1,5 @@
 import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qri/eventLog'
-import { Dataset } from '../../../qri/dataset'
 import { NewWorkflow, Workflow, WorkflowInfo, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
 import {
@@ -9,6 +8,7 @@ import {
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
   SET_TEMPLATE,
+  SET_WORKFLOW,
   SET_WORKFLOW_REF,
   SET_RUN_MODE,
   RunMode
@@ -79,7 +79,7 @@ export function setRunMode(mode: RunMode): RunModeAction {
   }
 }
 
-export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
+export function applyWorkflowTransform(w: Workflow, d: Dataset): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch({
       type: 'apply',
@@ -90,7 +90,7 @@ export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
           wait: false,
           transform: {
             scriptBytes: btoa(workflowScriptString(w)),
-            steps: w.steps
+            steps: d.transform.steps
           }
         },
       }
@@ -110,17 +110,31 @@ export function runEventLog(event: EventLogLine): EventLogAction {
   }
 }
 
+export interface SetWorkflowAction {
+  type: string
+  workflow: Workflow
+}
+
+export function setWorkflow(workflow: Workflow): SetWorkflowAction {
+  return {
+    type: SET_WORKFLOW,
+    workflow
+  }
+}
+
 export interface SetTemplateAction {
   type: string
   workflow: Workflow
 }
 
-export function setTemplate(template: Dataset): SetTemplateAction {
+export function setTemplate(dataset: Dataset): SetTemplateAction {
   return {
     type: SET_TEMPLATE,
-    dataset: template
+    dataset
   }
 }
+
+
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
