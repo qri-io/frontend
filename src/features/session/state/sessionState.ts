@@ -1,8 +1,18 @@
-import { createReducer } from '@reduxjs/toolkit'
+import { createReducer, Action } from '@reduxjs/toolkit'
 import { RootState } from '../../../store/store';
 
+interface SessionTokens {
+  token: string
+  refreshToken: string
+}
+
 export const selectSessionUser = (state: RootState): User => state.session.user
-export const selectSessionToken = (state: RootState): string => state.session.token
+export const selectSessionTokens = (state: RootState): SessionTokens => {
+  return {
+    token: state.session.token,
+    refreshToken: state.session.refreshToken
+  }
+}
 export const selectIsSessionLoading = (state: RootState): boolean => state.session.loading
 
 export interface User {
@@ -16,6 +26,7 @@ export interface SessionState {
   user: User
   loading: boolean
   token: string
+  refreshToken: string
 }
 
 export const AnonUser: User = {
@@ -25,16 +36,19 @@ export const AnonUser: User = {
 function getAuthState(): SessionState {
   try {
     const token = JSON.parse(localStorage.getItem('state.auth.token')) || '';
+    const refreshToken = JSON.parse(localStorage.getItem('state.auth.refreshToken')) || '';
     const user = JSON.parse(localStorage.getItem('state.auth.user')) || AnonUser;
 
     return {
       token,
+      refreshToken,
       user,
       loading: false
     }
   } catch (err) {
     return {
       token: '',
+      refreshToken: '',
       user: AnonUser,
       loading: false
     };
@@ -45,7 +59,7 @@ function getAuthState(): SessionState {
 const initialState: SessionState = getAuthState()
 
 // same state changes on successful login or signup
-const loginOrSignupSuccess = (state, action) => {
+const loginOrSignupSuccess = (state: SessionState, action: Action) => {
   const {
     name,
     profile,
@@ -62,25 +76,30 @@ const loginOrSignupSuccess = (state, action) => {
   state.loading = false
 
   state.token = action.token
+  state.refreshToken = action.refreshToken
 }
 
 export const sessionReducer = createReducer(initialState, {
-  'LOGIN_REQUEST': (state) => {
+  'LOGIN_REQUEST': (state: SessionState) => {
     state.loading = true
   },
   'LOGIN_SUCCESS': loginOrSignupSuccess,
-  'LOGIN_FAILURE': (state) => {
+  'LOGIN_FAILURE': (state: SessionState) => {
     state.loading = false
   },
-  'SIGNUP_REQUEST': (state) => {
+  'SIGNUP_REQUEST': (state: SessionState) => {
     state.loading = true
   },
-  'SIGNUP_FAILURE': (state) => {
+  'SIGNUP_FAILURE': (state: SessionState) => {
     state.loading = false
   },
   'SIGNUP_SUCCESS': loginOrSignupSuccess,
-  'LOGOUT_SUCCESS': (state) => {
+  'LOGOUT_SUCCESS': (state: SessionState) => {
     state.user = AnonUser
     state.token = ''
+  },
+  // called after accessToken refresh
+  'SET_TOKEN': (state: SessionState, action: Action) => {
+    state.token = action.token
   }
 })

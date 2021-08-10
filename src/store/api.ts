@@ -1,10 +1,11 @@
 import { Middleware, Dispatch, AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+import jwtDecode from 'jwt-decode'
 
 import { RootState } from './store'
 import mapError from './mapError'
 import { QriRef } from '../qri/ref'
-import { selectSessionToken } from '../features/session/state/sessionState'
+import { selectSessionTokens } from '../features/session/state/sessionState'
 
 // CALL_API is a global, unique constant for passing actions to API middleware
 export const CALL_API = Symbol('CALL_API')
@@ -229,8 +230,18 @@ async function getAPIJSON<T> (
   return getJSON(url, options)
 }
 
+export interface TokenClaims {
+  sub: string
+  exp: number
+  iss: string
+  aud: string
+  cty: string
+  username: string
+  user_id: string
+}
+
 // apiMiddleware manages requests to the qri JSON API
-export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
+export const apiMiddleware: Middleware = ({ dispatch, getState }) => (next: Dispatch<AnyAction>) => async (action: any): Promise<any> => {
   if (action[CALL_API]) {
     let data: APIResponseEnvelope
     let {
@@ -247,11 +258,11 @@ export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAc
     } = action[CALL_API]
     const [REQ_TYPE, SUCC_TYPE, FAIL_TYPE] = apiActionTypes(action.type)
 
-    const tokenFromState = selectSessionToken(getState())
+    const { token: tokenFromState, refreshToken } = selectSessionTokens(getState())
 
     // we still need a token from the action symbol for when the user first logs
     // in and we need to make an immediate call for user details
-    const token = tokenFromAction || tokenFromState
+    let token = tokenFromAction || tokenFromState
 
     next({
       ...action,
@@ -262,9 +273,8 @@ export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAc
     })
 
 
-    // TODO(chriswhong): validate token
-
     try {
+      token = await maybeRefreshToken(token, refreshToken, dispatch)
       data = await getAPIJSON(endpoint, method, segments, query, pageInfo, body, form, token)
     } catch (err) {
       return next({
@@ -299,4 +309,70 @@ export const apiMiddleware: Middleware = ({ getState }) => (next: Dispatch<AnyAc
   }
 
   return next(action)
+}
+
+// utility to auto refresh token
+// TODO(chrishwong): if there are multiple simultaneous API calls, there will be
+// multiple calls to refresh the token. We should add some handling to pause
+// subsequent requests while the refresh is happening
+export const maybeRefreshToken = async (token: string, refreshToken: string, dispatch): Promise<any> => {
+  try {
+    if (token) {
+      var decoded: TokenClaims = jwtDecode(token)
+      var exp = decoded.exp
+      var now = Math.floor(Date.now() / 1000) // in seconds
+      if ((exp - now) < 300) { // we preemptively refresh up to 5 min early for smoother operation
+        let res = await refreshSession(token, refreshToken)
+
+        // fire an action to update the access token in state
+        dispatch({
+          type: 'SET_TOKEN',
+          token: res.data.access_token
+        })
+
+        return Promise.resolve(res.data.access_token)
+      }
+    }
+  } catch (error) {
+    console.log(`error refreshing token - ${error.message}`)
+    // logOut immediately if there is any error parsing the token or refreshing
+    dispatch({ type: 'LOGOUT_SUCCESS' })
+    return Promise.reject(error)
+  }
+  return Promise.resolve(token)
+}
+
+// fetch a new token
+const refreshSession = async (token: string, refreshToken: string): Promise<any> => {
+  try {
+    if (token !== undefined && refreshToken !== undefined) {
+      const response = await getAPIJSON(
+        'oauth/token',
+        'POST',
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        {
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+        },
+        token
+      )
+
+      // Note: our API returns null when no data is present, which
+      // has gross implication for default values on downstream functions
+      // here we explictly override a null response with undefined
+      if (response.data === null) {
+        response.data = undefined
+      }
+
+      return Promise.resolve(response)
+    } else {
+      return Promise.reject(new Error('no token/refresh token present'))
+    }
+  } catch (error) {
+    console.log(`error refreshing token - ${error.message}`)
+    return Promise.reject(error)
+  }
 }
