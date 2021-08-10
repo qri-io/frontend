@@ -1,8 +1,11 @@
 import React from 'react'
 
 import ActivityFeed from './icon/ActivityFeed'
+import Any from './icon/Any'
+import Array from './icon/Array'
 import AutomationFilled from './icon/AutomationFilled'
 import Body from './icon/Body'
+import Boolean from './icon/Boolean'
 import Brackets from './icon/Brackets'
 import Calendar from './icon/Calendar'
 import CaretLeft from './icon/CaretLeft'
@@ -33,8 +36,13 @@ import Globe from './icon/Globe'
 import History from './icon/History'
 import Loader from './icon/Loader'
 import Info from './icon/Info'
+import Integer from './icon/Integer'
 import Lock from './icon/Lock'
+import More from './icon/More'
 import MyDatasets from './icon/MyDatasets'
+import Null from './icon/Null'
+import Number from './icon/Number'
+import Object from './icon/Object'
 import Page from './icon/Page'
 import Play from './icon/Play'
 import PlayCircle from './icon/PlayCircle'
@@ -43,6 +51,7 @@ import Readme from './icon/Readme'
 import Rocket from './icon/Rocket'
 import Rows from './icon/Rows'
 import SkinnySearch from './icon/SkinnySearch'
+import String from './icon/String'
 import Structure from './icon/Structure'
 import Tags from './icon/Tags'
 import Twitter from './icon/Twitter'
@@ -79,8 +88,11 @@ const Icon: React.FunctionComponent<IconProps> = ({
 
   const customIcons: {[key: string]: any} = {
     activityFeed: <ActivityFeed className={className} size={size} />,
+    any: <Any className={className} size={size} />,
+    array: <Array className={className} size={size} />,
     automationFilled: <AutomationFilled className={className} size={size} />,
     body: <Body className={className} size={size} />,
+    boolean: <Boolean className={className} size={size} />,
     brackets: <Brackets className={className} size={size} />,
     calendar: <Calendar className={className} size={size} />,
     caretLeft: <CaretLeft className={className} size={size} />,
@@ -110,9 +122,14 @@ const Icon: React.FunctionComponent<IconProps> = ({
     globe: <Globe className={className} size={size} />,
     history: <History className={className} size={size} />,
     info: <Info className={className} size={size} />,
+    integer: <Integer className={className} size={size} />,
     loader: <Loader className={className} size={size} />,
     lock: <Lock className={className} size={size} />,
+    more: <More className={className} size={size} />,
     myDatasets: <MyDatasets className={className} size={size} />,
+    null: <Null className={className} size={size} />,
+    number: <Number className={className} size={size} />,
+    object: <Object className={className} size={size} />,
     page: <Page className={className} size={size} />,
     play: <Play className={className} size={size} />,
     playCircle: <PlayCircle className={className} size={size} />,
@@ -121,6 +138,7 @@ const Icon: React.FunctionComponent<IconProps> = ({
     rocket: <Rocket className={className} size={size} />,
     rows: <Rows className={className} size={size} />,
     skinnySearch: <SkinnySearch className={className} size={size} />,
+    string: <String className={className} size={size} />,
     structure: <Structure className={className} size={size} />,
     tags: <Tags className={className} size={size} />,
     twitter: <Twitter className={className} size={size} />,

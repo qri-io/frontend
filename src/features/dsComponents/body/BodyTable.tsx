@@ -8,7 +8,7 @@ import classNames from 'classnames'
 // import { bodyPageSizeDefault } from '../actions/api'
 // import { ApiActionThunk } from '../store/api'
 
-import { TypeLabel } from '../schema/TwoDSchemaLayout'
+import DataType from '../../../chrome/DataType'
 // import SpinnerWithIcon from './chrome/SpinnerWithIcon'
 
 interface BodyTableProps {
@@ -154,8 +154,9 @@ export default class BodyTable extends React.Component<BodyTableProps> {
               {headers && headers.map((d: any, j: number) => {
                 return (
                   <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-gray-200'>
-                    <div className={classNames(cellClasses, 'text-qrinavy text-sm leading-4')} >
-                      <TypeLabel type={d.type} showLabel={false}/>&nbsp;{d.title}
+                    <div className={classNames(cellClasses, 'text-qrinavy text-sm flex items-center')} >
+                      <DataType type={d.type} showLabel={false} className='mr-1 text-qrigray-300' />
+                      <div>{d.title}</div>
                     </div>
                   </th>
                 )

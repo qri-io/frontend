@@ -35,7 +35,10 @@ const ColumnType: React.FunctionComponent<ColumnTypeProps> = ({
   const renderColType = (type: string, key: number) => {
     return (
       <div key={key} className='flex items-center'>
-        <span className='flex-grow mr-2'>{type}</span> <Icon icon={type === 'multi' ? 'unknown' : type} size='sm' color='medium'/>
+        <span className='flex-grow mr-1'>{type}</span>
+        <span className='text-black'>
+          <Icon icon={type === 'multi' ? 'unknown' : type} size='xs' />
+        </span>
       </div>
     )
   }

@@ -56,11 +56,11 @@ const Body: React.FC<BodyProps> = ({
   const headers = extractColumnHeaders(structure, body)
 
   return (
-    <div className='w-full h-full flex flex-col'>
+    <>
       <ComponentHeader border={false}>
         <BodyHeader dataset={dataset} showExpand={false} />
       </ComponentHeader>
-      <div className='overflow-scroll'>
+      <div className='overflow-auto flex-grow'>
       {
         (structure.format === 'csv' && Array.isArray(body))
           ? <BodyTable
@@ -73,7 +73,7 @@ const Body: React.FC<BodyProps> = ({
             />
       }
       </div>
-    </div>
+    </>
   )
 }
 

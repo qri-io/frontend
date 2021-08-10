@@ -1,28 +1,27 @@
 import React from 'react'
+import classNames from 'classnames'
+
 import Icon from './Icon'
 
 export type DataTypes = 'string' | 'integer' | 'number' | 'boolean' | 'null' | 'any' | 'array' | 'object'
 
 interface DataTypeProps {
   type: DataTypes
-  description: string
-  width?: number
+  className?: string
+  showLabel?: boolean
 }
 
 const DataType: React.FunctionComponent<DataTypeProps> = ({
-  type = 'unknown',
-  description = 'unknown',
-  width = 200
+  type = '',
+  className = '',
+  showLabel = true
 }) => {
-  return (<div className='data-type' style={{ width }}>
-    <div className='type-wrap'>
-      <div className='label large'>{type}</div>
-      <Icon icon={type} size='sm' color='medium' />
+  return (
+    <div className={classNames('flex items-center', className)}>
+      {showLabel && (<div>{type}</div>)}
+      <div className='flex items-center'><Icon icon={type} size='xs' /></div>
     </div>
-    <div className='description small'>
-      {description}
-    </div>
-  </div>)
+  )
 }
 
 export default DataType

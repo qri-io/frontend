@@ -228,9 +228,9 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => {
         return (
-          <div className='mx-auto text-gray-500'>
+          <div className='mx-auto text-qrigray-400'>
             <DropdownMenu
-              icon={<Icon icon='ellipsisH' size='md'/>}
+              icon={<Icon icon='more' />}
               items={[
                 // {
                 //   label: 'Rename...',

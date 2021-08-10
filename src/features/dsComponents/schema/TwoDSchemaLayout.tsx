@@ -2,6 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faToggleOn } from '@fortawesome/free-solid-svg-icons'
 
+import DataType from '../../chrome/DataType'
 import KeyValueTable from '../KeyValueTable'
 import { ColumnProperties, Schema, schemaToColumns } from '../../../qri/dataset'
 
@@ -16,49 +17,6 @@ const buildOtherKeywordsTable = (column: any, index: number) => {
   return hasOtherKeys ? <KeyValueTable index={index} data={column} filterKeys={filterKeys}/> : null
 }
 
-export interface TypeLabelProps {
-  type: string | string[] | undefined
-  showLabel?: boolean
-}
-
-export const TypeLabel: React.FunctionComponent<TypeLabelProps> = ({ type, showLabel = true }) => {
-  let icon
-
-  if (Array.isArray(type)) {
-    icon = ''
-  } else {
-    switch (type) {
-      case 'string':
-        icon = <span className='font-bold text-qrigray-300'>A</span>
-        break
-      case 'number':
-        icon = <span className='font-bold text-qrigray-300'>#</span>
-        break
-      case 'integer':
-        icon = <span className='font-bold text-qrigray-300'>#</span>
-        break
-      case 'boolean':
-        icon = <FontAwesomeIcon icon={faToggleOn} size='xs'/>
-        break
-      default:
-        icon = ''
-    }
-  }
-
-  return (
-    <span className='type-label'>
-      <span className='type-icon'>{icon}</span>
-      {
-        showLabel && (
-          <>
-            &nbsp;&nbsp;{type}
-          </>
-        )
-      }
-    </span>
-  )
-}
-
 const Row: React.FunctionComponent<RowProps> = ({ column, key }) => {
   // let typeContent
 
@@ -66,7 +24,7 @@ const Row: React.FunctionComponent<RowProps> = ({ column, key }) => {
     <div className='row'>
       <div className='cell'>{column.title}</div>
       <div className='cell'>
-        <TypeLabel type={column.type}/>
+        <DataType type={column.type}/>
       </div>
       <div className='cell'>{column.description}</div>
       <div className='cell other-keywords'>{buildOtherKeywordsTable(column, key)}</div>

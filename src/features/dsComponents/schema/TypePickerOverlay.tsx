@@ -54,7 +54,7 @@ const TypePickerOverlay: React.FunctionComponent<TypePickerOverlayProps> = ({
               color={
                 (typeof value === 'string' && value === item.type) || (Array.isArray(value) && value.includes(item.type)) ? 'dark' : 'light'}/>
             </div>
-            <DataType type={item.type} description={item.description} />
+            <DataType type={item.type} />
           </div>
         )
       })}
