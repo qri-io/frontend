@@ -9,8 +9,12 @@ import { selectSessionUserCanEditDataset } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
 import DeployingScreen from '../deploy/DeployingScreen'
 
+interface DatasetFixedLayoutProps {
+  headerChildren?: JSX.Element
+}
 
-const DatasetFixedLayout: React.FC<{}> = ({
+const DatasetFixedLayout: React.FC<DatasetFixedLayoutProps> = ({
+  headerChildren,
   children
 }) => {
   const qriRef = newQriRef(useParams())
@@ -31,7 +35,9 @@ const DatasetFixedLayout: React.FC<{}> = ({
   return (
     <>
         <div className='flex flex-col flex-grow overflow-hidden p-7'>
-          <DatasetHeader dataset={dsPreview} editable={editable} />
+          <DatasetHeader dataset={dsPreview} editable={editable}>
+            {headerChildren}
+          </DatasetHeader>
           {children}
         </div>
         <DeployingScreen qriRef={qriRef} />

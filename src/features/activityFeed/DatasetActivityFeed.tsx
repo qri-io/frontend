@@ -7,6 +7,8 @@ import ActivityList from './ActivityList'
 import { loadDatasetLogs } from './state/activityFeedActions'
 import { newDatasetLogsSelector } from './state/activityFeedState'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
+import Button from '../../chrome/Button'
+import Icon from '../../chrome/Icon'
 
 
 export interface DatasetActivityFeedProps {
@@ -27,8 +29,12 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
     dispatch(loadDatasetLogs(qriRef))
   },[dispatch, qriRef])
 
+  const runNowButton = (
+    <Button type='primary'><Icon icon='play' className='mr-2'/>Run Now</Button>
+  )
+
   return (
-    <DatasetFixedLayout>
+    <DatasetFixedLayout headerChildren={runNowButton}>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
         <ActivityList
           log={logs}

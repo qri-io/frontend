@@ -26,7 +26,8 @@ const NavBar: React.FC<NavBarProps> = ({
 
 
   const buttonItems = [
-    { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
+    // TODO(chriswhong) - reinstate dashboard when this feature is available
+    // { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
     { text: 'My Datasets', link: '/collection', icon: 'myDatasets'}
   ]
 

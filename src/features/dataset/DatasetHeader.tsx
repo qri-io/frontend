@@ -8,7 +8,7 @@ import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
 import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import DatasetInfoItem from './DatasetInfoItem'
-import Button from '../../chrome/Button'
+import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import TextLink from '../../chrome/TextLink'
 import { validateDatasetName } from '../session/state/formValidation'
 
@@ -64,26 +64,14 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                 value={qriRef.name}
                 validator={validateDatasetName}
               />
-              {editable &&
-                <DropdownMenu
-                  icon={<Icon className='ml-3 opacity-60' size='sm' icon='sortDown' />}
-                  items={[
-                    {
-                      label: 'Duplicate...',
-                      disabled: true,
-                      onClick: () => { handleButtonClick("duplicating not yet implemented") }
-                    }
-                  ]}
-                />}
             </div>
           )}
-
 
           <div className='text-2xl text-qrinavy-500 font-black group hover:text'>
             {dataset.meta?.title || dataset.name}
           </div>
           {showInfo && (
-            <div className='flex mt-3'>
+            <div className='flex mt-3 text-sm'>
               <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />
               <DatasetInfoItem icon='disk' label='59 MB' />
               <DatasetInfoItem icon='download' label='418 downloads' />
@@ -92,9 +80,11 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             </div>
           )}
         </div>
-        <div className='flex items-center content-center'>
+        <div className='flex items-center content-center pl-6'>
           {children || (
             <>
+              {/*
+                TODO(chriswhong) - Reinstate Share and Follow buttons when these features are available
               <Button className='mr-3' type='dark'>
                 Follow
               </Button>
@@ -102,6 +92,8 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
                 <Icon icon='globe' size='lg' className='mr-2' /> Share
               </Button>
               <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
+              */}
+              <DownloadDatasetButton qriRef={qriRef} type='primary' />
             </>
           )}
         </div>

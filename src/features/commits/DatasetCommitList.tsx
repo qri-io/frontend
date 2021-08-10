@@ -45,14 +45,18 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
         <div className='text-xs text-gray-400 tracking-wider'>{commits.length} {commits.length === 1 ? 'version' : 'versions'}</div>
       </header>
       <ul className='block flex-grow overflow-y-auto pb-40 pr-8'>
-        <HistorySearchBox />
-        {editable && <NewVersionButton qriRef={qriRef} />}
+        {/*
+          TODO(chriswhong): restore when these features become available
+          <HistorySearchBox />
+          {editable && <NewVersionButton qriRef={qriRef} />}
+        */}
         {commits.map((logItem, i) => (
           <DatasetCommitListItem
             key={i}
             logItem={logItem}
             active={logItem.path === path}
-            first={i === 0 && !editable}
+            // first={i === 0 && !editable} (restore when there is <NewVersionButton> at the top of the list)
+            first={i === 0}
             last={i === (commits.length - 1)}
           />
         ))}
