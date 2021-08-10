@@ -1,5 +1,6 @@
 import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qri/eventLog'
+import { Dataset } from '../../../qri/dataset'
 import { NewWorkflow, Workflow, WorkflowInfo, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
 import {
@@ -7,7 +8,7 @@ import {
   WORKFLOW_CHANGE_TRANSFORM_STEP,
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
-  SET_WORKFLOW,
+  SET_TEMPLATE,
   SET_WORKFLOW_REF,
   SET_RUN_MODE,
   RunMode
@@ -16,11 +17,7 @@ import { AnyAction } from 'redux'
 
 export function mapWorkflow(d: object | []): Workflow {
   const data = (d as Record<string,any>)
-  const wf = data.workflow || {}
-  wf.steps = data.dataset?.transform?.steps
-  wf.ref = data.ref
-
-  return NewWorkflow(wf)
+  return NewWorkflow(data)
 }
 
 export function loadWorkflowByDatasetRef(qriRef: QriRef): ApiActionThunk {
@@ -113,15 +110,15 @@ export function runEventLog(event: EventLogLine): EventLogAction {
   }
 }
 
-export interface SetWorkflowAction {
+export interface SetTemplateAction {
   type: string
   workflow: Workflow
 }
 
-export function setWorkflow(workflow: Workflow): SetWorkflowAction {
+export function setTemplate(template: Dataset): SetTemplateAction {
   return {
-    type: SET_WORKFLOW,
-    workflow
+    type: SET_TEMPLATE,
+    dataset: template
   }
 }
 

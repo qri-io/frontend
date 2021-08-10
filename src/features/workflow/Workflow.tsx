@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Prompt, Redirect } from 'react-router'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,7 +6,9 @@ import { Location } from 'history'
 
 import WorkflowOutline from './WorkflowOutline'
 import { selectLatestRun, selectRunMode, selectWorkflow, selectWorkflowIsDirty } from './state/workflowState'
-import { setWorkflow } from './state/workflowActions'
+import { selectDataset } from '../dataset/state/datasetState'
+
+import { setTemplate } from './state/workflowActions'
 import { selectTemplate } from '../template/templates'
 import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
@@ -26,6 +28,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
   const location = useLocation<WorkflowLocationState>()
   const workflow = useSelector(selectWorkflow)
+  const dataset = useSelector(selectDataset)
   const latestRun = useSelector(selectLatestRun)
   const runMode = useSelector(selectRunMode)
   const isDirty = useSelector(selectWorkflowIsDirty)
@@ -35,7 +38,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   useEffect(() => {
     if (location.state?.template) {
       const template = selectTemplate(location.state.template)
-      dispatch(setWorkflow(template))
+      dispatch(setTemplate(template))
     }
 
     if (location.state?.showSplashModal) {
@@ -71,7 +74,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
           message={handleBlockedNavigation}
         />
         <WorkflowOutline workflow={workflow} run={latestRun} runMode={runMode} />
-        <WorkflowEditor qriRef={qriRef} workflow={workflow} run={latestRun} runMode={runMode} isDirty={isDirty} />
+        <WorkflowEditor qriRef={qriRef} workflow={workflow} dataset={dataset} run={latestRun} runMode={runMode} isDirty={isDirty} />
         { redirectTo && <Redirect to={redirectTo} /> }
       </div>
     </>

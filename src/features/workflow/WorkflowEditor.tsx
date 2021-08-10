@@ -22,6 +22,7 @@ export interface WorkflowEditorProps {
   qriRef: QriRef
   runMode: RunMode
   workflow: Workflow
+  dataset: Dataset
   isDirty: boolean
   run?: Run
 }
@@ -30,6 +31,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   qriRef,
   runMode,
   workflow,
+  dataset,
   isDirty,
   run
 }) => {
@@ -109,7 +111,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                   <div className='text-sm text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
                 </div>
               </div>
-              {workflow.steps && workflow.steps.map((step, i) => {
+              {dataset.steps && dataset.steps.map((step, i) => {
                 let r
                 if (run) {
                   r = (run?.steps && run?.steps.length >= i) ? run.steps[i] : NewRunStep({ status: "waiting" })

@@ -13,7 +13,7 @@ import { QriRef } from '../../../qri/ref';
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
 export const WORKFLOW_CHANGE_TRANSFORM_STEP = 'WORKFLOW_CHANGE_TRANSFORM_STEP'
-export const SET_WORKFLOW = 'SET_WORKFLOW'
+export const SET_TEMPLATE = 'SET_TEMPLATE'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
 export const SET_RUN_MODE = 'SET_RUN_MODE'
 
@@ -63,8 +63,7 @@ const initialState: WorkflowState = {
   runMode: 'apply',
   workflow: {
     id: '',
-    datasetID: 'fake_id',
-    runCount: 0,
+    initID: 'fake_id',
     active: true,
 
     triggers: [],
@@ -76,6 +75,7 @@ const initialState: WorkflowState = {
     steps: [],
     hooks: []
   },
+  dataset: {},
   isDirty: false,
   events: []
 }
@@ -91,13 +91,12 @@ export const workflowReducer = createReducer(initialState, {
       state.runMode = action.mode
     }
   },
-  SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,
   WORKFLOW_CHANGE_TRANSFORM_STEP: changeWorkflowTransformStep,
   RUN_EVENT_LOG: addRunEvent,
   SET_WORKFLOW_REF: (state, action: SetWorkflowRefAction) => {
     state.qriRef = action.qriRef
-    state.workflow.datasetID = `${action.qriRef.username}/${action.qriRef.name}`
+    state.workflow.initID = `${action.qriRef.username}/${action.qriRef.name}`
   },
   // listen for dataset fetching actions, if the reference of the fetched dataset
   // matches the ref the workbench reducer is tuned to, load the transform script
@@ -108,7 +107,7 @@ export const workflowReducer = createReducer(initialState, {
     if (state.qriRef?.name === d.name) {
       if (d.transform?.steps) {
         state.workflow.steps = d.transform.steps
-        state.workflow.datasetID = d.path
+        state.workflow.initID = d.path
 
         state.workflowBase.steps = d.transform.steps
       }
@@ -122,6 +121,7 @@ export const workflowReducer = createReducer(initialState, {
   },
   'API_WORKFLOW_SUCCESS': (state, action) => {
     const w = action.payload.data as Workflow
+    console.log(w)
     // TODO (b5) - right now we only use the single-workflow fetch endpoint in one
     // place (on the workflow editor), so there's no need to check if the ID of the
     // workflow we're editing matches the one coming from a successful API call,
@@ -175,15 +175,4 @@ function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowSt
 function addRunEvent(state: WorkflowState, action: EventLogAction) {
   state.events.push(action.data)
   state.events.sort((a,b) => a.ts - b.ts)
-}
-
-function setWorkflow(state: WorkflowState, action: SetWorkflowAction) {
-  state.workflow = action.workflow
-  state.workflowBase = {
-    triggers: action.workflow.triggers,
-    steps: action.workflow.steps,
-    hooks: action.workflow.hooks
-  }
-  state.events = []
-  return
 }

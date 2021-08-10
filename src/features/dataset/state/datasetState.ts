@@ -5,6 +5,7 @@ import Dataset, { NewDataset } from '../../../qri/dataset';
 import { qriRefFromString } from '../../../qri/ref';
 import { RenameDatasetAction } from './datasetActions';
 import { selectSessionUser } from '../../session/state/sessionState';
+import { SetTemplateAction } from '../../workflow/state/workflowActions'
 
 export const RENAME_NEW_DATASET = 'RENAME_NEW_DATASET'
 
@@ -61,5 +62,9 @@ export const datasetReducer = createReducer(initialState, {
   },
   RENAME_NEW_DATASET: (state: DatasetState, action: RenameDatasetAction) => {
     state.dataset.name = action.next.name
+  },
+  SET_TEMPLATE: (state: DatasetState, action: SetTemplateAction) => {
+    state.dataset = action.dataset
+    return
   }
 })

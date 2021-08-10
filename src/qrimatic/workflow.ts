@@ -9,22 +9,12 @@ export type RunStatus =
 
 export interface Workflow {
   id: string
-  ref: string
-  ownerID?: string
-  datasetID?: string
-
-  disabled: boolean
-  runCount: number
-
-  latestStart?: string
-  latestEnd?: string
-  status: WorkflowStatus
-
+  initID: string
+  ownerID: string
+  created: string
+  active: boolean
   triggers?: WorkflowTrigger[]
-  steps?: TransformStep[]
   hooks?: WorkflowHook[]
-
-  versionInfo?: VersionInfo
 }
 
 // stores only the things we need to track to compute dirty/drafting state
@@ -38,10 +28,10 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
   return {
     id: data.id || '',
     ref: data.ref || '',
-    datasetID: data.datasetID,
+    initID: data.initID,
     ownerID: data.ownerID,
 
-    disabled: data.disabled || false,
+    active: data.active || false,
     runCount: data.runCount || 0,
 
     latestStart: data.latestStart,
