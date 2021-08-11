@@ -170,6 +170,7 @@ function calculateIsDirty(state: WorkflowState) {
 function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerAction) {
   // TODO(chriswhong): allow for more than one trigger
   state.workflow.triggers = [action.trigger]
+  state.isDirty = calculateIsDirty(state)
   return
 }
 
