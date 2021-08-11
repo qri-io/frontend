@@ -14,7 +14,7 @@ export function loadDatasetCommits(qriRef: QriRef): ApiActionThunk {
 
 function fetchDatasetCommits(qriRef: QriRef): ApiAction {
   return {
-    type: 'dataset_commits',
+    type: 'dataset_activity',
     qriRef,
     [CALL_API]: {
       endpoint: `ds/activity`,

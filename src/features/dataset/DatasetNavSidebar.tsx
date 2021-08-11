@@ -17,6 +17,8 @@ import {
 
 import { selectNavExpanded } from '../app/state/appState'
 import { toggleNavExpanded } from '../app/state/appActions'
+import { selectVersionCount } from '../commits/state/commitState'
+import { selectLogCount } from '../activityFeed/state/activityFeedState'
 
 export interface DatasetNavSidebarProps {
   qriRef: QriRef
@@ -24,6 +26,8 @@ export interface DatasetNavSidebarProps {
 
 const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const expanded = useSelector(selectNavExpanded)
+  const versionCount = useSelector(selectVersionCount(qriRef))
+  const logCount = useSelector(selectLogCount(qriRef))
   const dispatch = useDispatch()
 
   const toggleExpanded = () => {
@@ -39,7 +43,6 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   // determine if the workflow is new by reading /new at the end of the pathname
   const segments = useLocation().pathname.split('/')
   const isNewWorkflow = segments[segments.length - 1] === 'new'
-
 
   return (
     <div className={`side-nav pl-9 h-full bg-white relative pt-9 flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
@@ -88,6 +91,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         label='History'
         to={pathToDatasetViewer(qriRef)}
         expanded={expanded}
+        number={versionCount}
         tooltip={
           <TooltipContent
             text='Components'
@@ -115,6 +119,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         label='Run Log'
         to={pathToActivityFeed(qriRef.username, qriRef.name)}
         expanded={expanded}
+        number={logCount}
         tooltip={
           <TooltipContent
             text='Activity Feed'

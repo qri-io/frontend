@@ -12,6 +12,7 @@ export interface DatasetSideNavItemProps {
   to: string
   expanded: boolean
   tooltip?: React.ReactNode
+  number?: number
   disabled?: boolean
 }
 
@@ -22,6 +23,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   to,
   expanded=true,
   tooltip,
+  number,
   disabled = false
 }) => {
   const { pathname } = useLocation();
@@ -31,7 +33,17 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
     <>
       <span data-tip data-for={id}>
         <div className='flex items-center'>
-          <Icon className='mr-2' size='md' icon={icon} />
+          <div className='relative'>
+            {number && (
+              <div
+                className='text-center bg-qrigray-400 px-1 py-0.5 rounded-sm text-white leading-none absolute -top-0 right-1'
+                style={{
+                  fontSize: 9
+                }}
+              >{number}</div>
+            )}
+            <Icon className='mr-2' size='md' icon={icon} />
+          </div>
           <span style={{
             fontSize: '16px',
             width: expanded ? 'auto' : 0,

@@ -11,6 +11,13 @@ export function newDatasetCommitsSelector(qriRef: QriRef): (state: RootState) =>
   }
 }
 
+export function selectVersionCount(qriRef: QriRef): (state: RootState) => number {
+  qriRef = humanRef(qriRef)
+  return (state: RootState) => {
+    return state.commits.commits[refStringFromQriRef(qriRef)]?.length
+  }
+}
+
 export function selectDatasetCommitsLoading(state: RootState): boolean {
   return state.commits.loading
 }
@@ -28,15 +35,15 @@ const initialState: CommitsState = {
 }
 
 export const commitsReducer = createReducer(initialState, {
-  'API_DATASET_COMMITS_REQUEST': (state, action) => {
+  'API_DATASET_ACTIVITY_REQUEST': (state, action) => {
     state.loading = true
   },
-  'API_DATASET_COMMITS_FAILURE': (state, action) => {
+  'API_DATASET_ACTIVITY_FAILURE': (state, action) => {
     state.loading = false
     // TODO (b5): capture error from API response
     state.loadError = 'failed to load commits'
   },
-  'API_DATASET_COMMITS_SUCCESS': (state, action) => {
+  'API_DATASET_ACTIVITY_SUCCESS': (state, action) => {
     const ls = action.payload.data as LogItem[]
     state.commits[refStringFromQriRef(action.qriRef)] = ls.filter(d => d.path)
     state.loading = false

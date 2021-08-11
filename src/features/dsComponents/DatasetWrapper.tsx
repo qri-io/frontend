@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 import { newQriRef } from '../../qri/ref'
 import { fetchDsPreview } from '../dsPreview/state/dsPreviewActions'
 import { loadWorkflowByDatasetRef } from '../workflow/state/workflowActions'
+import { loadDatasetLogs } from '../activityFeed/state/activityFeedActions'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 
@@ -21,6 +22,7 @@ const DatasetWrapper: React.FC<{}> = ({ children }) => {
   useEffect(() => {
     dispatch(fetchDsPreview(qriRef))
     dispatch(loadWorkflowByDatasetRef(qriRef))
+    dispatch(loadDatasetLogs(qriRef))
   }, [ qriRef.username, qriRef.name])
 
   return (

@@ -32,7 +32,6 @@ export const TEMP_SET_WORKFLOW_EVENTS = 'TEMP_SET_WORKFLOW_EVENTS'
 
 export const selectLatestDryRun = (state: RootState): Run | undefined => {
   if (state.workflow.lastDryRunID) {
-    // console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
     return NewRunFromEventLog(state.workflow.lastDryRunID, state.workflow.events)
   }
   return undefined
@@ -40,7 +39,6 @@ export const selectLatestDryRun = (state: RootState): Run | undefined => {
 
 export const selectLatestRun = (state: RootState): Run | undefined => {
   if (state.workflow.lastRunID) {
-    // console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
     return NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events)
   }
   return undefined
