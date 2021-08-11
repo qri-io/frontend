@@ -1,3 +1,8 @@
+// we are currently using dsPreview as the place to store top-level info for the
+// active dataset (the dataset the user is using a /ds route for)
+// it is used to populate the header info, to store whether the dataset has a
+// workflow, etc
+
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
@@ -9,11 +14,13 @@ export const selectIsDsPreviewLoading = (state: RootState): boolean => state.dsP
 
 export interface DsPreviewState {
   preview: Dataset
+  hasWorkflow: boolean
   loading: boolean
 }
 
 const initialState: DsPreviewState = {
   preview: NewDataset({}),
+  hasWorkflow: false,
   loading: false
 }
 
@@ -58,5 +65,8 @@ export const dsPreviewReducer = createReducer(initialState, {
     state.preview.readme = { script: atob(action.payload.data) }
   },
   'API_PREVIEWREADME_FAILURE': (state, action) => {
+  },
+  'API_WORKFLOW_SUCCESS': (state, action) => {
+    state.hasWorkflow = true
   },
 })
