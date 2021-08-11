@@ -30,6 +30,14 @@ export const SET_RUN_MODE = 'SET_RUN_MODE'
 // of the workflow without having to have a working api
 export const TEMP_SET_WORKFLOW_EVENTS = 'TEMP_SET_WORKFLOW_EVENTS'
 
+export const selectLatestDryRun = (state: RootState): Run | undefined => {
+  if (state.workflow.lastDryRunID) {
+    // console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
+    return NewRunFromEventLog(state.workflow.lastDryRunID, state.workflow.events)
+  }
+  return undefined
+}
+
 export const selectLatestRun = (state: RootState): Run | undefined => {
   if (state.workflow.lastRunID) {
     // console.log('calculating event log for id', state.workflow.lastRunID, 'from events', state.workflow.events, NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events))
@@ -69,6 +77,7 @@ export interface WorkflowState {
   // with working state to determine isDirty
   workflowBase: WorkflowBase
   isDirty: boolean
+  lastDryRunID?: string,
   lastRunID?: string,
   events: EventLogLine[],
 }
@@ -91,13 +100,14 @@ const initialState: WorkflowState = {
   },
   isDirty: false,
   lastRunID: '',
+  lastDryRunID: '',
   events: []
 }
 
 export const workflowReducer = createReducer(initialState, {
   'API_APPLY_SUCCESS': (state, action) => {
     const runID = action.payload.data.runID
-    state.lastRunID = runID
+    state.lastDryRunID = runID
   },
   'API_RUNNOW_SUCCESS': (state, action) => {
     state.lastRunID = action.payload.data

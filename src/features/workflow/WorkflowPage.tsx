@@ -2,12 +2,10 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { newQriRef } from '../../qri/ref'
 import Spinner from '../../chrome/Spinner'
-import { loadDataset } from '../dataset/state/datasetActions'
 import { selectWorkflowDataset } from '../workflow/state/workflowState'
-import { loadWorkflowByDatasetRef, setWorkflowRef } from './state/workflowActions'
-import { selectLatestRun } from './state/workflowState'
+import { setWorkflowRef } from './state/workflowActions'
+import { selectLatestDryRun } from './state/workflowState'
 import { QriRef } from '../../qri/ref'
 import { NewDataset } from '../../qri/dataset'
 import Workflow from './Workflow'
@@ -22,7 +20,7 @@ interface WorkflowPageProps {
 const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
   let dataset = useSelector(selectWorkflowDataset)
-  const latestRun = useSelector(selectLatestRun)
+  const latestRun = useSelector(selectLatestDryRun)
   let { username, name } = useParams()
 
   // if qriRef is empty, this is a new workflow

@@ -6,7 +6,7 @@ import { Location } from 'history'
 
 import WorkflowOutline from './WorkflowOutline'
 import {
-  selectLatestRun,
+  selectLatestDryRun,
   selectRunMode,
   selectWorkflow,
   selectWorkflowIsDirty,
@@ -34,7 +34,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const location = useLocation<WorkflowLocationState>()
   const workflow = useSelector(selectWorkflow)
   const workflowDataset = useSelector(selectWorkflowDataset)
-  const latestRun = useSelector(selectLatestRun)
+  const latestRun = useSelector(selectLatestDryRun)
   const runMode = useSelector(selectRunMode)
   const isDirty = useSelector(selectWorkflowIsDirty)
 
