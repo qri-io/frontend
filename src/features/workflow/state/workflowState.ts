@@ -77,7 +77,7 @@ const initialState: WorkflowState = {
   runMode: 'apply',
   workflow: {
     id: '',
-    initID: 'new_dataset',
+    initID: '',
     active: true,
 
     triggers: [],
@@ -114,7 +114,6 @@ export const workflowReducer = createReducer(initialState, {
   SET_WORKFLOW_REF: (state, action: SetWorkflowRefAction) => {
     state.dataset.username = action.qriRef.username
     state.dataset.name = action.qriRef.name
-    state.workflow.initID = `${action.qriRef.username}/${action.qriRef.name}`
   },
   // listen for dataset fetching actions, if the reference of the fetched dataset
   // matches the ref the workbench reducer is tuned to, load the transform script

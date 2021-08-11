@@ -5,11 +5,15 @@ import numeral from 'numeral'
 
 import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
+import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
+import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import Icon from '../../chrome/Icon'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
+import commitishFromPath from '../../utils/commitishFromPath'
+
 
 interface ActivityListProps {
   log: LogItem[]
@@ -66,17 +70,17 @@ const ActivityList: React.FC<ActivityListProps> = ({
       name: 'Commit',
       selector: 'name',
       cell: (row: LogItem) => {
+        console.log('row', row)
         if (!['failed', 'unchanged'].includes(row.runStatus)) {
           const versionLink = `/ds/${row.username}/${row.name}/at${row.path}/body`
           return (
             <Link to={versionLink}>
-              <div className='font-semibold text-sm mb-1 text-qrinavy'>
-                {row.path && <div><Icon icon='commit' size='sm'/> {row.path.split('/')[2].substring(0, 8)}</div>}
+              <div className='text-qrinavy font-semibold text-sm flex items-center mb-2'>
+                <div className=''>{row.message}</div>
               </div>
-              <div className='flex text-xs overflow-y-hidden'>
-                <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} small />
-                <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} small />
-                <DatasetInfoItem icon='page' label={row.bodyFormat} small />
+              <div className='flex items-center text-xs text-gray-400'>
+                <Icon icon='commit' size='sm' className='-ml-2' />
+                <div className=''>{commitishFromPath(row.path)}</div>
               </div>
             </Link>
           )
