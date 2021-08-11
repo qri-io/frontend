@@ -69,8 +69,11 @@ function setAuthState(state: any) {
   try {
     if (state.session.token) {
       localStorage.setItem('state.auth.token', JSON.stringify((state.session || {}).token));
+      localStorage.setItem('state.auth.refreshToken', JSON.stringify((state.session || {}).refreshToken));
+
     } else {
       localStorage.removeItem('state.auth.token')
+      localStorage.removeItem('state.auth.refreshToken')
     }
 
 

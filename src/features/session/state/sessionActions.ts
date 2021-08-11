@@ -16,6 +16,7 @@ export function logIn (username: string, password: string): ApiActionThunk {
       }
 
       const token = tokenResponse.payload.data.access_token
+      const refreshToken = tokenResponse.payload.data.refresh_token
 
       // get user data
       // pass access_token directly to fetchUserProfile so it can be used immediately
@@ -36,7 +37,8 @@ export function logIn (username: string, password: string): ApiActionThunk {
       return dispatch({
         type: 'LOGIN_SUCCESS',
         user,
-        token
+        token,
+        refreshToken
       })
     } catch (e) {
       return dispatch({
