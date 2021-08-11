@@ -7,6 +7,7 @@ import {
   WORKFLOW_CHANGE_TRANSFORM_STEP,
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
+  SET_TEMPLATE,
   SET_WORKFLOW,
   SET_WORKFLOW_REF,
   SET_RUN_MODE,
@@ -16,11 +17,7 @@ import { AnyAction } from 'redux'
 
 export function mapWorkflow(d: object | []): Workflow {
   const data = (d as Record<string,any>)
-  const wf = data.workflow || {}
-  wf.steps = data.dataset?.transform?.steps
-  wf.ref = data.ref
-
-  return NewWorkflow(wf)
+  return NewWorkflow(data)
 }
 
 export function loadWorkflowByDatasetRef(qriRef: QriRef): ApiActionThunk {
@@ -38,6 +35,24 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
       method: 'POST',
       body: { ref: `${qriRef.username}/${qriRef.name}` },
       map: mapWorkflow
+    }
+  }
+}
+
+export function runNow(qriRef: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchRunNow(qriRef))
+  }
+}
+
+function fetchRunNow(qriRef: QriRef): ApiAction {
+  return {
+    type: 'runnow',
+    qriRef,
+    [CALL_API]: {
+      endpoint: 'auto/run',
+      method: 'POST',
+      body: { ref: `${qriRef.username}/${qriRef.name}` },
     }
   }
 }
@@ -82,7 +97,7 @@ export function setRunMode(mode: RunMode): RunModeAction {
   }
 }
 
-export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
+export function applyWorkflowTransform(w: Workflow, d: Dataset): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch({
       type: 'apply',
@@ -93,7 +108,7 @@ export function applyWorkflowTransform(w: Workflow): ApiActionThunk {
           wait: false,
           transform: {
             scriptBytes: btoa(workflowScriptString(w)),
-            steps: w.steps
+            steps: d.transform.steps
           }
         },
       }
@@ -124,6 +139,20 @@ export function setWorkflow(workflow: Workflow): SetWorkflowAction {
     workflow
   }
 }
+
+export interface SetTemplateAction {
+  type: string
+  workflow: Workflow
+}
+
+export function setTemplate(dataset: Dataset): SetTemplateAction {
+  return {
+    type: SET_TEMPLATE,
+    dataset
+  }
+}
+
+
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api

@@ -7,7 +7,7 @@ import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { applyWorkflowTransform } from './state/workflowActions'
 import { deployWorkflow } from '../deploy/state/deployActions'
-import { selectRunMode, selectWorkflow } from './state/workflowState'
+import { selectRunMode, selectWorkflow, selectWorkflowDataset } from './state/workflowState'
 import { platform } from '../../utils/platform'
 
 export interface RunBarProps {
@@ -22,11 +22,12 @@ const RunBar: React.FC<RunBarProps> = ({
   const dispatch = useDispatch()
   const runMode = useSelector(selectRunMode)
   const workflow = useSelector(selectWorkflow)
+  const workflowDataset = useSelector(selectWorkflowDataset)
 
   const handleRun = () => {
     if (onRun) { onRun() }
     if (runMode === 'apply') {
-      dispatch(applyWorkflowTransform(workflow))
+      dispatch(applyWorkflowTransform(workflow, workflowDataset))
     }
     else if (runMode === 'save') {
       dispatch(deployWorkflow(workflow))

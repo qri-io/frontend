@@ -2,17 +2,26 @@ import { createReducer } from '@reduxjs/toolkit'
 import DeepEqual from 'deep-equal'
 import _ from 'lodash'
 
-import { RootState } from '../../../store/store';
-import { EventLogAction, SetWorkflowAction, SetWorkflowStepAction, SetWorkflowRefAction, WorkflowTriggerAction, RunModeAction } from './workflowActions';
-import { NewRunFromEventLog, Run } from '../../../qri/run';
-import { Workflow, WorkflowBase } from '../../../qrimatic/workflow';
-import { EventLogLine } from '../../../qri/eventLog';
-import Dataset from '../../../qri/dataset';
-import { QriRef } from '../../../qri/ref';
+import { RootState } from '../../../store/store'
+import {
+  EventLogAction,
+  SetWorkflowAction,
+  SetWorkflowStepAction,
+  SetWorkflowRefAction,
+  WorkflowTriggerAction,
+  RunModeAction,
+  SetTemplateAction
+} from './workflowActions'
+import { NewRunFromEventLog, Run } from '../../../qri/run'
+import { Workflow, WorkflowBase } from '../../../qrimatic/workflow'
+import { EventLogLine } from '../../../qri/eventLog'
+import { Dataset, NewDataset, qriRefFromDataset } from '../../../qri/dataset'
+import { QriRef } from '../../../qri/ref'
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
 export const WORKFLOW_CHANGE_TRANSFORM_STEP = 'WORKFLOW_CHANGE_TRANSFORM_STEP'
+export const SET_TEMPLATE = 'SET_TEMPLATE'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
 export const SET_RUN_MODE = 'SET_RUN_MODE'
@@ -38,9 +47,13 @@ export const selectRunsFromEventLog = (state: RootState): Run[] => {
 }
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
-export const selectWorkflowQriRef = (state: RootState): QriRef => state.workflow.qriRef
+export const selectWorkflowQriRef = (state: RootState): QriRef => {
+  return qriRefFromDataset(state.workflow.dataset)
+}
 export const selectRunMode = (state: RootState): RunMode => state.workflow.runMode
 export const selectWorkflowIsDirty = (state: RootState): boolean => state.workflow.isDirty
+export const selectWorkflowDataset = (state: RootState): Dataset => state.workflow.dataset
+
 
 
 export type RunMode =
@@ -49,12 +62,13 @@ export type RunMode =
 
 export interface WorkflowState {
   runMode: RunMode
-  // reference the workflow editor is manipulating
-  qriRef?: QriRef
   workflow: Workflow
+  // working dataset for editing transform steps, setting dataset name, etc
+  dataset: Dataset
+  // stores the "clean" state of triggers, steps, and hooks, used to compare
+  // with working state to determine isDirty
   workflowBase: WorkflowBase
   isDirty: boolean
-
   lastRunID?: string,
   events: EventLogLine[],
 }
@@ -63,20 +77,20 @@ const initialState: WorkflowState = {
   runMode: 'apply',
   workflow: {
     id: '',
-    datasetID: 'fake_id',
-    runCount: 0,
+    initID: 'new_dataset',
     active: true,
 
     triggers: [],
-    steps: [],
     hooks: []
   },
+  dataset: NewDataset({}),
   workflowBase: {
     triggers: [],
     steps: [],
     hooks: []
   },
   isDirty: false,
+  lastRunID: '',
   events: []
 }
 
@@ -85,34 +99,31 @@ export const workflowReducer = createReducer(initialState, {
     const runID = action.payload.data.runID
     state.lastRunID = runID
   },
+  'API_RUNNOW_SUCCESS': (state, action) => {
+    state.lastRunID = action.payload.data
+  },
   SET_RUN_MODE: (state, action: RunModeAction) => {
     if (state.runMode !== action.mode) {
       state.events = [] // changing run modes negates any existing run state
       state.runMode = action.mode
     }
   },
-  SET_WORKFLOW: setWorkflow,
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,
   WORKFLOW_CHANGE_TRANSFORM_STEP: changeWorkflowTransformStep,
   RUN_EVENT_LOG: addRunEvent,
   SET_WORKFLOW_REF: (state, action: SetWorkflowRefAction) => {
-    state.qriRef = action.qriRef
-    state.workflow.datasetID = `${action.qriRef.username}/${action.qriRef.name}`
+    state.dataset.username = action.qriRef.username
+    state.dataset.name = action.qriRef.name
+    state.workflow.initID = `${action.qriRef.username}/${action.qriRef.name}`
   },
   // listen for dataset fetching actions, if the reference of the fetched dataset
   // matches the ref the workbench reducer is tuned to, load the transform script
   // into the workbench
-  'API_DATASET_SUCCESS': (state, action) => {
+  'API_PREVIEW_SUCCESS': (state, action) => {
     const d = action.payload.data as Dataset
     // TODO (b5) - this should check peername *and* confirm the loaded version is HEAD
-    if (state.qriRef?.name === d.name) {
-      if (d.transform?.steps) {
-        state.workflow.steps = d.transform.steps
-        state.workflow.datasetID = d.path
-
-        state.workflowBase.steps = d.transform.steps
-      }
-    }
+    state.dataset = d
+    state.workflowBase.steps = d.transform.steps
   },
   'API_WORKFLOW_REQUEST': (state, action) => {
     // reset workflow and lastRunID to initialState values
@@ -140,13 +151,18 @@ export const workflowReducer = createReducer(initialState, {
   },
   'API_DEPLOY_SUCCESS': (state, action) => {
     state.isDirty = false
+  },
+  SET_TEMPLATE: (state: WorkflowState, action: SetTemplateAction) => {
+    state.dataset = action.dataset
+    state.workflowBase.steps = action.dataset.transform.steps
+    return
   }
 })
 
 function calculateIsDirty(state: WorkflowState) {
   const workflowCompare = {
     triggers: state.workflow.triggers,
-    steps: state.workflow.steps,
+    steps: state.dataset.transform.steps,
     hooks: state.workflow.hooks
   }
   return !DeepEqual(workflowCompare, state.workflowBase)
@@ -159,8 +175,8 @@ function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerActi
 }
 
 function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowStepAction) {
-  if (state.workflow.steps) {
-    state.workflow.steps[action.index].script = action.script
+  if (state.dataset.transform.steps) {
+    state.dataset.transform.steps[action.index].script = action.script
   }
 
   state.isDirty = calculateIsDirty(state)
@@ -175,15 +191,4 @@ function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowSt
 function addRunEvent(state: WorkflowState, action: EventLogAction) {
   state.events.push(action.data)
   state.events.sort((a,b) => a.ts - b.ts)
-}
-
-function setWorkflow(state: WorkflowState, action: SetWorkflowAction) {
-  state.workflow = action.workflow
-  state.workflowBase = {
-    triggers: action.workflow.triggers,
-    steps: action.workflow.steps,
-    hooks: action.workflow.hooks
-  }
-  state.events = []
-  return
 }
