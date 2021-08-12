@@ -70,7 +70,6 @@ const ActivityList: React.FC<ActivityListProps> = ({
       name: 'Commit',
       selector: 'name',
       cell: (row: LogItem) => {
-        console.log('row', row)
         if (!['failed', 'unchanged'].includes(row.runStatus)) {
           const versionLink = `/ds/${row.username}/${row.name}/at${row.path}/body`
           return (

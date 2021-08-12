@@ -1,12 +1,19 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store';
-import { QriRef, refStringFromQriRef } from '../../../qri/ref';
+import { QriRef, humanRef, refStringFromQriRef } from '../../../qri/ref';
 import { LogItem } from '../../../qri/log';
 
 export function newDatasetLogsSelector(qriRef: QriRef): (state: RootState) => LogItem[] {
   return (state: RootState) => {
     return state.activityFeed.datasetLogs[refStringFromQriRef(qriRef)] || []
+  }
+}
+
+export function selectLogCount(qriRef: QriRef): (state: RootState) => number {
+  qriRef = humanRef(qriRef)
+  return (state: RootState) => {
+    return state.activityFeed.datasetLogs[refStringFromQriRef(qriRef)]?.length
   }
 }
 
@@ -19,7 +26,7 @@ const initialState: ActivityFeedState = {
 }
 
 export const activityFeedReducer = createReducer(initialState, {
-  'API_DATASET_LOGS_SUCCESS': (state, action) => {
+  'API_DATASET_ACTIVITY_SUCCESS': (state, action) => {
     const ls = action.payload.data as LogItem[]
     state.datasetLogs[refStringFromQriRef(action.qriRef)] = ls
   },

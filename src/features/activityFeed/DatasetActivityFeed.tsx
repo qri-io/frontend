@@ -9,8 +9,7 @@ import { newDatasetLogsSelector } from './state/activityFeedState'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 import { runNow } from '../workflow/state/workflowActions'
 import { selectLatestRun } from '../workflow/state/workflowState'
-import Button from '../../chrome/Button'
-import Icon from '../../chrome/Icon'
+import RunNowButton from './RunNowButton'
 
 
 export interface DatasetActivityFeedProps {
@@ -32,18 +31,17 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
     dispatch(loadDatasetLogs(qriRef))
   },[dispatch, qriRef])
 
+  useEffect(() => {
+    dispatch(loadDatasetLogs(qriRef))
+  },[latestRun?.status])
+
   const handleRunNowClick = () => {
     dispatch(runNow(qriRef))
-    // figure out the right time to refresh the logs
-    dispatch(loadDatasetLogs(qriRef))
   }
 
-  const runNowButton = (
-    <Button type='primary' onClick={handleRunNowClick}><Icon icon='play' className='mr-2'/>Run Now</Button>
-  )
 
   return (
-    <DatasetFixedLayout headerChildren={runNowButton}>
+    <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} />}>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
         <ActivityList
           log={logs}
