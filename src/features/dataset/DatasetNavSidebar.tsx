@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { QriRef } from '../../qri/ref'
 import DatasetSideNavItem from './DatasetSideNavItem'
 import TooltipContent from '../../chrome/TooltipContent'
+import NewDatasetButton from '../../chrome/NewDatasetButton'
 import Icon from '../../chrome/Icon'
 import {
   pathToWorkflowEditor,
@@ -45,8 +46,8 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const isNewWorkflow = segments[segments.length - 1] === 'new'
 
   return (
-    <div className={`side-nav pl-9 h-full bg-white relative pt-9 flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
-      <div className='mb-9 flex align-center items-center h-6'>
+    <div className={`side-nav h-full bg-white relative py-9 flex flex-col flex-shrink-0 ${expanded ? 'w-52' : 'w-24'}`}>
+      <div className='mb-9 flex align-center items-center h-6  pl-9'>
         <div
           className='text-gray-400 text-sm font-medium mr-4 leading-6 transition-all duration-700'
           style={{
@@ -71,78 +72,83 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         background: '#f4f7fb',
         borderTopLeftRadius: '20px'
       }}/>
-      <DatasetSideNavItem
-        id='preview'
-        icon='eye'
-        label='Preview'
-        to={pathToDatasetPreview(qriRef)}
-        expanded={expanded}
-        tooltip={
-          <TooltipContent
-            text='Preview'
-            subtext='View an overview of this Dataset'
-          />
-        }
-        disabled={isNewWorkflow}
-      />
-      <DatasetSideNavItem
-        id='components'
-        icon='history'
-        label='History'
-        to={pathToDatasetViewer(qriRef)}
-        expanded={expanded}
-        number={versionCount}
-        tooltip={
-          <TooltipContent
-            text='Components'
-            subtext='Explore the version history of this Dataset'
-          />
-        }
-        disabled={isNewWorkflow}
-      />
-      <DatasetSideNavItem
-        id='workflow-editor'
-        icon='code'
-        label='Workflow'
-        to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
-        expanded={expanded}
-        tooltip={
-          <TooltipContent
-            text='Workflow Editor'
-            subtext='Automate updates to this dataset'
-          />
-        }
-      />
-      <DatasetSideNavItem
-        id='activity-feed'
-        icon='clock'
-        label='Run Log'
-        to={pathToActivityFeed(qriRef.username, qriRef.name)}
-        expanded={expanded}
-        number={logCount}
-        tooltip={
-          <TooltipContent
-            text='Activity Feed'
-            subtext='Inspect recent job activity and updates'
-          />
-        }
-        disabled={isNewWorkflow}
-      />
-      {process.env.REACT_APP_FEATURE_WIREFRAMES &&
+      <div className='flex-grow pl-9'>
         <DatasetSideNavItem
-          id='issues'
-          icon='exclamationTriangle'
-          label='Issues'
-          to={pathToDatasetIssues(qriRef)}
+          id='preview'
+          icon='eye'
+          label='Preview'
+          to={pathToDatasetPreview(qriRef)}
+          expanded={expanded}
           tooltip={
             <TooltipContent
-              text='Issues'
-              subtext='Discuss this dataset'
+              text='Preview'
+              subtext='View an overview of this Dataset'
             />
           }
           disabled={isNewWorkflow}
         />
-      }
+        <DatasetSideNavItem
+          id='components'
+          icon='history'
+          label='History'
+          to={pathToDatasetViewer(qriRef)}
+          expanded={expanded}
+          number={versionCount}
+          tooltip={
+            <TooltipContent
+              text='Components'
+              subtext='Explore the version history of this Dataset'
+            />
+          }
+          disabled={isNewWorkflow}
+        />
+        <DatasetSideNavItem
+          id='workflow-editor'
+          icon='code'
+          label='Workflow'
+          to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
+          expanded={expanded}
+          tooltip={
+            <TooltipContent
+              text='Workflow Editor'
+              subtext='Automate updates to this dataset'
+            />
+          }
+        />
+        <DatasetSideNavItem
+          id='activity-feed'
+          icon='clock'
+          label='Run Log'
+          to={pathToActivityFeed(qriRef.username, qriRef.name)}
+          expanded={expanded}
+          number={logCount}
+          tooltip={
+            <TooltipContent
+              text='Activity Feed'
+              subtext='Inspect recent job activity and updates'
+            />
+          }
+          disabled={isNewWorkflow}
+        />
+        {process.env.REACT_APP_FEATURE_WIREFRAMES &&
+          <DatasetSideNavItem
+            id='issues'
+            icon='exclamationTriangle'
+            label='Issues'
+            to={pathToDatasetIssues(qriRef)}
+            tooltip={
+              <TooltipContent
+                text='Issues'
+                subtext='Discuss this dataset'
+              />
+            }
+            disabled={isNewWorkflow}
+          />
+        }
+      </div>
+      <div className='text-center'>
+        <NewDatasetButton mini={!expanded} />
+      </div>
     </div>
   )
 }

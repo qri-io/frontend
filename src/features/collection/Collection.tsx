@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import useDimensions from 'react-use-dimensions'
 
 import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
 import PageWithFooter from '../app/PageWithFooter'
 import CollectionTable from './CollectionTable'
-import Button from '../../chrome/Button'
 import Spinner from '../../chrome/Spinner'
 import TextLink from '../../chrome/TextLink'
+import NewDatasetButton from '../../chrome/NewDatasetButton'
 import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
 
@@ -90,17 +89,7 @@ const Collection: React.FC<{}> = () => {
 
             <div className='w-1/2 flex items-center justify-end'>
               <SearchBox onChange={handleSearchChange} placeholder='Filter' dark />
-              <Link to={{
-                pathname: `/workflow/new`,
-                state: {
-                  showSplashModal: true,
-                  template: 'CSVDownload'
-                }
-              }}>
-                <Button type='secondary'>
-                  New Dataset
-                </Button>
-              </Link>
+              <NewDatasetButton />
             </div>
           </header>
           <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
