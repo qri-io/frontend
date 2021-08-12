@@ -60,9 +60,8 @@ const DeployModal: React.FC = () => {
         pathname: `/ds/${qriRef.username}/${qriRef.name}/workflow`,
       })
     }
-
-    // TODO(chriswhong): listen for 'failed' status here and react accordingly
-  }, [ deployStatus, history, isNew, qriRef ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ deployStatus ])
 
 
   const handleClose = () => {
