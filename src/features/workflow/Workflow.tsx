@@ -51,8 +51,6 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
     }
   }, [dispatch, location.state])
 
-  const isNew = qriRef.username === '' && qriRef.name === ''
-
   const handleBlockedNavigation = (nextLocation: Location ) => {
     if (redirectTo) { return true }
     // do nothing if user clicks the link for the active route

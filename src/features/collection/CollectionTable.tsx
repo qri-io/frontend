@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
@@ -112,16 +112,10 @@ export const customStyles = {
 
 const CollectionTable: React.FC<CollectionTableProps> = ({
   filteredWorkflows,
-  onSelectedRowsChange,
-  clearSelectedTrigger,
   simplified = false,
   containerHeight
 }) => {
   const dispatch = useDispatch()
-
-  const handleButtonClick = (message: string) => {
-    alert(message)
-  }
 
   // react-data-table column definitions
   const columns = [

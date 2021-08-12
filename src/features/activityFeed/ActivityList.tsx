@@ -1,17 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import ReactDataTable from 'react-data-table-component'
-import numeral from 'numeral'
 
 import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
-import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
-import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import Icon from '../../chrome/Icon'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
-import DatasetInfoItem from '../dataset/DatasetInfoItem'
 import commitishFromPath from '../../utils/commitishFromPath'
 
 

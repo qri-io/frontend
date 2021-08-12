@@ -1,10 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import Button from '../../chrome/Button'
 import TextLink from '../../chrome/TextLink'
 import { Dataset, qriRefFromDataset } from '../../qri/dataset'
-import Icon from '../../chrome/Icon'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 
 export interface DatasetMiniHeaderProps {

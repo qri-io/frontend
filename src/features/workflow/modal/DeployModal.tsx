@@ -14,7 +14,6 @@ import { deployWorkflow } from '../../deploy/state/deployActions'
 import { setWorkflowRef } from '../state/workflowActions'
 import { selectWorkflow, selectWorkflowQriRef, selectWorkflowDataset } from '../state/workflowState'
 import { validateDatasetName } from '../../session/state/formValidation'
-import { Workflow } from '../../../qrimatic/workflow'
 import RunStatusIcon from '../../run/RunStatusIcon'
 import { selectDeployStatus } from '../../deploy/state/deployState'
 import { selectSessionUser } from '../../session/state/sessionState'
@@ -49,6 +48,7 @@ const DeployModal: React.FC = () => {
         name: dsName
       }))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ dsName, dispatch, username ])
 
   // listen for deployStatus changes
