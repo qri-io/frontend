@@ -14,8 +14,9 @@ import DropdownMenu from '../../chrome/DropdownMenu'
 import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { VersionInfo } from '../../qri/versionInfo'
-import ManualTriggerButton from '../manualTrigger/ManualTriggerButton'
+import ManualTriggerButton from '../workflow/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
+import { qriRefFromString } from '../../qri/ref'
 
 interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
@@ -157,7 +158,6 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       width: '180px',
       sortable: true,
       cell: (row: VersionInfo) => {
-
         // TODO (ramfox): the activity feed expects more content than currently exists
         // in the VersionInfo. Once the backend supplies these values, we can rip
         // out this section that mocks durations & timestamps for us
@@ -206,7 +206,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       omit: simplified,
       width: '90px',
       cell: (row: VersionInfo) => (row.workflowID
-          ? <ManualTriggerButton workflowID={row.workflowID} />
+          ? <ManualTriggerButton qriRef={qriRefFromString(`${row.username}/${row.name}`)} />
           : '—'
       )
     },
