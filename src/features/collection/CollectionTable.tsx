@@ -121,7 +121,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
   const columns = [
     {
       name: 'Name',
-      selector: 'name',
+      selector: (row: VersionInfo) => row.name,
       sortable: true,
       grow: 1,
       cell: (row: VersionInfo) => (
@@ -152,7 +152,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
     },
     {
       name: 'Last Run',
-      selector: 'lastrun',
+      selector: (row: VersionInfo) => row.commitTime,
       omit: simplified,
       width: '180px',
       sortable: true,
@@ -162,12 +162,12 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         // in the VersionInfo. Once the backend supplies these values, we can rip
         // out this section that mocks durations & timestamps for us
         const {
-          status,
+          runStatus,
           commitTime
         } = row
 
         // if status is not defined, show nothing in this column
-        if (status === undefined) {
+        if (runStatus === undefined) {
           return <>&nbsp;</>
         }
 
@@ -178,7 +178,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
               <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(commitTime || '')}/>} />
             </div>
             <div className='text-gray-500 text-xs'>
-              <RunStatusBadge status={status}/>
+              <RunStatusBadge status={runStatus}/>
             </div>
           </div>
         )
@@ -203,11 +203,10 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       style: {
         flexShrink: 0
       },
-      selector: 'actions',
       omit: simplified,
       width: '90px',
-      cell: (row: VersionInfo) => (row.id
-          ? <ManualTriggerButton workflowID={row.id} />
+      cell: (row: VersionInfo) => (row.workflowID
+          ? <ManualTriggerButton workflowID={row.workflowID} />
           : '—'
       )
     },
@@ -216,7 +215,6 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       style: {
         flexShrink: 0
       },
-      selector: 'hamburger',
       omit: simplified,
       width: '60px',
       // eslint-disable-next-line react/display-name

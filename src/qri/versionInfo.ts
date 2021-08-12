@@ -1,5 +1,5 @@
-import { QriRef } from "./ref";
-
+import { QriRef } from "./ref"
+import { RunStatus } from './run'
 // VersionInfo pulls details from a dataset at a specific commit in a version
 // history. It's flat, plain data representation of a dataset meant for listing.
 // VersionInfo is a superset of a Reference, embedding all fields a reference
@@ -34,7 +34,7 @@ export interface VersionInfo {
   workflowTriggerDescription?: string
 
   runID?: string
-  runStatus?: string
+  runStatus?: RunStatus
   runDuration?: number
 }
 
