@@ -71,13 +71,6 @@ interface IconProps {
 
 export type IconSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg'
 
-const sizes: {[key: string]: FontAwesomeIconProps['size']} = {
-  'xs': 'xs',
-  'sm': 'sm',
-  'md': 'lg',
-  'lg': '2x'
-}
-
 const Icon: React.FunctionComponent<IconProps> = ({
   icon = 'unknown',
   size = 'md',

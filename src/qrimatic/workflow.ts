@@ -1,4 +1,4 @@
-import { NewTransformStep, TransformStep } from "../qri/dataset"
+import { TransformStep } from "../qri/dataset"
 import { VersionInfo } from "../qri/versionInfo"
 
 export type RunStatus =

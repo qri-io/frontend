@@ -41,6 +41,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   useEffect(() => {
     // ensures that workflowDataset username and name match the route
     dispatch(setWorkflowRef(qriRef))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />

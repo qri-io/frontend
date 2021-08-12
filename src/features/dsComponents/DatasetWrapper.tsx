@@ -23,6 +23,7 @@ const DatasetWrapper: React.FC<{}> = ({ children }) => {
     dispatch(fetchDsPreview(qriRef))
     dispatch(loadWorkflowByDatasetRef(qriRef))
     dispatch(loadDatasetLogs(qriRef))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ qriRef.username, qriRef.name])
 
   return (
