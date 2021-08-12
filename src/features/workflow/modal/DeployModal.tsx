@@ -12,7 +12,7 @@ import TextInput from '../../../chrome/forms/TextInput'
 import Checkbox from '../../../chrome/forms/Checkbox'
 import { deployWorkflow } from '../../deploy/state/deployActions'
 import { setWorkflowRef } from '../state/workflowActions'
-import { selectWorkflow, selectWorkflowQriRef } from '../state/workflowState'
+import { selectWorkflow, selectWorkflowQriRef, selectWorkflowDataset } from '../state/workflowState'
 import { validateDatasetName } from '../../session/state/formValidation'
 import { Workflow } from '../../../qrimatic/workflow'
 import RunStatusIcon from '../../run/RunStatusIcon'
@@ -20,16 +20,14 @@ import { selectDeployStatus } from '../../deploy/state/deployState'
 import { selectSessionUser } from '../../session/state/sessionState'
 import WarningDialog from '../WarningDialog'
 
-interface DeployModalProps {
-  workflow: Workflow
-}
 
-const DeployModal: React.FC<DeployModalProps> = () => {
+const DeployModal: React.FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
   const qriRef = useSelector(selectWorkflowQriRef)
   const workflow = useSelector(selectWorkflow)
+  const dataset = useSelector(selectWorkflowDataset)
   const deployStatus = useSelector(selectDeployStatus(qriRef))
   const { username } = useSelector(selectSessionUser)
 
@@ -80,7 +78,7 @@ const DeployModal: React.FC<DeployModalProps> = () => {
 
   const handleDeployClick = () => {
     setDeploying(true)
-    dispatch(deployWorkflow(qriRef, workflow, runNow))
+    dispatch(deployWorkflow(qriRef, workflow, dataset, runNow))
   }
 
   // determine whether all conditions are met for proceeding

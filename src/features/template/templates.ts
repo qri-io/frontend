@@ -28,27 +28,27 @@ def transform(ds, ctx):
   ]
 }
 
-export const CSVDownload: Workflow = {
-  runCount: 0,
-  disabled: false,
-
-  triggers: [],
-  steps: [
-    { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
+export const CSVDownload: Dataset = {
+  meta: {
+    title: 'New Dataset from Workflow'
+  },
+  transform: {
+    steps: [
+      { syntax: 'starlark', category: 'setup', name: 'setup', script: `# load starlark dependencies
 load("http.star", "http")
 load("encoding/csv.star", "csv")` },
-    { syntax: 'starlark', category: 'download', name: 'download', script: `# get the popular baby names dataset as a csv
+      { syntax: 'starlark', category: 'download', name: 'download', script: `# get the popular baby names dataset as a csv
 def download(ctx):
   csvDownloadUrl = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"
   return http.get(csvDownloadUrl).body()` },
-    { syntax: 'starlark', category: 'transform', name: 'transform', script: `# set the body
+      { syntax: 'starlark', category: 'transform', name: 'transform', script: `# set the body
 def transform(ds, ctx):
   # ctx.download is whatever download() returned
   csv = ctx.download
   # set the dataset body
   ds.set_body(csv, parse_as='csv')`}
-  ],
-  hooks: []
+    ]
+  }
 }
 
 export const APICall: Workflow = {

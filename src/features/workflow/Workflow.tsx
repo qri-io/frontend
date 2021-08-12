@@ -1,12 +1,19 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Prompt, Redirect } from 'react-router'
 import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Location } from 'history'
 
 import WorkflowOutline from './WorkflowOutline'
-import { selectLatestRun, selectRunMode, selectWorkflow, selectWorkflowIsDirty } from './state/workflowState'
-import { setWorkflow } from './state/workflowActions'
+import {
+  selectLatestRun,
+  selectRunMode,
+  selectWorkflow,
+  selectWorkflowIsDirty,
+  selectWorkflowDataset
+} from './state/workflowState'
+
+import { setTemplate } from './state/workflowActions'
 import { selectTemplate } from '../template/templates'
 import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
@@ -26,6 +33,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
   const location = useLocation<WorkflowLocationState>()
   const workflow = useSelector(selectWorkflow)
+  const workflowDataset = useSelector(selectWorkflowDataset)
   const latestRun = useSelector(selectLatestRun)
   const runMode = useSelector(selectRunMode)
   const isDirty = useSelector(selectWorkflowIsDirty)
@@ -35,7 +43,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   useEffect(() => {
     if (location.state?.template) {
       const template = selectTemplate(location.state.template)
-      dispatch(setWorkflow(template))
+      dispatch(setTemplate(template))
     }
 
     if (location.state?.showSplashModal) {
@@ -70,8 +78,8 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
           when={true}
           message={handleBlockedNavigation}
         />
-        <WorkflowOutline workflow={workflow} run={latestRun} runMode={runMode} />
-        <WorkflowEditor qriRef={qriRef} workflow={workflow} run={latestRun} runMode={runMode} isDirty={isDirty} />
+        <WorkflowOutline workflow={workflow} dataset={workflowDataset} run={latestRun} runMode={runMode} />
+        <WorkflowEditor qriRef={qriRef} workflow={workflow} dataset={workflowDataset} run={latestRun} runMode={runMode} isDirty={isDirty} />
         { redirectTo && <Redirect to={redirectTo} /> }
       </div>
     </>

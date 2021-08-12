@@ -5,7 +5,7 @@ import fileSize, { abbreviateNumber } from '../utils/fileSize'
 
 
 export interface Dataset {
-  peername: string
+  username: string
   name: string
   path: string
   commit?: Commit
@@ -23,7 +23,7 @@ export default Dataset
 
 export function qriRefFromDataset(dataset: Dataset): QriRef {
   return {
-    username: dataset.peername,
+    username: dataset.peername || dataset.username,
     name: dataset.name,
     path: dataset.path
   }
@@ -31,7 +31,7 @@ export function qriRefFromDataset(dataset: Dataset): QriRef {
 
 export function isDatasetEmpty(ds: Dataset): boolean {
   return (
-    !ds.peername &&
+    !ds.username &&
     !ds.name &&
     !ds.path &&
     !ds.commit &&

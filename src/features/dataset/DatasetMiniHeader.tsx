@@ -35,7 +35,7 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
         <div className='flex-grow'>
           { qriRef.username && (
             <div className='text-xs text-gray-400 font-mono'>
-              <TextLink to={`/${dataset.peername}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.peername || 'new'}</TextLink>/{dataset.name}
+              <TextLink to={`/${dataset.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.username || 'new'}</TextLink>/{dataset.name}
             </div>
           )}
           <div className='text-normal text-qrinavy font-semibold'>
