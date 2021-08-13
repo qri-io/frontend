@@ -60,14 +60,6 @@ export const customSortIcon = (
 
 // react-data-table custom styles
 export const customStyles = {
-  table: {
-
-  },
-  tableWrapper: {
-    // style: {
-    //   display: 'flex'
-    // },
-  },
   headRow: {
     style: {
       minHeight: '68px',
@@ -190,7 +182,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       omit: simplified,
       width: '90px',
       cell: (row: VersionInfo) => (row.workflowID
-          ? <ManualTriggerButton qriRef={qriRefFromString(`${row.username}/${row.name}`)} />
+          ? <ManualTriggerButton qriRef={{ username: row.username, name: row.name }} />
           : '—'
       )
     },
