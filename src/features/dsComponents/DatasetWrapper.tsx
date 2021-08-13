@@ -5,7 +5,6 @@
 
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
-import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import { newQriRef } from '../../qri/ref'
