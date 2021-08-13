@@ -79,9 +79,9 @@ export const customStyles = {
 
   },
   tableWrapper: {
-    style: {
-      display: 'flex'
-    },
+    // style: {
+    //   display: 'flex'
+    // },
   },
   headRow: {
     style: {
