@@ -29,19 +29,25 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   const { pathname } = useLocation();
   const active = pathname.includes(to)
 
+  let numberContent
+
+  if (number && (number > 0)) {
+    numberContent = (
+      <div
+        className='text-center bg-qrigray-400 px-1 py-0.5 rounded-sm text-white leading-none absolute -top-0 right-1'
+        style={{
+          fontSize: 9
+        }}
+      >{number}</div>
+    )
+  }
+
   const content = (
     <>
       <span data-tip data-for={id}>
         <div className='flex items-center'>
           <div className='relative'>
-            {number && (
-              <div
-                className='text-center bg-qrigray-400 px-1 py-0.5 rounded-sm text-white leading-none absolute -top-0 right-1'
-                style={{
-                  fontSize: 9
-                }}
-              >{number}</div>
-            )}
+            {numberContent}
             <Icon className='mr-2' size='md' icon={icon} />
           </div>
           <span style={{
