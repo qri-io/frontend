@@ -29,27 +29,12 @@ interface CollectionTableProps {
   containerHeight: number
 }
 
-// fieldValue returns a VersionInfo value for a given field argument
-const fieldValue = (row: VersionInfo, field: string) => {
-  switch (field) {
-    case 'name':
-      return `${row['username']}/${row['name']}`
-    case 'updated':
-      return row.commitTime
-    case 'size':
-      return row.bodySize
-    case 'rows':
-      return row.bodyRows
-    default:
-      return (row as Record<string,any>)[field]
-  }
-}
 // column sort function for react-data-table
 // defines the actual string to sort on when a sortable column is clicked
-const customSort = (rows: VersionInfo[], field: string, direction: 'asc' | 'desc') => {
+const customSort = (rows: VersionInfo[], selector: (row: VersionInfo) => string, direction: 'asc' | 'desc') => {
   const sorted = rows.sort((a, b) => {
-    const aVal = fieldValue(a, field)
-    const bVal = fieldValue(b, field)
+    const aVal = selector(a)
+    const bVal = selector(b)
     if (aVal === bVal) {
       return 0
     } else if (aVal < bVal) {
@@ -122,7 +107,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
   const columns = [
     {
       name: 'Name',
-      selector: (row: VersionInfo) => row.name,
+      selector: (row: VersionInfo) => `${row['username']}/${row['name']}`,
       sortable: true,
       grow: 1,
       cell: (row: VersionInfo) => (
@@ -156,7 +141,6 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       selector: (row: VersionInfo) => row.commitTime,
       omit: simplified,
       width: '180px',
-      sortable: true,
       cell: (row: VersionInfo) => {
         // TODO (ramfox): the activity feed expects more content than currently exists
         // in the VersionInfo. Once the backend supplies these values, we can rip
