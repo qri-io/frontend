@@ -47,7 +47,7 @@ export default function Routes () {
         <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
         <Route path='/workflow/new'>
-          <DatasetWrapper>
+          <DatasetWrapper fetchData={false}>
             <WorkflowPage qriRef={{ username: '', name: '' }} />
           </DatasetWrapper>
         </Route>

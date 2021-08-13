@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
 import Spinner from '../../chrome/Spinner';
-import HistorySearchBox from '../search/HistorySearchBox'
 import { newQriRef, QriRef } from '../../qri/ref';
-import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState';
-import NewVersionButton from '../dsComponents/buttons/NewVersionButton';
 import DatasetCommitListItem from './DatasetCommitListItem';
 import { loadDatasetCommits } from './state/commitActions';
 import { newDatasetCommitsSelector, selectDatasetCommitsLoading } from './state/commitState';
@@ -21,7 +18,6 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
   const dispatch = useDispatch()
   const commits = useSelector(newDatasetCommitsSelector(qriRef))
   const loading = useSelector(selectDatasetCommitsLoading)
-  const editable = useSelector(selectSessionUserCanEditDataset)
   let { fs, hash } = useParams()
 
   // if there are no fs/hash in the URL, set it to the fs/hash of the latest commit

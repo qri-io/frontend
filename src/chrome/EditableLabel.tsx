@@ -47,6 +47,7 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
     } else {
       window.removeEventListener('keydown', close)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editing])
 
   const handleLabelClick = () => {

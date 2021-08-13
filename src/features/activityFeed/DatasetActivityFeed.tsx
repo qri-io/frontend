@@ -33,6 +33,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   useEffect(() => {
     dispatch(loadDatasetLogs(qriRef))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[latestRun?.status])
 
   const handleRunNowClick = () => {

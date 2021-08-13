@@ -2,8 +2,6 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
 
-import Icon from '../../chrome/Icon'
-import DropdownMenu from '../../chrome/DropdownMenu'
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
 import { Dataset, qriRefFromDataset } from '../../qri/dataset'
@@ -34,10 +32,6 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   const dispatch = useDispatch()
   const history = useHistory()
   const qriRef = qriRefFromDataset(dataset)
-
-  const handleButtonClick = (message: string) => {
-    alert(message)
-  }
 
   const handleRename = (_:string, value:string) => {
     renameDataset(qriRef, { username: dataset.peername, name: value })(dispatch)

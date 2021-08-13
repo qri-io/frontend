@@ -1,11 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit'
 import DeepEqual from 'deep-equal'
-import _ from 'lodash'
 
 import { RootState } from '../../../store/store'
 import {
   EventLogAction,
-  SetWorkflowAction,
   SetWorkflowStepAction,
   SetWorkflowRefAction,
   WorkflowTriggerAction,

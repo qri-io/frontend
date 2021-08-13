@@ -5,6 +5,7 @@
 
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import { newQriRef } from '../../qri/ref'
@@ -14,15 +15,25 @@ import { loadDatasetLogs } from '../activityFeed/state/activityFeedActions'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 
+interface DatasetWrapperProps {
+  fetchData: boolean
+}
 
-const DatasetWrapper: React.FC<{}> = ({ children }) => {
+const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
+  fetchData = true,
+  children
+}) => {
   const qriRef = newQriRef(useParams())
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchDsPreview(qriRef))
-    dispatch(loadWorkflowByDatasetRef(qriRef))
-    dispatch(loadDatasetLogs(qriRef))
+    // dont' fetch data if the user is making a new workflow
+    if (fetchData) {
+      dispatch(fetchDsPreview(qriRef))
+      dispatch(loadWorkflowByDatasetRef(qriRef))
+      dispatch(loadDatasetLogs(qriRef))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ qriRef.username, qriRef.name])
 
   return (
