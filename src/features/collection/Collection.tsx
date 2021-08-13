@@ -92,7 +92,7 @@ const Collection: React.FC<{}> = () => {
               <NewDatasetButton />
             </div>
           </header>
-          <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
+          <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow'>
             {resultsContent}
           </div>
         </div>
