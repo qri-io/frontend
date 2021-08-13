@@ -13,6 +13,7 @@ import CaretRight from './icon/CaretRight'
 import CaretDown from './icon/CaretDown'
 import Checkbox from './icon/Checkbox'
 import CheckboxChecked from './icon/CheckboxChecked'
+import Circle from './icon/Circle'
 import CircleCheck from './icon/CircleCheck'
 import CircleDash from './icon/CircleDash'
 import CircleWarning from './icon/CircleWarning'
@@ -71,74 +72,77 @@ interface IconProps {
 
 export type IconSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg'
 
-const Icon: React.FunctionComponent<IconProps> = ({
-  icon = 'unknown',
-  size = 'md',
-  className,
-  rotation,
-  spin
-}) => {
+const Icon: React.FunctionComponent<IconProps> = (props) => {
+  const { icon } = props
 
   const customIcons: {[key: string]: any} = {
-    activityFeed: <ActivityFeed className={className} size={size} />,
-    any: <Any className={className} size={size} />,
-    array: <Array className={className} size={size} />,
-    automationFilled: <AutomationFilled className={className} size={size} />,
-    body: <Body className={className} size={size} />,
-    boolean: <Boolean className={className} size={size} />,
-    brackets: <Brackets className={className} size={size} />,
-    calendar: <Calendar className={className} size={size} />,
-    caretLeft: <CaretLeft className={className} size={size} />,
-    caretRight: <CaretRight className={className} size={size} />,
-    caretDown: <CaretDown className={className} size={size} />,
-    checkbox: <Checkbox className={className} size={size} />,
-    checkboxChecked: <CheckboxChecked className={className} size={size} />,
-    circleCheck: <CircleCheck className={className} size={size} />,
-    circleDash: <CircleDash className={className} size={size} />,
-    circleWarning: <CircleWarning className={className} size={size} />,
-    circleX: <CircleX className={className} size={size} />,
-    clock: <Clock className={className} size={size} />,
-    close: <Close className={className} size={size} />,
-    code: <Code className={className} size={size} />,
-    columns: <Columns className={className} size={size} />,
-    commit: <Commit className={className} size={size} />,
-    dashboard: <Dashboard className={className} size={size} />,
-    deployCircle: <DeployCircle className={className} size={size} />,
-    discord: <Discord className={className} size={size} />,
-    disk: <Disk className={className} size={size} />,
-    download: <Download className={className} size={size} />,
-    ellipsesVertical: <EllipsesVertical className={className} size={size} />,
-    eye: <Eye className={className} size={size} />,
-    follower: <Follower className={className} size={size} />,
-    fullScreen: <FullScreen className={className} size={size} />,
-    github: <Github className={className} size={size} />,
-    globe: <Globe className={className} size={size} />,
-    history: <History className={className} size={size} />,
-    info: <Info className={className} size={size} />,
-    integer: <Integer className={className} size={size} />,
-    loader: <Loader className={className} size={size} />,
-    lock: <Lock className={className} size={size} />,
-    more: <More className={className} size={size} />,
-    myDatasets: <MyDatasets className={className} size={size} />,
-    null: <Null className={className} size={size} />,
-    number: <Number className={className} size={size} />,
-    object: <Object className={className} size={size} />,
-    page: <Page className={className} size={size} />,
-    play: <Play className={className} size={size} />,
-    playCircle: <PlayCircle className={className} size={size} />,
-    plus: <Plus className={className} size={size} />,
-    readme: <Readme className={className} size={size} />,
-    rocket: <Rocket className={className} size={size} />,
-    rows: <Rows className={className} size={size} />,
-    skinnySearch: <SkinnySearch className={className} size={size} />,
-    string: <String className={className} size={size} />,
-    structure: <Structure className={className} size={size} />,
-    tags: <Tags className={className} size={size} />,
-    twitter: <Twitter className={className} size={size} />,
-    youtube: <Youtube className={className} size={size} />
+    activityFeed: <ActivityFeed {...props} />,
+    any: <Any {...props} />,
+    array: <Array {...props} />,
+    automationFilled: <AutomationFilled {...props} />,
+    body: <Body {...props} />,
+    boolean: <Boolean {...props} />,
+    brackets: <Brackets {...props} />,
+    calendar: <Calendar {...props} />,
+    caretLeft: <CaretLeft {...props} />,
+    caretRight: <CaretRight {...props} />,
+    caretDown: <CaretDown {...props} />,
+    checkbox: <Checkbox {...props} />,
+    checkboxChecked: <CheckboxChecked {...props} />,
+    circle: <Circle {...props} />,
+    circleCheck: <CircleCheck {...props} />,
+    circleDash: <CircleDash {...props} />,
+    circleWarning: <CircleWarning {...props} />,
+    circleX: <CircleX {...props} />,
+    clock: <Clock {...props} />,
+    close: <Close {...props} />,
+    code: <Code {...props} />,
+    columns: <Columns {...props} />,
+    commit: <Commit {...props} />,
+    dashboard: <Dashboard {...props} />,
+    deployCircle: <DeployCircle {...props} />,
+    discord: <Discord {...props} />,
+    disk: <Disk {...props} />,
+    download: <Download {...props} />,
+    ellipsesVertical: <EllipsesVertical {...props} />,
+    eye: <Eye {...props} />,
+    follower: <Follower {...props} />,
+    fullScreen: <FullScreen {...props} />,
+    github: <Github {...props} />,
+    globe: <Globe {...props} />,
+    history: <History {...props} />,
+    info: <Info {...props} />,
+    integer: <Integer {...props} />,
+    loader: <Loader {...props} />,
+    lock: <Lock {...props} />,
+    more: <More {...props} />,
+    myDatasets: <MyDatasets {...props} />,
+    null: <Null {...props} />,
+    number: <Number {...props} />,
+    object: <Object {...props} />,
+    page: <Page {...props} />,
+    play: <Play {...props} />,
+    playCircle: <PlayCircle {...props} />,
+    plus: <Plus {...props} />,
+    readme: <Readme {...props} />,
+    rocket: <Rocket {...props} />,
+    rows: <Rows {...props} />,
+    skinnySearch: <SkinnySearch {...props} />,
+    string: <String {...props} />,
+    structure: <Structure {...props} />,
+    tags: <Tags {...props} />,
+    twitter: <Twitter {...props} />,
+    youtube: <Youtube {...props} />
   }
 
-  return customIcons[icon] || '?'
+  const customIcon = customIcons[icon]
+
+  if (customIcon) {
+    return customIcon
+  } else {
+    console.warn(`warning: an invalid icon '${icon}' was passed into Icon`)
+    return '?'
+  }
 }
 
 export default Icon
