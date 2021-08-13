@@ -26,13 +26,13 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const columns = [
     {
       name: 'Status',
-      selector: 'status',
+      selector: (row: LogItem) => row.runStatus,
       width: '200px',
       cell: (row: LogItem) => <RunStatusBadge status={row.runStatus} />
     },
     {
       name: 'name',
-      selector: 'name',
+      selector: (row: LogItem) => row.name,
       grow: 2,
       omit: !showDatasetName,
       cell: (row: LogItem) => {
@@ -46,7 +46,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Time',
-      selector: 'start',
+      selector: (row: LogItem) => row.timestamp,
       cell: (row: LogItem) => {
         return (
           <div className='text-qrigray-400 flex flex-col text-xs'>
@@ -64,7 +64,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Commit',
-      selector: 'name',
+      selector: (row: LogItem) => row.message,
       cell: (row: LogItem) => {
         if (!['failed', 'unchanged'].includes(row.runStatus)) {
           const versionLink = `/ds/${row.username}/${row.name}/at${row.path}/body`
