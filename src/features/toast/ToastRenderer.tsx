@@ -17,10 +17,8 @@ const ToastRenderer: React.FC<{}> = () => {
   // determine when it changes and update an already visible toast
   const runsRef = useRef({} as Record<string, RunStatus>)
 
-  // artifically delay the update to 'success', ensures that
-  // user will see 'running' for at least 3 seconds even if the
-  // workflow runs quickly
-  const SUCCESS_START_DELAY = 3000
+  // artifically delay the update to 'success'
+  const SUCCESS_START_DELAY = 0
 
   // after 'success', close the toast 4 seconds later
   const SUCCESS_CLOSE_DELAY = 4000

@@ -46,7 +46,7 @@ export const StatusDot: React.FC<StatusDotProps> = ({
 
   return (
     <div className={statusColor} style={{ fontSize: '0.55rem' }} data-tip={statusTooltip}>
-      {statusColor && <Icon icon='circle' />}
+      {statusColor && <Icon icon='circle' size='xs'/>}
     </div>
   )
 }

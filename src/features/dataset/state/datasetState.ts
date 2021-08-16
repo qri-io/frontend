@@ -51,7 +51,7 @@ export const datasetReducer = createReducer(initialState, {
     state.dataset.body = action.payload.data as Body
   },
   'API_REMOVE_SUCCESS': (state, action) => {
-    const ref = qriRefFromString(action.payload.data.Ref)
+    const ref = qriRefFromString(action.payload.data.ref)
     if (state.dataset.peername === ref.username && state.dataset.name === ref.name) {
       state.dataset = NewDataset({})
     }

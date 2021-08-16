@@ -3,24 +3,28 @@ import { useDispatch } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 
 import Icon from '../../chrome/Icon'
-import { manualTriggerWorkflow } from './state/manualTriggerActions'
+import { runNow } from './state/workflowActions'
+import { refStringFromQriRef, QriRef } from '../../qri/ref'
 
 export interface ManualTriggerButtonProps  {
-  workflowID: string
+  qriRef: QriRef
 }
 
-const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ workflowID }) => {
+const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
+
+  const id = refStringFromQriRef(qriRef)
+
   return (
     <div
       className='mx-auto'
-      data-for={workflowID}
+      data-for={id}
       data-tip
-      onClick={() => { dispatch(manualTriggerWorkflow(workflowID)) }}
+      onClick={() => { dispatch(runNow(qriRef)) }}
     >
       <Icon icon='playCircle' size='lg' className='text-qriblue'/>
       <ReactTooltip
-        id={workflowID}
+        id={id}
         place='bottom'
         effect='solid'
         delayShow={500}

@@ -27,7 +27,7 @@ const initialState: ActivityFeedState = {
 
 export const activityFeedReducer = createReducer(initialState, {
   'API_DATASET_ACTIVITY_SUCCESS': (state, action) => {
-    const ls = action.payload.data as LogItem[]
+    const ls = action.payload.data.filter((d: LogItem)  => d.runStatus) as LogItem[]
     state.datasetLogs[refStringFromQriRef(action.qriRef)] = ls
   },
 })

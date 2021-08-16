@@ -13,7 +13,7 @@ import {
   selectWorkflowDataset
 } from './state/workflowState'
 
-import { setTemplate } from './state/workflowActions'
+import { setTemplate, resetWorkflowState } from './state/workflowActions'
 import { selectTemplate } from '../template/templates'
 import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
@@ -41,6 +41,10 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const [ redirectTo, setRedirectTo ] = useState('')
 
   useEffect(() => {
+    if (location.pathname === '/workflow/new') {
+      dispatch(resetWorkflowState())
+    }
+
     if (location.state?.template) {
       const template = selectTemplate(location.state.template)
       dispatch(setTemplate(template))
@@ -49,7 +53,8 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
     if (location.state?.showSplashModal) {
       dispatch(showModal(ModalType.workflowSplash))
     }
-  }, [dispatch, location.state])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location])
 
   const handleBlockedNavigation = (nextLocation: Location ) => {
     if (redirectTo) { return true }

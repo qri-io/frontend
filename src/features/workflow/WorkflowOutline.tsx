@@ -29,7 +29,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
   if (!showing) {
     return (
       <div className='outline h-full w-10 flex flex-col py-4 pl-4'>
-        <div className='opacity-20 cursor-pointer' onClick={() => { setShowing(!showing) }} ><Icon icon='arrowRight' /></div>
+        <div className='opacity-20 cursor-pointer' onClick={() => { setShowing(!showing) }} ><Icon icon='caretRight' /></div>
       </div>
     )
   }

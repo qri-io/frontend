@@ -128,7 +128,7 @@ export const workflowReducer = createReducer(initialState, {
     const d = action.payload.data as Dataset
     // TODO (b5) - this should check peername *and* confirm the loaded version is HEAD
     state.dataset = d
-    state.workflowBase.steps = d.transform.steps
+    state.workflowBase.steps = d.transform?.steps
   },
   'API_WORKFLOW_REQUEST': (state, action) => {
     // reset workflow and lastRunID to initialState values
@@ -161,7 +161,10 @@ export const workflowReducer = createReducer(initialState, {
     state.dataset = action.dataset
     state.workflowBase.steps = action.dataset.transform.steps
     return
-  }
+  },
+  'RESET_WORKFLOW_STATE': (state: WorkflowState, action: SetTemplateAction) => {
+    return initialState
+  },
 })
 
 function calculateIsDirty(state: WorkflowState) {

@@ -69,7 +69,7 @@ const Dashboard: React.FC<any> = () => {
             </div>
             <div className='text-right'>
               <Link to='/collection'>
-                <Button>View All Datasets <Icon className='ml-2' icon='arrowRight' /></Button>
+                <Button>View All Datasets <Icon className='ml-2' icon='caretRight' /></Button>
               </Link>
             </div>
           </div>
@@ -84,7 +84,7 @@ const Dashboard: React.FC<any> = () => {
           </div>
           <div className='text-right'>
             <Link to='/activity'>
-              <Button>View All Activity <Icon className='ml-2' icon='arrowRight' /></Button>
+              <Button>View All Activity <Icon className='ml-2' icon='caretRight' /></Button>
             </Link>
           </div>
         </div>

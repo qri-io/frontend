@@ -61,12 +61,17 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   // necessary so that runScript has the latest workflow when it is executed
   // without it, runScript was firing the initialState of `workflow`
   const workflowRef = useRef(workflow)
+  const workflowDatasetRef = useRef(dataset)
   useEffect(() => {
     workflowRef.current = workflow
   }, [workflow])
 
+  useEffect(() => {
+    workflowDatasetRef.current = dataset
+  }, [dataset])
+
   const runScript = () => {
-    dispatch(applyWorkflowTransform(workflowRef.current))
+    dispatch(applyWorkflowTransform(workflowRef.current, workflowDatasetRef.current))
   }
 
   const onKeyDown = (keyName: string) => {

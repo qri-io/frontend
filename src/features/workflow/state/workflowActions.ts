@@ -39,6 +39,12 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
   }
 }
 
+export function resetWorkflowState() {
+  return {
+    type: 'RESET_WORKFLOW_STATE',
+  }
+}
+
 export function runNow(qriRef: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchRunNow(qriRef))

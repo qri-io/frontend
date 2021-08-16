@@ -20,7 +20,7 @@ const Splash: React.FC<{}> = () => (
           <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
             <Link to="/ds/new">
               <Button size='lg'>
-                Try Qri now <Icon className='ml-3' icon='arrowRight' />
+                Try Qri now <Icon className='ml-3' icon='caretRight' />
               </Button>
             </Link>
           </div>
