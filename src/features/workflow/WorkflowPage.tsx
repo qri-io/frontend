@@ -10,7 +10,6 @@ import { QriRef } from '../../qri/ref'
 import { NewDataset } from '../../qri/dataset'
 import Workflow from './Workflow'
 import RunBar from './RunBar'
-import Scroller from '../scroller/Scroller'
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
 
 interface WorkflowPageProps {
@@ -53,10 +52,8 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
           <Spinner color='#4FC7F3' />
         </div>)
       : (
-            <DatasetScrollLayout dataset={dataset} headerChildren={runBar}>
-              <Scroller>
-                <Workflow qriRef={qriRef} />
-              </Scroller>
+            <DatasetScrollLayout dataset={dataset} headerChildren={runBar} useScroller>
+              <Workflow qriRef={qriRef} />
             </DatasetScrollLayout>
         )}
     </>
