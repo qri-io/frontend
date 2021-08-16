@@ -9,6 +9,7 @@ export const SCROLLER_DEFAULT_TOP_OFFSET = 80
 
 export const SET_SCROLLER_POS = 'SET_SCROLLER_POS'
 export const SET_SCROLL_ELEMENT = 'SET_SCROLL_ELEMENT'
+export const RESET_SCROLLER = 'RESET_SCROLLER'
 
 export interface ScrollerState {
   // scrollPos, when this changes it triggers the workflow editor to adjust it's
@@ -36,4 +37,7 @@ export const scrollerReducer = createReducer(initialState, {
   SET_SCROLL_ELEMENT: (state: ScrollerState, action: SetScrollAnchorAction) => {
     state.scrollAnchorID = action.id
   },
+  RESET_SCROLLER: () => {
+    return initialState
+  }
 })

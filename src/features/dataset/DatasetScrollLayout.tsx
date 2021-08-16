@@ -11,17 +11,20 @@ import { selectSessionUser } from '../session/state/sessionState'
 import { selectSessionUserCanEditDataset } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
 import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
+import Scroller from '../scroller/Scroller'
 
 interface DatasetScrollLayoutProps {
   dataset?: Dataset
   headerChildren?: JSX.Element
   contentClassName?: string
+  useScroller?: boolean
 }
 
 const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
   dataset,
   headerChildren,
   contentClassName = '',
+  useScroller = false,
   children
 }) => {
   const qriRef = newQriRef(useParams())
@@ -46,22 +49,34 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
     initialInView: true
   });
 
-  return (
+  const content = (
     <>
-      <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
-        <DatasetMiniHeader dataset={headerDataset} show={!inView} >
-          {headerChildren}
-        </DatasetMiniHeader>
-        <div className={classNames('p-7 w-full', contentClassName)}>
-          <div ref={stickyHeaderTriggerRef}>
-            <DatasetHeader dataset={headerDataset} editable={editable} showInfo={!dataset}>
-              {headerChildren}
-            </DatasetHeader>
-          </div>
-          {children}
+      <DatasetMiniHeader dataset={headerDataset} show={!inView} >
+        {headerChildren}
+      </DatasetMiniHeader>
+      <div className={classNames('p-7 w-full', contentClassName)}>
+        <div ref={stickyHeaderTriggerRef}>
+          <DatasetHeader dataset={headerDataset} editable={editable} showInfo={!dataset}>
+            {headerChildren}
+          </DatasetHeader>
         </div>
+        {children}
       </div>
     </>
+  )
+
+  if (useScroller) {
+    return (
+      <Scroller className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
+        {content}
+      </Scroller>
+    )
+  }
+
+  return (
+    <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
+      {content}
+    </div>
   )
 }
 

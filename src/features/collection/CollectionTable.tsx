@@ -16,7 +16,6 @@ import RunStatusBadge from '../run/RunStatusBadge'
 import { VersionInfo } from '../../qri/versionInfo'
 import ManualTriggerButton from '../workflow/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
-import { qriRefFromString } from '../../qri/ref'
 
 interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
