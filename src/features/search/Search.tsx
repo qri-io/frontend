@@ -40,7 +40,8 @@ const Search: React.FC<{}> = () => {
   // if the query string ever changes, fetch new data
   useEffect(() => {
     dispatch(loadSearchResults(searchParams))
-  }, [q, page, sort, dispatch, searchParams])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, page, sort])
 
   // handle new search term input
   const handleSearchSubmit = (newQ:string) => {
@@ -146,22 +147,24 @@ const Search: React.FC<{}> = () => {
                     )}
                   </div>
                 </div>
-                <DropdownMenu 
-                  icon={sortIcon}
-                  className='ml-8'
-                  items={[
-                      {
-                        label: 'Dataset Name',
-                        active: sort === 'name',
-                        onClick: () => { updateQueryParams({ sort: 'name' }) }
-                      },
-                      {
-                        label: 'Recently Updated',
-                        active: sort === 'recentlyupdated',
-                        onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
-                      }
-                    ]}
+                <div>
+                  <DropdownMenu
+                    icon={sortIcon}
+                    className='ml-8'
+                    items={[
+                        {
+                          label: 'Dataset Name',
+                          active: sort === 'name',
+                          onClick: () => { updateQueryParams({ sort: 'name' }) }
+                        },
+                        {
+                          label: 'Recently Updated',
+                          active: sort === 'recentlyupdated',
+                          onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
+                        }
+                      ]}
                   />
+                </div>
               </>
             ):(
               <>&nbsp;</>
