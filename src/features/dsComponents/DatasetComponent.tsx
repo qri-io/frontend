@@ -58,7 +58,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
       component = <Transform data={dataset.transform}/>
       break
     case 'readme':
-      component = <Readme qriRef={qriRefFromDataset(dataset)}/>
+      component = <Readme data={dataset.readme}/>
       break
     default:
       component = <div>Unknown component</div>

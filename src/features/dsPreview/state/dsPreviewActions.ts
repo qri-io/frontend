@@ -8,10 +8,9 @@ export function loadDsPreview(ref: QriRef): ApiActionThunk {
     try {
       await Promise.all([
         // for the moment we don't get a preview explicitly because we already
-        // have what we need in state.dataset 
+        // have what we need in state.dataset
         // dispatch(fetchDsPreview(ref)),
-        dispatch(fetchDsPreviewBody(ref)),
-        dispatch(fetchDsPreviewReadme(ref)),
+        dispatch(fetchDsPreviewBody(ref))
       ])
 
       return dispatch({
@@ -58,21 +57,6 @@ function fetchDsPreviewBody (ref: QriRef, page: number = 1, pageSize: number = b
         path: ref.path,
         selector: ['body']
       },
-    }
-  }
-}
-
-function fetchDsPreviewReadme (ref: QriRef): ApiAction {
-  return {
-    type: 'previewreadme',
-    ref,
-    [CALL_API]: {
-      endpoint: 'ds/render',
-      method: 'POST',
-      body: {
-        ref: refStringFromQriRef(ref),
-        selector: 'readme'
-      }
     }
   }
 }
