@@ -55,21 +55,23 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
               <div className='-ml-2 -mr-3 mb-5'>
                 <div className='w-7/12 px-2 inline-block align-top' style={{ height: readmeContainerHeight}}>
                   <ContentBox className='flex flex-col h-full'>
-                    <ContentBoxTitle title='Readme'/>
-                    <div className='flex-grow overflow-hidden'>
-                      {
-                        dataset.readme ? (
-                          <Readme dataset={dataset} />
-                        ) : (
-                          <div className='h-full w-full flex items-center'>
-                            <div className='text-center mx-auto text-sm'>
-                              No Readme
+                    <div className='flex flex-col h-full overflow-hidden'>
+                      <ContentBoxTitle title='Readme'/>
+                      <div className='flex-grow overflow-hidden'>
+                        {
+                          dataset.readme ? (
+                            <Readme dataset={dataset} />
+                          ) : (
+                            <div className='h-full w-full flex items-center'>
+                              <div className='text-center mx-auto text-sm'>
+                                No Readme
+                              </div>
                             </div>
-                          </div>
-                        )
-                      }
+                          )
+                        }
+                      </div>
+                      {!expandReadme && (<div className='text-qriblue text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                     </div>
-                    {!expandReadme && (<div className='text-qriblue text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                   </ContentBox>
                 </div>
                 <div ref={versionInfoContainer} className='w-5/12 px-3 inline-block align-top'>
