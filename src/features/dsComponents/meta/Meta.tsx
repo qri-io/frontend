@@ -7,7 +7,7 @@ import { Meta, Citation, License, User, standardFieldNames } from '../../../qri/
 // import { connectComponentToProps } from '../../../utils/connectComponentToProps'
 
 // import { selectDataset, selectDatasetIsLoading } from '../../../selections'
-import ExternalLink from '../../../chrome/ExternalLink'
+import Link from '../../../chrome/Link'
 import KeyValueTable from '../KeyValueTable'
 import MetaChips from '../../../chrome/MetaChips'
 // import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
@@ -30,13 +30,13 @@ const renderValue = (value: string | string[] | object) => {
 }
 
 const renderLicense = (license: License) => (
-  <ExternalLink href={license.url}>
+  <Link to={license.url}>
     {license.type}
-  </ExternalLink>
+  </Link>
 )
 
 const renderURL = (url: string) => (
-  <ExternalLink href={url}>{url}</ExternalLink>
+  <Link to={url}>{url}</Link>
 )
 
 const renderArrayItemsTable = (value: any[]) => {

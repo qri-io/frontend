@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import TextLink from '../../chrome/TextLink'
+import Link from '../../chrome/Link'
 import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 
@@ -33,7 +33,7 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
         <div className='flex-grow'>
           { qriRef.username && (
             <div className='text-xs text-gray-400 font-mono'>
-              <TextLink to={`/${dataset.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.username || 'new'}</TextLink>/{dataset.name}
+              <Link to={`/${dataset.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.username || 'new'}</Link>/{dataset.name}
             </div>
           )}
           <div className='text-normal text-qrinavy font-semibold'>

@@ -7,7 +7,7 @@ import { selectCollection, selectIsCollectionLoading } from './state/collectionS
 import PageWithFooter from '../app/PageWithFooter'
 import CollectionTable from './CollectionTable'
 import Spinner from '../../chrome/Spinner'
-import TextLink from '../../chrome/TextLink'
+import Link from '../../chrome/Link'
 import NewDatasetButton from '../../chrome/NewDatasetButton'
 import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
@@ -67,7 +67,7 @@ const Collection: React.FC<{}> = () => {
     resultsContent = (
       <div className='h-full w-full flex justify-center items-center text-qrigray-400'>
         <div className='text-center'>
-          You don't have any datasets!<br/> You can push datasets using <TextLink to='https://qri.io/docs/getting-started/qri-cli-quickstart'>qri CLI</TextLink>.
+          You don't have any datasets!<br/> You can push datasets using <Link to='https://qri.io/docs/getting-started/qri-cli-quickstart'>qri CLI</Link>.
         </div>
       </div>
     )

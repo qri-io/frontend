@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import ExternalLink from './ExternalLink'
+import Link from './Link'
 import Icon, { IconSize } from './Icon'
 
 interface IconLinkProps {
@@ -23,9 +23,9 @@ const IconLink: React.FC<IconLinkProps> = ({
   if (link) {
     return (
       <div className={classNames('ml-2', className)}>
-        <ExternalLink to={link} className={linkClassNames}>
+        <Link to={link} className={linkClassNames}>
           <Icon icon={icon} size={size} />
-        </ExternalLink>
+        </Link>
       </div>
     )
   }
