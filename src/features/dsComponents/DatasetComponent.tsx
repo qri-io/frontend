@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import classNames from 'classnames'
 
 import ComponentHeader from './ComponentHeader'
-import Dataset, { ComponentName, qriRefFromDataset } from '../../qri/dataset'
+import Dataset, { ComponentName } from '../../qri/dataset'
 import Transform from './transform/Transform'
 import Body from './body/Body'
 import BodyHeader from './body/BodyHeader'
