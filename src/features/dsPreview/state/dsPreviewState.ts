@@ -50,7 +50,7 @@ export const dsPreviewReducer = createReducer(initialState, {
   'API_PREVIEW_SUCCESS': (state, action) => {
     state.preview = {
       ...state.preview,
-      ...action.payload.data
+      ...NewDataset(action.payload.data)
     }
   },
 
