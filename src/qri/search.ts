@@ -52,7 +52,9 @@ export interface SearchResult extends Dataset {
 }
 
 export function NewSearchResult(d: Record<string,any>): SearchResult {
-  const dv = d.value
+  // search results store the dataset under `value`, but this is used for
+  // listings on user profile pages which have the dataset at the top level
+  const dv = d.value || d
   const ds = NewDataset(dv)
   let stats
   let followStats = {}

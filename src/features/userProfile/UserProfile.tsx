@@ -48,18 +48,18 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
   const paginatedFollowingResults = useSelector(selectUserProfileFollowing)
 
   const scrollContainer = useRef<HTMLDivElement>(null)
-  const { username: usernameParam } = useParams();
+  const { username: usernameParam } = useParams()
 
   const { search } = useLocation()
   const userProfileParams: UserProfileDatasetListParams = NewUserProfileDatasetListParams(queryString.parse(search))
-  const { page, sort } = userProfileParams
 
   // if the query string ever changes, fetch new data
   useEffect(() => {
     dispatch(loadUserProfile(usernameParam))
     dispatch(loadUserProfileDatasets(usernameParam, userProfileParams))
     dispatch(loadUserProfileFollowing(usernameParam, userProfileParams))
-  }, [usernameParam, page, sort, dispatch, userProfileParams])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, search])
 
   // merges new query params with existing params, updates history
   const updateQueryParams = (newQueryParams: Record<string, any>) => {
