@@ -7,7 +7,7 @@ import { QriRef } from '../../../qri/ref'
 import { StatusInfo } from '../../../qri/status'
 import { Structure } from '../../../qri/dataset'
 import Icon from '../../../chrome/Icon'
-import ExternalLink from '../../../chrome/ExternalLink'
+import Link from '../../../chrome/Link'
 import LabeledStats from '../../../chrome/LabeledStats'
 import Schema from '../schema/Schema'
 
@@ -86,14 +86,14 @@ export const StructureEditor: React.FC<StructureEditorProps> = ({
         <h4 className='schema-title'>
           Schema
           &nbsp;
-          <ExternalLink id='json-schema' href='https://json-schema.org/'>
+          <Link id='json-schema' href='https://json-schema.org/'>
             <span
               data-tip={'JSON schema that describes the structure of the dataset. Click here to learn more about JSON schemas'}
               className='text-input-tooltip'
             >
               <Icon icon='info' size='sm' />
             </span>
-          </ExternalLink>
+          </Link>
         </h4>
       </div>
       <Schema

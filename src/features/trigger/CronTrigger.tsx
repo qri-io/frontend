@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import Icon from '../../chrome/Icon'
-import TextLink from '../../chrome/TextLink'
+import Link from '../../chrome/Link'
 import { WorkflowTrigger } from '../../qrimatic/workflow'
 import Block from '../workflow/Block'
 import { showModal } from '../app/state/appActions'
@@ -61,11 +61,11 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
           </div>
         </div>
         <div className='flex ml-2'>
-          <TextLink
+          <Link
             className='text-qrigray-400 text-xs self-end mb-0.5'
             colorClassName='text-qrigray-400 hover:text-qrigray-600'
             onClick={handleEditClick}
-          >Edit</TextLink>
+          >Edit</Link>
         </div>
       </div>
     </Block>

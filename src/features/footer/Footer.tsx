@@ -1,32 +1,32 @@
 import React from 'react'
 
-import TextLink from '../../chrome/TextLink'
+import Link from '../../chrome/Link'
 import IconLink from '../../chrome/IconLink'
 
 const Footer: React.FC<{}> = () => (
   <div className='flex w-9/12 mx-auto text-qrinavy text-sm py-5 tracking-wide'>
     <div className='flex flex-grow font-medium'>
-      <TextLink
+      <Link
         className='mr-10'
         colorClassName='text-qrinavy hover:text-qripink'
         to='https://qri.io/docs'
       >
         Tutorials
-      </TextLink>
-      <TextLink
+      </Link>
+      <Link
         className='mr-10'
         colorClassName='text-qrinavy hover:text-qripink'
         to='https://qri.io/docs'
       >
         Docs
-      </TextLink>
-      <TextLink
+      </Link>
+      <Link
         className='mr-10'
         colorClassName='text-qrinavy hover:text-qripink'
         to='https://qri.io/faq'
       >
         FAQs
-      </TextLink>
+      </Link>
     </div>
     <div className='flex flex-grow justify-end'>
       {

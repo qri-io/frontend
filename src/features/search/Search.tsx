@@ -17,7 +17,7 @@ import Footer from '../footer/Footer'
 import { NewSearchParams } from '../../qri/search'
 import DatasetList from '../../chrome/DatasetList'
 import ContentBox from '../../chrome/ContentBox'
-import TextLink from '../../chrome/TextLink'
+import Link from '../../chrome/Link'
 import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import { CleanSearchParams } from '../../qri/search'
@@ -90,9 +90,9 @@ const Search: React.FC<{}> = () => {
   let resultsContent = (
     <div className='text-center font-semibold text-sm'>
       <span className='text-qrigray-400 mr-4'>Try:</span>
-      <TextLink to='/search?q=transportation' className='mr-6'>transportation</TextLink>
-      <TextLink to='/search?q=census' className='mr-6'>census</TextLink>
-      <TextLink to='/search?q=covid-19'>covid-19</TextLink>
+      <Link to='/search?q=transportation' className='mr-6'>transportation</Link>
+      <Link to='/search?q=census' className='mr-6'>census</Link>
+      <Link to='/search?q=covid-19'>covid-19</Link>
     </div>
   )
 

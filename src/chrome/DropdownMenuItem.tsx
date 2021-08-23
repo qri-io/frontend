@@ -2,13 +2,14 @@ import React from 'react'
 import classNames from 'classnames'
 
 import Icon from './Icon'
+import Link from './Link'
 
 export const dropdownBaseClass = 'text-left text-xs px-2 py-0.5 mx-2 my-1 whitespace-nowrap rounded-md'
 
 export interface DropdownMenuItemProps {
   active?: boolean
   // label is the text that will be displayed to the user
-  label: string | React.ReactElement
+  label: string
   // disabled will show the item, but it will not be clickable
   disabled?: boolean
   // icon: options are found in the `Icon` component
@@ -16,6 +17,8 @@ export interface DropdownMenuItemProps {
   // if onClick exists in a DropDownMenuItem, clicking the item will not trigger onChange,
   // and will execute the onClick function
   onClick?: () => void
+  // if to exists the item will render a Link
+  to?: string
 }
 
 const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
@@ -24,22 +27,27 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   disabled = false,
   icon,
   onClick,
-  children
-}) => (
-  <button
-    onClick={() => { onClick && onClick() }}
-    className={classNames(dropdownBaseClass, {
-      'hover:pointer text-qrigray-400 hover:bg-gray-100': !disabled,
-      'text-qrigray-300': disabled
-    })}
-    role="menuitem"
-  >
-    {(typeof label === 'string')
-      ? <span className={classNames({'text-qripink font-semibold': active })}>
-          {icon && <Icon icon={icon} className='mr-2' size='sm' />}{label}
-        </span> 
-      : label}
-  </button>
-)
+  to,
+}) => {
+  const containerClassName = classNames(dropdownBaseClass, {
+    'hover:cursor-pointer text-qrigray-400 hover:bg-gray-100': !disabled,
+    'text-qrigray-300': disabled
+  })
+
+  const colorClassName = 'text-qrigray-400'
+
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className={containerClassName}
+      colorClassName={colorClassName}
+    >
+      <div className={classNames({'text-qripink font-semibold': active })}>
+        {icon && <Icon icon={icon} className='mr-2' size='sm' />}{label}
+      </div>
+    </Link>
+  )
+}
 
 export default DropdownMenuItem

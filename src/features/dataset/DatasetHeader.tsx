@@ -7,7 +7,7 @@ import { renameDataset } from './state/datasetActions'
 import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import DatasetInfoItem from './DatasetInfoItem'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
-import TextLink from '../../chrome/TextLink'
+import Link from '../../chrome/Link'
 import { validateDatasetName } from '../session/state/formValidation'
 
 
@@ -50,7 +50,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           {/* don't show the username/name when creating a new dataset with the workflow editor */}
           { qriRef.username && (
             <div className='text-md text-gray-400 relative flex items-center group hover:text pb-1 font-mono h-10'>
-              <TextLink to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</TextLink>/
+              <Link to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</Link>/
               <EditableLabel
                 readOnly={!editable}
                 name='name'

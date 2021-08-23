@@ -7,8 +7,7 @@ import { logOut } from '../session/state/sessionActions'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import Button from '../../chrome/Button'
-import TextLink from '../../chrome/TextLink'
-import ExternalLink from '../../chrome/ExternalLink'
+import Link from '../../chrome/Link'
 
 const SessionUserMenu: React.FC<{}> = () => {
   const user = useSelector(selectSessionUser)
@@ -25,7 +24,7 @@ const SessionUserMenu: React.FC<{}> = () => {
 
     return (
       <>
-        <TextLink onClick={handleLogInClick}>Log In</TextLink>
+        <Link onClick={handleLogInClick}>Log In</Link>
         <Button onClick={handleSignUpClick} size='sm' className='ml-8'>
           Sign Up
         </Button>
@@ -43,14 +42,15 @@ const SessionUserMenu: React.FC<{}> = () => {
 
   return (
     <div className="relative flex items-center font-medium">
-      <TextLink to='https://qri.io/docs'>Help</TextLink>
+      <Link to='https://qri.io/docs'>Help</Link>
       <DropdownMenu icon={icon} className='ml-8' items={[
-        // TODO(chriswhong): restore when Profiles are implemented
-        // {
-        //   label: <Link to={`/${user.username}`}>Profile</Link>
-        // },
         {
-          label: <ExternalLink to='https://qri.io/contact'>Send Feedback</ExternalLink>
+          label: 'Profile',
+          to: `/${user.username}`
+        },
+        {
+          label: 'Send Feedback',
+          to:'https://qri.io/contact'
         },
         {
           label: 'Log Out',
