@@ -404,14 +404,14 @@ export function scriptFromTransform(t: Transform): string {
 
 export interface Readme extends Component {
   scriptPath: string
-  script: string
+  text: string
 }
 
 export function NewReadme(d: Record<string,any>): Readme {
   return {
     qri: d.qri || 'rm:0',
     scriptPath: d.scriptPath,
-    script: d.script
+    text: d.text
   }
 }
 
