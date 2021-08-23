@@ -147,7 +147,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         }
       </div>
       <div className='text-center'>
-        <NewDatasetButton mini={!expanded} />
+        {!isNewWorkflow && <NewDatasetButton mini={!expanded} />}
       </div>
     </div>
   )
