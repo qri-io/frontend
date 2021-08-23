@@ -9,6 +9,7 @@ interface IconButtonProps {
   className?: string
   icon: string
   size?: IconSize
+  disabled?: boolean
   onClick: () => void
 }
 
@@ -16,12 +17,17 @@ const IconButton: React.FC<IconButtonProps> = ({
   className,
   icon,
   size = 'md',
+  disabled = false,
   onClick
 }) => (
   <div
     className={classNames(
-      'cursor-pointer text-qrigray-400 hover:text-qrigray-500 transition-all duration-100',
-      className
+      'transition-all duration-100',
+      className,
+      {
+        'text-qrigray-400 hover:text-qrigray-500 cursor-pointer': !disabled,
+        'text-qrigray-200': disabled
+      }
     )}
     onClick={onClick}
   >
