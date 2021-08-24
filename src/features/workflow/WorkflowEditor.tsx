@@ -104,7 +104,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
       keyName="cmd+enter,ctrl+enter"
       onKeyDown={onKeyDown}
     >
-      <div className='flex-grow min-w-0'>
+      <div className='flex-grow min-w-0 z-10'>
         <div className=''>
           <WorkflowTriggersEditor triggers={workflow.triggers} />
           <ContentBox className='mb-7' paddingClassName='px-5 py-4'>

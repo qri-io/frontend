@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import Icon from '../../chrome/Icon'
-import { TransformStep } from '../../qri/dataset'
+import { TransformStep, Dataset } from '../../qri/dataset'
 import { NewRunStep, Run } from '../../qri/run'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollTrigger from '../scroller/ScrollTrigger'
@@ -35,7 +35,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
   }
 
   return (
-    <div className='workflow-outline pr-7'>
+    <div className='workflow-outline pr-7 z-20'>
       <div className='w-44 flex flex-col sticky top-20'>
         <div className='text-left'>
           <div className='text-qrigray-400 text-xs font-medium mb-4'>AUTOMATION OUTLINE</div>
