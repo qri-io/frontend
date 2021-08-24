@@ -14,9 +14,10 @@ import {
   RunMode
 } from './workflowState'
 import { AnyAction } from 'redux'
+import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
 
 export function mapWorkflow(d: object | []): Workflow {
-  const data = (d as Record<string,any>)
+  const data = (d as Record<string, any>)
   return NewWorkflow(data)
 }
 
@@ -105,13 +106,15 @@ export function setRunMode(mode: RunMode): RunModeAction {
 
 export function applyWorkflowTransform(w: Workflow, d: Dataset): ApiActionThunk {
   return async (dispatch, getState) => {
+    var qriRef = qriRefFromDataset(d)
     return dispatch({
       type: 'apply',
       [CALL_API]: {
         endpoint: 'auto/apply',
         method: 'POST',
         body: {
-          wait: false,
+          ref: `${qriRef.username}/${qriRef.name}`,
+          wait: true,
           transform: {
             scriptBytes: btoa(workflowScriptString(w)),
             steps: d.transform.steps
