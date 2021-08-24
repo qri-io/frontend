@@ -57,12 +57,18 @@ export const selectWorkflowQriRef = (state: RootState): QriRef => {
 export const selectRunMode = (state: RootState): RunMode => state.workflow.runMode
 export const selectWorkflowIsDirty = (state: RootState): boolean => state.workflow.isDirty
 export const selectWorkflowDataset = (state: RootState): Dataset => state.workflow.dataset
+export const selectApplyStatus = (state: RootState): ApplyStatus => state.workflow.applyStatus
 
 
 
 export type RunMode =
   | 'apply'
   | 'save'
+
+export type ApplyStatus =
+  | ''
+  | 'loading'
+  | 'error'
 
 export interface WorkflowState {
   runMode: RunMode
@@ -73,9 +79,11 @@ export interface WorkflowState {
   // with working state to determine isDirty
   workflowBase: WorkflowBase
   isDirty: boolean
-  lastDryRunID?: string,
-  lastRunID?: string,
-  events: EventLogLine[],
+  lastDryRunID?: string
+  lastRunID?: string
+  events: EventLogLine[]
+  // state for the async request to /apply
+  applyStatus: ApplyStatus
 }
 
 const initialState: WorkflowState = {
@@ -97,13 +105,21 @@ const initialState: WorkflowState = {
   isDirty: false,
   lastRunID: '',
   lastDryRunID: '',
-  events: []
+  events: [],
+  applyStatus: ''
 }
 
 export const workflowReducer = createReducer(initialState, {
+  'API_APPLY_REQUEST': (state, action) => {
+    state.applyStatus = 'loading'
+  },
   'API_APPLY_SUCCESS': (state, action) => {
+    state.applyStatus = ''
     const runID = action.payload.data.runID
     state.lastDryRunID = runID
+  },
+  'API_APPLY_FAILURE': (state, action) => {
+    state.applyStatus = 'error'
   },
   'API_RUNNOW_SUCCESS': (state, action) => {
     state.lastRunID = action.payload.data
