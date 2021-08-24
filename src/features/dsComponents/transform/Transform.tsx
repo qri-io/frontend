@@ -1,18 +1,30 @@
 import React from 'react'
+import MonacoEditor from 'react-monaco-editor'
 
 import { scriptFromTransform, Transform } from '../../../qri/dataset'
-import Monospace from '../../../chrome/Monospace'
+import { MONACO_EDITOR_OPTIONS } from '../../workflow/CodeEditor'
 
 export interface TransformProps {
   data: Transform
 }
 
-export const TransformComponent: React.FunctionComponent<TransformProps> = ({ 
+export const TransformComponent: React.FunctionComponent<TransformProps> = ({
   data
-}) => (
-  <div className='pb-8 pt-5'>
-    <Monospace data={scriptFromTransform(data)} />
-  </div>
-)
+}) => {
+
+  return (
+    <div className='rounded-lg overflow-hidden h-full '>
+      <MonacoEditor
+        value={scriptFromTransform(data) as any as string}
+        language='python'
+        theme='qri-theme'
+        options={{
+          ...MONACO_EDITOR_OPTIONS,
+          readOnly: true
+        }}
+      />
+    </div>
+  )
+}
 
 export default TransformComponent

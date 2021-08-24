@@ -7,7 +7,7 @@ interface ComponentHeaderProps {
 
 const ComponentHeader: React.FC<ComponentHeaderProps> = ({ border = true, children }) => {
   return (
-    <div className={classNames('flex-grow text-sm py-3', {
+    <div className={classNames('text-sm py-3', {
       'border-b': border
     })}>
       {children}
