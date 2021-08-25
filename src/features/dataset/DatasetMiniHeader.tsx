@@ -22,7 +22,7 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
 }) => {
   const qriRef = qriRefFromDataset(dataset)
   return (
-    <div className={classNames('sticky bg-white border border-qrigray-200 z-10', {
+    <div className={classNames('sticky bg-white border border-qrigray-200 z-30', {
       'invisible -top-16 h-0': !show,
       'visible top-0': show
     })} style={{

@@ -59,6 +59,11 @@ export const customSortIcon = (
 
 // react-data-table custom styles
 export const customStyles = {
+  tableWrapper: {
+    style: {
+      display: 'flex'
+    },
+  },
   headRow: {
     style: {
       minHeight: '68px',
