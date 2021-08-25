@@ -1,10 +1,7 @@
 import React from 'react'
 
 import Dataset from '../../qri/dataset'
-import Icon from '../../chrome/Icon'
-import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
-import UsernameWithIcon from '../../chrome/UsernameWithIcon'
-import commitishFromPath from '../../utils/commitishFromPath'
+import DatasetVersionInfo from '../../chrome/DatasetCommitInfo'
 
 export interface CommitSummaryHeaderProps {
   dataset: Dataset
@@ -18,19 +15,11 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
   if (commit) {
     return (
       <div className='min-height-200 py-4 px-8 rounded-lg bg-white flex'>
-        <div className='flex-grow'>
+        <div className=''>
           <div className='text-xs text-gray-400 font-medium mb-2'>Version Info</div>
-          <div className='text-qrinavy font-semibold text-sm flex items-center mb-2'>
-            <div className=''>{commit.title}</div>
-          </div>
-          <div className='flex items-center text-xs text-gray-400'>
-            <UsernameWithIcon username={dataset.peername} className='mr-3' />
-            <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(commit.timestamp)} />
-            <Icon icon='commit' size='sm' className='-ml-2' />
-            <div className=''>{commitishFromPath(path)}</div>
-          </div>
+          <DatasetVersionInfo dataset={dataset} />
         </div>
-        <div className='flex items-center'>
+        <div className='flex-grow flex items-center justify-end'>
           {children}
         </div>
       </div>

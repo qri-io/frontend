@@ -7,18 +7,16 @@ import { selectDsPreview } from './state/dsPreviewState'
 import { loadDsPreview } from './state/dsPreviewActions'
 import Spinner from '../../chrome/Spinner'
 import ContentBox from '../../chrome/ContentBox'
-import Icon from '../../chrome/Icon'
 import ContentBoxTitle from '../../chrome/ContentBoxTitle'
-import RelativeTimestampWithIcon from '../../chrome/RelativeTimestampWithIcon'
-import UsernameWithIcon from '../../chrome/UsernameWithIcon'
+
 import BodyPreview from '../dsComponents/body/BodyPreview'
 
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
 import DeployingScreen from '../deploy/DeployingScreen'
-import commitishFromPath from '../../utils/commitishFromPath'
 import Readme from '../dsComponents/readme/Readme'
 import { QriRef } from '../../qri/ref'
 import MetaChips from '../../chrome/MetaChips'
+import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 
 interface DatasetPreviewPageProps {
   qriRef: QriRef
@@ -69,15 +67,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     <div className='flex items-center border-b pb-4 mb-3'>
                       <div className='flex-grow truncate'>
                         <ContentBoxTitle title='Latest Version' />
-                        <div className='text-qrinavy font-semibold text-sm flex items-center mb-2'>
-                          <div className=''>{dataset.commit?.title}</div>
-                        </div>
-                        <div className='flex items-center text-xs text-gray-400'>
-                          <UsernameWithIcon username={dataset.username} className='mr-3' />
-                          <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit?.timestamp)} />
-                          <Icon icon='commit' size='sm' className='-ml-2' />
-                          <div className=''>{commitishFromPath(dataset.path)}</div>
-                        </div>
+                        <DatasetCommitInfo dataset={dataset} />
                       </div>
                     </div>
                     {/* Bottom of the box */}

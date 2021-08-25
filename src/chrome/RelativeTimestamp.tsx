@@ -25,12 +25,12 @@ const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
     .replace('a', '1')
 
   return (
-    <span
+    <div
       className={className}
       title={format(timestamp, 'MMM d yyyy, h:mm zz')}
     >
       {timeFromNowAbbreviation}
-    </span>
+    </div>
   )
 }
 
