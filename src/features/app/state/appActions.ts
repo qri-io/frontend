@@ -3,6 +3,7 @@ import { Modal, ModalType, SET_MODAL, SET_MODAL_LOCKED, TOGGLE_NAV_EXPANDED,  } 
 export interface ModalAction {
   type: string
   modal: Modal
+  locked?: boolean
 }
 
 export interface ModalLockedAction {
@@ -10,7 +11,7 @@ export interface ModalLockedAction {
   locked: boolean
 }
 
-export function showModal<P = {}>(type: ModalType, props?: P): ModalAction {
+export function showModal<P = {}>(type: ModalType, props?: P, locked?: boolean = false): ModalAction {
   return {
     type: SET_MODAL,
     modal: {

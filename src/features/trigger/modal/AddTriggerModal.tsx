@@ -115,7 +115,11 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
                 className={classNames('w-full py-4 px-4 rounded flex border items-center mb-4', {
                   'cursor-pointer': !disabled
                 })}
-                onClick={() => { setType(id) }}
+                onClick={() => {
+                  if (!disabled) {
+                    setType(id)
+                  }
+                }}
               >
                 <div className='flex-grow'>
                   <div className={classNames('font-bold', {

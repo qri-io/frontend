@@ -19,10 +19,6 @@ const Modal: React.FC<any> = () => {
   const dispatch = useDispatch()
   const modal = useSelector(selectModal)
 
-
-
-  // this is called from from multiple places (esc key press or click outside modal)
-  // and is where we finally check allowClear and
   const clearModalCallback = useCallback(() => {
     if (!modal.locked) {
       dispatch(clearModal())
