@@ -198,11 +198,13 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       omit: simplified,
       width: '60px',
       // eslint-disable-next-line react/display-name
-      cell: (row: VersionInfo) => {
+      cell: (row: VersionInfo, i: number) => {
+        const isLastRow = (i === (filteredWorkflows.length - 1))
         return (
           <div className='mx-auto text-qrigray-400'>
             <DropdownMenu
               icon={<Icon icon='more' />}
+              dropUp={isLastRow}
               items={[
                 // {
                 //   label: 'Rename...',
