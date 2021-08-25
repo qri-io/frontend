@@ -128,7 +128,10 @@ export const workflowReducer = createReducer(initialState, {
     const d = action.payload.data as Dataset
     // TODO (b5) - this should check peername *and* confirm the loaded version is HEAD
     state.dataset = d
+
+    // set the values to compare with and caclulate isDirty
     state.workflowBase.steps = d.transform?.steps
+    state.isDirty = calculateIsDirty(state)
   },
   'API_WORKFLOW_REQUEST': (state, action) => {
     // reset workflow and lastRunID to initialState values
@@ -152,6 +155,11 @@ export const workflowReducer = createReducer(initialState, {
     // ref check
     // const steps = state.workflow.steps
     state.workflow = w
+
+    // set the values to compare with and caclulate isDirty
+    state.workflowBase.triggers = w.triggers
+    state.workflowBase.hooks = w.hooks
+    state.isDirty = calculateIsDirty(state)
     // state.workflow.steps = steps
   },
   'API_DEPLOY_SUCCESS': (state, action) => {
@@ -159,7 +167,7 @@ export const workflowReducer = createReducer(initialState, {
   },
   SET_TEMPLATE: (state: WorkflowState, action: SetTemplateAction) => {
     state.dataset = action.dataset
-    state.workflowBase.steps = action.dataset.transform.steps
+    state.workflowBase.steps = action.dataset.transform?.steps
     return
   },
   'RESET_WORKFLOW_STATE': (state: WorkflowState, action: SetTemplateAction) => {
@@ -170,7 +178,7 @@ export const workflowReducer = createReducer(initialState, {
 function calculateIsDirty(state: WorkflowState) {
   const workflowCompare = {
     triggers: state.workflow.triggers,
-    steps: state.dataset.transform.steps,
+    steps: state.dataset.transform?.steps,
     hooks: state.workflow.hooks
   }
   return !DeepEqual(workflowCompare, state.workflowBase)
@@ -184,15 +192,13 @@ function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerActi
 }
 
 function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowStepAction) {
-  if (state.dataset.transform.steps) {
+  if (state.dataset.transform?.steps) {
     state.dataset.transform.steps[action.index].script = action.script
   }
 
   state.isDirty = calculateIsDirty(state)
   // clear out events after an edit to reset dry run RunStatus
   state.events = []
-
-
 
   return
 }
