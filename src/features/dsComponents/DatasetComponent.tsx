@@ -65,21 +65,21 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   let componentContent = (
-    <div className='p-4'>
+    <div className='p-4 h-full'>
       {component}
     </div>
   )
 
   // exclude the default padding for some components
-  if (['body', 'structure'].includes(componentName)) {
+  if (['body', 'structure', 'transform'].includes(componentName)) {
     componentContent = component
   }
 
   return (
     <div
-      className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col', {})}
+      className={classNames('rounded-md bg-white h-full w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col pb-4', {})}
     >
-      <ComponentHeader border={!['body', 'structure'].includes(componentName)}>
+      <ComponentHeader border={!['body', 'structure', 'transform'].includes(componentName)}>
         {componentHeader}
       </ComponentHeader>
       <div className='overflow-auto flex-grow'>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import MonacoEditor from 'react-monaco-editor'
+import MonacoEditor, { EditorConstructionOptions } from 'react-monaco-editor'
 import { KeyMod, KeyCode } from "monaco-editor/esm/vs/editor/editor.api";
 import classNames from 'classnames'
 
@@ -15,6 +15,22 @@ export interface CodeEditorProps {
 const LINE_HEIGHT = 19
 const MIN_LINE_COUNT = 4
 const PADDING = 15
+
+export const MONACO_EDITOR_OPTIONS: EditorConstructionOptions = {
+  scrollbar: {
+    vertical: 'hidden',
+    horizontalScrollbarSize: 4,
+    alwaysConsumeMouseWheel: false
+  },
+  scrollBeyondLastLine: false,
+  minimap: {
+    enabled: false
+  },
+  padding: {
+    top: 10,
+    bottom: 10
+  }
+}
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
   script,
@@ -98,21 +114,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         }}
         language='python'
         theme='qri-theme'
-        options={{
-          scrollbar:{
-            vertical: "hidden",
-            horizontalScrollbarSize: 4,
-            alwaysConsumeMouseWheel: false
-          },
-          scrollBeyondLastLine: false,
-          minimap: {
-            enabled: false
-          },
-          padding: {
-            top: 10,
-            bottom: 10
-          }
-        }}
+        options={MONACO_EDITOR_OPTIONS}
         editorDidMount={handleEditorDidMount}
         editorWillMount={handleEditorWillMount}
       />
