@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import Button from '../../../chrome/Button'
 import Icon from '../../../chrome/Icon'
-import { clearModal } from '../../app/state/appActions'
+import { clearModal, setModalLocked } from '../../app/state/appActions'
 import IconButton from '../../../chrome/IconButton'
 import TextInput from '../../../chrome/forms/TextInput'
 import Checkbox from '../../../chrome/forms/Checkbox'
@@ -18,6 +18,8 @@ import RunStatusIcon from '../../run/RunStatusIcon'
 import { selectDeployStatus } from '../../deploy/state/deployState'
 import { selectSessionUser } from '../../session/state/sessionState'
 import WarningDialog from '../WarningDialog'
+
+
 
 
 const DeployModal: React.FC = () => {
@@ -55,10 +57,15 @@ const DeployModal: React.FC = () => {
   useEffect(() => {
     // the moment of triumph!
     if (deployStatus === 'deployed') {
+      dispatch(setModalLocked(false))
       // navigate to the new dataset's workflow!
       history.push({
         pathname: `/ds/${qriRef.username}/${qriRef.name}/workflow`,
       })
+    }
+
+    if (deployStatus === 'failed') {
+      dispatch(setModalLocked(false))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ deployStatus ])
@@ -77,6 +84,7 @@ const DeployModal: React.FC = () => {
 
   const handleDeployClick = () => {
     setDeploying(true)
+    dispatch(setModalLocked(true))
     dispatch(deployWorkflow(qriRef, workflow, dataset, runNow))
   }
 
