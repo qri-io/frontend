@@ -6,6 +6,7 @@ import BodyTable from './BodyTable'
 import BodyJson from './BodyJson'
 import BodyHeader from './BodyHeader'
 import ComponentHeader from '../ComponentHeader'
+import Spinner from '../../../chrome/Spinner'
 
 export interface BodyProps {
   dataset: Dataset
@@ -37,9 +38,7 @@ const Body: React.FC<BodyProps> = ({
   if (!body) {
     return (
       <div className='h-full w-full flex justify-center items-center'>
-        <div>
-          There's nothing here yet!
-        </div>
+        <Spinner color='#4FC7F3' />
       </div>
     )
   }

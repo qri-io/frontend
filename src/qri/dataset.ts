@@ -47,7 +47,7 @@ export function isDatasetEmpty(ds: Dataset): boolean {
 
 export function NewDataset(d: Record<string,any>): Dataset {
   const dataset: Dataset = {
-    peername: d.peername || '',
+    username: d.peername || d.username || '',
     name: d.name || '',
     path: d.path || '',
     bodyPath: d.bodyPath

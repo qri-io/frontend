@@ -55,7 +55,7 @@ const Body: React.FC<BodyProps> = ({
 }) => {
   const dispatch = useDispatch()
   const { body, structure } = data
-  const { path, name, peername: username } = data
+  const { path, name, username } = data
 
   // list out dependencies on dataset body individually for proper memoization
   useEffect(() => {

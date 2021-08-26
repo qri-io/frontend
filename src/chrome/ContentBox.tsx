@@ -17,7 +17,7 @@ const ContentBox: React.FC<ContentBoxProps> = ({
   children
 }) => (
   <div className={className}>
-    <div className={classNames('min-height-200 max-h-full bg-white', paddingClassName, {
+    <div className={classNames('min-height-200 h-full bg-white', paddingClassName, {
       'rounded-lg': !warning,
       'rounded-t-lg': warning
     })}>
