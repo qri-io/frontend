@@ -11,6 +11,7 @@ import { workflowReducer, WorkflowState } from '../features/workflow/state/workf
 import { AppState, appReducer } from '../features/app/state/appState';
 import { CollectionState, collectionReducer } from '../features/collection/state/collectionState';
 import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
+import { datasetVersionReducer, DatasetVersionState } from '../features/datasetVersion/state/datasetVersionState'
 import { dsPreviewReducer, DsPreviewState } from '../features/dsPreview/state/dsPreviewState';
 import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
 import { searchReducer, SearchState } from '../features/search/state/searchState';
@@ -18,7 +19,7 @@ import { deployReducer, DeployState } from '../features/deploy/state/deployState
 import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
 import { sessionReducer, SessionState, AnonUser } from '../features/session/state/sessionState';
 import { commitsReducer, CommitsState } from '../features/commits/state/commitState';
-import { datasetEditsReducer, DatasetEditsState } from '../features/dataset/state/editDatasetState';
+import { datasetEditsReducer, DatasetEditsState } from '../features/datasetVersion/state/editDatasetState';
 import { WebsocketState, websocketReducer } from '../features/websocket/state/websocketState';
 import { UserProfileState, userProfileReducer } from '../features/userProfile/state/userProfileState'
 
@@ -30,6 +31,7 @@ export interface RootState {
   collection: CollectionState
   commits: CommitsState
   dataset: DatasetState
+  datasetVersion: DatasetVersionState
   dsPreview: DsPreviewState
   deploy: DeployState
   router: RouterState
@@ -49,6 +51,7 @@ const rootReducer = (h: History) => combineReducers({
   collection: collectionReducer,
   commits: commitsReducer,
   dataset: datasetReducer,
+  datasetVersion: datasetVersionReducer,
   deploy: deployReducer,
   dsPreview: dsPreviewReducer,
   // apparently connected-router's types are no good.

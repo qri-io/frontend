@@ -8,9 +8,7 @@ import { useParams } from 'react-router'
 import { useDispatch } from 'react-redux'
 
 import { newQriRef } from '../../qri/ref'
-import { fetchDsPreview } from '../dsPreview/state/dsPreviewActions'
-import { loadWorkflowByDatasetRef } from '../workflow/state/workflowActions'
-import { loadDatasetLogs } from '../activityFeed/state/activityFeedActions'
+import { loadDatasetMetaInfo } from '../dataset/state/datasetActions'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 
@@ -28,9 +26,7 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
   useEffect(() => {
     // dont' fetch data if the user is making a new workflow
     if (fetchData) {
-      dispatch(fetchDsPreview(qriRef))
-      dispatch(loadWorkflowByDatasetRef(qriRef))
-      dispatch(loadDatasetLogs(qriRef))
+      dispatch(loadDatasetMetaInfo(qriRef))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ qriRef.username, qriRef.name])

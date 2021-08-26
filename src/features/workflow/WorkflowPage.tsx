@@ -52,7 +52,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
           <Spinner color='#4FC7F3' />
         </div>)
       : (
-            <DatasetScrollLayout dataset={dataset} headerChildren={runBar} useScroller>
+            <DatasetScrollLayout headerChildren={runBar} useScroller>
               <Workflow qriRef={qriRef} />
             </DatasetScrollLayout>
         )}

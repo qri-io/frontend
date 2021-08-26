@@ -140,7 +140,7 @@ export const workflowReducer = createReducer(initialState, {
   // listen for dataset fetching actions, if the reference of the fetched dataset
   // matches the ref the workbench reducer is tuned to, load the transform script
   // into the workbench
-  'API_PREVIEW_SUCCESS': (state, action) => {
+  'API_WORKFLOW_DATASET_SUCCESS': (state, action) => {
     const d = action.payload.data as Dataset
     // TODO (b5) - this should check peername *and* confirm the loaded version is HEAD
     state.dataset = d

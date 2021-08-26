@@ -6,19 +6,19 @@ import { useParams } from 'react-router'
 import { ComponentName } from '../../qri/dataset'
 import { newQriRef } from '../../qri/ref'
 import { pathToDatasetViewer } from '../dataset/state/datasetPaths'
-import { selectDataset, selectIsDatasetLoading } from '../dataset/state/datasetState'
+import { selectDatasetVersion, selectIsDatasetVersionLoading } from '../datasetVersion/state/datasetVersionState'
 import DatasetCommitList from '../commits/DatasetCommitList'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 import TabbedComponentViewer from './TabbedComponentViewer'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
-import { loadDataset } from '../dataset/state/datasetActions'
+import { loadDatasetVersion } from '../datasetVersion/state/datasetVersionActions'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 
 const DatasetComponents: React.FC<{}> = () => {
   const qriRef = newQriRef(useParams())
   const dispatch = useDispatch()
-  const dataset = useSelector(selectDataset)
-  const loading = useSelector(selectIsDatasetLoading)
+  const dataset = useSelector(selectDatasetVersion)
+  const loading = useSelector(selectIsDatasetVersionLoading)
 
   const setSelectedComponent = (component: ComponentName) => {
     const dest = newQriRef(Object.assign({}, qriRef, { component }))
@@ -27,7 +27,7 @@ const DatasetComponents: React.FC<{}> = () => {
 
   useEffect(() => {
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
-    dispatch(loadDataset(ref))
+    dispatch(loadDatasetVersion(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
 
 

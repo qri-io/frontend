@@ -16,10 +16,9 @@ import {
   pathToActivityFeed,
 } from './state/datasetPaths'
 
+import { selectDataset } from './state/datasetState'
 import { selectNavExpanded } from '../app/state/appState'
 import { toggleNavExpanded } from '../app/state/appActions'
-import { selectVersionCount } from '../commits/state/commitState'
-import { selectLogCount } from '../activityFeed/state/activityFeedState'
 
 export interface DatasetNavSidebarProps {
   qriRef: QriRef
@@ -27,8 +26,8 @@ export interface DatasetNavSidebarProps {
 
 const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const expanded = useSelector(selectNavExpanded)
-  const versionCount = useSelector(selectVersionCount(qriRef))
-  const logCount = useSelector(selectLogCount(qriRef))
+  const datasetMetaInfo = useSelector(selectDataset)
+
   const dispatch = useDispatch()
 
   const toggleExpanded = () => {
@@ -93,7 +92,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           label='History'
           to={pathToDatasetViewer(qriRef)}
           expanded={expanded}
-          number={versionCount}
+          number={datasetMetaInfo.commitCount}
           tooltip={
             <TooltipContent
               text='Components'
@@ -121,7 +120,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           label='Run Log'
           to={pathToActivityFeed(qriRef.username, qriRef.name)}
           expanded={expanded}
-          number={logCount}
+          number={datasetMetaInfo.runCount}
           tooltip={
             <TooltipContent
               text='Activity Feed'

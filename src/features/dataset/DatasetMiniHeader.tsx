@@ -2,11 +2,12 @@ import React from 'react'
 import classNames from 'classnames'
 
 import Link from '../../chrome/Link'
-import { Dataset, qriRefFromDataset } from '../../qri/dataset'
+import { DatasetMetaInfo } from './state/datasetState'
+import { qriRefFromDataset } from '../../qri/dataset'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 
 export interface DatasetMiniHeaderProps {
-  dataset: Dataset
+  dataset: DatasetMetaInfo
   show: boolean
 }
 
@@ -20,7 +21,11 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
   show,
   children
 }) => {
-  const qriRef = qriRefFromDataset(dataset)
+  const qriRef = qriRefFromDataset({
+    username: dataset.username,
+    name: dataset.name,
+    path: ''
+  })
   return (
     <div className={classNames('sticky bg-white border border-qrigray-200 z-30', {
       'invisible -top-16 h-0': !show,

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import Button from '../../../chrome/Button'
 import Dataset, { qriRefFromDataset } from '../../../qri/dataset'
 import { loadDatasetCommits } from '../../commits/state/commitActions'
-import { saveDataset } from '../../dataset/state/editDatasetActions'
+import { saveDataset } from '../../datasetVersion/state/editDatasetActions'
 
 export interface SaveVersionButtonProps {
   dataset?: Dataset
@@ -16,7 +16,7 @@ const SaveVersionButton: React.FC<SaveVersionButtonProps> = ({
   const dispatch = useDispatch()
 
   return (
-    <Button 
+    <Button
       className='bg-green'
       onClick={() => {
         if (dataset) {

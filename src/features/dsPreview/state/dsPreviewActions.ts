@@ -1,15 +1,14 @@
-import { QriRef, refStringFromQriRef } from "../../../qri/ref";
+import { QriRef } from "../../../qri/ref";
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
 
 export function loadDsPreview(ref: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     dispatch({ type: 'DS_PREVIEW_REQUEST' })
+    console.log('fetching body')
 
     try {
       await Promise.all([
-        // for the moment we don't get a preview explicitly because we already
-        // have what we need in state.dataset
-        // dispatch(fetchDsPreview(ref)),
+        dispatch(fetchDsPreview(ref)),
         dispatch(fetchDsPreviewBody(ref))
       ])
 

@@ -26,6 +26,9 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   const [tableContainer, { height: tableContainerHeight }] = useDimensions()
 
+  useEffect(() => {
+    dispatch(loadDatasetLogs(qriRef))
+  },[dispatch, qriRef])
 
   useEffect(() => {
     dispatch(loadDatasetLogs(qriRef))

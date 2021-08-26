@@ -1,4 +1,5 @@
 import { QriRef } from '../../../qri/ref'
+import { NewDataset } from "../../../qri/dataset"
 import { EventLogLine } from '../../../qri/eventLog'
 import { NewWorkflow, Workflow, WorkflowInfo, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
@@ -21,6 +22,10 @@ export function mapWorkflow(d: object | []): Workflow {
   return NewWorkflow(data)
 }
 
+export function mapDataset(d: object | []): Dataset {
+  return NewDataset((d as Record<string,any>))
+}
+
 export function loadWorkflowByDatasetRef(qriRef: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchWorkflowByDatasetRef(qriRef))
@@ -36,6 +41,25 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
       method: 'POST',
       body: { ref: `${qriRef.username}/${qriRef.name}` },
       map: mapWorkflow
+    }
+  }
+}
+
+export function loadWorkflowDatasetByDatasetRef(qriRef: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchWorkflowDatasetByDatasetRef(qriRef))
+  }
+}
+
+function fetchWorkflowDatasetByDatasetRef(qriRef: QriRef): ApiAction {
+  return {
+    type: 'workflow_dataset',
+    qriRef,
+    [CALL_API]: {
+      endpoint: 'ds/get',
+      method: 'GET',
+      segments: qriRef,
+      map: mapDataset
     }
   }
 }

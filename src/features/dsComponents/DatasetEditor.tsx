@@ -8,8 +8,8 @@ import DatasetCommitList from '../commits/DatasetCommitList'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 import TabbedComponentEditor from './TabbedComponentEditor'
 import SaveVersionButton from './buttons/SaveVersionButton'
-import { editDataset, loadEditingDatasetHead } from '../dataset/state/editDatasetActions'
-import { selectDatasetEdits, selectEditingHeadIsLoading } from '../dataset/state/editDatasetState'
+import { editDataset, loadEditingDatasetHead } from '../datasetVersion/state/editDatasetActions'
+import { selectDatasetEdits, selectEditingHeadIsLoading } from '../datasetVersion/state/editDatasetState'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 
 const DatasetEditor: React.FC<{}> = () => {

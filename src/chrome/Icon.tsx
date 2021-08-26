@@ -56,6 +56,7 @@ import String from './icon/String'
 import Structure from './icon/Structure'
 import Tags from './icon/Tags'
 import Twitter from './icon/Twitter'
+import Unlock from './icon/Unlock'
 import Youtube from './icon/Youtube'
 
 interface IconProps {
@@ -132,6 +133,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     structure: <Structure {...props} />,
     tags: <Tags {...props} />,
     twitter: <Twitter {...props} />,
+    unlock: <Unlock {...props} />,
     youtube: <Youtube {...props} />
   }
 

@@ -1,6 +1,6 @@
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
 import { newQriRef, QriRef } from "../../../qri/ref";
-import { mapDataset } from "./datasetActions";
+import { mapDataset } from "./datasetVersionActions";
 import { EDIT_DATASET } from "./editDatasetState";
 import Dataset from "../../../qri/dataset";
 

@@ -1,24 +1,19 @@
+import Dataset, { NewDataset } from "../../../qri/dataset"
 import { QriRef, refStringFromQriRef, humanRef } from "../../../qri/ref"
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
-import { RENAME_NEW_DATASET } from "./datasetState"
+import { RENAME_NEW_DATASET } from "./datasetVersionState"
 import { API_BASE_URL } from '../../../store/api'
 
 export const bodyPageSizeDefault = 50
 
-export function mapDataset(d: object | []): any {
-  // TODO: the dataset metaInfo endpoint doesn't exist yet, so this will fake the
-  // response using some real values from '/ds/get'
-  return {
-    username: d.peername || d.username,
-    name: d.name,
-    title: 'O hello there',
-    workflowId: 'someWorkflowId',
-    length: 3733,
-    commitCount: 16,
-    runCount: 42,
-    downloadCount: 129,
-    followerCount: 32,
-    private: false
+export function mapDataset(d: object | []): Dataset {
+  return NewDataset((d as Record<string,any>))
+}
+
+export function loadDatasetVersion(ref: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    // TODO (b5) - check state before making a network request
+    return dispatch(fetchDatasetVersion(ref))
   }
 }
 
@@ -32,22 +27,42 @@ export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): stri
   return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}?format=zip`
 }
 
-export function loadDatasetMetaInfo(ref: QriRef): ApiActionThunk {
-  return async (dispatch, getState) => {
-    // TODO (b5) - check state before making a network request
-    return dispatch(fetchDatasetMetaInfo(ref))
-  }
-}
-
-function fetchDatasetMetaInfo (ref: QriRef): ApiAction {
+function fetchDatasetVersion (ref: QriRef): ApiAction {
   return {
-    type: 'dataset_meta_info',
+    type: 'dataset',
     ref,
     [CALL_API]: {
       endpoint: 'ds/get',
       method: 'GET',
       segments: ref,
       map: mapDataset
+    }
+  }
+}
+
+export function loadBody(ref: QriRef, page: number = 1, pageSize: number = bodyPageSizeDefault): ApiActionThunk {
+  return async (dispatch) => {
+    return dispatch(fetchBody(ref, page, pageSize))
+  }
+}
+
+function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
+  return {
+    type: 'body',
+    ref,
+    [CALL_API]: {
+      endpoint: 'ds/get',
+      method: 'GET',
+      pageInfo: {
+        page,
+        pageSize
+      },
+      segments: {
+        username: ref.username,
+        name: ref.name,
+        path: ref.path,
+        selector: ['body']
+      }
     }
   }
 }

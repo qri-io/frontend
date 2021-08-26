@@ -4,15 +4,18 @@ import { useHistory } from 'react-router'
 
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
-import { Dataset, qriRefFromDataset } from '../../qri/dataset'
+import { DatasetMetaInfo } from './state/datasetState'
+import { qriRefFromDataset } from '../../qri/dataset'
 import DatasetInfoItem from './DatasetInfoItem'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import Link from '../../chrome/Link'
 import { validateDatasetName } from '../session/state/formValidation'
+import fileSize from '../../utils/fileSize'
+
 
 
 export interface DatasetHeaderProps {
-  dataset: Dataset
+  dataset: DatasetMetaInfo
   border?: boolean
   editable?: boolean
   showInfo?: boolean
@@ -31,7 +34,11 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const qriRef = qriRefFromDataset(dataset)
+  const qriRef = qriRefFromDataset({
+    username: dataset.username,
+    name: dataset.name,
+    path: ''
+  })
 
   const handleRename = (_:string, value:string) => {
     renameDataset(qriRef, { username: dataset.peername, name: value })(dispatch)
@@ -62,15 +69,15 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           )}
 
           <div className='text-2xl text-qrinavy-500 font-black group hover:text'>
-            {dataset.meta?.title || dataset.name}
+            {dataset.title || dataset.name}
           </div>
           {showInfo && (
             <div className='flex mt-3 text-sm'>
-              <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />
-              <DatasetInfoItem icon='disk' label='59 MB' />
-              <DatasetInfoItem icon='download' label='418 downloads' />
-              <DatasetInfoItem icon='follower' label='130 followers' />
-              <DatasetInfoItem icon='lock' label='private' />
+              {dataset.workflowId && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}
+              <DatasetInfoItem icon='disk' label={`${fileSize(dataset.length)}`} />
+              <DatasetInfoItem icon='download' label={`${dataset.downloadCount} downloads`} />
+              <DatasetInfoItem icon='follower' label={`${dataset.followerCount} followers`} />
+              <DatasetInfoItem icon={dataset.private ? 'lock' : 'unlock'} label={dataset.private ? 'private' : 'public'} />
             </div>
           )}
         </div>

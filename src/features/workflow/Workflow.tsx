@@ -13,7 +13,12 @@ import {
   selectWorkflowDataset
 } from './state/workflowState'
 
-import { setTemplate, resetWorkflowState } from './state/workflowActions'
+import {
+  setTemplate,
+  resetWorkflowState,
+  loadWorkflowByDatasetRef,
+  loadWorkflowDatasetByDatasetRef
+} from './state/workflowActions'
 import { selectTemplate } from '../template/templates'
 import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
@@ -43,6 +48,9 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   useEffect(() => {
     if (location.pathname === '/workflow/new') {
       dispatch(resetWorkflowState())
+    } else {
+      dispatch(loadWorkflowByDatasetRef(qriRef))
+      dispatch(loadWorkflowDatasetByDatasetRef(qriRef))
     }
 
     if (location.state?.template) {

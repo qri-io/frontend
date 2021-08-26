@@ -5,8 +5,7 @@ import { useInView } from 'react-intersection-observer'
 import classNames from 'classnames'
 
 import { newQriRef } from '../../qri/ref'
-import { Dataset } from '../../qri/dataset'
-import { selectDsPreview } from '../dsPreview/state/dsPreviewState'
+import { selectDataset } from './state/datasetState'
 import { selectSessionUser } from '../session/state/sessionState'
 import { selectSessionUserCanEditDataset } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
@@ -14,26 +13,23 @@ import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
 import Scroller from '../scroller/Scroller'
 
 interface DatasetScrollLayoutProps {
-  dataset?: Dataset
   headerChildren?: JSX.Element
   contentClassName?: string
   useScroller?: boolean
 }
 
 const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
-  dataset,
   headerChildren,
   contentClassName = '',
   useScroller = false,
   children
 }) => {
   const qriRef = newQriRef(useParams())
-  const dsPreview = useSelector(selectDsPreview)
+  const datasetMetaInfo = useSelector(selectDataset)
+
   const user = useSelector(selectSessionUser)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const isNew = (qriRef.username === 'new')
-
-  const headerDataset = dataset || dsPreview
 
   // This covers the case where a user created a new workflow before logging in.
   // If they login while working on the workflow, the `user` will change, but the
@@ -51,12 +47,12 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
 
   const content = (
     <>
-      <DatasetMiniHeader dataset={headerDataset} show={!inView} >
+      <DatasetMiniHeader dataset={datasetMetaInfo} show={!inView} >
         {headerChildren}
       </DatasetMiniHeader>
       <div className={classNames('p-7 w-full', contentClassName)}>
         <div ref={stickyHeaderTriggerRef}>
-          <DatasetHeader dataset={headerDataset} editable={editable} showInfo={!dataset}>
+          <DatasetHeader dataset={datasetMetaInfo} editable={editable} showInfo={!datasetMetaInfo}>
             {headerChildren}
           </DatasetHeader>
         </div>
