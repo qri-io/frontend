@@ -11,7 +11,7 @@ interface DropdownMenuProps {
   items: DropdownMenuItemProps[]
 }
 
-// DropdownMenu shows menu when a given "icon" prop is clicked. the element to 
+// DropdownMenu shows menu when a given "icon" prop is clicked. the element to
 // be clicked must be passed in as the "icon" prop. pass contents of the menu as
 // children
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
@@ -44,7 +44,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       </div>
       {open && (
         <div
-          className={classNames(`origin-top-right absolute top-8 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-30`, { 'left-0': alignLeft, 'right-0': !alignLeft })}
+          className={classNames(`origin-top-right absolute top-8 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-40`, { 'left-0': alignLeft, 'right-0': !alignLeft })}
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="options-menu"
