@@ -19,17 +19,26 @@ const SignUpModal: React.FC = () => {
   return (
     <div className='bg-white p-8 text-left text-qrinavy' style={{ width: '440px'}}>
       <div className='flex'>
-        <div className='flex-grow text-3xl font-black mb-8'>Welcome to the workflow editor!</div>
+        <div className='flex-grow text-3xl font-black'>Welcome to the workflow editor!</div>
         <IconButton icon='close' className='ml-10' onClick={handleClose}/>
       </div>
 
       <Carousel
+        renderArrowPrev={(clickHandler: () => void, hasPrev: boolean) => (
+          <div className='absolute top-0 bottom-0 flex items-center z-10 left-0'>
+            <IconButton icon='caretLeft' className='' disabled={!hasPrev} onClick={clickHandler}/>
+          </div>
+        )}
+        renderArrowNext={(clickHandler: () => void, hasNext: boolean) => (
+          <div className='absolute top-0 bottom-0 flex items-center z-10 right-0 '>
+            <IconButton icon='caretRight' className='' disabled={!hasNext} onClick={clickHandler}/>
+          </div>
+        )}
         showStatus={false}
-        showArrows={false}
         showThumbs={false}
         showIndicators
       >
-         <div className='mb-12 flex'>
+         <div className='my-12 px-8 flex'>
            <div className='text-2xl font-bold mr-3 leading-tight'>
              1.
            </div>
@@ -37,7 +46,7 @@ const SignUpModal: React.FC = () => {
              Qri binds code to data, teaching datasets to update themselves
            </div>
          </div>
-         <div className='mb-12 flex'>
+         <div className='my-12 px-8 flex'>
            <div className='text-2xl font-bold mr-3 leading-tight'>
              2.
            </div>
@@ -45,7 +54,7 @@ const SignUpModal: React.FC = () => {
              Triggers kick off workflows, completions run when datasets update
            </div>
          </div>
-         <div className='mb-12 flex'>
+         <div className='my-12 px-8 flex'>
            <div className='text-2xl font-bold mr-3 leading-tight'>
              3.
            </div>

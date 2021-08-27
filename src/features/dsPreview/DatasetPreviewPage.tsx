@@ -46,7 +46,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
 
   return (
     <>
-        {dataset?.peername === ''
+        {dataset?.username === ''
         ? (<div className='w-full h-full p-4 flex justify-center items-center'>
             <Spinner color='#4FC7F3' />
           </div>)
@@ -73,7 +73,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                           <div className=''>{dataset.commit?.title}</div>
                         </div>
                         <div className='flex items-center text-xs text-gray-400'>
-                          <UsernameWithIcon username={dataset.peername} className='mr-3' />
+                          <UsernameWithIcon username={dataset.username} className='mr-3' />
                           <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit?.timestamp)} />
                           <Icon icon='commit' size='sm' className='-ml-2' />
                           <div className=''>{commitishFromPath(dataset.path)}</div>
