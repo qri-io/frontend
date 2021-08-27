@@ -66,7 +66,7 @@ const LogInModal: React.FC = () => {
 
           {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
 
-          <Button size='sm' className='w-full mb-6' onClick={handleButtonClick} submit>
+          <Button id='login_modal_login_button' size='sm' className='w-full mb-6' onClick={handleButtonClick} submit>
             {loading ? <Spinner color='#fff' size={6} /> : 'Log In'}
           </Button>
         </form>

@@ -6,7 +6,8 @@ interface LinkProps {
   to?: string
   className?: string,
   colorClassName?: string,
-  onClick?: () => void
+  onClick?: () => void,
+  id?: string
 }
 
 const Link: React.FC<LinkProps> = ({
@@ -14,13 +15,14 @@ const Link: React.FC<LinkProps> = ({
   className,
   colorClassName = 'text-qriblue hover:text-qriblue-800',
   onClick,
-  children
+  children,
+  id
 }) => {
   const combinedClassNames = classNames('cursor-pointer transition-all duration-100', colorClassName)
 
   // use a <div> by default
   let theLink = (
-    <span onClick={onClick} className={combinedClassNames}>
+    <span id={id} onClick={onClick} className={combinedClassNames}>
       {children}
     </span>
   )

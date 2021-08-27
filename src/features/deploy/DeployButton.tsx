@@ -30,6 +30,7 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
   // TODO(chriswhong): add more validation logic to determine whether the deploy button should be disabled
   return (
     <Button
+      id='deploy_workflow_button'
       type='secondary'
       className='w-full'
       onClick={handleButtonClick}

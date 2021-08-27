@@ -112,6 +112,7 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
             return (
               <div
                 key={id}
+                id={'trigger_modal_'+id}
                 className={classNames('w-full py-4 px-4 rounded flex border items-center mb-4', {
                   'cursor-pointer': !disabled
                 })}
@@ -149,7 +150,7 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
             </div>
           </div>
           <div>
-            <Button className='w-full mb-3' type='secondary' onClick={handleSaveButtonClick}>Save</Button>
+            <Button id='add_trigger_save_button' className='w-full mb-3' type='secondary' onClick={handleSaveButtonClick}>Save</Button>
             <Button className='w-full' type='light' onClick={handleCancelButtonClick}>Cancel</Button>
           </div>
         </div>
