@@ -58,7 +58,7 @@ export const colorFromRunStatus = (status: RunStatus) => {
 const RunStatusIcon: React.FC<RunStatusIconProps> = ({ status, className, size='sm' }) => {
   const { icon, color } = statusMappings[status]
 
-  return <Icon icon={icon} size={size} className={classNames(`text-${color}`, className)}/>
+  return <Icon icon={icon} size={size} className={classNames(`${'run_status_icon_'+color} text-${color}`, className)}/>
 }
 
 export default RunStatusIcon

@@ -47,7 +47,7 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
         */}
         {triggers.length === 0 && (
           <div className='flex items-center'>
-            <Button onClick={handleAddClick}>
+            <Button id='workflow_triggers_add_button' onClick={handleAddClick}>
               <Icon icon='plus' size='sm'/>
             </Button>
           </div>

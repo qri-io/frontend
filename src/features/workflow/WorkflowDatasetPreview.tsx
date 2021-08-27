@@ -29,7 +29,7 @@ const WorkflowDatasetPreview: React.FC<WorkflowDatasetPreviewProps> = ({
           dataset={NewDataset({})}
           border
         >
-          <div className='h-full w-full flex justify-center items-center text-qrigray-400 text-center'>
+          <div id='workflow_dataset_preview_empty_text' className='h-full w-full flex justify-center items-center text-qrigray-400 text-center'>
             Dry run your code!<br/>If everything is working, you'll see a preview of the next version of this dataset here.
           </div>
         </TabbedComponentViewer>

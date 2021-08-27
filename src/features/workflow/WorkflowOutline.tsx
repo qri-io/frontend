@@ -63,7 +63,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
                 <ScrollTrigger target={step.name} key={i}>
                   <div className='text-sm mb-0.5 text-qrigray-400 capitalize'>
                     {step.name}
-                    {r && <div className='float-right text-green-500'><RunStatusIcon status={r.status || "waiting"} className='ml-2' /></div>}
+                    {r && <div className='workflow_outline_status_container float-right text-green-500'><RunStatusIcon status={r.status || "waiting"} className='ml-2' /></div>}
                   </div>
                 </ScrollTrigger>
               )

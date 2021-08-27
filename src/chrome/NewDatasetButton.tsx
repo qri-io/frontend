@@ -6,10 +6,11 @@ import Button from './Button'
 
 interface NewDatasetButtonProps {
   mini?: boolean
+  id: string | undefined;
 }
 
-const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini }) => (
-  <Link to={{
+const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini,id }) => (
+  <Link id={id} to={{
     pathname: `/workflow/new`,
     state: {
       showSplashModal: true,
