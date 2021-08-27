@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { ModalType, selectModal } from '../state/appState'
@@ -19,21 +19,27 @@ const Modal: React.FC<any> = () => {
   const dispatch = useDispatch()
   const modal = useSelector(selectModal)
 
-  const handleMaskClick = useCallback((e: MouseEvent) => {
-    if (maskRef && maskRef.current?.contains(e.target as Element)) {
+  const clearModalCallback = useCallback(() => {
+    if (!modal.locked) {
       dispatch(clearModal())
     }
-  }, [dispatch, maskRef])
+  }, [modal.locked, dispatch])
+
+  const handleMaskClick = useCallback((e: MouseEvent) => {
+    if (maskRef && maskRef.current?.contains(e.target as Element)) {
+      clearModalCallback()
+    }
+  }, [maskRef, clearModalCallback])
 
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
-        dispatch(clearModal())
+        clearModalCallback()
       }
     }
     window.addEventListener('keydown', close)
     return () => window.removeEventListener('keydown', close)
-  }, [dispatch])
+  }, [clearModalCallback])
 
   useEffect(() => {
     document.addEventListener("mousedown", handleMaskClick)
