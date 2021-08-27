@@ -5,10 +5,11 @@ import ReactDataTable from 'react-data-table-component'
 import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import Icon from '../../chrome/Icon'
+import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
+import { NewDataset } from '../../qri/dataset'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
-import commitishFromPath from '../../utils/commitishFromPath'
 
 
 interface ActivityListProps {
@@ -66,17 +67,19 @@ const ActivityList: React.FC<ActivityListProps> = ({
       name: 'Commit',
       selector: (row: LogItem) => row.message,
       cell: (row: LogItem) => {
+        const dataset = NewDataset({
+          username: row.username,
+          path: row.path,
+          commit: {
+            title: row.message,
+            timestamp:row.timestamp
+          }
+        })
         if (!['failed', 'unchanged'].includes(row.runStatus)) {
           const versionLink = `/ds/${row.username}/${row.name}/at${row.path}/body`
           return (
             <Link to={versionLink}>
-              <div className='text-qrinavy font-semibold text-sm flex items-center mb-2'>
-                <div className=''>{row.message}</div>
-              </div>
-              <div className='flex items-center text-xs text-gray-400'>
-                <Icon icon='commit' size='sm' className='-ml-2' />
-                <div className=''>{commitishFromPath(row.path)}</div>
-              </div>
+              <DatasetCommitInfo dataset={dataset} small />
             </Link>
           )
         } else {
