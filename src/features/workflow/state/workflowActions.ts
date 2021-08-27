@@ -113,11 +113,11 @@ export function applyWorkflowTransform(w: Workflow, d: Dataset): ApiActionThunk 
         endpoint: 'auto/apply',
         method: 'POST',
         body: {
-          ref: `${qriRef.username}/${qriRef.name}`,
-          wait: true,
+          ref: (qriRef.username && qriRef.name) ? `${qriRef.username}/${qriRef.name}` : '',
+          wait: false,
           transform: {
             scriptBytes: btoa(workflowScriptString(w)),
-            steps: d.transform.steps
+            steps: d.transform?.steps
           }
         },
       }
