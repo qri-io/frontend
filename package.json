@@ -16,6 +16,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/classnames": "^2.2.11",
+    "@types/deep-equal": "1.0.1",
     "@types/jest": "^26.0.20",
     "@types/markdown-it": "12.2.0",
     "@types/node": "^12.0.0",

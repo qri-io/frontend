@@ -151,7 +151,7 @@ export function setWorkflow(workflow: Workflow): SetWorkflowAction {
 
 export interface SetTemplateAction {
   type: string
-  workflow: Workflow
+  dataset: Dataset
 }
 
 export function setTemplate(dataset: Dataset): SetTemplateAction {
