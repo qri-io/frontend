@@ -45,7 +45,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         {(typeof icon === 'string') ? <Icon icon={icon} /> : icon}
       </div>
       <div
-        className={classNames(` transition-all duration-100 transform origin-top-right absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-30`,
+        className={classNames(` transition-all duration-100 transform origin-top-right absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-40`,
           {
             'left-0': alignLeft,
             'right-0': !alignLeft,
