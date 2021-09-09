@@ -23,7 +23,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
       'text-xs': small
     })}>
       <div className={classNames('text-qrinavy font-semibold flex justify-between items-center mb-2')}>
-        <div>{dataset.commit?.title}</div>
+        <div className='dataset_commit_info_text'>{dataset.commit?.title}</div>
         <div className='flex-grow-0 text-qrigreen'>
           <Icon icon='automationFilled' size={small ? 'xs' : 'sm'}/>
         </div>

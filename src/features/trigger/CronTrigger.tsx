@@ -54,10 +54,10 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
     <Block>
       <div className='flex'>
         <div className='flex-grow'>
-          <div className='text-sm font-semibold pb-1 text-qrinavy'>Schedule</div>
+          <div id='cron_trigger_schedule' className='text-sm font-semibold pb-1 text-qrinavy'>Schedule</div>
           <div className='text-qrigray-400 text-xs flex items-center'>
             <Icon icon='calendar' size='sm' className='mr-1 pt-1' />
-            <div>{displayInterval} {displayStartTime}</div>
+            <div id='cron_trigger_interval_text'>{displayInterval} {displayStartTime}</div>
           </div>
         </div>
         <div className='flex ml-2'>

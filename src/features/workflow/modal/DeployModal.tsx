@@ -138,7 +138,7 @@ const DeployModal: React.FC = () => {
     deployingContent = (
       <>
         <RunStatusIcon status={'succeeded'} size='lg' className='text-green mb-2' />
-        <div className='font-semibold text-xl mb-2'>Workflow Deployed</div>
+        <div id='snack_bar_message_workflow_deployed' className='font-semibold text-xl mb-2'>Workflow Deployed</div>
         <div className='text-sm text-qrigray'>You're all set! Sit back and let the data flow.</div>
       </>
     )
@@ -181,6 +181,7 @@ const DeployModal: React.FC = () => {
           <Checkbox label='Run on Deploy' value={runNow} onChange={() => { setRunNow(!runNow) }} />
         </div>
         <Button
+          id='deploy_modal_deploy_button'
           size='sm'
           type='secondary'
           className='w-full mt-2 flex-shrink-0'
@@ -210,7 +211,7 @@ const DeployModal: React.FC = () => {
           }}
           fire={deployStatus === 'deployed'}
         />
-        <Button size='sm' type={buttonType} className={classNames('w-full mt-2', {
+        <Button id='deploy_modal_done_button' size='sm' type={buttonType} className={classNames('w-full mt-2', {
           'invisible': !showButton
         })} onClick={handleClose} submit>
           {buttonText}

@@ -3,7 +3,7 @@ import React from 'react'
 import Icon from '../../chrome/Icon'
 
 export interface SnackBarMessageProps {
-  
+
 }
 
 const SnackBarMessage: React.FC<SnackBarMessageProps> = () => {

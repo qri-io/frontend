@@ -64,7 +64,7 @@ const RunBar: React.FC<RunBarProps> = ({
             ? <Button className='w-24' onClick={() => { handleCancel() }}>Cancel</Button>
             : (
               <div data-tip data-for='dry-run'>
-                <Button className='w-24' onClick={() => { handleRun() }}>Dry Run</Button>
+                <Button className='w-24 run_bar_run_button' onClick={() => { handleRun() }}>Dry Run</Button>
               </div>
             )
           }

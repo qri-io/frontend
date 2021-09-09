@@ -89,7 +89,7 @@ const Collection: React.FC<{}> = () => {
 
             <div className='w-1/2 flex items-center justify-end'>
               <SearchBox onChange={handleSearchChange} placeholder='Filter' dark />
-              <NewDatasetButton />
+              <NewDatasetButton id='new_dataset_button' />
             </div>
           </header>
           <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow'>

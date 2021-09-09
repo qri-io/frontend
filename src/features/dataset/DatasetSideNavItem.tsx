@@ -89,7 +89,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   return (
     <>
       <div className='mb-4 inline-block h-6'>
-        <Link to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
+        <Link id={id+'_link'} to={to} className={classNames('font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
           'text-qripink': active
         })}>
           {content}

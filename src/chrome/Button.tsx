@@ -16,6 +16,7 @@ export interface ButtonProps {
   className?: string
   submit?: boolean
   disabled?: boolean
+  id?: string
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -25,9 +26,11 @@ const Button: React.FC<ButtonProps> = ({
   onClick= () => {},
   submit = false,
   disabled = false,
-  children
+  children,
+  id = undefined
 }) => (
   <button
+    id={id}
     type={submit ? 'submit' : 'button'}
     className={classNames(
       'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-medium focus:outline-none focus:ring-none mt-0 transition-all duration-100',
