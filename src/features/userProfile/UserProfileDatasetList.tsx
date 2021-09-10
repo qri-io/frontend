@@ -62,7 +62,7 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
                   <rect y="0" width="100" height="18" rx="6"/>
                 </ContentLoader>
               ) : (
-                <>Page {page} of {totalPages}</>
+                <>Page {page} of {totalPages || 1}</>
               )
             }
 
