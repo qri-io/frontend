@@ -26,7 +26,7 @@ const DatasetList: React.FC<DatasetListProps> = ({ datasets, loading=false }) =>
   return (
     <>
       {
-        datasets.map((dataset) => <SearchResultItem key={`${dataset.peername}/${dataset.name}`} dataset={dataset} />)
+        datasets.map((dataset) => <SearchResultItem key={`${dataset.username}/${dataset.name}`} dataset={dataset} />)
       }
     </>
   )

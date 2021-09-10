@@ -27,7 +27,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading=fa
       )
     } else if (dataset) {
       const {
-        peername,
+        username,
         name,
         meta,
         commit,
@@ -35,7 +35,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading=fa
         followStats
       } = dataset
 
-      const humanRef = `${peername}/${name}`
+      const humanRef = `${username}/${name}`
       const title = meta?.title || humanRef
       const timestamp = new Date(commit.timestamp)
 
