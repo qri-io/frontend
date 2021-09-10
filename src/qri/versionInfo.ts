@@ -36,6 +36,16 @@ export interface VersionInfo {
   runID?: string
   runStatus?: RunStatus
   runDuration?: number
+
+  // TODO (boandriy): These fields are only temporarily living on `VersionInfo`.
+  // When we get more user feedback and settle what info
+  // users want about their datasets, these fields may move to a new struct
+  // store, or subsystem.
+  runCount: number // RunCount is the number of times this dataset's transform has been run
+  commitCount: number // CommitCount is the number of commits in this dataset's history
+  downloadCount: number // DownloadCount is the number of times this dataset has been directly downloaded from this Qri node
+  followerCount: number // FollowerCount is the number of followers this dataset has on this Qri node
+  openIssueCount: number // OpenIssueCount is the number of open issues this dataset has on this Qri node
 }
 
 export function newVersionInfo(data: Record<string,any>): VersionInfo {
@@ -69,6 +79,15 @@ export function newVersionInfo(data: Record<string,any>): VersionInfo {
     runID: data.runID,
     runStatus: data.runStatus,
     runDuration: data.runDuration,
+
+    // TODO(boandriy): the following fields are likely to be removed from the VersionInfo
+    // type in the future
+    runCount: data.runCount || 0,
+    commitCount: data.commitCount || 0,
+    downloadCount: data.downloadCount || 0,
+    followerCount: data.followerCount || 0,
+    openIssueCount: data.openIssueCount || 0
+
   }
 }
 

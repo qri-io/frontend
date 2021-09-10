@@ -5,8 +5,9 @@
 
 // DatasetPreviewPage fetches the other necessary parts of the preview (body + readme)
 
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router'
+import { useDispatch } from "react-redux";
 
 import WorkflowPage from '../workflow/WorkflowPage'
 import DatasetComponents from '../dsComponents/DatasetComponents'
@@ -16,6 +17,7 @@ import DatasetIssues from '../issues/DatasetIssues'
 import { newQriRef } from '../../qri/ref'
 import DatasetEditor from '../dsComponents/DatasetEditor'
 import DatasetWrapper from '../dsComponents/DatasetWrapper'
+import { loadHeader } from "./state/datasetActions";
 
 const DatasetRoutes: React.FC<{}> = () => {
   const { url } = useRouteMatch()
@@ -26,6 +28,11 @@ const DatasetRoutes: React.FC<{}> = () => {
   // ref. Move all ref constructino into container components to avoid potential
   // bugs
   const qriRef = newQriRef(useParams())
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadHeader(qriRef))
+  },[dispatch, qriRef.username, qriRef.name, qriRef.path]);
 
   return (
     <DatasetWrapper>

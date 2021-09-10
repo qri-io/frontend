@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { newQriRef } from '../../qri/ref'
-import { selectDsPreview } from '../dsPreview/state/dsPreviewState'
 import { selectSessionUser } from '../session/state/sessionState'
 import { selectSessionUserCanEditDataset } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
@@ -18,7 +17,6 @@ const DatasetFixedLayout: React.FC<DatasetFixedLayoutProps> = ({
   children
 }) => {
   const qriRef = newQriRef(useParams())
-  const dsPreview = useSelector(selectDsPreview)
   const user = useSelector(selectSessionUser)
   const editable = useSelector(selectSessionUserCanEditDataset)
   const isNew = (qriRef.username === 'new')
@@ -35,7 +33,7 @@ const DatasetFixedLayout: React.FC<DatasetFixedLayoutProps> = ({
   return (
     <>
         <div className='flex flex-col flex-grow overflow-hidden p-7'>
-          <DatasetHeader dataset={dsPreview} editable={editable}>
+          <DatasetHeader editable={editable}>
             {headerChildren}
           </DatasetHeader>
           {children}
