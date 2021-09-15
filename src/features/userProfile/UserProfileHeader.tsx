@@ -4,7 +4,6 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import ContentLoader from 'react-content-loader'
 
 import ContentBox from '../../chrome/ContentBox'
-import IconLink from '../../chrome/IconLink'
 
 import { UserProfile } from '../../qri/userProfile'
 
@@ -19,7 +18,6 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ profile, loading 
     profile: avatarUrl,
     name,
     username,
-    description,
     created
   } = profile
 
@@ -46,19 +44,21 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ profile, loading 
         ) : (
           <>
             <div className='text-qrinavy text-xl font-medium mb-1'>{name || username}</div>
-            <div className='text-qrinavy text-sm'>{username}</div>
-            <div className='text-qrigray-400 text-sm'>{description || 'I\'m a Qri user'}</div>
+            {/*TODO(boandriy): Hiding the user name/description until there is an option to edit it*/}
+            {/*<div className='text-qrinavy text-sm'>{username}</div>*/}
+            {/*<div className='text-qrigray-400 text-sm'>{description || 'I\'m a Qri user'}</div>*/}
           </>
         )}
       </div>
       <div className='flex flex-shrink-0 ml-4 flex-col justify-end items-end'>
         { !loading && (
           <>
-            <div className='flex justify-end mb-2'>
-              <IconLink icon='github' className='ml-2' link='https://github.com/chriswhong' />
-              <IconLink icon='twitter' className='ml-2' link='https://twitter.com/chriswhong' />
-              <IconLink icon='globe' className='ml-2' link='https://chriswhong.com' />
-            </div>
+            {/*TODO(boandriy): Hiding the user socials until there is an option to edit it*/}
+            {/*<div className='flex justify-end mb-2'>*/}
+            {/*  <IconLink icon='github' className='ml-2' link='https://github.com/chriswhong' />*/}
+            {/*  <IconLink icon='twitter' className='ml-2' link='https://twitter.com/chriswhong' />*/}
+            {/*  <IconLink icon='globe' className='ml-2' link='https://chriswhong.com' />*/}
+            {/*</div>*/}
             <div className='text-xs text-qrigray-400'>Qri user since {format(fromUnixTime(created), 'yyyy')}</div>
           </>
         )}
