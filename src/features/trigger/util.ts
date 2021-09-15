@@ -90,13 +90,15 @@ export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
   // for every 10 minutes, periodicity is 'R/PT10M'
   switch (schedule.periodicity) {
     case 'PT10M':
-      // get most recent previous hour, the ten-minutes interval will run at 00, 10, 20, 30, ...
+      const min = today.getMinutes()
+      const hr = min - 50 > 0 ? today.getHours() + 1 : today.getHours()
+      // start on the next closest 10 minute interval
       startTime = new Date(
         today.getFullYear(),
         today.getMonth(),
         today.getDate(),
-        today.getHours(),
-        0,
+        hr,
+        min + (10 - (min % 10)),
         0
       ).toISOString()
 
@@ -105,12 +107,12 @@ export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
     case 'P1H':
       // for hourly, periodicity is R/P1H and startTime is the next instance of
       // the minutes selected by the user
-      // get most recent previous hour, add minutes, convert to ISO8601
+      const hrs = parseInt(schedule.minutes) <= today.getMinutes() ? today.getHours() + 1 : today.getHours()
       startTime = new Date(
         today.getFullYear(),
         today.getMonth(),
         today.getDate(),
-        today.getHours(),
+        hrs,
         parseInt(schedule.minutes),
         0
       ).toISOString()
@@ -120,12 +122,12 @@ export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
      case 'P1D':
        // time is in HH:MM format in local time (24 hour hours)
       const [hours, minutes] = schedule.time.split(':')
-
+      const date = parseInt(hours) <= today.getHours() ? today.getDate() + 1 : today.getDate()
       // get ISO8601 string for today at the specified hours+minutes
       startTime = new Date(
         today.getFullYear(),
         today.getMonth(),
-        today.getDate(),
+        date, 
         parseInt(hours),
         parseInt(minutes),
         0
