@@ -1,18 +1,19 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
-import { Dataset, qriRefFromDataset } from '../../qri/dataset'
 import DatasetInfoItem from './DatasetInfoItem'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import Link from '../../chrome/Link'
 import { validateDatasetName } from '../session/state/formValidation'
+import { selectDatasetHeader } from "./state/datasetState";
+import { qriRefFromVersionInfo } from "../../qri/versionInfo";
+import fileSize from "../../utils/fileSize";
 
 
 export interface DatasetHeaderProps {
-  dataset: Dataset
   border?: boolean
   editable?: boolean
   showInfo?: boolean
@@ -23,7 +24,6 @@ export interface DatasetHeaderProps {
 // overriding the download button with the dry run button in the workflow editor
 
 const DatasetHeader: React.FC<DatasetHeaderProps> = ({
-  dataset,
   border = false,
   editable = false,
   showInfo = true,
@@ -31,13 +31,15 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const qriRef = qriRefFromDataset(dataset)
+  const header = useSelector(selectDatasetHeader)
+  const qriRef = qriRefFromVersionInfo(header)
+
 
   const handleRename = (_:string, value:string) => {
-    renameDataset(qriRef, { username: dataset.peername, name: value })(dispatch)
+    renameDataset(qriRef, { username: header.username, name: value })(dispatch)
       .then(({ type }) => {
         if (type === 'API_RENAME_SUCCESS') {
-          const newPath = history.location.pathname.replace(dataset.name, value)
+          const newPath = history.location.pathname.replace(header.name, value)
           history.replace(newPath)
         }
       })
@@ -62,15 +64,15 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           )}
 
           <div className='text-2xl text-qrinavy-500 font-black group hover:text'>
-            {dataset.meta?.title || dataset.name}
+            {header.name}
           </div>
           {showInfo && (
             <div className='flex mt-3 text-sm'>
-              <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />
-              <DatasetInfoItem icon='disk' label='59 MB' />
-              <DatasetInfoItem icon='download' label='418 downloads' />
-              <DatasetInfoItem icon='follower' label='130 followers' />
-              <DatasetInfoItem icon='lock' label='private' />
+              {header.workflowID && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}
+              <DatasetInfoItem icon='disk' label={fileSize(header.bodySize || 0)} />
+              <DatasetInfoItem icon='download' label={getLabel(header.downloadCount, 'download')} />
+              <DatasetInfoItem icon='follower' label={getLabel(header.followerCount, 'follower')} />
+              <DatasetInfoItem icon='globe' label='public' />
             </div>
           )}
         </div>
@@ -98,3 +100,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 }
 
 export default DatasetHeader;
+
+function getLabel(count: number, label: string) {
+  return `${count} ${label}${count === 1 ? '' : 's'}`
+}

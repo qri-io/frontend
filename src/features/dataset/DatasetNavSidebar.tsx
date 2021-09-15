@@ -18,8 +18,7 @@ import {
 
 import { selectNavExpanded } from '../app/state/appState'
 import { toggleNavExpanded } from '../app/state/appActions'
-import { selectVersionCount } from '../commits/state/commitState'
-import { selectLogCount } from '../activityFeed/state/activityFeedState'
+import { selectRunCount, selectCommitCount } from "./state/datasetState";
 
 export interface DatasetNavSidebarProps {
   qriRef: QriRef
@@ -27,8 +26,8 @@ export interface DatasetNavSidebarProps {
 
 const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const expanded = useSelector(selectNavExpanded)
-  const versionCount = useSelector(selectVersionCount(qriRef))
-  const logCount = useSelector(selectLogCount(qriRef))
+  const versionCount = useSelector(selectCommitCount)
+  const logCount = useSelector(selectRunCount)
   const dispatch = useDispatch()
 
   const toggleExpanded = () => {

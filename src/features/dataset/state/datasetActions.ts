@@ -1,8 +1,9 @@
 import Dataset, { NewDataset } from "../../../qri/dataset"
 import { QriRef, refStringFromQriRef, humanRef } from "../../../qri/ref"
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
-import { RENAME_NEW_DATASET } from "./datasetState"
+import {RENAME_NEW_DATASET, SET_HEADER} from "./datasetState"
 import { API_BASE_URL } from '../../../store/api'
+import {VersionInfo} from "../../../qri/versionInfo";
 
 export const bodyPageSizeDefault = 50
 
@@ -17,6 +18,27 @@ export function loadDataset(ref: QriRef): ApiActionThunk {
   }
 }
 
+export function loadHeader(ref: QriRef): ApiActionThunk {
+  return async (dispatch, getState) => {
+    if(getState){
+      const state = getState()
+      const existingHeader: VersionInfo | undefined = getExistingHeader(state.collection.collection, ref)
+      if(existingHeader)
+        return dispatch(setHeader(existingHeader))
+    }
+    return dispatch(fetchHeader(ref))
+  }
+}
+
+function getExistingHeader(collection: Record<string, VersionInfo>, ref: QriRef): VersionInfo | undefined {
+  for (const k in collection) {
+    if(collection[k].name === ref.name && collection[k].username === ref.username){
+      return collection[k]
+    }
+  }
+  return undefined
+}
+
 // downloadLinkFromQriRef creates a download link
 export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): string {
   let pathSegment = ref.path ? `/at${ref.path}` : ''
@@ -25,6 +47,24 @@ export function downloadLinkFromQriRef(ref: QriRef, body: boolean = false): stri
     return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}/body.csv`
   }
   return `${API_BASE_URL}/ds/get/${ref.username}/${ref.name}${pathSegment}?format=zip`
+}
+
+function fetchHeader(ref: QriRef) {
+  // fetchHeader fetches a specified `VersionInfo` from the collection
+  // TODO(boandriy): this endpoint ('collection/get') returns a `VersionInfo`, but
+  // this return type may change in the future when the specific "dataset details"
+  // that a user wants to see on the dataset page settles. We may then have a new
+  // data structure that returns from the 'collection/get' endpoint
+  return {
+    type: 'header',
+    [CALL_API]: {
+      endpoint: 'collection/get',
+      method: 'POST',
+      body: {
+        ref: ref.username+'/'+ref.name
+      }
+    }
+  }
 }
 
 function fetchDataset (ref: QriRef): ApiAction {
@@ -89,6 +129,13 @@ export interface RenameDatasetAction {
   type: string,
   current: QriRef
   next: QriRef
+}
+
+export function setHeader(header: VersionInfo) {
+  return {
+    type: SET_HEADER,
+    payload: header
+  }
 }
 
 export function renameDataset(current: QriRef, next: QriRef): ApiActionThunk {
