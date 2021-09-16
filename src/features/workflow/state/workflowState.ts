@@ -46,7 +46,7 @@ export const selectRunsFromEventLog = (state: RootState): Run[] => {
   const { events } = state.workflow
   const unique = [...new Set(events.map(d => d.sessionID))]
   return unique.map((d) => {
-    return NewRunFromEventLog(d, events)
+    return NewRunFromEventLog(d, events.filter(e => e.data.mode !== 'apply'))
   })
 }
 
