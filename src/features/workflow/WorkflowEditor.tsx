@@ -123,6 +123,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 }
                 return (
                   <WorkflowCell
+                    disabled={run?.status === 'running'}
                     key={step.category}
                     index={i}
                     step={step}
@@ -145,6 +146,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
               })}
               {/* TODO(b5) - hack for now. In the future we should make a component that trances & selects save results */}
               {runMode === 'save' && <WorkflowCell
+                disabled={false}
                 index={(workflow.steps?.length || 1)}
                 step={{name: 'save', syntax: 'qri', category: 'save', script: ''}}
                 collapseState={collapseState('save')}
