@@ -1,3 +1,16 @@
+/*
+To add a new icon (from the Figma design board):
+
+- right click the 24 x 24 version of the icon from Figma, choose Copy > copy as SVG
+- duplicate an existing icon and name it to match the new icon
+- paste the SVG you copied in between the <CustomIcon> tags
+- Remove the opening and closing <svg> tags, leaving only the internal svg elements (<path>, etc)
+- Rename the component variables to match the icon's name
+- convert attributes to camelcase `stroke-linejoin` becomes `strokeLinejoin` to satisfy react/linting
+- In this file, add an import for the new icon, and add it to the `customIcons` object.  Keep things in alphabetical order.
+- You're ready to use the icon!  <Icon icon='mynewicon' />
+*/
+
 import React from 'react'
 
 import ActivityFeed from './icon/ActivityFeed'
@@ -56,6 +69,7 @@ import String from './icon/String'
 import Structure from './icon/Structure'
 import Tags from './icon/Tags'
 import Twitter from './icon/Twitter'
+import Unlock from './icon/Unlock'
 import Youtube from './icon/Youtube'
 
 interface IconProps {
@@ -132,6 +146,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     structure: <Structure {...props} />,
     tags: <Tags {...props} />,
     twitter: <Twitter {...props} />,
+    unlock: <Unlock {...props} />,
     youtube: <Youtube {...props} />
   }
 
