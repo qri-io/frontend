@@ -1,7 +1,7 @@
 import getMinutes from 'date-fns/getMinutes'
 import format from 'date-fns/format'
 
-import { CronTrigger } from '../../qrimatic/workflow'
+import { CronTrigger, WorkflowTrigger } from '../../qrimatic/workflow'
 import { SelectOption } from '../../chrome/Select'
 
 // for hourly cron triggers, only these values are valid for specifying the minutes
@@ -80,7 +80,8 @@ export interface Schedule {
   time: string
 }
 
-// convert the UI values into a valid CronTrigger
+// convert the UI values into a valid CronTrigger, with the periodicity start
+// time occuring in the future
 export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
   // convert the UI settings into a valid WorkflowTrigger
   let periodicity
@@ -142,4 +143,18 @@ export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
     active: true,
     periodicity,
   }
+}
+
+// ensures that any cron triggers have a start time that occurs in the future 
+// it returns any other kinds of triggers unaltered
+export const prepareTriggersForDeploy = (wts: WorkflowTrigger[] | undefined): WorkflowTrigger[] | undefined => {
+  if (!wts) {
+    return 
+  }
+  return wts.map((trigger: WorkflowTrigger) => {
+    if (trigger.type === "cron") {
+      return triggerFromSchedule(scheduleFromPeriodicity((trigger as CronTrigger).periodicity))
+    }
+    return trigger
+  })
 }
