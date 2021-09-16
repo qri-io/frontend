@@ -72,7 +72,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
               <DatasetInfoItem icon='disk' label={fileSize(header.bodySize || 0)} />
               <DatasetInfoItem icon='download' label={getLabel(header.downloadCount, 'download')} />
               <DatasetInfoItem icon='follower' label={getLabel(header.followerCount, 'follower')} />
-              <DatasetInfoItem icon='globe' label='public' />
+              <DatasetInfoItem icon='unlock' label='public' />
             </div>
           )}
         </div>
