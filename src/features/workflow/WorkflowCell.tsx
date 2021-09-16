@@ -9,7 +9,7 @@ export interface WorkflowCellProps {
   index: number
   step: TransformStep
   run?: RunStep
-
+  disabled: boolean;
   collapseState: 'collapsed' | 'only-editor' | 'only-output' | 'all'
   onChangeCollapse: (v: 'collapsed' | 'only-editor' | 'only-output' | 'all') => void
   onChangeScript: (index: number, script: string) => void
@@ -36,6 +36,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   step,
   run,
   collapseState,
+  disabled,
   onChangeCollapse,
   onChangeScript,
   onRun,
@@ -46,7 +47,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   let editor: React.ReactElement
   switch (syntax) {
     case 'starlark':
-      editor = <CodeEditor script={script} onChange={(v) => { onChangeScript(index, v) }} onRun={onRun} disabled={!!run} standalone={!run?.output} />
+      editor = <CodeEditor script={script} onChange={(v) => { onChangeScript(index, v) }} onRun={onRun} disabled={disabled} standalone={!run?.output} />
       break;
     case 'qri':
       editor = <></>

@@ -36,7 +36,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   script,
   standalone = true,
   onChange,
-  onRun = () => {}
+  onRun = () => {},
+  disabled
 }) => {
   const ref = useRef<MonacoEditor>(null)
 
@@ -114,7 +115,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         }}
         language='python'
         theme='qri-theme'
-        options={MONACO_EDITOR_OPTIONS}
+        options={{...MONACO_EDITOR_OPTIONS, readOnly: disabled}}
         editorDidMount={handleEditorDidMount}
         editorWillMount={handleEditorWillMount}
       />
