@@ -10,6 +10,8 @@ import {
   DEPLOY_SAVEDATASET_START,
   DEPLOY_SAVEDATASET_END,
 } from './deployState'
+import { prepareTriggersForDeploy } from '../../trigger/util'
+import { prepareWorkflowForDeploy } from '../../workflow/utils/prepareWorkflowForDeploy'
 
 export interface DeployEvent {
   datasetID: string
@@ -26,6 +28,7 @@ export interface DeployEventAction {
 }
 
 export function deployWorkflow(qriRef: QriRef, w: Workflow, d: Dataset, run: boolean): ApiActionThunk {
+  const workflow = prepareWorkflowForDeploy(w)
   // this is where we strip the steps from the workflow and add them to dataset
   return async (dispatch, getState) => {
     return dispatch({
@@ -36,7 +39,7 @@ export function deployWorkflow(qriRef: QriRef, w: Workflow, d: Dataset, run: boo
         requestID: refStringFromQriRef(qriRef),
         body: {
           run,
-          workflow: w,
+          workflow,
           dataset: {
             peername: qriRef.username,
             name: qriRef.name,
