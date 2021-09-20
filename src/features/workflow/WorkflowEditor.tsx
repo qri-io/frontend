@@ -7,11 +7,18 @@ import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
 import Hooks from './Hooks'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
 import { Dataset } from '../../qri/dataset'
-import { changeWorkflowTransformStep, applyWorkflowTransform } from './state/workflowActions'
+import {
+  changeWorkflowTransformStep,
+  applyWorkflowTransform,
+  addWorkflowTransformStep,
+  removeWorkflowTransformStep,
+  duplicateWorkflowTransformStep,
+  clearOutputWorkflowTransformStep,
+  moveWorkflowTransformStepUp, moveWorkflowTransformStepDown
+} from './state/workflowActions'
 import { RunMode } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
-import ContentBox from '../../chrome/ContentBox'
 import DeployButton from '../deploy/DeployButton'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
 import { QriRef } from '../../qri/ref'
@@ -107,10 +114,10 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
       <div className='flex-grow min-w-0 z-10'>
         <div className=''>
           <WorkflowTriggersEditor triggers={workflow.triggers} />
-          <ContentBox className='mb-7' paddingClassName='px-5 py-4'>
+          <div className='mb-7 ' >
             <ScrollAnchor id='script' />
-            <section className='bg-white mb-4 border-b-2 border-qrigray-100 mb-7'>
-              <div className='bg-white top-0 z-10 flex mb-3'>
+            <section className='mb-4 border-b-2 border-qrigray-100 mb-7'>
+              <div className='top-0 z-10 flex mb-3'>
                 <div className='flex-grow'>
                   <h2 className='text-2xl font-medium text-black mb-1'>Script</h2>
                   <div className='text-sm text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
@@ -135,6 +142,12 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                       update[step.name] = v
                       setCollapseStates(update)
                     }}
+                    onRowAdd={(i:number,syntax: string) => dispatch(addWorkflowTransformStep(i, syntax))}
+                    onRowDelete={() => dispatch(removeWorkflowTransformStep(i))}
+                    onRowDuplicate={() => dispatch(duplicateWorkflowTransformStep(i))}
+                    onOutputClear={() => dispatch(clearOutputWorkflowTransformStep(i))}
+                    onRowMoveUp={() => dispatch(moveWorkflowTransformStepUp(i))}
+                    onRowMoveDown={() => dispatch(moveWorkflowTransformStepDown(i))}
                     onChangeScript={(i:number, script:string) => {
 
                       if (dataset?.transform?.steps) {
@@ -166,7 +179,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
 
             <ScrollAnchor id='result' />
             <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
-          </ContentBox>
+          </div>
           <Hooks />
           <div className='mt-6'>
             <ScrollAnchor id='deploy-button' />

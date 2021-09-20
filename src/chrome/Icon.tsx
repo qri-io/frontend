@@ -71,6 +71,9 @@ import Tags from './icon/Tags'
 import Twitter from './icon/Twitter'
 import Unlock from './icon/Unlock'
 import Youtube from './icon/Youtube'
+import TrashBin from "./icon/TrashBin";
+import Duplicate from "./icon/Duplicate";
+import UpArrow from "./icon/UpArrow";
 
 interface IconProps {
   // name of the icon
@@ -118,6 +121,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     discord: <Discord {...props} />,
     disk: <Disk {...props} />,
     download: <Download {...props} />,
+    duplicate: <Duplicate {...props} />,
     ellipsesVertical: <EllipsesVertical {...props} />,
     eye: <Eye {...props} />,
     follower: <Follower {...props} />,
@@ -145,8 +149,10 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     string: <String {...props} />,
     structure: <Structure {...props} />,
     tags: <Tags {...props} />,
+    trashBin: <TrashBin {...props} />,
     twitter: <Twitter {...props} />,
     unlock: <Unlock {...props} />,
+    upArrow: <UpArrow {...props} />,
     youtube: <Youtube {...props} />
   }
 

@@ -5,13 +5,15 @@ export interface CustomIconProps {
   className?: string
   size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   spin?: boolean
+  rotation?: 90 | 180 | 270
 }
 
 const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
   className,
   size,
   spin=false,
-  children
+  children,
+  rotation
 }) => {
   let dimension = 22
 
@@ -38,7 +40,8 @@ const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
       })}
       width={dimension}
       height={dimension}
-      viewBox="0 0 24 24"
+      transform={`${rotation ? 'rotate('+rotation+')' : ''}`}
+      viewBox={`0 0 24 24`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{

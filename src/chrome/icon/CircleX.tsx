@@ -10,4 +10,5 @@ const CircleX: React.FC<CustomIconProps> = (props) => (
 
 )
 
+
 export default CircleX

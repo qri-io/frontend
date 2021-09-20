@@ -4,6 +4,8 @@ import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
 import ScrollAnchor from '../scroller/ScrollAnchor'
+import WorkflowHeading from "./WorkfolwHeading";
+import WorkflowCellControls from "./WorkflowCellControls";
 
 export interface WorkflowCellProps {
   index: number
@@ -14,22 +16,28 @@ export interface WorkflowCellProps {
   onChangeCollapse: (v: 'collapsed' | 'only-editor' | 'only-output' | 'all') => void
   onChangeScript: (index: number, script: string) => void
   onRun: () => void
+  onRowAdd: (index: number, syntax: string) => void
+  onRowDelete: () => void
+  onRowDuplicate: () => void
+  onOutputClear: () => void
+  onRowMoveUp: () => void
+  onRowMoveDown: () => void
 }
 
-const nameLookup = (name: string) => {
-  switch(name) {
-    case 'setup':
-      return 'Import dependencies or load existing qri datasets'
-    case 'download':
-      return 'Pull in data from external sources like websites, APIs, or databases'
-    case 'transform':
-      return 'Shape your data into the desired output for your dataset'
-    case 'save':
-      return 'Saving will commit changes to your qri dataset after running the code above. You can preview the changes here after each dry run of the workflow'
-    default:
-      return ''
-  }
-}
+// const nameLookup = (name: string) => {
+//   switch(name) {
+//     case 'setup':
+//       return 'Import dependencies or load existing qri datasets'
+//     case 'download':
+//       return 'Pull in data from external sources like websites, APIs, or databases'
+//     case 'transform':
+//       return 'Shape your data into the desired output for your dataset'
+//     case 'save':
+//       return 'Saving will commit changes to your qri dataset after running the code above. You can preview the changes here after each dry run of the workflow'
+//     default:
+//       return ''
+//   }
+// }
 
 const WorkflowCell: React.FC<WorkflowCellProps> = ({
   index,
@@ -37,12 +45,16 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   run,
   collapseState,
   disabled,
-  onChangeCollapse,
   onChangeScript,
+  onRowAdd,
   onRun,
+  onRowDelete,
+  onRowDuplicate,
+  onOutputClear,
+  onRowMoveUp,
+  onRowMoveDown,
 }) => {
   const { syntax, name, script } = step
-  const description = nameLookup(name)
 
   let editor: React.ReactElement
   switch (syntax) {
@@ -52,24 +64,44 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
     case 'qri':
       editor = <></>
       break;
+    case 'heading': // TODO (boandriy): implement when markdown step will be introduced on BE
+      editor = <WorkflowHeading title={script} onChange={(v) => { onChangeScript(index, v) }}/>
+      break;
     default:
       editor = <p>unknown editor for '{syntax}' workflow step</p>
   }
 
   return (
-    <div id={`${step.name}-cell`} className='w-full mb-4'>
-        <ScrollAnchor id={step.name} />
-        <header>
-          <div className=''>
-            {run && <p className='float-right'>{run.duration}</p>}
-            <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5' onClick={() => {
-              onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
-            }}>{name}</h3>
-            <div className='text-xs mb-2.5 text-gray-400'>{description}</div>
-          </div>
-        </header>
+    <div id={`${name}-cell`} className='w-full group flex'>
+      <div className={'flex-grow'}>
+        <ScrollAnchor id={name} />
+        {/*<header>*/}
+        {/*  <div className=''>*/}
+        {/*    {run && <p className='float-right'>{run.duration}</p>}*/}
+        {/*    <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5' onClick={() => {*/}
+        {/*      onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')*/}
+        {/*    }}>{name}</h3>*/}
+        {/*    <div className='text-xs mb-2.5 text-gray-400'>{description}</div>*/}
+        {/*  </div>*/}
+        {/*</header>*/}
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
+
+
         {(collapseState === 'all' || collapseState === 'only-output') && run?.output && <Output data={run?.output} status={run?.status} />}
+        <div onClick={() => onRowAdd(index, 'starlark')}
+             className={'mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'}>
+          <div className={'h-px bg-gray-300 flex-grow mr-2'} />
+          <button className={'text-xs border-none flex-shrink-0 bg-white rounded py-1 pr-2 pl-1 font-semibold '}>+ Code</button>
+        </div>
+      </div>
+
+      <WorkflowCellControls
+        onDelete={onRowDelete}
+        onDuplicate={onRowDuplicate}
+        onOutputClear={onOutputClear}
+        onMoveUp={onRowMoveUp}
+        onMoveDown={onRowMoveDown}
+      />
       </div>
   )
 }
