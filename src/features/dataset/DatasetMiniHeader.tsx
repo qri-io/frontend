@@ -36,7 +36,7 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
               <Link to={`/${dataset.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.username || 'new'}</Link>/{dataset.name}
             </div>
           )}
-          <div className='text-normal text-qrinavy font-semibold'>
+          <div className='text-normal text-black font-semibold'>
             {dataset.meta?.title || dataset.name}
           </div>
         </div>

@@ -68,7 +68,7 @@ const PageControl: React.FC<PageControlProps> = ({
             previousLabel={<Icon icon='caretLeft' size='xs' />}
             nextLabel={<Icon icon='caretRight' size='xs' />}
             hrefBuilder={hrefBuilder}
-            activeClassName='text-qrired'
+            activeClassName='text-dangerred'
             onPageChange={onPageChange}
             containerClassName='page-control-pagination flex items-center'
           />

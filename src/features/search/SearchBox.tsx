@@ -45,7 +45,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       <input
         className={classNames('focus:ring-qripink focus:border-qripink block w-full sm:text-xs rounded-lg tracking-wider bg-transparent placeholder-opacity-50', {
           'border-gray-400 placeholder-gray-600': !dark,
-          'border-qrinavy placeholder-qrinavy': dark
+          'border-black placeholder-black': dark
         })}
         style={{
           padding: '8px 8px 10px 8px'
@@ -59,7 +59,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       />
       <span className={classNames('absolute inset-y-0 right-0 flex items-center pr-2', {
         'text-gray-400': !dark,
-        'text-qrinavy': dark
+        'text-black': dark
       })}>
         <Icon size='sm' icon='skinnySearch' />
       </span>

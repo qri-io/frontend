@@ -96,7 +96,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
                   <div className='text-sm text-gray-400 font-mono'>
                     {dataset.peername}/{dataset.name}
                   </div>
-                  <div className='text-xl text-qrinavy font-semibold'>
+                  <div className='text-xl text-black font-semibold'>
                     {dataset.meta?.title || dataset.name}
                   </div>
                 </div>

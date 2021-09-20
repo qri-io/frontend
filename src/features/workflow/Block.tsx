@@ -11,7 +11,7 @@ const Block: React.FC<BlockProps> = ({ name, onClick, children }) => (
     <div className={classNames('bg-white px-3 py-2 shadow-even rounded-lg h-full', {
       'cursor-pointer': !!onClick
     })}>
-      { name && <div className='text-sm font-semibold pb-1 text-qrinavy'>{name}</div>}
+      { name && <div className='text-sm font-semibold pb-1 text-black'>{name}</div>}
       {children}
     </div>
   </div>

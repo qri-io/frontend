@@ -35,7 +35,7 @@ const statusMappings: StatusMappings = {
   },
   failed: {
     icon: 'circleX',
-    color: 'qrired-700'
+    color: 'dangerred'
   },
   unchanged: {
     icon: 'circleDash',

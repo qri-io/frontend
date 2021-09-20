@@ -44,7 +44,7 @@ const LogInModal: React.FC = () => {
       <div className='w-10 m-auto mb-4'>
         <QriLogo size='sm'/>
       </div>
-      <div className='text-3xl font-black mb-8 text-qrinavy'>Welcome to Qri</div>
+      <div className='text-3xl font-black mb-8 text-black'>Welcome to Qri</div>
       <div className='w-72 mx-auto'>
         <form>
           <div className='mb-8'>
@@ -61,7 +61,7 @@ const LogInModal: React.FC = () => {
               onChange={(value) => { setPassword(value)  }}
               placeholder='Password'
             />
-            <Link to='/forgot-password'><div className='text-left text-qrinavy text-xs font-medium'>Forgot your Password?</div></Link>
+            <Link to='/forgot-password'><div className='text-left text-black text-xs font-medium'>Forgot your Password?</div></Link>
           </div>
 
           {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
@@ -76,7 +76,7 @@ const LogInModal: React.FC = () => {
 
         <hr className='w-20 mx-auto mb-3'/>
 
-        <div className='text-qrinavy text-xs font-medium'>
+        <div className='text-black text-xs font-medium'>
           Not on Qri yet? <Link onClick={handleSignUpClick}>Sign Up</Link>
         </div>
       </div>

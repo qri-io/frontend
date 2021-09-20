@@ -8,6 +8,7 @@ interface IconLinkProps {
   link?: string
   size?: IconSize
   className?: string
+  colorClassName?: string
   onClick?: () => void
 }
 
@@ -16,14 +17,15 @@ const IconLink: React.FC<IconLinkProps> = ({
   link,
   size='sm',
   className,
+  colorClassName='text-black hover:text-qripink',
   onClick
 }) => {
-  const linkClassNames = 'text-qrinavy hover:text-qripink hover:cursor-pointer'
+  const linkClassNames = `${colorClassName} hover:cursor-pointer`
 
   if (link) {
     return (
       <div className={classNames('ml-2', className)}>
-        <Link to={link} className={linkClassNames}>
+          <Link to={link} className={linkClassNames} colorClassName={colorClassName}>
           <Icon icon={icon} size={size} />
         </Link>
       </div>

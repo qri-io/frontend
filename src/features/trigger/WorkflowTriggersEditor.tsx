@@ -38,7 +38,7 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
       <ScrollAnchor id='triggers'/>
       <div className='flex'>
         <div className='flex-grow'>
-          <h2 className='text-2xl font-medium text-qrinavy mb-1'>Triggers</h2>
+          <h2 className='text-2xl font-medium text-black mb-1'>Triggers</h2>
           <div className='text-sm text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
         </div>
         {/*

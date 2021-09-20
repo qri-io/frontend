@@ -40,7 +40,7 @@ const FormatConfig: React.FunctionComponent<FormatConfigProps> = ({
 
   return (
     <div className='text-left'>
-      <div className='text-qrinavy text-sm font-semibold mb-2'>
+      <div className='text-black text-sm font-semibold mb-2'>
         {format ? format.toUpperCase() + ' ' : ''}Configuration
       </div>
       <div className='font-normal text-sm text-qrigray-400'>

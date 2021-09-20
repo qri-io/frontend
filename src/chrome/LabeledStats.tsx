@@ -47,12 +47,12 @@ const LabeledStats: React.FC<LabeledStatsProps> = ( {
             <div className={classNames('text-xs text-qrigray-400 capitalize', { 'light': color === 'light', 'large': size === 'lg' })}>
               {stat.label}
             </div>
-            <div className={classNames('font-semibold text-qrinavy flex justify-center items-center', { 'light': color === 'light', 'large': size === 'lg' })}>
+            <div className={classNames('font-semibold text-black flex justify-center items-center', { 'light': color === 'light', 'large': size === 'lg' })}>
               {displayVal}
               {(stat.value === 'CSV') && (
                 <div className='relative'>
                   <div className='flex' data-tip data-for={stat.label}>
-                    <Icon icon='info' size='sm' className='text-qriblue ml-2'/>
+                    <Icon icon='info' size='sm' className='text-qritile ml-2'/>
                   </div>
                   {/* TODO(chriswhong): this renders a light tooltip with gray border and shadow that resembles our dropdown menus, and should be componentized for re-use */}
                   <ReactTooltip

@@ -15,12 +15,12 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
   switch(status) {
     case 'waiting':
       displayStatus = 'Waiting'
-      colorClass = 'text-qrinavy-300'
+      colorClass = 'text-black-300'
       break
 
     case 'running':
       displayStatus = 'Running'
-      colorClass = 'text-qrinavy-500'
+      colorClass = 'text-black-500'
       break
 
     case 'succeeded':
@@ -35,7 +35,7 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
 
     case 'unchanged':
       displayStatus = 'No Changes'
-      colorClass = 'text-qriblue-500'
+      colorClass = 'text-qritile-500'
       break
   }
 

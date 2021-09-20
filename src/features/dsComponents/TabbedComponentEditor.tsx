@@ -23,7 +23,7 @@ export const TabbedComponentEditor: React.FC<TabbedComponentViewerProps> = ({
   if (loading) {
     return (
       <div className='p-4 h-full w-full flex justify-center items-center bg-white rounded-md'>
-        <Spinner color='#4FC7F3' />
+        <Spinner color='#43B3B2' />
       </div>
     )
   }

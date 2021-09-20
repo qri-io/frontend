@@ -4,25 +4,25 @@ import Link from '../../chrome/Link'
 import IconLink from '../../chrome/IconLink'
 
 const Footer: React.FC<{}> = () => (
-  <div className='flex w-9/12 mx-auto text-qrinavy text-sm py-5 tracking-wide'>
+  <div className='flex w-9/12 mx-auto text-black text-sm py-5 tracking-wide'>
     <div className='flex flex-grow font-medium'>
       <Link
         className='mr-10'
-        colorClassName='text-qrinavy hover:text-qripink'
+        colorClassName='text-black hover:text-qripink'
         to='https://qri.io/docs'
       >
         Tutorials
       </Link>
       <Link
         className='mr-10'
-        colorClassName='text-qrinavy hover:text-qripink'
+        colorClassName='text-black hover:text-qripink'
         to='https://qri.io/docs'
       >
         Docs
       </Link>
       <Link
         className='mr-10'
-        colorClassName='text-qrinavy hover:text-qripink'
+        colorClassName='text-black hover:text-qripink'
         to='https://qri.io/faq'
       >
         FAQs
@@ -50,6 +50,7 @@ const Footer: React.FC<{}> = () => (
             size='md'
             link={link}
             className='ml-5'
+            colorClassName='text-black hover:text-qripink'
           />
         ))
       }

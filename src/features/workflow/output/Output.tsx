@@ -16,7 +16,7 @@ export interface OutputProps {
 const Output: React.FC<OutputProps> = ({ data, status }) => {
   let borderColorClass = 'border-qrigreen'
 
-  if (status === 'failed') { borderColorClass = 'border-qrired-700' }
+  if (status === 'failed') { borderColorClass = 'border-dangerred' }
 
   return (
     <div className='relative'>

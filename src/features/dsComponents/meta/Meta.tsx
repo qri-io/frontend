@@ -88,7 +88,7 @@ const renderTable = (keys: string[], data: Meta) => {
 
             return (
               <tr key={key}>
-                <td className='p-2 font-semibold text-sm text-left text-qrinavy capitalize'>{key}</td>
+                <td className='p-2 font-semibold text-sm text-left text-black capitalize'>{key}</td>
                 <td id={`meta-${key}`} className='p-2 text-sm text-qrigray-400'>{cellContent}</td>
               </tr>
             )
@@ -113,11 +113,11 @@ export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
 
   return (
     <div className='h-full w-full overflow-auto'>
-      <div className='text-xl font-normal text-qrinavy font-medium mb-2'>Standard Metadata</div>
+      <div className='text-xl font-normal text-black font-medium mb-2'>Standard Metadata</div>
       {renderTable(standard, data)}
 
       {(extra.length > 0) && <div>
-        <h4 className='text-xl font-normal text-qrinavy font-medium mb-2'>Additional Metadata</h4>
+        <h4 className='text-xl font-normal text-black font-medium mb-2'>Additional Metadata</h4>
         {renderTable(extra, data)}
       </div>}
     </div>

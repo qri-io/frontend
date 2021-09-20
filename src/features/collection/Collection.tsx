@@ -47,7 +47,7 @@ const Collection: React.FC<{}> = () => {
   if (loading) {
     resultsContent = (
       <div className='h-full w-full flex justify-center items-center'>
-        <Spinner color='#4FC7F3' />
+        <Spinner color='#43B3B2' />
       </div>
     )
   }
@@ -77,7 +77,7 @@ const Collection: React.FC<{}> = () => {
     <PageWithFooter>
       <div className='h-full' style={{ backgroundColor: '#f3f4f6'}}>
         <div className='h-full w-9/12 mx-auto pt-7 pb-7 flex flex-col'>
-          <header className='mb-7 flex text-qrinavy items-end'>
+          <header className='mb-7 flex text-black items-end'>
             <div className='flex-grow flex items-center justify-start'>
               <h1 className='text-3xl font-extrabold mb-1'>My Datasets </h1>
               <div>

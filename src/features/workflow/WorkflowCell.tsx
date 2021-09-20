@@ -62,7 +62,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
         <header>
           <div className=''>
             {run && <p className='float-right'>{run.duration}</p>}
-            <h3 className='text-sm text-qrinavy font-semibold cursor-pointer mb-0.5' onClick={() => {
+            <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5' onClick={() => {
               onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')
             }}>{name}</h3>
             <div className='text-xs mb-2.5 text-gray-400'>{description}</div>
