@@ -3,6 +3,8 @@ import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
 import { NewWorkflow, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
 import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
 import { AnyAction } from "redux"
+import { RootState } from "../../../store/store";
+import { ThunkDispatch } from 'redux-thunk'
 
 function mapVersionInfo (data: object | []): VersionInfo[] {
   if (!data) { return [] }
@@ -13,6 +15,18 @@ export function loadCollection() {
   return async (dispatch, getState) => {
     return dispatch(fetchCollection())
   }
+}
+
+export function loadVersionInfo(initID: string) {
+  return async (dispatch: ThunkDispatch<any, any, any>, getState: () => RootState) => {
+    const state = getState();
+    if (state.collection.collection[initID]) {
+      return state.collection.collection[initID]
+    } else if (!state.collection.pendingIDs.includes(initID)) {
+      return dispatch(fetchVersionInfo(initID))
+    } else return
+  }
+
 }
 
 function fetchCollection (): ApiAction {
@@ -26,6 +40,19 @@ function fetchCollection (): ApiAction {
         limit: 300 // TODO(chriswhong): For now, we assume the client has the entire collection and can sort and filter locally
       },
       map: mapVersionInfo
+    }
+  }
+}
+
+function fetchVersionInfo (initID: string): ApiAction {
+  return {
+    type: 'versioninfo',
+    [CALL_API]: {
+      endpoint: 'collection/get',
+      method: 'POST',
+      body: {
+        initID: initID
+      },
     }
   }
 }
