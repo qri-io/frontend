@@ -22,7 +22,7 @@ const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ qriRef }) => 
       data-tip
       onClick={() => { dispatch(runNow(qriRef)) }}
     >
-      <Icon icon='playCircle' size='lg' className='text-qriblue'/>
+      <Icon icon='playCircle' size='lg' className='text-qritile'/>
       <ReactTooltip
         id={id}
         place='bottom'

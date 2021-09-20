@@ -128,7 +128,7 @@ const Search: React.FC<{}> = () => {
       <NavBar showSearch={false} />
       <div className='flex-grow w-full py-9'>
         <div className='w-4/5 max-w-screen-lg mx-auto'>
-        <div className='text-qrinavy text-3xl font-black mb-4'>Dataset Search</div>
+        <div className='text-black text-3xl font-black mb-4'>Dataset Search</div>
           <BigSearchBox onSubmit={handleSearchSubmit} value={q} className='mb-4'/>
           <div className='flex items-center mb-4 h-8'>
             {searchResults.length > 0 ? (

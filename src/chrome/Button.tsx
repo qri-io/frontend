@@ -44,11 +44,11 @@ const Button: React.FC<ButtonProps> = ({
         'text-md px-8 py-3': (size === 'lg'),
       },
       {
-        'text-white bg-qriblue hover:bg-qriblue-600': (type === 'primary'),
-        'text-qriblue hover:text-qriblue-600 text-sm font-medium border-2 border-qriblue hover:border-qriblue-600 box-border': (type === 'primary-outline'),
+        'text-white bg-qritile hover:bg-qritile-600': (type === 'primary'),
+        'text-qritile hover:text-qritile-600 text-sm font-medium border-2 border-qritile hover:border-qritile-600 box-border': (type === 'primary-outline'),
         'text-white bg-qripink hover:bg-qripink-600': (type === 'secondary'),
         'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
-        'text-white bg-qrired-700 hover:bg-qrired-900': (type === 'danger'),
+        'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
         'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),
         'text-qrigray-900 hover:text-qripink border border-qrigray-900 hover:border-qripink': (type === 'dark'),
       }

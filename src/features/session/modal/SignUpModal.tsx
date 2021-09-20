@@ -65,7 +65,7 @@ const SignUpModal: React.FC = () => {
       <div className='w-10 m-auto mb-4'>
         <QriLogo size='sm'/>
       </div>
-      <div className='text-3xl font-black mb-8 text-qrinavy'>Sign Up for Qri</div>
+      <div className='text-3xl font-black mb-8 text-black'>Sign Up for Qri</div>
       <div className='w-72 mx-auto'>
         <form>
           <div className='mb-8'>
@@ -103,7 +103,7 @@ const SignUpModal: React.FC = () => {
 
         <hr className='w-20 mx-auto mb-3'/>
 
-        <div className='text-qrinavy text-xs font-medium'>
+        <div className='text-black text-xs font-medium'>
           Already on Qri? <Link onClick={handleLogInClick}>Log In</Link>
         </div>
       </div>

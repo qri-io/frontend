@@ -66,13 +66,13 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
         <div>
           <div className='flex'>
             <div className='flex-grow'>
-              <h3 className={classNames('text-2xl leading-6 font-black text-qrinavy mb-5', {
-                'text-qrired-700': type === 'danger'
+              <h3 className={classNames('text-2xl leading-6 font-black text-black mb-5', {
+                'text-dangerred': type === 'danger'
               })}>{title}</h3>
             </div>
             <IconButton icon='close' onClick={handleCancelButtonClick} />
           </div>
-          <div className="mb-5 text-base text-qrinavy">
+          <div className="mb-5 text-base text-black">
             {children}
           </div>
         </div>

@@ -179,7 +179,7 @@ test('happy path', async () => {
  */
 // test('first time user flow', async () => {
 //   await page.goto('http://localhost:3000/')
-//   // await page.click('#app > div.route-content.h-full > div > div.bg-qriblue.text-white.text-bold.flex.p-4.items-center > a.px-4')
+//   // await page.click('#app > div.route-content.h-full > div > div.bg-qritile.text-white.text-bold.flex.p-4.items-center > a.px-4')
 //   await page.click("#new-dataset-button")
 // } )
 

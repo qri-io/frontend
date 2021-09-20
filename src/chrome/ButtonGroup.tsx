@@ -23,7 +23,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
     {items.map(({ text, icon, link }, i) => {
       const selected = selectedIndex === i
       return (
-        <Link className={classNames('my-2 mx-4 font-medium text-qrinavy transition-100 transition-all hover:text-qripink', {
+        <Link className={classNames('my-2 mx-4 font-medium text-black transition-100 transition-all hover:text-qripink', {
           'text-qripink': selected
         })} key={i} to={link}>
           <div className='flex items-center'>

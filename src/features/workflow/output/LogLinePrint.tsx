@@ -11,7 +11,7 @@ const LogLinePrint: React.FC<LogLineProps> = ({ line }) => {
       // TODO (b5) - utilize line.data.lvl to set output colour
      return <p className='log_line_print_text text-sm text-gray-500'>{line.data.msg}</p>
     case EventLogLineType.ETError:
-     return <p className='text-sm text-qrired-700'>{line.data.msg}</p>
+     return <p className='text-sm text-dangerred'>{line.data.msg}</p>
     default:
       return <p>{line.data.msg}</p>
   }

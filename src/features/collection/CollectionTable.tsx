@@ -75,7 +75,7 @@ export const customStyles = {
     style: {
       fontSize: '1rem', // text-base
       lineHeight: '1.5rem', // text-base
-      color: '#1B3356' // qrinavy
+      color: '#000000' // black
     },
   },
   rows: {
@@ -117,7 +117,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
           <div className='truncate'>
             <div className='mb-1'>
               <Link to={pathToDatasetPreview(row)}>
-                <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-medium text-qrinavy ' />
+                <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-medium text-black ' />
               </Link>
             </div>
             <div className='flex text-xs overflow-y-hidden'>
@@ -174,7 +174,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
     //   omit: simplified,
     //   width: '160px',
     //   cell: (row: VersionInfo) => (row.id
-    //       ? <div className='tracking-wider font-medium text-qrinavy'>Schedule, Run When, Webhook</div>
+    //       ? <div className='tracking-wider font-medium text-black'>Schedule, Run When, Webhook</div>
     //       : '—'
     //   )
     // },

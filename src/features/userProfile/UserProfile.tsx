@@ -121,7 +121,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
                 backgroundImage: `url(${profile.profile})`
               }}></div>
               <div>
-                <div className='text-qrinavy text-sm font-semibold'>{profile.name}</div>
+                <div className='text-black text-sm font-semibold'>{profile.name}</div>
                 <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
               </div>
             </div>

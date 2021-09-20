@@ -63,7 +63,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             </div>
           )}
 
-          <div className='text-2xl text-qrinavy-500 font-black group hover:text'>
+          <div className='text-2xl text-black-500 font-black group hover:text'>
             {header.name}
           </div>
           {showInfo && (

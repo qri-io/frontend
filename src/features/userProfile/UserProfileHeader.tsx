@@ -43,9 +43,9 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ profile, loading 
           </ContentLoader>
         ) : (
           <>
-            <div className='text-qrinavy text-xl font-medium mb-1'>{name || username}</div>
+            <div className='text-black text-xl font-medium mb-1'>{name || username}</div>
             {/*TODO(boandriy): Hiding the user name/description until there is an option to edit it*/}
-            {/*<div className='text-qrinavy text-sm'>{username}</div>*/}
+            {/*<div className='text-black text-sm'>{username}</div>*/}
             {/*<div className='text-qrigray-400 text-sm'>{description || 'I\'m a Qri user'}</div>*/}
           </>
         )}

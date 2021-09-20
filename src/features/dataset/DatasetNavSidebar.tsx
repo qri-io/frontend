@@ -68,7 +68,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
       </div>
       <div className="absolute top-0 -right-10 w-10 h-10 bg-white" />
       <div className="absolute top-0 -right-10 w-10 h-10" style={{
-        background: '#f4f7fb',
+        background: '#EFF3F5',
         borderTopLeftRadius: '20px'
       }}/>
       <div className='flex-grow pl-9'>

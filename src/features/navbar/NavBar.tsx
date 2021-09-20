@@ -37,7 +37,7 @@ const NavBar: React.FC<NavBarProps> = ({
   }
 
   return (
-    <div className='bg-white text-qrinavy-700 text-bold flex items-center pr-8 font-medium' style={{
+    <div className='bg-white text-black-700 text-bold flex items-center pr-8 font-medium' style={{
       paddingTop: 14,
       paddingBottom: 14,
     }}>

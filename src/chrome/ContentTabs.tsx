@@ -61,7 +61,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ tabs }) => (
               'text-qripink': selected,
               'bg-gray-200': !selected,
               'text-gray-400': disabled,
-              'text-qrinavy': !disabled,
+              'text-black': !disabled,
               'hover:cursor-pointer': !disabled,
             })}
           >

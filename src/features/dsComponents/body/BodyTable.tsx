@@ -117,7 +117,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
       return (
         <tr key={i} className=''>
           <td key={0}className='bg-white text-center border-r border-b border-gray-200'>
-            <div className={classNames(cellClasses, 'text-qrinavy-500')}>
+            <div className={classNames(cellClasses, 'text-black-500')}>
               {
                 // TODO (ramfox): when we add back pageInfo/fetching
                 // we should use the page number, page size, and the row index (i)
@@ -154,7 +154,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
               {headers && headers.map((d: any, j: number) => {
                 return (
                   <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-gray-200'>
-                    <div className={classNames(cellClasses, 'text-qrinavy text-sm flex items-center')} >
+                    <div className={classNames(cellClasses, 'text-black text-sm flex items-center')} >
                       <DataType type={d.type} showLabel={false} className='mr-1 text-qrigray-300' />
                       <div>{d.title}</div>
                     </div>

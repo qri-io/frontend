@@ -43,7 +43,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
         'text-qripink': selected,
         'bg-gray-200': !selected,
         'text-gray-400': disabled,
-        'text-qrinavy': !disabled,
+        'text-black': !disabled,
         'hover:cursor-pointer': !disabled,
         'w-1/4': displayName === 'Data',
         'border-grigray-200 border-t-2 border-r-2 border-l-2 -bottom-0.5': border

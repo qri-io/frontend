@@ -23,7 +23,7 @@ const DatasetInfoItem: React.FC<DatasetInfoItemProps> = ({
 
   return (
     <div className={classNames('flex items-center inline-block', {
-      'text-qrinavy-500 mr-5': !small,
+      'text-black-500 mr-5': !small,
       'text-qrigray-400 mr-3': small
     })}>
       <div className='mr-1 flex items-center'>

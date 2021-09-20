@@ -107,7 +107,7 @@ const DeployModal: React.FC = () => {
 
   let content = (
     <div className='text-sm mb-4'>
-      <div className='text-qrinavy font-semibold mb-1'>Dataset name *</div>
+      <div className='text-black font-semibold mb-1'>Dataset name *</div>
       <div className='text-qrigray-400 mb-2'>Give your dataset a descriptive, machine-friendly name</div>
       <TextInput
         name='dsName'
@@ -128,7 +128,7 @@ const DeployModal: React.FC = () => {
 
   let deployingContent = (
     <>
-      <RunStatusIcon status={'running'} size='lg' className='text-qrinavy mb-2' />
+      <RunStatusIcon status={'running'} size='lg' className='text-black mb-2' />
       <div className='font-semibold text-xl mb-2'>Deploying Workflow</div>
       <div className='text-sm text-qrigray'>Standby... this won't take long.</div>
     </>
@@ -165,7 +165,7 @@ const DeployModal: React.FC = () => {
 
   return (
     <div style={{ width: 440, height: 440 }}>
-      <div className={classNames('absolute w-full h-full bg-white p-8 transition-all duration-300 bg-white p-8 text-left text-qrinavy flex flex-col z-10', {
+      <div className={classNames('absolute w-full h-full bg-white p-8 transition-all duration-300 bg-white p-8 text-left text-black flex flex-col z-10', {
         'left-0': !deploying,
         '-left-full': deploying
       })}>

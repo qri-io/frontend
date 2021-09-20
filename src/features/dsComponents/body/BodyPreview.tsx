@@ -38,7 +38,7 @@ const Body: React.FC<BodyProps> = ({
   if (!body) {
     return (
       <div className='h-full w-full flex justify-center items-center'>
-        <Spinner color='#4FC7F3' />
+        <Spinner color='#43B3B2' />
       </div>
     )
   }

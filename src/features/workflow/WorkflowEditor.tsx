@@ -112,7 +112,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
             <section className='bg-white mb-4 border-b-2 border-qrigray-100 mb-7'>
               <div className='bg-white top-0 z-10 flex mb-3'>
                 <div className='flex-grow'>
-                  <h2 className='text-2xl font-medium text-qrinavy mb-1'>Script</h2>
+                  <h2 className='text-2xl font-medium text-black mb-1'>Script</h2>
                   <div className='text-sm text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
                 </div>
               </div>
@@ -158,7 +158,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 onChangeScript={() => {}}
                 />}
             </section>
-            <h3 className='text-sm text-qrinavy font-semibold cursor-pointer mb-0.5'>
+            <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5'>
               Result
             </h3>
 

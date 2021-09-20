@@ -34,7 +34,7 @@ const Schema: React.FC<SchemaProps> = ({
 
   const thCellClassName = 'px-2 py-2 whitespace-nowrap max-w-xs'
 
-  const thClassName = 'h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-gray-200 text-qrinavy capitalize text-sm'
+  const thClassName = 'h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-gray-200 text-black capitalize text-sm'
 
   return (
     <div className='overflow-x-scroll'>

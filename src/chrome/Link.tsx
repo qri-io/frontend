@@ -13,7 +13,7 @@ interface LinkProps {
 const Link: React.FC<LinkProps> = ({
   to,
   className,
-  colorClassName = 'text-qriblue hover:text-qriblue-800',
+  colorClassName = 'text-qritile hover:text-qritile-800',
   onClick,
   children,
   id

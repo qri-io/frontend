@@ -103,11 +103,11 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
       })}>
         <div className='flex'>
           <div className='flex-grow'>
-            <h3 className={classNames('text-2xl leading-6 font-black text-qrinavy mb-5')}>Add a Trigger</h3>
+            <h3 className={classNames('text-2xl leading-6 font-black text-black mb-5')}>Add a Trigger</h3>
           </div>
           <IconButton icon='close' onClick={handleCancelButtonClick} />
         </div>
-        <div className="mb-5 text-base text-qrinavy">
+        <div className="mb-5 text-base text-black">
           {triggerTypes.map(({ id, buttonLabel, description, disabled = false }) => {
             return (
               <div
@@ -124,7 +124,7 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
               >
                 <div className='flex-grow'>
                   <div className={classNames('font-bold', {
-                    'text-qrinavy': !disabled,
+                    'text-black': !disabled,
                     'text-qrigray-300': disabled
                   })}>{buttonLabel}</div>
                   <div className={classNames('text-sm', {
@@ -145,7 +145,7 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
                 <h3 className={classNames('text-2xl leading-6 font-black mb-5')}>{currentTriggerType.label}</h3>
               </div>
             </div>
-            <div className="mb-5 text-base text-qrinavy">
+            <div className="mb-5 text-base text-black">
               {currentTriggerType.content}
             </div>
           </div>
