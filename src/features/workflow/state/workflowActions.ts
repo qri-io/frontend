@@ -20,18 +20,18 @@ import {
 import { AnyAction } from 'redux'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
 
-export function mapWorkflow(d: object | []): Workflow {
+export function mapWorkflow (d: object | []): Workflow {
   const data = (d as Record<string, any>)
   return NewWorkflow(data)
 }
 
-export function loadWorkflowByDatasetRef(qriRef: QriRef): ApiActionThunk {
+export function loadWorkflowByDatasetRef (qriRef: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchWorkflowByDatasetRef(qriRef))
   }
 }
 
-function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
+function fetchWorkflowByDatasetRef (qriRef: QriRef): ApiAction {
   return {
     type: 'workflow',
     qriRef,
@@ -44,102 +44,101 @@ function fetchWorkflowByDatasetRef(qriRef: QriRef): ApiAction {
   }
 }
 
-export function resetWorkflowState() {
+export function resetWorkflowState () {
   return {
-    type: 'RESET_WORKFLOW_STATE',
+    type: 'RESET_WORKFLOW_STATE'
   }
 }
 
-export function runNow(qriRef: QriRef): ApiActionThunk {
+export function runNow (qriRef: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchRunNow(qriRef))
   }
 }
 
-function fetchRunNow(qriRef: QriRef): ApiAction {
+function fetchRunNow (qriRef: QriRef): ApiAction {
   return {
     type: 'runnow',
     qriRef,
     [CALL_API]: {
       endpoint: 'auto/run',
       method: 'POST',
-      body: { ref: `${qriRef.username}/${qriRef.name}` },
+      body: { ref: `${qriRef.username}/${qriRef.name}` }
     }
   }
 }
 
-export interface RemoveWorkflowStepAction {
+export interface WorkflowStepAction {
   type: string
   index: number
 }
 
-
-export interface SetWorkflowStepAction extends RemoveWorkflowStepAction{
+export interface SetWorkflowStepAction extends WorkflowStepAction{
   script: string
 }
 
-export interface AddWorkflowStepAction extends RemoveWorkflowStepAction{
+export interface AddWorkflowStepAction extends WorkflowStepAction{
   syntax: string
 }
 
-export function changeWorkflowTransformStep(index: number, script: string): SetWorkflowStepAction {
+export function changeWorkflowTransformStep (index: number, script: string): SetWorkflowStepAction {
   return {
     type: WORKFLOW_CHANGE_TRANSFORM_STEP,
     index,
-    script,
+    script
   }
 }
 
-export function addWorkflowTransformStep(index: number, syntax: string): AddWorkflowStepAction {
+export function addWorkflowTransformStep (index: number, syntax: string): AddWorkflowStepAction {
   return {
     type: WORKFLOW_ADD_TRANSFORM_STEP,
     index,
-    syntax,
+    syntax
   }
 }
 
-export function removeWorkflowTransformStep(index: number): RemoveWorkflowStepAction {
+export function removeWorkflowTransformStep (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_REMOVE_TRANSFORM_STEP,
-    index,
+    index
   }
 }
 
-export function duplicateWorkflowTransformStep(index: number): RemoveWorkflowStepAction {
+export function duplicateWorkflowTransformStep (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_DUPLICATE_TRANSFORM_STEP,
-    index,
+    index
   }
 }
 
-export function clearOutputWorkflowTransformStep(index: number): RemoveWorkflowStepAction {
+export function clearOutputWorkflowTransformStep (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP,
-    index,
+    index
   }
 }
 
-export function moveWorkflowTransformStepUp(index: number): RemoveWorkflowStepAction {
+export function moveWorkflowTransformStepUp (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_MOVE_TRANSFORM_STEP_UP,
-    index,
+    index
   }
 }
 
-export function moveWorkflowTransformStepDown(index: number): RemoveWorkflowStepAction {
+export function moveWorkflowTransformStepDown (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_MOVE_TRANSFORM_STEP_DOWN,
-    index,
+    index
   }
 }
 
 export interface WorkflowTriggerAction {
   type: string
-  index: number,
+  index: number
   trigger: WorkflowTrigger
 }
 
-export function changeWorkflowTrigger(index: number, trigger: WorkflowTrigger): WorkflowTriggerAction {
+export function changeWorkflowTrigger (index: number, trigger: WorkflowTrigger): WorkflowTriggerAction {
   return {
     type: WORKFLOW_CHANGE_TRIGGER,
     index,
@@ -152,14 +151,14 @@ export interface RunModeAction {
   mode: RunMode
 }
 
-export function setRunMode(mode: RunMode): RunModeAction {
+export function setRunMode (mode: RunMode): RunModeAction {
   return {
     type: SET_RUN_MODE,
-    mode,
+    mode
   }
 }
 
-export function applyWorkflowTransform(w: Workflow, d: Dataset): ApiActionThunk {
+export function applyWorkflowTransform (w: Workflow, d: Dataset): ApiActionThunk {
   return async (dispatch, getState) => {
     var qriRef = qriRefFromDataset(d)
     return dispatch({
@@ -174,7 +173,7 @@ export function applyWorkflowTransform(w: Workflow, d: Dataset): ApiActionThunk 
             scriptBytes: btoa(workflowScriptString(w)),
             steps: d.transform?.steps
           }
-        },
+        }
       }
     })
   }
@@ -185,10 +184,10 @@ export interface EventLogAction {
   data: EventLogLine
 }
 
-export function runEventLog(event: EventLogLine): EventLogAction {
+export function runEventLog (event: EventLogLine): EventLogAction {
   return {
     type: RUN_EVENT_LOG,
-    data: event,
+    data: event
   }
 }
 
@@ -197,7 +196,7 @@ export interface SetWorkflowAction {
   workflow: Workflow
 }
 
-export function setWorkflow(workflow: Workflow): SetWorkflowAction {
+export function setWorkflow (workflow: Workflow): SetWorkflowAction {
   return {
     type: SET_WORKFLOW,
     workflow
@@ -209,26 +208,24 @@ export interface SetTemplateAction {
   dataset: Dataset
 }
 
-export function setTemplate(dataset: Dataset): SetTemplateAction {
+export function setTemplate (dataset: Dataset): SetTemplateAction {
   return {
     type: SET_TEMPLATE,
     dataset
   }
 }
 
-
-
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
 export interface TempWorkflowAction {
-  type: string,
-  id: string,
+  type: string
+  id: string
   events: EventLogLine[]
 }
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
-export function tempSetWorkflowEvents(id: string, events: EventLogLine[]): TempWorkflowAction {
+export function tempSetWorkflowEvents (id: string, events: EventLogLine[]): TempWorkflowAction {
   return {
     type: TEMP_SET_WORKFLOW_EVENTS,
     id,
@@ -241,10 +238,10 @@ export interface SetWorkflowRefAction {
   qriRef: QriRef
 }
 
-export function setWorkflowRef(qriRef: QriRef): SetWorkflowRefAction {
+export function setWorkflowRef (qriRef: QriRef): SetWorkflowRefAction {
   return {
     type: SET_WORKFLOW_REF,
-    qriRef,
+    qriRef
   }
 }
 

@@ -38,7 +38,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const runMode = useSelector(selectRunMode)
   const isDirty = useSelector(selectWorkflowIsDirty)
 
-  const [ redirectTo, setRedirectTo ] = useState('')
+  const [redirectTo, setRedirectTo] = useState('')
 
   useEffect(() => {
     if (location.pathname === '/workflow/new') {
@@ -56,7 +56,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
 
-  const handleBlockedNavigation = (nextLocation: Location ) => {
+  const handleBlockedNavigation = (nextLocation: Location) => {
     if (redirectTo) { return true }
     // do nothing if user clicks the link for the active route
     if (nextLocation.pathname === location.pathname) {
@@ -78,15 +78,15 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
     <>
       <div id='workflow' className='w-full flex'>
         <Prompt
-          when={true}
+          when
           message={handleBlockedNavigation}
         />
-        <WorkflowOutline workflow={workflow} dataset={workflowDataset} run={latestRun} runMode={runMode} />
+        <WorkflowOutline workflow={workflow} run={latestRun} />
         <WorkflowEditor qriRef={qriRef} workflow={workflow} dataset={workflowDataset} run={latestRun} runMode={runMode} isDirty={isDirty} />
-        { redirectTo && <Redirect to={redirectTo} /> }
+        {redirectTo && <Redirect to={redirectTo} />}
       </div>
     </>
   )
 }
 
-export default Workflow;
+export default Workflow
