@@ -127,6 +127,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
               {row.commitTime && (
                 <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(row.commitTime)}/>} small />
               )}
+              <DatasetInfoItem icon={'commit'} label={row.commitCount.toString()} small/>
             </div>
           </div>
         </div>
