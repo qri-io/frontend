@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-import {RunStatus} from "../../qri/run";
+import { RunStatus } from '../../qri/run'
 
 interface WorkflowStepStatusCircleProps {
   status: RunStatus
@@ -28,7 +28,7 @@ const statusMappings: StatusMappings = {
     classes: 'bg-dangerred'
   },
   unchanged: {
-    classes:  'bg-blue'
+    classes: 'bg-blue'
   },
   skipped: {
     classes: 'border border-solid border-gray-400'
@@ -39,7 +39,7 @@ const statusMappings: StatusMappings = {
 }
 
 const WorkflowStepStatusCircle: React.FC<WorkflowStepStatusCircleProps> = ({
- status
+  status
 }) => {
   const { classes } = statusMappings[status]
   return (
@@ -47,4 +47,4 @@ const WorkflowStepStatusCircle: React.FC<WorkflowStepStatusCircleProps> = ({
   )
 }
 
-export default WorkflowStepStatusCircle;
+export default WorkflowStepStatusCircle
