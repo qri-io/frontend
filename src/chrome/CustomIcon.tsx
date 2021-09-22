@@ -10,27 +10,32 @@ export interface CustomIconProps {
 
 const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
   className,
-  size,
+  size='md',
   spin=false,
   children,
   rotation
 }) => {
-  let dimension = 22
+  let dimension: number
 
-  if (size === '2xs') {
-    dimension = 12
-  }
-
-  if (size === 'xs') {
-    dimension = 14
-  }
-
-  if (size === 'sm') {
-    dimension = 18
-  }
-
-  if (size === 'lg') {
-    dimension = 24
+  switch (size) {
+    case '2xs':
+      dimension = 12
+      break
+    case 'xs':
+      dimension = 14
+      break
+    case 'sm':
+      dimension = 18
+      break
+    case 'md':
+      dimension = 22
+      break
+    case 'lg':
+      dimension = 24
+      break
+    default: // 'md'
+      dimension = 22
+      break
   }
 
   return (
@@ -40,7 +45,7 @@ const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
       })}
       width={dimension}
       height={dimension}
-      transform={`${rotation ? 'rotate('+rotation+')' : ''}`}
+      transform={rotation && `rotate(${rotation})`}
       viewBox={`0 0 24 24`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

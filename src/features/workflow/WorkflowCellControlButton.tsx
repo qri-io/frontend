@@ -5,14 +5,14 @@ interface WorkflowCellControlButtonProps {
   onClick: () => void
   label: string
   icon: string
-  rotate?: boolean
+  flipIcon?: boolean
 }
 
 const WorkflowCellControlButton: React.FC<WorkflowCellControlButtonProps> = ({
   onClick,
   label,
   icon,
-  rotate
+  flipIcon=false
  }) => {
 
   return (
@@ -21,7 +21,7 @@ const WorkflowCellControlButton: React.FC<WorkflowCellControlButtonProps> = ({
       onClick={onClick}>
       <Icon
         className='mr-2'
-        rotation={rotate ? 180 : undefined}
+        rotation={flipIcon ? 180 : undefined}
         size='2xs'
         icon={icon}/>
         {label}

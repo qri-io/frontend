@@ -9,6 +9,3 @@ const Duplicate: React.FC<CustomIconProps> = (props) => (
 )
 
 export default Duplicate
-
-
-

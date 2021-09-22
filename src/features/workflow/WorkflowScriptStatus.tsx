@@ -49,18 +49,6 @@ const WorkflowScriptStatus: React.FC<WorkflowCellControlsProps> = ({
   return (
     <div className={`${classes} px-2 pt-2 pb-2 rounded-lg mb-5`}>
       <div className={'mb-2 text-xs tracking-wide'}>New Preview Version</div>
-      <div className='flex flex-wrap'>
-        {dataset?.transform?.steps && dataset.transform.steps.map((step: TransformStep, i: number) => {
-          let r
-          if (run) {
-            r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: "waiting" })
-          }
-          return (
-            <WorkflowStepStatusCircle status={r ? (r.status || 'waiting') : ''} />
-          )
-        })}
-      </div>
-
     </div>
   )
 }

@@ -2,28 +2,23 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Hotkeys from 'react-hot-keys'
 
+
+import {
+  changeWorkflowTransformStep,
+  applyWorkflowTransform,
+  addWorkflowTransformStep,
+} from './state/workflowActions'
 import WorkflowCell from './WorkflowCell'
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
 import Hooks from './Hooks'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
 import { Dataset } from '../../qri/dataset'
-import {
-  changeWorkflowTransformStep,
-  applyWorkflowTransform,
-  addWorkflowTransformStep,
-  removeWorkflowTransformStep,
-  duplicateWorkflowTransformStep,
-  clearOutputWorkflowTransformStep,
-  moveWorkflowTransformStepUp, moveWorkflowTransformStepDown
-} from './state/workflowActions'
 import { RunMode } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import DeployButton from '../deploy/DeployButton'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
 import { QriRef } from '../../qri/ref'
-
-
 
 export interface WorkflowEditorProps {
   qriRef: QriRef
@@ -143,13 +138,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                       setCollapseStates(update)
                     }}
                     onRowAdd={(i:number,syntax: string) => dispatch(addWorkflowTransformStep(i, syntax))}
-                    onRowDelete={() => dispatch(removeWorkflowTransformStep(i))}
-                    onRowDuplicate={() => dispatch(duplicateWorkflowTransformStep(i))}
-                    onOutputClear={() => dispatch(clearOutputWorkflowTransformStep(i))}
-                    onRowMoveUp={() => dispatch(moveWorkflowTransformStepUp(i))}
-                    onRowMoveDown={() => dispatch(moveWorkflowTransformStepDown(i))}
                     onChangeScript={(i:number, script:string) => {
-
                       if (dataset?.transform?.steps) {
                         dispatch(changeWorkflowTransformStep(i, script))
                       }

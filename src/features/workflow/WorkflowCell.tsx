@@ -17,27 +17,7 @@ export interface WorkflowCellProps {
   onChangeScript: (index: number, script: string) => void
   onRun: () => void
   onRowAdd: (index: number, syntax: string) => void
-  onRowDelete: () => void
-  onRowDuplicate: () => void
-  onOutputClear: () => void
-  onRowMoveUp: () => void
-  onRowMoveDown: () => void
 }
-
-// const nameLookup = (name: string) => {
-//   switch(name) {
-//     case 'setup':
-//       return 'Import dependencies or load existing qri datasets'
-//     case 'download':
-//       return 'Pull in data from external sources like websites, APIs, or databases'
-//     case 'transform':
-//       return 'Shape your data into the desired output for your dataset'
-//     case 'save':
-//       return 'Saving will commit changes to your qri dataset after running the code above. You can preview the changes here after each dry run of the workflow'
-//     default:
-//       return ''
-//   }
-// }
 
 const WorkflowCell: React.FC<WorkflowCellProps> = ({
   index,
@@ -48,11 +28,6 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   onChangeScript,
   onRowAdd,
   onRun,
-  onRowDelete,
-  onRowDuplicate,
-  onOutputClear,
-  onRowMoveUp,
-  onRowMoveDown,
 }) => {
   const { syntax, name, script } = step
 
@@ -75,18 +50,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
     <div id={`${name}-cell`} className='w-full group flex'>
       <div className={'flex-grow'}>
         <ScrollAnchor id={name} />
-        {/*<header>*/}
-        {/*  <div className=''>*/}
-        {/*    {run && <p className='float-right'>{run.duration}</p>}*/}
-        {/*    <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5' onClick={() => {*/}
-        {/*      onChangeCollapse(collapseState === 'all' ? 'collapsed' : 'all')*/}
-        {/*    }}>{name}</h3>*/}
-        {/*    <div className='text-xs mb-2.5 text-gray-400'>{description}</div>*/}
-        {/*  </div>*/}
-        {/*</header>*/}
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-
-
         {(collapseState === 'all' || collapseState === 'only-output') && run?.output && <Output data={run?.output} status={run?.status} />}
         <div onClick={() => onRowAdd(index, 'starlark')}
              className={'mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'}>
@@ -95,13 +59,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
         </div>
       </div>
 
-      <WorkflowCellControls
-        onDelete={onRowDelete}
-        onDuplicate={onRowDuplicate}
-        onOutputClear={onOutputClear}
-        onMoveUp={onRowMoveUp}
-        onMoveDown={onRowMoveDown}
-      />
+      <WorkflowCellControls index={index} />
       </div>
   )
 }
