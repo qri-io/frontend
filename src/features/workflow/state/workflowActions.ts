@@ -11,7 +11,11 @@ import {
   SET_WORKFLOW,
   SET_WORKFLOW_REF,
   SET_RUN_MODE,
-  RunMode
+  RunMode,
+  WORKFLOW_ADD_TRANSFORM_STEP,
+  WORKFLOW_REMOVE_TRANSFORM_STEP,
+  WORKFLOW_DUPLICATE_TRANSFORM_STEP,
+  WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP, WORKFLOW_MOVE_TRANSFORM_STEP_UP, WORKFLOW_MOVE_TRANSFORM_STEP_DOWN
 } from './workflowState'
 import { AnyAction } from 'redux'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
@@ -64,10 +68,18 @@ function fetchRunNow(qriRef: QriRef): ApiAction {
   }
 }
 
-export interface SetWorkflowStepAction {
+export interface RemoveWorkflowStepAction {
   type: string
   index: number
+}
+
+
+export interface SetWorkflowStepAction extends RemoveWorkflowStepAction{
   script: string
+}
+
+export interface AddWorkflowStepAction extends RemoveWorkflowStepAction{
+  syntax: string
 }
 
 export function changeWorkflowTransformStep(index: number, script: string): SetWorkflowStepAction {
@@ -75,6 +87,49 @@ export function changeWorkflowTransformStep(index: number, script: string): SetW
     type: WORKFLOW_CHANGE_TRANSFORM_STEP,
     index,
     script,
+  }
+}
+
+export function addWorkflowTransformStep(index: number, syntax: string): AddWorkflowStepAction {
+  return {
+    type: WORKFLOW_ADD_TRANSFORM_STEP,
+    index,
+    syntax,
+  }
+}
+
+export function removeWorkflowTransformStep(index: number): RemoveWorkflowStepAction {
+  return {
+    type: WORKFLOW_REMOVE_TRANSFORM_STEP,
+    index,
+  }
+}
+
+export function duplicateWorkflowTransformStep(index: number): RemoveWorkflowStepAction {
+  return {
+    type: WORKFLOW_DUPLICATE_TRANSFORM_STEP,
+    index,
+  }
+}
+
+export function clearOutputWorkflowTransformStep(index: number): RemoveWorkflowStepAction {
+  return {
+    type: WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP,
+    index,
+  }
+}
+
+export function moveWorkflowTransformStepUp(index: number): RemoveWorkflowStepAction {
+  return {
+    type: WORKFLOW_MOVE_TRANSFORM_STEP_UP,
+    index,
+  }
+}
+
+export function moveWorkflowTransformStepDown(index: number): RemoveWorkflowStepAction {
+  return {
+    type: WORKFLOW_MOVE_TRANSFORM_STEP_DOWN,
+    index,
   }
 }
 

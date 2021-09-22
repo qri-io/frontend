@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 
 import Icon from '../../chrome/Icon'
-import { TransformStep, Dataset } from '../../qri/dataset'
-import { NewRunStep, Run } from '../../qri/run'
+import { Dataset } from '../../qri/dataset'
+import { Run } from '../../qri/run'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { RunMode } from './state/workflowState'
 import DeployStatusIndicator from '../deploy/DeployStatusIndicator'
-import DatasetCommit from '../commits/DatasetCommit'
+import WorkflowScriptStatus from "./WorkflowScriptStatus";
 
 
 export interface WorkflowOutlineProps {
@@ -43,7 +43,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
             <ScrollTrigger target='triggers'>
               <div className='font-semibold text-black mb-1'>Triggers</div>
               <div className='text-qrigray-400'>—</div>
-              <div className='mb-4'></div>
+              <div className='mb-4' />
             </ScrollTrigger>
           </div>
           <div className='mb-2'>
@@ -53,50 +53,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
               </div>
             </ScrollTrigger>
           </div>
-          <div className='mb-2'>
-            {dataset?.transform?.steps && dataset.transform.steps.map((step: TransformStep, i: number) => {
-              let r
-              if (run) {
-                r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: "waiting" })
-              }
-              return (
-                <ScrollTrigger target={step.name} key={i}>
-                  <div className='text-sm mb-0.5 text-qrigray-400 capitalize'>
-                    {step.name}
-                    {r && <div className='workflow_outline_status_container float-right text-green-500'><RunStatusIcon status={r.status || "waiting"} className='ml-2' /></div>}
-                  </div>
-                </ScrollTrigger>
-              )
-            })}
-            {runMode === 'save' && <ScrollTrigger target='save'>
-              <div className='text-sm ml-2 mb-1 text-gray-500 font-semibold'>
-                <span className='font-black text-gray-500'>{((workflow && workflow.steps?.length) || 0)+1}</span> &nbsp; save
-                {/* {r && <div className='float-right text-green-500'><RunStateIcon state={r.status || RunState.waiting} /></div>} */}
-              </div>
-            </ScrollTrigger>}
-          </div>
-          <hr/>
-          <ScrollTrigger target='result'>
-            <div className='text-sm text-qrigray-400 pt-2 pb-1'>Result</div>
-            { /*
-              TODO(chriswhong): we need the backend to return a timestamp for the dry run and a commit message in order to render this commit box
-              this can be a proper LogItem or we can modify the props for DatasetCommit, or make a new component, this is a placeholder
-            */}
-            {run?.dsPreview ? (
-              <DatasetCommit
-                logItem={{
-                  timestamp: Date.parse(new Date(new Date().getTime() - 5 * 1000)),
-                  title: 'new version from workflow'
-                }}
-                active
-                isLink={false}
-              />
-            ) : (
-              <div className='text-xs block rounded-md px-3 pt-3 pb-4 mb-6 w-full overflow-x-hidden text-qrigray-400 border border-qrigray-300'>
-                Click <span className='border rounded-sm px-1'>Dry Run</span> to preview the result of this script
-              </div>
-            )}
-          </ScrollTrigger>
+          <WorkflowScriptStatus dataset={dataset} run={run} />
 
           <ScrollTrigger target='on-completion'>
             <div className='font-semibold text-black mb-1'>On Completion</div>

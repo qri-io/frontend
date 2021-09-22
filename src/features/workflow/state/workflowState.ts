@@ -8,7 +8,7 @@ import {
   SetWorkflowRefAction,
   WorkflowTriggerAction,
   RunModeAction,
-  SetTemplateAction
+  SetTemplateAction, AddWorkflowStepAction, RemoveWorkflowStepAction
 } from './workflowActions'
 import { NewRunFromEventLog, Run } from '../../../qri/run'
 import { Workflow, WorkflowBase } from '../../../qrimatic/workflow'
@@ -19,6 +19,12 @@ import { QriRef } from '../../../qri/ref'
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
 export const WORKFLOW_CHANGE_TRANSFORM_STEP = 'WORKFLOW_CHANGE_TRANSFORM_STEP'
+export const WORKFLOW_ADD_TRANSFORM_STEP = 'WORKFLOW_ADD_TRANSFORM_STEP'
+export const WORKFLOW_REMOVE_TRANSFORM_STEP = 'WORKFLOW_REMOVE_TRANSFORM_STEP'
+export const WORKFLOW_DUPLICATE_TRANSFORM_STEP = 'WORKFLOW_DUPLICATE_TRANSFORM_STEP'
+export const WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP = 'WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP'
+export const WORKFLOW_MOVE_TRANSFORM_STEP_UP = 'WORKFLOW_MOVE_TRANSFORM_STEP_UP'
+export const WORKFLOW_MOVE_TRANSFORM_STEP_DOWN = 'WORKFLOW_MOVE_TRANSFORM_STEP_DOWN'
 export const SET_TEMPLATE = 'SET_TEMPLATE'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
@@ -133,6 +139,12 @@ export const workflowReducer = createReducer(initialState, {
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,
   WORKFLOW_CHANGE_TRANSFORM_STEP: changeWorkflowTransformStep,
   RUN_EVENT_LOG: addRunEvent,
+  WORKFLOW_ADD_TRANSFORM_STEP: addWorkflowTransformStep,
+  WORKFLOW_REMOVE_TRANSFORM_STEP: removeWorkflowTransformStep,
+  WORKFLOW_DUPLICATE_TRANSFORM_STEP: duplicateWorkflowTransformStep,
+  WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP:clearOutputWorkflowTransformStep,
+  WORKFLOW_MOVE_TRANSFORM_STEP_UP: moveWorkflowTransformStepUp,
+  WORKFLOW_MOVE_TRANSFORM_STEP_DOWN: moveWorkflowTransformStepDown,
   SET_WORKFLOW_REF: (state, action: SetWorkflowRefAction) => {
     state.dataset.username = action.qriRef.username
     state.dataset.name = action.qriRef.name
@@ -216,6 +228,62 @@ function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowSt
   // clear out events after an edit to reset dry run RunStatus
   state.events = []
 
+  return
+}
+
+function addWorkflowTransformStep(state: WorkflowState, action: AddWorkflowStepAction) {
+  if (state.dataset.transform?.steps) {
+    state.dataset.transform.steps.splice(action.index+1,0,
+      {script: '', category: action.syntax+'_'+new Date().valueOf(), name: action.syntax+'_'+new Date().valueOf(), syntax: action.syntax})
+  }
+
+  state.isDirty = calculateIsDirty(state)
+  // clear out events after an edit to reset dry run RunStatus
+  state.events = []
+
+  return
+}
+
+function removeWorkflowTransformStep(state: WorkflowState, action: RemoveWorkflowStepAction) {
+  if (state.dataset.transform?.steps) {
+    state.dataset.transform.steps.splice(action.index,1)
+  }
+
+  return
+}
+
+function duplicateWorkflowTransformStep(state: WorkflowState, action: RemoveWorkflowStepAction) {
+  if (state.dataset.transform?.steps) {
+    const duplicateStep = {...state.dataset.transform.steps[action.index]}
+    duplicateStep.name = duplicateStep.syntax+'_'+new Date().valueOf()
+    duplicateStep.category = duplicateStep.syntax+'_'+new Date().valueOf()
+    state.dataset.transform.steps.splice(action.index+1,0, duplicateStep)
+  }
+
+  return
+}
+
+function clearOutputWorkflowTransformStep(state: WorkflowState, action: RemoveWorkflowStepAction) {
+  if (state.dataset.transform?.steps ) {
+    //TODO (boandriy): clears all cells output, need it specific to actions.index cell.
+    state.events=[]
+  }
+  return
+}
+
+function moveWorkflowTransformStepUp (state: WorkflowState, action: RemoveWorkflowStepAction) {
+  if(state.dataset.transform?.steps && action.index > 0){
+    const movedElement = state.dataset.transform.steps.splice(action.index,1)[0]
+    state.dataset.transform.steps.splice(action.index-1,0,movedElement)
+  }
+  return
+}
+
+function moveWorkflowTransformStepDown (state: WorkflowState, action: RemoveWorkflowStepAction) {
+  if(state.dataset.transform?.steps && action.index < state.dataset.transform.steps.length){
+    const movedElement = state.dataset.transform.steps.splice(action.index,1)[0];
+    state.dataset.transform.steps.splice(action.index+1,0,movedElement)
+  }
   return
 }
 

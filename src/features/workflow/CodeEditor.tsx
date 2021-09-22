@@ -57,7 +57,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         inherit: true,
         rules: [],
         colors: {
-          'editor.background': '#f4f6f8',
+          'editor.background': '#fff',
       	}
     });
   }
@@ -99,7 +99,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   });
 
   return (
-    <div className={classNames('rounded-t-lg overflow-hidden', {
+    <div className={classNames('rounded-t-lg overflow-hidden flex-grow', {
       'rounded-b-lg': standalone
     })}>
       <MonacoEditor
