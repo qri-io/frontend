@@ -19,8 +19,8 @@ const DeployStatusIndicator: React.FC<DeployStatusIndicatorProps> = ({ workflow 
   return (
     <div>
       <div className='mb-2 inline-block' data-tip data-for='deploy-status'>
-        <Icon icon={statusIcon} className={classNames('mr-2.5', color)} size='md' />
-        <span className={classNames('text-sm font-semibold text-gray-600', color)}>{statusText}</span>
+        <Icon icon={statusIcon} className={classNames('mr-2', color)} size='md' />
+        <span className={classNames('font-semibold text-gray-600 tracking-wider', color)} style={{ fontSize: 12.5 }}>{statusText}</span>
       </div>
       <ReactTooltip
         id='deploy-status'

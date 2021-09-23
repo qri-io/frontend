@@ -32,21 +32,24 @@ const Button: React.FC<ButtonProps> = ({
   <button
     id={id}
     type={submit ? 'submit' : 'button'}
+    style={{
+      fontSize: 11
+    }}
     className={classNames(
-      'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-medium focus:outline-none focus:ring-none mt-0 transition-all duration-100',
+      'inline-flex items-center justify-center rounded-md shadow-sm bg-transparent font-semibold focus:outline-none focus:ring-none mt-0 transition-all duration-100',
       className,
       {
         'cursor-default bg-opacity-40 hover:bg-opacity-40': disabled
       },
       {
         'text-sm px-2.5 h-9 ': (size === 'sm'),
-        'text-sm px-4 h-10': (size === 'md'),
+        'text-sm px-2.5 h-9': (size === 'md'),
         'text-md px-8 py-3': (size === 'lg'),
       },
       {
         'text-white bg-qritile hover:bg-qritile-600': (type === 'primary'),
         'text-qritile hover:text-qritile-600 text-sm font-medium border-2 border-qritile hover:border-qritile-600 box-border': (type === 'primary-outline'),
-        'text-white bg-qripink hover:bg-qripink-600': (type === 'secondary'),
+        'text-white bg-qripink-600 hover:bg-qripink-': (type === 'secondary'),
         'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
         'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
         'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),

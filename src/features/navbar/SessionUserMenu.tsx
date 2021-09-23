@@ -42,7 +42,7 @@ const SessionUserMenu: React.FC<{}> = () => {
 
   return (
     <div className="relative flex items-center font-medium">
-      <Link to='https://qri.io/docs'>Help</Link>
+      <Link to='https://qri.io/docs' className='text-xs font-semibold' colorClassName='text-black hover:text-qripink'>Help</Link>
       <DropdownMenu icon={icon} className='ml-8' items={[
         {
           label: 'Profile',

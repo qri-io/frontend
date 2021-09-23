@@ -2,7 +2,6 @@ import React from 'react'
 
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import Block from './Block'
-import ContentBox from '../../chrome/ContentBox'
 
 const hooks = [
   {
@@ -11,7 +10,7 @@ const hooks = [
   },
   {
     name: 'Call Webhook',
-    description: 'If the workflow results in a new version of the dataset, call http://mywebook.com/somewebhook'
+    description: 'If the workflow results in a new version of the dataset, call http://mywebhook.com/foo'
   },
   {
     name: 'Email Workflow Report',
@@ -21,18 +20,25 @@ const hooks = [
 
 const OnComplete: React.FC<any> = () => {
   return (
-    <ContentBox className='mb-7' paddingClassName='px-5 py-4'>
+    <div className='flex'>
+      <div className='flex-grow min-w-0'>
         <ScrollAnchor id='on-completion' />
-        <h2 className='text-2xl font-semibold text-gray-600'>On Completion</h2>
+        <h2 className='text-xl font-bold text-gray-600'>On Completion</h2>
         <div className='text-sm text-qrigray-400 mb-3'>Configure actions that will happen when the workflow succeeds</div>
         <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
           {hooks.map((d, i) => (
-            <Block key={i} name={d.name}>
-              <div className='text-xs text-qrigray-400'>{d.description}</div>
-            </Block>
+            <div className='w-1/3'>
+              <Block key={i} name={d.name}>
+                <div className='text-xs text-qrigray-400'>{d.description}</div>
+              </Block>
+            </div>
           ))}
         </div>
-      </ContentBox>
+      </div>
+      <div className='flex-shrink-0 w-48 ml-8'>
+        {/* TODO (chriswhong): this is a sidebar placeholder that matches the width of the contextual menu which appears to the right of code cells */}
+      </div>
+    </div>
   )
 }
 

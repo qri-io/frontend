@@ -59,7 +59,7 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
     if (onChange) onChange(d, e)
   }
 
-  const tdCellClassName = 'border-r border-b border-gray-200 break-words'
+  const tdCellClassName = 'border-r border-b border-qrigray-200 break-words'
   const cellClassName = 'px-2 py-2 break-words'
 
 
