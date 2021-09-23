@@ -28,27 +28,26 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
 
   return (
     <div className='workflow-outline pr-7 z-20'>
-      <div className='w-44 flex flex-col sticky top-20'>
+      <div className='flex flex-col sticky top-20' style={{ width: 147 }}>
         <div className='text-left'>
-          <div className='text-qrigray-400 text-xs font-medium mb-4'>AUTOMATION OUTLINE</div>
           <div className='mb-2'>
             <ScrollTrigger target='triggers'>
-              <div className='font-semibold text-black mb-1'>Triggers</div>
+              <div className='font-bold text-black mb-1' style={{ fontSize: 13 }}>Triggers</div>
               <div className='text-qrigray-400'>—</div>
               <div className='mb-4' />
             </ScrollTrigger>
           </div>
           <div className='mb-2'>
             <ScrollTrigger target='script'>
-              <div className='font-semibold text-black mb-2'>
-                Script {(run && run.status === 'running') && <div className='float-right'><RunStatusIcon status='running' /></div>}
+              <div className='font-bold text-black mb-2' style={{ fontSize: 13 }}>
+                Script {(run && run.status === "running") && <div className='float-right'><RunStatusIcon status='running' /></div>}
               </div>
             </ScrollTrigger>
           </div>
           <WorkflowScriptStatus run={run} />
 
           <ScrollTrigger target='on-completion'>
-            <div className='font-semibold text-black mb-1'>On Completion</div>
+            <div className='font-bold text-black mb-1' style={{ fontSize: 13 }}>On Completion</div>
             <div className='text-qrigray-400'>—</div>
           </ScrollTrigger>
 

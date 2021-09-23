@@ -25,7 +25,7 @@ const LabeledStats: React.FC<LabeledStatsProps> = ( {
 }) => {
   const stats = getStats(data)
   return (
-    <div className='stats-values border border-gray-200 rounded-lg grid grid-cols-5 w-full mb-6'>
+    <div className='stats-values border border-qrigray-200 rounded-lg grid grid-cols-5 w-full mb-6'>
       {stats.map((stat, i) => {
         let displayVal: any = stat.value
         let displayDelta: any = stat.delta

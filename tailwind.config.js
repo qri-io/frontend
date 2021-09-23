@@ -134,6 +134,9 @@ module.exports = {
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite'
+      },
+      fontSize: {
+        'sm': '0.813rem' // 13px
       }
     },
   },

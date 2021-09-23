@@ -48,7 +48,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
 
   return (
     <div id={`${name}-cell`} className='w-full group flex'>
-      <div className='flex-grow'>
+      <div className='flex-grow min-w-0'>
         <ScrollAnchor id={name} />
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
         {(collapseState === 'all' || collapseState === 'only-output') && run?.output && <Output data={run?.output} status={run?.status} />}

@@ -37,14 +37,14 @@ const NavBar: React.FC<NavBarProps> = ({
   }
 
   return (
-    <div className='bg-white text-black-700 text-bold flex items-center pr-8 font-medium' style={{
+    <div className='bg-white text-black text-bold flex items-center pr-8 font-medium' style={{
       paddingTop: 14,
       paddingBottom: 14,
     }}>
       <Link className='mr-5' to='/'>
-        <div className={`flex align-center items-center justify-center ${expanded ? 'w-52' : 'w-24'}`}>
+        <div className={`flex align-center items-center justify-center ${expanded ? 'w-44' : 'w-24'}`}>
           <QriLogo />
-          <div className={`font-medium text-2xl ml-2 ${expanded ? 'block' : 'hidden'}`}>Qri</div>
+          <div className={`font-bold text-xl ml-2 ${expanded ? 'block' : 'hidden'}`} style={{ fontSize: 21 }}>Qri</div>
         </div>
       </Link>
       {!minimal && showSearch && <SearchBox onSubmit={handleSearchSubmit} placeholder='Search for Datasets' />}

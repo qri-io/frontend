@@ -34,36 +34,44 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
     noTriggersWarning = 'This workflow does not have any triggers defined.  Once deployed, it will only run when triggered manually.'
   }
   return (
-    <ContentBox className='mb-7' paddingClassName='px-5 py-4' warning={noTriggersWarning}>
-      <ScrollAnchor id='triggers'/>
-      <div className='flex'>
-        <div className='flex-grow'>
-          <h2 className='text-2xl font-medium text-black mb-1'>Triggers</h2>
-          <div className='text-sm text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
-        </div>
-        {/*
-          TODO(chriswhong): allow for adding other types of triggers.
-          For now, we only allow one cron trigger so disable add when it exists
-        */}
-        {triggers.length === 0 && (
-          <div className='flex items-center'>
-            <Button id='workflow_triggers_add_button' onClick={handleAddClick}>
-              <Icon icon='plus' size='sm'/>
-            </Button>
+    <div className='flex'>
+      <div className='flex-grow min-w-0'>
+        <ScrollAnchor id='triggers'/>
+        <div className='flex'>
+          <div className='flex-grow'>
+            <h2 className='text-xl font-bold text-black mb-1'>Triggers</h2>
+            <div className='text-sm text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
           </div>
-        )}
+          {/*
+            TODO(chriswhong): allow for adding other types of triggers.
+            For now, we only allow one cron trigger so disable add when it exists
+          */}
+          {triggers.length === 0 && (
+            <div className='flex items-center'>
+              <Button id='workflow_triggers_add_button' onClick={handleAddClick}>
+                <Icon icon='plus' size='sm'/>
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <ContentBox className='mb-7' paddingClassName='px-5 py-4' warning={noTriggersWarning}>
+          <div className='flex flex-wrap -mx-2 overflow-hidden'>
+            {triggers.map((trigger: WorkflowTrigger, i) => {
+              switch (trigger.type) {
+                case 'cron':
+                  return <CronTrigger key={i} trigger={trigger} />
+                default:
+                  return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
+              }
+            })}
+          </div>
+        </ContentBox>
       </div>
-      <div className='flex flex-wrap -mx-2 overflow-hidden'>
-        {triggers.map((trigger: WorkflowTrigger, i) => {
-          switch (trigger.type) {
-            case 'cron':
-              return <CronTrigger key={i} trigger={trigger} />
-            default:
-              return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
-          }
-        })}
+      <div className='flex-shrink-0 w-48 ml-8'>
+        {/* TODO (chriswhong): this is a sidebar placeholder that matches the width of the contextual menu which appears to the right of code cells */}
       </div>
-    </ContentBox>
+    </div>
   )
 }
 

@@ -37,12 +37,12 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   return (
     <div
       id={`${displayName.toLowerCase()}-status`}
-      className={classNames('flex flex-grow mw-40 mr-2 last:mr-0 py-2 rounded-tr-lg rounded-tl-lg group justify-center relative', {
+      className={classNames('flex flex-grow items-center mw-40 mr-2 last:mr-0 py-1.5 rounded-tr-lg rounded-tl-lg group justify-center relative', {
         'selected': selected,
         'bg-white': selected,
         'text-qripink': selected,
-        'bg-gray-200': !selected,
-        'text-gray-400': disabled,
+        'bg-qrigray-200': !selected,
+        'text-qrigray-400': disabled,
         'text-black': !disabled,
         'hover:cursor-pointer': !disabled,
         'w-1/4': displayName === 'Data',
@@ -54,9 +54,9 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
         }
       }}
     >
-      {icon && <Icon icon={icon} size='sm' className='mt-1 mr-3' color={disabled ? 'medium' : color} />}
+      {icon && <Icon icon={icon} size='2xs' className='mr-2' color={disabled ? 'medium' : color} />}
       <div>
-        <div className='font-medium'>{displayName}</div>
+        <div className='font-bold' style={{ fontSize: 12 }}>{displayName}</div>
         <div>{filename}</div>
       </div>
       <StatusDot status={status} />
