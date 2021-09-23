@@ -116,7 +116,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
     const tableRows = body.map((row, i) => {
       return (
         <tr key={i} className=''>
-          <td key={0}className='bg-white text-center border-r border-b border-gray-200'>
+          <td key={0}className='bg-white text-center border-r border-b border-qrigray-200'>
             <div className={classNames(cellClasses, 'text-black-500')}>
               {
                 // TODO (ramfox): when we add back pageInfo/fetching
@@ -128,7 +128,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
           </td>
           {row.map((d: any, j: number) => {
             return (
-              <td key={j + 1} className='border-r border-b border-gray-200'>
+              <td key={j + 1} className='border-r border-b border-qrigray-200'>
                 <div className={classNames(cellClasses, 'text-qrigray-400')}>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
               </td>
             )
@@ -145,15 +145,15 @@ export default class BodyTable extends React.Component<BodyTableProps> {
         style={{ maxWidth: 800 }}
         onScroll={() => { this.handleVerticalScrollThrottled() } }
       >
-        <table className='table text-xs border-separate border-l border-gray-200 mb-4 ' style={{ borderSpacing: 0 }}>
+        <table className='table text-xs border-separate border-l border-qrigray-200 mb-4 ' style={{ borderSpacing: 0 }}>
           <thead className='sticky top-0'>
             <tr>
-              <th className=' h-6 bg-white p-0 border-t border-r border-b border-gray-200'>
+              <th className=' h-6 bg-white p-0 border-t border-r border-b border-qrigray-200'>
                 <div className={classNames(cellClasses, 'leading-4')}>&nbsp;</div>
               </th>
               {headers && headers.map((d: any, j: number) => {
                 return (
-                  <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-gray-200'>
+                  <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-qrigray-200'>
                     <div className={classNames(cellClasses, 'text-black text-sm flex items-center')} >
                       <DataType type={d.type} showLabel={false} className='mr-1 text-qrigray-300' />
                       <div>{d.title}</div>

@@ -114,7 +114,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
             <section className='mb-4 border-b-2 border-qrigray-100 mb-7'>
               <div className='top-0 z-10 flex mb-3'>
                 <div className='flex-grow'>
-                  <h2 className='text-2xl font-medium text-black mb-1'>Script</h2>
+                  <h2 className='text-xl font-bold text-black mb-1'>Script</h2>
                   <div className='text-sm text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
                 </div>
               </div>
@@ -161,13 +161,20 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 />}
             </section>
             <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5'>
-              Result
+              Next Version Preview
             </h3>
 
-            <div className='text-xs mb-2.5 text-gray-400'>Preview the results of your script here</div>
+            <div className='text-xs mb-2.5 text-gray-400'>Dry Run this transform and preview the next version of the dataset here</div>
 
             <ScrollAnchor id='result' />
-            <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
+            <div className='flex'>
+              <div className='flex-grow min-w-0'>
+                <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
+              </div>
+              <div className='flex-shrink-0 w-48 ml-8'>
+                {/* TODO (chriswhong): this is a sidebar placeholder that matches the width of the contextual menu which appears to the right of code cells */}
+              </div>
+            </div>
           </div>
           <Hooks />
           <div className='mt-6'>

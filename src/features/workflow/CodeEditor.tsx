@@ -29,7 +29,8 @@ export const MONACO_EDITOR_OPTIONS: EditorConstructionOptions = {
   padding: {
     top: 10,
     bottom: 10
-  }
+  },
+  wordWrap: 'on'
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = ({

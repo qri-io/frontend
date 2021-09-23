@@ -20,7 +20,7 @@ const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini,id }) => (
     {
       !mini && (
         <Button type='secondary'>
-          <Icon icon='plus' className='mr-2'/>
+          <Icon icon='plus' size='sm' className='mr-2'/>
           New Dataset
         </Button>
       )

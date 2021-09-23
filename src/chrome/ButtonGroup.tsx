@@ -28,7 +28,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
         })} key={i} to={link}>
           <div className='flex items-center'>
             <Icon className='mr-2' size='md' icon={icon} />
-            <span style={{ fontSize: '16px' }}>{text}</span>
+            <span className='font-bold text-sm'>{text}</span>
           </div>
         </Link>
       )

@@ -41,14 +41,15 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   }
 
   return (
-    <form className="my-1 mx-2 relative rounded-md shadow-sm w-48" onSubmit={handleSubmit}>
+    <form className="my-1 mx-2 relative shadow-sm w-48" onSubmit={handleSubmit}>
       <input
-        className={classNames('focus:ring-qripink focus:border-qripink block w-full sm:text-xs rounded-lg tracking-wider bg-transparent placeholder-opacity-50', {
-          'border-gray-400 placeholder-gray-600': !dark,
+        className={classNames('focus:ring-qripink focus:border-qripink block w-full rounded-md tracking-wider bg-transparent placeholder-opacity-50', {
+          'border-qrigray-300 placeholder-qrigray-300': !dark,
           'border-black placeholder-black': dark
         })}
         style={{
-          padding: '8px 8px 10px 8px'
+          padding: '4px 8px 4px 8px',
+          fontSize: 11
         }}
         id='search'
         name='search'
@@ -58,7 +59,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         onChange={handleChange}
       />
       <span className={classNames('absolute inset-y-0 right-0 flex items-center pr-2', {
-        'text-gray-400': !dark,
+        'text-qrigray-300': !dark,
         'text-black': dark
       })}>
         <Icon size='sm' icon='skinnySearch' />

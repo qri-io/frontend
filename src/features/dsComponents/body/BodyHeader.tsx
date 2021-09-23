@@ -27,7 +27,7 @@ const BodyHeader: React.FC<BodyHeaderProps> = ({
 
   return (
     <div className='flex'>
-      <div className='flex flex-grow text-sm text-qrigray-400'>
+      <div className='flex flex-grow text-qrigray-400' style={{ fontSize: 12 }}>
         <div className='mr-4 flex items-center'>
           <Icon icon='rows' size='2xs' className='mr-1'/> {numeral(structure?.entries).format('0,0')} rows
         </div>
