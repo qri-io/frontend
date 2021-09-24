@@ -11,7 +11,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
   dataset,
   children
 }) => {
-  const { commit, path } = dataset
+  const { commit } = dataset
   if (commit) {
     return (
       <div className='min-height-200 py-4 px-8 rounded-lg bg-white flex'>
