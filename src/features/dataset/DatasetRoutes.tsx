@@ -31,7 +31,7 @@ const DatasetRoutes: React.FC<{}> = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(loadHeader(qriRef))
+    dispatch(loadHeader({username: qriRef.username, name: qriRef.name, path: qriRef.path}))
   },[dispatch, qriRef.username, qriRef.name, qriRef.path]);
 
   return (

@@ -1,4 +1,4 @@
-import { QriRef, refStringFromQriRef } from "../../../qri/ref";
+import { QriRef } from "../../../qri/ref";
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
 
 export function loadDsPreview(ref: QriRef): ApiActionThunk {

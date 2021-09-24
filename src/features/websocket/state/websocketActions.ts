@@ -6,9 +6,13 @@ import {
   WebsocketState,
 } from './websocketState'
 
+interface ConnectAction extends Action {
+  token: string
+}
+
 // tell websocket to connect
-export function wsConnect(): Action {
-  return { type: WS_CONNECT }
+export function wsConnect(token?: string): ConnectAction {
+  return { type: WS_CONNECT, token: token || '' }
 }
 
 // tell websocket to disconnect

@@ -33,6 +33,8 @@ import {
   ETAutomationDeploySaveDatasetEnd,
   ETAutomationDeploySaveWorkflowStart,
   ETAutomationDeploySaveWorkflowEnd,
+  WSSubscribeRequest,
+  WSUnsubscribeRequest,
 } from '../../../qri/events'
 import { wsConnectionChange } from '../state/websocketActions'
 import { WS_CONNECT, WS_DISCONNECT } from '../state/websocketState'
@@ -56,8 +58,8 @@ export type RemoteEvents = Record<string, RemoteEvent>
 
 const WEBSOCKETS_URL = process.env.REACT_APP_WS_BASE_URL || 'ws://localhost:2503'
 const WEBSOCKETS_PROTOCOL = 'qri-websocket'
-const numReconnectAttempts = 2
-const msToAddBeforeReconnectAttempt = 3000
+const numReconnectAttempts: number = 2
+const msToAddBeforeReconnectAttempt: number = 3000
 
 function newReconnectDeadline(): Date {
   let d = new Date()
@@ -71,7 +73,7 @@ const middleware = () => {
     status: WSConnectionStatus.disconnected,
   }
 
-  const onOpen = (dispatch: Dispatch ) => (event: Event) => {
+  const onOpen = (dispatch: Dispatch, token: string) => (event: Event) => {
     state = {
       status: WSConnectionStatus.connected,
       reconnectAttemptsRemaining: 0,
@@ -79,9 +81,10 @@ const middleware = () => {
     }
     const stateCopy = NewWebsocketState(state.status)
     dispatch(wsConnectionChange(stateCopy))
+    subscribe(token)
   }
 
-  const onClose = (dispatch: Dispatch) => (event: Event) => {
+  const onClose = (dispatch: Dispatch, token: string) => (event: Event) => {
     // code 1006 is an "Abnormal Closure" where no close frame is sent. Happens
     // when there isn't a websocket host on the other end (aka: server down)
     // https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
@@ -96,7 +99,7 @@ const middleware = () => {
       state.reconnectAttemptsRemaining = numReconnectAttempts
     }
 
-    reconnect(dispatch)
+    reconnect(dispatch, token)
     const stateCopy = NewWebsocketState(state.status, state.reconnectAttemptsRemaining, state.reconnectTime)
     dispatch(wsConnectionChange(stateCopy))
   }
@@ -173,7 +176,6 @@ const middleware = () => {
         case ETAutomationDeploySaveDatasetEnd:
           dispatch(deploySaveDatasetEnded(event.data, event.sessionID))
           break
-
         default:
           // console.log(`received websocket event: ${event.type}`)
       }
@@ -183,18 +185,58 @@ const middleware = () => {
     }
   }
 
-  const connect = (dispatch: Dispatch) => {
+  const connect = (dispatch: Dispatch, token: string) => {
     if (socket !== undefined) {
       socket.close()
     }
     // connect to the remote host
     socket = new WebSocket(WEBSOCKETS_URL, WEBSOCKETS_PROTOCOL)
     socket.onmessage = onMessage(dispatch)
-    socket.onclose = onClose(dispatch)
-    socket.onopen = onOpen(dispatch)
+    socket.onclose = onClose(dispatch, token)
+    socket.onopen = onOpen(dispatch, token)
   }
 
-  const reconnect = (dispatch: Dispatch) => {
+  const subscribe = (token: string) => {
+    if (token === "") {
+      return 
+    }
+    if (socket === undefined) {
+      return
+    }
+    let reconnectAttemptsRemaining = numReconnectAttempts
+    const msg = JSON.stringify({ type: WSSubscribeRequest, payload: { token }})
+    const attempt = setInterval(() => {
+      if (reconnectAttemptsRemaining === 0) {
+        clearInterval(attempt)
+      }
+      if (socket?.readyState === 1) {
+        socket.send(msg)
+        clearInterval(attempt)
+        return
+      }
+      reconnectAttemptsRemaining--
+      }, msToAddBeforeReconnectAttempt)
+  }
+
+  const unsubscribe = () => {
+    if (socket === undefined) {
+      return
+    }
+    var reconnectAttemptsRemaining = numReconnectAttempts
+    const attempt = setInterval(() => {
+      if (reconnectAttemptsRemaining === 0) {
+        clearInterval(attempt)
+      }
+      if (socket?.readyState === 1) {
+        socket.send(JSON.stringify({ type: WSUnsubscribeRequest }))
+        clearInterval(attempt)
+        return
+      }
+      reconnectAttemptsRemaining--
+      }, msToAddBeforeReconnectAttempt)
+  }
+
+  const reconnect = (dispatch: Dispatch, token: string) => {
     if (state.reconnectAttemptsRemaining && state.reconnectAttemptsRemaining > 0) {
       state = {
         status: WSConnectionStatus.interrupted,
@@ -202,7 +244,7 @@ const middleware = () => {
         reconnectTime: newReconnectDeadline()
       }
       setTimeout(() => {
-        connect(dispatch)
+        connect(dispatch, token)
       }, msToAddBeforeReconnectAttempt)
       return
     }
@@ -217,7 +259,7 @@ const middleware = () => {
   return (store: Store<RootState>) => (next: Dispatch<AnyAction>) => (action: AnyAction) => {
     switch (action.type) {
       case WS_CONNECT:
-        connect(next)
+        connect(next, action.token)
         break
       case WS_DISCONNECT:
         if (socket !== undefined) {
@@ -225,6 +267,11 @@ const middleware = () => {
         }
         socket = undefined
         break
+      case 'LOGIN_SUCCESS':
+        subscribe(action.token)
+        break
+      case 'LOGOUT_SUCCESS':
+        unsubscribe()
     }
 
     return next(action)

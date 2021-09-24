@@ -10,7 +10,6 @@ import {
   DEPLOY_SAVEDATASET_START,
   DEPLOY_SAVEDATASET_END,
 } from './deployState'
-import { prepareTriggersForDeploy } from '../../trigger/util'
 import { prepareWorkflowForDeploy } from '../../workflow/utils/prepareWorkflowForDeploy'
 
 export interface DeployEvent {
