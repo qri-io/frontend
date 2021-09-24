@@ -1,34 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import Icon from '../../chrome/Icon'
-import Link from '../../chrome/Link'
-import { WorkflowTrigger } from '../../qrimatic/workflow'
-import Block from '../workflow/Block'
-import { showModal } from '../app/state/appActions'
-import { ModalType } from '../app/state/appState'
-import { parseHourlyStart, parseDailyStart,  } from './util'
+import {CronTrigger as CronTriggerType, WorkflowTrigger} from '../../qrimatic/workflow'
+import { parseHourlyStart, parseDailyStart } from './util'
+import CronTriggerEditor from "./CronTriggerEditor";
+import { changeWorkflowTrigger, deleteWorkflowTrigger } from "../workflow/state/workflowActions";
 
 export interface CronTriggerProps {
   trigger: WorkflowTrigger
+  onCreateDelete: () => void
+  editMode?: boolean
 }
 
 const CronTrigger: React.FC<CronTriggerProps> = ({
-  trigger
+  trigger: initialTrigger,
+  onCreateDelete,
+  editMode
 }) => {
-
   const dispatch = useDispatch()
 
+  // manage a collection of triggers in local state until they are "saved"
+  const [ triggers, setTriggers ] = useState<WorkflowTrigger[]>([initialTrigger])
+  const [ isEditable, setIsEditable ] = useState(!!editMode)
   // on edit, open AddTriggerModal and pass in the correct type and array of WorkflowTrigger
-  const handleEditClick = () => {
-    dispatch(showModal(ModalType.addTrigger, {
-      type: 'cron',
-      triggers: [ trigger ]
-    }))
+
+  const handleSaveTrigger = () => {
+    setIsEditable(false)
+    onCreateDelete()
+    dispatch(changeWorkflowTrigger(0, triggers[0]))
+  }
+
+  const handleTriggerDelete = () => {
+    setIsEditable(false)
+    onCreateDelete()
+    dispatch(deleteWorkflowTrigger(0))
+
+  }
+
+  const handleTriggerChange = (t: WorkflowTrigger) => {
+    setTriggers([t])
   }
 
   // split the ISO8601 repeating interval (R/{starttime}/{interval})
-  const [, startTime, interval] = trigger.periodicity.split('/')
+  const cronTrigger = triggers[0] as CronTriggerType
+  const [, startTime, interval] = cronTrigger.periodicity.split('/')
 
 
   let displayInterval, displayStartTime
@@ -50,25 +66,33 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
       displayInterval = ''
   }
 
+  const onEdit = () => {
+    if(!isEditable){
+      setIsEditable(true)
+    }
+  }
+
   return (
-    <Block>
-      <div className='flex'>
-        <div className='flex-grow'>
-          <div id='cron_trigger_schedule' className='text-sm font-semibold pb-1 text-black'>Schedule</div>
-          <div className='text-qrigray-400 text-xs flex items-center'>
+    <div onClick={onEdit} className='w-full cursor-pointer'>
+      <div className='flex w-full items-center'>
+        <div className='flex-grow flex items-center'>
+          <div id='cron_trigger_schedule' className='text-sm font-semibold mr-2.5 text-black'>Schedule</div>
+          {!isEditable &&<div className='text-qrigray-400 text-xs flex items-center'>
             <Icon icon='calendar' size='sm' className='mr-1 pt-1' />
             <div id='cron_trigger_interval_text'>{displayInterval} {displayStartTime}</div>
-          </div>
-        </div>
-        <div className='flex ml-2'>
-          <Link
-            className='text-qrigray-400 text-xs self-end mb-0.5'
-            colorClassName='text-qrigray-400 hover:text-qrigray-600'
-            onClick={handleEditClick}
-          >Edit</Link>
+          </div>}
         </div>
       </div>
-    </Block>
+      {isEditable &&
+      <div className='w-full'>
+        <div className='text-qrigray-700 text-xs'>Repeat</div>
+        <CronTriggerEditor
+          trigger={cronTrigger}
+          onChange={handleTriggerChange}
+          onSave={handleSaveTrigger}
+          onDelete={handleTriggerDelete}/>
+      </div>}
+    </div>
   )
 }
 

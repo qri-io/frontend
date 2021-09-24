@@ -16,10 +16,10 @@ type StatusMappings = {
 
 const statusMappings: StatusMappings = {
   waiting: {
-    classes: 'border border-solid border-gray-400'
+    classes: 'border border-solid border-qrigray-400'
   },
   running: {
-    classes: 'bg-gray-400'
+    classes: 'bg-qrigray-400'
   },
   succeeded: {
     classes: 'bg-green-600'
@@ -31,10 +31,10 @@ const statusMappings: StatusMappings = {
     classes: 'bg-blue'
   },
   skipped: {
-    classes: 'border border-solid border-gray-400'
+    classes: 'border border-solid border-qrigray-400'
   },
   '': {
-    classes: 'border border-solid border-gray-400'
+    classes: 'border border-solid border-qrigray-400'
   }
 }
 

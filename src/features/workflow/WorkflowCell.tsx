@@ -16,6 +16,8 @@ export interface WorkflowCellProps {
   onChangeCollapse: (v: 'collapsed' | 'only-editor' | 'only-output' | 'all') => void
   onChangeScript: (index: number, script: string) => void
   onRun: () => void
+  setAnimatedCell: (i: number) => void
+  isCellAdded: boolean
   onRowAdd: (index: number, syntax: string) => void
 }
 
@@ -27,14 +29,16 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   disabled,
   onChangeScript,
   onRowAdd,
-  onRun
+  onRun,
+  isCellAdded,
+  setAnimatedCell
 }) => {
   const { syntax, name, script } = step
 
   let editor: React.ReactElement
   switch (syntax) {
     case 'starlark':
-      editor = <CodeEditor script={script} onChange={(v) => { onChangeScript(index, v) }} onRun={onRun} disabled={disabled} standalone={!run?.output} />
+      editor = <CodeEditor hasOutput={!!run?.output} status={run?.status} script={script} onChange={(v) => { onChangeScript(index, v) }} onRun={onRun} disabled={disabled} standalone={!run?.output} />
       break;
     case 'qri':
       editor = <></>
@@ -47,7 +51,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div id={`${name}-cell`} className='w-full group flex'>
+    <div id={`${name}-cell`} className={`w-full group flex ${isCellAdded && 'animate-appear'}`}>
       <div className='flex-grow min-w-0'>
         <ScrollAnchor id={name} />
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
@@ -60,8 +64,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
           <button className='text-xs border-none flex-shrink-0 bg-white rounded py-1 pr-2 pl-1 font-semibold '>+ Code</button>
         </div>
       </div>
-
-      <WorkflowCellControls index={index} />
+      <WorkflowCellControls index={index} setAnimatedCell={setAnimatedCell} />
     </div>
   )
 }

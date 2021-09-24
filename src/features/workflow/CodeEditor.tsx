@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import MonacoEditor, { EditorConstructionOptions } from 'react-monaco-editor'
 import { KeyMod, KeyCode } from "monaco-editor/esm/vs/editor/editor.api";
 import classNames from 'classnames'
+import { RunStatus } from "../../qri/run";
 
 export interface CodeEditorProps {
   script: string
@@ -9,7 +10,9 @@ export interface CodeEditorProps {
   // determines whether the Component should render with rounded corners on the bottom
   standalone?: boolean
   onChange: (newValue: string) => void
+  hasOutput: boolean;
   onRun?: () => void
+  status?: RunStatus
 }
 
 const LINE_HEIGHT = 19
@@ -38,7 +41,9 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   standalone = true,
   onChange,
   onRun = () => {},
-  disabled
+  disabled,
+  hasOutput,
+  status
 }) => {
   const ref = useRef<MonacoEditor>(null)
 
@@ -99,8 +104,17 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     window.addEventListener('resize', handleResize);
   });
 
+  let borderStyles = '';
+  if(status === 'succeeded') {
+    borderStyles = `border-qrigreen border-2 border-solid ${hasOutput && 'border-b-0'}`
+  }else if(status === 'failed'){
+    borderStyles = `border-dangerred border-2 border-solid ${hasOutput && 'border-b-0'}`
+  }else{
+    borderStyles = 'border-transparent hover:border-qritile border-2 border-solid'
+  }
+
   return (
-    <div className={classNames('rounded-t-lg overflow-hidden flex-grow', {
+    <div className={classNames(`rounded-t-lg overflow-hidden flex-grow transition-all ${borderStyles}`, {
       'rounded-b-lg': standalone
     })}>
       <MonacoEditor

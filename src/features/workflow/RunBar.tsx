@@ -11,9 +11,14 @@ import {
   selectRunMode,
   selectWorkflow,
   selectWorkflowDataset,
-  selectApplyStatus
+  selectApplyStatus,
+  selectWorkflowIsDirty
 } from './state/workflowState'
 import { platform } from '../../utils/platform'
+import Icon from "../../chrome/Icon";
+import DeployButton from "../deploy/DeployButton";
+import { newQriRef } from "../../qri/ref";
+import { useParams } from "react-router";
 
 export interface RunBarProps {
  status: RunStatus
@@ -29,6 +34,8 @@ const RunBar: React.FC<RunBarProps> = ({
   const workflow = useSelector(selectWorkflow)
   const workflowDataset = useSelector(selectWorkflowDataset)
   const applyStatus = useSelector(selectApplyStatus)
+  const isDirty = useSelector(selectWorkflowIsDirty)
+  const qriRef = newQriRef(useParams())
 
   const handleRun = () => {
     if (onRun) { onRun() }
@@ -44,6 +51,8 @@ const RunBar: React.FC<RunBarProps> = ({
 
   const isMac = (platform() === 'mac')
 
+  const isNew = (qriRef.username === '' && qriRef.name === '') ||  (!qriRef.username && !qriRef.name)
+
   let displayStatus = status
   // we already have RunStatusIcon to show the status of the run, so we
   // can use it to indicate that the /apply api call is pending OR if there was
@@ -53,7 +62,7 @@ const RunBar: React.FC<RunBarProps> = ({
 
   return (
     <div>
-      <div className='flex w-36 items-center'>
+      <div className='flex w-64 items-center'>
         <div className='mr-4'>
           <div className='inline-block align-middle'>
             <RunStatusIcon status={displayStatus} size='md' className='ml-2' />
@@ -61,10 +70,20 @@ const RunBar: React.FC<RunBarProps> = ({
         </div>
         <div className='w-36'>
           {(status === "running")
-            ? <Button className='w-24' onClick={() => { handleCancel() }}>Cancel</Button>
+            ? <div className='flex'>
+                <Button type='secondary-outline' className='px-2 w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>
+                  <Icon className='mr-1.5' icon='playCircle' size='sm'/>Cancel</Button>
+                <DeployButton isNew={isNew} disabled={!isDirty} />
+              </div>
             : (
-              <div data-tip data-for='dry-run'>
-                <Button className='w-24 run_bar_run_button' onClick={() => { handleRun() }}>Dry Run</Button>
+              <div className='flex'>
+                <div data-tip data-for='dry-run'>
+                  <Button type='secondary-outline' className='px-2 w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>
+                    <Icon className='mr-1.5' icon='playCircle' size='sm'/>Dry Run</Button>
+                </div>
+                <div>
+                  <DeployButton isNew={isNew} disabled={!isDirty} />
+                </div>
               </div>
             )
           }
