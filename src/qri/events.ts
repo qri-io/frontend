@@ -51,3 +51,10 @@ export const ETAutomationDeploySaveWorkflowEnd = "automation:DeploySaveWorkflowE
 
 export const ETAutomationDeploySaveDatasetStart = "automation:DeploySaveDatasetStart"
 export const ETAutomationDeploySaveDatasetEnd = "automation:DeploySaveDatasetEnd"
+
+// Websocket message types describe the different types of messages that can be
+// sent over the websocket connection to establish the authentication handshake
+export const WSSubscribeRequest = "subscribe:request"
+export const WSSubscribeSuccess = "subscribe:success"
+export const WSSubscribeFailure = "subscribe:failure"
+export const WSUnsubscribeRequest = "unsubscribe:request"

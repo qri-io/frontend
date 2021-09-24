@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { ConnectedRouter } from 'connected-react-router'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { history } from '../../store/store'
 import Routes from '../../routes'
@@ -10,13 +10,15 @@ import SnackBar from '../snackBar/SnackBar'
 import ToastRenderer from '../toast/ToastRenderer'
 
 import './App.css'
+import { selectSessionTokens } from '../session/state/sessionState'
 
 const App: React.FC<any> = () => {
   const dispatch = useDispatch()
 
+  const tokens = useSelector(selectSessionTokens)
   useEffect(() => {
-    dispatch(wsConnect())
-  })
+    dispatch(wsConnect(tokens.token))
+  }, [dispatch, tokens.token])
 
   return (
     <div id='app' className='flex flex-col h-screen w-screen' style={{ minWidth: '1100px' }}>
