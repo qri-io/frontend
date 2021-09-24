@@ -74,6 +74,9 @@ import Youtube from './icon/Youtube'
 import TrashBin from "./icon/TrashBin";
 import Duplicate from "./icon/Duplicate";
 import UpArrow from "./icon/UpArrow";
+import Dataset from "./icon/Dataset";
+import WebHook from "./icon/WebHook";
+import Deploy from "./icon/Deploy";
 
 interface IconProps {
   // name of the icon
@@ -117,6 +120,8 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     columns: <Columns {...props} />,
     commit: <Commit {...props} />,
     dashboard: <Dashboard {...props} />,
+    dataset: <Dataset {...props} />,
+    deploy: <Deploy {...props} />,
     deployCircle: <DeployCircle {...props} />,
     discord: <Discord {...props} />,
     disk: <Disk {...props} />,
@@ -153,6 +158,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     twitter: <Twitter {...props} />,
     unlock: <Unlock {...props} />,
     upArrow: <UpArrow {...props} />,
+    webHook: <WebHook {...props} />,
     youtube: <Youtube {...props} />
   }
 

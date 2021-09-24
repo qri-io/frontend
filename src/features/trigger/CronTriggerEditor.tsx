@@ -4,21 +4,25 @@ import { TriggerEditorProps } from './WorkflowTriggersEditor'
 import { CronTrigger } from '../../qrimatic/workflow'
 import { hourlyItems, scheduleFromPeriodicity, triggerFromSchedule } from './util'
 import Select from '../../chrome/Select'
+import Button from "../../chrome/Button";
 
 interface CronTriggerEditorProps extends TriggerEditorProps {
   trigger: CronTrigger
+  onSave: () => void
+  onDelete: () => void
 }
 
 const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
   trigger,
-  onChange
+  onChange,
+  onSave,
+  onDelete
 }) => {
   const schedule = scheduleFromPeriodicity(trigger.periodicity)
 
   return (
-    <div>
-      <div className="text-sm leading-6 font-medium text-gray-700 mr-1" id="modal-headline">When should Qri run this workflow?</div>
-      <div className='flex flex-wrap -mx-1'>
+    <div className='flex items-center'>
+      <div className='flex flex-wrap -mx-1 flex-grow'>
         <div className='my-1 px-1 w-1/2'>
           <Select
             value={schedule.periodicity}
@@ -75,6 +79,8 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
           }
         </div>
       </div>
+      <Button onClick={onDelete} className='ml-14 mr-2' type='light'>Delete</Button>
+      <Button onClick={onSave} type='secondary'>Complete</Button>
     </div>
   )
 }

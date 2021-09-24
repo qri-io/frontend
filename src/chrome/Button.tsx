@@ -4,6 +4,7 @@ import classNames from 'classnames';
 export type ButtonType = 'primary' // light blue button with white text
   | 'primary-outline' // light blue outline button, thick border
   | 'secondary' // pink button with white text
+  | 'secondary-outline' //pink outline button, thick border
   | 'warning' // yellow button with dark text
   | 'danger' // red button with white text
   | 'light' // gray outline and text, thin border, e.g. cancel button for modal
@@ -50,6 +51,7 @@ const Button: React.FC<ButtonProps> = ({
         'text-white bg-qritile hover:bg-qritile-600': (type === 'primary'),
         'text-qritile hover:text-qritile-600 text-sm font-medium border-2 border-qritile hover:border-qritile-600 box-border': (type === 'primary-outline'),
         'text-white bg-qripink-600 hover:bg-qripink-': (type === 'secondary'),
+        'text-qripink-600 hover:text-qripink-700 text-sm font-medium border-2 border-qripink-600 hover:border-qripink-700 box-border': (type === 'secondary-outline'),
         'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
         'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
         'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),

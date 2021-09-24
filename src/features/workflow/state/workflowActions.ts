@@ -4,6 +4,7 @@ import { NewWorkflow, Workflow, WorkflowInfo, workflowScriptString, WorkflowTrig
 import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
 import {
   WORKFLOW_CHANGE_TRIGGER,
+  WORKFLOW_DELETE_TRIGGER,
   WORKFLOW_CHANGE_TRANSFORM_STEP,
   RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
@@ -143,6 +144,13 @@ export function changeWorkflowTrigger (index: number, trigger: WorkflowTrigger):
     type: WORKFLOW_CHANGE_TRIGGER,
     index,
     trigger
+  }
+}
+
+export function deleteWorkflowTrigger (index: number): WorkflowStepAction {
+  return {
+    type: WORKFLOW_DELETE_TRIGGER,
+    index,
   }
 }
 

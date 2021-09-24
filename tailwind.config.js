@@ -5,6 +5,13 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      keyframes : {
+        'appear':{
+          '0%': {maxHeight: 0},
+          '99%': {maxHeight: 1000},
+          '100%': {maxHeight: 'none'}
+        }
+      },
       colors: {
         qripink: {
           100: '#FFD9E5',
@@ -133,7 +140,8 @@ module.exports = {
         even: '0px 0px 5px rgba(0, 0, 0, 0.1)'
       },
       animation: {
-        'spin-slow': 'spin 3s linear infinite'
+        'spin-slow': 'spin 3s linear infinite',
+        'appear': 'appear 1s ease-in-out'
       },
       fontSize: {
         'sm': '0.813rem' // 13px

@@ -16,7 +16,6 @@ import { Dataset } from '../../qri/dataset'
 import { RunMode } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
-import DeployButton from '../deploy/DeployButton'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
 import { QriRef } from '../../qri/ref'
 
@@ -25,7 +24,6 @@ export interface WorkflowEditorProps {
   runMode: RunMode
   workflow: Workflow
   dataset: Dataset
-  isDirty: boolean
   run?: Run
 }
 
@@ -34,11 +32,11 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   runMode,
   workflow,
   dataset,
-  isDirty,
   run
 }) => {
   const dispatch = useDispatch()
 
+  const [addedCell, setAddedCell] = useState<number>(-1)
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
   const collapseState = (stepName: string, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
     if (collapseStates[stepName]) {
@@ -97,7 +95,11 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
     return dsPreview
   }
 
-  const isNew = qriRef.username === '' && qriRef.name === ''
+  const addCell = (i:number,syntax: string) => {
+    dispatch(addWorkflowTransformStep(i, syntax))
+    setAddedCell(i + 1)
+  }
+
 
   // to deploy, the workflow must have a RunStatus of succeeded and isDirty = true
 
@@ -129,6 +131,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                     key={step.category}
                     index={i}
                     step={step}
+                    setAnimatedCell={setAddedCell}
                     run={r}
                     onRun={runScript}
                     collapseState={collapseState(step.name, r)}
@@ -137,7 +140,8 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                       update[step.name] = v
                       setCollapseStates(update)
                     }}
-                    onRowAdd={(i:number,syntax: string) => dispatch(addWorkflowTransformStep(i, syntax))}
+                    isCellAdded={addedCell === i}
+                    onRowAdd={(i:number,syntax: string) => addCell(i, syntax)}
                     onChangeScript={(i:number, script:string) => {
                       if (dataset?.transform?.steps) {
                         dispatch(changeWorkflowTransformStep(i, script))
@@ -177,10 +181,6 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
             </div>
           </div>
           <Hooks />
-          <div className='mt-6'>
-            <ScrollAnchor id='deploy-button' />
-            <DeployButton isNew={isNew} disabled={!isDirty} />
-          </div>
         </div>
       </div>
     </Hotkeys>
