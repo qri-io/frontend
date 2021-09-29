@@ -27,7 +27,7 @@ const statusMappings: StatusMappings = {
   },
   running: {
     icon: 'loader',
-    color: 'qrigray-400'
+    color: 'qrinavy-700'
   },
   succeeded: {
     icon: 'circleCheck',
