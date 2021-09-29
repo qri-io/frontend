@@ -55,7 +55,8 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
       <div className='flex-grow min-w-0'>
         <ScrollAnchor id={name} />
         {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-        {(collapseState === 'all' || collapseState === 'only-output') && run?.output && <Output data={run?.output} status={run?.status} />}
+        {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
+        <Output data={run?.output} status={run?.status} />}
         <div
           onClick={() => onRowAdd(index, 'starlark')}
           className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'

@@ -107,6 +107,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   let borderStyles = '';
   if(status === 'succeeded') {
     borderStyles = `border-qrigreen border-2 border-solid ${hasOutput && 'border-b-0'}`
+  }else if(status === 'running'){
+    borderStyles = 'border-qrinavy-700 border-2 border-solid border-b-0 -mb-1'
   }else if(status === 'failed'){
     borderStyles = `border-dangerred border-2 border-solid ${hasOutput && 'border-b-0'}`
   }else{
