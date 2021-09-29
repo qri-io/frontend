@@ -16,7 +16,10 @@ import {
   WORKFLOW_ADD_TRANSFORM_STEP,
   WORKFLOW_REMOVE_TRANSFORM_STEP,
   WORKFLOW_DUPLICATE_TRANSFORM_STEP,
-  WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP, WORKFLOW_MOVE_TRANSFORM_STEP_UP, WORKFLOW_MOVE_TRANSFORM_STEP_DOWN
+  WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP,
+  WORKFLOW_MOVE_TRANSFORM_STEP_UP,
+  WORKFLOW_MOVE_TRANSFORM_STEP_DOWN,
+  WORKFLOW_UNDO_CHANGES
 } from './workflowState'
 import { AnyAction } from 'redux'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
@@ -48,6 +51,12 @@ function fetchWorkflowByDatasetRef (qriRef: QriRef): ApiAction {
 export function resetWorkflowState () {
   return {
     type: 'RESET_WORKFLOW_STATE'
+  }
+}
+
+export function workflowUndoChanges(): UndoWorkflowChanges {
+  return {
+    type: WORKFLOW_UNDO_CHANGES
   }
 }
 
@@ -214,6 +223,10 @@ export function setWorkflow (workflow: Workflow): SetWorkflowAction {
 export interface SetTemplateAction {
   type: string
   dataset: Dataset
+}
+
+export interface UndoWorkflowChanges {
+  type: string
 }
 
 export function setTemplate (dataset: Dataset): SetTemplateAction {

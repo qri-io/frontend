@@ -1,4 +1,5 @@
 import { Workflow } from '../../qrimatic/workflow'
+import Dataset from "../../qri/dataset";
 
 // TODO (ramfox): need to formalize possible trigger & on completion types
 
@@ -30,12 +31,19 @@ def transform(ds, ctx):
 
 export const CSVDownload: Dataset = {
   meta: {
+    qri: '',
     title: 'New Dataset from Workflow'
   },
+  username: '',
+  name: '',
+  path: '',
   transform: {
+    qri: '',
     steps: [
       {
+        name: 'intro-step',
         syntax: 'starlark',
+        category: 'intro-step',
         script: `# Welcome to the Qri Workflow Editor!
 # This script lives with your new dataset, and will be used to create new versions of the dataset
 # Start writing Starlark code here...
@@ -54,7 +62,9 @@ print('Hello, World!')
 `
       },
       {
+        name: 'download-example',
         syntax: 'starlark',
+        category: 'download-example',
         script: `# CSV Download Code Sample
 # This really works! Click 'Dry Run' to try it ↗
 

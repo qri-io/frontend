@@ -27,8 +27,8 @@ const OnComplete: React.FC<any> = () => {
         <div className='text-sm text-qrigray-400 mb-3'>Configure actions that will happen when the workflow succeeds</div>
         <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
           {hooks.map((d, i) => (
-            <div className='w-1/3'>
-              <Block key={i} name={d.name}>
+            <div key={i} className='w-1/3'>
+              <Block name={d.name}>
                 <div className='text-xs text-qrigray-400'>{d.description}</div>
               </Block>
             </div>
