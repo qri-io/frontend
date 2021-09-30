@@ -16,7 +16,7 @@ export interface Run {
   startTime?: Date
   stopTime?: Date
   duration?: string
-
+  initID?: string
   steps: RunStep[]
   dsPreview?: Dataset
 }
@@ -64,10 +64,12 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
   switch (line.type) {
     case EventLogLineType.ETTransformStart:
       run.status = 'running'
+      run.initID = line.data.initID
       run.startTime = new Date(line.ts / 1000)
       run.steps = []
       break;
     case EventLogLineType.ETTransformStop:
+      run.initID = line.data.initID
       run.status = line.data.status || 'failed'
       run.stopTime = new Date(line.ts / 1000)
       break;

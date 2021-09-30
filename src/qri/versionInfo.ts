@@ -92,7 +92,10 @@ export function newVersionInfo(data: Record<string,any>): VersionInfo {
 }
 
 export function datasetAliasFromVersionInfo(vi: VersionInfo): string {
-  return `${vi.username}/${vi.name}`
+  if(vi && vi.username && vi.name){
+    return `${vi.username}/${vi.name}`
+  }
+  return ''
 }
 
 export function qriRefFromVersionInfo (vi: VersionInfo): QriRef {

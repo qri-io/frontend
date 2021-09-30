@@ -1,6 +1,7 @@
 import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import { datasetAliasFromVersionInfo, VersionInfo } from '../../../qri/versionInfo';
+import { datasetAliasFromVersionInfo, newVersionInfo, VersionInfo } from '../../../qri/versionInfo';
+import { CALL_API } from "../../../store/api";
 
 export const WORKFLOW_STARTED = 'WORKFLOW_STARTED'
 export const WORKFLOW_COMPLETED = 'WORKFLOW_COMPLETED'
@@ -18,7 +19,7 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
     ordered.push(collection[id])
   })
 
-  Object.keys(collection).forEach( (id: string) => {
+  state.collection.listedIDs.forEach( (id: string) => {
     if (running.includes(id)) {
       return
     }
@@ -31,6 +32,9 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
   })
 }
 
+export const selectVersionInfo = ( initId: string): (state: RootState) => VersionInfo =>
+  (state) => state.collection.collection[initId]
+
 export const selectIsCollectionLoading = (state: RootState): boolean => state.collection.collectionLoading && state.collection.runningLoading
 
 export interface CollectionState {
@@ -39,26 +43,36 @@ export interface CollectionState {
   // running contains the ids of the currently running workflows in reverse chronological
   // order based on latestRunTime
   running: string[]
+  // ids of datasets in the current user's collection
+  listedIDs: Set<string>
+  // ids of run events in middle of loading
+  pendingIDs: string[]
   collectionLoading: boolean
   runningLoading: boolean
+
 }
 
 const initialState: CollectionState = {
   collection: {},
   running: [],
+  listedIDs: new Set<string>(),
+  pendingIDs: [],
   collectionLoading: true,
   runningLoading: true
 }
 
 export const collectionReducer = createReducer(initialState, {
   'API_COLLECTION_REQUEST': (state, action) => {
-    state.collection = {}
+    state.listedIDs = new Set<string>()
     state.collectionLoading = true
   },
   'API_COLLECTION_SUCCESS': (state, action) => {
+    const listedIDs:Set<string> = new Set()
     action.payload.data.forEach((d: VersionInfo) => {
       state.collection[d.initID] = d
+      listedIDs.add(d.initID)
     })
+    state.listedIDs = listedIDs
     state.collectionLoading = false
   },
   'API_COLLECTION_FAILURE': (state, action) => {
@@ -83,6 +97,14 @@ export const collectionReducer = createReducer(initialState, {
   },
   'API_RUNNING_FAILURE': (state, action) => {
     state.runningLoading = false
+  },
+  'API_VERSIONINFO_REQUEST' : (state, action) => {
+    state.pendingIDs.push(action[CALL_API].body.initID)
+  },
+  'API_VERSIONINFO_SUCCESS':(state, action) => {
+    const versionInfo: VersionInfo = action.payload.data;
+    state.pendingIDs = state.pendingIDs.filter(id => id !== versionInfo.initID)
+    state.collection[versionInfo.initID] = newVersionInfo(versionInfo)
   },
   WORKFLOW_STARTED: (state, action) => {
     const id = action.data.id
