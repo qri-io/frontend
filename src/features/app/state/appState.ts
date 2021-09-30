@@ -19,7 +19,8 @@ export enum ModalType {
   signUp = 'signUp',
   workflowSplash = 'workflowSplash',
   deploy = 'deploy',
-  addTrigger = 'addTrigger'
+  addTrigger = 'addTrigger',
+  cellDelete = 'cellDelete'
 }
 
 export interface Modal<P = {}> {

@@ -11,6 +11,7 @@ import SignUpModal from '../../session/modal/SignUpModal'
 import WorkflowSplashModal from '../../workflow/modal/SplashModal'
 import DeployModal from '../../workflow/modal/DeployModal'
 import AddTriggerModal from '../../trigger/modal/AddTriggerModal'
+import ConfirmCellDelete from "../../workflow/modal/ConfirmCellDeleteModal";
 
 import { clearModal } from '../state/appActions'
 
@@ -80,6 +81,8 @@ const Modal: React.FC<any> = () => {
                   return <DeployModal {...modal.props} />
               case ModalType.addTrigger:
                   return <AddTriggerModal {...modal.props} />
+              case ModalType.cellDelete:
+                  return <ConfirmCellDelete {...modal.props} />
               default:
                 return null
             }
