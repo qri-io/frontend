@@ -3,19 +3,23 @@ import React, { useState } from 'react'
 import Icon from '../../chrome/Icon'
 import { Run } from '../../qri/run'
 import { Workflow } from '../../qrimatic/workflow'
+import { Dataset } from "../../qri/dataset";
 import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStatusIcon from '../run/RunStatusIcon'
 import DeployStatusIndicator from '../deploy/DeployStatusIndicator'
 import WorkflowScriptStatus from './WorkflowScriptStatus'
+import WorkflowCellsStatus from "./WorkflowCellsStatus";
 
 export interface WorkflowOutlineProps {
   workflow?: Workflow
   run?: Run
+  dataset: Dataset
 }
 
 const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
   workflow,
-  run
+  run,
+  dataset
 }) => {
   const [showing, setShowing] = useState(true)
   if (!showing) {
@@ -40,10 +44,11 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <div className='mb-2'>
             <ScrollTrigger target='script'>
               <div className='font-bold text-black mb-2' style={{ fontSize: 13 }}>
-                Script {(run && run.status === "running") && <div className='float-right'><RunStatusIcon status='running' /></div>}
+                Script {run && <div className='float-right'><RunStatusIcon status={run.status} /></div>}
               </div>
             </ScrollTrigger>
           </div>
+          <WorkflowCellsStatus run={run} dataset={dataset} />
           <WorkflowScriptStatus run={run} />
 
           <ScrollTrigger target='on-completion'>
