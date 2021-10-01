@@ -10,7 +10,8 @@ import {
   RunModeAction,
   SetTemplateAction,
   AddWorkflowStepAction,
-  WorkflowStepAction
+  WorkflowStepAction,
+  UndoWorkflowChanges
 } from './workflowActions'
 import { NewRunFromEventLog, Run } from '../../../qri/run'
 import { Workflow, WorkflowBase } from '../../../qrimatic/workflow'
@@ -28,6 +29,7 @@ export const WORKFLOW_DUPLICATE_TRANSFORM_STEP = 'WORKFLOW_DUPLICATE_TRANSFORM_S
 export const WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP = 'WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP'
 export const WORKFLOW_MOVE_TRANSFORM_STEP_UP = 'WORKFLOW_MOVE_TRANSFORM_STEP_UP'
 export const WORKFLOW_MOVE_TRANSFORM_STEP_DOWN = 'WORKFLOW_MOVE_TRANSFORM_STEP_DOWN'
+export const WORKFLOW_UNDO_CHANGES = 'WORKFLOW_UNDO_CHANGES'
 export const SET_TEMPLATE = 'SET_TEMPLATE'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
@@ -149,6 +151,7 @@ export const workflowReducer = createReducer(initialState, {
   WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP:clearOutputWorkflowTransformStep,
   WORKFLOW_MOVE_TRANSFORM_STEP_UP: moveWorkflowTransformStepUp,
   WORKFLOW_MOVE_TRANSFORM_STEP_DOWN: moveWorkflowTransformStepDown,
+  WORKFLOW_UNDO_CHANGES: workflowUndoChanges,
   SET_WORKFLOW_REF: (state, action: SetWorkflowRefAction) => {
     state.dataset.username = action.qriRef.username
     state.dataset.name = action.qriRef.name
@@ -287,6 +290,14 @@ function moveWorkflowTransformStepUp (state: WorkflowState, action: WorkflowStep
     state.dataset.transform.steps.splice(action.index-1,0,movedElement)
   }
   return
+}
+
+function workflowUndoChanges (state: WorkflowState, actions: UndoWorkflowChanges) {
+  state.workflow.triggers = state.workflowBase.triggers
+  state.workflow.hooks = state.workflowBase.hooks
+  if (state.dataset.transform) {
+    state.dataset.transform.steps = state.workflowBase.steps || []
+  }
 }
 
 function moveWorkflowTransformStepDown (state: WorkflowState, action: WorkflowStepAction) {

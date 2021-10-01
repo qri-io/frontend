@@ -13,7 +13,7 @@ import {
   selectWorkflowDataset
 } from './state/workflowState'
 
-import { setTemplate, resetWorkflowState } from './state/workflowActions'
+import { setTemplate, resetWorkflowState, workflowUndoChanges } from './state/workflowActions'
 import { selectTemplate } from '../template/templates'
 import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
@@ -66,6 +66,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
     if (isDirty) {
       dispatch(showModal(ModalType.unsavedChanges, {
         action: () => {
+          dispatch(workflowUndoChanges())
           setRedirectTo(nextLocation.pathname)
         }
       }))
