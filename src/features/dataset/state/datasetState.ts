@@ -19,54 +19,62 @@ export const selectCommitCount = (state: RootState): number => state.dataset.hea
 
 export const selectRunCount = (state: RootState): number => state.dataset.header.runCount
 
-export const selectIsDatasetLoading = (state: RootState): boolean => state.dataset.loading
+export const selectIsDatasetLoading = (state: RootState): boolean => state.dataset.datasetLoading
 
 export const selectSessionUserCanEditDataset = (state: RootState): boolean => {
   const u = selectSessionUser(state)
-  if (state.dataset.loading) {
+  if (state.dataset.headerLoading) {
     return false
   }
   // TODO(b5) - this would ideally be checking for an existing dataset ID instead
   // of a path
-  if (state.dataset.dataset.path === '') {
+  if (state.dataset.header.path === '') {
     return true
   }
-  return u.username === state.dataset.dataset.peername
+  return u.username === state.dataset.header.username
 }
 
 export interface DatasetState {
   dataset: Dataset
   // TODO(boandriy): header is currently a `VersionInfo`, but will have its own data structure in future iterations
   header: VersionInfo
-  loading: boolean
+  datasetLoading: boolean
+  headerLoading: boolean
 }
 
 const initialState: DatasetState = {
   dataset: NewDataset({}),
   header: newVersionInfo({}),
-  loading: true
+  datasetLoading: true,
+  headerLoading: true
 }
 
 export const datasetReducer = createReducer(initialState, {
   'API_HEADER_REQUEST': (state) => {
+    state.headerLoading = true
     state.header = newVersionInfo({})
   },
   'API_HEADER_SUCCESS': (state, action) => {
+    state.headerLoading = false
     state.header = newVersionInfo(action.payload.data)
   },
+  'API_HEADER_FAILURE': (state) => {
+    state.headerLoading = false
+  },
   SET_HEADER : (state, action) => {
+    state.headerLoading = false
     state.header = action.payload
   },
   'API_DATASET_REQUEST': (state) => {
     state.dataset = NewDataset({})
-    state.loading = true
+    state.datasetLoading = true
   },
   'API_DATASET_SUCCESS': (state, action) => {
     state.dataset = action.payload.data as Dataset
-    state.loading = false
+    state.datasetLoading = false
   },
   'API_DATASET_FAILURE': (state) => {
-    state.loading = false
+    state.datasetLoading = false
   },
   'API_BODY_SUCCESS': (state, action) => {
     state.dataset.body = action.payload.data as Body
@@ -81,6 +89,6 @@ export const datasetReducer = createReducer(initialState, {
     // TODO(b5): finish
   },
   RENAME_NEW_DATASET: (state: DatasetState, action: RenameDatasetAction) => {
-    state.dataset.name = action.next.name
+    state.header.name = action.next.name
   }
 })
