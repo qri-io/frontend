@@ -4,14 +4,15 @@ import { ToastContainer, toast } from 'react-toastify'
 
 import { Run, RunStatus } from '../../qri/run'
 import Toast from './Toast'
-import { selectRunsFromEventLog } from '../workflow/state/workflowState'
+import { selectRuns } from '../events/state/eventsState'
 import { loadVersionInfo } from "../collection/state/collectionActions";
 
 import 'react-toastify/dist/ReactToastify.css'
+import {removeEvent} from "../events/state/eventsActions";
 
 const ToastRenderer: React.FC<{}> = () => {
 
-  const runs = useSelector(selectRunsFromEventLog)
+  const runs = useSelector(selectRuns)
   const dispatch = useDispatch()
   // use a ref to store the workflow status so we can
   // determine when it changes and update an already visible toast
@@ -46,6 +47,7 @@ const ToastRenderer: React.FC<{}> = () => {
           toast(<Toast message={'Running Workflow...'} initID={initID as string} type='running' />, {
             toastId: id,
             autoClose: false,
+            onClose: () => dispatch(removeEvent(id))
           })
         }
       break
@@ -61,7 +63,10 @@ const ToastRenderer: React.FC<{}> = () => {
                 <Toast message={'Success!'} initID={initID as string} type='succeeded' />
               ),
               autoClose: SUCCESS_CLOSE_DELAY,
-              onClose: () => {delete runsRef.current[id]}
+              onClose: () => {
+                delete runsRef.current[id]
+                dispatch(removeEvent(id))
+              }
             })
           }, SUCCESS_START_DELAY)
         }

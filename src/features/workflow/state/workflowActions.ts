@@ -6,7 +6,6 @@ import {
   WORKFLOW_CHANGE_TRIGGER,
   WORKFLOW_DELETE_TRIGGER,
   WORKFLOW_CHANGE_TRANSFORM_STEP,
-  RUN_EVENT_LOG,
   TEMP_SET_WORKFLOW_EVENTS,
   SET_TEMPLATE,
   SET_WORKFLOW,
@@ -16,7 +15,6 @@ import {
   WORKFLOW_ADD_TRANSFORM_STEP,
   WORKFLOW_REMOVE_TRANSFORM_STEP,
   WORKFLOW_DUPLICATE_TRANSFORM_STEP,
-  WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP,
   WORKFLOW_MOVE_TRANSFORM_STEP_UP,
   WORKFLOW_MOVE_TRANSFORM_STEP_DOWN,
   WORKFLOW_UNDO_CHANGES
@@ -121,13 +119,6 @@ export function duplicateWorkflowTransformStep (index: number): WorkflowStepActi
   }
 }
 
-export function clearOutputWorkflowTransformStep (index: number): WorkflowStepAction {
-  return {
-    type: WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP,
-    index
-  }
-}
-
 export function moveWorkflowTransformStepUp (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_MOVE_TRANSFORM_STEP_UP,
@@ -196,17 +187,7 @@ export function applyWorkflowTransform (w: Workflow, d: Dataset): ApiActionThunk
   }
 }
 
-export interface EventLogAction {
-  type: string
-  data: EventLogLine
-}
 
-export function runEventLog (event: EventLogLine): EventLogAction {
-  return {
-    type: RUN_EVENT_LOG,
-    data: event
-  }
-}
 
 export interface SetWorkflowAction {
   type: string

@@ -6,7 +6,7 @@ import { Location } from 'history'
 
 import WorkflowOutline from './WorkflowOutline'
 import {
-  selectLatestDryRun,
+  selectLatestDryRunId,
   selectRunMode,
   selectWorkflow,
   selectWorkflowIsDirty,
@@ -19,6 +19,7 @@ import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
+import { selectRun } from "../events/state/eventsState";
 
 interface WorkflowLocationState {
   template: string
@@ -34,7 +35,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const location = useLocation<WorkflowLocationState>()
   const workflow = useSelector(selectWorkflow)
   const workflowDataset = useSelector(selectWorkflowDataset)
-  const latestRun = useSelector(selectLatestDryRun)
+  const latestRun = useSelector(selectRun(useSelector(selectLatestDryRunId)))
   const runMode = useSelector(selectRunMode)
   const isDirty = useSelector(selectWorkflowIsDirty)
 

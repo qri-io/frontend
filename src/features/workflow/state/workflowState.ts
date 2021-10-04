@@ -3,7 +3,6 @@ import DeepEqual from 'deep-equal'
 
 import { RootState } from '../../../store/store'
 import {
-  EventLogAction,
   SetWorkflowStepAction,
   SetWorkflowRefAction,
   WorkflowTriggerAction,
@@ -13,20 +12,16 @@ import {
   WorkflowStepAction,
   UndoWorkflowChanges
 } from './workflowActions'
-import { NewRunFromEventLog, Run } from '../../../qri/run'
 import { Workflow, WorkflowBase } from '../../../qrimatic/workflow'
-import { EventLogLine } from '../../../qri/eventLog'
 import { Dataset, NewDataset, qriRefFromDataset } from '../../../qri/dataset'
 import { QriRef } from '../../../qri/ref'
 
-export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
 export const WORKFLOW_DELETE_TRIGGER = 'WORKFLOW_DELETE_TRIGGER'
 export const WORKFLOW_CHANGE_TRANSFORM_STEP = 'WORKFLOW_CHANGE_TRANSFORM_STEP'
 export const WORKFLOW_ADD_TRANSFORM_STEP = 'WORKFLOW_ADD_TRANSFORM_STEP'
 export const WORKFLOW_REMOVE_TRANSFORM_STEP = 'WORKFLOW_REMOVE_TRANSFORM_STEP'
 export const WORKFLOW_DUPLICATE_TRANSFORM_STEP = 'WORKFLOW_DUPLICATE_TRANSFORM_STEP'
-export const WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP = 'WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP'
 export const WORKFLOW_MOVE_TRANSFORM_STEP_UP = 'WORKFLOW_MOVE_TRANSFORM_STEP_UP'
 export const WORKFLOW_MOVE_TRANSFORM_STEP_DOWN = 'WORKFLOW_MOVE_TRANSFORM_STEP_DOWN'
 export const WORKFLOW_UNDO_CHANGES = 'WORKFLOW_UNDO_CHANGES'
@@ -39,26 +34,18 @@ export const SET_RUN_MODE = 'SET_RUN_MODE'
 // of the workflow without having to have a working api
 export const TEMP_SET_WORKFLOW_EVENTS = 'TEMP_SET_WORKFLOW_EVENTS'
 
-export const selectLatestDryRun = (state: RootState): Run | undefined => {
+export const selectLatestDryRunId = (state: RootState): string => {
   if (state.workflow.lastDryRunID) {
-    return NewRunFromEventLog(state.workflow.lastDryRunID, state.workflow.events)
+    return state.workflow.lastDryRunID
   }
-  return undefined
+  return ''
 }
 
-export const selectLatestRun = (state: RootState): Run | undefined => {
+export const selectLatestRunId = (state: RootState): string => {
   if (state.workflow.lastRunID) {
-    return NewRunFromEventLog(state.workflow.lastRunID, state.workflow.events)
+    return state.workflow.lastRunID
   }
-  return undefined
-}
-
-export const selectRunsFromEventLog = (state: RootState): Run[] => {
-  const { events } = state.workflow
-  const unique = [...new Set(events.map(d => d.sessionID))]
-  return unique.map((d) => {
-    return NewRunFromEventLog(d, events.filter(e => e.data.mode !== 'apply'))
-  })
+  return ''
 }
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
@@ -92,7 +79,6 @@ export interface WorkflowState {
   isDirty: boolean
   lastDryRunID?: string
   lastRunID?: string
-  events: EventLogLine[]
   // state for the async request to /apply
   applyStatus: ApplyStatus
 }
@@ -116,7 +102,6 @@ const initialState: WorkflowState = {
   isDirty: false,
   lastRunID: '',
   lastDryRunID: '',
-  events: [],
   applyStatus: ''
 }
 
@@ -137,18 +122,15 @@ export const workflowReducer = createReducer(initialState, {
   },
   SET_RUN_MODE: (state, action: RunModeAction) => {
     if (state.runMode !== action.mode) {
-      state.events = [] // changing run modes negates any existing run state
       state.runMode = action.mode
     }
   },
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,
   WORKFLOW_DELETE_TRIGGER: deleteWorkflowTrigger,
   WORKFLOW_CHANGE_TRANSFORM_STEP: changeWorkflowTransformStep,
-  RUN_EVENT_LOG: addRunEvent,
   WORKFLOW_ADD_TRANSFORM_STEP: addWorkflowTransformStep,
   WORKFLOW_REMOVE_TRANSFORM_STEP: removeWorkflowTransformStep,
   WORKFLOW_DUPLICATE_TRANSFORM_STEP: duplicateWorkflowTransformStep,
-  WORKFLOW_CLEAR_OUTPUT_TRANSFORM_STEP:clearOutputWorkflowTransformStep,
   WORKFLOW_MOVE_TRANSFORM_STEP_UP: moveWorkflowTransformStepUp,
   WORKFLOW_MOVE_TRANSFORM_STEP_DOWN: moveWorkflowTransformStepDown,
   WORKFLOW_UNDO_CHANGES: workflowUndoChanges,
@@ -238,8 +220,6 @@ function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowSt
   }
 
   state.isDirty = calculateIsDirty(state)
-  // clear out events after an edit to reset dry run RunStatus
-  state.events = []
 
   return
 }
@@ -251,8 +231,6 @@ function addWorkflowTransformStep(state: WorkflowState, action: AddWorkflowStepA
   }
 
   state.isDirty = calculateIsDirty(state)
-  // clear out events after an edit to reset dry run RunStatus
-  state.events = []
 
   return
 }
@@ -273,14 +251,6 @@ function duplicateWorkflowTransformStep(state: WorkflowState, action: WorkflowSt
     state.dataset.transform.steps.splice(action.index+1,0, duplicateStep)
   }
 
-  return
-}
-
-function clearOutputWorkflowTransformStep(state: WorkflowState, action: WorkflowStepAction) {
-  if (state.dataset.transform?.steps ) {
-    //TODO (boandriy): clears all cells output, need it specific to actions.index cell.
-    state.events=[]
-  }
   return
 }
 
@@ -306,9 +276,4 @@ function moveWorkflowTransformStepDown (state: WorkflowState, action: WorkflowSt
     state.dataset.transform.steps.splice(action.index+1,0,movedElement)
   }
   return
-}
-
-function addRunEvent(state: WorkflowState, action: EventLogAction) {
-  state.events.push(action.data)
-  state.events.sort((a,b) => a.ts - b.ts)
 }

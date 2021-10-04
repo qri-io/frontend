@@ -8,8 +8,9 @@ import { loadDatasetLogs } from './state/activityFeedActions'
 import { newDatasetLogsSelector } from './state/activityFeedState'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 import { runNow } from '../workflow/state/workflowActions'
-import { selectLatestRun } from '../workflow/state/workflowState'
+import { selectLatestRunId } from '../workflow/state/workflowState'
 import RunNowButton from './RunNowButton'
+import { selectRun } from "../events/state/eventsState";
 
 
 export interface DatasetActivityFeedProps {
@@ -21,7 +22,8 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 }) => {
 
   const logs = useSelector(newDatasetLogsSelector(qriRef))
-  const latestRun = useSelector(selectLatestRun)
+  const latestRunId = useSelector(selectLatestRunId)
+  const latestRun = useSelector(selectRun(latestRunId))
   const dispatch = useDispatch()
 
   const [tableContainer, { height: tableContainerHeight }] = useDimensions()

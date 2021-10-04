@@ -12,18 +12,27 @@ import TextInput from '../../../chrome/forms/TextInput'
 import Checkbox from '../../../chrome/forms/Checkbox'
 import { deployWorkflow } from '../../deploy/state/deployActions'
 import { setWorkflowRef } from '../state/workflowActions'
-import { selectWorkflow, selectWorkflowQriRef, selectWorkflowDataset } from '../state/workflowState'
+import {
+  selectWorkflow,
+  selectWorkflowQriRef,
+  selectWorkflowDataset,
+  selectLatestDryRunId,
+  selectLatestRunId
+} from '../state/workflowState'
 import { validateDatasetName } from '../../session/state/formValidation'
 import RunStatusIcon from '../../run/RunStatusIcon'
 import { selectDeployStatus } from '../../deploy/state/deployState'
 import { selectSessionUser } from '../../session/state/sessionState'
 import WarningDialog from '../WarningDialog'
+import { removeEvent } from "../../events/state/eventsActions";
 
 
 
 
 const DeployModal: React.FC = () => {
   const dispatch = useDispatch()
+  const latestDryRunId = useSelector(selectLatestDryRunId)
+  const latestRunId = useSelector(selectLatestRunId)
   const history = useHistory()
 
   const qriRef = useSelector(selectWorkflowQriRef)
@@ -84,6 +93,12 @@ const DeployModal: React.FC = () => {
 
   const handleDeployClick = () => {
     setDeploying(true)
+    if (latestDryRunId) {
+      dispatch(removeEvent(latestDryRunId))
+    }
+    if (latestRunId) {
+      dispatch(removeEvent(latestRunId))
+    }
     dispatch(setModalLocked(true))
     dispatch(deployWorkflow(qriRef, workflow, dataset, runNow))
   }

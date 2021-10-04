@@ -81,8 +81,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   }, [theEditor])
 
-  const handleEditorDidMount = (editor: MonacoEditor['editor']) => {
-    editor?.addAction({
+  useEffect(() => {
+    theEditor?.addAction({
       id: "executeCurrentAndAdvance",
       label: "Execute Block and Advance",
       keybindings: [KeyMod.CtrlCmd | KeyCode.Enter],
@@ -90,9 +90,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       precondition: "editorTextFocus && !suggestWidgetVisible && !renameInputVisible && !inSnippetMode && !quickFixWidgetVisible",
       run: () => {
         onRun()
-      },
-    });
+      }
+    })
+  }, [theEditor, onRun])
 
+  const handleEditorDidMount = (editor: MonacoEditor['editor']) => {
     setTheEditor(editor)
   }
 

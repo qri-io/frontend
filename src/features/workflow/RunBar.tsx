@@ -12,13 +12,16 @@ import {
   selectWorkflow,
   selectWorkflowDataset,
   selectApplyStatus,
-  selectWorkflowIsDirty
+  selectWorkflowIsDirty,
+  selectLatestDryRunId,
+  selectLatestRunId
 } from './state/workflowState'
 import { platform } from '../../utils/platform'
 import Icon from "../../chrome/Icon";
 import DeployButton from "../deploy/DeployButton";
 import { newQriRef } from "../../qri/ref";
 import { useParams } from "react-router";
+import { removeEvent } from "../events/state/eventsActions";
 
 export interface RunBarProps {
  status: RunStatus
@@ -35,9 +38,19 @@ const RunBar: React.FC<RunBarProps> = ({
   const workflowDataset = useSelector(selectWorkflowDataset)
   const applyStatus = useSelector(selectApplyStatus)
   const isDirty = useSelector(selectWorkflowIsDirty)
+  const latestDryRunId = useSelector(selectLatestDryRunId)
+  const latestRunId = useSelector(selectLatestRunId)
   const qriRef = newQriRef(useParams())
 
+  const removeRunEvents = () => {
+    if (latestDryRunId)
+      dispatch(removeEvent(latestDryRunId))
+    if (latestRunId)
+      dispatch(removeEvent(latestRunId))
+  }
+
   const handleRun = () => {
+    removeRunEvents()
     if (onRun) { onRun() }
     if (runMode === 'apply') {
       dispatch(applyWorkflowTransform(workflow, workflowDataset))

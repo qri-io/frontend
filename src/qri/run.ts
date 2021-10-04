@@ -34,6 +34,7 @@ export function NewRunFromEventLog(runID: string, log: EventLogLine[]): Run {
 }
 
 export interface RunStep {
+  id: string
   name: string
   category: string
   status: RunStatus
@@ -45,6 +46,7 @@ export interface RunStep {
 
 export function NewRunStep(data: Record<string, any>): RunStep {
   return {
+    id: data.sessionID,
     name: data.name,
     category: data.category,
     status: data.status,
