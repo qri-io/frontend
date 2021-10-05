@@ -10,7 +10,7 @@ export interface CodeEditorProps {
   // determines whether the Component should render with rounded corners on the bottom
   standalone?: boolean
   onChange: (newValue: string) => void
-  hasOutput: boolean;
+  isEdited: boolean
   onRun?: () => void
   status?: RunStatus
 }
@@ -42,8 +42,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   onChange,
   onRun = () => {},
   disabled,
-  hasOutput,
-  status
+  status,
+  isEdited
 }) => {
   const ref = useRef<MonacoEditor>(null)
 
@@ -106,16 +106,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     window.addEventListener('resize', handleResize);
   });
 
-  let borderStyles = '';
-  if(status === 'succeeded') {
-    borderStyles = `border-qrigreen border-2 border-solid ${hasOutput && 'border-b-0'}`
-  }else if(status === 'running'){
-    borderStyles = 'border-qrinavy-700 border-2 border-solid border-b-0 -mb-1'
-  }else if(status === 'failed'){
-    borderStyles = `border-dangerred border-2 border-solid ${hasOutput && 'border-b-0'}`
-  }else{
-    borderStyles = 'border-transparent hover:border-qritile border-2 border-solid'
+  let borderStyles
+  if (!isEdited) {
+    if (status === 'succeeded') {
+      borderStyles = `border-qrigreen border-2 border-solid ${!standalone && 'border-b-0'}`
+    } else if (status === 'running') {
+      borderStyles = 'border-qrinavy-700 border-2 border-solid border-b-0 -mb-1'
+    } else if (status === 'failed') {
+      borderStyles = `border-dangerred border-2 border-solid ${!standalone && 'border-b-0'}`
+    } else {
+      borderStyles = 'border-transparent hover:border-qritile border-2 border-solid'
+    }
+  } else {
+    borderStyles = `border-transparent group-hover:border-qritile border-2 border-solid ${!standalone && isEdited && 'border-b-0'}`
   }
+
 
   return (
     <div className={classNames(`rounded-t-lg overflow-hidden flex-grow transition-all ${borderStyles}`, {

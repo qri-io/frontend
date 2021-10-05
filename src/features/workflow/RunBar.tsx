@@ -14,7 +14,8 @@ import {
   selectApplyStatus,
   selectWorkflowIsDirty,
   selectLatestDryRunId,
-  selectLatestRunId
+  selectLatestRunId,
+  selectEditedCells
 } from './state/workflowState'
 import { platform } from '../../utils/platform'
 import Icon from "../../chrome/Icon";
@@ -41,6 +42,7 @@ const RunBar: React.FC<RunBarProps> = ({
   const latestDryRunId = useSelector(selectLatestDryRunId)
   const latestRunId = useSelector(selectLatestRunId)
   const qriRef = newQriRef(useParams())
+  const areCellsEdited = useSelector(selectEditedCells)
 
   const removeRunEvents = () => {
     if (latestDryRunId)
@@ -78,7 +80,7 @@ const RunBar: React.FC<RunBarProps> = ({
       <div className='flex w-64 items-center'>
         <div className='mr-4'>
           <div className='inline-block align-middle'>
-            <RunStatusIcon status={displayStatus} size='md' className='ml-2' />
+            <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : displayStatus} size='md' className='ml-2' />
           </div>
         </div>
         <div className='w-36'>

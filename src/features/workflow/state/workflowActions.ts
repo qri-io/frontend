@@ -17,7 +17,8 @@ import {
   WORKFLOW_DUPLICATE_TRANSFORM_STEP,
   WORKFLOW_MOVE_TRANSFORM_STEP_UP,
   WORKFLOW_MOVE_TRANSFORM_STEP_DOWN,
-  WORKFLOW_UNDO_CHANGES
+  WORKFLOW_UNDO_CHANGES,
+  WORKFLOW_CLEAR_TRANSFORM_STEP_OUTPUT
 } from './workflowState'
 import { AnyAction } from 'redux'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
@@ -94,6 +95,13 @@ export function changeWorkflowTransformStep (index: number, script: string): Set
     type: WORKFLOW_CHANGE_TRANSFORM_STEP,
     index,
     script
+  }
+}
+
+export function clearWorkflowTransformStepOutput (index: number): WorkflowStepAction {
+  return {
+    type: WORKFLOW_CLEAR_TRANSFORM_STEP_OUTPUT,
+    index: index
   }
 }
 

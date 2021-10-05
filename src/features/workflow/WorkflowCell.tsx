@@ -6,6 +6,8 @@ import Output from './output/Output'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowHeader from './WorkflowHeader'
 import WorkflowCellControls from './WorkflowCellControls'
+import { useSelector } from "react-redux";
+import { selectClearedCells, selectEditedCells } from "./state/workflowState";
 
 export interface WorkflowCellProps {
   index: number
@@ -34,11 +36,20 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   setAnimatedCell
 }) => {
   const { syntax, name, script } = step
+  const editedCells = useSelector(selectEditedCells)
+  const clearedCells = useSelector(selectClearedCells)
 
   let editor: React.ReactElement
   switch (syntax) {
     case 'starlark':
-      editor = <CodeEditor hasOutput={!!run?.output} status={run?.status} script={script} onChange={(v) => { onChangeScript(index, v) }} onRun={onRun} disabled={disabled} standalone={!run?.output} />
+      editor = <CodeEditor
+        isEdited={editedCells[index]}
+        status={run?.status}
+        script={script}
+        onChange={(v) => { onChangeScript(index, v) }}
+        onRun={onRun}
+        disabled={disabled}
+        standalone={!run?.output || clearedCells[index]} />
       break;
     case 'qri':
       editor = <></>
@@ -51,12 +62,15 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div id={`${name}-cell`} className={`w-full group flex ${isCellAdded && 'animate-appear'}`}>
+    <div id={`${name}-cell`} className={`w-full workflow-cell flex ${isCellAdded && 'animate-appear'}`}>
       <div className='flex-grow min-w-0'>
         <ScrollAnchor id={name} />
-        {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-        {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
-        <Output data={run?.output} status={run?.status} />}
+        <div className='group'>
+          {(collapseState === 'all' || collapseState === 'only-editor') && editor}
+          {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
+          !clearedCells[index] &&
+          <Output data={run?.output} status={run?.status} wasEdited={editedCells[index]} />}
+        </div>
         <div
           onClick={() => onRowAdd(index, 'starlark')}
           className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'
