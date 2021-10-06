@@ -10,6 +10,7 @@ interface DropdownMenuProps {
   icon?: string | React.ReactElement
   items: DropdownMenuItemProps[]
   dropUp?: boolean
+  oneItem?: boolean
 }
 
 // DropdownMenu shows menu when a given "icon" prop is clicked. the element to
@@ -20,7 +21,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   alignLeft=false,
   className='',
   items,
-  dropUp=false
+  dropUp=false,
+  oneItem=false
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
@@ -45,7 +47,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         {(typeof icon === 'string') ? <Icon icon={icon} /> : icon}
       </div>
       <div
-        className={classNames(` transition-all duration-100 transform origin-top-right absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-40`,
+        className={classNames(`transition-all duration-100 transform origin-top-right absolute rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-40`,
           {
             'left-0': alignLeft,
             'right-0': !alignLeft,
@@ -58,7 +60,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         role="menu"
         aria-orientation="vertical"
         aria-labelledby="options-menu"
-        style={{ minWidth: '9rem' }}
+        style={oneItem ? { minWidth: '9rem', top: -8, right: 30 } : { minWidth: '9rem' }}
       >
         <div className="py-1 flex flex-col" onClick={ () => setOpen(false) }>
           {items.map((props, i) => <DropdownMenuItem key={i} {...props} />)}
