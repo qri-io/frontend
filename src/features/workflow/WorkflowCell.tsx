@@ -65,7 +65,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
           <button className='text-xs border-none flex-shrink-0 bg-white rounded py-1 pr-2 pl-1 font-semibold '>+ Code</button>
         </div>
       </div>
-      <WorkflowCellControls index={index} setAnimatedCell={setAnimatedCell} />
+      <WorkflowCellControls index={index} sessionId={run ? run.id : ''} setAnimatedCell={setAnimatedCell} />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { QriRef } from '../../../qri/ref'
 import { NewEventLogLine } from '../../../qri/eventLog'
 import { RootState } from '../../../store/store'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
-import { runEventLog } from '../../workflow/state/workflowActions'
+import { runEventLog } from '../../events/state/eventsActions'
 import { workflowCompleted, workflowStarted } from '../../collection/state/collectionActions'
 import {
   deployStarted,
@@ -198,7 +198,7 @@ const middleware = () => {
 
   const subscribe = (token: string) => {
     if (token === "") {
-      return 
+      return
     }
     if (socket === undefined) {
       return

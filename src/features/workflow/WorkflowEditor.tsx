@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Hotkeys from 'react-hot-keys'
 
 
@@ -13,11 +13,12 @@ import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
 import Hooks from './Hooks'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
 import { Dataset } from '../../qri/dataset'
-import { RunMode } from './state/workflowState'
+import { RunMode, selectLatestDryRunId, selectLatestRunId } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
 import { QriRef } from '../../qri/ref'
+import { removeEvent } from "../events/state/eventsActions";
 
 export interface WorkflowEditorProps {
   qriRef: QriRef
@@ -35,6 +36,8 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   run
 }) => {
   const dispatch = useDispatch()
+  const latestDryRunId = useSelector(selectLatestDryRunId)
+  const latestRunId = useSelector(selectLatestRunId)
 
   const [addedCell, setAddedCell] = useState<number>(-1)
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
@@ -71,6 +74,12 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   }, [dataset])
 
   const runScript = () => {
+    if (latestDryRunId) {
+      dispatch(removeEvent(latestDryRunId))
+    }
+    if (latestRunId) {
+      dispatch(removeEvent(latestRunId))
+    }
     dispatch(applyWorkflowTransform(workflowRef.current, workflowDatasetRef.current))
   }
 
@@ -121,9 +130,11 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 </div>
               </div>
               {dataset?.transform?.steps && dataset.transform.steps.map((step, i) => {
-                let r
+                let r: RunStep
                 if (run) {
                   r = (run?.steps && run?.steps.length >= i) ? run.steps[i] : NewRunStep({ status: "waiting" })
+                  if (r)
+                    r.id = run.id
                 }
                 return (
                   <WorkflowCell
