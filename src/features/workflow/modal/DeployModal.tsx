@@ -179,7 +179,7 @@ const DeployModal: React.FC = () => {
   }
 
   return (
-    <div style={{ width: 440, height: 440 }}>
+    <div style={{ width: 440, height: 510 }}>
       <div className={classNames('absolute w-full h-full bg-white p-8 transition-all duration-300 bg-white p-8 text-left text-black flex flex-col z-10', {
         'left-0': !deploying,
         '-left-full': deploying
