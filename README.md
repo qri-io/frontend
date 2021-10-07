@@ -78,7 +78,7 @@ To run the e2e tests locally, you must be able to run and instance of qri & an i
 4) set your credentials as environment variables:
 `TEST_E2E_USERNAME` is your local qri node's username
 `TEST_E2E_PASSWORD` is your password
-5) run `yarn e2e-test` to run your tests
+5) run `yarn test-e2e` to run your tests
 
 ### run via cloud
 To run the e2e tests via the staging cloud environment you must have an accound on `rosebud.qri.cloud` that has been cleared by an administrator. For help, please reach out to us on discord.
@@ -88,7 +88,7 @@ To run the e2e tests via the staging cloud environment you must have an accound 
 `TEST_E2E_PASSWORD` is your password
 2) set your app url environment variable:
 `TEST_E2E_APP_URL="https://rosebud.qri.cloud"`
-3) run `yarn e2e-test`
+3) run `yarn test-e2e`
 
 <a id="dependencies"></a>
 ## Main Dependencies

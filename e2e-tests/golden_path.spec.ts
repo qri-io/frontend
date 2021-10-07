@@ -1,12 +1,12 @@
 import { test, expect, Page } from '@playwright/test';
 
-const APP_URL = process.env.TEST_E2E_APP_URL  || 'http://localhost:3000/';
+const APP_URL = process.env.TEST_E2E_APP_URL || 'http://localhost:3000/';
 const USERNAME = process.env.TEST_E2E_USERNAME || '';
 const USER_PASSWORD = process.env.TEST_E2E_PASSWORD || '';
 
 test.describe.serial('Golden path', () => {
   test.skip(() => {
-    if(!USERNAME || !USER_PASSWORD)
+    if (!USERNAME || !USER_PASSWORD)
       console.log('Please provide credentials!');
     return !USERNAME || !USER_PASSWORD
   }, 'Please provide credentials!');
@@ -38,14 +38,18 @@ test.describe.serial('Golden path', () => {
   test('go to new dataset page', async () => {
     await page.click('#new_dataset_button');
     await page.click('#splash_modal_workflow_button');
-    await expect(page.url()).toBe(APP_URL+'workflow/new');
+    await expect(page.url()).toBe(APP_URL + '/workflow/new');
   });
 
   test('Dry run', async () => {
-    await page.click('#setup-cell .monaco-editor');
+    console.log("selected 1")
+    await page.click('#intro-step .monaco-editor');
+    console.log("selected 1.1")
     await page.keyboard.press('End');
     await page.keyboard.type('\nprint("test")');
+    console.log("selected 2")
     const selected = await page.$$('.run_bar_run_button');
+    console.log(selected)
     const [response] = await Promise.all([
       page.waitForResponse(resp => resp.url().includes('/auto/apply')),
       selected[1].click()
@@ -69,7 +73,7 @@ test.describe.serial('Golden path', () => {
 
   });
 
-  test('Adding a trigger', async () =>{
+  test('Adding a trigger', async () => {
     await page.click('#workflow_triggers_add_button');
     await page.click("#trigger_modal_cron");
     await page.click("#add_trigger_save_button");
@@ -79,7 +83,7 @@ test.describe.serial('Golden path', () => {
     await expect(selector).toContainText('Every day');
   });
 
-  test('Deploy workflow', async () =>{
+  test('Deploy workflow', async () => {
     await page.click('#deploy_workflow_button');
     await page.fill('#dsName', workflowRandomName);
     const [response] = await Promise.all([
@@ -92,8 +96,8 @@ test.describe.serial('Golden path', () => {
     await page.click('#deploy_modal_done_button')
   });
 
-  test('History update check', async () =>{
-    await page.goto(APP_URL+`ds/${USERNAME}/${workflowRandomName}/body`);
+  test('History update check', async () => {
+    await page.goto(APP_URL + `ds/${USERNAME}/${workflowRandomName}/body`);
     const versionInfoText = await page.locator('.commit_summary_header_container .dataset_commit_info_text');
     await expect(versionInfoText).toHaveText('created dataset')
     const versionSelector = await page.locator('#dataset_commit_list_versions_text');
@@ -101,7 +105,7 @@ test.describe.serial('Golden path', () => {
   });
 
   test('Checking if trigger is fine on workflow', async () => {
-    await page.goto(APP_URL+`ds/${USERNAME}/${workflowRandomName}/workflow`);
+    await page.goto(APP_URL + `ds/${USERNAME}/${workflowRandomName}/workflow`);
     const selector = await page.locator('#cron_trigger_interval_text');
     await expect(selector).toContainText('Every day');
   });
@@ -121,8 +125,8 @@ test.describe.serial('Golden path', () => {
     await page.click('#deploy_modal_done_button')
   });
 
-  test('History second version update check', async () =>{
-    await page.goto(APP_URL+`ds/${USERNAME}/${workflowRandomName}/body`);
+  test('History second version update check', async () => {
+    await page.goto(APP_URL + `ds/${USERNAME}/${workflowRandomName}/body`);
     const versionSelector = await page.locator('#dataset_commit_list_versions_text');
     const versionInfoText = await page.locator('.commit_summary_header_container .dataset_commit_info_text');
     await expect(versionSelector).toHaveText('2 versions');
