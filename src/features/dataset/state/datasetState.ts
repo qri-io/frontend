@@ -3,13 +3,15 @@ import { createReducer } from '@reduxjs/toolkit'
 import { RootState } from '../../../store/store';
 import Dataset, { NewDataset } from '../../../qri/dataset';
 import { qriRefFromString } from '../../../qri/ref';
-import { RenameDatasetAction } from './datasetActions';
+import { RenameDatasetAction, ResetDatasetStateAction } from './datasetActions';
 import { selectSessionUser } from '../../session/state/sessionState';
 import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo";
 
 export const RENAME_NEW_DATASET = 'RENAME_NEW_DATASET'
 
 export const SET_HEADER = 'SET_HEADER'
+
+export const RESET_DATASET_STATE = 'RESET_DATASET_STATE'
 
 export const selectDataset = (state: RootState): Dataset => state.dataset.dataset
 
@@ -87,6 +89,9 @@ export const datasetReducer = createReducer(initialState, {
   },
   'API_RENAME_SUCCESS': (state, action) => {
     // TODO(b5): finish
+  },
+  RESET_DATASET_STATE: (state: DatasetState, action: ResetDatasetStateAction) => {
+    return initialState
   },
   RENAME_NEW_DATASET: (state: DatasetState, action: RenameDatasetAction) => {
     state.header.name = action.next.name

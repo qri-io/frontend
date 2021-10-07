@@ -1,7 +1,10 @@
 import Dataset, { NewDataset } from "../../../qri/dataset"
 import { QriRef, refStringFromQriRef, humanRef } from "../../../qri/ref"
 import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
-import {RENAME_NEW_DATASET, SET_HEADER} from "./datasetState"
+import {
+  RENAME_NEW_DATASET,
+  RESET_DATASET_STATE,
+  SET_HEADER } from "./datasetState"
 import { API_BASE_URL } from '../../../store/api'
 import {VersionInfo} from "../../../qri/versionInfo";
 
@@ -131,10 +134,20 @@ export interface RenameDatasetAction {
   next: QriRef
 }
 
+export interface ResetDatasetStateAction {
+  type: string
+}
+
 export function setHeader(header: VersionInfo) {
   return {
     type: SET_HEADER,
     payload: header
+  }
+}
+
+export function resetDatasetState(): ResetDatasetStateAction {
+  return {
+    type: RESET_DATASET_STATE,
   }
 }
 

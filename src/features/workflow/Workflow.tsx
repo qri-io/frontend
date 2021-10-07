@@ -20,6 +20,7 @@ import WorkflowEditor from './WorkflowEditor'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import { selectRun } from "../events/state/eventsState";
+import { resetDatasetState } from "../dataset/state/datasetActions";
 
 interface WorkflowLocationState {
   template: string
@@ -44,6 +45,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   useEffect(() => {
     if (location.pathname === '/workflow/new') {
       dispatch(resetWorkflowState())
+      dispatch(resetDatasetState())
     }
 
     if (location.state?.template) {
