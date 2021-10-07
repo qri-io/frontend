@@ -23,7 +23,7 @@ const WorkflowCellsStatus: React.FC<WorkflowCellsStatusProps> = ({
           r = (run?.steps && run?.steps.length >= i && run.steps[i]) ? run.steps[i] : NewRunStep({ status: "waiting" })
         }
         return (
-          <div key={i} className='flex items-center justify-between mb-1.5'>
+          <div key={i} className='flex items-center justify-between mb-1.5 workflow_outline_status_container'>
             <div className='bg-white rounded-md px-2 w-20 h-6 flex items-center'>
               <Icon size='2xs' icon='code'/>
             </div>
