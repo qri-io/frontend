@@ -27,7 +27,7 @@ const WorkflowCellsStatus: React.FC<WorkflowCellsStatusProps> = ({
             <div className='bg-white rounded-md px-2 w-20 h-6 flex items-center'>
               <Icon size='2xs' icon='code'/>
             </div>
-            {r && <RunStatusIcon status={r.status} />}
+            {r && r.status && <RunStatusIcon status={r.status} />}
           </div>
         )
       })}
