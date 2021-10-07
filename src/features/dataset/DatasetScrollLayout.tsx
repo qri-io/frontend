@@ -54,7 +54,7 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
       <DatasetMiniHeader dataset={headerDataset} show={!inView} >
         {headerChildren}
       </DatasetMiniHeader>
-      <div className={classNames('p-7 w-full', contentClassName)}>
+      <div className={classNames('dataset_fixed_layout p-7 w-full', contentClassName)}>
         <div ref={stickyHeaderTriggerRef}>
           <DatasetHeader editable={editable} showInfo={!dataset}>
             {headerChildren}

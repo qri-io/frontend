@@ -85,7 +85,7 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
       </div>
       <div className='flex-shrink-0 w-48 ml-8 relative'>
         {showControls && <div onBlur={() => setShowControls(false)} className={'bg-white absolute -m-0.5 top-16 w-48 p-5 pt-2.5 rounded-md'}>
-          <WorkflowCellControlButton onClick={handleAddClick} label={'Schedule'} icon={'calendar'}/>
+          <WorkflowCellControlButton id='workflow_trigger_schedule_button' onClick={handleAddClick} label={'Schedule'} icon={'calendar'}/>
           <WorkflowCellControlButton disabled={true} onClick={() => {}} label={'Webhook'} icon={'webHook'}/>
           <WorkflowCellControlButton disabled={true} onClick={() => {}} label={'Dataset'} icon={'dataset'}/>
         </div>}

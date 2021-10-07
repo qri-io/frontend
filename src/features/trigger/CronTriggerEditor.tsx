@@ -80,7 +80,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
         </div>
       </div>
       <Button onClick={onDelete} className='ml-14 mr-2' type='light'>Delete</Button>
-      <Button onClick={onSave} type='secondary'>Complete</Button>
+      <Button id='add_trigger_save_button' onClick={onSave} type='secondary'>Complete</Button>
     </div>
   )
 }

@@ -7,6 +7,7 @@ interface WorkflowCellControlButtonProps {
   icon: string
   flipIcon?: boolean
   disabled?: boolean
+  id?: string
 }
 
 const WorkflowCellControlButton: React.FC<WorkflowCellControlButtonProps> = ({
@@ -14,11 +15,13 @@ const WorkflowCellControlButton: React.FC<WorkflowCellControlButtonProps> = ({
   label,
   icon,
   flipIcon=false,
-  disabled
+  disabled,
+  id
  }) => {
   let classes = disabled ?  'text-qrigray-400 cursor-not-allowed' : 'hover:text-qripink-600'
   return (
     <button
+      id={id}
       disabled={disabled}
       className={`flex items-center text-xs h-5 mt-2.5 focus:outline-none ${classes}`}
       onClick={onClick}>
