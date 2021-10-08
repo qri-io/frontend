@@ -57,7 +57,7 @@ commands:
 jobs:
   frontend-test:
     docker:
-      - image: circleci/node:14.15
+      - image: circleci/node:15
 
     working_directory: ~/repo
 
@@ -86,7 +86,40 @@ jobs:
     # run tests!
     - run:
         name: Run Test Suite
-        command: yarn test
+        command: CI=true yarn test --watchAll=false --ci
+  
+  frontend-test-e2e:
+    docker:
+      - image: mcr.microsoft.com/playwright:focal
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout:
+        path: ~/repo
+    - run:
+        name: Check for changes
+        command: ~/repo/.circleci/exit_if_path_not_changed.sh ~/repo
+    - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+    - run:
+        name: Install Dependencies
+        command: yarn install
+    - save_cache:
+        paths:
+          - node_modules
+        key: v1-dependencies-{{ checksum "package.json" }}
+    # compile typescript
+    - run:
+        name: Compile Typescript
+        command: yarn build
+    # run tests!
+    - run:
+        name: Run e2e Test Suite
+        command: yarn test-e2e
 
   frontend-image-push:
     docker:
@@ -129,7 +162,8 @@ jobs:
 workflows:
   frontend:
     jobs:
-      # - frontend-test
+      - frontend-test
+      - frontend-test-e2e
       - frontend-image-push:
           # requires:
           #   - frontend-test
