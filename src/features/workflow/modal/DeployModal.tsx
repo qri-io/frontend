@@ -25,9 +25,9 @@ import { selectDeployStatus } from '../../deploy/state/deployState'
 import { selectSessionUser } from '../../session/state/sessionState'
 import WarningDialog from '../WarningDialog'
 import { removeEvent } from "../../events/state/eventsActions";
+import { useDebounce } from "use-debounce";
 
-
-
+const DEBOUNCE_TIMER = 500
 
 const DeployModal: React.FC = () => {
   const dispatch = useDispatch()
@@ -47,8 +47,10 @@ const DeployModal: React.FC = () => {
 
   // local state
   const [ dsName, setDsName ] = useState('')
-  const [ dsNameError, setDsNameError ] = useState()
+  const [debouncedDsName] = useDebounce(dsName, DEBOUNCE_TIMER)
+  const [ dsNameError, setDsNameError ] = useState<string | null>(null)
   const [ runNow, setRunNow ] = useState(false)
+  const [ canBeDeployed, setCanBeDeployed ] = useState(!isNew);
   const [ deploying, setDeploying ] = useState(false)
 
   useEffect(() => {
@@ -85,11 +87,14 @@ const DeployModal: React.FC = () => {
   }
 
   const handleDsNameChange = (value: string) => {
-    //validate the dataset name
-    const err = validateDatasetName(value)
-    setDsNameError(err)
     setDsName(value)
   }
+
+  useEffect(() => {
+    if (isNew) {
+      setCanBeDeployed(false)
+    }
+  }, [ dsName, isNew ])
 
   const handleDeployClick = () => {
     setDeploying(true)
@@ -103,18 +108,14 @@ const DeployModal: React.FC = () => {
     dispatch(deployWorkflow(qriRef, workflow, dataset, runNow))
   }
 
-  // determine whether all conditions are met for proceeding
-  const checkReadyToDeploy = () => {
-
+  useEffect(() => {
     if (isNew) {
-      // if the name exists and is valid
-      if (!dsName.length || dsNameError) { return false }
+      //validate the dataset name
+      const err = validateDatasetName(debouncedDsName)
+      setDsNameError(err)
+      setCanBeDeployed(debouncedDsName.length > 0 && err === null)
     }
-
-    return true
-  }
-
-  const readyToDeploy = checkReadyToDeploy()
+  }, [ debouncedDsName, isNew ])
 
 
   let heading = 'You\'re almost there!'
@@ -202,7 +203,7 @@ const DeployModal: React.FC = () => {
           className='w-full mt-2 flex-shrink-0'
           onClick={handleDeployClick}
           submit
-          disabled={!readyToDeploy}>
+          disabled={!canBeDeployed}>
           <Icon icon='rocket' className='mr-2' /> Deploy
         </Button>
         {workflow.triggers?.length === 0 && (
