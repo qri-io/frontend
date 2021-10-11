@@ -38,7 +38,7 @@ test.describe.serial('Golden path', () => {
   test('go to new dataset page', async () => {
     await page.click('#new_dataset_button');
     await page.click('#splash_modal_workflow_button');
-    await expect(page.url()).toBe(APP_URL + 'workflow/new');
+    await expect(page.url()).toBe(APP_URL + '/workflow/new');
   });
 
   test('Dry run', async () => {
