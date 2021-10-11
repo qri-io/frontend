@@ -30,6 +30,8 @@ export const SET_TEMPLATE = 'SET_TEMPLATE'
 export const SET_WORKFLOW = 'SET_WORKFLOW'
 export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
 export const SET_RUN_MODE = 'SET_RUN_MODE'
+export const WORKFLOW_RESET_DRY_RUN_ID = 'WORKFLOW_RESET_DRY_RUN_ID'
+export const WORKFLOW_RESET_EDITED_CLEARED_CELLS = 'WORKFLOW_RESET_EDITED_CLEARED_CELLS'
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
@@ -40,6 +42,13 @@ export const selectLatestDryRunId = (state: RootState): string => {
     return state.workflow.lastDryRunID
   }
   return ''
+}
+
+export const selectLatestDeployOrDryRunId = (state: RootState): string => {
+  if (state.deploy.runId) {
+    return state.deploy.runId
+  }
+  return state.workflow.lastDryRunID
 }
 
 export const selectLatestRunId = (state: RootState): string => {
@@ -92,7 +101,7 @@ export interface WorkflowState {
   // cell output was cleared
   clearedOutputCells: boolean[]
   isDirty: boolean
-  lastDryRunID?: string
+  lastDryRunID: string
   lastRunID?: string
   // state for the async request to /apply
   applyStatus: ApplyStatus
@@ -216,6 +225,13 @@ export const workflowReducer = createReducer(initialState, {
   'RESET_WORKFLOW_STATE': (state: WorkflowState, action: SetTemplateAction) => {
     return initialState
   },
+  WORKFLOW_RESET_DRY_RUN_ID: (state: WorkflowState, actions: UndoWorkflowChanges) => {
+    state.lastDryRunID = ''
+  },
+  WORKFLOW_RESET_EDITED_CLEARED_CELLS: (state: WorkflowState, actions: UndoWorkflowChanges) => {
+    state.editedCells = state.editedCells.map(c => false)
+    state.clearedOutputCells = state.clearedOutputCells.map(c => false)
+  }
 })
 
 function calculateIsDirty(state: WorkflowState) {

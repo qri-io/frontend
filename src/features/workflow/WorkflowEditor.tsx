@@ -19,6 +19,8 @@ import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
 import { QriRef } from '../../qri/ref'
 import { removeEvent } from "../events/state/eventsActions";
+import { selectDeployRunId } from "../deploy/state/deployState";
+import { deployResetRunId } from "../deploy/state/deployActions";
 
 export interface WorkflowEditorProps {
   qriRef: QriRef
@@ -38,6 +40,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   const dispatch = useDispatch()
   const latestDryRunId = useSelector(selectLatestDryRunId)
   const latestRunId = useSelector(selectLatestRunId)
+  const latestDeployRunId = useSelector(selectDeployRunId)
 
   const [activeCell, setActiveCell] = useState<number>(-1)
   const [addedCell, setAddedCell] = useState<number>(-1)
@@ -81,6 +84,10 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
     if (latestRunId) {
       dispatch(removeEvent(latestRunId))
     }
+    if (latestDeployRunId) {
+      dispatch(removeEvent(latestDeployRunId))
+    }
+    dispatch(deployResetRunId())
     dispatch(applyWorkflowTransform(workflowRef.current, workflowDatasetRef.current))
   }
 

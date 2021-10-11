@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
 import { DeployStatus, Workflow, workflowDeployStatus } from '../../../qrimatic/workflow'
-import { DeployEventAction } from '../../deploy/state/deployActions'
+import { DeployEventAction, ResetRunIdAction } from '../../deploy/state/deployActions'
 import { QriRef } from '../../../qri/ref'
 
 export const DEPLOY_START = 'DEPLOY_START'
@@ -11,6 +11,7 @@ export const DEPLOY_SAVEWORKFLOW_START = 'DEPLOY_SAVEWORKFLOW_START'
 export const DEPLOY_SAVEWORKFLOW_END = 'DEPLOY_SAVEWORKFLOW_END'
 export const DEPLOY_SAVEDATASET_START = 'DEPLOY_SAVEDATASET_START'
 export const DEPLOY_SAVEDATASET_END = 'DEPLOY_SAVEDATASET_END'
+export const DEPLOY_RESET_RUN_ID = 'DEPLOY_RESET_RUN_ID'
 
 
 export function newDeployStatusSelector(workflowID: string): (state: RootState) => DeployStatus {
@@ -25,13 +26,18 @@ export function selectDeployStatus(qriRef: QriRef): (state: RootState) => Deploy
   return (state: RootState): DeployStatus => (state.deploy.status[`${qriRef.username}/${qriRef.name}`])
 }
 
+export const selectDeployRunId = (state: RootState): string => {
+  return state.deploy.runId
+}
 
 export interface DeployState {
   status: Record<string,DeployStatus>
+  runId: string // runID of deploying dataset, empty string means no deploying run
 }
 
 const initialState: DeployState = {
-  status: {}
+  status: {},
+  runId: ''
 }
 
 const handleDeployEvents = (state: DeployState, action: DeployEventAction) => {
@@ -47,6 +53,7 @@ export const deployReducer = createReducer(initialState, {
       state.status[action.sessionID] = 'failed'
       return
     }
+    state.runId = action.data.runID
     state.status[action.sessionID] = 'deploying'
   },
   // set deployStatus for this sessionID to 'deployed'
@@ -70,5 +77,8 @@ export const deployReducer = createReducer(initialState, {
   'API_DEPLOY_FAILURE': (state: DeployState, action) => {
     const refString = action.payload.requestID
     state.status[refString] = 'failed'
+  },
+  DEPLOY_RESET_RUN_ID: (state: DeployState, action: ResetRunIdAction) => {
+    state.runId = ''
   }
 })

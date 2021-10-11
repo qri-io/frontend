@@ -18,7 +18,9 @@ import {
   WORKFLOW_MOVE_TRANSFORM_STEP_UP,
   WORKFLOW_MOVE_TRANSFORM_STEP_DOWN,
   WORKFLOW_UNDO_CHANGES,
-  WORKFLOW_CLEAR_TRANSFORM_STEP_OUTPUT
+  WORKFLOW_RESET_DRY_RUN_ID,
+  WORKFLOW_CLEAR_TRANSFORM_STEP_OUTPUT,
+  WORKFLOW_RESET_EDITED_CLEARED_CELLS
 } from './workflowState'
 import { AnyAction } from 'redux'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
@@ -53,9 +55,21 @@ export function resetWorkflowState () {
   }
 }
 
+export function workflowResetDryRunId(): UndoWorkflowChanges {
+  return {
+    type: WORKFLOW_RESET_DRY_RUN_ID
+  }
+}
+
 export function workflowUndoChanges(): UndoWorkflowChanges {
   return {
     type: WORKFLOW_UNDO_CHANGES
+  }
+}
+
+export function workflowResetEditedClearedCells() {
+  return {
+    type: WORKFLOW_RESET_EDITED_CLEARED_CELLS
   }
 }
 
