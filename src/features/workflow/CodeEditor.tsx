@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import MonacoEditor, { EditorConstructionOptions } from 'react-monaco-editor'
 import { KeyMod, KeyCode } from "monaco-editor/esm/vs/editor/editor.api";
-import classNames from 'classnames'
 import { RunStatus } from "../../qri/run";
 
 export interface CodeEditorProps {
+  active: boolean
   script: string
   disabled?: boolean
   // determines whether the Component should render with rounded corners on the bottom
@@ -15,7 +15,7 @@ export interface CodeEditorProps {
   status?: RunStatus
 }
 
-const LINE_HEIGHT = 19
+const LINE_HEIGHT = 21
 const MIN_LINE_COUNT = 4
 const PADDING = 15
 
@@ -38,12 +38,9 @@ export const MONACO_EDITOR_OPTIONS: EditorConstructionOptions = {
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
   script,
-  standalone = true,
   onChange,
   onRun = () => {},
   disabled,
-  status,
-  isEdited
 }) => {
   const ref = useRef<MonacoEditor>(null)
 
@@ -106,44 +103,24 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     window.addEventListener('resize', handleResize);
   });
 
-  let borderStyles
-  if (!isEdited) {
-    if (status === 'succeeded') {
-      borderStyles = `border-qrigreen border-2 border-solid ${!standalone && 'border-b-0'}`
-    } else if (status === 'running') {
-      borderStyles = 'border-qrinavy-700 border-2 border-solid border-b-0 -mb-1'
-    } else if (status === 'failed') {
-      borderStyles = `border-dangerred border-2 border-solid ${!standalone && 'border-b-0'}`
-    } else {
-      borderStyles = 'border-transparent hover:border-qritile border-2 border-solid'
-    }
-  } else {
-    borderStyles = `border-transparent group-hover:border-qritile border-2 border-solid ${!standalone && isEdited && 'border-b-0'}`
-  }
-
-
   return (
-    <div className={classNames(`rounded-t-lg overflow-hidden flex-grow transition-all ${borderStyles}`, {
-      'rounded-b-lg': standalone
-    })}>
-      <MonacoEditor
-        ref={ref}
-        height={(lineCount * LINE_HEIGHT) + PADDING}
-        value={script as any as string}
-        onChange={(script: string) => {
-          onChange(script)
+    <MonacoEditor
+      ref={ref}
+      height={(lineCount * LINE_HEIGHT) + PADDING}
+      value={script as any as string}
+      onChange={(script: string) => {
+        onChange(script)
 
-          if (ref) {
-            handleSetLineCount(ref.current?.editor?.getModel()?.getLineCount() || 4)
-          }
-        }}
-        language='python'
-        theme='qri-theme'
-        options={{...MONACO_EDITOR_OPTIONS, readOnly: disabled}}
-        editorDidMount={handleEditorDidMount}
-        editorWillMount={handleEditorWillMount}
-      />
-    </div>
+        if (ref) {
+          handleSetLineCount(ref.current?.editor?.getModel()?.getLineCount() || 4)
+        }
+      }}
+      language='python'
+      theme='qri-theme'
+      options={{...MONACO_EDITOR_OPTIONS, readOnly: disabled}}
+      editorDidMount={handleEditorDidMount}
+      editorWillMount={handleEditorWillMount}
+    />
   )
 }
 

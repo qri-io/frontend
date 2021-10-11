@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import { RunStep } from '../../qri/run'
 import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
@@ -10,6 +11,7 @@ import { useSelector } from "react-redux";
 import { selectClearedCells, selectEditedCells } from "./state/workflowState";
 
 export interface WorkflowCellProps {
+  active: boolean
   index: number
   step: TransformStep
   run?: RunStep
@@ -21,9 +23,11 @@ export interface WorkflowCellProps {
   setAnimatedCell: (i: number) => void
   isCellAdded: boolean
   onRowAdd: (index: number, syntax: string) => void
+  onClick: () => void
 }
 
 const WorkflowCell: React.FC<WorkflowCellProps> = ({
+  active = false,
   index,
   step,
   run,
@@ -33,16 +37,21 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   onRowAdd,
   onRun,
   isCellAdded,
-  setAnimatedCell
+  setAnimatedCell,
+  onClick
 }) => {
   const { syntax, name, script } = step
   const editedCells = useSelector(selectEditedCells)
   const clearedCells = useSelector(selectClearedCells)
 
+  const status = run?.status
+  const isEdited = editedCells[index]
+
   let editor: React.ReactElement
   switch (syntax) {
     case 'starlark':
       editor = <CodeEditor
+        active={active}
         isEdited={editedCells[index]}
         status={run?.status}
         script={script}
@@ -61,16 +70,49 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
       editor = <p>unknown editor for '{syntax}' workflow step</p>
   }
 
+  const noColorStatus = !['succeeded', 'running', 'failed'].includes(status)
+
+  let borderStyles
+  if (!isEdited) {
+    if (status === 'succeeded') {
+      borderStyles = 'border-qrigreen'
+    } else if (status === 'running') {
+      borderStyles = 'border-qrinavy-700 -mb-1'
+    } else if (status === 'failed') {
+      borderStyles = 'border-dangerred'
+    } else if (active) {
+      borderStyles = 'border-qritile'
+    } else {
+      borderStyles = 'border-transparent'
+    }
+  } else {
+    borderStyles = 'border-qritile'
+  }
+
   return (
-    <div id={`${name}-cell`} className={`w-full workflow-cell flex ${isCellAdded && 'animate-appear'}`}>
+    <div id={`${name}-cell`} className={`w-full workflow-cell flex ${isCellAdded && 'animate-appear'}`} onClick={onClick}>
       <div className='flex-grow min-w-0'>
         <ScrollAnchor id={name} />
-        <div className='group'>
-          {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-          {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
-          !clearedCells[index] &&
-          <Output data={run?.output} status={run?.status} wasEdited={editedCells[index]} />}
-        </div>
+          <div
+            className={classNames(`border rounded-lg ${active && borderStyles}`, {
+              'border-transparent': !active
+            })}
+            style={{
+              borderRadius: '0.58rem'
+            }}
+          >
+            {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift*/}
+            <div
+              className={classNames(`rounded-lg overflow-hidden flex-grow border box-content ${borderStyles}`, {
+                'border-transparent hover:border-qrigray-200': !active && (noColorStatus)
+              })}
+            >
+              {(collapseState === 'all' || collapseState === 'only-editor') && editor}
+              {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
+              !clearedCells[index] &&
+              <Output data={run?.output} status={run?.status} wasEdited={editedCells[index]} />}
+            </div>
+          </div>
         <div
           onClick={() => onRowAdd(index, 'starlark')}
           className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'
@@ -79,7 +121,12 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
           <button className='text-xs border-none flex-shrink-0 bg-white rounded py-1 pr-2 pl-1 font-semibold '>+ Code</button>
         </div>
       </div>
-      <WorkflowCellControls index={index} sessionId={run ? run.id : ''} setAnimatedCell={setAnimatedCell} />
+      <WorkflowCellControls
+        index={index}
+        sessionId={run ? run.id : ''}
+        setAnimatedCell={setAnimatedCell}
+        hide={!active}
+      />
     </div>
   )
 }
