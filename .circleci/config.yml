@@ -151,19 +151,34 @@ jobs:
           image: gcr.io/qri-io/qrimatic-fe
           tag: $CIRCLE_SHA1
 
+  frontend-dev-deploy:
+    machine: true
+    steps:
+      - checkout
+      - gcp-gke/install
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: qri-cloud-dev-cluster
+          install-kubectl: true
+          perform-login: true
+      - gcp-gke/rollout-image:
+          namespace: qrimatic
+          cluster: qri-cloud-dev-cluster
+          deployment: qm-test-qrimatic-fe
+          container: qrimatic-fe
+          image: gcr.io/qri-io/qrimatic-fe
+          tag: $CIRCLE_SHA1
+
 workflows:
   frontend:
     jobs:
       - frontend-test
-      - frontend-test-e2e
-      - frontend-image-push:
-          # requires:
-          #   - frontend-test
-          #   - frontend-test-e2e
-          filters:
-            branches:
-              only:
-                - master
+      - frontend-image-push
+      - frontend-dev-deploy:
+          requires:
+            - frontend-image-push
+      - frontend-test-e2e:
+          requires:
+            - frontend-dev-deploy
       - frontend-prod-deploy:
           requires:
             - frontend-image-push
