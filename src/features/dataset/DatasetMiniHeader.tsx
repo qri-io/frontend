@@ -2,8 +2,11 @@ import React from 'react'
 import classNames from 'classnames'
 
 import Link from '../../chrome/Link'
-import { Dataset, qriRefFromDataset } from '../../qri/dataset'
+import { Dataset } from '../../qri/dataset'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
+import { useSelector } from "react-redux";
+import { selectDatasetHeader } from "./state/datasetState";
+import { qriRefFromVersionInfo } from "../../qri/versionInfo";
 
 export interface DatasetMiniHeaderProps {
   dataset: Dataset
@@ -20,7 +23,9 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
   show,
   children
 }) => {
-  const qriRef = qriRefFromDataset(dataset)
+  const header = useSelector(selectDatasetHeader)
+  const qriRef = qriRefFromVersionInfo(header)
+
   return (
     <div className={classNames('sticky bg-white border border-qrigray-200 z-30', {
       'invisible -top-16 h-0': !show,
@@ -33,7 +38,7 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
         <div className='flex-grow'>
           { qriRef.username && (
             <div className='text-xs text-gray-400 font-mono'>
-              <Link to={`/${dataset.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{dataset.username || 'new'}</Link>/{dataset.name}
+              <Link to={`/${qriRef.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</Link>/{qriRef.name}
             </div>
           )}
           <div className='text-normal text-black font-semibold'>
