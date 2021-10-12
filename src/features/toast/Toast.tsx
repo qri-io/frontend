@@ -28,7 +28,7 @@ const Toast: React.FC<ToastProps> = ({ message, initID, type }) => {
           'text-qrigreen': type === 'succeeded',
           'text-dangerred': type === 'failed',
         })}>{message}</div>
-        <Link to={'/ds/'+ref}
+        <Link to={`/${ref}`}
               className='text-qrinavy w-56 whitespace-nowrap overflow-hidden block text-sm overflow-ellipsis'>
           {ref}
         </Link>

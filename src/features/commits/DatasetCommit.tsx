@@ -1,11 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 
 import { LogItem } from '../../qri/log'
-import { newQriRef } from '../../qri/ref'
+import { newQriRef, refParamsFromLocation } from '../../qri/ref'
 import { NewDataset } from '../../qri/dataset'
-import { pathToDatasetViewer } from '../dataset/state/datasetPaths'
+import { pathToDatasetHistory } from '../dataset/state/datasetPaths'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 
 export interface DatasetCommitProps {
@@ -19,6 +19,7 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
   active = false,
   isLink = true
 }) => {
+  const location = useLocation()
   // create a Dataset to pass into DatasetCommitInfo
   const dataset = NewDataset({
     username: logItem.username,
@@ -39,7 +40,7 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
     return (
       <Link
         className={containerClassNames}
-        to={pathToDatasetViewer(newQriRef(logItem))}
+        to={pathToDatasetHistory(newQriRef(refParamsFromLocation(logItem, location)))}
         style={{ fontSize: 11 }}
       >
         {content}

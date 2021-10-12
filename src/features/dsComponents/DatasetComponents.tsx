@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
-import { push } from 'connected-react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
+import { useLocation } from 'react-router-dom'
 
 import { ComponentName } from '../../qri/dataset'
-import { newQriRef } from '../../qri/ref'
-import { pathToDatasetViewer } from '../dataset/state/datasetPaths'
+import { newQriRef, refParamsFromLocation } from '../../qri/ref'
 import { selectDataset, selectIsDatasetLoading } from '../dataset/state/datasetState'
 import DatasetCommitList from '../commits/DatasetCommitList'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
@@ -15,15 +14,10 @@ import { loadDataset } from '../dataset/state/datasetActions'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 
 const DatasetComponents: React.FC<{}> = () => {
-  const qriRef = newQriRef(useParams())
+  const qriRef = newQriRef(refParamsFromLocation(useParams(), useLocation()))
   const dispatch = useDispatch()
   const dataset = useSelector(selectDataset)
   const loading = useSelector(selectIsDatasetLoading)
-
-  const setSelectedComponent = (component: ComponentName) => {
-    const dest = newQriRef(Object.assign({}, qriRef, { component }))
-    dispatch(push(pathToDatasetViewer(dest)))
-  }
 
   useEffect(() => {
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
@@ -43,7 +37,6 @@ const DatasetComponents: React.FC<{}> = () => {
             dataset={dataset}
             loading={loading}
             selectedComponent={qriRef.component as ComponentName || 'body'}
-            setSelectedComponent={setSelectedComponent}
           />
         </div>
       </div>

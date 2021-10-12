@@ -58,7 +58,7 @@ test('happy path', async () => {
   await page.waitForSelector("#new-dataset-button")
 
   await page.click('#new-dataset-button')
-  expect(page.url()).toContain('/ds/new')
+  expect(page.url()).toContain('/new')
 
   await page.click('#CSVDownload')
   await page.waitForSelector('#workflow')
@@ -95,7 +95,7 @@ test('happy path', async () => {
   await page.keyboard.type('\nbadcode',{delay: 20})
   await page.click('#dry-run')
   await page.waitForSelector('#failed')
-  
+
   const downloadOutput = await page.$('#download-cell .output')
     .then(async el => {
       return await page.evaluate((el: HTMLElement) => {
@@ -112,7 +112,7 @@ test('happy path', async () => {
   await page.click('#dry-run')
   await page.waitForSelector('#succeeded')
   await page.waitForSelector('#dataset-preview')
-  
+
   // TODO (ramfox): when we get this functionality up and running, we can comment
   // these tests back in
   // await page.click('#select-schedule')
@@ -151,7 +151,7 @@ test('happy path', async () => {
   // await workflowItemEl.click()
   // await page.waitForSelector('#setup-cell')
   // await page.click('#setup-cell .monaco-editor')
-  // await page.keyboard.type('badcode',{delay: 20}) 
+  // await page.keyboard.type('badcode',{delay: 20})
   // await page.click('#run-and-save')
   // await page.click('#menu')
   // await page.click('#back-to-collection')

@@ -40,7 +40,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
         const { username, name } = row
         return (
           <div className='hover:text-qrilightblue hover:underline'>
-            <Link to={`/ds/${username}/${name}`}>{username}/{name}</Link>
+            <Link to={`/${username}/${name}`}>{username}/{name}</Link>
           </div>
         )
       }

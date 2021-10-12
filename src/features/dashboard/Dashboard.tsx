@@ -30,7 +30,7 @@ const Dashboard: React.FC<any> = () => {
         <header className='mb-8 flex'>
           <h1 className='text-2xl font-extrabold w-1/2'>Dashboard</h1>
           <div className='w-1/2 text-right'>
-          <Link to='/ds/new'>
+          <Link to='/new'>
             <Button>
               <Icon icon='plusCircle' className='mr-2' size='md'/> New Dataset
             </Button>

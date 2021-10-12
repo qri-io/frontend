@@ -52,8 +52,7 @@ export default function Routes () {
           </DatasetWrapper>
         </Route>
 
-        <Route path='/ds/new'><TemplateList /></Route>
-        <Route path='/ds/:username/:name'><DatasetRoutes /></Route>
+        <Route path='/new'><TemplateList /></Route>
 
         <Route path='/run'><Run /></Route>
         <Route path='/changes'><ChangeReport /></Route>
@@ -66,6 +65,7 @@ export default function Routes () {
         <Route path='/:username' exact><UserProfile /></Route>
         <Route path='/:username/following'><UserProfile path='/following' /></Route>
 
+        <Route path='/:username/:name'><DatasetRoutes /></Route>
 
         <Route path='/'>
           {

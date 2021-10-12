@@ -53,7 +53,6 @@ export const componentsInfo:ComponentInfo[] = [
 export interface ComponentListProps {
   // qriRef: QriRef
   dataset: Dataset
-  onClick?: (component: ComponentName) => void
   // components?: SelectedComponent[]
   // status: Status
   selectedComponent?: ComponentName
@@ -65,7 +64,6 @@ export interface ComponentListProps {
 
 const ComponentList: React.FC<ComponentListProps> = ({
   dataset,
-  onClick,
   // qriRef,
   // status,
   // components = [],
@@ -79,7 +77,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
     return (
     <div className={classNames('flex w-full', { 'border-b-2': border })}>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
-          if (allowClickMissing || componentNames.includes(name)) {
+          if (allowClickMissing || componentNames.includes(name) || ( name==='body' && dataset.bodyPath )) {
             var fileStatus: ComponentStatus = 'unmodified'
             // if (status[name]) {
             //   fileStatus = status[name].status
@@ -94,7 +92,6 @@ const ComponentList: React.FC<ComponentListProps> = ({
                 status={fileStatus}
                 selected={selectedComponent === name}
                 tooltip={tooltip}
-                onClick={onClick}
                 border={border}
               />
             )
