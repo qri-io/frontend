@@ -206,6 +206,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
             <DropdownMenu
               icon={<Icon icon='more' />}
               dropUp={isLastRow}
+              oneItem={filteredWorkflows.length === 1}
               items={[
                 // {
                 //   label: 'Rename...',
