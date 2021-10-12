@@ -82,7 +82,7 @@ test.describe.serial('Golden path', () => {
   });
 
   test('History update check', async () => {
-    await page.goto(APP_URL + `ds/${USERNAME}/${workflowRandomName}/body`);
+    await page.goto(APP_URL + `/ds/${USERNAME}/${workflowRandomName}/body`);
     const versionInfoText = await page.locator('.commit_summary_header_container .dataset_commit_info_text');
     await expect(versionInfoText).toHaveText('created dataset')
     const versionSelector = await page.locator('#dataset_commit_list_versions_text');
@@ -90,7 +90,7 @@ test.describe.serial('Golden path', () => {
   });
 
   test('Checking if trigger is fine on workflow', async () => {
-    await page.goto(APP_URL + `ds/${USERNAME}/${workflowRandomName}/workflow`);
+    await page.goto(APP_URL + `/ds/${USERNAME}/${workflowRandomName}/workflow`);
     const selector = await page.locator('#cron_trigger_interval_text');
     await expect(selector).toContainText('Every day');
   });
@@ -112,7 +112,7 @@ test.describe.serial('Golden path', () => {
   });
 
   test('History second version update check', async () => {
-    await page.goto(APP_URL + `ds/${USERNAME}/${workflowRandomName}/body`);
+    await page.goto(APP_URL + `/ds/${USERNAME}/${workflowRandomName}/body`);
     const versionSelector = await page.locator('#dataset_commit_list_versions_text');
     const versionInfoText = await page.locator('.commit_summary_header_container .dataset_commit_info_text');
     await expect(versionSelector).toHaveText('2 versions');
