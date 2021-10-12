@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 
-const APP_URL = process.env.TEST_E2E_APP_URL || 'http://localhost:3000/';
+const APP_URL = process.env.TEST_E2E_APP_URL || 'http://localhost:3000';
 const USERNAME = process.env.TEST_E2E_USERNAME || '';
 const USER_PASSWORD = process.env.TEST_E2E_PASSWORD || '';
 
