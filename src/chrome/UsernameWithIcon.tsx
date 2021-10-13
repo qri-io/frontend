@@ -6,6 +6,7 @@ interface UsernameWithIconProps {
   className?: string
   iconWidth?: number
   iconOnly?: boolean
+  tooltip?: boolean
 }
 
 // TODO(chriswhong): make the prop a user object, or pass in icon URL as a separate prop
@@ -13,14 +14,15 @@ const UsernameWithIcon: React.FunctionComponent<UsernameWithIconProps> = ({
   username,
   className,
   iconWidth = 18,
-  iconOnly = false
+  iconOnly = false,
+  tooltip = false
 }) => (
    <div className={classNames('flex items-center tracking-wider', className)}>
-     <div className='rounded-xl inline-block bg-cover flex-shrink-0' style={{
+     <div className='rounded-xl inline-block bg-cover flex-shrink-0' title={tooltip ? username : ''} style={{
        height: iconWidth,
        width: iconWidth,
        backgroundImage: 'url(https://qri-user-images.storage.googleapis.com/1570029763701.png)'
-     }}></div>
+     }}/>
      {!iconOnly &&  <p className='ml-1.5 truncate'>{username}</p>}
    </div>
 )
