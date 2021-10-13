@@ -46,12 +46,14 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   return (
     <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} />}>
-      <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white relative'>
-        <ActivityList
-          log={logs}
-          showDatasetName={false}
-          containerHeight={tableContainerHeight}
-        />
+      <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
+        <div className='rounded-none'>
+          <ActivityList
+            log={logs}
+            showDatasetName={false}
+            containerHeight={tableContainerHeight}
+          />
+        </div>
       </div>
     </DatasetFixedLayout>
   )

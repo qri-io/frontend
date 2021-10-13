@@ -32,15 +32,17 @@ const Collection: React.FC<{}> = () => {
   const collection = searchString ? filterVersionInfos(fullCollection, searchString) : fullCollection
 
   let resultsContent = (
-    <CollectionTable
-      filteredWorkflows={collection}
-      // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
-      // to its internal the selections
-      clearSelectedTrigger={false}
-      onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
-      containerHeight={tableContainerHeight}
-      searchString={searchString}
-    />
+    <div className='rounded-none'>
+      <CollectionTable
+        filteredWorkflows={collection}
+        // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
+        // to its internal the selections
+        clearSelectedTrigger={false}
+        onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
+        containerHeight={tableContainerHeight}
+        searchString={searchString}
+      />
+    </div>
   )
 
   // if loading, show a spinner
@@ -92,7 +94,7 @@ const Collection: React.FC<{}> = () => {
               <NewDatasetButton id='new_dataset_button' />
             </div>
           </header>
-          <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow'>
+          <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
             {resultsContent}
           </div>
         </div>
