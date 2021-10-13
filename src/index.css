@@ -1138,6 +1138,10 @@ code {
   @apply rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-100 p-4 !important;
 }
 
+.workflow-cell:hover .workflow-cell-hover\:opacity-100 {
+  opacity: 1;
+}
+
 /* override react-responsive-carousel control dot styles */
 .carousel .control-dots .dot {
   @apply bg-qrigray-400 shadow-none !important;

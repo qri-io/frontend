@@ -9,6 +9,8 @@ import RunStatusIcon from '../run/RunStatusIcon'
 import DeployStatusIndicator from '../deploy/DeployStatusIndicator'
 import WorkflowScriptStatus from './WorkflowScriptStatus'
 import WorkflowCellsStatus from "./WorkflowCellsStatus";
+import { useSelector } from "react-redux";
+import { selectEditedCells } from "./state/workflowState";
 
 export interface WorkflowOutlineProps {
   workflow?: Workflow
@@ -21,6 +23,8 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
   run,
   dataset
 }) => {
+  const areCellsEdited = useSelector(selectEditedCells)
+
   const [showing, setShowing] = useState(true)
   if (!showing) {
     return (
@@ -44,7 +48,9 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <div className='mb-2'>
             <ScrollTrigger target='script'>
               <div className='font-bold text-black mb-2' style={{ fontSize: 13 }}>
-                Script {run && <div className='float-right'><RunStatusIcon status={run.status} /></div>}
+                Script {run && <div className='float-right'>
+                <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : run.status} />
+                </div>}
               </div>
             </ScrollTrigger>
           </div>

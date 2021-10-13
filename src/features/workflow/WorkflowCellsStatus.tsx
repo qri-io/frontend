@@ -4,6 +4,8 @@ import { NewRunStep, Run } from "../../qri/run";
 import Dataset, { TransformStep } from "../../qri/dataset";
 import Icon from "../../chrome/Icon";
 import RunStatusIcon from "../run/RunStatusIcon";
+import { useSelector } from "react-redux";
+import { selectEditedCells } from "./state/workflowState";
 
 interface WorkflowCellsStatusProps {
   run?: Run
@@ -14,6 +16,7 @@ const WorkflowCellsStatus: React.FC<WorkflowCellsStatusProps> = ({
  run,
  dataset
 }) => {
+  const editedCells = useSelector(selectEditedCells)
 
   return (
     <div className='mb-1'>
@@ -27,7 +30,7 @@ const WorkflowCellsStatus: React.FC<WorkflowCellsStatusProps> = ({
             <div className='bg-white rounded-md px-2 w-20 h-6 flex items-center'>
               <Icon size='2xs' icon='code'/>
             </div>
-            {r && r.status && <RunStatusIcon status={r.status} />}
+            {r && r.status && <RunStatusIcon status={!editedCells[i] ? r.status : 'waiting'} />}
           </div>
         )
       })}

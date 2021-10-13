@@ -11,12 +11,15 @@ import { RunStatus } from '../../../qri/run'
 export interface OutputProps {
   data?: EventLogLine[]
   status?: RunStatus
+  wasEdited: boolean
 }
 
-const Output: React.FC<OutputProps> = ({ data, status }) => {
+const Output: React.FC<OutputProps> = ({ data, status, wasEdited }) => {
   let borderColorClass = 'border-qrigreen'
 
-  if (status === 'failed') {
+  if (wasEdited) {
+    borderColorClass = 'group-hover:border-qritile'
+  } else if (status === 'failed') {
     borderColorClass = 'border-dangerred'
   } else if(status === 'running') {
     borderColorClass = 'border-qrinavy-700'
@@ -24,15 +27,15 @@ const Output: React.FC<OutputProps> = ({ data, status }) => {
 
   return (
     <div className='relative'>
-      <div className='rounded-xl absolute bg-white inline-block flex items-center justify-center' style={{
+      {!wasEdited && <div className='rounded-xl absolute bg-white inline-block flex items-center justify-center' style={{
         top: -8,
         left: 10,
         height: 18,
         width: 18
       }}>
         <RunStatusIcon status={status} size='2xs' />
-      </div>
-      <div className={classNames('max-h-96 overflow-auto output font-mono px-5 py-4 rounded-sm overflow-x-hidden border-2 rounded-b-md bg-white', borderColorClass)}>
+      </div>}
+      <div className={classNames('max-h-96 overflow-auto output font-mono px-5 py-4 rounded-sm overflow-x-hidden border-t rounded-b-md bg-white', borderColorClass)}>
         {data && data.map((line, i) => {
           switch (line.type) {
             case EventLogLineType.ETPrint:

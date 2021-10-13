@@ -39,6 +39,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   const latestDryRunId = useSelector(selectLatestDryRunId)
   const latestRunId = useSelector(selectLatestRunId)
 
+  const [activeCell, setActiveCell] = useState<number>(-1)
   const [addedCell, setAddedCell] = useState<number>(-1)
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
   const collapseState = (stepName: string, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
@@ -138,6 +139,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 }
                 return (
                   <WorkflowCell
+                    active={activeCell === i}
                     disabled={run?.status === 'running'}
                     key={step.category}
                     index={i}
@@ -158,6 +160,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                         dispatch(changeWorkflowTransformStep(i, script))
                       }
                     }}
+                    onClick={() => { setActiveCell(i) }}
                   />
                 )
               })}
