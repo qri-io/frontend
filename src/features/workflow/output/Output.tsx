@@ -32,7 +32,7 @@ const Output: React.FC<OutputProps> = ({ data, status }) => {
       }}>
         <RunStatusIcon status={status} size='2xs' />
       </div>
-      <div className={classNames('output font-mono px-5 py-4 rounded-sm overflow-x-hidden border-2 rounded-b-md bg-white', borderColorClass)}>
+      <div className={classNames('max-h-96 overflow-auto output font-mono px-5 py-4 rounded-sm overflow-x-hidden border-2 rounded-b-md bg-white', borderColorClass)}>
         {data && data.map((line, i) => {
           switch (line.type) {
             case EventLogLineType.ETPrint:
