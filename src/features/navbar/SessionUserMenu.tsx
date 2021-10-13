@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import DropdownMenu from '../../chrome/DropdownMenu'
+import DropdownMenu, { Divider } from '../../chrome/DropdownMenu'
 import { AnonUser, selectSessionUser } from '../session/state/sessionState'
 import { logOut } from '../session/state/sessionActions'
 import { showModal } from '../app/state/appActions'
@@ -32,18 +32,38 @@ const SessionUserMenu: React.FC<{}> = () => {
     )
   }
 
-  const icon = <div
-    className='rounded-2xl inline-block bg-cover flex-shrink-0'
-    style={{
-      height: '30px',
-      width: '30px',
-      backgroundImage: `url(${user.profile})`
-    }}></div>
+  const userIcon = (
+    <div
+      className='rounded-2xl inline-block bg-cover flex-shrink-0'
+      style={{
+        height: '30px',
+        width: '30px',
+        backgroundImage: `url(${user.profile})`
+      }}
+    />
+  )
 
   return (
     <div className="relative flex items-center font-medium">
       <Link to='https://qri.io/docs' className='text-xs font-semibold' colorClassName='text-black hover:text-qripink'>Help</Link>
-      <DropdownMenu icon={icon} className='ml-8' items={[
+      <DropdownMenu icon={userIcon} className='ml-8' items={[
+        {
+          element: (
+            <div className='flex'>
+              <div className='mr-2'>
+                {userIcon}
+              </div>
+              <div>
+                <div className='font-semibold text-xs'>{user.username}</div>
+                <div className='text-qrigray-400 font-light' style={{ fontSize: 10 }}>{user.email}</div>
+              </div>
+
+            </div>
+          ),
+        },
+        {
+          element: <Divider />,
+        },
         {
           label: 'Profile',
           to: `/${user.username}`

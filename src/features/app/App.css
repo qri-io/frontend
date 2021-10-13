@@ -68,3 +68,11 @@
   padding: 3px;
   box-sizing: border-box;
 }
+
+/* add gray border to  react-data-table-component last row */
+.rdt_TableRow:last-child {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(0,0,0,.12);
+  margin-bottom: 20px;
+}

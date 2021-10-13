@@ -267,7 +267,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       highlightOnHover
       pointerOnHover
       fixedHeader
-      fixedHeaderScrollHeight={`${String(containerHeight - 68)}px`}
+      fixedHeaderScrollHeight={`${String(containerHeight)}px`}
       noHeader
       // selectableRows
       // selectableRowsComponent={forwardRef((props, ref) => (

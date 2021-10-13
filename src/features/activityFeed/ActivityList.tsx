@@ -96,7 +96,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       data={log}
       customStyles={customStyles}
       fixedHeader
-      fixedHeaderScrollHeight={`${String(containerHeight - 68)}px`}
+      fixedHeaderScrollHeight={`${String(containerHeight)}px`}
       noHeader
       style={{
         background: 'blue'

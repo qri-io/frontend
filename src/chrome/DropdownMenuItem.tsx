@@ -4,16 +4,18 @@ import classNames from 'classnames'
 import Icon from './Icon'
 import Link from './Link'
 
-export const dropdownBaseClass = 'text-left text-xs px-2 py-0.5 mx-2 my-1 whitespace-nowrap rounded-md'
+export const dropdownBaseClass = 'text-left text-xs my-0.5 px-2 py-1 whitespace-nowrap rounded-sm font-light last:mb-0'
 
 export interface DropdownMenuItemProps {
   active?: boolean
   // label is the text that will be displayed to the user
-  label: string
+  label?: string
   // disabled will show the item, but it will not be clickable
   disabled?: boolean
   // icon: options are found in the `Icon` component
   icon?: string
+  // element: pass in any react element instead of a label and or icon
+  element?: React.ReactElement
   // if onClick exists in a DropDownMenuItem, clicking the item will not trigger onChange,
   // and will execute the onClick function
   onClick?: () => void
@@ -26,6 +28,7 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   active = false,
   disabled = false,
   icon,
+  element,
   onClick,
   to,
 }) => {
@@ -36,18 +39,41 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
 
   const colorClassName = 'text-qrigray-400'
 
-  return (
-    <Link
-      to={to}
-      onClick={onClick}
-      className={containerClassName}
-      colorClassName={colorClassName}
-    >
-      <div className={classNames({'text-qripink font-semibold': active })}>
-        {icon && <Icon icon={icon} className='mr-2' size='sm' />}{label}
-      </div>
-    </Link>
+  let dropdownMenuItemContent = (
+    <div className={classNames({'text-qripink': active })}>
+      {icon && <Icon icon={icon} className='mr-2' size='sm' />}{label}
+    </div>
   )
+
+  if (element) {
+    dropdownMenuItemContent = element
+  }
+
+  if (to || onClick) {
+    return (
+      <Link
+        to={to}
+        onClick={onClick}
+        className={containerClassName}
+        colorClassName={colorClassName}
+      >
+        {dropdownMenuItemContent}
+      </Link>
+    )
+  } else if (element) {
+    return (
+      <>
+        {dropdownMenuItemContent}
+      </>
+    )
+  } else {
+    return (
+      <div className={dropdownBaseClass}>
+        {dropdownMenuItemContent}
+      </div>
+    )
+  }
+
 }
 
 export default DropdownMenuItem
