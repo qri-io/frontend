@@ -107,7 +107,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
               <ComponentHeader>
                 {componentHeader}
               </ComponentHeader>
-              <div className='overflow-auto flex-grow'>
+              <div style={{maxHeight: 'calc(100% - 92px)'}} className='overflow-auto flex-grow'>
                 {component}
               </div>
             </ContentBox>
