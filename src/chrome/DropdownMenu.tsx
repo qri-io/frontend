@@ -13,6 +13,9 @@ interface DropdownMenuProps {
   oneItem?: boolean
 }
 
+// pass this as an item's element property to make a divider
+export const Divider = () => (<hr className='mb-2'/>)
+
 // DropdownMenu shows menu when a given "icon" prop is clicked. the element to
 // be clicked must be passed in as the "icon" prop. pass contents of the menu as
 // children
@@ -62,7 +65,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         aria-labelledby="options-menu"
         style={oneItem ? { minWidth: '9rem', top: -8, right: 30 } : { minWidth: '9rem' }}
       >
-        <div className="py-1 flex flex-col" onClick={ () => setOpen(false) }>
+        <div className="p-2.5 flex flex-col" onClick={ () => setOpen(false) }>
           {items.map((props, i) => <DropdownMenuItem key={i} {...props} />)}
         </div>
       </div>

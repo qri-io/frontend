@@ -32,7 +32,7 @@ const Collection: React.FC<{}> = () => {
   const collection = searchString ? filterVersionInfos(fullCollection, searchString) : fullCollection
 
   let resultsContent = (
-    <div className='rounded-none'>
+    <div className='rounded-none h-full'>
       <CollectionTable
         filteredWorkflows={collection}
         // When the clearSelectedTrigger changes value, it triggers the ReactDataTable

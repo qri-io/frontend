@@ -30,14 +30,8 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
 
   useEffect(() => {
-    dispatch(loadDatasetLogs(qriRef))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-
-  useEffect(() => {
-    dispatch(loadDatasetLogs(qriRef))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[latestRun?.status])
+    dispatch(loadDatasetLogs({username: qriRef.username, name: qriRef.name}))
+  },[dispatch, qriRef.username, qriRef.name, latestRun?.status])
 
   const handleRunNowClick = () => {
     dispatch(runNow(qriRef))
@@ -47,7 +41,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   return (
     <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} />}>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
-        <div className='rounded-none'>
+        <div className='rounded-none h-full'>
           <ActivityList
             log={logs}
             showDatasetName={false}

@@ -20,6 +20,7 @@ export interface User {
   profile?: string
   username: string
   description?: string
+  email?: string
 }
 
 export interface SessionState {
@@ -65,6 +66,7 @@ const loginOrSignupSuccess = (state: SessionState, action: Action) => {
     profile,
     username,
     description,
+    email
   } = action.user
 
   state.user = {
@@ -72,6 +74,7 @@ const loginOrSignupSuccess = (state: SessionState, action: Action) => {
     profile,
     username,
     description,
+    email
   }
   state.loading = false
 
