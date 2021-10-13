@@ -31,7 +31,8 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   useEffect(() => {
     dispatch(loadDatasetLogs(qriRef))
-  },[dispatch, qriRef])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   useEffect(() => {
     dispatch(loadDatasetLogs(qriRef))
