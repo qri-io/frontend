@@ -73,6 +73,28 @@ export function newQriRef(d: Record<string,any>): QriRef {
   }
 }
 
+// TODO(b5): this function should be applied to the selector field of QriRef
+export function selectorFromLocationHash(location: Record<string,any>): string {
+  if (location?.hash) {
+    const hashValue = location.hash.split('#')[1]
+    // only set component if it's a valid qri component name
+    if (['body', 'meta', 'structure', 'readme', 'transform'].includes(hashValue)) {
+      return hashValue
+    }
+  }
+  return 'body'
+}
+
+// parses the selected component from the location hash and appends it to params
+// params can be any object that would normally be passed to newQriRef
+// location is the result of useLocation
+export function refParamsFromLocation(params: Record<string,any>, location: Record<string,any>): Record<string,any> {
+  return {
+    ...params,
+    component: selectorFromLocationHash(location)
+  }
+}
+
 // // qriRefFromRoute parses route props into a Ref
 // export function qriRefFromRoute (p: RouteComponentProps): QriRef {
 //   const selectedComponent = selectedComponentFromLocation(p.location.pathname)

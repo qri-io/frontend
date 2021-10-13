@@ -11,7 +11,7 @@ import Icon from '../../chrome/Icon'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import DropdownMenu from '../../chrome/DropdownMenu'
-import { pathToDatasetPreview } from '../dataset/state/datasetPaths'
+import { pathToDatasetHeadPreview } from '../dataset/state/datasetPaths'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { VersionInfo } from '../../qri/versionInfo'
 import ManualTriggerButton from '../workflow/ManualTriggerButton'
@@ -116,7 +116,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
           </div>
           <div className='truncate'>
             <div className='mb-1'>
-              <Link to={pathToDatasetPreview(row)}>
+              <Link to={pathToDatasetHeadPreview(row, { ignorePath: true })}>
                 <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-medium text-black ' />
               </Link>
             </div>

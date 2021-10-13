@@ -41,8 +41,8 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading=fa
 
       itemContent = (
         <>
-          <Link to={`/ds/${humanRef}`}><div className='text-sm text-gray-400 relative flex items-baseline group hover:text mb-2 font-mono hover:underline'>{humanRef}</div></Link>
-          <Link to={`/ds/${humanRef}`}><div className='text-xl text-black-500 font-medium hover:text hover:underline mb-1'>{title}</div></Link>
+          <Link to={`/${humanRef}`}><div className='text-sm text-gray-400 relative flex items-baseline group hover:text mb-2 font-mono hover:underline'>{humanRef}</div></Link>
+          <Link to={`/${humanRef}`}><div className='text-xl text-black-500 font-medium hover:text hover:underline mb-1'>{title}</div></Link>
           <div className='text-sm text-qrigray hover:text line-clamp-3 mb-2'>{meta?.description || 'No Description'}</div>
           <div className='flex items-center flex-wrap'>
             <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={timestamp} />} />

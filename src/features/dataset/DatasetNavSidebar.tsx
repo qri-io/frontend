@@ -10,10 +10,10 @@ import NewDatasetButton from '../../chrome/NewDatasetButton'
 import Icon from '../../chrome/Icon'
 import {
   pathToWorkflowEditor,
-  pathToDatasetViewer,
+  pathToDatasetHistory,
   pathToDatasetIssues,
   pathToDatasetPreview,
-  pathToActivityFeed,
+  pathToDatasetRuns,
 } from './state/datasetPaths'
 
 import { selectNavExpanded } from '../app/state/appState'
@@ -91,7 +91,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           id='components'
           icon='history'
           label='History'
-          to={pathToDatasetViewer(qriRef)}
+          to={pathToDatasetHistory(qriRef)}
           expanded={expanded}
           number={versionCount}
           tooltip={
@@ -119,7 +119,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           id='activity-feed'
           icon='clock'
           label='Run Log'
-          to={pathToActivityFeed(qriRef.username, qriRef.name)}
+          to={pathToDatasetRuns(qriRef.username, qriRef.name)}
           expanded={expanded}
           number={logCount}
           tooltip={

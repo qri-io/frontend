@@ -15,7 +15,7 @@ import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 
 interface DatasetWrapperProps {
-  fetchData: boolean
+  fetchData?: boolean
 }
 
 const DatasetWrapper: React.FC<DatasetWrapperProps> = ({

@@ -57,7 +57,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
       dispatch(showModal(ModalType.workflowSplash))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location])
+  }, [])
 
   const handleBlockedNavigation = (nextLocation: Location) => {
     if (redirectTo) { return true }

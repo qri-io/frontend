@@ -9,7 +9,6 @@ import Spinner from '../../chrome/Spinner'
 export interface TabbedComponentViewerProps {
   dataset: Dataset
   selectedComponent?: ComponentName
-  setSelectedComponent?: (name: ComponentName) => void
   loading?: boolean
   // border is used to display TabbedComponentViewer over a white background e.g. on the workflow editor
   border?: boolean
@@ -21,7 +20,6 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   dataset: ds,
   loading,
   selectedComponent,
-  setSelectedComponent,
   border = false,
   preview = false,
   children
@@ -44,7 +42,6 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
     <div className={'flex flex-col w-full mt-1 pt-4 h-full min-h-0'}>
       <ComponentList
         dataset={dataset}
-        onClick={setSelectedComponent}
         selectedComponent={selectedComponent}
         border={border}
       />

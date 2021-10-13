@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useLocation } from 'react-router-dom'
 
-import { Dataset, ComponentName, NewDataset } from  '../../qri/dataset'
+import { Dataset, NewDataset } from  '../../qri/dataset'
+import { selectorFromLocationHash } from '../../qri/ref'
 import TabbedComponentViewer from '../dsComponents/TabbedComponentViewer'
 
 export interface WorkflowDatasetPreviewProps {
@@ -11,7 +13,7 @@ const WorkflowDatasetPreview: React.FC<WorkflowDatasetPreviewProps> = ({
   dataset
 }) => {
 
-  const [ selectedComponent, setSelectedComponent ] = useState<ComponentName>('body')
+  const selectedComponent = selectorFromLocationHash(useLocation())
 
   return (
     <div style={{ height: '65vh' }}>
@@ -20,7 +22,6 @@ const WorkflowDatasetPreview: React.FC<WorkflowDatasetPreviewProps> = ({
           dataset={dataset}
           loading={false}
           selectedComponent={selectedComponent}
-          setSelectedComponent={(component: ComponentName) => { setSelectedComponent(component) }}
           preview
         />
       ) : (

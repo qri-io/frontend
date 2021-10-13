@@ -18,7 +18,7 @@ const Splash: React.FC<{}> = () => (
             Qrimatic binds code to data, so you can keep your data fresh.  Just write a script to move and munge your data, set a schedule, and we'll take care of the rest.
           </p>
           <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
-            <Link to="/ds/new">
+            <Link to="/new">
               <Button size='lg'>
                 Try Qri now <Icon className='ml-3' icon='caretRight' />
               </Button>

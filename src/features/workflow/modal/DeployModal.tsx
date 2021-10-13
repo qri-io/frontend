@@ -71,7 +71,7 @@ const DeployModal: React.FC = () => {
       dispatch(setModalLocked(false))
       // navigate to the new dataset's workflow!
       history.push({
-        pathname: `/ds/${qriRef.username}/${qriRef.name}/workflow`,
+        pathname: `/${qriRef.username}/${qriRef.name}/workflow`,
       })
     }
 
