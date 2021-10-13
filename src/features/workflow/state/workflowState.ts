@@ -50,11 +50,11 @@ export const selectLatestRunId = (state: RootState): string => {
 }
 
 export const selectEditedCells = (state: RootState): boolean[] => {
-  return state.workflow.areCellsEdited
+  return state.workflow.editedCells
 }
 
 export const selectClearedCells = (state: RootState): boolean[] => {
-  return state.workflow.areCellsOutputCleared
+  return state.workflow.clearedOutputCells
 }
 
 export const selectWorkflow = (state: RootState): Workflow => state.workflow.workflow
@@ -87,10 +87,10 @@ export interface WorkflowState {
   workflowBase: WorkflowBase
   // stores a boolean value for each workflow code cell to represent if
   // cell was edited
-  areCellsEdited: boolean[]
+  editedCells: boolean[]
   // stores a boolean value for each workflow code cell to represent if
   // cell output was cleared
-  areCellsOutputCleared: boolean[]
+  clearedOutputCells: boolean[]
   isDirty: boolean
   lastDryRunID?: string
   lastRunID?: string
@@ -114,8 +114,8 @@ const initialState: WorkflowState = {
     steps: [],
     hooks: []
   },
-  areCellsEdited: [],
-  areCellsOutputCleared: [],
+  editedCells: [],
+  clearedOutputCells: [],
   isDirty: false,
   lastRunID: '',
   lastDryRunID: '',
@@ -125,8 +125,8 @@ const initialState: WorkflowState = {
 export const workflowReducer = createReducer(initialState, {
   'API_APPLY_REQUEST': (state, action) => {
     state.applyStatus = 'loading'
-    state.areCellsEdited = state.areCellsEdited.map(c => false)
-    state.areCellsOutputCleared = state.areCellsOutputCleared.map(c => false)
+    state.editedCells = state.editedCells.map(c => false)
+    state.clearedOutputCells = state.clearedOutputCells.map(c => false)
   },
   'API_APPLY_SUCCESS': (state, action) => {
     state.applyStatus = ''
@@ -137,8 +137,8 @@ export const workflowReducer = createReducer(initialState, {
     state.applyStatus = 'error'
   },
   'API_RUNNOW_REQUEST': (state, action) => {
-    state.areCellsEdited = state.areCellsEdited.map(c => false)
-    state.areCellsOutputCleared = state.areCellsOutputCleared.map(c => false)
+    state.editedCells = state.editedCells.map(c => false)
+    state.clearedOutputCells = state.clearedOutputCells.map(c => false)
   },
   'API_RUNNOW_SUCCESS': (state, action) => {
     state.lastRunID = action.payload.data
@@ -209,8 +209,8 @@ export const workflowReducer = createReducer(initialState, {
   SET_TEMPLATE: (state: WorkflowState, action: SetTemplateAction) => {
     state.dataset = action.dataset
     state.workflowBase.steps = action.dataset.transform?.steps
-    state.areCellsEdited = action.dataset.transform?.steps.map(s => false) || []
-    state.areCellsOutputCleared = action.dataset.transform?.steps.map(s => false) || []
+    state.editedCells = action.dataset.transform?.steps.map(s => false) || []
+    state.clearedOutputCells = action.dataset.transform?.steps.map(s => false) || []
     return
   },
   'RESET_WORKFLOW_STATE': (state: WorkflowState, action: SetTemplateAction) => {
@@ -243,7 +243,7 @@ function deleteWorkflowTrigger(state: WorkflowState, actions: WorkflowStepAction
 function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowStepAction) {
   if (state.dataset.transform?.steps) {
     state.dataset.transform.steps[action.index].script = action.script
-    state.areCellsEdited[action.index] = true
+    state.editedCells[action.index] = true
   }
 
   state.isDirty = calculateIsDirty(state)
@@ -255,8 +255,8 @@ function addWorkflowTransformStep(state: WorkflowState, action: AddWorkflowStepA
   if (state.dataset.transform?.steps) {
     state.dataset.transform.steps.splice(action.index+1,0,
       {script: '', category: action.syntax+'_'+new Date().valueOf(), name: action.syntax+'_'+new Date().valueOf(), syntax: action.syntax})
-    state.areCellsEdited.splice(action.index+1, 0, true)
-    state.areCellsOutputCleared.splice(action.index+1, 0, true)
+    state.editedCells.splice(action.index+1, 0, true)
+    state.clearedOutputCells.splice(action.index+1, 0, true)
   }
 
   state.isDirty = calculateIsDirty(state)
@@ -265,14 +265,14 @@ function addWorkflowTransformStep(state: WorkflowState, action: AddWorkflowStepA
 }
 
 function clearWorkflowTransformStepOutput(state: WorkflowState, actions: WorkflowStepAction) {
-  state.areCellsOutputCleared[actions.index] = true
+  state.clearedOutputCells[actions.index] = true
 }
 
 function removeWorkflowTransformStep(state: WorkflowState, action: WorkflowStepAction) {
   if (state.dataset.transform?.steps) {
     state.dataset.transform.steps.splice(action.index,1)
-    state.areCellsEdited.splice(action.index,1)
-    state.areCellsOutputCleared.splice(action.index,1)
+    state.editedCells.splice(action.index,1)
+    state.clearedOutputCells.splice(action.index,1)
   }
 
   return
@@ -284,8 +284,8 @@ function duplicateWorkflowTransformStep(state: WorkflowState, action: WorkflowSt
     duplicateStep.name = duplicateStep.syntax+'_'+new Date().valueOf()
     duplicateStep.category = duplicateStep.syntax+'_'+new Date().valueOf()
     state.dataset.transform.steps.splice(action.index+1,0, duplicateStep)
-    state.areCellsEdited.splice(action.index+1,0,true)
-    state.areCellsOutputCleared.splice(action.index+1,0,true)
+    state.editedCells.splice(action.index+1,0,true)
+    state.clearedOutputCells.splice(action.index+1,0,true)
   }
 
   return
@@ -295,10 +295,10 @@ function moveWorkflowTransformStepUp (state: WorkflowState, action: WorkflowStep
   if(state.dataset.transform?.steps && action.index > 0){
     const movedElement = state.dataset.transform.steps.splice(action.index,1)[0]
     state.dataset.transform.steps.splice(action.index-1,0,movedElement)
-    const movedEditCell = state.areCellsEdited.splice(action.index,1)[0]
-    state.areCellsEdited.splice(action.index-1,0,movedEditCell)
-    const movedClearedCell = state.areCellsOutputCleared.splice(action.index,1)[0]
-    state.areCellsOutputCleared.splice(action.index-1,0,movedClearedCell)
+    const movedEditCell = state.editedCells.splice(action.index,1)[0]
+    state.editedCells.splice(action.index-1,0,movedEditCell)
+    const movedClearedCell = state.clearedOutputCells.splice(action.index,1)[0]
+    state.clearedOutputCells.splice(action.index-1,0,movedClearedCell)
   }
   return
 }
@@ -315,10 +315,10 @@ function moveWorkflowTransformStepDown (state: WorkflowState, action: WorkflowSt
   if(state.dataset.transform?.steps && action.index < state.dataset.transform.steps.length){
     const movedElement = state.dataset.transform.steps.splice(action.index,1)[0];
     state.dataset.transform.steps.splice(action.index+1,0,movedElement)
-    const movedEditCell = state.areCellsEdited.splice(action.index,1)[0]
-    state.areCellsEdited.splice(action.index+1,0,movedEditCell)
-    const movedClearedCell = state.areCellsOutputCleared.splice(action.index,1)[0]
-    state.areCellsOutputCleared.splice(action.index+1,0,movedClearedCell)
+    const movedEditCell = state.editedCells.splice(action.index,1)[0]
+    state.editedCells.splice(action.index+1,0,movedEditCell)
+    const movedClearedCell = state.clearedOutputCells.splice(action.index,1)[0]
+    state.clearedOutputCells.splice(action.index+1,0,movedClearedCell)
   }
   return
 }

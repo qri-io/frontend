@@ -1,4 +1,6 @@
 import React from 'react'
+import { useSelector } from "react-redux";
+
 import classNames from 'classnames'
 import { RunStep } from '../../qri/run'
 import { TransformStep } from '../../qri/dataset'
@@ -7,7 +9,6 @@ import Output from './output/Output'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowHeader from './WorkflowHeader'
 import WorkflowCellControls from './WorkflowCellControls'
-import { useSelector } from "react-redux";
 import { selectClearedCells, selectEditedCells } from "./state/workflowState";
 
 export interface WorkflowCellProps {
