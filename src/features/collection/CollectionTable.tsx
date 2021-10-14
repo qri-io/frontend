@@ -110,8 +110,8 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         <div className='flex items-center truncate'>
           <div className='w-8 mr-2'>
             <Icon icon='automationFilled' className={classNames('text-qrigreen', {
-              'visible': row.workflowID,
-              'invisible': !row.workflowID
+              'visible': row.runID,
+              'invisible': !row.runID
             })}/>
           </div>
           <div className='truncate'>
@@ -185,10 +185,13 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         flexShrink: 0
       },
       omit: simplified,
-      width: '90px',
-      cell: (row: VersionInfo) => (row.workflowID
-          ? <ManualTriggerButton qriRef={{ username: row.username, name: row.name }} />
-          : '—'
+      width: '100px',
+      cell: (row: VersionInfo) => (
+        <div className='mx-auto text-qrigray-400'>
+          {row.runID
+            ? <ManualTriggerButton row={row}/>
+            : '—'}
+        </div>
       )
     },
     {

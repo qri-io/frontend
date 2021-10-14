@@ -117,5 +117,9 @@ export const collectionReducer = createReducer(initialState, {
   },
   WORKFLOW_COMPLETED: (state, action) => {
     state.collection[action.data.id] = action.data
+  },
+  'API_RUNNOW_COLLECTION_SUCCESS': (state, action) => {
+    const initID = action.payload.requestID
+    state.collection[initID].runID = action.payload.data
   }
 })

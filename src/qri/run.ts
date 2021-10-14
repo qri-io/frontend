@@ -3,6 +3,7 @@ import { Dataset } from './dataset'
 
 export type RunStatus =
   | 'waiting'
+  | 'queued'
   | 'running'
   | 'succeeded'
   | 'failed'
