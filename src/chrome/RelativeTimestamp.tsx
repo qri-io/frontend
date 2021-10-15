@@ -23,6 +23,7 @@ const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
     .replace(/ months? ago/, 'mo')
     .replace(/ years? ago/, 'y')
     .replace('a', '1')
+    .replace('over', '>')
 
   return (
     <div
