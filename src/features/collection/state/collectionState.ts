@@ -26,8 +26,8 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
     ordered.push(collection[id])
   })
   return ordered.sort((a,b) => {
-    if (a.username === b.username && a.name === b.name) { return 0 }
-    else if (a.username < b.username ||  a.name < b.name) { return -1 }
+    if (a.commitTime === b.commitTime) { return 0 }
+    else if (a.commitTime > b.commitTime) { return -1 }
     return 1
   })
 }
