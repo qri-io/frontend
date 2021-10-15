@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Spinner from '../../chrome/Spinner'
 import { selectLatestDeployOrDryRunId, selectWorkflowDataset } from '../workflow/state/workflowState'
 import { setWorkflowRef } from './state/workflowActions'
 import { QriRef } from '../../qri/ref'
-import { NewDataset } from '../../qri/dataset'
 import Workflow from './Workflow'
 import RunBar from './RunBar'
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
@@ -21,21 +19,10 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   let dataset = useSelector(selectWorkflowDataset)
   const latestDryRunDeployId = useSelector(selectLatestDeployOrDryRunId)
   const latestRun = useSelector(selectRun(latestDryRunDeployId))
-  let { username, name } = useParams()
 
   // if qriRef is empty, this is a new workflow
   const isNew = qriRef.username === '' && qriRef.name === ''
 
-  // if new, make a mock dataset for rendering the headers
-  if (isNew) {
-    dataset = NewDataset({
-      peername: username,
-      name,
-      meta: {
-        title: 'New Dataset from Workflow'
-      }
-    })
-  }
 
   // don't fetch the dataset if this is a new workflow
   useEffect(() => {
@@ -48,15 +35,14 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
 
   return (
     <>
-      {!dataset && !isNew
-      ? (<div className='w-full h-full p-4 flex justify-center items-center'>
+      {dataset || isNew ?
+        (<DatasetScrollLayout isNew={isNew} headerChildren={runBar} useScroller>
+          <Workflow qriRef={qriRef} />
+        </DatasetScrollLayout>)
+      :
+        (<div className='w-full h-full p-4 flex justify-center items-center'>
           <Spinner color='#43B3B2' />
-        </div>)
-      : (
-            <DatasetScrollLayout dataset={dataset} headerChildren={runBar} useScroller>
-              <Workflow qriRef={qriRef} />
-            </DatasetScrollLayout>
-        )}
+        </div>)}
     </>
   )
 }
