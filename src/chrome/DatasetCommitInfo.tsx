@@ -24,7 +24,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
     })}>
       <div className={classNames('text-black font-semibold flex justify-between items-center mb-2')}>
         <div className='dataset_commit_info_text'>{dataset.commit?.title}</div>
-        <div className='flex-grow-0 text-qrigreen'>
+        <div className='flex-grow-0 text-qrigreen' title='version created by this dataset&apos;s transform script'>
           <Icon icon='automationFilled' size={small ? 'xs' : 'sm'}/>
         </div>
       </div>

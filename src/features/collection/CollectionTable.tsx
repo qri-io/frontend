@@ -108,7 +108,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       grow: 1,
       cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
-          <div className='w-8 mr-2'>
+          <div className='w-8 mr-2' title={row.workflowID && 'This dataset has an automation script'}>
             <Icon icon='automationFilled' className={classNames('text-qrigreen', {
               'visible': row.workflowID,
               'invisible': !row.workflowID

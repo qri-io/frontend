@@ -68,7 +68,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           </div>
           {showInfo && (
             <div className='flex mt-3 text-sm'>
-              {header.workflowID && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}
+              {header.runID && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}
               <DatasetInfoItem icon='disk' label={fileSize(header.bodySize || 0)} />
               <DatasetInfoItem icon='download' label={getLabel(header.downloadCount, 'download')} />
               <DatasetInfoItem icon='follower' label={getLabel(header.followerCount, 'follower')} />
