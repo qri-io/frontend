@@ -8,6 +8,7 @@ import classNames from 'classnames'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import Icon from '../../chrome/Icon'
+import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import UsernameWithIcon from '../../chrome/UsernameWithIcon'
 import DropdownMenu from '../../chrome/DropdownMenu'
@@ -108,7 +109,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       grow: 1,
       cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
-          <div className='w-8 mr-2' title={row.workflowID && 'This dataset has an automation script'}>
+          <div className='w-8 mr-2 flex-shrink-0'  title={row.workflowID && 'This dataset has an automation script'}>
             <Icon icon='automationFilled' className={classNames('text-qrigreen', {
               'visible': row.workflowID,
               'invisible': !row.workflowID
@@ -123,15 +124,47 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
             <div className='flex text-xs overflow-y-hidden'>
               <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} small />
               <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} small />
-              <DatasetInfoItem icon='page' label={row.bodyFormat} small />
-              {row.commitTime && (
-                <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(row.commitTime)}/>} small />
-              )}
               <DatasetInfoItem icon={'commit'} label={row.commitCount.toString()} small/>
             </div>
           </div>
         </div>
       )
+    },
+    {
+      name: 'Last Update',
+      selector: (row: VersionInfo) => row.commitTime,
+      sortable: true,
+      omit: simplified,
+      width: '180px',
+      cell: (row: VersionInfo) => {
+        // TODO (ramfox): the activity feed expects more content than currently exists
+        // in the VersionInfo. Once the backend supplies these values, we can rip
+        // out this section that mocks durations & timestamps for us
+        const {
+          username,
+          commitTime,
+          commitTitle,
+          path,
+          runID
+        } = row
+
+        const dataset = {
+          username,
+          commit: {
+            title: commitTitle,
+            timestamp: commitTime
+          },
+          path: path,
+          runID
+        }
+
+        const versionLink = `/${row.username}/${row.name}/at${row.path}/history`
+        return (
+          <Link to={versionLink} className='min-w-0 flex-grow'>
+            <DatasetCommitInfo dataset={dataset} small inRow />
+          </Link>
+        )
+      }
     },
     {
       name: 'Last Run',
