@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "main": "index.js",
+  "dependencies": {
+    "express": "4.17.1",
+    "node-fetch": "3.0.0",
+    "nodemon": "2.0.13"
+  },
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  }
+}

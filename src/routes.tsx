@@ -31,7 +31,6 @@ const PrivateRoute: React.FC<any>  = ({ path, children }) => {
   )
 }
 
-
 export default function Routes () {
   const user = useSelector(selectSessionUser)
 
