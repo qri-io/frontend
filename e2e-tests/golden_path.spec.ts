@@ -82,7 +82,7 @@ test.describe.serial('Golden path', () => {
   });
 
   test('History update check', async () => {
-    await page.goto(APP_URL + `/${USERNAME}/${workflowRandomName}/body`);
+    await page.goto(APP_URL + `/${USERNAME}/${workflowRandomName}/history#body`);
     const versionInfoText = await page.locator('.commit_summary_header_container .dataset_commit_info_text');
     await expect(versionInfoText).toHaveText('created dataset')
     const versionSelector = await page.locator('#dataset_commit_list_versions_text');
@@ -112,7 +112,7 @@ test.describe.serial('Golden path', () => {
   });
 
   test('History second version update check', async () => {
-    await page.goto(APP_URL + `/${USERNAME}/${workflowRandomName}/body`);
+    await page.goto(APP_URL + `/${USERNAME}/${workflowRandomName}/history#body`);
     const versionSelector = await page.locator('#dataset_commit_list_versions_text');
     const versionInfoText = await page.locator('.commit_summary_header_container .dataset_commit_info_text');
     await expect(versionSelector).toHaveText('2 versions');
