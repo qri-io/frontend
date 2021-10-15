@@ -38,7 +38,7 @@ const WorkflowCellControls: React.FC<WorkflowCellControlsProps> = ({
   }
 
   return (
-    <div className={classNames('flex-grow-0 w-48 ml-8 relative pb-11', {
+    <div className={classNames('flex-grow-0 w-48 ml-8 absolute top-0 right-0 bottom-0 pb-8', {
       'opacity-0': hide
     })}>
       <div className='flex flex-col bg-white w-48 rounded-md absolute p-5 pt-2.5 sticky top-20'>

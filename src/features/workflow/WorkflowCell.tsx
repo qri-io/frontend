@@ -91,43 +91,46 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div id={`${name}-cell`} className={`w-full workflow-cell flex ${isCellAdded && 'animate-appear'}`} onClick={onClick}>
-      <div className='flex-grow min-w-0'>
+    <div id={`${name}-cell`} className={`w-full workflow-cell relative  ${isCellAdded && 'animate-appear'}`} onClick={onClick}>
         <ScrollAnchor id={name} />
-          <div
-            className={classNames(`border rounded-lg ${active && borderStyles}`, {
-              'border-transparent': !active
-            })}
-            style={{
-              borderRadius: '0.58rem'
-            }}
-          >
-            {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift*/}
-            <div
-              className={classNames(`rounded-lg overflow-hidden flex-grow border box-content ${borderStyles}`, {
-                'border-transparent hover:border-qrigray-200': !active && (noColorStatus)
-              })}
-            >
-              {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-              {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
-              !clearedCells[index] &&
-              <Output data={run?.output} status={run?.status} wasEdited={editedCells[index]} />}
-            </div>
-          </div>
         <div
-          onClick={() => onRowAdd(index, 'starlark')}
-          className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'
+          className={classNames(`border rounded-lg ${active && borderStyles}`, {
+            'border-transparent': !active
+          })}
+          style={{
+            borderRadius: '0.58rem',
+            width: 'calc(100% - 225px)'
+          }}
         >
-          <div className='h-px bg-gray-300 flex-grow mr-2' />
-          <button className='text-xs border-none flex-shrink-0 bg-white rounded py-1 pr-2 pl-1 font-semibold '>+ Code</button>
+          {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift*/}
+          <div
+            className={classNames(
+              `rounded-lg overflow-hidden flex-grow border box-content`,
+              borderStyles,
+              {
+              'border-transparent hover:border-qrigray-200': !active && (noColorStatus)
+              }
+            )}
+          >
+            {(collapseState === 'all' || collapseState === 'only-editor') && editor}
+            {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
+            !clearedCells[index] &&
+            <Output data={run?.output} status={run?.status} wasEdited={editedCells[index]} />}
+          </div>
         </div>
+        <WorkflowCellControls
+          index={index}
+          sessionId={run ? run.id : ''}
+          setAnimatedCell={setAnimatedCell}
+          hide={!active}
+        />
+      <div
+        onClick={() => onRowAdd(index, 'starlark')}
+        className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'
+      >
+        <div className='h-px bg-gray-300 flex-grow mr-2' />
+        <button className='text-xs border-none flex-shrink-0 bg-white rounded py-1 pr-2 pl-1 font-semibold '>+ Code</button>
       </div>
-      <WorkflowCellControls
-        index={index}
-        sessionId={run ? run.id : ''}
-        setAnimatedCell={setAnimatedCell}
-        hide={!active}
-      />
     </div>
   )
 }
