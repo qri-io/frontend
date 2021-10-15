@@ -14,6 +14,7 @@ export interface DatasetSideNavItemProps {
   tooltip?: React.ReactNode
   number?: number
   disabled?: boolean
+  isLink?: boolean
 }
 
 const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
@@ -24,7 +25,8 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   expanded=true,
   tooltip,
   number,
-  disabled = false
+  disabled = false,
+  isLink = true
 }) => {
   const { pathname } = useLocation();
   const active = pathname.includes(to)
@@ -88,11 +90,18 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   return (
     <>
       <div className='mb-4 inline-block h-6'>
-        <Link id={id+'_link'} to={to} className={classNames('font-medium text-black transition-100 transition-all hover:text-qripink', {
-          'text-qripink': active
-        })}>
-          {content}
-        </Link>
+        {isLink ?
+          <Link id={id+'_link'} to={to} className={classNames('font-medium text-black transition-100 transition-all hover:text-qripink', {
+            'text-qripink': active
+          })}>
+            {content}
+          </Link> :
+          <span id={id+'_link'} className={classNames('cursor-pointer font-medium text-black transition-100 transition-all hover:text-qripink', {
+            'text-qripink': active
+          })}>
+            {content}
+          </span>
+        }
       </div>
       <br/>
     </>

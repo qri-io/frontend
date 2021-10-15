@@ -33,7 +33,10 @@ export function pathToDatasetEditor(ref: QriRef): string {
 }
 
 export function pathToWorkflowEditor(username: string, name: string): string {
-  return `/${username}/${name}/workflow`
+  if (username && name) {
+    return `/${username}/${name}/workflow`
+  }
+  return '/workflow/new'
 }
 
 export function pathToDatasetRuns(username: string, name:string): string {

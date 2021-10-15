@@ -106,6 +106,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           id='workflow-editor'
           icon='code'
           label='Workflow'
+          isLink={!isNewWorkflow}
           to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
           expanded={expanded}
           tooltip={
