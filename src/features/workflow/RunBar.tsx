@@ -6,7 +6,7 @@ import Button from '../../chrome/Button'
 import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { applyWorkflowTransform } from './state/workflowActions'
-import { deployWorkflow } from '../deploy/state/deployActions'
+import { deployResetRunId, deployWorkflow } from '../deploy/state/deployActions'
 import {
   selectRunMode,
   selectWorkflow,
@@ -23,6 +23,7 @@ import DeployButton from "../deploy/DeployButton";
 import { newQriRef } from "../../qri/ref";
 import { useParams } from "react-router";
 import { removeEvent } from "../events/state/eventsActions";
+import { selectDeployRunId } from "../deploy/state/deployState";
 
 export interface RunBarProps {
  status: RunStatus
@@ -41,6 +42,7 @@ const RunBar: React.FC<RunBarProps> = ({
   const isDirty = useSelector(selectWorkflowIsDirty)
   const latestDryRunId = useSelector(selectLatestDryRunId)
   const latestRunId = useSelector(selectLatestRunId)
+  const latestDeployRunId = useSelector(selectDeployRunId)
   const qriRef = newQriRef(useParams())
   const areCellsEdited = useSelector(selectEditedCells)
 
@@ -49,12 +51,15 @@ const RunBar: React.FC<RunBarProps> = ({
       dispatch(removeEvent(latestDryRunId))
     if (latestRunId)
       dispatch(removeEvent(latestRunId))
+    if (latestDeployRunId)
+      dispatch(removeEvent(latestDeployRunId))
   }
 
   const handleRun = () => {
     removeRunEvents()
     if (onRun) { onRun() }
     if (runMode === 'apply') {
+      dispatch(deployResetRunId())
       dispatch(applyWorkflowTransform(workflow, workflowDataset))
     }
     else if (runMode === 'save') {

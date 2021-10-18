@@ -9,6 +9,7 @@ import {
   DEPLOY_SAVEWORKFLOW_END,
   DEPLOY_SAVEDATASET_START,
   DEPLOY_SAVEDATASET_END,
+  DEPLOY_RESET_RUN_ID,
 } from './deployState'
 import { prepareWorkflowForDeploy } from '../../workflow/utils/prepareWorkflowForDeploy'
 
@@ -24,6 +25,10 @@ export interface DeployEventAction {
   type: string
   data: DeployEvent
   sessionID: string
+}
+
+export interface ResetRunIdAction {
+  type: string
 }
 
 export function deployWorkflow(qriRef: QriRef, w: Workflow, d: Dataset, run: boolean): ApiActionThunk {
@@ -50,6 +55,12 @@ export function deployWorkflow(qriRef: QriRef, w: Workflow, d: Dataset, run: boo
         },
       }
     })
+  }
+}
+
+export function deployResetRunId(): ResetRunIdAction {
+  return {
+    type: DEPLOY_RESET_RUN_ID
   }
 }
 

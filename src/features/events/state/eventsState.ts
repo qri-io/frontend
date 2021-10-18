@@ -10,7 +10,9 @@ export const REMOVE_EVENT = 'REMOVE_EVENT'
 
 export const selectRuns = (state: RootState): Run[] => {
   const { events } = state.events
-  const unique = Array.from(new Set(events.map(d => d.sessionID)))
+  const { runId } = state.deploy
+  const unique = Array.from(new Set(events.map(d => d.sessionID))).filter(id => id !== runId)
+
   return unique.map((d) => {
     return NewRunFromEventLog(d, events.filter(e => e.data.mode !== 'apply'))
   })
