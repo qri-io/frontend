@@ -8,7 +8,6 @@ import Icon from '../../chrome/Icon'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
-import { NewDataset } from '../../qri/dataset'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
 
 
@@ -48,6 +47,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
     {
       name: 'Time',
       selector: (row: LogItem) => row.timestamp,
+      width: '180px',
       cell: (row: LogItem) => {
         return (
           <div className='text-qrigray-400 flex flex-col text-xs'>
@@ -66,20 +66,22 @@ const ActivityList: React.FC<ActivityListProps> = ({
     {
       name: 'Commit',
       selector: (row: LogItem) => row.message,
+      width: '180px',
       cell: (row: LogItem) => {
-        const dataset = NewDataset({
+        const dataset = {
           username: row.username,
+          runID: row.runID,
           path: row.path,
           commit: {
             title: row.message,
             timestamp:row.timestamp
           }
-        })
+        }
         if (!['failed', 'unchanged'].includes(row.runStatus)) {
           const versionLink = `/ds/${row.username}/${row.name}/at${row.path}/body`
           return (
-            <Link to={versionLink}>
-              <DatasetCommitInfo dataset={dataset} small />
+            <Link to={versionLink} className='min-w-0 flex-grow'>
+              <DatasetCommitInfo dataset={dataset} small inRow />
             </Link>
           )
         } else {
