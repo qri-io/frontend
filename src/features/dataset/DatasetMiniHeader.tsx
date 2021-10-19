@@ -2,14 +2,14 @@ import React from 'react'
 import classNames from 'classnames'
 
 import Link from '../../chrome/Link'
-import { Dataset } from '../../qri/dataset'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import { useSelector } from "react-redux";
 import { selectDatasetHeader } from "./state/datasetState";
 import { qriRefFromVersionInfo } from "../../qri/versionInfo";
+import { newWorkflowTitle } from "./DatasetHeader";
 
 export interface DatasetMiniHeaderProps {
-  dataset: Dataset
+  isNew: boolean
   show: boolean
 }
 
@@ -19,7 +19,7 @@ export interface DatasetMiniHeaderProps {
 
 
 const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
-  dataset,
+  isNew,
   show,
   children
 }) => {
@@ -36,13 +36,13 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
     }}>
       <div className='px-7 pt-4 pb-3 flex items-center z-10'>
         <div className='flex-grow'>
-          { qriRef.username && (
+          { !isNew && (
             <div className='text-xs text-gray-400 font-mono'>
               <Link to={`/${qriRef.username}`} colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username || 'new'}</Link>/{qriRef.name}
             </div>
           )}
           <div className='text-normal text-black font-semibold'>
-            {dataset.meta?.title || dataset.name}
+            {isNew ? newWorkflowTitle : header.name}
           </div>
         </div>
 

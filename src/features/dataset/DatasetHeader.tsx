@@ -14,20 +14,21 @@ import fileSize from "../../utils/fileSize";
 
 
 export interface DatasetHeaderProps {
+  isNew: boolean
   border?: boolean
   editable?: boolean
-  showInfo?: boolean
 }
 
+export const newWorkflowTitle: string = 'New Dataset from Workflow'
 // DatasetHeader and DatasetMiniHeader now accept children which will be displayed
 // in the right side where the default buttons are located. This is useful for
 // overriding the download button with the dry run button in the workflow editor
 
 const DatasetHeader: React.FC<DatasetHeaderProps> = ({
+  isNew,
   border = false,
   editable = false,
-  showInfo = true,
-  children
+  children,
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -50,7 +51,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       <div className='flex mb-5'>
         <div className='flex-grow'>
           {/* don't show the username/name when creating a new dataset with the workflow editor */}
-          { qriRef.username && (
+          { !isNew && (
             <div className='text-md text-gray-400 relative flex items-center group hover:text pb-1 font-mono h-10'>
               <Link to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</Link>/
               <EditableLabel
@@ -64,9 +65,9 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           )}
 
           <div className='text-2xl text-black-500 font-black group hover:text'>
-            {header.name}
+            {isNew ? newWorkflowTitle : header.name}
           </div>
-          {showInfo && (
+          {!isNew && (
             <div className='flex mt-3 text-sm'>
               {header.runID && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}
               <DatasetInfoItem icon='disk' label={fileSize(header.bodySize || 0)} />
