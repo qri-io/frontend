@@ -87,6 +87,8 @@
     "test-e2e": "playwright test e2e-tests",
     "test-e2e-no-build": "NODE_ENV=test && jest ./e2e/* --detectOpenHandles",
     "eject": "react-scripts eject",
+    "serve-dev": "(cd server && yarn dev)",
+    "serve": "(cd server && yarn start)",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },

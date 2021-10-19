@@ -11,10 +11,11 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY . ./
 # run installation
 RUN yarn install
+RUN yarn build
 
 # distribution image, must be the same architecture & OS as build
 # or else node-sass gets angry
 FROM node:14.8-alpine
 COPY --from=build /app /
 EXPOSE 8080
-CMD ["yarn", "start"]
+CMD ["yarn", "serve"]
