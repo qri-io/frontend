@@ -25,6 +25,7 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
     }
     ordered.push(collection[id])
   })
+
   return ordered.sort((a,b) => {
     if (a.commitTime === b.commitTime) { return 0 }
     else if (a.commitTime > b.commitTime) { return -1 }
@@ -63,7 +64,6 @@ const initialState: CollectionState = {
 
 export const collectionReducer = createReducer(initialState, {
   'API_COLLECTION_REQUEST': (state, action) => {
-    state.listedIDs = new Set<string>()
     state.collectionLoading = true
   },
   'API_COLLECTION_SUCCESS': (state, action) => {

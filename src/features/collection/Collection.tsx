@@ -9,6 +9,7 @@ import CollectionTable from './CollectionTable'
 import Spinner from '../../chrome/Spinner'
 import Link from '../../chrome/Link'
 import NewDatasetButton from '../../chrome/NewDatasetButton'
+import Icon from '../../chrome/Icon'
 import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
 
@@ -45,8 +46,8 @@ const Collection: React.FC<{}> = () => {
     </div>
   )
 
-  // if loading, show a spinner
-  if (loading) {
+  // if loading and there is no collection, show a spinner
+  if (loading && (collection.length === 0)) {
     resultsContent = (
       <div className='h-full w-full flex justify-center items-center'>
         <Spinner color='#43B3B2' />
@@ -87,6 +88,11 @@ const Collection: React.FC<{}> = () => {
                   {collection.length}
                 </div>
               </div>
+              { loading && collection.length && (
+                <div>
+                  <Icon icon='loader' className='ml-2 text-qrigray-400'/>
+                </div>
+              )}
             </div>
 
             <div className='w-1/2 flex items-center justify-end'>
