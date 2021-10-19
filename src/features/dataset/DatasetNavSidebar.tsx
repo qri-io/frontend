@@ -78,6 +78,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           icon='eye'
           label='Preview'
           to={pathToDatasetPreview(qriRef)}
+          exact
           expanded={expanded}
           tooltip={
             <TooltipContent
