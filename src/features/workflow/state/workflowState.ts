@@ -6,7 +6,6 @@ import {
   SetWorkflowStepAction,
   SetWorkflowRefAction,
   WorkflowTriggerAction,
-  RunModeAction,
   SetTemplateAction,
   AddWorkflowStepAction,
   WorkflowStepAction,
@@ -70,16 +69,9 @@ export const selectWorkflow = (state: RootState): Workflow => state.workflow.wor
 export const selectWorkflowQriRef = (state: RootState): QriRef => {
   return qriRefFromDataset(state.workflow.dataset)
 }
-export const selectRunMode = (state: RootState): RunMode => state.workflow.runMode
 export const selectWorkflowIsDirty = (state: RootState): boolean => state.workflow.isDirty
 export const selectWorkflowDataset = (state: RootState): Dataset => state.workflow.dataset
 export const selectApplyStatus = (state: RootState): ApplyStatus => state.workflow.applyStatus
-
-
-
-export type RunMode =
-  | 'apply'
-  | 'save'
 
 export type ApplyStatus =
   | ''
@@ -87,7 +79,6 @@ export type ApplyStatus =
   | 'error'
 
 export interface WorkflowState {
-  runMode: RunMode
   workflow: Workflow
   // working dataset for editing transform steps, setting dataset name, etc
   dataset: Dataset
@@ -108,7 +99,6 @@ export interface WorkflowState {
 }
 
 const initialState: WorkflowState = {
-  runMode: 'apply',
   workflow: {
     id: '',
     initID: '',
@@ -152,11 +142,6 @@ export const workflowReducer = createReducer(initialState, {
   'API_RUNNOW_SUCCESS': (state, action) => {
     state.lastRunID = action.payload.data
   },
-  SET_RUN_MODE: (state, action: RunModeAction) => {
-    if (state.runMode !== action.mode) {
-      state.runMode = action.mode
-    }
-  },
   WORKFLOW_CHANGE_TRIGGER: changeWorkflowTrigger,
   WORKFLOW_DELETE_TRIGGER: deleteWorkflowTrigger,
   WORKFLOW_CHANGE_TRANSFORM_STEP: changeWorkflowTransformStep,
@@ -185,7 +170,6 @@ export const workflowReducer = createReducer(initialState, {
   },
   'API_WORKFLOW_REQUEST': (state, action) => {
     // reset workflow and lastRunID to initialState values
-    state.runMode = initialState.runMode
     state.workflow = initialState.workflow
     state.lastRunID = undefined
   },
