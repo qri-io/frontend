@@ -1,7 +1,6 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
 
-import ContentBox from '../../chrome/ContentBox'
 import PageControl from '../../chrome/PageControl'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import DatasetList from '../../chrome/DatasetList'
@@ -50,44 +49,42 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
 
   return (
     <>
-      <ContentBox className='mb-6 rounded-tl-none'>
-        <div className='flex items-center justify-between border-b pb-5'>
-          <div className='text-qrigray flex-grow'>
-            {
-              loading ? (
-                <ContentLoader
-                  width={100}
-                  height={20}
-                >
-                  <rect y="0" width="100" height="18" rx="6"/>
-                </ContentLoader>
-              ) : (
-                <>Page {page} of {totalPages || 1}</>
-              )
-            }
+      <div className='flex items-center justify-between px-2.5 pb-2'>
+        <div className='text-qrigray flex-grow'>
+          {
+            loading ? (
+              <ContentLoader
+                width={100}
+                height={20}
+              >
+                <rect y="0" width="100" height="18" rx="6"/>
+              </ContentLoader>
+            ) : (
+              <>Page {page} of {totalPages || 1}</>
+            )
+          }
 
-          </div>
-          <div>
-            <DropdownMenu
-              icon={dropdownSortIcon}
-              className='ml-8'
-              items={[
-                {
-                  label: 'Dataset Name',
-                  active: sort === 'name',
-                  onClick: () => { handleSortChange('name') }
-                },
-                {
-                  label: 'Recently Updated',
-                  active: sort === 'recentlyupdated',
-                  onClick: () => { handleSortChange('recentlyupdated') },
-                }
-              ]}
-            />
-          </div>
         </div>
-        <DatasetList datasets={results} loading={loading} />
-      </ContentBox>
+        <div>
+          <DropdownMenu
+            icon={dropdownSortIcon}
+            className='ml-8'
+            items={[
+              {
+                label: 'Dataset Name',
+                active: sort === 'name',
+                onClick: () => { handleSortChange('name') }
+              },
+              {
+                label: 'Recently Updated',
+                active: sort === 'recentlyupdated',
+                onClick: () => { handleSortChange('recentlyupdated') },
+              }
+            ]}
+          />
+        </div>
+      </div>
+      <DatasetList datasets={results} loading={loading} />
       <PageControl
         pageInfo={pageInfo}
         queryParams={CleanUserProfileDatasetListParams(userProfileParams)}

@@ -16,7 +16,6 @@ import {
   selectUserProfileDatasets,
   selectUserProfileFollowing,
 } from './state/userProfileState'
-import ContentBox from '../../chrome/ContentBox'
 import NavBar from '../navbar/NavBar'
 import Footer from '../footer/Footer'
 import {
@@ -96,12 +95,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
       numberDecorator: paginatedDatasetResults.pageInfo.resultCount,
       selected: path === '/'
     },
-    {
-      name: 'Following',
-      link: `/${usernameParam}/following`,
-      numberDecorator: paginatedFollowingResults.pageInfo.resultCount,
-      selected: path === '/following'
-    }
+    // TODO (boandriy): Hiding temporarily to match new design
+    // {
+    //   name: 'Following',
+    //   link: `/${usernameParam}/following`,
+    //   numberDecorator: paginatedFollowingResults.pageInfo.resultCount,
+    //   selected: path === '/following'
+    // }
   ]
 
   return (
@@ -119,7 +119,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
                 height: '30px',
                 width: '30px',
                 backgroundImage: `url(${profile.profile})`
-              }}></div>
+              }}/>
               <div>
                 <div className='text-black text-sm font-semibold'>{profile.name}</div>
                 <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
@@ -130,7 +130,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
         {/* end sticky header */}
         <div className='mx-auto flex py-9' style={{ maxWidth: '1040px' }}>
           <div className='flex-auto'>
-              <div ref={stickyHeaderTriggerRef}>
+              <div className='w-full' ref={stickyHeaderTriggerRef}>
                 <UserProfileHeader profile={profile} loading={loading} />
               </div>
               <ContentTabs
@@ -142,11 +142,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
                 onParamsUpdate={updateQueryParams}
               />
             </div>
-          <div className=' flex-none pl-8' style={{ width: '366px' }}>
-            <ContentBox>
-              Sidebar
-            </ContentBox>
-          </div>
         </div>
       </div>
       <div className='bg-white flex-shrink-0'>

@@ -1142,6 +1142,10 @@ code {
   opacity: 1;
 }
 
+.bg-white-important {
+  background-color: #fff !important;
+}
+
 /* override react-responsive-carousel control dot styles */
 .carousel .control-dots .dot {
   @apply bg-qrigray-400 shadow-none !important;
