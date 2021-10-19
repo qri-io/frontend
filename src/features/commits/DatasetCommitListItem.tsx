@@ -6,6 +6,7 @@ import DatasetCommit from './DatasetCommit'
 
 export interface DatasetCommitListItemProps {
   logItem: LogItem
+  loading?: boolean
   active?: boolean
   first?: boolean
   last?: boolean
@@ -13,6 +14,7 @@ export interface DatasetCommitListItemProps {
 
 const DatasetCommitListItem: React.FC<DatasetCommitListItemProps> = ({
   logItem,
+  loading = false,
   active = false,
   first = false,
   last = false
@@ -25,7 +27,7 @@ const DatasetCommitListItem: React.FC<DatasetCommitListItemProps> = ({
         {!last && <div className='absolute top-11 bottom-0 w-full bg-gray-300 rounded'>&nbsp;</div>}
       </div>
     </div>
-    <DatasetCommit logItem={logItem} active={active} />
+    <DatasetCommit loading={loading} logItem={logItem} active={active} />
   </li>
 )
 

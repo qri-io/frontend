@@ -4,12 +4,10 @@ import classNames from 'classnames'
 import Dataset, { ComponentName, isDatasetEmpty, NewDataset } from '../../qri/dataset'
 import ComponentList from './ComponentList'
 import DatasetComponent from './DatasetComponent'
-import Spinner from '../../chrome/Spinner'
 
 export interface TabbedComponentViewerProps {
   dataset: Dataset
   selectedComponent?: ComponentName
-  loading?: boolean
   // border is used to display TabbedComponentViewer over a white background e.g. on the workflow editor
   border?: boolean
   // preview will cause the body component to render only what is in dataset and not fetch more data
@@ -18,19 +16,11 @@ export interface TabbedComponentViewerProps {
 
 export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   dataset: ds,
-  loading,
   selectedComponent,
   border = false,
   preview = false,
   children
 }) => {
-  if (loading) {
-    return (
-      <div className='p-4 h-full w-full flex justify-center items-center bg-white rounded-md'>
-        <Spinner color='#43B3B2' />
-      </div>
-    )
-  }
 
   let dataset = ds
 

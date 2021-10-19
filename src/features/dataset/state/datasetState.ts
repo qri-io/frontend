@@ -13,6 +13,8 @@ export const SET_HEADER = 'SET_HEADER'
 
 export const RESET_DATASET_STATE = 'RESET_DATASET_STATE'
 
+export const SET_BODY_LOADING = 'SET_BODY_LOADING'
+
 export const selectDataset = (state: RootState): Dataset => state.dataset.dataset
 
 export const selectDatasetHeader = (state: RootState): VersionInfo => state.dataset.header
@@ -22,6 +24,10 @@ export const selectCommitCount = (state: RootState): number => state.dataset.hea
 export const selectRunCount = (state: RootState): number => state.dataset.header.runCount
 
 export const selectIsDatasetLoading = (state: RootState): boolean => state.dataset.datasetLoading
+
+export const selectIsBodyLoading = (state: RootState): boolean => state.dataset.bodyLoading
+
+export const selectIsHeaderLoading = (state: RootState): boolean => state.dataset.headerLoading
 
 export const selectSessionUserCanEditDataset = (state: RootState): boolean => {
   const u = selectSessionUser(state)
@@ -42,13 +48,15 @@ export interface DatasetState {
   header: VersionInfo
   datasetLoading: boolean
   headerLoading: boolean
+  bodyLoading: boolean
 }
 
 const initialState: DatasetState = {
   dataset: NewDataset({}),
   header: newVersionInfo({}),
   datasetLoading: true,
-  headerLoading: true
+  headerLoading: true,
+  bodyLoading: true
 }
 
 export const datasetReducer = createReducer(initialState, {
@@ -78,8 +86,15 @@ export const datasetReducer = createReducer(initialState, {
   'API_DATASET_FAILURE': (state) => {
     state.datasetLoading = false
   },
+  'API_BODY_REQUEST': (state, action) => {
+    state.bodyLoading = true
+  },
   'API_BODY_SUCCESS': (state, action) => {
     state.dataset.body = action.payload.data as Body
+    state.bodyLoading = false
+  },
+  'API_BODY_FAILURE': (state, action) => {
+    state.bodyLoading = false
   },
   'API_REMOVE_SUCCESS': (state, action) => {
     const ref = qriRefFromString(action.payload.data.ref)
@@ -95,5 +110,8 @@ export const datasetReducer = createReducer(initialState, {
   },
   RENAME_NEW_DATASET: (state: DatasetState, action: RenameDatasetAction) => {
     state.header.name = action.next.name
+  },
+  SET_BODY_LOADING: (state: DatasetState, action: ResetDatasetStateAction) => {
+    state.bodyLoading = true
   }
 })

@@ -1,19 +1,13 @@
 import React from 'react'
 import classNames from 'classnames'
-// import * as _ from 'underscore'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faSync } from '@fortawesome/free-solid-svg-icons'
-
-// import { PageInfo } from '../models/store'
-// import { bodyPageSizeDefault } from '../actions/api'
-// import { ApiActionThunk } from '../store/api'
+import ContentLoader from "react-content-loader";
 
 import DataType from '../../../chrome/DataType'
-// import SpinnerWithIcon from './chrome/SpinnerWithIcon'
 
 interface BodyTableProps {
   headers?: any[]
-  body: any[]
+  body?: any[]
+  loading?: boolean
   // highlighedColumnIndex: number | undefined
   // onFetch: (page?: number, pageSize?: number) => ApiActionThunk
   // setDetailsBar?: (index: number) => void
@@ -41,6 +35,28 @@ interface BodyTableProps {
 
 const cellClasses = 'px-2 py-2 overflow-hidden overflow-ellipsis whitespace-nowrap max-w-xs'
 
+
+
+const loadingColumns: { width: number, component: React.ReactElement }[] = [
+  {width: 26.5, component: <rect y='7' x='8.65' width="6" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 185.2,component: <rect y='7' x='8.65' width="104" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 163.77,component: <rect y='7' x='8.65' width="17" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 113.7,component: <rect y='7' x='8.65' width="22" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 98.03,component: <rect y='7' x='8.65' width="35" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 124,component: <rect y='7' x='8.65' width="55" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 109.19,component: <rect y='7' x='8.65' width="22" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 75.13,component: <rect y='7' x='8.65' width="26" height="14" rx="1" fill="#D5DADD"/>}
+];
+
+const loadingHeaderColumns:{ width: number, component: React.ReactElement }[] = [
+  {width: 185.2,component: <rect y='13' x='8.62' width="85" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 163.77,component: <rect y='13' x='8.62' width="113" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 113.7,component: <rect y='13' x='8.62' width="61" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 98.03,component: <rect y='13' x='8.62' width="34" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 124,component: <rect y='13' x='8.62' width="42" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 109.19,component: <rect y='13' x='8.62' width="57" height="14" rx="1" fill="#D5DADD"/>},
+  {width: 75.13,component: <rect y='13' x='8.62' width="43" height="14" rx="1" fill="#D5DADD"/>}
+]
 
 export default class BodyTable extends React.Component<BodyTableProps> {
   constructor (props: BodyTableProps) {
@@ -76,7 +92,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
     // maintain the user's view
     const { body: prevBody } = prevProps
     const { body } = this.props
-    if (prevBody.length && body.length) {
+    if (prevBody && body && prevBody.length && body.length) {
       // get the first and last row indices for the current and previous bodies
       // const prevFirstIndex = prevBody[0][0]
       // const prevLastIndex = prevBody[prevBody.length - 1][0]
@@ -107,13 +123,30 @@ export default class BodyTable extends React.Component<BodyTableProps> {
   //   onFetch(page, pageInfo.pageSize)
   // }
 
+
   render () {
-    const { body, headers } = this.props
+    const { body = [], headers = [], loading = false } = this.props
     // const { isFetching, fetchedAll } = pageInfo
 
     // if (isFetching && !body) return <SpinnerWithIcon loading />
 
-    const tableRows = body.map((row, i) => {
+    const tableRows = loading ?
+      Array(20).fill('').map((_, i) => {
+        return (
+          <tr key={i} className=''>
+            {loadingColumns.map((svgComponent, j) => {
+              return (
+                <td key={j + 1} className='border-r border-b border-qrigray-200'>
+                  <ContentLoader width={svgComponent.width} height={28}>
+                    {svgComponent.component}
+                  </ContentLoader>
+                </td>
+              )
+            })}
+          </tr>
+        )}
+      )
+      :body.map((row, i) => {
       return (
         <tr key={i} className=''>
           <td key={0}className='bg-white text-center border-r border-b border-qrigray-200'>
@@ -136,7 +169,7 @@ export default class BodyTable extends React.Component<BodyTableProps> {
         </tr>
       )
     })
-    if (!body.length) return null
+    if (!body.length && !loading) return null
     return (
       <div
         id='body-table-container'
@@ -151,16 +184,26 @@ export default class BodyTable extends React.Component<BodyTableProps> {
               <th className=' h-6 bg-white p-0 border-t border-r border-b border-qrigray-200'>
                 <div className={classNames(cellClasses, 'leading-4')}>&nbsp;</div>
               </th>
-              {headers && headers.map((d: any, j: number) => {
+              {loading ? loadingHeaderColumns.map((svgComponent, j) => {
                 return (
                   <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-qrigray-200'>
-                    <div className={classNames(cellClasses, 'text-black text-sm flex items-center')} >
-                      <DataType type={d.type} showLabel={false} className='mr-1 text-qrigray-300' />
-                      <div>{d.title}</div>
-                    </div>
+                    <ContentLoader width={svgComponent.width} height={38}>
+                      {svgComponent.component}
+                    </ContentLoader>
                   </th>
                 )
-              })}
+              }) :
+                headers && headers.map((d: any, j: number) => {
+                  return (
+                    <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-qrigray-200'>
+                      <div className={classNames(cellClasses, 'text-black text-sm flex items-center')} >
+                        <DataType type={d.type} showLabel={false} className='mr-1 text-qrigray-300' />
+                        <div>{d.title}</div>
+                      </div>
+                    </th>
+                  )
+                })
+              }
             </tr>
           </thead>
           <tbody>

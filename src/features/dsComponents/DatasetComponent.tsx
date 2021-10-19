@@ -12,6 +12,8 @@ import Structure from './structure/Structure'
 import Readme from './readme/Readme'
 import ContentBox from '../../chrome/ContentBox'
 import IconLink from '../../chrome/IconLink'
+import { useSelector } from "react-redux";
+import { selectIsBodyLoading, selectIsDatasetLoading } from "../dataset/state/datasetState";
 
 export interface DatasetComponentProps {
   dataset: Dataset
@@ -23,9 +25,11 @@ export interface DatasetComponentProps {
 const DatasetComponent: React.FC<DatasetComponentProps> = ({
   dataset,
   componentName,
-  preview = false
+  preview = false,
 }) => {
   const [ expanded, setExpanded ] = useState(false)
+  const loading = useSelector(selectIsDatasetLoading)
+  const bodyLoading = useSelector(selectIsBodyLoading)
 
   const handleToggleExpanded = () => {
     setExpanded(!expanded)
@@ -35,9 +39,10 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   let componentHeader: JSX.Element | null = null
   switch (componentName) {
     case 'body':
-      component = <Body data={dataset} preview={preview} />
+      component = <Body loading={loading || bodyLoading} data={dataset} preview={preview} />
       componentHeader = (
         <BodyHeader
+          loading={ loading || bodyLoading }
           dataset={dataset}
           onToggleExpanded={handleToggleExpanded}
           showDownload={!preview}

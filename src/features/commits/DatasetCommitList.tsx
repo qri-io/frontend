@@ -2,18 +2,18 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 
-import Spinner from '../../chrome/Spinner';
 import { newQriRef, QriRef } from '../../qri/ref';
 import DatasetCommitListItem from './DatasetCommitListItem';
 import { loadDatasetCommits } from './state/commitActions';
 import { newDatasetCommitsSelector, selectDatasetCommitsLoading } from './state/commitState';
+import { LogItem } from "../../qri/log";
 
 export interface DatasetCommitsProps {
   qriRef: QriRef
 }
 
 const DatasetCommits: React.FC<DatasetCommitsProps> = ({
-  qriRef
+  qriRef,
 }) => {
   const dispatch = useDispatch()
   const commits = useSelector(newDatasetCommitsSelector(qriRef))
@@ -46,18 +46,31 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
           <HistorySearchBox />
           {editable && <NewVersionButton qriRef={qriRef} />}
         */}
-        {commits.map((logItem, i) => (
-          <DatasetCommitListItem
-            key={i}
-            logItem={logItem}
-            active={logItem.path === path}
-            // first={i === 0 && !editable} (restore when there is <NewVersionButton> at the top of the list)
-            first={i === 0}
-            last={i === (commits.length - 1)}
-          />
+        {loading ?
+            Array(3).fill('').map((_,i) => (
+            <DatasetCommitListItem
+              key={i}
+              loading={true}
+              logItem={{} as LogItem}
+              active={i === 0}
+              // first={i === 0 && !editable} (restore when there is <NewVersionButton> at the top of the list)
+              first={i === 0}
+              last={i === 2}
+            />
+          ))
+           :
+          commits.map((logItem, i) => (
+            <DatasetCommitListItem
+              key={i}
+              loading={false}
+              logItem={logItem}
+              active={logItem.path === path}
+              // first={i === 0 && !editable} (restore when there is <NewVersionButton> at the top of the list)
+              first={i === 0}
+              last={i === (commits.length - 1)}
+            />
         ))}
       </ul>
-      {loading && <Spinner color='#fff' size={6} />}
     </div>
   )
 }

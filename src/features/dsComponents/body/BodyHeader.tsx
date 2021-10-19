@@ -8,19 +8,22 @@ import Dataset, {
 import Icon from '../../../chrome/Icon'
 import IconLink from '../../../chrome/IconLink'
 import DownloadDatasetButton from '../../download/DownloadDatasetButton'
+import ContentLoader from "react-content-loader";
 
 interface BodyHeaderProps {
   dataset: Dataset
   showExpand?: boolean
   showDownload?: boolean
   onToggleExpanded?: () => void
+  loading: boolean
 }
 
 const BodyHeader: React.FC<BodyHeaderProps> = ({
   dataset,
   onToggleExpanded,
   showExpand = true,
-  showDownload = true
+  showDownload = true,
+  loading
 }) => {
   const { structure, body } = dataset
   const headers = extractColumnHeaders(structure, body)
@@ -35,10 +38,23 @@ const BodyHeader: React.FC<BodyHeaderProps> = ({
             TODO (boandriy): Once the preview row count is filtered by fetch pagination -
             use global filtering variable instead of hardcoded 100
           */}
-          {numeral(structure?.entries).value() > 100 ? 'Previewing 100 of' : 'Showing all'} {entries} rows
+          {loading ?
+            <ContentLoader height='13' width='117'>
+              <rect y='0' x='1' width="95" height="12" fill="#D5DADD"/>
+            </ContentLoader>:
+            <>
+              {numeral(structure?.entries).value() > 100 ? 'Previewing 100 of' : 'Showing all'} {entries} rows
+            </>}
         </div>
         <div className='body_header_columns_text mr-4 flex items-center'>
-          <Icon icon='columns' size='2xs' className='mr-1'/> {numeral(headers.length).format('0,0')} columns
+          <Icon icon='columns' size='2xs' className='mr-1'/>
+          {loading ?
+            <ContentLoader height='13' width='117'>
+              <rect y='0' x='1' width="95" height="12" fill="#D5DADD"/>
+            </ContentLoader>:
+            <>
+              {numeral(headers.length).format('0,0')} columns
+            </>}
         </div>
       </div>
       {showDownload && <DownloadDatasetButton qriRef={qriRefFromDataset(dataset)} asIconLink body />}
