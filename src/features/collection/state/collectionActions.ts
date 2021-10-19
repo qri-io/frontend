@@ -1,10 +1,12 @@
-import { ApiAction, CALL_API } from "../../../store/api"
+import { ApiAction, CALL_API, ApiActionThunk } from "../../../store/api"
 import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
 import { NewWorkflow, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
 import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
 import { AnyAction } from "redux"
 import { RootState } from "../../../store/store";
 import { ThunkDispatch } from 'redux-thunk'
+import { QriRef } from '../../../qri/ref'
+
 
 function mapVersionInfo (data: object | []): VersionInfo[] {
   if (!data) { return [] }
@@ -53,6 +55,26 @@ function fetchVersionInfo (initID: string): ApiAction {
       body: {
         initID: initID
       },
+    }
+  }
+}
+
+// runnow will trigger a manual run.  On success, it will refresh the collection
+export function runNow (qriRef: QriRef, initID: string): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchRunNow(qriRef, initID))
+  }
+}
+
+function fetchRunNow (qriRef: QriRef, initID: string): ApiAction {
+  return {
+    type: 'runnow_collection',
+    qriRef,
+    [CALL_API]: {
+      endpoint: 'auto/run',
+      method: 'POST',
+      body: { ref: `${qriRef.username}/${qriRef.name}` },
+      requestID: initID
     }
   }
 }

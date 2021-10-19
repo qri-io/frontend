@@ -78,7 +78,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
           }
         }
         if (!['failed', 'unchanged'].includes(row.runStatus)) {
-          const versionLink = `/ds/${row.username}/${row.name}/at${row.path}/body`
+          const versionLink = `/${row.username}/${row.name}/at${row.path}/history/body`
           return (
             <Link to={versionLink} className='min-w-0 flex-grow'>
               <DatasetCommitInfo dataset={dataset} small inRow />
