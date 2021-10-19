@@ -6,9 +6,8 @@ import Button from '../../chrome/Button'
 import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
 import { applyWorkflowTransform } from './state/workflowActions'
-import { deployResetRunId, deployWorkflow } from '../deploy/state/deployActions'
+import { deployResetRunId } from '../deploy/state/deployActions'
 import {
-  selectRunMode,
   selectWorkflow,
   selectWorkflowDataset,
   selectApplyStatus,
@@ -27,15 +26,12 @@ import { selectDeployRunId } from "../deploy/state/deployState";
 
 export interface RunBarProps {
  status: RunStatus
- onRun?: () => void
 }
 
 const RunBar: React.FC<RunBarProps> = ({
-  status,
-  onRun
+  status
 }) => {
   const dispatch = useDispatch()
-  const runMode = useSelector(selectRunMode)
   const workflow = useSelector(selectWorkflow)
   const workflowDataset = useSelector(selectWorkflowDataset)
   const applyStatus = useSelector(selectApplyStatus)
@@ -57,14 +53,8 @@ const RunBar: React.FC<RunBarProps> = ({
 
   const handleRun = () => {
     removeRunEvents()
-    if (onRun) { onRun() }
-    if (runMode === 'apply') {
-      dispatch(deployResetRunId())
-      dispatch(applyWorkflowTransform(workflow, workflowDataset))
-    }
-    else if (runMode === 'save') {
-      dispatch(deployWorkflow(workflow))
-    }
+    dispatch(deployResetRunId())
+    dispatch(applyWorkflowTransform(workflow, workflowDataset))
   }
 
   const handleCancel = () => { alert('cannot cancel runs yet') }

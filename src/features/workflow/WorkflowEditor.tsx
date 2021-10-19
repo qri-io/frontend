@@ -13,7 +13,7 @@ import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
 import Hooks from './Hooks'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
 import { Dataset } from '../../qri/dataset'
-import { RunMode, selectLatestDryRunId, selectLatestRunId } from './state/workflowState'
+import { selectLatestDryRunId, selectLatestRunId } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
@@ -24,7 +24,6 @@ import { deployResetRunId } from "../deploy/state/deployActions";
 
 export interface WorkflowEditorProps {
   qriRef: QriRef
-  runMode: RunMode
   workflow: Workflow
   dataset: Dataset
   run?: Run
@@ -32,7 +31,6 @@ export interface WorkflowEditorProps {
 
 const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   qriRef,
-  runMode,
   workflow,
   dataset,
   run
@@ -171,19 +169,6 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                   />
                 )
               })}
-              {/* TODO(b5) - hack for now. In the future we should make a component that trances & selects save results */}
-              {runMode === 'save' && <WorkflowCell
-                disabled={false}
-                index={(workflow.steps?.length || 1)}
-                step={{name: 'save', syntax: 'qri', category: 'save', script: ''}}
-                collapseState={collapseState('save')}
-                onChangeCollapse={(v) => {
-                  const update = Object.assign({}, collapseStates as any)
-                  update['save'] = v
-                  setCollapseStates(update)
-                }}
-                onChangeScript={() => {}}
-                />}
             </section>
             <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5'>
               Next Version Preview

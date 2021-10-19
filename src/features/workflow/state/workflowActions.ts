@@ -10,8 +10,6 @@ import {
   SET_TEMPLATE,
   SET_WORKFLOW,
   SET_WORKFLOW_REF,
-  SET_RUN_MODE,
-  RunMode,
   WORKFLOW_ADD_TRANSFORM_STEP,
   WORKFLOW_REMOVE_TRANSFORM_STEP,
   WORKFLOW_DUPLICATE_TRANSFORM_STEP,
@@ -173,18 +171,6 @@ export function deleteWorkflowTrigger (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_DELETE_TRIGGER,
     index,
-  }
-}
-
-export interface RunModeAction {
-  type: string
-  mode: RunMode
-}
-
-export function setRunMode (mode: RunMode): RunModeAction {
-  return {
-    type: SET_RUN_MODE,
-    mode
   }
 }
 

@@ -6,7 +6,6 @@ import { Location } from 'history'
 
 import WorkflowOutline from './WorkflowOutline'
 import {
-  selectRunMode,
   selectWorkflow,
   selectWorkflowIsDirty,
   selectWorkflowDataset,
@@ -38,7 +37,6 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
   const workflowDataset = useSelector(selectWorkflowDataset)
   const latestDryRunDeployID = useSelector(selectLatestDeployOrDryRunId)
   const latestRun = useSelector(selectRun(latestDryRunDeployID))
-  const runMode = useSelector(selectRunMode)
   const isDirty = useSelector(selectWorkflowIsDirty)
 
   const [redirectTo, setRedirectTo] = useState('')
@@ -87,7 +85,7 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
           message={handleBlockedNavigation}
         />
         <WorkflowOutline workflow={workflow} run={latestRun} dataset={workflowDataset} />
-        <WorkflowEditor qriRef={qriRef} workflow={workflow} dataset={workflowDataset} run={latestRun} runMode={runMode} />
+        <WorkflowEditor qriRef={qriRef} workflow={workflow} dataset={workflowDataset} run={latestRun} />
         {redirectTo && <Redirect to={redirectTo} />}
       </div>
     </>
