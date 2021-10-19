@@ -23,6 +23,7 @@ import { newQriRef } from "../../qri/ref";
 import { useParams } from "react-router";
 import { removeEvent } from "../events/state/eventsActions";
 import { selectDeployRunId } from "../deploy/state/deployState";
+import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 
 export interface RunBarProps {
  status: RunStatus
@@ -32,6 +33,7 @@ const RunBar: React.FC<RunBarProps> = ({
   status
 }) => {
   const dispatch = useDispatch()
+  const canEdit = useSelector(selectSessionUserCanEditDataset)
   const workflow = useSelector(selectWorkflow)
   const workflowDataset = useSelector(selectWorkflowDataset)
   const applyStatus = useSelector(selectApplyStatus)
@@ -83,7 +85,7 @@ const RunBar: React.FC<RunBarProps> = ({
             ? <div className='flex'>
                 <Button type='secondary-outline' className='px-2 w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>
                   <Icon className='mr-1.5' icon='playCircle' size='sm'/>Cancel</Button>
-                <DeployButton isNew={isNew} disabled={!isDirty} />
+                <DeployButton isNew={isNew} disabled={!((isNew || canEdit) && isDirty) } />
               </div>
             : (
               <div className='flex'>
@@ -92,7 +94,7 @@ const RunBar: React.FC<RunBarProps> = ({
                     <Icon className='mr-1.5' icon='playCircle' size='sm'/>Dry Run</Button>
                 </div>
                 <div>
-                  <DeployButton isNew={isNew} disabled={!isDirty} />
+                  <DeployButton isNew={isNew} disabled={!((isNew || canEdit) &&isDirty)} />
                 </div>
               </div>
             )
