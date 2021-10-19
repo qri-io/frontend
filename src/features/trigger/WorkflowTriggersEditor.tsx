@@ -9,8 +9,7 @@ import Block from '../workflow/Block'
 import CronTrigger from './CronTrigger'
 import { CronTrigger as CronTriggerType } from '../../qrimatic/workflow'
 import ContentBox from '../../chrome/ContentBox'
-import Icon from '../../chrome/Icon'
-import Button from '../../chrome/Button'
+import IconOnlyButton from '../../chrome/IconOnlyButton'
 import WorkflowCellControlButton from "../workflow/WorkflowCellControlButton";
 
 export interface WorkflowTriggersEditorProps {
@@ -62,9 +61,8 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
           */}
           {!createTrigger && triggers.length === 0 && (
             <div className='flex items-center'>
-              <Button id='workflow_triggers_add_button' onClick={() => setShowControls(true)}>
-                <Icon icon='plus' size='sm'/>
-              </Button>
+              <IconOnlyButton id='workflow_triggers_add_button' icon='plus' onClick={() => setShowControls(true)}>
+              </IconOnlyButton>
             </div>
           )}
         </div>

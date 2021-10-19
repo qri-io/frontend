@@ -64,7 +64,7 @@ const SignUpModal: React.FC = () => {
          </div>
       </Carousel>
 
-      <Button id='splash_modal_workflow_button' size='sm' className='w-full mt-2' onClick={handleClose} submit>
+      <Button id='splash_modal_workflow_button' className='mt-2' onClick={handleClose} submit block>
         Go to Workflow!
       </Button>
     </div>

@@ -80,7 +80,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
           <Button
             type={actionButtonType}
             onClick={handleActionButtonClick}
-            size='sm'
+            size='lg'
           >
             {actionButtonText}
           </Button>
@@ -88,7 +88,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
             type='light'
             onClick={handleCancelButtonClick}
             className='ml-4'
-            size='sm'
+            size='lg'
           >
            {cancelButtonText}
           </Button>

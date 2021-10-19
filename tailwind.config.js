@@ -1,4 +1,8 @@
-const { fontFamily, boxShadow } = require('tailwindcss/defaultTheme')
+const {
+  borderRadius,
+  boxShadow,
+  fontFamily
+} = require('tailwindcss/defaultTheme')
 
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
@@ -145,6 +149,13 @@ module.exports = {
       },
       fontSize: {
         'sm': '0.813rem' // 13px
+      },
+      borderRadius: {
+        ...borderRadius,
+        'DEFAULT': '3px',
+        'md': '4.5px',
+        'lg': '6px',
+        'xl': '8px'
       }
     },
   },

@@ -2,7 +2,6 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Button, { ButtonType } from '../../chrome/Button'
-import Icon from '../../chrome/Icon'
 import IconLink from '../../chrome/IconLink'
 import { QriRef } from '../../qri/ref'
 import { showModal } from '../app/state/appActions'
@@ -48,8 +47,8 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     }
   } else { // returns <Button>
     let buttonContent = (
-      <Button type={type} size='sm' className='px-1.5'>
-        <Icon icon='download' /> {!small && <span className='ml-2'>Download</span>}
+      <Button type={type} icon='download' className=''>
+        {!small && 'Download'}
       </Button>
     )
 

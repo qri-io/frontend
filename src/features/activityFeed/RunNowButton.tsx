@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Button from '../../chrome/Button'
-import Icon from '../../chrome/Icon'
 import { RunStatus } from '../../qri/run'
 
 export interface RunNowButtonProps {
@@ -18,8 +17,7 @@ const RunNowButton: React.FC<RunNowButtonProps> = ({
     text = 'Running'
   }
   return (
-    <Button type='primary' disabled={status === 'running'} onClick={onClick}>
-      <Icon icon={ status === 'running' ? 'loader' : 'play'} className='mr-2'/>
+    <Button type='primary' icon={ status === 'running' ? 'loader' : 'play'} disabled={status === 'running'} onClick={onClick}>
       {text}
     </Button>
   )

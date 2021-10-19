@@ -204,9 +204,9 @@ const DeployModal: React.FC = () => {
         </div>
         <Button
           id='deploy_modal_deploy_button'
-          size='sm'
           type='secondary'
-          className='w-full mt-2 flex-shrink-0'
+          className='mt-2'
+          block
           onClick={handleDeployClick}
           submit
           disabled={!canBeDeployed}>
@@ -233,7 +233,7 @@ const DeployModal: React.FC = () => {
           }}
           fire={deployStatus === 'deployed'}
         />
-        <Button id='deploy_modal_done_button' size='sm' type={buttonType} className={classNames('w-full mt-2', {
+        <Button id='deploy_modal_done_button' type={buttonType} block className={classNames('mt-2', {
           'invisible': !showButton
         })} onClick={handleClose} submit>
           {buttonText}
