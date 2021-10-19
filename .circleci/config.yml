@@ -115,7 +115,7 @@ jobs:
 
   frontend-image-push:
     docker:
-      - image: google/cloud-sdk
+      - image: google/cloud-sdk:360.0.0
 
     working_directory: /root/project
 
