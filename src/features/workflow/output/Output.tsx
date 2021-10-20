@@ -9,7 +9,7 @@ import RunStatusIcon from '../../run/RunStatusIcon'
 import { RunStatus } from '../../../qri/run'
 
 export interface OutputProps {
-  data?: EventLogLine[]
+  data: EventLogLine[]
   status?: RunStatus
   wasEdited: boolean
 }
@@ -33,10 +33,10 @@ const Output: React.FC<OutputProps> = ({ data, status, wasEdited }) => {
         height: 18,
         width: 18
       }}>
-        <RunStatusIcon status={status} size='2xs' />
+        {status && <RunStatusIcon status={status} size='2xs' />}
       </div>}
       <div className={classNames('max-h-96 overflow-auto output font-mono px-5 py-4 rounded-sm overflow-x-hidden border-t rounded-b-md bg-white', borderColorClass)}>
-        {data && data.map((line, i) => {
+        {data.map((line, i) => {
           switch (line.type) {
             case EventLogLineType.ETPrint:
             case EventLogLineType.ETError:
@@ -47,7 +47,7 @@ const Output: React.FC<OutputProps> = ({ data, status, wasEdited }) => {
               return <p key={i}>{JSON.stringify(line, undefined, 2)}</p>
           }
         })}
-        {status === 'running' && <p className='text-qrinavy-700 text-sm'>Running...</p>}
+        {status === 'running' && !data.length && <p className='text-qrinavy-700 text-sm'>Running...</p>}
         &nbsp;
       </div>
     </div>

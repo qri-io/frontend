@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
 
 import classNames from 'classnames'
@@ -10,6 +10,7 @@ import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowHeader from './WorkflowHeader'
 import WorkflowCellControls from './WorkflowCellControls'
 import { selectClearedCells, selectEditedCells } from "./state/workflowState";
+import { EventLogLine } from "../../qri/eventLog";
 
 export interface WorkflowCellProps {
   active: boolean
@@ -44,6 +45,15 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   const { syntax, name, script } = step
   const editedCells = useSelector(selectEditedCells)
   const clearedCells = useSelector(selectClearedCells)
+  const [output, setOutput] = useState<EventLogLine[]>(run?.output || [])
+
+  useEffect(() => {
+    if ((run?.status === "succeeded" || run?.status === "failed") && run.output) {
+      setOutput(run.output)
+    } else if ((run?.status === "succeeded" || run?.status === "failed") && !run.output?.length){
+      setOutput([])
+    }
+  }, [ run, output ])
 
   const status = run?.status
   const isEdited = editedCells[index]
@@ -113,9 +123,9 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
             )}
           >
             {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-            {(collapseState === 'all' || collapseState === 'only-output') && (run?.output || run?.status === 'running') &&
+            {(collapseState === 'all' || collapseState === 'only-output') && (output.length > 0 || run?.status === 'running') &&
             !clearedCells[index] &&
-            <Output data={run?.output} status={run?.status} wasEdited={editedCells[index]} />}
+            <Output data={output} status={run?.status} wasEdited={editedCells[index]} />}
           </div>
         </div>
         <WorkflowCellControls
