@@ -73,7 +73,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
           runID: row.runID,
           path: row.path,
           commit: {
-            title: row.message,
+            title: row.title,
             timestamp:row.timestamp
           }
         }
