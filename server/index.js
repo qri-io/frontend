@@ -6,7 +6,7 @@ const composeHeadData = require('./util').composeHeadData
 const composeJSONLD = require('./util').composeJSONLD
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:2503'
-const PORT = 3000 
+const PORT = process.env.PORT || 3000 
 
 const app = express()
 
@@ -22,7 +22,24 @@ var server = app.listen(PORT, () => {
 // are formed
 // must be updated if routes change, particularly routes with 2 segments as
 // those are the routes at risk for being incorrectly matched
-const reservedUsernames = ['ipfs', 'login', 'workflow'] 
+const reservedUsernames = [
+  'ipfs',
+  'login',
+  'workflow',
+  'admin',
+  'settings',
+  'signin',
+  'signout',
+  'signup',
+  'userimage',
+  'search',
+  'oauth',
+  'identity',
+  'client',
+  'issues',
+  'follow',
+  'unpublish'
+] 
 
 
 // reservedNames are a list of words that may be mistaken for dataset names
