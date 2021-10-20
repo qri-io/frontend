@@ -18,4 +18,4 @@ RUN yarn build
 FROM node:14.8-alpine
 COPY --from=build /app /
 EXPOSE 8080
-CMD ["yarn", "start"]
+CMD ["yarn", "serve"]
