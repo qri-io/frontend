@@ -1,5 +1,13 @@
 FROM node:14.8-alpine as build
 
+ARG api_base_url
+ARG ws_base_url
+ARG app_port
+
+ENV REACT_APP_API_BASE_URL=$api_base_url
+ENV REACT_APP_WS_BASE_URL=$ws_base_url
+ENV PORT=$app_port
+
 # create app directory
 WORKDIR /app
 

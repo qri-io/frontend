@@ -120,12 +120,20 @@ jobs:
   frontend-image-push:
     docker:
       - image: google/cloud-sdk:360.0.0
-
     working_directory: /root/project
-
+    parameters:
+      api_url:
+        description: The api base url
+        type: string
+      ws_url:
+        description: The ws base url
+        type: string
+      port:
+        description: the port to serve the app on
+        type: string
     steps:
     - checkout:
-        path: /root/project
+        path: /root/project 
     - run:
         name: Install node
         command: curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -y nodejs build-essential
@@ -133,7 +141,7 @@ jobs:
     - setup_remote_docker
     - run:
         name: Build docker image
-        command: docker build --rm=false -t gcr.io/qri-io/qrimatic-fe:$CIRCLE_SHA1 .
+        command: docker build --build-arg api_base_url=<<parameters.api_url>> --build-arg ws_base_url=<<parameters.ws_url>> --build-arg app_port=<<parameters.port>> --rm=false -t gcr.io/qri-io/qrimatic-fe:$CIRCLE_SHA1 .
     - run:
         name: Push image to Google Container Registry, add 'latest' tag
         command: .circleci/publish_to_gcr.sh gcr.io/qri-io/qrimatic-fe $CIRCLE_SHA1
@@ -180,7 +188,10 @@ workflows:
   frontend:
     jobs:
       - frontend-test
-      - frontend-image-push
+      - frontend-image-push:
+          api_url: "https://rosebud-api.qri.cloud"
+          ws_url: "wss://rosebud-api.qri.cloud"
+          port: "3000"
       - frontend-dev-deploy:
           requires:
             - frontend-image-push
