@@ -3,6 +3,8 @@ FROM node:14.8-alpine as build
 # create app directory
 WORKDIR /app
 
+RUN echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
+
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
 
