@@ -53,6 +53,10 @@ commands:
             kubectl set image statefulset <<parameters.statefulset>>
             <<parameters.container>>=<<parameters.image>>:<<parameters.tag>> "$@"
           name: Roll out image
+      - run:
+          command: >
+            kubectl rollout status deployment/<<parameters.deployment>> --namespace="<<parameters.namespace>>" --watch --timeout=5m
+          name: Wait for deployment complete
 
 jobs:
   frontend-test:
@@ -167,6 +171,10 @@ jobs:
           container: qrimatic-fe
           image: gcr.io/qri-io/qrimatic-fe
           tag: $CIRCLE_SHA1
+      - run:
+          command: >
+            kubectl rollout status deployment/qm-test-qrimatic-fe --namespace="qrimatic" --watch --timeout=5m
+          name: Wait for deployment complete
 
 workflows:
   frontend:
