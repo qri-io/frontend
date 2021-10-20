@@ -85,8 +85,8 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
               <Button className='mr-3' type='dark'>
                 Follow
               </Button>
-              <Button type='secondary'>
-                <Icon icon='globe' size='lg' className='mr-2' /> Share
+              <Button type='secondary icon='globe'>
+                Share
               </Button>
               <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
               */}

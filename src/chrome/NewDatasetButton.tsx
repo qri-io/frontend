@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import Icon from './Icon'
 import Button from './Button'
+import IconOnlyButton from './IconOnlyButton'
 
 interface NewDatasetButtonProps {
   mini?: boolean
@@ -19,22 +19,14 @@ const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini,id }) => (
   }}>
     {
       !mini && (
-        <Button type='secondary'>
-          <Icon icon='plus' size='sm' className='mr-2'/>
+        <Button type='secondary' icon='plus'>
           New Dataset
         </Button>
       )
     }
     {
       mini && (
-        <div
-          className='text-white bg-qripink hover:bg-qripink-600 inline-block p-8 relative'
-          style={{
-            borderRadius: 50
-          }}
-        >
-          <Icon icon='plus' size='lg' className='absolute left-5 top-5'/>
-        </div>
+        <IconOnlyButton type='secondary' size='lg' icon='plus' round />
       )
     }
 

@@ -5,7 +5,6 @@ import Button from '../../chrome/Button'
 import { AnonUser, selectSessionUser } from '../session/state/sessionState'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
-import Icon from "../../chrome/Icon";
 
 export interface DeployStatusDescriptionButtonProps {
   isNew: boolean
@@ -32,11 +31,11 @@ const DeployButtonWithStatusDescription: React.FC<DeployStatusDescriptionButtonP
   return (
     <Button
       type='secondary'
-      className='px-2 w-28 deploy_workflow_button'
+      className='deploy_workflow_button'
       onClick={handleButtonClick}
       disabled={disabled}
+      icon='deploy'
     >
-      <Icon className='mr-1.5' icon='deploy' size='sm'/>
       {isNew ? 'Deploy' : 'Re Deploy'}
     </Button>
   )

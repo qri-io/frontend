@@ -90,7 +90,7 @@ interface IconProps {
   spin?: boolean
 }
 
-export type IconSize = '2xs' | 'xs' | 'sm' | 'md' | 'lg'
+export type IconSize = '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg'
 
 const Icon: React.FunctionComponent<IconProps> = (props) => {
   const { icon } = props

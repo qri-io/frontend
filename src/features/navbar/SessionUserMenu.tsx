@@ -25,7 +25,7 @@ const SessionUserMenu: React.FC<{}> = () => {
     return (
       <>
         <Link id='user_menu_login_button' onClick={handleLogInClick}>Log In</Link>
-        <Button onClick={handleSignUpClick} size='sm' className='ml-8'>
+        <Button onClick={handleSignUpClick} size='lg' className='ml-8'>
           Sign Up
         </Button>
       </>

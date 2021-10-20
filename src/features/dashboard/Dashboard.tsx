@@ -8,7 +8,6 @@ import Page from '../app/Page'
 import CollectionTable from '../collection/CollectionTable'
 import { WorkflowInfo } from '../../qrimatic/workflow'
 import Button from '../../chrome/Button'
-import Icon from '../../chrome/Icon'
 import ActivityList from '../activityFeed/ActivityList'
 import { LogItem } from '../../qri/log'
 import Spinner from '../../chrome/Spinner'
@@ -31,9 +30,7 @@ const Dashboard: React.FC<any> = () => {
           <h1 className='text-2xl font-extrabold w-1/2'>Dashboard</h1>
           <div className='w-1/2 text-right'>
           <Link to='/new'>
-            <Button>
-              <Icon icon='plusCircle' className='mr-2' size='md'/> New Dataset
-            </Button>
+            <Button icon='plus'>New Dataset</Button>
           </Link>
           </div>
         </header>
@@ -69,7 +66,7 @@ const Dashboard: React.FC<any> = () => {
             </div>
             <div className='text-right'>
               <Link to='/collection'>
-                <Button>View All Datasets <Icon className='ml-2' icon='caretRight' /></Button>
+                <Button caret>View All Datasets</Button>
               </Link>
             </div>
           </div>
@@ -84,7 +81,7 @@ const Dashboard: React.FC<any> = () => {
           </div>
           <div className='text-right'>
             <Link to='/activity'>
-              <Button>View All Activity <Icon className='ml-2' icon='caretRight' /></Button>
+              <Button caret>View All Activity</Button>
             </Link>
           </div>
         </div>

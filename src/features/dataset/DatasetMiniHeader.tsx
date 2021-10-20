@@ -55,8 +55,8 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
                 <Button className='mr-3' type='dark'>
                   Follow
                 </Button>
-                <Button className='mr-3' type='secondary'>
-                  <Icon icon='globe' size='lg' className='mr-2' /> Share
+                <Button className='mr-3' type='secondary' icon='globe'>
+                  Share
                 </Button>
               */}
               <DownloadDatasetButton qriRef={qriRef} type='primary' small />

@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 export interface CustomIconProps {
   className?: string
-  size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  size?: '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   spin?: boolean
   rotation?: 90 | 180 | 270
 }
@@ -18,6 +18,9 @@ const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
   let dimension: number
 
   switch (size) {
+    case '3xs':
+      dimension = 10
+      break
     case '2xs':
       dimension = 12
       break

@@ -17,7 +17,6 @@ import {
   selectEditedCells
 } from './state/workflowState'
 import { platform } from '../../utils/platform'
-import Icon from "../../chrome/Icon";
 import DeployButton from "../deploy/DeployButton";
 import { newQriRef } from "../../qri/ref";
 import { useParams } from "react-router";
@@ -80,18 +79,16 @@ const RunBar: React.FC<RunBarProps> = ({
             <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : displayStatus} size='md' className='ml-2' />
           </div>
         </div>
-        <div className='w-36'>
+        <div>
           {(status === "running")
             ? <div className='flex'>
-                <Button type='secondary-outline' className='px-2 w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>
-                  <Icon className='mr-1.5' icon='playCircle' size='sm'/>Cancel</Button>
+                <Button type='secondary-outline' icon='playCircle' className='w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>Cancel</Button>
                 <DeployButton isNew={isNew} disabled={!((isNew || canEdit) && isDirty) } />
               </div>
             : (
               <div className='flex'>
                 <div data-tip data-for='dry-run'>
-                  <Button type='secondary-outline' className='px-2 w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>
-                    <Icon className='mr-1.5' icon='playCircle' size='sm'/>Dry Run</Button>
+                  <Button type='secondary-outline' icon='playCircle' className='w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
                 </div>
                 <div>
                   <DeployButton isNew={isNew} disabled={!((isNew || canEdit) &&isDirty)} />
