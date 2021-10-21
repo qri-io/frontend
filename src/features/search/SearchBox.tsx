@@ -10,14 +10,24 @@ interface SearchBoxProps {
   onChange?: (q: string) => void
   onSubmit?: (q: string) => void
   placeholder?: string
+  value?: string
+  size: 'md' | 'lg'
   dark?: boolean
+  shadow?: boolean
+  border?: boolean
+  transparent?: boolean
 }
 
 const SearchBox: React.FC<SearchBoxProps> = ({
   onChange,
   onSubmit,
   placeholder = 'Search',
-  dark = false
+  value,
+  size = 'md',
+  dark = false,
+  shadow = false,
+  border = true,
+  transparent = false
 }) => {
   const [stateValue, setStateValue] = React.useState('')
   const [debouncedValue] = useDebounce(stateValue, DEBOUNCE_TIMER)
@@ -27,6 +37,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       onChange(stateValue)
     }
   }, [debouncedValue, onChange, stateValue])
+
+  React.useEffect(() => {
+    setStateValue(value)
+  }, [value])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -41,16 +55,24 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   }
 
   return (
-    <form className="my-1 mx-2 relative shadow-sm w-48" onSubmit={handleSubmit}>
+    <form className={classNames('relative flex focus-within:border-qripink border rounded-lg w-full', {
+      'bg-transparent': transparent,
+      'bg-white': !transparent,
+      'border-qrigray-300': !dark && border,
+      'border-black': dark && border,
+      'border-0': !border
+    })} onSubmit={handleSubmit} style={{
+      boxShadow: shadow ? '0px 0px 8px rgba(0, 0, 0, 0.1)' : '',
+      padding: size === 'lg' ? '8px 20px' : '4px 10px',
+      height: size === 'lg' ? '50px' : '34px'
+    }}>
       <input
-        className={classNames('focus:ring-qripink focus:border-qripink block w-full rounded-md tracking-wider bg-transparent placeholder-opacity-50', {
-          'border-qrigray-300 placeholder-qrigray-300': !dark,
-          'border-black placeholder-black': dark
+        className={classNames('focus:ring-transparent border-0 bg-transparent block w-full tracking-wider placeholder-opacity-50 p-0', {
+          'placeholder-black': dark,
+          'placeholder-qrigray-300': !dark,
+          'text-sm': size === 'md',
+          'text-base': size === 'lg',
         })}
-        style={{
-          padding: '4px 8px 4px 8px',
-          fontSize: 11
-        }}
         id='search'
         name='search'
         type='text'
@@ -58,12 +80,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         value={stateValue || ''}
         onChange={handleChange}
       />
-      <span className={classNames('absolute inset-y-0 right-0 flex items-center pr-2', {
+      <div className={classNames('flex items-center', {
         'text-qrigray-300': !dark,
         'text-black': dark
       })}>
         <Icon size='sm' icon='skinnySearch' />
-      </span>
+      </div>
     </form>
   )
 }

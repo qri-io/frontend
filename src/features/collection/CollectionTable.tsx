@@ -123,9 +123,9 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
               </Link>
             </div>
             <div className='flex text-xs overflow-y-hidden'>
-              <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} small />
-              <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} small />
-              <DatasetInfoItem icon={'commit'} label={row.commitCount.toString()} small/>
+              <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} size='sm' />
+              <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} size='sm' />
+              <DatasetInfoItem icon={'commit'} label={row.commitCount.toString()} size='sm' />
             </div>
           </div>
         </div>

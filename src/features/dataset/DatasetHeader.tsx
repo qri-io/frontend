@@ -52,7 +52,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
         <div className='flex-grow'>
           {/* don't show the username/name when creating a new dataset with the workflow editor */}
           { !isNew && (
-            <div className='text-md text-gray-400 relative flex items-center group hover:text pb-1 font-mono h-10'>
+            <div className='text-base text-qrigray-400 relative flex items-center group hover:text font-mono'>
               <Link to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</Link>/
               <EditableLabel
                 readOnly={!editable}
@@ -64,16 +64,16 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             </div>
           )}
 
-          <div className='text-2xl text-black-500 font-black group hover:text'>
+          <div className='text-2xl text-black-500 font-bold group hover:text'>
             {isNew ? newWorkflowTitle : header.name}
           </div>
           {!isNew && (
-            <div className='flex mt-3 text-sm'>
+            <div className='flex mt-2 text-sm'>
               {header.runID && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}
-              <DatasetInfoItem icon='disk' label={fileSize(header.bodySize || 0)} />
-              <DatasetInfoItem icon='download' label={getLabel(header.downloadCount, 'download')} />
-              <DatasetInfoItem icon='follower' label={getLabel(header.followerCount, 'follower')} />
-              <DatasetInfoItem icon='unlock' label='public' />
+              <DatasetInfoItem size='lg' icon='disk' label={fileSize(header.bodySize || 0)} />
+              <DatasetInfoItem size='lg' icon='download' label={getLabel(header.downloadCount, 'download')} />
+              <DatasetInfoItem size='lg' icon='follower' label={getLabel(header.followerCount, 'follower')} />
+              <DatasetInfoItem size='lg' icon='unlock' label='public' />
             </div>
           )}
         </div>

@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import classNames from 'classnames'
 import { Link, useLocation, useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
@@ -13,11 +14,16 @@ import { AnonUser, selectSessionUser } from '../session/state/sessionState'
 export interface NavBarProps {
   minimal?: boolean
   showSearch?: boolean
+  transparent?: boolean
+  // noLogo hides the logo, used on homepage
+  noLogo?: boolean
 }
 
 const NavBar: React.FC<NavBarProps> = ({
   minimal = false,
-  showSearch = true
+  showSearch = true,
+  transparent = false,
+  noLogo = false
 }) => {
   const expanded = useSelector(selectNavExpanded)
   const user = useSelector(selectSessionUser)
@@ -37,17 +43,23 @@ const NavBar: React.FC<NavBarProps> = ({
   }
 
   return (
-    <div className='bg-white text-black text-bold flex items-center pr-8 font-medium' style={{
+    <div className={classNames('text-black text-bold flex items-center pr-8 font-medium', {
+      'bg-white': !transparent
+    })} style={{
       paddingTop: 14,
       paddingBottom: 14,
     }}>
-      <Link className='mr-5' to='/'>
-        <div className={`flex align-center items-center justify-center ${expanded ? 'w-44' : 'w-24'}`}>
-          <QriLogo />
-          <div className={`font-bold text-xl ml-2 ${expanded ? 'block' : 'hidden'}`} style={{ fontSize: 21 }}>Qri</div>
-        </div>
-      </Link>
-      {!minimal && showSearch && <SearchBox onSubmit={handleSearchSubmit} placeholder='Search for Datasets' />}
+      {!noLogo && (
+        <Link className='mr-5' to='/'>
+          <div className={`flex align-center items-center justify-center ${expanded ? 'w-44' : 'w-24'}`}>
+            <QriLogo />
+            <div className={`font-bold text-xl ml-2 ${expanded ? 'block' : 'hidden'}`} style={{ fontSize: 21 }}>Qri</div>
+          </div>
+        </Link>
+      )}
+      <div className='w-48'>
+        {!minimal && showSearch && <SearchBox onSubmit={handleSearchSubmit} placeholder='Search for Datasets' />}
+      </div>
       <div className='flex m-auto items-center'>
         {!minimal && (user !== AnonUser) && (
           <ButtonGroup
