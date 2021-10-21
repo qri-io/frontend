@@ -1,34 +1,39 @@
 import { RootState } from '../../../store/store';
 import { createReducer } from '@reduxjs/toolkit'
-import { datasetAliasFromVersionInfo, newVersionInfo, VersionInfo } from '../../../qri/versionInfo';
+import { newVersionInfo, VersionInfo } from '../../../qri/versionInfo';
 import { CALL_API } from "../../../store/api";
+import { runEndTime } from '../../../utils/runEndTime';
+import { LogbookWriteAction, TransformStartAction } from './collectionActions';
 
-export const WORKFLOW_STARTED = 'WORKFLOW_STARTED'
-export const WORKFLOW_COMPLETED = 'WORKFLOW_COMPLETED'
+export const LOGBOOK_WRITE_COMMIT = 'LOGBOOK_WRITE_COMMIT'
+export const LOGBOOK_WRITE_RUN = 'LOGBOOK_WRITE_RUN'
+export const TRANSFORM_START = 'TRANSFORM_START'
 
 export const selectCollection = (state: RootState): VersionInfo[] => {
-  const { collection, running } = state.collection
+  const { collection } = state.collection
 
-  var ordered: VersionInfo[] = []
-  running.forEach((id: string) => {
-    // websocket may notify us about a running workflow that we haven't
-    // loaded locally yet. Return early if id is not in collection
-    if (!collection[id]) {
-      return
-    }
-    ordered.push(collection[id])
-  })
-
-  state.collection.listedIDs.forEach( (id: string) => {
-    if (running.includes(id)) {
-      return
-    }
-    ordered.push(collection[id])
-  })
+  var ordered: VersionInfo[] = Object.keys(collection).map((id: string) => collection[id])
 
   return ordered.sort((a,b) => {
-    if (a.commitTime === b.commitTime) { return 0 }
-    else if (a.commitTime > b.commitTime) { return -1 }
+    let aTime: Date
+    let bTime: Date
+    if (a.runStart && a.runDuration) {
+      aTime = runEndTime(a.runStart, a.runDuration)
+    } else if (!a.commitTime) {
+     return 0 
+    } else {
+      aTime = new Date(a.commitTime)
+    }
+
+    if (b.runStart && b.runDuration) {
+      bTime = runEndTime(b.runStart, b.runDuration)
+    } else if (!b.commitTime) {
+      return 0
+    } else {
+      bTime = new Date(b.commitTime)
+    }
+    if (aTime === bTime) { return 0 }
+    else if (aTime > bTime) { return -1 }
     return 1
   })
 }
@@ -36,30 +41,23 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
 export const selectVersionInfo = ( initId: string): (state: RootState) => VersionInfo =>
   (state) => state.collection.collection[initId]
 
-export const selectIsCollectionLoading = (state: RootState): boolean => state.collection.collectionLoading && state.collection.runningLoading
+export const selectIsCollectionLoading = (state: RootState): boolean => state.collection.collectionLoading
 
 export interface CollectionState {
   // collection is a record of all the workflow infos
   collection: Record<string, VersionInfo>
-  // running contains the ids of the currently running workflows in reverse chronological
-  // order based on latestRunTime
-  running: string[]
   // ids of datasets in the current user's collection
   listedIDs: Set<string>
   // ids of run events in middle of loading
   pendingIDs: string[]
   collectionLoading: boolean
-  runningLoading: boolean
-
 }
 
 const initialState: CollectionState = {
   collection: {},
-  running: [],
   listedIDs: new Set<string>(),
   pendingIDs: [],
   collectionLoading: true,
-  runningLoading: true
 }
 
 export const collectionReducer = createReducer(initialState, {
@@ -76,27 +74,7 @@ export const collectionReducer = createReducer(initialState, {
     state.collectionLoading = false
   },
   'API_COLLECTION_FAILURE': (state, action) => {
-    state.runningLoading = false
-  },
-  'API_RUNNING_REQUEST': (state, action) => {
-    state.running = []
-    state.runningLoading = true
-  },
-  'API_RUNNING_SUCCESS': (state, action) => {
-    var running: string[] = []
-    action.payload.data.forEach( (workflow: VersionInfo) => {
-      var alias = workflow.initID
-      if (alias === '') {
-        alias = datasetAliasFromVersionInfo(workflow)
-      }
-      state.collection[alias] = workflow
-      running.push(alias)
-    })
-    state.running = running
-    state.runningLoading = false
-  },
-  'API_RUNNING_FAILURE': (state, action) => {
-    state.runningLoading = false
+    state.collectionLoading = false
   },
   'API_VERSIONINFO_REQUEST' : (state, action) => {
     state.pendingIDs.push(action[CALL_API].body.initID)
@@ -106,20 +84,66 @@ export const collectionReducer = createReducer(initialState, {
     state.pendingIDs = state.pendingIDs.filter(id => id !== versionInfo.initID)
     state.collection[versionInfo.initID] = newVersionInfo(versionInfo)
   },
-  WORKFLOW_STARTED: (state, action) => {
-    const id = action.data.id
-    const i = state.running.findIndex((runningID: string) => runningID === id)
-    if (i !== -1) {
-      state.running.splice(i, 1)
-    }
-    state.running.unshift(id)
-    state.collection[id] = action.data
-  },
-  WORKFLOW_COMPLETED: (state, action) => {
-    state.collection[action.data.id] = action.data
-  },
-  'API_RUNNOW_COLLECTION_SUCCESS': (state, action) => {
-    const initID = action.payload.requestID
-    state.collection[initID].runID = action.payload.data
-  }
+  TRANSFORM_START: transformStart,
+  LOGBOOK_WRITE_RUN: logbookWriteRun,
+  LOGBOOK_WRITE_COMMIT: logbookWriteCommit,
 })
+
+function transformStart(state: CollectionState, action: TransformStartAction) {
+  const { collection } = state
+  const { mode, initID, runID } = action.lc
+
+  if (mode === "apply" || !collection[initID]) return
+
+  collection[initID].runStatus = "running"
+  collection[initID].runID = runID
+  collection[initID].runCount++
+}
+
+function logbookWriteRun(state: CollectionState, action: LogbookWriteAction) {
+  const { collection } = state
+  const { initID, runID, runStatus, runDuration, runStart } = action.vi
+
+  if (!collection[initID]) return
+
+  collection[initID].runID = runID
+  collection[initID].runStatus = runStatus
+  collection[initID].runDuration = runDuration
+  collection[initID].runStart = runStart
+}
+
+function logbookWriteCommit(state: CollectionState, action: LogbookWriteAction) {
+  const { collection } = state
+  const { vi } = action
+
+  if (!collection[vi.initID]) return
+
+  const { 
+    workflowID,
+    downloadCount, 
+    runCount, 
+    followerCount, 
+    openIssueCount, 
+    runID, 
+    runStatus, 
+    runDuration, 
+    runStart 
+  } = collection[vi.initID]
+  
+  // preserve fields that are not tracked in logbookWriteCommit
+  vi.workflowID = workflowID
+  vi.downloadCount = downloadCount
+  vi.runCount = runCount
+  vi.followerCount = followerCount
+  vi.openIssueCount = openIssueCount
+
+  // preserve "last run" information
+  if (vi.runID === "") {
+    vi.runID = runID
+    vi.runStatus = runStatus
+    vi.runDuration = runDuration
+    vi.runStart = runStart
+  }
+
+  collection[vi.initID] = vi
+}

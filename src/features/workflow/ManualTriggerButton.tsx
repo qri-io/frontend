@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 
 import Icon from '../../chrome/Icon'
-import { runNow, loadCollection } from '../collection/state/collectionActions'
+import { runNow } from '../collection/state/collectionActions'
 import { refStringFromQriRef } from '../../qri/ref'
 import { VersionInfo } from '../../qri/versionInfo'
 import { selectRun } from '../events/state/eventsState'
@@ -23,17 +23,6 @@ const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ row }) => {
   const handleClick = () => {
     dispatch(runNow({ username, name }, initID))
   }
-
-  const statusRef = useRef(status);
-
-  // when status changes from 'running' to 'succeeded', refresh the collection state
-  useEffect(() => {
-    if ((statusRef.current === 'running') && (status === 'succeeded')) {
-      dispatch(loadCollection())
-    }
-
-    statusRef.current = status
-  }, [dispatch, status])
 
   return (
     <div

@@ -43,6 +43,20 @@ export const ETWorkflowStarted = "wf:Started"
 // payload is a Workflow
 export const ETWorkflowCompleted = "wf:Completed"
 
+// ETTransformStart signals the start of a transform execution
+// payload is a TransformLifecycle
+export const ETTransformStart = "tf:Start"
+
+// ETLogbookWriteRun occurs when the logbook writes an op of model
+// `RunModel`, indicating that a new run of a dataset has occured
+// payload is a dsref.VersionInfo
+export const ETLogbookWriteRun = "logbook:WriteRun"
+// ETLogbookWriteCommit occurs when the logbook writes an op of model
+// `CommitModel`, indicating that a new dataset version has been saved
+// payload is a dsref.VersionInfo
+export const ETLogbookWriteCommit = "logbook:WriteCommit"
+
+
 export const ETAutomationDeployStart = "automation:DeployStart"
 export const ETAutomationDeployEnd = "automation:DeployEnd"
 
@@ -58,3 +72,21 @@ export const WSSubscribeRequest = "subscribe:request"
 export const WSSubscribeSuccess = "subscribe:success"
 export const WSSubscribeFailure = "subscribe:failure"
 export const WSUnsubscribeRequest = "unsubscribe:request"
+
+export interface TransformLifecycle {
+  runID: string
+  stepCount: number
+  status: string
+  mode: string
+  initID: string
+}
+
+export function NewTransformLifecycle(data: Record<string,any>): TransformLifecycle {
+  return {
+    runID: data.runID,
+    stepCount: data.stepCount,
+    status: data.status,
+    mode: data.mode,
+    initID: data.initID
+  }
+}

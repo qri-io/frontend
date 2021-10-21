@@ -1,11 +1,10 @@
 import { ApiAction, CALL_API, ApiActionThunk } from "../../../store/api"
 import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
-import { NewWorkflow, workflowInfoFromWorkflow } from "../../../qrimatic/workflow"
-import { WORKFLOW_COMPLETED, WORKFLOW_STARTED } from "./collectionState"
-import { AnyAction } from "redux"
+import { LOGBOOK_WRITE_COMMIT, LOGBOOK_WRITE_RUN, TRANSFORM_START } from "./collectionState"
 import { RootState } from "../../../store/store";
 import { ThunkDispatch } from 'redux-thunk'
 import { QriRef } from '../../../qri/ref'
+import { TransformLifecycle } from "../../../qri/events"
 
 
 function mapVersionInfo (data: object | []): VersionInfo[] {
@@ -79,22 +78,32 @@ function fetchRunNow (qriRef: QriRef, initID: string): ApiAction {
   }
 }
 
-// workflowStarted is dispatched by the websocket and users should not need to
-// dispatch it anywhere else
-export function workflowStarted(workflow: Record<string, any>): AnyAction {
-  const wf = NewWorkflow(workflow)
+export interface LogbookWriteAction {
+  type: string
+  vi: VersionInfo
+}
+
+export function logbookWriteCommitEvent(vi: VersionInfo): LogbookWriteAction {
   return {
-    type: WORKFLOW_STARTED,
-    data: workflowInfoFromWorkflow(wf)
+    type: LOGBOOK_WRITE_COMMIT,
+    vi
   }
 }
 
-// workflowCompleted is dispatched by the websocket and users should not need to
-// dispatch it anywhere else
-export function workflowCompleted(workflow: Record<string, any>): AnyAction {
-  const wf = NewWorkflow(workflow)
+export function logbookWriteRunEvent(vi: VersionInfo): LogbookWriteAction {
   return {
-    type: WORKFLOW_COMPLETED,
-    data: workflowInfoFromWorkflow(wf)
+    type: LOGBOOK_WRITE_RUN,
+    vi
+  }
+}
+
+export interface TransformStartAction {
+  type: string
+  lc: TransformLifecycle
+}
+export function transformStartEvent(lc: TransformLifecycle): TransformStartAction {
+  return {
+    type: TRANSFORM_START,
+    lc
   }
 }

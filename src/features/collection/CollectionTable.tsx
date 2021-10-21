@@ -17,6 +17,7 @@ import RunStatusBadge from '../run/RunStatusBadge'
 import { VersionInfo } from '../../qri/versionInfo'
 import ManualTriggerButton from '../workflow/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
+import { runEndTime } from '../../utils/runEndTime'
 
 interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
@@ -177,9 +178,14 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         // out this section that mocks durations & timestamps for us
         const {
           runStatus,
-          commitTime
+          runStart,
+          runDuration,
+          runCount
         } = row
-
+        let runEndLabel = <span>-</span> 
+        if (runStatus !== 'running' && runStart && runDuration) {
+          runEndLabel = <RelativeTimestamp timestamp={runEndTime(runStart, runDuration)} />
+        }
         // if status is not defined, show nothing in this column
         if (runStatus === undefined) {
           return <>&nbsp;</>
@@ -188,8 +194,8 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         return (
           <div className='flex flex-col'>
             <div className='flex items-center'>
-              <div className='text-sm mr-2'>#23</div>
-              <DatasetInfoItem icon='clock' label={<RelativeTimestamp timestamp={new Date(commitTime || '')}/>} />
+              <div className='text-sm mr-2'>{runStatus === 'running' ? '-' : `#${runCount}`}</div>
+              <DatasetInfoItem icon='clock' label={runEndLabel}/>
             </div>
             <div className='text-gray-500 text-xs'>
               <RunStatusBadge status={runStatus}/>
