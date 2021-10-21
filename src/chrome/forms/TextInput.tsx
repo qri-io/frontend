@@ -53,7 +53,7 @@ const TextInput: React.FC<TextInputProps> = ({
           tooltipFor={name}
         />}
         <input
-          className="focus:ring-indigo-500 focus:border-indigo-500 block w-full px-2 text-md border-qrigray-300 rounded-md placeholder-qrigray-400 rounded-lg"
+          className="focus:ring-qripink focus:border-qripink block w-full px-2 text-sm border-qrigray-300 rounded-md placeholder-qrigray-400 rounded-lg"
           id={name}
           name={name}
           type={type}

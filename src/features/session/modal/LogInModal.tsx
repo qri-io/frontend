@@ -44,7 +44,7 @@ const LogInModal: React.FC = () => {
       <div className='w-10 m-auto mb-4'>
         <QriLogo size='sm'/>
       </div>
-      <div className='text-3xl font-black mb-8 text-black'>Welcome to Qri</div>
+      <div className='text-3xl font-black mb-8 text-qrinavy-800'>Welcome to Qri</div>
       <div className='w-72 mx-auto'>
         <form>
           <div className='mb-8'>
@@ -61,7 +61,7 @@ const LogInModal: React.FC = () => {
               onChange={(value) => { setPassword(value)  }}
               placeholder='Password'
             />
-            <Link to='/forgot-password'><div className='text-left text-black text-xs font-medium'>Forgot your Password?</div></Link>
+            <Link to='/forgot-password'><div className='text-left text-black text-sm font-semibold'>Forgot your Password?</div></Link>
           </div>
 
           {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
@@ -70,7 +70,7 @@ const LogInModal: React.FC = () => {
             {loading ? <Spinner color='#fff' size={6} /> : 'Log In'}
           </Button>
         </form>
-        <div className='mb-3 text-qrigray-400 tracking-wider text-xs'>
+        <div className='mb-3 text-qrigray-400' style={{ fontSize: 11 }}>
           By continuing, you agree to Qri's <Link to='https://qri.io/legal/tos'>Terms of Service</Link> & <Link to='https://qri.io/legal/privacy-policy'>Privacy Policy</Link>.
         </div>
 

@@ -58,7 +58,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                       <div className='flex-grow overflow-hidden'>
                         <Readme data={dataset.readme} />
                       </div>
-                      {!expandReadme && (<div className='text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+                      {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                     </div>
                   </ContentBox>
                 </div>
@@ -72,7 +72,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     </div>
                     {/* Bottom of the box */}
                     <ContentBoxTitle title='Description' />
-                    <div className='text-gray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
+                    <div className='text-qrigray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
                     {dataset.meta?.keywords && <MetaChips words={dataset.meta.keywords} />}
                   </ContentBox>
                 </div>

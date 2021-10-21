@@ -93,7 +93,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
             <ContentBox className='flex-grow flex flex-col'>
               <div className='flex'>
                 <div className='flex-grow'>
-                  <div className='text-sm text-gray-400 font-mono'>
+                  <div className='text-sm text-qrigray-400 font-mono'>
                     {dataset.username}/{dataset.name}
                   </div>
                   <div className='text-xl text-black font-semibold'>

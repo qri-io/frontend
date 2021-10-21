@@ -73,29 +73,24 @@ const RunBar: React.FC<RunBarProps> = ({
 
   return (
     <div>
-      <div className='flex w-64 items-center'>
+      <div className='flex items-center'>
         <div className='mr-4'>
           <div className='inline-block align-middle'>
             <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : displayStatus} size='md' className='ml-2' />
           </div>
         </div>
-        <div>
+        <div className='flex'>
           {(status === "running")
-            ? <div className='flex'>
-                <Button type='secondary-outline' icon='playCircle' className='w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>Cancel</Button>
-                <DeployButton isNew={isNew} disabled={!((isNew || canEdit) && isDirty) } />
-              </div>
+            ? (
+                <Button type='secondary-outline' icon='circleX' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>Cancel</Button>
+              )
             : (
-              <div className='flex'>
                 <div data-tip data-for='dry-run'>
-                  <Button type='secondary-outline' icon='playCircle' className='w-24 run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
+                  <Button type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
                 </div>
-                <div>
-                  <DeployButton isNew={isNew} disabled={!((isNew || canEdit) &&isDirty)} />
-                </div>
-              </div>
-            )
+              )
           }
+          <DeployButton isNew={isNew} disabled={!((isNew || canEdit) && isDirty) } />
         </div>
       </div>
       <ReactTooltip

@@ -40,14 +40,14 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
         <div className='text-left'>
           <div className='mb-2'>
             <ScrollTrigger target='triggers'>
-              <div className='font-bold text-black mb-1' style={{ fontSize: 13 }}>Triggers</div>
+              <div className='font-bold text-black mb-1 text-base'>Triggers</div>
               <div className='text-qrigray-400'>—</div>
               <div className='mb-4' />
             </ScrollTrigger>
           </div>
           <div className='mb-2'>
             <ScrollTrigger target='script'>
-              <div className='font-bold text-black mb-2' style={{ fontSize: 13 }}>
+              <div className='font-bold text-black mb-2 text-base'>
                 Script {run && <div className='float-right'>
                 <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : run.status} />
                 </div>}
@@ -58,7 +58,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <WorkflowScriptStatus run={run} />
 
           <ScrollTrigger target='on-completion'>
-            <div className='font-bold text-black mb-1' style={{ fontSize: 13 }}>On Completion</div>
+            <div className='font-bold text-black mb-1 text-base'>On Completion</div>
             <div className='text-qrigray-400'>—</div>
           </ScrollTrigger>
 
