@@ -1,3 +1,7 @@
+html {
+  font-size: 14px;
+}
+
 .App {
   text-align: center;
 }
@@ -75,4 +79,15 @@
   border-bottom-width: 1px;
   border-bottom-color: rgba(0,0,0,.12);
   margin-bottom: 20px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

@@ -1,7 +1,8 @@
 const {
   borderRadius,
   boxShadow,
-  fontFamily
+  fontFamily,
+  fontSize
 } = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -147,15 +148,29 @@ module.exports = {
         'spin-slow': 'spin 3s linear infinite',
         'appear': 'appear 1s ease-in-out'
       },
-      fontSize: {
-        'sm': '0.813rem' // 13px
-      },
       borderRadius: {
         ...borderRadius,
-        'DEFAULT': '3px',
         'md': '4.5px',
         'lg': '6px',
-        'xl': '8px'
+        'xl': '8px',
+        '2xl': '10px'
+      },
+      fontSize: {
+        ...fontSize,
+        'xs': '10px',
+        'sm': '12px',
+        'DEFAULT': '14px',
+        'base': '14px',
+        'lg': '16px',
+        'xl': '18px',
+        '2xl': '20px',
+        '3xl': '30px',
+        '4xl': '40px',
+        '5xl': '48px',
+        '6xl': '56px',
+        '7xl': '64px',
+        '8xl': '72px',
+        '9xl': '80px',
       }
     },
   },

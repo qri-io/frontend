@@ -34,7 +34,7 @@ const SessionUserMenu: React.FC<{}> = () => {
 
   const userIcon = (
     <div
-      className='rounded-2xl inline-block bg-cover flex-shrink-0'
+      className='rounded-3xl inline-block bg-cover flex-shrink-0'
       style={{
         height: '30px',
         width: '30px',
@@ -45,7 +45,7 @@ const SessionUserMenu: React.FC<{}> = () => {
 
   return (
     <div className="relative flex items-center font-medium">
-      <Link to='https://qri.io/docs' className='text-xs font-semibold' colorClassName='text-black hover:text-qripink'>Help</Link>
+      <Link to='https://qri.io/docs' className='text-sm font-semibold' colorClassName='text-black hover:text-qripink'>Help</Link>
       <DropdownMenu icon={userIcon} className='ml-8' items={[
         {
           element: (

@@ -7,7 +7,7 @@ interface ContentBoxTitleProps {
 const ContentBoxTitle: React.FC<ContentBoxTitleProps> = ({
   title
 }) => (
-  <div className='text-xs text-gray-400 font-medium mb-2'>{title}</div>
+  <div className='text-sm text-qrigray-400 font-semibold mb-2'>{title}</div>
 )
 
 export default ContentBoxTitle

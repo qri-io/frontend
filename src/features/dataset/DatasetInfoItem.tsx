@@ -9,7 +9,7 @@ export interface DatasetInfoItemProps {
   label: string | JSX.Element
   tooltip?: string
   iconClassName?: string
-  small?: boolean // uses smaller icons and gray text, used in collection view
+  size?: 'sm' | 'md' | 'lg'
 }
 
 const DatasetInfoItem: React.FC<DatasetInfoItemProps> = ({
@@ -17,22 +17,25 @@ const DatasetInfoItem: React.FC<DatasetInfoItemProps> = ({
   label,
   tooltip,
   iconClassName = '',
-  small = false
+  size = 'md'
 }) => {
 
+  let iconSize = 'xs'
+  if (size === 'sm') {
+    iconSize = '2xs'
+  } else if (size === 'lg'){
+    iconSize = 'sm'
+  }
 
   return (
-    <div className={classNames('flex items-center inline-block', {
-      'text-black-500 mr-5': !small,
-      'text-qrigray-400 mr-3': small
+    <div className={classNames('flex items-center inline-block text-xs', {
+      'text-black-500 mr-5': size !== 'sm',
+      'text-qrigray-400 mr-3': size === 'sm'
     })}>
-      <div className='mr-1 flex items-center'>
-        {(typeof icon === 'string') ? <Icon icon={icon} size={small ? '2xs' : 'sm'} className={iconClassName} /> : icon }
-      </div>
+      {(typeof icon === 'string') ? <Icon icon={icon} size={iconSize} className={classNames('mr-1', iconClassName)} /> : icon }
       {label}
       {tooltip && (
         <ReactTooltip
-          id={id}
           place='right'
           effect='solid'
           offset={{

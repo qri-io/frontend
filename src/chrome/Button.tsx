@@ -16,9 +16,9 @@ export type ButtonType = 'primary' // light blue button with white text
   export function generateButtonTypeClasses(type: ButtonType, disabled: boolean): object {
     return  {
       'text-white bg-qritile hover:bg-qritile-600': (type === 'primary'),
-      'text-qritile hover:text-qritile-600 text-sm border border-qritile hover:border-qritile-600 box-border': (type === 'primary-outline'),
-      'text-white bg-qripink-600 hover:bg-qripink-': (type === 'secondary'),
-      'text-qripink-600 hover:text-qripink-700 text-sm border border-qripink-600 hover:border-qripink-700 box-border': (type === 'secondary-outline'),
+      'text-qritile hover:text-qritile-600 border border-qritile hover:border-qritile-600 box-border': (type === 'primary-outline'),
+      'text-white bg-qripink-600 hover:bg-qripink-700': (type === 'secondary'),
+      'text-qripink-600 hover:text-qripink-700 border border-qripink-600 hover:border-qripink-700 box-border': (type === 'secondary-outline'),
       'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
       'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
       'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),
@@ -62,20 +62,17 @@ const Button: React.FC<ButtonProps> = ({
   onClick= () => {},
   children,
 }) => {
-  let fontSize = 12
   let height = 32
   let sizeClassName = 'rounded-md px-2.5'
   let caretSize: IconSize = '2xs'
 
   if (size === 'sm') {
-    fontSize = 10
     height = 30
     sizeClassName = 'rounded px-2.5'
     caretSize = '3xs'
   } else if (size === 'lg') {
-    fontSize = 14
     height = 38
-    sizeClassName = 'rounded-lg px-8'
+    sizeClassName = 'rounded-lg text-base'
     caretSize = 'xs'
   }
 
@@ -111,11 +108,10 @@ const Button: React.FC<ButtonProps> = ({
       id={id}
       type={submit ? 'submit' : 'button'}
       style={{
-        fontSize,
         height
       }}
       className={classNames(
-        'inline-flex items-center justify-center shadow-sm bg-transparent font-semibold focus:outline-none focus:ring-none mt-0 transition-all duration-100',
+        'px-2.5 inline-flex items-center justify-center shadow-sm bg-transparent font-semibold focus:outline-none focus:ring-none mt-0 transition-all duration-100',
         sizeClassName,
         className,
         generateButtonTypeClasses(type, disabled)
