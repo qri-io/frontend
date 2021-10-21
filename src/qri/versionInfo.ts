@@ -35,7 +35,8 @@ export interface VersionInfo {
 
   runID?: string
   runStatus?: RunStatus
-  runDuration?: number
+  runDuration?: number // duration of the run in nanoseconds
+  runStart?: string
 
   // TODO (boandriy): These fields are only temporarily living on `VersionInfo`.
   // When we get more user feedback and settle what info
@@ -79,6 +80,7 @@ export function newVersionInfo(data: Record<string,any>): VersionInfo {
     runID: data.runID,
     runStatus: data.runStatus,
     runDuration: data.runDuration,
+    runStart: data.runStart,
 
     // TODO(boandriy): the following fields are likely to be removed from the VersionInfo
     // type in the future
