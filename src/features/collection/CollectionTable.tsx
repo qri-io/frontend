@@ -67,9 +67,11 @@ export const customStyles = {
   },
   headRow: {
     style: {
-      minHeight: '68px',
+      minHeight: '58px',
       paddingRight: '26px',
-      paddingLeft: '26px'
+      paddingLeft: '26px',
+      fontSize: 13,
+      fontWeight: 'bold'
     }
   },
   headCells: {
@@ -81,7 +83,7 @@ export const customStyles = {
   },
   rows: {
     style: {
-      minHeight: '68px',
+      minHeight: '58px',
       paddingRight: '26px',
       paddingLeft: '26px'
     }
@@ -110,7 +112,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
           <div className='w-8 mr-2 flex-shrink-0'  title={row.workflowID && 'This dataset has an automation script'}>
-            <Icon icon='automationFilled' className={classNames('text-qrigreen', {
+            <Icon icon='automationFilled' size='sm' className={classNames('text-qrigreen', {
               'visible': row.runID,
               'invisible': !row.runID
             })}/>
@@ -118,7 +120,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
           <div className='truncate'>
             <div className='mb-1'>
               <Link to={pathToDatasetHeadPreview(row, { ignorePath: true })}>
-                <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-medium text-black ' />
+                <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-bold text-black ' />
               </Link>
             </div>
             <div className='flex text-xs overflow-y-hidden'>

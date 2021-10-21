@@ -35,7 +35,9 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
         </div>
       )}
     </div>
-    <div className='flex items-center text-qrigray-400'>
+    <div className={classNames('flex items-center text-qrigray-400', {
+      'text-xs': small
+    })}>
       <UsernameWithIcon username={dataset.username} tooltip className='mr-2' iconWidth={small ? 14 : 18} iconOnly={small} />
       <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit?.timestamp)} />
       {dataset.path && (
