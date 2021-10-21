@@ -5,7 +5,7 @@ import { NewEventLogLine } from '../../../qri/eventLog'
 import { RootState } from '../../../store/store'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
 import { runEventLog } from '../../events/state/eventsActions'
-import { workflowCompleted, workflowStarted } from '../../collection/state/collectionActions'
+import { logbookWriteCommitEvent, logbookWriteRunEvent, transformStartEvent } from '../../collection/state/collectionActions'
 import {
   deployStarted,
   deployEnded,
@@ -25,20 +25,23 @@ import {
   ETRemoteClientPullVersionCompleted,
   // ETRemoteClientPullDatasetCompleted,
   ETRemoteClientRemoveDatasetCompleted,
-  ETWorkflowStarted,
-  ETWorkflowCompleted,
   ETAutomationDeployStart,
   ETAutomationDeployEnd,
   ETAutomationDeploySaveDatasetStart,
   ETAutomationDeploySaveDatasetEnd,
   ETAutomationDeploySaveWorkflowStart,
   ETAutomationDeploySaveWorkflowEnd,
+  ETTransformStart,
   WSSubscribeRequest,
   WSUnsubscribeRequest,
+  ETLogbookWriteRun,
+  ETLogbookWriteCommit,
+  NewTransformLifecycle,
 } from '../../../qri/events'
 import { wsConnectionChange } from '../state/websocketActions'
 import { WS_CONNECT, WS_DISCONNECT } from '../state/websocketState'
 import { WebsocketState, NewWebsocketState, WSConnectionStatus } from '../state/websocketState';
+import { newVersionInfo } from '../../../qri/versionInfo'
 
 type DagCompletion = number[]
 
@@ -109,6 +112,7 @@ const middleware = () => {
       const event = JSON.parse(e.data)
 
       if (event.type.startsWith("tf:")) {
+        if (event.type === ETTransformStart) dispatch(transformStartEvent(NewTransformLifecycle(event.data)))
         dispatch(runEventLog(NewEventLogLine(event)))
         return
       }
@@ -152,12 +156,6 @@ const middleware = () => {
         case ETRemoteClientRemoveDatasetCompleted:
           dispatch(removeVersionTransfer(event.data))
           break
-        case ETWorkflowStarted:
-          dispatch(workflowStarted(event.data))
-          break
-        case ETWorkflowCompleted:
-          dispatch(workflowCompleted(event.data))
-          break
         case ETAutomationDeployStart:
           dispatch(deployStarted(event.data, event.sessionID))
           break
@@ -175,6 +173,12 @@ const middleware = () => {
           break
         case ETAutomationDeploySaveDatasetEnd:
           dispatch(deploySaveDatasetEnded(event.data, event.sessionID))
+          break
+        case ETLogbookWriteCommit:
+          dispatch(logbookWriteCommitEvent(newVersionInfo(event.data)))
+          break
+        case ETLogbookWriteRun:
+          dispatch(logbookWriteRunEvent(newVersionInfo(event.data)))
           break
         default:
           // console.log(`received websocket event: ${event.type}`)
