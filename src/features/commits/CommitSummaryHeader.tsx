@@ -16,7 +16,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
     return (
       <div className='min-height-200 py-4 px-8 rounded-lg bg-white flex'>
         <div className='commit_summary_header_container'>
-          <div className='text-xs text-gray-400 font-medium mb-2'>Version Info</div>
+          <div className='text-sm text-qrigray-400 font-semibold mb-2'>Version Info</div>
           <DatasetVersionInfo dataset={dataset} />
         </div>
         <div className='flex-grow flex items-center justify-end'>

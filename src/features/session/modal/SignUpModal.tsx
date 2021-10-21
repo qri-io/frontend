@@ -65,7 +65,7 @@ const SignUpModal: React.FC = () => {
       <div className='w-10 m-auto mb-4'>
         <QriLogo size='sm'/>
       </div>
-      <div className='text-3xl font-black mb-8 text-black'>Sign Up for Qri</div>
+      <div className='text-3xl font-black mb-8 text-qrinavy-800'>Sign Up for Qri</div>
       <div className='w-72 mx-auto'>
         <form>
           <div className='mb-8'>
@@ -97,13 +97,13 @@ const SignUpModal: React.FC = () => {
             {loading ? <Spinner color='#fff' size='6' /> : 'Continue'}
           </Button>
         </form>
-        <div className='mb-3 text-qrigray-400 tracking-wider text-xs'>
+        <div className='mb-3 text-qrigray-400 text-xs'>
           By continuing, you agree to Qri's <Link to='https://qri.io/legal/tos'>Terms of Service</Link> & <Link to='https://qri.io/legal/privacy-policy'>Privacy Policy</Link>.
         </div>
 
         <hr className='w-20 mx-auto mb-3'/>
 
-        <div className='text-black text-xs font-medium'>
+        <div className='text-black font-semibold' style={{ fontSize: 11 }}>
           Already on Qri? <Link onClick={handleLogInClick}>Log In</Link>
         </div>
       </div>

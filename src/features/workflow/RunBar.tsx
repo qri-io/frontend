@@ -73,7 +73,7 @@ const RunBar: React.FC<RunBarProps> = ({
 
   return (
     <div>
-      <div className='flex w-64 items-center'>
+      <div className='flex items-center'>
         <div className='mr-4'>
           <div className='inline-block align-middle'>
             <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : displayStatus} size='md' className='ml-2' />

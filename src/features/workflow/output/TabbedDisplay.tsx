@@ -38,7 +38,7 @@ export const TabbedDisplay: React.FC<TabbedDisplayProps> = (props) => {
                     onClick={() => onTabClick(tab.name)}
                   >{tab.name}</div>
           }
-          return <div key={tab.name} className='flex-initial m-4 text-gray-400 cursor-default'>{tab.name}</div>
+          return <div key={tab.name} className='flex-initial m-4 text-qrigray-400 cursor-default'>{tab.name}</div>
         })
       }
     </div>

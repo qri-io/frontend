@@ -67,7 +67,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       height: size === 'lg' ? '50px' : '34px'
     }}>
       <input
-        className={classNames('focus:ring-transparent border-0 bg-transparent block w-full tracking-wider placeholder-opacity-50 p-0', {
+        className={classNames('focus:ring-transparent border-0 bg-transparent block w-full placeholder-opacity-50 p-0', {
           'placeholder-black': dark,
           'placeholder-qrigray-300': !dark,
           'text-sm': size === 'md',

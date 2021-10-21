@@ -54,7 +54,7 @@ const SessionUserMenu: React.FC<{}> = () => {
                 {userIcon}
               </div>
               <div>
-                <div className='font-semibold text-xs'>{user.username}</div>
+                <div className='font-semibold text-sm'>{user.username}</div>
                 <div className='text-qrigray-400 font-light' style={{ fontSize: 10 }}>{user.email}</div>
               </div>
 

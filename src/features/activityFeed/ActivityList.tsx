@@ -50,7 +50,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       width: '180px',
       cell: (row: LogItem) => {
         return (
-          <div className='text-qrigray-400 flex flex-col text-xs'>
+          <div className='text-qrigray-400 flex flex-col text-sm'>
             <div className='mb-1'>
               <RelativeTimestamp timestamp={new Date(row.timestamp)} />
             </div>

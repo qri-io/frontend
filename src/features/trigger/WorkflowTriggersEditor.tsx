@@ -53,7 +53,7 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
         <div className='flex'>
           <div className='flex-grow'>
             <h2 className='text-xl font-bold text-black mb-1'>Triggers</h2>
-            <div className='text-sm text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
+            <div className='text-base text-qrigray-400 mb-3'>Customize your workflow to execute on a schedule, or based on other events</div>
           </div>
           {/*
             TODO(chriswhong): allow for adding other types of triggers.

@@ -78,7 +78,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
             width: expanded ? 'auto' : 0,
             // inline-block is necessary here so that the tooltip appears just to the right of the text
             display: expanded ? 'inline-block' : 'none'
-          }} className='font-bold text-sm'>{label}</span>
+          }} className='font-bold text-base'>{label}</span>
         </div>
       </span>
       {tooltip && (

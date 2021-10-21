@@ -132,7 +132,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
               <div className='top-0 z-10 flex mb-3'>
                 <div className='flex-grow'>
                   <h2 className='text-xl font-bold text-black mb-1'>Script</h2>
-                  <div className='text-sm text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
+                  <div className='text-base text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
                 </div>
               </div>
               {dataset?.transform?.steps && dataset.transform.steps.map((step, i) => {
@@ -170,11 +170,11 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 )
               })}
             </section>
-            <h3 className='text-sm text-black font-semibold cursor-pointer mb-0.5'>
+            <h3 className='text-base text-black font-semibold cursor-pointer mb-0.5'>
               Next Version Preview
             </h3>
 
-            <div className='text-xs mb-2.5 text-gray-400'>Dry Run this transform and preview the next version of the dataset here</div>
+            <div className='text-base mb-2.5 text-qrigray-400'>Dry Run this transform and preview the next version of the dataset here</div>
 
             <ScrollAnchor id='result' />
             <div className='flex'>
