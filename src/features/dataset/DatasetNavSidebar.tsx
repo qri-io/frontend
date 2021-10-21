@@ -19,6 +19,7 @@ import {
 import { selectNavExpanded } from '../app/state/appState'
 import { toggleNavExpanded } from '../app/state/appActions'
 import { selectRunCount, selectCommitCount } from "./state/datasetState";
+import { selectWorkflow } from "../workflow/state/workflowState";
 
 export interface DatasetNavSidebarProps {
   qriRef: QriRef
@@ -28,6 +29,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const expanded = useSelector(selectNavExpanded)
   const versionCount = useSelector(selectCommitCount)
   const logCount = useSelector(selectRunCount)
+  const workflow = useSelector(selectWorkflow)
   const dispatch = useDispatch()
 
   const toggleExpanded = () => {
@@ -130,7 +132,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
               subtext='Inspect recent job activity and updates'
             />
           }
-          disabled={isNewWorkflow}
+          disabled={isNewWorkflow || !workflow.id.length}
         />
         {process.env.REACT_APP_FEATURE_WIREFRAMES &&
           <DatasetSideNavItem

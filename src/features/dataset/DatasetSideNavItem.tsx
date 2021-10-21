@@ -100,7 +100,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
     return (
       <>
         <div className='mb-4 inline-block h-6'>
-          <div className='font-medium text-qrigray-300 cursor-pointer'>
+          <div className='font-medium text-qrigray-300'>
             {content}
           </div>
         </div>
