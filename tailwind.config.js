@@ -146,7 +146,7 @@ module.exports = {
       },
       animation: {
         'spin-slow': 'spin 3s linear infinite',
-        'appear': 'appear 1s ease-in-out'
+        'appear': 'appear 0.8s ease-in-out'
       },
       borderRadius: {
         ...borderRadius,

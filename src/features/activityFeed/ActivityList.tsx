@@ -77,7 +77,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
             timestamp:row.timestamp
           }
         }
-        if (!['failed', 'unchanged'].includes(row.runStatus)) {
+        if (!['failed', 'unchanged', 'running'].includes(row.runStatus)) {
           const versionLink = `/${row.username}/${row.name}/at${row.path}/history/body`
           return (
             <Link to={versionLink} className='min-w-0 flex-grow'>
@@ -91,6 +91,16 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
   ]
 
+  const conditionalRowStyles = [
+    {
+      when: (row:LogItem) => row.runStatus === 'running',
+      classNames: ['animate-appear', 'overflow-hidden', 'min-height-0-important'],
+      style: {
+        height: 58
+      }
+    }
+  ];
+
   // borrows styles and icons from CollectionTable
   return (
     <ReactDataTable
@@ -98,6 +108,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       data={log}
       customStyles={customStyles}
       fixedHeader
+      conditionalRowStyles={conditionalRowStyles}
       fixedHeaderScrollHeight={`${String(containerHeight)}px`}
       noHeader
       style={{
