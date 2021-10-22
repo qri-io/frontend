@@ -55,7 +55,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ tabs }) => (
         return (
           <div
             key={tab.name}
-            className={classNames('font-medium px-5 mr-2 last:mr-0 py-3 rounded-tr-lg rounded-tl-lg', {
+            className={classNames('font-medium px-5 mr-2 last:mr-0 py-3 rounded-lg mb-4', {
               'selected': selected,
               'bg-white': selected,
               'text-qripink': selected,

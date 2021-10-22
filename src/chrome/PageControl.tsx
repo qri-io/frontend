@@ -51,7 +51,7 @@ const PageControl: React.FC<PageControlProps> = ({
   }
 
   return (
-    <div className='page-control flex justify-between px-6 text-qrigray'>
+    <div className='page-control mt-2 flex justify-between px-2.5 text-qrigray text-xs'>
       { showRange && <div className='current-page-info flex items-center'>{numeral(lowItem).format('0,0')}-{numeral(highItem).format('0,0')} of {numeral(resultCount).format('0,0')}</div> }
       { pageCount > 1 && (
         <div className='text-right'>
@@ -59,7 +59,7 @@ const PageControl: React.FC<PageControlProps> = ({
             pageCount={pageCount}
             pageRangeDisplayed={5}
             marginPagesDisplayed={2}
-            pageClassName='bg-white p-3 font-semibold rounded-sm m-1 leading-3'
+            pageClassName='bg-gray-200 px-2.5 py-2 font-semibold transition rounded-sm m-1 leading-3 hover:bg-white hover:text-dangerred'
             previousClassName='flex items-center mr-1'
             previousLinkClassName='flex items-center'
             nextClassName='flex items-center ml-1'
@@ -68,7 +68,7 @@ const PageControl: React.FC<PageControlProps> = ({
             previousLabel={<Icon icon='caretLeft' size='xs' />}
             nextLabel={<Icon icon='caretRight' size='xs' />}
             hrefBuilder={hrefBuilder}
-            activeClassName='text-dangerred'
+            activeClassName='text-dangerred bg-white-important'
             onPageChange={onPageChange}
             containerClassName='page-control-pagination flex items-center'
           />
