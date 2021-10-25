@@ -5,6 +5,7 @@ import { CALL_API } from "../../../store/api";
 import { runEndTime } from '../../../utils/runEndTime';
 import {
   LogbookWriteAction,
+  RemoveCollectionItemAction,
   ResetCollectionStateAction,
   TransformStartAction
 } from './collectionActions';
@@ -12,6 +13,7 @@ import {
 export const LOGBOOK_WRITE_COMMIT = 'LOGBOOK_WRITE_COMMIT'
 export const LOGBOOK_WRITE_RUN = 'LOGBOOK_WRITE_RUN'
 export const TRANSFORM_START = 'TRANSFORM_START'
+export const REMOVE_COLLECTION_ITEM = 'REMOVE_COLLECTION_ITEM'
 export const RESET_COLLECTION_STATE = 'RESET_COLLECTION_STATE'
 
 export const selectCollection = (state: RootState): VersionInfo[] => {
@@ -92,6 +94,7 @@ export const collectionReducer = createReducer(initialState, {
   TRANSFORM_START: transformStart,
   LOGBOOK_WRITE_RUN: logbookWriteRun,
   LOGBOOK_WRITE_COMMIT: logbookWriteCommit,
+  REMOVE_COLLECTION_ITEM:removeCollectionItem,
   RESET_COLLECTION_STATE: (state: CollectionState, action: ResetCollectionStateAction) => {
     return initialState
   },
@@ -118,6 +121,18 @@ function logbookWriteRun(state: CollectionState, action: LogbookWriteAction) {
   collection[initID].runStatus = runStatus
   collection[initID].runDuration = runDuration
   collection[initID].runStart = runStart
+}
+
+function removeCollectionItem(state: CollectionState, action: RemoveCollectionItemAction) {
+  let deleteItemInitId:string = '';
+  Object.keys(state.collection).forEach(key => {
+    if(state.collection[key].username === action.username && state.collection[key].name === action.name){
+      deleteItemInitId = state.collection[key].initID
+    }
+  })
+  if (deleteItemInitId.length) {
+    delete state.collection[deleteItemInitId]
+  }
 }
 
 function logbookWriteCommit(state: CollectionState, action: LogbookWriteAction) {

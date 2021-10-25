@@ -3,6 +3,7 @@ import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
 import {
   LOGBOOK_WRITE_COMMIT,
   LOGBOOK_WRITE_RUN,
+  REMOVE_COLLECTION_ITEM,
   RESET_COLLECTION_STATE,
   TRANSFORM_START
 } from "./collectionState"
@@ -88,6 +89,12 @@ export interface LogbookWriteAction {
   vi: VersionInfo
 }
 
+export interface RemoveCollectionItemAction {
+  type: string
+  username: string
+  name: string
+}
+
 export function logbookWriteCommitEvent(vi: VersionInfo): LogbookWriteAction {
   return {
     type: LOGBOOK_WRITE_COMMIT,
@@ -99,6 +106,14 @@ export function logbookWriteRunEvent(vi: VersionInfo): LogbookWriteAction {
   return {
     type: LOGBOOK_WRITE_RUN,
     vi
+  }
+}
+
+export function removeCollectionItem(username: string, name: string): RemoveCollectionItemAction {
+  return {
+    type: REMOVE_COLLECTION_ITEM,
+    username: username,
+    name: name
   }
 }
 

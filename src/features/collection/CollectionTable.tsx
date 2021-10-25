@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useDispatch } from 'react-redux'
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
@@ -103,6 +103,8 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
 }) => {
   const dispatch = useDispatch()
 
+  const [ deletedRowInitID, setDeletedRowInitID ] = useState('')
+
   // react-data-table column definitions
   const columns = [
     {
@@ -184,7 +186,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
           runDuration,
           runCount
         } = row
-        let runEndLabel = <span>-</span> 
+        let runEndLabel = <span>-</span>
         if (runStatus !== 'running' && runStart && runDuration) {
           runEndLabel = <RelativeTimestamp timestamp={runEndTime(runStart, runDuration)} />
         }
@@ -285,7 +287,9 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
                         ModalType.removeDataset,
                         {
                           username: row.username,
-                          name: row.name
+                          name: row.name,
+                          onDsRemove: () => setDeletedRowInitID(row.initID),
+                          afterRemove: () => setDeletedRowInitID('')
                         }
                       )
                     )
@@ -299,6 +303,18 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
     }
   ]
 
+  const conditionalRowStyles = [
+    {
+      when: (row: VersionInfo) => row.initID === deletedRowInitID,
+      classNames: ['animate-disappear'],
+      style: {
+        height: 58,
+        minHeight: 0,
+        overflow: 'hidden'
+      }
+    }
+  ];
+
   // TODO(chriswhong): implement selectable rows and multi-row actions
   // uncomment `selectableRows` etc below
 
@@ -308,6 +324,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       data={filteredWorkflows}
       customStyles={customStyles}
       sortFunction={customSort}
+      conditionalRowStyles={conditionalRowStyles}
       highlightOnHover
       pointerOnHover
       fixedHeader
