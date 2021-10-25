@@ -21,6 +21,7 @@ import Link from '../../chrome/Link'
 import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import { CleanSearchParams } from '../../qri/search'
+import { trackGoal } from '../../features/analytics/analytics'
 
 const Search: React.FC<{}> = () => {
   const dispatch = useDispatch()
@@ -45,6 +46,8 @@ const Search: React.FC<{}> = () => {
 
   // handle new search term input
   const handleSearchSubmit = (newQ:string) => {
+    // search-submit-search-string event
+    trackGoal('WYBS8MYM', 0)
     updateQueryParams({ q: newQ })
   }
 

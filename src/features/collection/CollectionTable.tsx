@@ -18,6 +18,7 @@ import { VersionInfo } from '../../qri/versionInfo'
 import ManualTriggerButton from '../workflow/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 import { runEndTime } from '../../utils/runEndTime'
+import { trackGoal } from '../../features/analytics/analytics'
 
 interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
@@ -33,6 +34,8 @@ interface CollectionTableProps {
 // column sort function for react-data-table
 // defines the actual string to sort on when a sortable column is clicked
 const customSort = (rows: VersionInfo[], selector: (row: VersionInfo) => string, direction: 'asc' | 'desc') => {
+  // collection-sort-table event
+  trackGoal('VXNLJRBH', 0)
   const sorted = rows.sort((a, b) => {
     const aVal = selector(a)
     const bVal = selector(b)

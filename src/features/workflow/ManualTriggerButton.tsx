@@ -7,7 +7,7 @@ import { runNow } from '../collection/state/collectionActions'
 import { refStringFromQriRef } from '../../qri/ref'
 import { VersionInfo } from '../../qri/versionInfo'
 import { selectRun } from '../events/state/eventsState'
-
+import { trackGoal } from '../../features/analytics/analytics'
 
 export interface ManualTriggerButtonProps  {
   row: VersionInfo
@@ -21,6 +21,8 @@ const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ row }) => {
   const { status } = useSelector(selectRun(runID))
 
   const handleClick = () => {
+    //collection-run-now event
+    trackGoal('RXLAWMP8', 0)
     dispatch(runNow({ username, name }, initID))
   }
 

@@ -5,6 +5,7 @@ import { ComponentStatus, ComponentName } from '../../qri/dataset'
 import Icon from '../../chrome/Icon'
 import StatusDot from '../../chrome/StatusDot'
 import Link from '../../chrome/Link'
+import { trackGoal } from '../../features/analytics/analytics'
 
 export interface ComponentItemProps {
   displayName: string
@@ -73,6 +74,10 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
       className={classNames(tabClasses, enabledClasses)}
       colorClassName={classNames('flex items-center', enabledColorClasses)}
       to={`#${name}`}
+      onClick={() => {
+        // dataset-click-dataset-tab event
+        trackGoal('TGPXLRVF', 0)
+      }}
     >
       {tabContent}
     </Link>

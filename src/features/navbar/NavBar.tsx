@@ -9,7 +9,7 @@ import QriLogo from '../../chrome/QriLogo'
 import ButtonGroup from '../../chrome/ButtonGroup'
 import { selectNavExpanded } from '../app/state/appState'
 import { AnonUser, selectSessionUser } from '../session/state/sessionState'
-
+import { trackGoal } from '../../features/analytics/analytics'
 
 export interface NavBarProps {
   minimal?: boolean
@@ -38,6 +38,8 @@ const NavBar: React.FC<NavBarProps> = ({
   ]
 
   const handleSearchSubmit = (query:string) => {
+    // general-search-from-navbar event
+    trackGoal('PLKLNWYO', 0)
     const newParams = new URLSearchParams(`q=${query}`)
     history.push(`/search?${newParams.toString()}`)
   }

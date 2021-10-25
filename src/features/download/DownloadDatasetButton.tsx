@@ -8,6 +8,7 @@ import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import { selectSessionUser } from '../session/state/sessionState'
 import { downloadLinkFromQriRef } from '../dataset/state/datasetActions'
+import { trackGoal } from '../../features/analytics/analytics'
 
 export interface DownloadDatasetButtonProps {
   qriRef: QriRef
@@ -33,6 +34,8 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
   const user = useSelector(selectSessionUser)
 
   const handleDownloadClick = () => {
+    // anonymous-click-download event
+    trackGoal('06WN7WD1', 0)
     dispatch(showModal(ModalType.logIn))
   }
 
@@ -43,7 +46,10 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     if (user.username === 'new') {
       return <IconLink icon='download' onClick={handleDownloadClick} />
     } else {
-      return <IconLink icon='download' link={downloadLink} />
+      return <IconLink icon='download' link={downloadLink} onClick={() => {
+        // preview-download-body
+        trackGoal('MUBGTLL9', 0)
+      }} />
     }
   } else { // returns <Button>
     let buttonContent = (
@@ -61,7 +67,10 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     }
 
     return (
-      <a href={downloadLink}>
+      <a href={downloadLink} onClick={() => {
+        // preview-download-full-dataset event
+        trackGoal('GGER8NHQ', 0)
+      }}>
         {buttonContent}
       </a>
     )
