@@ -63,8 +63,8 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
               <input
                 className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 w-full'
                 style={{
-                  paddingTop: 6.75,
-                  paddingBottom: 6.75
+                  paddingTop: 3.8,
+                  paddingBottom: 3.8
                 }}
                 type='time'
                 value={schedule.time}

@@ -99,7 +99,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           number={versionCount}
           tooltip={
             <TooltipContent
-              text='Components'
+              text='History'
               subtext='Explore the version history of this Dataset'
             />
           }
@@ -128,7 +128,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           number={logCount}
           tooltip={
             <TooltipContent
-              text='Activity Feed'
+              text='Run Log'
               subtext='Inspect recent job activity and updates'
             />
           }

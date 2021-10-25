@@ -48,7 +48,7 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
   }
   return (
     <div className='flex'>
-      <div className='flex-grow min-w-0'>
+      <div style={{width: 'calc(100% - 225px)'}} className='min-w-0'>
         <ScrollAnchor id='triggers'/>
         <div className='flex'>
           <div className='flex-grow'>

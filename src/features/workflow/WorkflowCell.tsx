@@ -136,6 +136,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
         />
       <div
         onClick={() => onRowAdd(index, 'starlark')}
+        style={{width: 'calc(100% - 225px)'}}
         className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'
       >
         <div className='h-px bg-gray-300 flex-grow mr-2' />
