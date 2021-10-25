@@ -23,7 +23,14 @@ export type ButtonType = 'primary' // light blue button with white text
       'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
       'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),
       'text-qrigray-900 hover:text-qripink border border-qrigray-900 hover:border-qripink': (type === 'dark'),
-      'cursor-default bg-opacity-40 hover:bg-opacity-40': disabled
+      'cursor-default text-white bg-qrigray-400 hover:bg-qrigray-400': (type === 'primary' && disabled),
+      'text-qrigray-400 border border-qrigray-400 box-border hover:text-qrigray-400 hover:border-qrigray-400': (type === 'primary-outline' && disabled),
+      'text-white bg-qrigray-400 hover:bg-qrigray-400': ((type === 'secondary' || type === 'danger') && disabled),
+      'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400 box-border': (type === 'secondary-outline' && disabled),
+      'text-qrigray-400 bg-qrigray-400 hover:bg-qrigray-400': (type === 'warning' && disabled),
+      'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400': (type === 'light' && disabled),
+      'text-qrigray-400 hover:text-qripink border border-qrigray-400 hover:border-qrigray-400': (type === 'dark' && disabled),
+      'cursor-default': disabled
     }
   }
 
