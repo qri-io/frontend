@@ -1154,3 +1154,8 @@ code {
 .carousel .control-dots .dot.selected {
   @apply bg-qripink !important;
 }
+
+.min-height-0-important {
+  min-height: 0 !important;
+}
+

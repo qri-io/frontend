@@ -2,6 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 
 import { RunStatus } from '../../qri/run'
+import RunStatusIcon from "./RunStatusIcon";
 
 interface RunStatusBadgeProps {
   status: RunStatus
@@ -20,7 +21,7 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
 
     case 'running':
       displayStatus = 'Running'
-      colorClass = 'text-black-500'
+      colorClass = 'text-qrinavy-700'
       break
 
     case 'succeeded':
@@ -40,7 +41,10 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
   }
 
   return (
-    <div className={classNames('text-sm font-semibold tracking-wider', colorClass)}>{displayStatus}</div>
+    <div className={classNames('text-sm font-semibold tracking-wider flex items-center', colorClass)}>
+      <RunStatusIcon className='mr-1' size={'2xs'} status={status}/>
+      {displayStatus}
+    </div>
   )
 }
 
