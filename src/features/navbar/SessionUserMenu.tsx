@@ -8,6 +8,7 @@ import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import Button from '../../chrome/Button'
 import Link from '../../chrome/Link'
+import { resetCollectionState } from "../collection/state/collectionActions";
 
 const SessionUserMenu: React.FC<{}> = () => {
   const user = useSelector(selectSessionUser)
@@ -74,7 +75,10 @@ const SessionUserMenu: React.FC<{}> = () => {
         },
         {
           label: 'Log Out',
-          onClick: () => { dispatch(logOut()) }
+          onClick: () => {
+            dispatch(logOut())
+            dispatch(resetCollectionState())
+          }
         }
       ]} />
     </div>

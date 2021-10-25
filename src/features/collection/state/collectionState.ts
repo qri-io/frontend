@@ -3,11 +3,16 @@ import { createReducer } from '@reduxjs/toolkit'
 import { newVersionInfo, VersionInfo } from '../../../qri/versionInfo';
 import { CALL_API } from "../../../store/api";
 import { runEndTime } from '../../../utils/runEndTime';
-import { LogbookWriteAction, TransformStartAction } from './collectionActions';
+import {
+  LogbookWriteAction,
+  ResetCollectionStateAction,
+  TransformStartAction
+} from './collectionActions';
 
 export const LOGBOOK_WRITE_COMMIT = 'LOGBOOK_WRITE_COMMIT'
 export const LOGBOOK_WRITE_RUN = 'LOGBOOK_WRITE_RUN'
 export const TRANSFORM_START = 'TRANSFORM_START'
+export const RESET_COLLECTION_STATE = 'RESET_COLLECTION_STATE'
 
 export const selectCollection = (state: RootState): VersionInfo[] => {
   const { collection } = state.collection
@@ -20,7 +25,7 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
     if (a.runStart && a.runDuration) {
       aTime = runEndTime(a.runStart, a.runDuration)
     } else if (!a.commitTime) {
-     return 0 
+     return 0
     } else {
       aTime = new Date(a.commitTime)
     }
@@ -87,6 +92,9 @@ export const collectionReducer = createReducer(initialState, {
   TRANSFORM_START: transformStart,
   LOGBOOK_WRITE_RUN: logbookWriteRun,
   LOGBOOK_WRITE_COMMIT: logbookWriteCommit,
+  RESET_COLLECTION_STATE: (state: CollectionState, action: ResetCollectionStateAction) => {
+    return initialState
+  },
 })
 
 function transformStart(state: CollectionState, action: TransformStartAction) {
@@ -118,18 +126,18 @@ function logbookWriteCommit(state: CollectionState, action: LogbookWriteAction) 
 
   if (!collection[vi.initID]) return
 
-  const { 
+  const {
     workflowID,
-    downloadCount, 
-    runCount, 
-    followerCount, 
-    openIssueCount, 
-    runID, 
-    runStatus, 
-    runDuration, 
-    runStart 
+    downloadCount,
+    runCount,
+    followerCount,
+    openIssueCount,
+    runID,
+    runStatus,
+    runDuration,
+    runStart
   } = collection[vi.initID]
-  
+
   // preserve fields that are not tracked in logbookWriteCommit
   vi.workflowID = workflowID
   vi.downloadCount = downloadCount

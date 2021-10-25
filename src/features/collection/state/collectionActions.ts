@@ -1,6 +1,11 @@
 import { ApiAction, CALL_API, ApiActionThunk } from "../../../store/api"
 import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
-import { LOGBOOK_WRITE_COMMIT, LOGBOOK_WRITE_RUN, TRANSFORM_START } from "./collectionState"
+import {
+  LOGBOOK_WRITE_COMMIT,
+  LOGBOOK_WRITE_RUN,
+  RESET_COLLECTION_STATE,
+  TRANSFORM_START
+} from "./collectionState"
 import { RootState } from "../../../store/store";
 import { ThunkDispatch } from 'redux-thunk'
 import { QriRef } from '../../../qri/ref'
@@ -101,9 +106,20 @@ export interface TransformStartAction {
   type: string
   lc: TransformLifecycle
 }
+
+export interface ResetCollectionStateAction {
+  type: string
+}
+
 export function transformStartEvent(lc: TransformLifecycle): TransformStartAction {
   return {
     type: TRANSFORM_START,
     lc
+  }
+}
+
+export function resetCollectionState() {
+  return {
+    type: RESET_COLLECTION_STATE
   }
 }
