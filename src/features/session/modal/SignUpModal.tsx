@@ -91,7 +91,7 @@ const SignUpModal: React.FC = () => {
             />
           </div>
           {signupError && <div className='text-xs text-red-500 text-left mb-2'>{signupError}</div>}
-          <Button className='mb-6' onClick={handleButtonClick} submit block>
+          <Button id='sign_up_modal_submit_button' className='mb-6' onClick={handleButtonClick} submit block>
             {loading ? <Spinner color='#fff' size={6} /> : 'Continue'}
           </Button>
         </form>

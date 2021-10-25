@@ -79,6 +79,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
           <Button
             type={actionButtonType}
             onClick={handleActionButtonClick}
+            id='modal_layout_action_button'
             size='lg'
           >
             {actionButtonText}

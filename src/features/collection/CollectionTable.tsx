@@ -241,6 +241,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         return (
           <div className='mx-auto text-qrigray-400'>
             <DropdownMenu
+              id={row.name}
               icon={<Icon icon='more' />}
               dropUp={isLastRow}
               oneItem={filteredWorkflows.length === 1}
