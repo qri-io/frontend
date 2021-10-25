@@ -11,7 +11,7 @@ interface SearchBoxProps {
   onSubmit?: (q: string) => void
   placeholder?: string
   value?: string
-  size: 'md' | 'lg'
+  size?: 'md' | 'lg'
   dark?: boolean
   shadow?: boolean
   border?: boolean

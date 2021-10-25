@@ -30,7 +30,7 @@ const Link: React.FC<LinkProps> = ({
   // if to exists, make it a react-router-dom <Link>
   if (to) {
     theLink = (
-      <RouterLink to={to} className={combinedClassNames}>
+      <RouterLink to={to} className={combinedClassNames} onClick={onClick}>
         {children}
       </RouterLink>
     )
@@ -51,7 +51,7 @@ const Link: React.FC<LinkProps> = ({
   }
 
   return (
-    <span className={className}>
+    <span className={className} onClick={onClick}>
       {theLink}
     </span>
   )

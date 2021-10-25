@@ -12,6 +12,7 @@ import NewDatasetButton from '../../chrome/NewDatasetButton'
 import Icon from '../../chrome/Icon'
 import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
+import { trackGoal } from '../../features/analytics/analytics'
 
 const Collection: React.FC<{}> = () => {
   const dispatch = useDispatch()
@@ -21,6 +22,8 @@ const Collection: React.FC<{}> = () => {
   const [ searchString, setSearchString ] = useState('')
 
   const handleSearchChange = (q) => {
+    // collection-filter-by-text event
+    trackGoal('ZAC6ZOWU', 0)
     setSearchString(q)
   }
 

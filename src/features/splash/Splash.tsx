@@ -10,6 +10,7 @@ import NavBar from '../navbar/NavBar'
 import SplashFooter from '../footer/SplashFooter'
 import featuredDatasets from './featuredDatasets'
 import BigCircle from './BigCircle'
+import { trackGoal } from '../../features/analytics/analytics'
 
 const Splash: React.FC<{}> = () => {
   const history = useHistory()
@@ -66,7 +67,11 @@ const Splash: React.FC<{}> = () => {
                       className='mr-3'
                       size = 'sm'
                       type={id === selectedFeaturedDatasetType ? 'secondary-outline' : 'light'}
-                      onClick={() => { setSelectedFeaturedDatasetType(id) }}
+                      onClick={() => {
+                        // home-click-featured-dataset-list-button event
+                        trackGoal('SRIJWHUA', 0);
+                        setSelectedFeaturedDatasetType(id)
+                      }}
                     >
                       {title}
                     </Button>
@@ -76,9 +81,17 @@ const Splash: React.FC<{}> = () => {
             </div>
             <div className='overflow-y-scroll hide-scrollbar pt-2 px-9 pb-8'>
               {
-                featuredDatasets[selectedFeaturedDatasetType].datasets.map((dataset) => {
+                featuredDatasets[selectedFeaturedDatasetType].datasets.map((dataset, i) => {
                   return (
-                    <SearchResultItem dataset={dataset} card />
+                    <div
+                      key={i}
+                      onClick={() => {
+                        // home-click-featured-dataset event
+                        trackGoal('0D5HYPFA', 0)
+                      }}
+                    >
+                      <SearchResultItem dataset={dataset} card />
+                    </div>
                   )
                 })
               }

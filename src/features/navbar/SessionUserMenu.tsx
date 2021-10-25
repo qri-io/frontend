@@ -8,7 +8,8 @@ import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import Button from '../../chrome/Button'
 import Link from '../../chrome/Link'
-import { resetCollectionState } from "../collection/state/collectionActions";
+import { resetCollectionState } from "../collection/state/collectionActions"
+import { trackGoal } from '../../features/analytics/analytics'
 
 const SessionUserMenu: React.FC<{}> = () => {
   const user = useSelector(selectSessionUser)
@@ -20,6 +21,8 @@ const SessionUserMenu: React.FC<{}> = () => {
     }
 
     const handleSignUpClick = () => {
+      // general-click-sign-up event
+      trackGoal('VW3UXBQA', 0)
       dispatch(showModal(ModalType.signUp))
     }
 
@@ -46,7 +49,15 @@ const SessionUserMenu: React.FC<{}> = () => {
 
   return (
     <div className="relative flex items-center font-medium">
-      <Link to='https://qri.io/docs' className='text-sm font-semibold' colorClassName='text-black hover:text-qripink'>Help</Link>
+      <Link
+        to='https://qri.io/docs'
+        className='text-sm font-semibold'
+        colorClassName='text-black hover:text-qripink'
+        onClick={() => {
+          // general-click-help event
+          trackGoal('MN77WFUZ', 0)
+        }}
+      >Help</Link>
       <DropdownMenu icon={userIcon} className='ml-8' items={[
         {
           element: (

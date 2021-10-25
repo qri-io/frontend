@@ -23,6 +23,7 @@ import { useParams } from "react-router";
 import { removeEvent } from "../events/state/eventsActions";
 import { selectDeployRunId } from "../deploy/state/deployState";
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
+import { trackGoal } from '../../features/analytics/analytics'
 
 export interface RunBarProps {
  status: RunStatus
@@ -53,6 +54,8 @@ const RunBar: React.FC<RunBarProps> = ({
   }
 
   const handleRun = () => {
+    // workflow-click-dry-run event
+    trackGoal('AN0WUIY6', 0)
     removeRunEvents()
     dispatch(deployResetRunId())
     dispatch(applyWorkflowTransform(workflow, workflowDataset))

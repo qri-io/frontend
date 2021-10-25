@@ -93,7 +93,10 @@
     "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "globals": {
+      "fathom": true
+    }
   },
   "browserslist": {
     "production": [

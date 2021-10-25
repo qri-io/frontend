@@ -10,8 +10,10 @@ import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 import { runNow } from '../workflow/state/workflowActions'
 import { selectLatestRunId } from '../workflow/state/workflowState'
 import RunNowButton from './RunNowButton'
-import { selectRun } from "../events/state/eventsState";
-import { LogItem, NewLogItem } from "../../qri/log";
+import { LogItem, NewLogItem } from "../../qri/log"
+import { selectRun } from "../events/state/eventsState"
+import { trackGoal } from '../../features/analytics/analytics'
+
 
 
 export interface DatasetActivityFeedProps {
@@ -36,6 +38,8 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   },[dispatch, qriRef.username, qriRef.name, latestRun?.status])
 
   const handleRunNowClick = () => {
+    // runlog-run-now event
+    trackGoal('GHUGYPYM', 0)
     dispatch(runNow(qriRef))
   }
 
