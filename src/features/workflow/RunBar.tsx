@@ -89,7 +89,7 @@ const RunBar: React.FC<RunBarProps> = ({
               )
             : (
                 <div data-tip data-for='dry-run'>
-                  <Button type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
+                  <Button disabled={!canEdit} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
                 </div>
               )
           }
@@ -100,7 +100,10 @@ const RunBar: React.FC<RunBarProps> = ({
         id='dry-run'
         effect='solid'
       >
-        Try this script and preview the results without saving ({isMac ? '⌘' : 'Ctrl'}+↵)
+        {canEdit ?
+          `Try this script and preview the results without saving (${isMac ? '⌘' : 'Ctrl'}+↵)` :
+          'Only the dataset owner can run this script'
+        }
       </ReactTooltip>
     </div>
   )
