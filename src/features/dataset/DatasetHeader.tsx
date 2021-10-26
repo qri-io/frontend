@@ -5,7 +5,6 @@ import { useHistory } from 'react-router'
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
 import DatasetInfoItem from './DatasetInfoItem'
-import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import Link from '../../chrome/Link'
 import { validateDatasetName } from '../session/state/formValidation'
 import { selectDatasetHeader } from "./state/datasetState";
@@ -90,7 +89,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
               </Button>
               <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
               */}
-              <DownloadDatasetButton qriRef={qriRef} type='primary' />
+              {/*<DownloadDatasetButton qriRef={qriRef} type='primary' />*/}
             </>
           )}
         </div>
