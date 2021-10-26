@@ -24,6 +24,7 @@ import { removeEvent } from "../events/state/eventsActions";
 import { selectDeployRunId } from "../deploy/state/deployState";
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 import { trackGoal } from '../../features/analytics/analytics'
+import { selectIsLoggedIn } from '../session/state/sessionState'
 
 export interface RunBarProps {
  status: RunStatus
@@ -43,6 +44,7 @@ const RunBar: React.FC<RunBarProps> = ({
   const latestDeployRunId = useSelector(selectDeployRunId)
   const qriRef = newQriRef(useParams())
   const areCellsEdited = useSelector(selectEditedCells)
+  const isLoggedIn = useSelector(selectIsLoggedIn)
 
   const removeRunEvents = () => {
     if (latestDryRunId)
@@ -100,7 +102,7 @@ const RunBar: React.FC<RunBarProps> = ({
         id='dry-run'
         effect='solid'
       >
-        {canEdit ?
+        {canEdit || (isNew && isLoggedIn) ?
           `Try this script and preview the results without saving (${isMac ? '⌘' : 'Ctrl'}+↵)` :
           'Only the dataset owner can run this script'
         }
