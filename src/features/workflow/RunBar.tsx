@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip'
 import Button from '../../chrome/Button'
 import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
-import { applyWorkflowTransform } from './state/workflowActions'
+import { applyWorkflowTransform, cancelRun } from './state/workflowActions'
 import { deployResetRunId } from '../deploy/state/deployActions'
 import {
   selectWorkflow,
@@ -63,7 +63,7 @@ const RunBar: React.FC<RunBarProps> = ({
     dispatch(applyWorkflowTransform(workflow, workflowDataset))
   }
 
-  const handleCancel = () => { alert('cannot cancel runs yet') }
+  const handleCancel = () => { dispatch(cancelRun(latestDryRunId)) }
 
   const isMac = (platform() === 'mac')
 
@@ -91,7 +91,7 @@ const RunBar: React.FC<RunBarProps> = ({
               )
             : (
                 <div data-tip data-for='dry-run'>
-                  <Button disabled={(!canEdit && !isNew)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
+                  <Button disabled={!((isNew && isLoggedIn) || canEdit)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
                 </div>
               )
           }

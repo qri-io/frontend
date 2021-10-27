@@ -7,12 +7,13 @@ import {
   LogbookWriteAction,
   RemoveCollectionItemAction,
   ResetCollectionStateAction,
-  TransformStartAction
+  TransformAction
 } from './collectionActions';
 
 export const LOGBOOK_WRITE_COMMIT = 'LOGBOOK_WRITE_COMMIT'
 export const LOGBOOK_WRITE_RUN = 'LOGBOOK_WRITE_RUN'
 export const TRANSFORM_START = 'TRANSFORM_START'
+export const TRANSFORM_CANCELED = 'TRANSFORM_CANCELED'
 export const REMOVE_COLLECTION_ITEM = 'REMOVE_COLLECTION_ITEM'
 export const RESET_COLLECTION_STATE = 'RESET_COLLECTION_STATE'
 
@@ -92,6 +93,7 @@ export const collectionReducer = createReducer(initialState, {
     state.collection[versionInfo.initID] = newVersionInfo(versionInfo)
   },
   TRANSFORM_START: transformStart,
+  TRANSFORM_CANCELED: transformCanceled,
   LOGBOOK_WRITE_RUN: logbookWriteRun,
   LOGBOOK_WRITE_COMMIT: logbookWriteCommit,
   REMOVE_COLLECTION_ITEM:removeCollectionItem,
@@ -100,7 +102,7 @@ export const collectionReducer = createReducer(initialState, {
   },
 })
 
-function transformStart(state: CollectionState, action: TransformStartAction) {
+function transformStart(state: CollectionState, action: TransformAction) {
   const { collection } = state
   const { mode, initID, runID } = action.lc
 
@@ -109,6 +111,15 @@ function transformStart(state: CollectionState, action: TransformStartAction) {
   collection[initID].runStatus = "running"
   collection[initID].runID = runID
   collection[initID].runCount++
+}
+
+function transformCanceled(state: CollectionState, action: TransformAction) {
+  const { collection } = state
+  const { mode, initID } = action.lc
+
+  if (mode === 'apply' || !collection[initID]) return
+  
+  collection[initID].runStatus = "failed"
 }
 
 function logbookWriteRun(state: CollectionState, action: LogbookWriteAction) {
