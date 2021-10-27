@@ -16,7 +16,6 @@ import PageControl, { PageChangeObject } from '../../chrome/PageControl'
 import Footer from '../footer/Footer'
 import { NewSearchParams } from '../../qri/search'
 import DatasetList from '../../chrome/DatasetList'
-import ContentBox from '../../chrome/ContentBox'
 import Link from '../../chrome/Link'
 import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
@@ -103,12 +102,10 @@ const Search: React.FC<{}> = () => {
     if (searchResults.length > 0) {
       resultsContent = (
         <>
-          <ContentBox className='mb-6'>
-            <DatasetList
-              datasets={searchResults}
-              loading={loading}
-            />
-          </ContentBox>
+          <DatasetList
+            datasets={searchResults}
+            loading={loading}
+          />
           <PageControl
             pageInfo={pageInfo}
             queryParams={CleanSearchParams(searchParams)}
