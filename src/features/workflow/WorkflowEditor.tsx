@@ -21,6 +21,7 @@ import { QriRef } from '../../qri/ref'
 import { removeEvent } from "../events/state/eventsActions";
 import { selectDeployRunId } from "../deploy/state/deployState";
 import { deployResetRunId } from "../deploy/state/deployActions";
+import { selectSessionUserCanEditDataset } from "../dataset/state/datasetState";
 
 export interface WorkflowEditorProps {
   qriRef: QriRef
@@ -39,6 +40,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   const latestDryRunId = useSelector(selectLatestDryRunId)
   const latestRunId = useSelector(selectLatestRunId)
   const latestDeployRunId = useSelector(selectDeployRunId)
+  const canEdit = useSelector(selectSessionUserCanEditDataset)
 
   const [activeCell, setActiveCell] = useState<number>(-1)
   const [addedCell, setAddedCell] = useState<number>(-1)
@@ -145,7 +147,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 return (
                   <WorkflowCell
                     active={activeCell === i}
-                    disabled={run?.status === 'running'}
+                    disabled={run?.status === 'running' || !canEdit}
                     key={step.category}
                     index={i}
                     step={step}
