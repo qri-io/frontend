@@ -54,15 +54,15 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
         </div>
       )}
       <div className={`dataset_commit_info_text ${preview && 'text-xs'} truncate flex-grow`} style={{maxWidth: maxWidht}} title={dataset.commit?.title}>{dataset.commit?.title}</div>
-      {dataset.runID && (
-        <div className='flex-grow-0 text-qrigreen' title='version created by this dataset&apos;s transform script'>
-          <Icon icon='automationFilled' size={small ? 'xs' : 'sm'}/>
-        </div>
-      )}
     </div>
     <div className={classNames('flex items-center text-qrigray-400', {
       'text-xs': small
     })}>
+      {dataset.runID && (
+        <div className='flex-grow-0 text-qrigreen mr-2' title='version created by this dataset&apos;s transform script'>
+          <Icon icon='automationFilled' size={small ? 'xs' : 'sm'}/>
+        </div>
+      )}
       {preview ?
         <>
           <RelativeTimestampWithIcon className='mr-3 text-xs' timestamp={new Date(dataset.commit?.timestamp)} />
