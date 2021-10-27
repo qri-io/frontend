@@ -5,14 +5,16 @@
 
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { newQriRef } from '../../qri/ref'
 import { fetchDsPreview } from '../dsPreview/state/dsPreviewActions'
+import { selectDsPreviewError } from '../dsPreview/state/dsPreviewState'
 import { loadWorkflowByDatasetRef } from '../workflow/state/workflowActions'
 import { loadDatasetLogs } from '../activityFeed/state/activityFeedActions'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
+import NotFoundPage from '../notFound/NotFoundPage'
 
 interface DatasetWrapperProps {
   fetchData?: boolean
@@ -25,6 +27,8 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
   const qriRef = newQriRef(useParams())
   const dispatch = useDispatch()
 
+  const error = useSelector(selectDsPreviewError)
+
   useEffect(() => {
     // dont' fetch data if the user is making a new workflow
     if (fetchData) {
@@ -35,13 +39,21 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ qriRef.username, qriRef.name])
 
+  let content = (
+    <div className='flex overflow-hidden w-full flex-grow'>
+      <DatasetNavSidebar qriRef={qriRef} />
+      {children}
+    </div>
+  )
+
+  if (error.code === 404) {
+    content = (<NotFoundPage/>)
+  }
+
   return (
     <div className='flex flex-col h-full w-full bg-qrigray-100'>
       <NavBar />
-      <div className='flex overflow-hidden w-full flex-grow'>
-        <DatasetNavSidebar qriRef={qriRef} />
-      {children}
-      </div>
+      {content}
     </div>
   )
 }
