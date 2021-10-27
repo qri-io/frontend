@@ -20,6 +20,7 @@ import { AnonUser, selectSessionUser } from './features/session/state/sessionSta
 import UserProfile from './features/userProfile/UserProfile'
 import WorkflowPage from './features/workflow/WorkflowPage'
 import DatasetWrapper from './features/dsComponents/DatasetWrapper'
+import PasswordReset from "./features/session/PasswordReset";
 
 
 const PrivateRoute: React.FC<any>  = ({ path, children }) => {
@@ -39,7 +40,12 @@ export default function Routes () {
       <Switch>
         <Route path='/login'><Login /></Route>
         <Route path='/signup'><Signup /></Route>
-        <Route path='/login/forgot'><ForgotPassword /></Route>
+        <Route path='/forgot-password'><ForgotPassword /></Route>
+        <Route path='/reset'>
+          {
+            user !== AnonUser ? <Redirect to='/collection' /> : <PasswordReset />
+          }
+        </Route>
 
         <PrivateRoute path='/dashboard'><Dashboard /></PrivateRoute>
         <PrivateRoute path='/collection'><Collection /></PrivateRoute>

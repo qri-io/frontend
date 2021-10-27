@@ -7,7 +7,7 @@ import Link from '../../../chrome/Link'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
 import { showModal, clearModal } from '../../app/state/appActions'
-import { logIn } from '../state/sessionActions'
+import { logIn, resetForgotState } from '../state/sessionActions'
 import { selectIsSessionLoading } from '../state/sessionState'
 import { ModalType } from '../../app/state/appState'
 import QriLogo from '../../../chrome/QriLogo'
@@ -39,6 +39,11 @@ const LogInModal: React.FC = () => {
       })
   }
 
+  const handleForgotPasswordRedirect = () => {
+    dispatch(clearModal())
+    dispatch(resetForgotState())
+  }
+
   return (
     <div className='bg-white py-9 px-5 text-center' style={{ width: '440px'}}>
       <div className='w-10 m-auto mb-4'>
@@ -61,7 +66,7 @@ const LogInModal: React.FC = () => {
               onChange={(value) => { setPassword(value)  }}
               placeholder='Password'
             />
-            <Link to='/forgot-password'><div className='text-left text-black text-sm font-semibold'>Forgot your Password?</div></Link>
+            <Link to='/forgot-password' onClick={handleForgotPasswordRedirect}><div className='text-left text-black text-sm font-semibold'>Forgot your Password?</div></Link>
           </div>
 
           {loginError && <div className='text-xs text-red-500 text-left mb-2'>{loginError}</div>}
