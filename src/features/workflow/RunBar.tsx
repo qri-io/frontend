@@ -89,7 +89,7 @@ const RunBar: React.FC<RunBarProps> = ({
               )
             : (
                 <div data-tip data-for='dry-run'>
-                  <Button disabled={!canEdit} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
+                  <Button disabled={(!canEdit && !isNew)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
                 </div>
               )
           }

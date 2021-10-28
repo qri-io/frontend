@@ -45,6 +45,9 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
   const [activeCell, setActiveCell] = useState<number>(-1)
   const [addedCell, setAddedCell] = useState<number>(-1)
   const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
+
+  const isNew = !qriRef.username && !qriRef.name
+
   const collapseState = (stepName: string, run?: RunStep): "all" | "collapsed" | "only-editor" | "only-output" => {
     if (collapseStates[stepName]) {
       return collapseStates[stepName]
@@ -147,7 +150,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 return (
                   <WorkflowCell
                     active={activeCell === i}
-                    disabled={run?.status === 'running' || !canEdit}
+                    disabled={run?.status === 'running' || (!canEdit && !isNew)}
                     key={step.category}
                     index={i}
                     step={step}
