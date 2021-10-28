@@ -29,14 +29,6 @@ const initialState: DsPreviewState = {
 }
 
 export const dsPreviewReducer = createReducer(initialState, {
-
-
-
-  'API_PREVIEW_REQUEST': (state) => {
-    state.preview = NewDataset({})
-    state.loading = true
-  },
-
   'DS_PREVIEW_REQUEST': (state) => {
     state.loading = true
   },
@@ -47,7 +39,11 @@ export const dsPreviewReducer = createReducer(initialState, {
     state.loading = false
   },
 
-
+  'API_PREVIEW_REQUEST': (state) => {
+    state.preview = NewDataset({})
+    state.loading = true
+    state.error = NewApiErr()
+  },
   'API_PREVIEW_FAILURE': (state, action) => {
     state.loading = false
     state.error = action.payload.err
