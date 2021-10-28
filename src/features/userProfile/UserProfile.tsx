@@ -13,6 +13,7 @@ import {
 import {
   selectUserProfile,
   selectUserProfileLoading,
+  selectUserProfileError,
   selectUserProfileDatasets,
   selectUserProfileFollowing,
 } from './state/userProfileState'
@@ -26,6 +27,7 @@ import {
 import { ContentTabs, Tab } from '../../chrome/ContentTabs'
 import UserProfileHeader from './UserProfileHeader'
 import UserProfileDatasetList from './UserProfileDatasetList'
+import NotFoundPage from '../notFound/NotFoundPage'
 
 interface UserProfileProps {
   path?: '/' | '/following'
@@ -37,6 +39,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
 
   const profile = useSelector(selectUserProfile)
   const loading = useSelector(selectUserProfileLoading)
+  const error = useSelector(selectUserProfileError)
 
   const { ref: stickyHeaderTriggerRef, inView } = useInView({
     threshold: 0.6,
@@ -104,49 +107,59 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
     // }
   ]
 
-  return (
-    <div className='flex flex-col h-full w-full' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6'}}>
-      <NavBar />
-      <div className='flex-grow w-full overflow-y-scroll'>
-        {/* begin sticky header */}
-        <div className={classNames('sticky bg-white  border border-qrigray-200 z-10', {
-          'invisible -top-16 h-0': inView,
-          'visible top-0 transition-all': !inView
-        })}>
-          <div className='px-8 pt-4 pb-3 flex'>
-            <div className='flex items-center'>
-              <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
-                height: '30px',
-                width: '30px',
-                backgroundImage: `url(${profile.profile})`
-              }}/>
-              <div>
-                <div className='text-black text-sm font-semibold'>{profile.name}</div>
-                <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
-              </div>
+  let content = (
+    <>
+    <div className='flex-grow w-full overflow-y-scroll'>
+      {/* begin sticky header */}
+      <div className={classNames('sticky bg-white  border border-qrigray-200 z-10', {
+        'invisible -top-16 h-0': inView,
+        'visible top-0 transition-all': !inView
+      })}>
+        <div className='px-8 pt-4 pb-3 flex'>
+          <div className='flex items-center'>
+            <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
+              height: '30px',
+              width: '30px',
+              backgroundImage: `url(${profile.profile})`
+            }}/>
+            <div>
+              <div className='text-black text-sm font-semibold'>{profile.name}</div>
+              <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
             </div>
           </div>
         </div>
-        {/* end sticky header */}
-        <div className='mx-auto flex py-9' style={{ maxWidth: '1040px' }}>
-          <div className='flex-auto'>
-              <div className='w-full' ref={stickyHeaderTriggerRef}>
-                <UserProfileHeader profile={profile} loading={loading} />
-              </div>
-              <ContentTabs
-                tabs={tabs}
-              />
-              <UserProfileDatasetList
-                paginatedResults={path === '/' ? paginatedDatasetResults : paginatedFollowingResults}
-                userProfileParams={userProfileParams}
-                onParamsUpdate={updateQueryParams}
-              />
+      </div>
+      {/* end sticky header */}
+      <div className='mx-auto flex py-9' style={{ maxWidth: '1040px' }}>
+        <div className='flex-auto'>
+            <div className='w-full' ref={stickyHeaderTriggerRef}>
+              <UserProfileHeader profile={profile} loading={loading} />
             </div>
-        </div>
+            <ContentTabs
+              tabs={tabs}
+            />
+            <UserProfileDatasetList
+              paginatedResults={path === '/' ? paginatedDatasetResults : paginatedFollowingResults}
+              userProfileParams={userProfileParams}
+              onParamsUpdate={updateQueryParams}
+            />
+          </div>
+      </div>
       </div>
       <div className='bg-white flex-shrink-0'>
         <Footer />
       </div>
+    </>
+  )
+
+  if (error.message === '404: Not Found') {
+    content = (<NotFoundPage/>)
+  }
+
+  return (
+    <div className='flex flex-col h-full w-full' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6'}}>
+      <NavBar />
+      {content}
     </div>
   )
 }

@@ -12,6 +12,17 @@ export const CALL_API = Symbol('CALL_API')
 
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:2503'
 
+export interface ApiErr {
+  code?: number
+  message: string
+}
+
+export function NewApiErr (): ApiErr {
+  return {
+    message: ''
+  }
+}
+
 // ApiAction is an action that api middleware will operate on. ApiAction
 // intentionally does _not_ extend Action. when api middleware encounters an
 // ApiAction, it will immideately fire a API_[endpoint]_REQUEST action and
