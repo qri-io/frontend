@@ -55,6 +55,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
             </ScrollTrigger>
           </div>
           <WorkflowCellsStatus run={run} dataset={dataset} />
+          <div className='text-sm font-semibold mt-3 mb-1'>Next Version Preview</div>
           <WorkflowScriptStatus run={run} />
 
           <ScrollTrigger target='on-completion'>

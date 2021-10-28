@@ -69,11 +69,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     <div className='flex items-center'>
                       <div className='flex-grow truncate'>
                         <div className='flex items-center justify-between'>
-                          <div>
+                          <div className='flex-grow min-w-0 pr-6'>
                             <ContentBoxTitle title='Latest Version' />
-                            <DatasetCommitInfo preview={true} flex={!dataset.readme} inRow={true} dataset={dataset} />
+                            <DatasetCommitInfo dataset={dataset} small />
                           </div>
-                          <div className='flex'>
+                          <div className='flex flex-shrink-0'>
                             <DownloadDatasetButton hideIcon={true} type='primary' qriRef={qriRef} />
                           </div>
                         </div>

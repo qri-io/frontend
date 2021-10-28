@@ -117,19 +117,20 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       grow: 1,
       cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
-          <div className='w-8 mr-2 flex-shrink-0'  title={row.workflowID && 'This dataset has an automation script'}>
-            <Icon icon='automationFilled' size='sm' className={classNames('text-qrigreen', {
-              'visible': row.runID,
-              'invisible': !row.runID
-            })}/>
-          </div>
+
           <div className='truncate'>
             <div className='mb-1'>
               <Link to={pathToDatasetHeadPreview(row, { ignorePath: true })}>
                 <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-bold text-black ' />
               </Link>
             </div>
-            <div className='flex text-xs overflow-y-hidden'>
+            <div className='flex text-xs items-center overflow-y-hidden'>
+              <div className='mr-2 flex-shrink-0'  title={row.workflowID && 'This dataset has an automation script'}>
+                <Icon icon='automationFilled' size='2xs' className={classNames('text-qrigray-400', {
+                  'visible': row.runID,
+                  'invisible': !row.runID
+                })}/>
+              </div>
               <DatasetInfoItem icon='disk' label={numeral(row.bodySize).format('0.0 b')} size='sm' />
               <DatasetInfoItem icon='rows' label={numeral(row.bodyRows).format('0,0a')} size='sm' />
               <DatasetInfoItem icon={'commit'} label={row.commitCount.toString()} size='sm' />
@@ -169,7 +170,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         const versionLink = `/${row.username}/${row.name}/at${row.path}/history`
         return (
           <Link to={versionLink} className='min-w-0 flex-grow'>
-            <DatasetCommitInfo dataset={dataset} small inRow />
+            <DatasetCommitInfo dataset={dataset} small inRow automated={!!runID}/>
           </Link>
         )
       }
