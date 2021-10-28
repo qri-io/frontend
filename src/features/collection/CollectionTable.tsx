@@ -179,6 +179,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       name: 'Last Run',
       selector: (row: VersionInfo) => row.commitTime,
       omit: simplified,
+      sortable: true,
       width: '180px',
       cell: (row: VersionInfo) => {
         // TODO (ramfox): the activity feed expects more content than currently exists

@@ -70,7 +70,7 @@ const LogInModal: React.FC = () => {
             {loading ? <Spinner color='#fff' size={6} /> : 'Log In'}
           </Button>
         </form>
-        <div className='mb-3 text-qrigray-400' style={{ fontSize: 11 }}>
+        <div className='mb-3 text-qrigray-400 text-xs'>
           By continuing, you agree to Qri's <Link to='https://qri.io/legal/tos'>Terms of Service</Link> & <Link to='https://qri.io/legal/privacy-policy'>Privacy Policy</Link>.
         </div>
 
