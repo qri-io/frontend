@@ -20,14 +20,16 @@ export interface DownloadDatasetButtonProps {
   asIconLink?: boolean
   // if body=true, the downloadLink will get the dataset body
   body?: boolean
+  hideIcon?: boolean
 }
 
 const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
   qriRef,
-  small=false,
-  type='primary-outline',
-  asIconLink=false,
-  body=false,
+  small = false,
+  type = 'primary-outline',
+  asIconLink = false,
+  body = false,
+  hideIcon = false,
 }) => {
   const dispatch = useDispatch()
 
@@ -53,7 +55,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     }
   } else { // returns <Button>
     let buttonContent = (
-      <Button type={type} icon='download' className=''>
+      <Button type={type} icon={hideIcon ? '' : 'download'} className='flex-shrink-0'>
         {!small && 'Download'}
       </Button>
     )

@@ -17,6 +17,8 @@ import Readme from '../dsComponents/readme/Readme'
 import { QriRef } from '../../qri/ref'
 import MetaChips from '../../chrome/MetaChips'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
+import DownloadDatasetButton from "../download/DownloadDatasetButton";
+import ContentBoxSubTitle from "../../chrome/ContentBoxSubTitle";
 
 interface DatasetPreviewPageProps {
   qriRef: QriRef
@@ -50,8 +52,8 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
           </div>)
         : (
             <DatasetScrollLayout contentClassName='max-w-screen-lg mx-auto'>
-              <div className='-ml-2 -mr-3 mb-5'>
-                <div className='w-7/12 px-2 inline-block align-top' style={{ height: readmeContainerHeight}}>
+              <div className='flex -ml-2 -mr-3 mb-6'>
+                {dataset.readme && <div className='w-7/12 px-2 align-top' style={{ height: readmeContainerHeight}}>
                   <ContentBox className='flex flex-col h-full'>
                     <div className='flex flex-col h-full overflow-hidden'>
                       <ContentBoxTitle title='Readme'/>
@@ -61,18 +63,29 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                       {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                     </div>
                   </ContentBox>
-                </div>
-                <div ref={versionInfoContainer} className='w-5/12 px-3 inline-block align-top'>
+                </div>}
+                <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-5/12' : 'w-full' } px-3 align-top`}>
                   <ContentBox>
-                    <div className='flex items-center border-b pb-4 mb-3'>
+                    <div className='flex items-center'>
                       <div className='flex-grow truncate'>
-                        <ContentBoxTitle title='Latest Version' />
-                        <DatasetCommitInfo dataset={dataset} />
+                        <div className='flex items-center justify-between'>
+                          <div>
+                            <ContentBoxTitle title='Latest Version' />
+                            <DatasetCommitInfo preview={true} flex={!dataset.readme} inRow={true} dataset={dataset} />
+                          </div>
+                          <div className='flex'>
+                            <DownloadDatasetButton hideIcon={true} type='primary' qriRef={qriRef} />
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  </ContentBox>
+                  <ContentBox className='mt-6'>
                     {/* Bottom of the box */}
-                    <ContentBoxTitle title='Description' />
+                    <ContentBoxTitle title='Metadata' />
+                    <ContentBoxSubTitle title='Description' />
                     <div className='text-qrigray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
+                    <ContentBoxSubTitle title='Keywords' />
                     {dataset.meta?.keywords && <MetaChips words={dataset.meta.keywords} />}
                   </ContentBox>
                 </div>
