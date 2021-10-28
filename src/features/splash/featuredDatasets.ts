@@ -82,6 +82,26 @@ const featuredDatasets: FeaturedDatasets = {
     title: 'Latest',
     datasets: [
       {
+        username: 'chriswhong-demo',
+        name: 'top-ten-us-cities-by-population',
+        meta: {
+          title: 'Top 10 U.S. Cities by 2020 Population',
+          description: 'A simple dataset of the 10 largest cities in the U.S. by population, copied from https://worldpopulationreview.com/us-cities',
+          structure: {
+            length: 310
+          }
+        },
+        commit: {
+          timestamp: 1633523901000
+        },
+        stats: {
+          downloadCount: 0
+        },
+        followStats: {
+
+        }
+      },
+      {
         username: 'nyc-transit-data',
         name: 'turnstile_daily_counts_2021',
         meta: {
@@ -121,26 +141,6 @@ const featuredDatasets: FeaturedDatasets = {
 
         }
       },
-      {
-        username: 'b5',
-        name: 'world-bank-population',
-        meta: {
-          title: 'World Bank Population',
-          description: '( 1 ) United Nations Population Division. World Population Prospects: 2017 Revision. ( 2 ) Census reports and other statistical publications from national statistical offices, ( 3 ) Eurostat: Demographic Statistics, ( 4 ) United Nations Statistical Division. Population and Vital Statistics Reprot ( various years ), ( 5 ) U.S. Census Bureau: International Database, and ( 6 ) Secretariat of the Pacific Community: Statistics and Demography Programme.',
-          structure: {
-            length: 111400
-          }
-        },
-        commit: {
-          timestamp: 1598184201000
-        },
-        stats: {
-          downloadCount: 168
-        },
-        followStats: {
-
-        }
-      }
     ]
   }
 }
