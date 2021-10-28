@@ -81,7 +81,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
           const versionLink = `/${row.username}/${row.name}/at${row.path}/history/body`
           return (
             <Link to={versionLink} className='min-w-0 flex-grow'>
-              <DatasetCommitInfo dataset={dataset} small inRow />
+              <DatasetCommitInfo dataset={dataset} small inRow automated/>
             </Link>
           )
         } else {

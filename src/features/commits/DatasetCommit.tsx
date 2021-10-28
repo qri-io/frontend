@@ -31,7 +31,7 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
   }
 
   const content = (
-    <DatasetCommitInfo dataset={dataset} small />
+    <DatasetCommitInfo dataset={dataset} small automated={!!dataset.runID} />
   )
 
   const containerClassNames = classNames('block rounded-md px-3 py-3 mb-6 w-full overflow-x-hidden', active && 'bg-white', !active && 'text-qrigray-400 border border-qrigray-300')

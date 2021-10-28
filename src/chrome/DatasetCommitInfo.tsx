@@ -17,12 +17,16 @@ interface DatasetCommitInfoProps {
   preview?: boolean
   // sets the maxWidth, used for dynamic display in dataset preview page
   flex?: boolean
+  // determines whether or not to show the automated icon.  This should be included in dataset, but our responses
+  // are inconsistent, so this prop allows us to turn it on manually wherever we know it should appear
+  automated?: boolean
 }
 
 const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
   dataset,
   small=false,
-  inRow=false
+  inRow=false,
+  automated=false
 }) => {
   return (
   <div className={classNames('truncate', {
@@ -44,7 +48,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
       'text-xs': small
     })}>
       {/* automation icon */}
-      {dataset.runID && (
+      {automated && (
         <div className='flex-grow-0 mr-2' title='version created by this dataset&apos;s transform script'>
           <Icon icon='automationFilled' size={small ? '2xs' : 'xs'}/>
         </div>
