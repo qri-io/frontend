@@ -59,6 +59,7 @@ const initialState: UserProfileState = {
 export const userProfileReducer = createReducer(initialState, {
   'API_USERPROFILE_REQUEST': (state: UserProfileState, action) => {
     state.loading = true
+    state.error = NewApiErr()
   },
   'API_USERPROFILE_SUCCESS': (state: UserProfileState, action) => {
     state.profile = action.payload.data
