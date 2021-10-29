@@ -141,7 +141,7 @@ jobs:
     - setup_remote_docker
     - run:
         name: Build docker image
-        command: docker build --build-arg api_base_url=<<parameters.api_url>> --build-arg ws_base_url=<<parameters.ws_url>> --build-arg app_port=<<parameters.port>> --rm=false -t gcr.io/qri-io/qrimatic-fe:$CIRCLE_SHA1 .
+        command: docker build --build-arg api_base_url=<<parameters.api_url>> --build-arg ws_base_url=<<parameters.ws_url>> --build-arg app_port=<<parameters.port>> --rm=false -t gcr.io/qri-io/qrimatic-fe-prod:$CIRCLE_SHA1 .
     - run:
         name: Push image to Google Container Registry, add 'latest' tag
         command: .circleci/publish_to_gcr.sh gcr.io/qri-io/qrimatic-fe $CIRCLE_SHA1
