@@ -10,6 +10,7 @@ import Spinner from '../../../chrome/Spinner'
 
 export interface BodyProps {
   dataset: Dataset
+  loading: boolean
 }
 
 const extractColumnHeaders = (structure: Structure, value: any[]): ColumnProperties[] => {
@@ -29,6 +30,7 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
 
 const Body: React.FC<BodyProps> = ({
   dataset,
+  loading
 }) => {
   const {
     body,
@@ -57,7 +59,7 @@ const Body: React.FC<BodyProps> = ({
   return (
     <>
       <ComponentHeader border={false}>
-        <BodyHeader dataset={dataset} showExpand={false} />
+        <BodyHeader dataset={dataset} showExpand={false} loading={loading} />
       </ComponentHeader>
       <div className='overflow-auto flex-grow'>
       {

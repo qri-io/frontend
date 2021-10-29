@@ -10,7 +10,7 @@ import DatasetCommitList from '../commits/DatasetCommitList'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 import TabbedComponentViewer from './TabbedComponentViewer'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
-import { loadDataset } from '../dataset/state/datasetActions'
+import { loadDataset, setBodyLoading } from '../dataset/state/datasetActions'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 
 const DatasetComponents: React.FC<{}> = () => {
@@ -21,7 +21,10 @@ const DatasetComponents: React.FC<{}> = () => {
 
   useEffect(() => {
     const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
-    dispatch(loadDataset(ref))
+    dispatch(setBodyLoading())
+    if (ref.username && ref.name) {
+      dispatch(loadDataset(ref))
+    }
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
 
 
@@ -30,12 +33,11 @@ const DatasetComponents: React.FC<{}> = () => {
       <div className='flex-grow flex overflow-hidden'>
         <DatasetCommitList qriRef={qriRef} />
         <div className='flex flex-col flex-grow overflow-hidden'>
-          <CommitSummaryHeader dataset={dataset}>
+          <CommitSummaryHeader loading={loading} dataset={dataset}>
             <DownloadDatasetButton qriRef={qriRef} />
           </CommitSummaryHeader>
           <TabbedComponentViewer
             dataset={dataset}
-            loading={loading}
             selectedComponent={qriRef.component as ComponentName || 'body'}
           />
         </div>

@@ -1,13 +1,14 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
+import ContentLoader from "react-content-loader";
 
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
 import DatasetInfoItem from './DatasetInfoItem'
 import Link from '../../chrome/Link'
 import { validateDatasetName } from '../session/state/formValidation'
-import { selectDatasetHeader } from "./state/datasetState";
+import { selectDatasetHeader, selectIsHeaderLoading } from "./state/datasetState";
 import { qriRefFromVersionInfo } from "../../qri/versionInfo";
 import fileSize from "../../utils/fileSize";
 
@@ -32,8 +33,8 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   const dispatch = useDispatch()
   const history = useHistory()
   const header = useSelector(selectDatasetHeader)
+  const loading = useSelector(selectIsHeaderLoading)
   const qriRef = qriRefFromVersionInfo(header)
-
 
   const handleRename = (_:string, value:string) => {
     renameDataset(qriRef, { username: header.username, name: value })(dispatch)
@@ -52,20 +53,31 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           {/* don't show the username/name when creating a new dataset with the workflow editor */}
           { !isNew && (
             <div className='text-base text-qrigray-400 relative flex items-center group hover:text font-mono'>
-              <Link to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</Link>/
-              <EditableLabel
-                readOnly={!editable}
-                name='name'
-                onChange={handleRename}
-                value={qriRef.name}
-                validator={validateDatasetName}
-              />
+              {loading ?
+                <ContentLoader height='20.8'>
+                  <rect width="100" y='4' height="16" rx="1" fill="#D5DADD"/>
+                  <rect width="180" y='4' x='110' height="16" rx="1" fill="#D5DADD"/>
+                </ContentLoader> :
+                <>
+                  <Link to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</Link>/
+                  <EditableLabel
+                    readOnly={!editable}
+                    name='name'
+                    onChange={handleRename}
+                    value={qriRef.name}
+                    validator={validateDatasetName}
+                  />
+                </>}
             </div>
           )}
 
-          <div className='text-2xl text-black-500 font-bold group hover:text'>
-            {isNew ? newWorkflowTitle : header.name}
-          </div>
+          {loading && !isNew ?
+            <ContentLoader height='29.6'>
+              <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
+            </ContentLoader> :
+            <div className='text-2xl text-black-500 font-bold group hover:text'>
+              {isNew ? newWorkflowTitle : header.name}
+            </div>}
           {!isNew && (
             <div className='flex mt-2 text-sm'>
               {header.runID && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}

@@ -43,13 +43,13 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
     </>
   )
 
-  const tabClasses = 'flex flex-grow items-center mw-40 mr-2 last:mr-0 py-1.5 rounded-tr-lg rounded-tl-lg group justify-center relative'
+  const tabClasses = `flex flex-grow items-center mw-40 mr-2 last:mr-0 py-1.5 rounded-tr-lg rounded-tl-lg group justify-center relative 
+  ${displayName === 'Data' && 'w-1/4'}`
 
   const enabledClasses = {
     'selected': selected,
     'bg-white': selected,
     'bg-qrigray-200': !selected,
-    'w-1/4': displayName === 'Data',
     'border-grigray-200 border-t-2 border-r-2 border-l-2 -bottom-0.5': border
   }
 
@@ -60,7 +60,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
 
   const disabledClasses = 'text-qrigray-400 bg-qrigray-200'
 
-  if (disabled) {
+  if (disabled && !selected) {
     return (
       <div className={classNames(tabClasses, disabledClasses)}>
         {tabContent}

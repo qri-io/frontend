@@ -4,9 +4,11 @@ import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
 import {
   RENAME_NEW_DATASET,
   RESET_DATASET_STATE,
-  SET_HEADER } from "./datasetState"
+  SET_BODY_LOADING,
+  SET_HEADER
+} from "./datasetState"
 import { API_BASE_URL } from '../../../store/api'
-import {VersionInfo} from "../../../qri/versionInfo";
+import { VersionInfo } from "../../../qri/versionInfo";
 
 export const bodyPageSizeDefault = 50
 
@@ -148,6 +150,12 @@ export function setHeader(header: VersionInfo) {
 export function resetDatasetState(): ResetDatasetStateAction {
   return {
     type: RESET_DATASET_STATE,
+  }
+}
+
+export function setBodyLoading(): ResetDatasetStateAction {
+  return {
+    type: SET_BODY_LOADING
   }
 }
 

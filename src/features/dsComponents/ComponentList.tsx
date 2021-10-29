@@ -99,8 +99,10 @@ const ComponentList: React.FC<ComponentListProps> = ({
           return (
             <ComponentItem
               key={name}
+              name={name}
               displayName={displayName}
               icon={icon}
+              selected={displayName === 'Data'}
               border={border}
               disabled
             />

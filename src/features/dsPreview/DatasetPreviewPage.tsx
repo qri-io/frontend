@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
 
 import { newQriRef } from '../../qri/ref';
-import { selectDsPreview } from './state/dsPreviewState'
+import { selectDsPreview, selectIsDsPreviewLoading } from './state/dsPreviewState'
 import { loadDsPreview } from './state/dsPreviewActions'
 import Spinner from '../../chrome/Spinner'
 import ContentBox from '../../chrome/ContentBox'
@@ -29,6 +29,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
 }) => {
   const dispatch = useDispatch()
   const dataset = useSelector(selectDsPreview)
+  const loading = useSelector(selectIsDsPreviewLoading)
 
   const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions();
   const [expandReadme, setExpandReadme] = useState(false)
@@ -96,7 +97,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 <ContentBox className='h-full overflow-hidden flex flex-col'>
                   <div className='flex flex-col h-full overflow-hidden'>
                     <ContentBoxTitle title='Data' />
-                    <BodyPreview dataset={dataset} />
+                    <BodyPreview dataset={dataset} loading={loading} />
                   </div>
                 </ContentBox>
               </div>
