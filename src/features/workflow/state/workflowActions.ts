@@ -195,7 +195,20 @@ export function applyWorkflowTransform (w: Workflow, d: Dataset): ApiActionThunk
   }
 }
 
-
+export function cancelRun(runID: string): ApiActionThunk {
+  return async (dispatch) => {
+    return dispatch({
+      type: 'cancel',
+      [CALL_API]: {
+        endpoint: 'auto/cancel',
+        method: 'POST',
+        body: {
+          runID
+        }
+      }
+    })
+  }
+}
 
 export interface SetWorkflowAction {
   type: string

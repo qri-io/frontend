@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip'
 import Button from '../../chrome/Button'
 import { RunStatus } from '../../qri/run'
 import RunStatusIcon from '../run/RunStatusIcon'
-import { applyWorkflowTransform } from './state/workflowActions'
+import { applyWorkflowTransform, cancelRun } from './state/workflowActions'
 import { deployResetRunId } from '../deploy/state/deployActions'
 import {
   selectWorkflow,
@@ -24,6 +24,7 @@ import { removeEvent } from "../events/state/eventsActions";
 import { selectDeployRunId } from "../deploy/state/deployState";
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 import { trackGoal } from '../../features/analytics/analytics'
+import { selectIsLoggedIn } from '../session/state/sessionState'
 
 export interface RunBarProps {
  status: RunStatus
@@ -43,6 +44,7 @@ const RunBar: React.FC<RunBarProps> = ({
   const latestDeployRunId = useSelector(selectDeployRunId)
   const qriRef = newQriRef(useParams())
   const areCellsEdited = useSelector(selectEditedCells)
+  const isLoggedIn = useSelector(selectIsLoggedIn)
 
   const removeRunEvents = () => {
     if (latestDryRunId)
@@ -61,7 +63,7 @@ const RunBar: React.FC<RunBarProps> = ({
     dispatch(applyWorkflowTransform(workflow, workflowDataset))
   }
 
-  const handleCancel = () => { alert('cannot cancel runs yet') }
+  const handleCancel = () => { dispatch(cancelRun(latestDryRunId)) }
 
   const isMac = (platform() === 'mac')
 
@@ -89,7 +91,7 @@ const RunBar: React.FC<RunBarProps> = ({
               )
             : (
                 <div data-tip data-for='dry-run'>
-                  <Button disabled={(!canEdit && !isNew)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
+                  <Button disabled={!((isNew && isLoggedIn) || canEdit)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
                 </div>
               )
           }
@@ -100,7 +102,7 @@ const RunBar: React.FC<RunBarProps> = ({
         id='dry-run'
         effect='solid'
       >
-        {canEdit ?
+        {canEdit || (isNew && isLoggedIn) ?
           `Try this script and preview the results without saving (${isMac ? '⌘' : 'Ctrl'}+↵)` :
           'Only the dataset owner can run this script'
         }

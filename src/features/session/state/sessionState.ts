@@ -14,6 +14,7 @@ export const selectSessionTokens = (state: RootState): SessionTokens => {
   }
 }
 export const selectIsSessionLoading = (state: RootState): boolean => state.session.loading
+export const selectIsLoggedIn = (state: RootState): boolean => state.session.user.username !== 'new'
 
 export interface User {
   name?: string

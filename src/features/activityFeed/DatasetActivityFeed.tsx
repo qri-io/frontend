@@ -7,7 +7,7 @@ import ActivityList from './ActivityList'
 import { loadDatasetLogs } from './state/activityFeedActions'
 import { newDatasetLogsSelector } from './state/activityFeedState'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
-import { runNow } from '../workflow/state/workflowActions'
+import { cancelRun, runNow } from '../workflow/state/workflowActions'
 import { selectLatestRunId } from '../workflow/state/workflowState'
 import RunNowButton from './RunNowButton'
 import { LogItem, NewLogItem } from "../../qri/log"
@@ -43,6 +43,10 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
     dispatch(runNow(qriRef))
   }
 
+  const handleCancelRun = () => {
+    dispatch(cancelRun(latestRun.id))
+  }
+
   useEffect(() => {
     if (latestRun.status === 'running') {
       const runningLog:LogItem = NewLogItem({
@@ -71,7 +75,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   }, [ logs, latestRun ])
 
   return (
-    <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} />}>
+    <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} />}>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
         <div className='rounded-none h-full'>
           <ActivityList

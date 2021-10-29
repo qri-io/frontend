@@ -5,7 +5,7 @@ import { NewEventLogLine } from '../../../qri/eventLog'
 import { RootState } from '../../../store/store'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
 import { runEventLog } from '../../events/state/eventsActions'
-import { logbookWriteCommitEvent, logbookWriteRunEvent, transformStartEvent } from '../../collection/state/collectionActions'
+import { logbookWriteCommitEvent, logbookWriteRunEvent, transformStartEvent, transformCanceledEvent } from '../../collection/state/collectionActions'
 import {
   deployStarted,
   deployEnded,
@@ -37,6 +37,7 @@ import {
   ETLogbookWriteRun,
   ETLogbookWriteCommit,
   NewTransformLifecycle,
+  ETTransformCancel,
 } from '../../../qri/events'
 import { wsConnectionChange } from '../state/websocketActions'
 import { WS_CONNECT, WS_DISCONNECT } from '../state/websocketState'
@@ -113,6 +114,7 @@ const middleware = () => {
 
       if (event.type.startsWith("tf:")) {
         if (event.type === ETTransformStart) dispatch(transformStartEvent(NewTransformLifecycle(event.data)))
+        if (event.type === ETTransformCancel) dispatch(transformCanceledEvent(NewTransformLifecycle(event.data)))
         dispatch(runEventLog(NewEventLogLine(event)))
         return
       }
@@ -283,3 +285,4 @@ const middleware = () => {
 }
 
 export const websocketMiddleware = middleware()
+

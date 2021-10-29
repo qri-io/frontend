@@ -46,6 +46,10 @@ export const ETWorkflowCompleted = "wf:Completed"
 // ETTransformStart signals the start of a transform execution
 // payload is a TransformLifecycle
 export const ETTransformStart = "tf:Start"
+// ETTransformCanceled signals that the transform was canceled before it
+// could fully execute
+// payload is a TransformLifecycle
+export const ETTransformCancel = "tf:Canceled"
 
 // ETLogbookWriteRun occurs when the logbook writes an op of model
 // `RunModel`, indicating that a new run of a dataset has occured

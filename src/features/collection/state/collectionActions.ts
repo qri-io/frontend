@@ -5,6 +5,7 @@ import {
   LOGBOOK_WRITE_RUN,
   REMOVE_COLLECTION_ITEM,
   RESET_COLLECTION_STATE,
+  TRANSFORM_CANCELED,
   TRANSFORM_START
 } from "./collectionState"
 import { RootState } from "../../../store/store";
@@ -117,7 +118,7 @@ export function removeCollectionItem(username: string, name: string): RemoveColl
   }
 }
 
-export interface TransformStartAction {
+export interface TransformAction {
   type: string
   lc: TransformLifecycle
 }
@@ -126,9 +127,16 @@ export interface ResetCollectionStateAction {
   type: string
 }
 
-export function transformStartEvent(lc: TransformLifecycle): TransformStartAction {
+export function transformStartEvent(lc: TransformLifecycle): TransformAction {
   return {
     type: TRANSFORM_START,
+    lc
+  }
+}
+
+export function transformCanceledEvent(lc: TransformLifecycle): TransformAction {
+  return {
+    type: TRANSFORM_CANCELED,
     lc
   }
 }
