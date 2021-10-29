@@ -62,7 +62,7 @@ const Body: React.FC<BodyProps> = ({
   // list out dependencies on dataset body individually for proper memoization
   useEffect(() => {
     if (preview) { return }
-    if(name  && username) {
+    if (name  && username) {
       dispatch(loadBody(newQriRef({ path, name, username }), 1, 100))
     }
   }, [preview, dispatch, path, name, username])

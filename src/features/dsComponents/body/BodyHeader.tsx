@@ -1,5 +1,6 @@
 import React from 'react'
 import numeral from 'numeral'
+import ContentLoader from 'react-content-loader'
 
 import Dataset, {
   qriRefFromDataset,
@@ -8,7 +9,6 @@ import Dataset, {
 import Icon from '../../../chrome/Icon'
 import IconLink from '../../../chrome/IconLink'
 import DownloadDatasetButton from '../../download/DownloadDatasetButton'
-import ContentLoader from "react-content-loader";
 
 interface BodyHeaderProps {
   dataset: Dataset
