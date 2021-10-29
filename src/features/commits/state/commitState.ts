@@ -3,6 +3,7 @@ import { createReducer } from '@reduxjs/toolkit'
 import { RootState } from '../../../store/store'
 import { humanRef, QriRef, refStringFromQriRef } from '../../../qri/ref'
 import { LogItem } from '../../../qri/log'
+import { ApiErr, NewApiErr } from '../../../store/api'
 
 export function newDatasetCommitsSelector(qriRef: QriRef): (state: RootState) => LogItem[] {
   qriRef = humanRef(qriRef)
@@ -25,27 +26,25 @@ export function selectDatasetCommitsLoading(state: RootState): boolean {
 export interface CommitsState {
   commits: Record<string,LogItem[]>
   loading: boolean
-  loadError: string
+  error: ApiErr
 }
 
 const initialState: CommitsState = {
   commits: {},
   loading: false,
-  loadError: ''
+  error: NewApiErr()
 }
 
 export const commitsReducer = createReducer(initialState, {
-  'API_DATASET_ACTIVITY_REQUEST': (state, action) => {
+  'API_DATASET_ACTIVITY_HISTORY_REQUEST': (state, action) => {
     state.loading = true
   },
-  'API_DATASET_ACTIVITY_FAILURE': (state, action) => {
+  'API_DATASET_ACTIVITY_HISTORY_FAILURE': (state, action) => {
     state.loading = false
-    // TODO (b5): capture error from API response
-    state.loadError = 'failed to load commits'
+    state.error = action.payload.err
   },
-  'API_DATASET_ACTIVITY_SUCCESS': (state, action) => {
-    const ls = action.payload.data as LogItem[]
-    state.commits[refStringFromQriRef(action.qriRef)] = ls.filter(d => d.path)
+  'API_DATASET_ACTIVITY_HISTORY_SUCCESS': (state, action) => {
+    state.commits[refStringFromQriRef(action.qriRef)] = action.payload.data
     state.loading = false
   },
 })

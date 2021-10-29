@@ -14,13 +14,15 @@ export function loadDatasetCommits(qriRef: QriRef): ApiActionThunk {
 
 function fetchDatasetCommits(qriRef: QriRef): ApiAction {
   return {
-    type: 'dataset_activity',
+    type: 'dataset_activity_history',
     qriRef,
     [CALL_API]: {
       endpoint: `ds/activity`,
       method: 'POST',
       body: {
-        ref: `${qriRef.username}/${qriRef.name}`
+        ref: `${qriRef.username}/${qriRef.name}`,
+        limit: 100,
+        term: 'history'
       },
       map: mapCommits
     }

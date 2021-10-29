@@ -14,14 +14,15 @@ export function loadDatasetLogs(qriRef: QriRef): ApiActionThunk {
 
 function fetchDatasetLogs(qriRef: QriRef): ApiAction {
   return {
-    type: 'dataset_activity',
+    type: 'dataset_activity_runs',
     qriRef,
     [CALL_API]: {
       endpoint: `ds/activity`,
       method: 'POST',
       body: {
         ref: `${qriRef.username}/${qriRef.name}`,
-        pageSize: 100
+        limit: 500,
+        term: 'run'
       },
       map: mapLogs
     }
