@@ -34,7 +34,7 @@ const DatasetComponents: React.FC<{}> = () => {
         <DatasetCommitList qriRef={qriRef} />
         <div className='flex flex-col flex-grow overflow-hidden'>
           <CommitSummaryHeader loading={loading} dataset={dataset}>
-            <DownloadDatasetButton qriRef={qriRef} />
+            <DownloadDatasetButton title='Download the full dataset version as a zip file' qriRef={qriRef} />
           </CommitSummaryHeader>
           <TabbedComponentViewer
             dataset={dataset}

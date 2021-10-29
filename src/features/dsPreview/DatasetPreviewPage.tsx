@@ -75,7 +75,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                             <DatasetCommitInfo dataset={dataset} small />
                           </div>
                           <div className='flex flex-shrink-0'>
-                            <DownloadDatasetButton hideIcon={true} type='primary' qriRef={qriRef} />
+                            <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' hideIcon={true} type='primary' qriRef={qriRef} />
                           </div>
                         </div>
                       </div>
