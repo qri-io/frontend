@@ -20,9 +20,9 @@ const WorkflowDatasetPreview: React.FC<WorkflowDatasetPreviewProps> = ({
       {dataset ? (
         <TabbedComponentViewer
           dataset={dataset}
-          loading={false}
           selectedComponent={selectedComponent}
           preview
+          showLoadingState={false}
         />
       ) : (
         <TabbedComponentViewer
