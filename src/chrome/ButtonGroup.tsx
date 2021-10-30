@@ -25,8 +25,8 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
       const selected = selectedIndex === i
       return (
         <Link
-          className={classNames('my-2 mx-4 font-medium text-black transition-100 transition-all hover:text-qripink', {
-            'text-qripink': selected
+          className={classNames('my-2 mx-4 font-medium text-black transition-100 transition-all hover:text-qripink-600', {
+            'text-qripink-600': selected
           })}
           key={i}
           to={link}

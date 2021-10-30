@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import Icon from './Icon'
 import Link from './Link'
 
-export const dropdownBaseClass = 'text-left my-0.5 px-2 py-1 whitespace-nowrap rounded-sm font-light last:mb-0'
+export const dropdownBaseClass = 'text-left my-0.5 px-2 py-1 whitespace-nowrap rounded-sm last:mb-0'
 
 export interface DropdownMenuItemProps {
   active?: boolean
@@ -40,7 +40,7 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   const colorClassName = 'text-qrigray-400'
 
   let dropdownMenuItemContent = (
-    <div className={classNames({'text-qripink': active })} style={{ fontSize: 11 }}>
+    <div className={classNames({'text-qripink-600 font-semibold': active })} style={{ fontSize: 11 }}>
       {icon && <Icon icon={icon} className='mr-2' size='sm' />}{label}
     </div>
   )

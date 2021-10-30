@@ -20,8 +20,8 @@ const ContentBox: React.FC<ContentBoxProps> = ({
 }) => (
   <div className={className}>
     <div className={classNames('min-height-200 h-full bg-white', paddingClassName, {
-      'rounded-2xl': !warning,
-      'rounded-t-2xl': warning
+      'rounded-lg': !warning,
+      'rounded-t-lg': warning
     })} style={{
       boxShadow: card ? '0px 0px 8px rgba(0, 0, 0, 0.1)' : ''
     }}>

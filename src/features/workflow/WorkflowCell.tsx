@@ -108,7 +108,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
             'border-transparent': !active
           })}
           style={{
-            borderRadius: '0.58rem',
+            borderRadius: 7,
             width: 'calc(100% - 225px)'
           }}
         >

@@ -22,14 +22,14 @@ export type ButtonType = 'primary' // light blue button with white text
       'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
       'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
       'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),
-      'text-qrigray-900 hover:text-qripink border border-qrigray-900 hover:border-qripink': (type === 'dark'),
+      'text-qrigray-900 hover:text-qripink-600 border border-qrigray-900 hover:border-qripink-600': (type === 'dark'),
       'cursor-default text-white bg-qrigray-400 hover:bg-qrigray-400': (type === 'primary' && disabled),
       'text-qrigray-400 border border-qrigray-400 box-border hover:text-qrigray-400 hover:border-qrigray-400': (type === 'primary-outline' && disabled),
       'text-white bg-qrigray-400 hover:bg-qrigray-400': ((type === 'secondary' || type === 'danger') && disabled),
       'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400 box-border': (type === 'secondary-outline' && disabled),
       'text-qrigray-400 bg-qrigray-400 hover:bg-qrigray-400': (type === 'warning' && disabled),
       'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400': (type === 'light' && disabled),
-      'text-qrigray-400 hover:text-qripink border border-qrigray-400 hover:border-qrigray-400': (type === 'dark' && disabled),
+      'text-qrigray-400 hover:text-qripink-600 border border-qrigray-400 hover:border-qrigray-400': (type === 'dark' && disabled),
       'cursor-default': disabled
     }
   }
@@ -115,7 +115,8 @@ const Button: React.FC<ButtonProps> = ({
       id={id}
       type={submit ? 'submit' : 'button'}
       style={{
-        height
+        height,
+        lineHeight: height
       }}
       className={classNames(
         'px-2.5 inline-flex items-center justify-center shadow-sm bg-transparent font-semibold focus:outline-none focus:ring-none mt-0 transition-all duration-100',

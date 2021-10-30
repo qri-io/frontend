@@ -8,21 +8,21 @@ const Footer: React.FC<{}> = () => (
     <div className='flex flex-grow font-medium'>
       <Link
         className='mr-10'
-        colorClassName='text-black hover:text-qripink'
+        colorClassName='text-black hover:text-qripink-600'
         to='https://qri.io/docs'
       >
         Tutorials
       </Link>
       <Link
         className='mr-10'
-        colorClassName='text-black hover:text-qripink'
+        colorClassName='text-black hover:text-qripink-600'
         to='https://qri.io/docs'
       >
         Docs
       </Link>
       <Link
         className='mr-10'
-        colorClassName='text-black hover:text-qripink'
+        colorClassName='text-black hover:text-qripink-600'
         to='https://qri.io/faq'
       >
         FAQs
@@ -50,7 +50,7 @@ const Footer: React.FC<{}> = () => (
             size='md'
             link={link}
             className='ml-5'
-            colorClassName='text-black hover:text-qripink'
+            colorClassName='text-black hover:text-qripink-600'
           />
         ))
       }

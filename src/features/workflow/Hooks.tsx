@@ -23,7 +23,7 @@ const OnComplete: React.FC<any> = () => {
     <div className='flex'>
       <div className='flex-grow min-w-0'>
         <ScrollAnchor id='on-completion' />
-        <h2 className='text-xl font-bold text-gray-600'>On Completion</h2>
+        <h2 className='text-xl font-bold text-black'>On Completion</h2>
         <div className='text-base text-qrigray-400 mb-3'>Configure actions that will happen when the workflow succeeds</div>
         <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
           {hooks.map((d, i) => (

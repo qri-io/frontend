@@ -31,7 +31,7 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
 
     case 'failed':
       displayStatus = 'Failed'
-      colorClass = 'text-qripink'
+      colorClass = 'text-qripink-600'
       break
 
     case 'unchanged':

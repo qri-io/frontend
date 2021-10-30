@@ -34,7 +34,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ tabs }) => (
               (numberDecorator > 0) &&
               (
                 <div className={classNames('text-white rounded px-2 ml-2', {
-                  'bg-qripink': selected,
+                  'bg-qripink-600': selected,
                   'bg-qrigray-400': !selected,
                 })}>
                   {numberDecorator}
@@ -58,7 +58,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ tabs }) => (
             className={classNames('font-medium px-5 mr-2 last:mr-0 py-3 rounded-lg mb-4', {
               'selected': selected,
               'bg-white': selected,
-              'text-qripink': selected,
+              'text-qripink-600': selected,
               'bg-gray-200': !selected,
               'text-gray-400': disabled,
               'text-black': !disabled,
