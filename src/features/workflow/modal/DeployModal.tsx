@@ -95,7 +95,7 @@ const DeployModal: React.FC = () => {
     if (isNew) {
       setCanBeDeployed(false)
     }
-  }, [ dsName, isNew ])
+  }, [ isNew ])
 
   const handleDeployClick = () => {
     setDeploying(true)
