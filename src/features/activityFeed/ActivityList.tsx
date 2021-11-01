@@ -9,6 +9,7 @@ import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
+import { runEndTime } from '../../utils/runEndTime'
 
 
 interface ActivityListProps {
@@ -46,13 +47,14 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Time',
-      selector: (row: LogItem) => row.timestamp,
+      selector: (row: LogItem) => row.runStart,
       width: '180px',
       cell: (row: LogItem) => {
+        const runEnd = runEndTime(row.runStart, row.runDuration)
         return (
           <div className='text-qrigray-400 flex flex-col text-sm'>
             <div className='mb-1'>
-              <RelativeTimestamp timestamp={new Date(row.timestamp)} />
+              {runEnd ? <RelativeTimestamp timestamp={runEnd} /> : <div className='w-full'>--</div> }
             </div>
             <div className='flex items-center'>
               <Icon icon='clock' size='2xs' className='mr-1' />
