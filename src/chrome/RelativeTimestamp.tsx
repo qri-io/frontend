@@ -1,6 +1,7 @@
 import React from 'react'
 import format from 'date-fns/format'
 import { formatDistanceToNow } from 'date-fns'
+import { timestampIsZero } from '../utils/timestampIsZero'
 
 interface RelativeTimestampProps {
   timestamp: Date
@@ -11,6 +12,9 @@ const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
   timestamp,
   className
 }) => {
+  if (timestamp.toString() === 'Invalid Date' || timestampIsZero(timestamp)) {
+    return <div className={className}>--</div>
+  }
   let timeFromNowAbbreviation = formatDistanceToNow(timestamp, { addSuffix: true })
   // manipulate the output of date-fns formatDistanceToNow() for shorter screen renders
   timeFromNowAbbreviation = timeFromNowAbbreviation

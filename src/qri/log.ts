@@ -18,6 +18,7 @@ export interface LogItem {
   runNumber: number
   runDuration: number
   runStatus: RunStatus
+  runStart: string
 
   bodySize: number
   bodyRows: number
@@ -41,6 +42,7 @@ export function NewLogItem(d: Record<string,any>): LogItem {
     runNumber: d.runNumber,
     runDuration: d.runDuration,
     runStatus: d.runStatus,
+    runStart: d.runStart,
 
     bodySize: d.bodySize,
     bodyRows: d.bodyRows,
