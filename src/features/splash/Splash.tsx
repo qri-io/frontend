@@ -23,7 +23,7 @@ const Splash: React.FC<{}> = () => {
   }
 
   return (
-    <div className='flex flex-col' style = {{
+    <div className='flex flex-col ' style = {{
       backgroundImage: 'url(/img/splash/dot.svg)'
     }}>
       <div className='h-screen' style={{
