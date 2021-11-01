@@ -39,10 +39,10 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   let componentHeader: JSX.Element | null = null
   switch (componentName) {
     case 'body':
-      component = <Body loading={loading || bodyLoading} data={dataset} preview={preview} />
+      component = <Body loading={preview ? false : (loading || bodyLoading)} data={dataset} preview={preview} />
       componentHeader = (
         <BodyHeader
-          loading={ loading || bodyLoading }
+          loading={ preview ? false : (loading || bodyLoading)}
           dataset={dataset}
           onToggleExpanded={handleToggleExpanded}
           showDownload={!preview}
