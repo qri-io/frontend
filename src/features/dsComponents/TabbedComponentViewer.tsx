@@ -12,6 +12,8 @@ export interface TabbedComponentViewerProps {
   border?: boolean
   // preview will cause the body component to render only what is in dataset and not fetch more data
   preview?: boolean
+  // used to disable loading state when rendering the component viewer in the workflow
+  showLoadingState?: boolean
 }
 
 export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
@@ -19,6 +21,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   selectedComponent,
   border = false,
   preview = false,
+  showLoadingState = true,
   children
 }) => {
 
@@ -46,6 +49,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
               dataset={dataset}
               componentName={selectedComponent}
               preview={preview}
+              showLoadingState={showLoadingState}
             />
           )
         }

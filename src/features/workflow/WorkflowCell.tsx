@@ -53,7 +53,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
     } else if ((run?.status === "succeeded" || run?.status === "failed") && !run.output?.length){
       setOutput([])
     }
-  }, [ run, output ])
+  }, [ run ])
 
   const status = run?.status
   const isEdited = editedCells[index]

@@ -20,12 +20,14 @@ export interface DatasetComponentProps {
   componentName: ComponentName
   // preview will cause the body component to render only what is in dataset and not fetch more data
   preview?: boolean
+  showLoadingState?: boolean
 }
 
 const DatasetComponent: React.FC<DatasetComponentProps> = ({
   dataset,
   componentName,
   preview = false,
+  showLoadingState = true
 }) => {
   const [ expanded, setExpanded ] = useState(false)
   const loading = useSelector(selectIsDatasetLoading)
@@ -39,10 +41,12 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   let componentHeader: JSX.Element | null = null
   switch (componentName) {
     case 'body':
-      component = <Body loading={loading || bodyLoading} data={dataset} preview={preview} />
+      component = (
+        <Body loading={showLoadingState ? (loading || bodyLoading) : false} data={dataset} preview={preview} />
+      )
       componentHeader = (
         <BodyHeader
-          loading={ loading || bodyLoading }
+          loading={ showLoadingState ? (loading || bodyLoading) : false }
           dataset={dataset}
           onToggleExpanded={handleToggleExpanded}
           showDownload={!preview}
