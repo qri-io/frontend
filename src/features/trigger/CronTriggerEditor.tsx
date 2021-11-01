@@ -39,6 +39,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
               // { value: 'P1W',   label: 'Every Week' },
               // { value: 'P1M',   label: 'Monthly' }
             ]}
+            fullWidth
           />
         </div>
         <div className='my-1 px-1 w-1/2'>
@@ -61,7 +62,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
             // show a time selector
             schedule.periodicity === 'P1D' && (
               <input
-                className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 w-full'
+                className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 w-full focus:border-qripink-600 focus:ring-transparent'
                 style={{
                   paddingTop: 3.8,
                   paddingBottom: 3.8

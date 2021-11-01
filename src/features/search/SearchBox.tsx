@@ -16,6 +16,7 @@ interface SearchBoxProps {
   shadow?: boolean
   border?: boolean
   transparent?: boolean
+  disabled?: boolean
 }
 
 const SearchBox: React.FC<SearchBoxProps> = ({
@@ -27,7 +28,8 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   dark = false,
   shadow = false,
   border = true,
-  transparent = false
+  transparent = false,
+  disabled = false
 }) => {
   const [stateValue, setStateValue] = React.useState('')
   const [debouncedValue] = useDebounce(stateValue, DEBOUNCE_TIMER)
@@ -54,8 +56,12 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     }
   }
 
+  const DEFAULT_HEIGHT = 34
+  const LARGE_HEIGHT = 50
+
+
   return (
-    <form className={classNames('relative flex focus-within:border-qripink border rounded-lg w-full', {
+    <form className={classNames('relative flex focus-within:border-qripink-600 border rounded-lg w-full', {
       'bg-transparent': transparent,
       'bg-white': !transparent,
       'border-qrigray-300': !dark && border,
@@ -63,24 +69,29 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       'border-0': !border
     })} onSubmit={handleSubmit} style={{
       boxShadow: shadow ? '0px 0px 8px rgba(0, 0, 0, 0.1)' : '',
-      padding: size === 'lg' ? '8px 20px' : '4px 10px',
-      height: size === 'lg' ? '50px' : '34px'
+      height: size === 'lg' ? LARGE_HEIGHT : DEFAULT_HEIGHT
     }}>
-      <input
-        className={classNames('focus:ring-transparent border-0 bg-transparent block w-full placeholder-opacity-50 p-0', {
-          'placeholder-black': dark,
-          'placeholder-qrigray-300': !dark,
-          'text-sm': size === 'md',
-          'text-base': size === 'lg',
-        })}
-        id='search'
-        name='search'
-        type='text'
-        placeholder={placeholder}
-        value={stateValue || ''}
-        onChange={handleChange}
-      />
-      <div className={classNames('flex items-center', {
+    <input
+      className={classNames('focus:ring-transparent border-0 bg-transparent block rounded-lg w-full placeholder-opacity-50 p-0', {
+        'placeholder-black': dark,
+        'placeholder-qrigray-300': !dark,
+        'text-sm': size === 'md',
+        'text-base': size === 'lg',
+        'cursor-pointer': disabled
+      })}
+      id='search'
+      name='search'
+      type='text'
+      placeholder={placeholder}
+      value={stateValue || ''}
+      onChange={handleChange}
+      style={{
+        padding: size === 'lg' ? '0 45px 0 20px' : '0 20px 0 10px',
+        lineHeight: size === 'lg' ? LARGE_HEIGHT : DEFAULT_HEIGHT
+      }}
+      disabled={disabled}
+    />
+      <div className={classNames('flex items-center absolute right-0 h-full px-3', {
         'text-qrigray-300': !dark,
         'text-black': dark
       })}>

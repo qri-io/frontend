@@ -102,7 +102,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
               name={name}
               displayName={displayName}
               icon={icon}
-              selected={displayName === 'Data'}
+              selected={selectedComponent === name}
               border={border}
               disabled
             />

@@ -21,6 +21,7 @@ export interface DownloadDatasetButtonProps {
   // if body=true, the downloadLink will get the dataset body
   body?: boolean
   hideIcon?: boolean
+  title?: string
 }
 
 const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
@@ -30,6 +31,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
   asIconLink = false,
   body = false,
   hideIcon = false,
+  title
 }) => {
   const dispatch = useDispatch()
 
@@ -46,9 +48,9 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
   // returns <IconLink>
   if (asIconLink) {
     if (user.username === 'new') {
-      return <IconLink icon='download' onClick={handleDownloadClick} />
+      return <IconLink title={title} icon='download' onClick={handleDownloadClick} />
     } else {
-      return <IconLink icon='download' link={downloadLink} onClick={() => {
+      return <IconLink title={title} icon='download' link={downloadLink} onClick={() => {
         // preview-download-body
         trackGoal('MUBGTLL9', 0)
       }} />
@@ -69,7 +71,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     }
 
     return (
-      <a href={downloadLink} onClick={() => {
+      <a href={downloadLink} title={title} onClick={() => {
         // preview-download-full-dataset event
         trackGoal('GGER8NHQ', 0)
       }}>

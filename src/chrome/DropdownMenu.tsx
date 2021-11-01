@@ -11,6 +11,7 @@ interface DropdownMenuProps {
   items: DropdownMenuItemProps[]
   dropUp?: boolean
   oneItem?: boolean
+  fullWidth?: boolean
 }
 
 // pass this as an item's element property to make a divider
@@ -25,7 +26,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   className='',
   items,
   dropUp=false,
-  oneItem=false
+  oneItem=false,
+  fullWidth=false
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
@@ -54,10 +56,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
           {
             'left-0': alignLeft,
             'right-0': !alignLeft,
-            'origin-top-right top-8': !dropUp,
+            'origin-top-right top-9': !dropUp,
             'origin-bottom-right bottom-8': dropUp,
             'opacity-0 invisible -translate-y-2 scale-95': !open,
-            'opacity-100 translate-y-0 scale-100 visible': open
+            'opacity-100 translate-y-0 scale-100 visible': open,
+            'w-full': fullWidth
           }
         )}
         role="menu"

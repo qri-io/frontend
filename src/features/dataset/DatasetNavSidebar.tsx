@@ -74,7 +74,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         background: '#EFF3F5',
         borderTopLeftRadius: '20px'
       }}/>
-      <div className='flex-grow pl-9'>
+      <div className={`flex-grow mx-auto`}>
         <DatasetSideNavItem
           id='preview'
           icon='eye'

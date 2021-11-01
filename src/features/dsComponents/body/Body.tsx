@@ -70,17 +70,6 @@ const Body: React.FC<BodyProps> = ({
   if (loading) {
     return <BodyTable loading />
   }
-
-  if (!body && !loading) {
-    return (
-      <div className='h-full w-full flex justify-center items-center'>
-        <div>
-          There's nothing here yet!
-        </div>
-      </div>
-    )
-  }
-
   if (!structure) {
     return (
       <div className='h-full w-full flex justify-center items-center'>

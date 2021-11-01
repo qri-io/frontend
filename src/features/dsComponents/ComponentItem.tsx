@@ -43,7 +43,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
     </>
   )
 
-  const tabClasses = `flex flex-grow items-center mw-40 mr-2 last:mr-0 py-1.5 rounded-tr-lg rounded-tl-lg group justify-center relative 
+  const tabClasses = `flex flex-grow items-center mw-40 mr-2 last:mr-0 py-1.5 rounded-tr-lg rounded-tl-lg group justify-center relative
   ${displayName === 'Data' && 'w-1/4'}`
 
   const enabledClasses = {
@@ -54,7 +54,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   }
 
   const enabledColorClasses = {
-    'text-qripink': selected,
+    'text-qripink-600': selected,
     'text-black': !selected,
   }
 

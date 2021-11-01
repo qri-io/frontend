@@ -52,7 +52,7 @@ const SessionUserMenu: React.FC<{}> = () => {
       <Link
         to='https://qri.io/docs'
         className='text-sm font-semibold'
-        colorClassName='text-black hover:text-qripink'
+        colorClassName='text-black hover:text-qripink-600'
         onClick={() => {
           // general-click-help event
           trackGoal('MN77WFUZ', 0)

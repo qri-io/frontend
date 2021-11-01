@@ -182,16 +182,21 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
             <div className='text-base mb-2.5 text-qrigray-400'>Dry Run this transform and preview the next version of the dataset here</div>
 
             <ScrollAnchor id='result' />
-            <div className='flex'>
-              <div className='flex-grow min-w-0'>
-                <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
-              </div>
-              <div className='flex-shrink-0 w-48 ml-8'>
-                {/* TODO (chriswhong): this is a sidebar placeholder that matches the width of the contextual menu which appears to the right of code cells */}
+            <div style={{width: 'calc(100% - 32px)'}}>
+              <div className='flex' >
+                <div className='flex-grow min-w-0'>
+                  <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
+                </div>
+                <div className='flex-shrink-0 w-48 ml-8'>
+                  {/* TODO (chriswhong): this is a sidebar placeholder that matches the width of the contextual menu which appears to the right of code cells */}
+                </div>
               </div>
             </div>
+
           </div>
-          <Hooks />
+          <div style={{width: 'calc(100% - 32px)'}} >
+            <Hooks />
+          </div>
         </div>
       </div>
     </Hotkeys>
