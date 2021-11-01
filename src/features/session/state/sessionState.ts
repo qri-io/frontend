@@ -6,7 +6,11 @@ interface SessionTokens {
   refreshToken: string
 }
 
+
+export const RESET_FORGOT_STATE = 'RESET_FORGOT_STATE'
+
 export const selectSessionUser = (state: RootState): User => state.session.user
+
 export const selectSessionTokens = (state: RootState): SessionTokens => {
   return {
     token: state.session.token,
@@ -15,6 +19,10 @@ export const selectSessionTokens = (state: RootState): SessionTokens => {
 }
 export const selectIsSessionLoading = (state: RootState): boolean => state.session.loading
 export const selectIsLoggedIn = (state: RootState): boolean => state.session.user.username !== 'new'
+
+export const selectResetError = (state: RootState): string => state.session.resetError
+
+export const selectResetSent = (state: RootState): boolean => state.session.resetSent
 
 export interface User {
   name?: string
@@ -29,6 +37,8 @@ export interface SessionState {
   loading: boolean
   token: string
   refreshToken: string
+  resetSent: boolean
+  resetError: string
 }
 
 export const AnonUser: User = {
@@ -45,14 +55,18 @@ function getAuthState(): SessionState {
       token,
       refreshToken,
       user,
-      loading: false
+      loading: false,
+      resetSent: false,
+      resetError: ''
     }
   } catch (err) {
     return {
       token: '',
       refreshToken: '',
       user: AnonUser,
-      loading: false
+      loading: false,
+      resetSent: false,
+      resetError: ''
     };
   }
 }
@@ -102,8 +116,39 @@ export const sessionReducer = createReducer(initialState, {
     state.user = AnonUser
     state.token = ''
   },
+  'API_FORGOT_REQUEST': (state: SessionState) => {
+    state.loading = true
+    state.resetError = ''
+  },
+  'API_FORGOT_SUCCESS': (state: SessionState) => {
+    state.loading = false
+    state.resetSent = true
+  },
+  'API_FORGOT_FAILURE': (state: SessionState, action) => {
+    state.resetError = cleanErrorMessage(action.payload.err.message)
+    state.loading = false
+  },
+  'RESET_REQUEST': (state: SessionState) => {
+    state.loading = true
+  },
+  'RESET_SUCCESS': loginOrSignupSuccess,
+  'RESET_FAILURE': (state: SessionState, action) => {
+    state.loading = false
+    state.resetError = action.error
+  },
   // called after accessToken refresh
   'SET_TOKEN': (state: SessionState, action: Action) => {
     state.token = action.token
+  },
+  RESET_FORGOT_STATE: (state: SessionState) => {
+    state.resetError = ''
+    state.resetSent = false
   }
 })
+
+const cleanErrorMessage = (err: string):string => {
+  if (err.includes('404:')) {
+    return err.replace('404: ', '')
+  }
+  return err
+}
