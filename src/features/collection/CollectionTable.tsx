@@ -254,7 +254,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       width: '60px',
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo, i: number) => {
-        const isLastRow = (i === (filteredWorkflows.length - 1))
+        const isLastRow = (i === (filteredWorkflows.length - 1) && filteredWorkflows.length !== 1)
         return (
           <div className='mx-auto text-qrigray-400'>
             <DropdownMenu
