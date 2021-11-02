@@ -13,6 +13,7 @@ import RunNowButton from './RunNowButton'
 import { LogItem, NewLogItem } from "../../qri/log"
 import { selectRun } from "../events/state/eventsState"
 import { trackGoal } from '../../features/analytics/analytics'
+import { selectSessionUser } from '../session/state/sessionState'
 
 
 
@@ -26,6 +27,8 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   const logs = useSelector(newDatasetLogsSelector(qriRef))
   const latestRunId = useSelector(selectLatestRunId)
   const latestRun = useSelector(selectRun(latestRunId))
+  const user = useSelector(selectSessionUser)
+  const isDatasetOwner = user.username === qriRef.username
   const dispatch = useDispatch()
 
   const [displayLogs, setDisplayLogs] = useState<LogItem[]>(logs)
@@ -75,7 +78,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   }, [ logs, latestRun ])
 
   return (
-    <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} />}>
+    <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} isDatasetOwner={isDatasetOwner} />}>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
         <div className='rounded-none h-full'>
           <ActivityList
