@@ -394,12 +394,15 @@ export function NewTransformStep(data: Record<string,any>): TransformStep {
 }
 
 export function scriptFromTransform(t: Transform): string {
-  return t.steps.reduce((acc: string, step: TransformStep, i: number) => {
-    if (step.script && step.script !== "") {
-      acc += step.script + "\n\n"
-    }
-    return acc
-  }, '')
+  if (t && t.steps) {
+    return t.steps.reduce((acc: string, step: TransformStep, i: number) => {
+      if (step.script && step.script !== "") {
+        acc += step.script + "\n\n"
+      }
+      return acc
+    }, '')
+  }
+  return ''
 }
 
 export interface Readme extends Component {
