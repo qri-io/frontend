@@ -15,15 +15,15 @@ import WorkflowCellControlButton from "./WorkflowCellControlButton";
 interface WorkflowCellControlsProps {
   index: number
   setAnimatedCell: (i:number) => void
-  sessionId: string
   hide: boolean
+  canBeDeleted: boolean
 }
 
 const WorkflowCellControls: React.FC<WorkflowCellControlsProps> = ({
   index,
   setAnimatedCell,
-  sessionId,
-  hide=false
+  hide=false,
+  canBeDeleted
 }) => {
   const dispatch = useDispatch()
 
@@ -42,7 +42,7 @@ const WorkflowCellControls: React.FC<WorkflowCellControlsProps> = ({
       'opacity-0': hide
     })}>
       <div className='flex flex-col bg-white w-48 rounded-md absolute p-5 pt-2.5 sticky top-20'>
-        <WorkflowCellControlButton onClick={onDelete} label='Delete' icon='trashBin'/>
+        <WorkflowCellControlButton disabled={!canBeDeleted} onClick={onDelete} label='Delete' icon='trashBin'/>
         <WorkflowCellControlButton onClick={onDuplicate} label='Duplicate block' icon='duplicate'/>
         <WorkflowCellControlButton onClick={() => { dispatch(clearWorkflowTransformStepOutput(index)) }} label='Clean output' icon='circleX'/>
         <WorkflowCellControlButton onClick={() => { dispatch(moveWorkflowTransformStepUp(index)) }} label='Move block up' icon='upArrow'/>

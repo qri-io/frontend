@@ -157,6 +157,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                     setAnimatedCell={setAddedCell}
                     run={r}
                     onRun={runScript}
+                    canBeDeleted={dataset.transform ? dataset.transform.steps.length !== 1 : false}
                     collapseState={collapseState(step.name, r)}
                     onChangeCollapse={(v) => {
                       const update = Object.assign({}, collapseStates as any)
