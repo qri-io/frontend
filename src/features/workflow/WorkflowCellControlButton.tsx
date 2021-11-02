@@ -20,7 +20,7 @@ const WorkflowCellControlButton: React.FC<WorkflowCellControlButtonProps> = ({
   disabled,
   id
  }) => {
-  let classes = disabled ?  'text-qrigray-400 cursor-not-allowed' : 'hover:text-qripink-600'
+  let classes = disabled ?  'text-qrigray-400 cursor-default' : 'hover:text-qripink-600'
 
   const handleClick = () => {
     // workflow-click-cell-menu-item event

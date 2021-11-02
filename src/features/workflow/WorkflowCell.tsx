@@ -26,6 +26,7 @@ export interface WorkflowCellProps {
   isCellAdded: boolean
   onRowAdd: (index: number, syntax: string) => void
   onClick: () => void
+  canBeDeleted: boolean
 }
 
 const WorkflowCell: React.FC<WorkflowCellProps> = ({
@@ -40,7 +41,8 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   onRun,
   isCellAdded,
   setAnimatedCell,
-  onClick
+  onClick,
+  canBeDeleted
 }) => {
   const { syntax, name, script } = step
   const editedCells = useSelector(selectEditedCells)
@@ -130,8 +132,8 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
         </div>
         <WorkflowCellControls
           index={index}
-          sessionId={run ? run.id : ''}
           setAnimatedCell={setAnimatedCell}
+          canBeDeleted={canBeDeleted}
           hide={!active}
         />
       <div
