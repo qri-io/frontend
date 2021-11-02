@@ -199,17 +199,20 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         if (runStatus === undefined) {
           return <>&nbsp;</>
         }
+        const runLogLink = `/${row.username}/${row.name}/runs`
 
         return (
-          <div className='flex flex-col'>
-            <div className='flex items-center'>
-              <div className='text-sm mr-2'>{runStatus === 'running' ? '-' : `#${runCount}`}</div>
-              <DatasetInfoItem icon='clock' label={runEndLabel}/>
+          <Link to={runLogLink}>
+            <div className='flex flex-col'>
+              <div className='flex items-center'>
+                <div className='text-sm mr-2'>{runStatus === 'running' ? '-' : `#${runCount}`}</div>
+                <DatasetInfoItem icon='clock' label={runEndLabel}/>
+              </div>
+              <div className='text-gray-500 text-xs'>
+                <RunStatusBadge status={runStatus}/>
+              </div>
             </div>
-            <div className='text-gray-500 text-xs'>
-              <RunStatusBadge status={runStatus}/>
-            </div>
-          </div>
+          </Link>
         )
       }
     },
