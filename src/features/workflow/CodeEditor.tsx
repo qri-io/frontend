@@ -83,7 +83,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       id: "executeCurrentAndAdvance",
       label: "Execute Block and Advance",
       keybindings: [KeyMod.CtrlCmd | KeyCode.Enter],
-      contextMenuGroupId: "2_execution",
       precondition: "editorTextFocus && !suggestWidgetVisible && !renameInputVisible && !inSnippetMode && !quickFixWidgetVisible",
       run: () => {
         onRun()
