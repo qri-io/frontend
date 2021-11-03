@@ -59,8 +59,8 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
           <WorkflowScriptStatus run={run} />
 
           <ScrollTrigger target='on-completion'>
-            <div className='font-bold text-black mb-1 text-base'>On Completion</div>
-            <div className='text-qrigray-400'>—</div>
+            <div className='font-bold text-black mb-1 text-base text-qrigray-300'>On Completion</div>
+            <div className='text-qrigray-300 text-xs mb-6'>Feature is coming soon</div>
           </ScrollTrigger>
 
           <hr className='mb-4' />
