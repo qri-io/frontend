@@ -1,16 +1,33 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
+import { useLocation } from "react-router-dom"
 import ContentLoader from "react-content-loader"
 
 import EditableLabel from '../../chrome/EditableLabel'
-import { renameDataset } from './state/datasetActions'
+import {
+  commitDatasetTitle,
+  loadDataset,
+  resetDatasetTitleError,
+  renameDataset
+} from './state/datasetActions'
 import DatasetInfoItem from './DatasetInfoItem'
 import Link from '../../chrome/Link'
 import { validateDatasetName } from '../session/state/formValidation'
-import { selectDatasetHeader, selectIsHeaderLoading } from "./state/datasetState"
+import {
+  selectDataset,
+  selectDatasetHeader,
+  selectIsDatasetLoading,
+  selectIsHeaderLoading
+} from "./state/datasetState"
 import { qriRefFromVersionInfo } from "../../qri/versionInfo"
 import fileSize from "../../utils/fileSize"
+import { newQriRef } from "../../qri/ref"
+import { loadDatasetCommits } from "../commits/state/commitActions"
+import classNames from "classnames"
+import Icon from "../../chrome/Icon"
+import { clearModal, showModal } from "../app/state/appActions"
+import { ModalType } from "../app/state/appState"
 
 export interface DatasetHeaderProps {
   isNew: boolean
@@ -31,8 +48,11 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const location = useLocation()
   const header = useSelector(selectDatasetHeader)
-  const loading = useSelector(selectIsHeaderLoading)
+  const dataset = useSelector(selectDataset)
+  const headerLoading = useSelector(selectIsHeaderLoading)
+  const datasetLoading = useSelector(selectIsDatasetLoading)
   const qriRef = qriRefFromVersionInfo(header)
 
   const handleRename = (_: string, value: string) => {
@@ -45,6 +65,34 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       })
   }
 
+  const handleTitleChange = (title: string, commitTitle: string) => {
+    commitDatasetTitle(qriRef, title, commitTitle)(dispatch)
+      .then(({ type }) => {
+        if (type === 'API_TITLE_SUCCESS') {
+          const ref = newQriRef({ username: qriRef.username, name: qriRef.name })
+          loadDataset(ref)(dispatch).then(({ type }) => {
+            if (type === 'API_DATASET_SUCCESS') {
+              dispatch(clearModal())
+            }
+          })
+          dispatch(loadDatasetCommits(ref))
+        }
+      })
+  }
+
+  const onTitleClick = () => {
+    if (!isNew) {
+      const left = location.pathname === `/${header.username}/${header.name}` ? '-167px' : '153px'
+      const top = location.pathname === `/${header.username}/${header.name}` ? '67px' : '65px'
+      const position = location.pathname === `/${header.username}/${header.name}` ? 'relative' : 'absolute'
+      dispatch(resetDatasetTitleError())
+      dispatch(showModal(ModalType.editDatasetTitle, {
+        title: dataset.meta?.title ? dataset.meta?.title : header.name,
+        onCommit: handleTitleChange
+      }, true, { top, left, position: position }))
+    }
+  }
+
   return (
     <div className="w-full">
       <div className='flex mb-5'>
@@ -52,7 +100,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           {/* don't show the username/name when creating a new dataset with the workflow editor */}
           { !isNew && (
             <div className='text-base text-qrigray-400 relative flex items-center group hover:text font-mono'>
-              {loading
+              {headerLoading
                 ? <ContentLoader height='20.8'>
                   <rect width="100" y='4' height="16" rx="1" fill="#D5DADD"/>
                   <rect width="180" y='4' x='110' height="16" rx="1" fill="#D5DADD"/>
@@ -70,13 +118,15 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             </div>
           )}
 
-          {loading && !isNew
+          {(headerLoading || datasetLoading) && !isNew
             ? <ContentLoader height='29.6'>
-              <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
+                <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
             </ContentLoader>
-            : <div className='text-2xl text-black-500 font-bold group hover:text'>
-              {isNew ? newWorkflowTitle : header.name}
-            </div>}
+            : <div onClick={onTitleClick} className={classNames({ 'cursor-pointer whitespace-nowrap': !isNew }, 'flex items-center group hover:text')}>
+              <h3 className='text-2xl font-bold'>{isNew ? newWorkflowTitle : dataset.meta?.title ? dataset.meta?.title : header.name}</h3>
+              <Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' />
+            </div>
+          }
           {!isNew && (
             <div className='flex mt-2 text-sm'>
               {header.runID && <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' />}

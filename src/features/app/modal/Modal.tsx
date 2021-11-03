@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ModalType, selectModal } from '../state/appState'
 import RemoveDatasetModal, { RemoveDatasetModalProps } from '../../dataset/modal/RemoveDatasetModal'
+import EditDatasetTitleModal, { EditDatasetTitleModalProps } from "../../dataset/modal/EditDatasetTitleModal"
 import ScheduleModal from '../../workflow/modal/ScheduleModal'
 import UnsavedChangesModal from '../../workflow/modal/UnsavedChangesModal'
 import LogInModal from '../../session/modal/LogInModal'
@@ -55,10 +56,10 @@ const Modal: React.FC<any> = () => {
     <div className='fixed z-50 inset-0 overflow-y-auto'>
       <div className='flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
         <div ref={maskRef} className="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          <div className="absolute inset-0 bg-gray-500 opacity-75"/>
         </div>
 
-        <div className='inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle max-w-xl' role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div style={modal.position && { position: modal.position.position, top: modal.position.top, left: modal.position.left }} className={`inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle ${modal.customWidth ? '' : 'max-w-xl'}`} role="dialog" aria-modal="true" aria-labelledby="modal-headline">
           {(() => {
             switch (modal.type) {
               case ModalType.schedulePicker:
@@ -67,6 +68,8 @@ const Modal: React.FC<any> = () => {
                 return <UnsavedChangesModal {...modal.props} />
               case ModalType.removeDataset:
                 return <RemoveDatasetModal {...modal.props as RemoveDatasetModalProps} />
+              case ModalType.editDatasetTitle:
+                return <EditDatasetTitleModal {...modal.props as EditDatasetTitleModalProps} />
               case ModalType.logIn:
                 return <LogInModal {...modal.props} />
               case ModalType.signUp:

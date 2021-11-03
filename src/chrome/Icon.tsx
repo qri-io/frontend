@@ -77,6 +77,7 @@ import UpArrow from "./icon/UpArrow"
 import Dataset from "./icon/Dataset"
 import WebHook from "./icon/WebHook"
 import Deploy from "./icon/Deploy"
+import Edit from "./icon/Edit"
 
 interface IconProps {
   // name of the icon
@@ -127,6 +128,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     disk: <Disk {...props} />,
     download: <Download {...props} />,
     duplicate: <Duplicate {...props} />,
+    edit: <Edit {...props} />,
     ellipsesVertical: <EllipsesVertical {...props} />,
     eye: <Eye {...props} />,
     follower: <Follower {...props} />,

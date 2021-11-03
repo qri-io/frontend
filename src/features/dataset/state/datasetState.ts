@@ -6,6 +6,7 @@ import { qriRefFromString } from '../../../qri/ref'
 import { RenameDatasetAction, ResetDatasetStateAction } from './datasetActions'
 import { selectSessionUser } from '../../session/state/sessionState'
 import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
+import { ApiResponseAction } from "../../../store/api"
 
 export const RENAME_NEW_DATASET = 'RENAME_NEW_DATASET'
 
@@ -14,6 +15,8 @@ export const SET_HEADER = 'SET_HEADER'
 export const RESET_DATASET_STATE = 'RESET_DATASET_STATE'
 
 export const SET_BODY_LOADING = 'SET_BODY_LOADING'
+
+export const RESET_DATASET_TITLE_ERROR = 'RESET_DATASET_TITLE_ERROR'
 
 export const selectDataset = (state: RootState): Dataset => state.dataset.dataset
 
@@ -28,6 +31,8 @@ export const selectIsDatasetLoading = (state: RootState): boolean => state.datas
 export const selectIsBodyLoading = (state: RootState): boolean => state.dataset.bodyLoading
 
 export const selectIsHeaderLoading = (state: RootState): boolean => state.dataset.headerLoading
+
+export const selectTitleError = (state: RootState): string => state.dataset.titleError
 
 export const selectSessionUserCanEditDataset = (state: RootState): boolean => {
   const u = selectSessionUser(state)
@@ -49,6 +54,7 @@ export interface DatasetState {
   datasetLoading: boolean
   headerLoading: boolean
   bodyLoading: boolean
+  titleError: string
 }
 
 const initialState: DatasetState = {
@@ -56,10 +62,22 @@ const initialState: DatasetState = {
   header: newVersionInfo({}),
   datasetLoading: true,
   headerLoading: true,
-  bodyLoading: true
+  bodyLoading: true,
+  titleError: ''
 }
 
 export const datasetReducer = createReducer(initialState, {
+  'API_TITLE_REQUEST': (state: DatasetState) => {
+    state.datasetLoading = true
+    state.titleError = ''
+  },
+  'API_TITLE_SUCCESS': (state: DatasetState) => {
+    state.datasetLoading = false
+  },
+  'API_TITLE_FAILURE': (state: DatasetState, action: ApiResponseAction) => {
+    state.datasetLoading = false
+    state.titleError = action.payload.err.message
+  },
   'API_HEADER_REQUEST': (state) => {
     state.headerLoading = true
     state.header = newVersionInfo({})
@@ -113,5 +131,8 @@ export const datasetReducer = createReducer(initialState, {
   },
   SET_BODY_LOADING: (state: DatasetState, action: ResetDatasetStateAction) => {
     state.bodyLoading = true
+  },
+  RESET_DATASET_TITLE_ERROR: (state: DatasetState, action: ResetDatasetStateAction) => {
+    state.titleError = ''
   }
 })
