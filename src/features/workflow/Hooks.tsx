@@ -5,10 +5,6 @@ import Block from './Block'
 
 const hooks = [
   {
-    name: 'Push to Qri Cloud',
-    description: 'If the workflow results in a new version of the dataset, it will be published on qri.cloud'
-  },
-  {
     name: 'Call Webhook',
     description: 'If the workflow results in a new version of the dataset, call http://mywebhook.com/foo'
   },
@@ -21,13 +17,17 @@ const hooks = [
 const OnComplete: React.FC<any> = () => {
   return (
     <div className='flex'>
-      <div className='flex-grow min-w-0'>
+      <div className='flex-grow min-w-0 text-qrigray-300'>
         <ScrollAnchor id='on-completion' />
-        <h2 className='text-xl font-bold text-black'>On Completion</h2>
-        <div className='text-base text-qrigray-400 mb-3'>Configure actions that will happen when the workflow succeeds</div>
+        <div className='flex items-center'>
+          <h2 className='text-xl font-bold '>On Completion</h2>
+          <span className='text-sm ml-3'>(This feature is coming soon)</span>
+        </div>
+
+        <div className='text-base mb-3'>Configure actions that will happen when the workflow succeeds</div>
         <div className='flex flex-wrap -mx-2 overflow-hidden -mx-2 overflow-hidden'>
           {hooks.map((d, i) => (
-            <div key={i} className='w-1/3'>
+            <div key={i} className='w-1/2'>
               <Block name={d.name}>
                 <div className='text-xs text-qrigray-400'>{d.description}</div>
               </Block>
