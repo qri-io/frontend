@@ -60,7 +60,6 @@ export const ETLogbookWriteRun = "logbook:WriteRun"
 // payload is a dsref.VersionInfo
 export const ETLogbookWriteCommit = "logbook:WriteCommit"
 
-
 export const ETAutomationDeployStart = "automation:DeployStart"
 export const ETAutomationDeployEnd = "automation:DeployEnd"
 
@@ -85,7 +84,7 @@ export interface TransformLifecycle {
   initID: string
 }
 
-export function NewTransformLifecycle(data: Record<string,any>): TransformLifecycle {
+export function NewTransformLifecycle (data: Record<string, any>): TransformLifecycle {
   return {
     runID: data.runID,
     stepCount: data.stepCount,

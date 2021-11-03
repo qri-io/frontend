@@ -27,18 +27,17 @@ export interface MiniButtonProps {
 const MiniButton: React.FC<MiniButtonProps> = ({
   id,
   className,
-  type='primary',
+  type = 'primary',
   icon,
-  size='md',
+  size = 'md',
   submit = false,
   disabled = false,
   round = false,
-  onClick= () => {},
+  onClick = () => {}
 }) => {
   let dimension = 26
   let iconSize: IconSize = 'xs'
   let borderRadius = round ? 56.5 : 4.5
-
 
   if (size === 'md') {
     dimension = 36

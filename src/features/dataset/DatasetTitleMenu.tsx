@@ -24,7 +24,7 @@ const DatasetTitleMenu: React.FC<DatasetTitleMenuProps> = ({
     alert(message)
   }
 
-  const handleRename = (_:string, value:string) => {
+  const handleRename = (_: string, value: string) => {
     dispatch(renameDataset(qriRef, { username: qriRef.username, name: value }))
     // TODO(b5): we should be chaining this route replacement after successful
     // dispatch with a "then" off the renameDataset action
@@ -38,8 +38,8 @@ const DatasetTitleMenu: React.FC<DatasetTitleMenuProps> = ({
       <p className=' font-bold text-white relative flex items-baseline group hover:text'>
         <span className='opacity-70'>{qriRef.username} / </span>
         <EditableLabel readOnly={!editable} name='name' onChange={handleRename} value={qriRef.name} />
-        {editable && 
-          <DropdownMenu 
+        {editable &&
+          <DropdownMenu
             icon={<Icon icon='sortDown' className='ml-3'/>}
             items={[
               {

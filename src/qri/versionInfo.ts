@@ -8,27 +8,27 @@ import { RunStatus } from './run'
 export interface VersionInfo {
   // reference details
   initID: string
-  username: string      // human-readble name of the owner of this dataset
-  profileId: string     // user identifier
-  name: string          // dataset name
-  path: string          // commit hash, eg: /ipfs/QmY9WcXXUnHJbYRA28LRctiL4qu4y...
+  username: string // human-readble name of the owner of this dataset
+  profileId: string // user identifier
+  name: string // dataset name
+  path: string // commit hash, eg: /ipfs/QmY9WcXXUnHJbYRA28LRctiL4qu4y...
 
-  fsiPath: string       // path to a local filesystem-linked directory (if exists)
-  foreign?: boolean      // is block data for this commit stored locally?
-  published?: boolean    // published tells whether or not a dataset is published
+  fsiPath: string // path to a local filesystem-linked directory (if exists)
+  foreign?: boolean // is block data for this commit stored locally?
+  published?: boolean // published tells whether or not a dataset is published
 
-  metaTitle: string     // dataset meta.Title field
-  themeList: string     // meta.Themes array as a "comma,separated,string"
+  metaTitle: string // dataset meta.Title field
+  themeList: string // meta.Themes array as a "comma,separated,string"
 
-  bodyFormat: string    // data format of the body
-  bodySize?: number     // length of body data in bytes
-  bodyRows?: number     // number of rows in the body
-  numErrors?: number    // number of validation errors in the body
+  bodyFormat: string // data format of the body
+  bodySize?: number // length of body data in bytes
+  bodyRows?: number // number of rows in the body
+  numErrors?: number // number of validation errors in the body
 
-  commitTitle?: string   // title of commit
+  commitTitle?: string // title of commit
   commitMessage?: string // commit description message
-  commitTime?: string    // commit.Timestamp field, time of version creation
-  numVersions?: number  // number of commits in history
+  commitTime?: string // commit.Timestamp field, time of version creation
+  numVersions?: number // number of commits in history
 
   workflowID?: string // workflow identifier
   workflowTriggerDescription?: string
@@ -49,7 +49,7 @@ export interface VersionInfo {
   openIssueCount: number // OpenIssueCount is the number of open issues this dataset has on this Qri node
 }
 
-export function newVersionInfo(data: Record<string,any>): VersionInfo {
+export function newVersionInfo (data: Record<string, any>): VersionInfo {
   return {
     initID: data.initID || '',
     username: data.username || '',
@@ -93,8 +93,8 @@ export function newVersionInfo(data: Record<string,any>): VersionInfo {
   }
 }
 
-export function datasetAliasFromVersionInfo(vi: VersionInfo): string {
-  if(vi && vi.username && vi.name){
+export function datasetAliasFromVersionInfo (vi: VersionInfo): string {
+  if (vi && vi.username && vi.name) {
     return `${vi.username}/${vi.name}`
   }
   return ''
@@ -109,13 +109,13 @@ export function qriRefFromVersionInfo (vi: VersionInfo): QriRef {
   }
 }
 
-export function filterVersionInfos(collection: VersionInfo[], searchString: string): VersionInfo[] {
+export function filterVersionInfos (collection: VersionInfo[], searchString: string): VersionInfo[] {
   return collection.filter((d) => [
-      d.username,
-      d.name,
-      d.metaTitle,
-      d.themeList,
-      d.path,
-    ].findIndex((f: string) => f.includes(searchString)) > -1
+    d.username,
+    d.name,
+    d.metaTitle,
+    d.themeList,
+    d.path
+  ].findIndex((f: string) => f.includes(searchString)) > -1
   )
 }

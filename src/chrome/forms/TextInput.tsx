@@ -11,18 +11,18 @@ interface TextInputProps {
   showHelpText?: boolean
   label?: string
   labelTooltip?: string
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void | undefined
-  onChange?: (value: string) => void | undefined
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => {} | undefined
+  onChange?: (value: string) => void
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   placeholder?: string
   white?: boolean
   tooltipFor?: string
-  className?:string
+  className?: string
 }
 
 const TextInput: React.FC<TextInputProps> = ({
   name,
-  type='text',
+  type = 'text',
   label,
   labelTooltip,
   value,
@@ -32,7 +32,7 @@ const TextInput: React.FC<TextInputProps> = ({
   onBlur,
   onKeyDown,
   placeholder,
-  className,
+  className
 }) => {
   const [stateValue, setStateValue] = React.useState(value)
 
@@ -43,7 +43,8 @@ const TextInput: React.FC<TextInputProps> = ({
   }, [stateValue, onChange])
 
   const handleOnChange = (e: React.ChangeEvent) => {
-    setStateValue(e.target.value)
+    const target = e.target as HTMLInputElement
+    setStateValue(target.value)
   }
 
   return (

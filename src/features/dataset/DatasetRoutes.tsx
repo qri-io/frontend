@@ -5,9 +5,9 @@
 
 // DatasetPreviewPage fetches the other necessary parts of the preview (body + readme)
 
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { Route, Switch, useParams } from 'react-router'
-import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux"
 
 import WorkflowPage from '../workflow/WorkflowPage'
 import DatasetComponents from '../dsComponents/DatasetComponents'
@@ -17,7 +17,7 @@ import DatasetIssues from '../issues/DatasetIssues'
 import { newQriRef } from '../../qri/ref'
 import DatasetEditor from '../dsComponents/DatasetEditor'
 import DatasetWrapper from '../dsComponents/DatasetWrapper'
-import { loadHeader } from "./state/datasetActions";
+import { loadHeader } from "./state/datasetActions"
 
 const DatasetRoutes: React.FC<{}> = () => {
   // TODO(b5): this qriRef is missing all params after /:username/:name b/c
@@ -30,8 +30,8 @@ const DatasetRoutes: React.FC<{}> = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(loadHeader({username: qriRef.username, name: qriRef.name, path: qriRef.path}))
-  },[dispatch, qriRef.username, qriRef.name, qriRef.path]);
+    dispatch(loadHeader({ username: qriRef.username, name: qriRef.name, path: qriRef.path }))
+  }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
 
   return (
     <DatasetWrapper>

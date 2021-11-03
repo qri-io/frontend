@@ -1,13 +1,13 @@
 import { ComponentName } from '../../qri/dataset'
 
 export interface ComponentDisplayProps {
-  name: ComponentName,
-  displayName: string,
-  tooltip: string,
+  name: ComponentName
+  displayName: string
+  tooltip: string
   icon: string
 }
 
-const displayProps: Record<ComponentName,ComponentDisplayProps> = {
+const displayProps: Record<ComponentName, ComponentDisplayProps> = {
   'commit': {
     name: 'commit',
     displayName: 'Commit',

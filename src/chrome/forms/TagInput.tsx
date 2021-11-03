@@ -29,12 +29,11 @@ const TagInput: React.FC<TagInputProps> = ({
   placeHolder,
   tooltipFor
 }) => {
-
   const id = `${name}-tag-input`
 
   const setTag = (e: React.SyntheticEvent, tagString: string) => {
     const i = document.getElementById(id)
-    if (i) i.value = ''
+    if (i) i.innerHTML = ''
     const newTagList = [...value, tagString]
     onArrayChange(e, name, newTagList)
   }
@@ -72,7 +71,7 @@ const TagInput: React.FC<TagInputProps> = ({
           <div key={i} className='tag' id={`${name}-tag-${i}`}>
             <span className='tag-text'>{d}</span>
             <span className='tag-remove' onClick={(e: React.SyntheticEvent) => { removeItem(e, i) }}>
-              <Icon icon='times'  size='sm' />
+              <Icon icon='times' size='sm' />
             </span>
           </div>
         ))}

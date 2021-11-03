@@ -27,24 +27,25 @@ const ComponentEditor: React.FC<ComponentEditorProps> = ({
   <div
     className={classNames(
       'rounded-md bg-white w-full overflow-auto', {
-      'rounded-tl-none' : noHeader,
-      'my-6': !noHeader
-    })}
+        'rounded-tl-none': noHeader,
+        'my-6': !noHeader
+      })}
   >
-    {!noHeader && <ComponentHeader componentName={componentName} />}
+    {!noHeader && <ComponentHeader />}
     {(() => {
       switch (componentName) {
         case 'meta':
-          return (<MetaEditor
-            qriRef={qriRefFromDataset(dataset)}
-            onDatasetChange={onDatasetChange}
-            data={dataset.meta}
-            />)
+          return (
+            <MetaEditor
+              onDatasetChange={onDatasetChange}
+              data={dataset.meta}
+            />
+          )
         case 'readme':
           return (<ReadmeEditor
             qriRef={qriRefFromDataset(dataset)}
             onDatasetChange={onDatasetChange}
-            data={dataset.readme}
+            data={dataset.readme?.text}
             />)
         default:
           return <div>Unknown Component</div>

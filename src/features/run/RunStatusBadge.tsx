@@ -2,18 +2,17 @@ import React from 'react'
 import classNames from 'classnames'
 
 import { RunStatus } from '../../qri/run'
-import RunStatusIcon from "./RunStatusIcon";
+import RunStatusIcon from "./RunStatusIcon"
 
 interface RunStatusBadgeProps {
   status: RunStatus
 }
 
 const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
-
   let displayStatus = ''
   let colorClass = ''
 
-  switch(status) {
+  switch (status) {
     case 'waiting':
       displayStatus = 'Waiting'
       colorClass = 'text-black-300'

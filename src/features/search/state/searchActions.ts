@@ -1,15 +1,15 @@
-import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
+import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
 
-import { NewSearchResult, SearchParams } from '../../../qri/search'
+import { NewSearchResult, SearchParams, SearchResult } from '../../../qri/search'
 
-export function loadSearchResults(searchParams: SearchParams): ApiActionThunk {
+export function loadSearchResults (searchParams: SearchParams): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchSearchResults(searchParams))
   }
 }
 
-const mapSearchResults = (results) => {
-  return results.map((d) => NewSearchResult(d))
+const mapSearchResults = (results: SearchResult[]) => {
+  return results.map((d: Record<string, any>) => NewSearchResult(d))
 }
 
 const mapFrontendParams = (frontendParams: SearchParams) => {
@@ -30,7 +30,7 @@ function fetchSearchResults (searchParams: SearchParams): ApiAction {
       endpoint: 'registry/search',
       method: 'POST',
       body: {
-        q: searchParams.q,
+        q: searchParams.q
       },
       pageInfo: {
         page: searchParams.page,

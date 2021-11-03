@@ -1,5 +1,5 @@
 export default function fileSize (l: number): string {
-  var length = { name: '', value: 0 }
+  let length = { name: '', value: 0 }
   if (l > Math.pow(2, 80)) {
     length.name = 'YB'
     length.value = Math.trunc(l / Math.pow(2, 80))
@@ -34,14 +34,14 @@ export default function fileSize (l: number): string {
   return `${length.value}${length.name}`
 }
 
-var SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E']
+let SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E']
 
 export function abbreviateNumber (number: number) {
   if (number === undefined) {
     return undefined
   }
   // what tier? (determines SI symbol)
-  var tier = Math.log10(number) / 3 | 0
+  let tier = Math.log10(number) / 3 | 0
 
   // if zero, we don't need a suffix
   if (tier === 0) {
@@ -52,11 +52,11 @@ export function abbreviateNumber (number: number) {
   }
 
   // get suffix and determine scale
-  var suffix = SI_SYMBOL[tier]
-  var scale = Math.pow(10, tier * 3)
+  let suffix = SI_SYMBOL[tier]
+  let scale = Math.pow(10, tier * 3)
 
   // scale the number
-  var scaled = number / scale
+  let scaled = number / scale
 
   // format number and add suffix
   return scaled.toFixed(1) + suffix

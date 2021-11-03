@@ -11,13 +11,13 @@ import ComponentItem from './ComponentItem'
 // import { components as componentsInfo } from './WorkingComponentList'
 
 interface ComponentInfo {
-  name: ComponentName,
-  displayName: string,
-  tooltip: string,
+  name: ComponentName
+  displayName: string
+  tooltip: string
   icon: string
 }
 
-export const componentsInfo:ComponentInfo[] = [
+export const componentsInfo: ComponentInfo[] = [
   {
     name: 'body',
     displayName: 'Data',
@@ -70,20 +70,20 @@ const ComponentList: React.FC<ComponentListProps> = ({
   selectedComponent,
   // history
   allowClickMissing = false,
-  border = false,
+  border = false
 }) => {
   const componentNames = Object.keys(dataset)
 
-    return (
+  return (
     <div className={classNames('flex w-full', { 'border-b-2': border })}>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
-          if (allowClickMissing || componentNames.includes(name) || ( name==='body' && dataset.bodyPath )) {
-            var fileStatus: ComponentStatus = 'unmodified'
-            // if (status[name]) {
-            //   fileStatus = status[name].status
-            // }
+        if (allowClickMissing || componentNames.includes(name) || (name === 'body' && dataset.bodyPath)) {
+          let fileStatus: ComponentStatus = 'unmodified'
+          // if (status[name]) {
+          //   fileStatus = status[name].status
+          // }
 
-            return (
+          return (
               <ComponentItem
                 key={name}
                 name={name}
@@ -94,9 +94,9 @@ const ComponentList: React.FC<ComponentListProps> = ({
                 tooltip={tooltip}
                 border={border}
               />
-            )
-          }
-          return (
+          )
+        }
+        return (
             <ComponentItem
               key={name}
               name={name}
@@ -106,8 +106,8 @@ const ComponentList: React.FC<ComponentListProps> = ({
               border={border}
               disabled
             />
-          )
-        })
+        )
+      })
       }
     </div>
   )

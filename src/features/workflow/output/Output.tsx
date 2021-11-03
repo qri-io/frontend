@@ -21,7 +21,7 @@ const Output: React.FC<OutputProps> = ({ data, status, wasEdited }) => {
     borderColorClass = 'group-hover:border-qritile'
   } else if (status === 'failed') {
     borderColorClass = 'border-dangerred'
-  } else if(status === 'running') {
+  } else if (status === 'running') {
     borderColorClass = 'border-qrinavy-700'
   }
 

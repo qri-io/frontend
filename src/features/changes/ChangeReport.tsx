@@ -6,4 +6,4 @@ const ChangeReport: React.FC<any> = () => {
   )
 }
 
-export default ChangeReport;
+export default ChangeReport

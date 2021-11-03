@@ -37,11 +37,11 @@ import {
   ETLogbookWriteRun,
   ETLogbookWriteCommit,
   NewTransformLifecycle,
-  ETTransformCancel,
+  ETTransformCancel
 } from '../../../qri/events'
 import { wsConnectionChange } from '../state/websocketActions'
-import { WS_CONNECT, WS_DISCONNECT } from '../state/websocketState'
-import { WebsocketState, NewWebsocketState, WSConnectionStatus } from '../state/websocketState';
+import { WS_CONNECT, WS_DISCONNECT, WebsocketState, NewWebsocketState, WSConnectionStatus } from '../state/websocketState'
+
 import { newVersionInfo } from '../../../qri/versionInfo'
 
 type DagCompletion = number[]
@@ -65,7 +65,7 @@ const WEBSOCKETS_PROTOCOL = 'qri-websocket'
 const numReconnectAttempts: number = 2
 const msToAddBeforeReconnectAttempt: number = 3000
 
-function newReconnectDeadline(): Date {
+function newReconnectDeadline (): Date {
   let d = new Date()
   d.setSeconds(d.getSeconds() + msToAddBeforeReconnectAttempt)
   return d
@@ -74,14 +74,14 @@ function newReconnectDeadline(): Date {
 const middleware = () => {
   let socket: WebSocket | undefined
   let state: WebsocketState = {
-    status: WSConnectionStatus.disconnected,
+    status: WSConnectionStatus.disconnected
   }
 
   const onOpen = (dispatch: Dispatch, token: string) => (event: Event) => {
     state = {
       status: WSConnectionStatus.connected,
       reconnectAttemptsRemaining: 0,
-      reconnectTime: undefined,
+      reconnectTime: undefined
     }
     const stateCopy = NewWebsocketState(state.status)
     dispatch(wsConnectionChange(stateCopy))
@@ -210,7 +210,7 @@ const middleware = () => {
       return
     }
     let reconnectAttemptsRemaining = numReconnectAttempts
-    const msg = JSON.stringify({ type: WSSubscribeRequest, payload: { token }})
+    const msg = JSON.stringify({ type: WSSubscribeRequest, payload: { token } })
     const attempt = setInterval(() => {
       if (reconnectAttemptsRemaining === 0) {
         clearInterval(attempt)
@@ -221,14 +221,14 @@ const middleware = () => {
         return
       }
       reconnectAttemptsRemaining--
-      }, msToAddBeforeReconnectAttempt)
+    }, msToAddBeforeReconnectAttempt)
   }
 
   const unsubscribe = () => {
     if (socket === undefined) {
       return
     }
-    var reconnectAttemptsRemaining = numReconnectAttempts
+    let reconnectAttemptsRemaining = numReconnectAttempts
     const attempt = setInterval(() => {
       if (reconnectAttemptsRemaining === 0) {
         clearInterval(attempt)
@@ -239,7 +239,7 @@ const middleware = () => {
         return
       }
       reconnectAttemptsRemaining--
-      }, msToAddBeforeReconnectAttempt)
+    }, msToAddBeforeReconnectAttempt)
   }
 
   const reconnect = (dispatch: Dispatch, token: string) => {
@@ -257,7 +257,7 @@ const middleware = () => {
 
     // no reconnect attempts remaining, we're just disconnected
     state = {
-      status: WSConnectionStatus.disconnected,
+      status: WSConnectionStatus.disconnected
     }
   }
 
@@ -285,4 +285,3 @@ const middleware = () => {
 }
 
 export const websocketMiddleware = middleware()
-

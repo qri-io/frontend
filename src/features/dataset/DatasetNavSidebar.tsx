@@ -13,13 +13,13 @@ import {
   pathToDatasetHistory,
   pathToDatasetIssues,
   pathToDatasetPreview,
-  pathToDatasetRuns,
+  pathToDatasetRuns
 } from './state/datasetPaths'
 
 import { selectNavExpanded } from '../app/state/appState'
 import { toggleNavExpanded } from '../app/state/appActions'
-import { selectRunCount, selectCommitCount } from "./state/datasetState";
-import { selectWorkflow } from "../workflow/state/workflowState";
+import { selectRunCount, selectCommitCount } from "./state/datasetState"
+import { selectWorkflow } from "../workflow/state/workflowState"
 
 export interface DatasetNavSidebarProps {
   qriRef: QriRef
@@ -62,7 +62,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         <div
           className={classNames('cursor-pointer flex items-center w-6 transition duration-300 ease-in-out transform', {
             'hover:-translate-x-1': expanded,
-            'hover:translate-x-1': !expanded,
+            'hover:translate-x-1': !expanded
           })}
           onClick={toggleExpanded}
         >
@@ -151,7 +151,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
         }
       </div>
       <div className='text-center'>
-        {!isNewWorkflow && <NewDatasetButton mini={!expanded} />}
+        {!isNewWorkflow && <NewDatasetButton id='sidebar-new-dataset-button' mini={!expanded} />}
       </div>
     </div>
   )

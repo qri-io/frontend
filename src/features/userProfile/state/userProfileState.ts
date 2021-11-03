@@ -97,5 +97,5 @@ export const userProfileReducer = createReducer(initialState, {
   },
   'API_USERPROFILEFOLLOWING_FAILURE': (state: UserProfileState) => {
     state.following.loading = false
-  },
+  }
 })

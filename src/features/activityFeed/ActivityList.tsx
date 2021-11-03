@@ -10,7 +10,7 @@ import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
 import { runEndTime } from '../../utils/runEndTime'
-
+import { NewDataset, NewCommit } from '../../qri/dataset'
 
 interface ActivityListProps {
   log: LogItem[]
@@ -29,6 +29,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       name: 'Status',
       selector: (row: LogItem) => row.runStatus,
       width: '200px',
+      // eslint-disable-next-line react/display-name
       cell: (row: LogItem) => <RunStatusBadge status={row.runStatus} />
     },
     {
@@ -36,6 +37,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       selector: (row: LogItem) => row.name,
       grow: 2,
       omit: !showDatasetName,
+      // eslint-disable-next-line react/display-name
       cell: (row: LogItem) => {
         const { username, name } = row
         return (
@@ -49,6 +51,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       name: 'Time',
       selector: (row: LogItem) => row.runStart,
       width: '180px',
+      // eslint-disable-next-line react/display-name
       cell: (row: LogItem) => {
         const runEnd = runEndTime(row.runStart, row.runDuration)
         return (
@@ -62,23 +65,23 @@ const ActivityList: React.FC<ActivityListProps> = ({
             </div>
           </div>
         )
-
       }
     },
     {
       name: 'Commit',
       selector: (row: LogItem) => row.message,
       width: '180px',
+      // eslint-disable-next-line react/display-name
       cell: (row: LogItem) => {
-        const dataset = {
+        const dataset = NewDataset({
           username: row.username,
           runID: row.runID,
           path: row.path,
-          commit: {
+          commit: NewCommit({
             title: row.title,
-            timestamp:row.timestamp
-          }
-        }
+            timestamp: row.timestamp
+          })
+        })
         if (!['failed', 'unchanged', 'running'].includes(row.runStatus)) {
           const versionLink = `/${row.username}/${row.name}/at${row.path}/history/body`
           return (
@@ -90,18 +93,18 @@ const ActivityList: React.FC<ActivityListProps> = ({
           return <div className='w-full'>--</div>
         }
       }
-    },
+    }
   ]
 
   const conditionalRowStyles = [
     {
-      when: (row:LogItem) => row.runStatus === 'running',
+      when: (row: LogItem) => row.runStatus === 'running',
       classNames: ['animate-appear', 'overflow-hidden', 'min-height-0-important'],
       style: {
         height: 58
       }
     }
-  ];
+  ]
 
   // borrows styles and icons from CollectionTable
   return (

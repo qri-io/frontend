@@ -30,14 +30,13 @@ const NavBar: React.FC<NavBarProps> = ({
   const location = useLocation()
   const history = useHistory()
 
-
   const buttonItems = [
     // TODO(chriswhong) - reinstate dashboard when this feature is available
     // { text: 'Dashboard', link: '/dashboard', icon: 'dashboard'},
-    { text: 'My Datasets', link: '/collection', icon: 'myDatasets'}
+    { text: 'My Datasets', link: '/collection', icon: 'myDatasets' }
   ]
 
-  const handleSearchSubmit = (query:string) => {
+  const handleSearchSubmit = (query: string) => {
     // general-search-from-navbar event
     trackGoal('PLKLNWYO', 0)
     const newParams = new URLSearchParams(`q=${query}`)
@@ -49,7 +48,7 @@ const NavBar: React.FC<NavBarProps> = ({
       'bg-white': !transparent
     })} style={{
       paddingTop: 14,
-      paddingBottom: 14,
+      paddingBottom: 14
     }}>
       {!noLogo && (
         <Link className='mr-5' to='/'>

@@ -3,14 +3,14 @@ import React, { useState } from 'react'
 import Icon from '../../chrome/Icon'
 import { Run } from '../../qri/run'
 import { Workflow } from '../../qrimatic/workflow'
-import { Dataset } from "../../qri/dataset";
+import { Dataset } from "../../qri/dataset"
 import ScrollTrigger from '../scroller/ScrollTrigger'
 import RunStatusIcon from '../run/RunStatusIcon'
 import DeployStatusIndicator from '../deploy/DeployStatusIndicator'
 import WorkflowScriptStatus from './WorkflowScriptStatus'
-import WorkflowCellsStatus from "./WorkflowCellsStatus";
-import { useSelector } from "react-redux";
-import { selectEditedCells } from "./state/workflowState";
+import WorkflowCellsStatus from "./WorkflowCellsStatus"
+import { useSelector } from "react-redux"
+import { selectEditedCells } from "./state/workflowState"
 
 export interface WorkflowOutlineProps {
   workflow?: Workflow

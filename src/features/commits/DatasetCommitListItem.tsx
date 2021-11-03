@@ -31,5 +31,4 @@ const DatasetCommitListItem: React.FC<DatasetCommitListItemProps> = ({
   </li>
 )
 
-
 export default DatasetCommitListItem

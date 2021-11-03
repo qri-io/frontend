@@ -2,10 +2,7 @@ import React from 'react'
 
 import NavBar from '../navbar/NavBar'
 
-export interface PageLayoutProps {
-}
-
-const Page: React.FC<PageLayoutProps> = ({ children }) => (
+const Page: React.FC = ({ children }) => (
   <div className='flex flex-col h-full'>
     <NavBar />
     <div className='flex-grow overflow-y-scroll bg-white'>

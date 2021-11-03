@@ -25,14 +25,14 @@ export const TabbedDisplay: React.FC<TabbedDisplayProps> = (props) => {
       {
         tabs.map((tab: Tab) => {
           if (tab.name === activeTab) {
-            return <div 
+            return <div
                     key={tab.name}
                     className='flex-initial m-4 font-bold cursor-default border-b-2'
                     onClick={() => onTabClick(tab.name)}
                   >{tab.name}</div>
           }
           if (tab.clickable) {
-            return <div 
+            return <div
                     key={tab.name}
                     className='flex-initial m-4 font-bold cursor-pointer'
                     onClick={() => onTabClick(tab.name)}

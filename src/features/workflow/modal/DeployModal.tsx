@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import ReactCanvasConfetti from 'react-canvas-confetti'
 import classNames from 'classnames'
 
-import Button from '../../../chrome/Button'
+import Button, { ButtonType } from '../../../chrome/Button'
 import Icon from '../../../chrome/Icon'
 import { clearModal, setModalLocked } from '../../app/state/appActions'
 import IconButton from '../../../chrome/IconButton'
 import TextInput from '../../../chrome/forms/TextInput'
 import Checkbox from '../../../chrome/forms/Checkbox'
 import { deployWorkflow } from '../../deploy/state/deployActions'
-import {workflowResetDryRunId, setWorkflowRef, workflowResetEditedClearedCells} from '../state/workflowActions'
+import { workflowResetDryRunId, setWorkflowRef, workflowResetEditedClearedCells } from '../state/workflowActions'
 import {
   selectWorkflow,
   selectWorkflowQriRef,
@@ -24,8 +24,8 @@ import RunStatusIcon from '../../run/RunStatusIcon'
 import { selectDeployRunId, selectDeployStatus } from '../../deploy/state/deployState'
 import { selectSessionUser } from '../../session/state/sessionState'
 import WarningDialog from '../WarningDialog'
-import { removeEvent } from "../../events/state/eventsActions";
-import { useDebounce } from "use-debounce";
+import { removeEvent } from "../../events/state/eventsActions"
+import { useDebounce } from "use-debounce"
 
 const DEBOUNCE_TIMER = 500
 
@@ -51,7 +51,7 @@ const DeployModal: React.FC = () => {
   const [debouncedDsName] = useDebounce(dsName, DEBOUNCE_TIMER)
   const [ dsNameError, setDsNameError ] = useState<string | null>(null)
   const [ runNow, setRunNow ] = useState(false)
-  const [ canBeDeployed, setCanBeDeployed ] = useState(!isNew);
+  const [ canBeDeployed, setCanBeDeployed ] = useState(!isNew)
   const [ deploying, setDeploying ] = useState(false)
 
   useEffect(() => {
@@ -62,7 +62,6 @@ const DeployModal: React.FC = () => {
         name: dsName
       }))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ dsName, dispatch, username ])
 
   // listen for deployStatus changes
@@ -72,16 +71,14 @@ const DeployModal: React.FC = () => {
       dispatch(setModalLocked(false))
       // navigate to the new dataset's workflow!
       history.push({
-        pathname: `/${qriRef.username}/${qriRef.name}/workflow`,
+        pathname: `/${qriRef.username}/${qriRef.name}/workflow`
       })
     }
 
     if (deployStatus === 'failed') {
       dispatch(setModalLocked(false))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ deployStatus ])
-
 
   const handleClose = () => {
     dispatch(clearModal())
@@ -116,13 +113,12 @@ const DeployModal: React.FC = () => {
 
   useEffect(() => {
     if (isNew) {
-      //validate the dataset name
+      // validate the dataset name
       const err = validateDatasetName(debouncedDsName)
       setDsNameError(err)
       setCanBeDeployed(debouncedDsName.length > 0 && err === null)
     }
   }, [ debouncedDsName, isNew ])
-
 
   let heading = 'You\'re almost there!'
   let subHeading = 'We need one more thing before you can deploy'
@@ -147,12 +143,11 @@ const DeployModal: React.FC = () => {
     content = <></>
   }
 
-
   let deployingContent = (
     <>
       <RunStatusIcon status={'running'} size='lg' className='text-black mb-2' />
       <div className='font-semibold text-xl mb-2'>Deploying Workflow</div>
-      <div className='text-sm text-qrigray'>Standby... this won't take long.</div>
+      <div className='text-sm text-qrigray'>Standby... this won&apos;t take long.</div>
     </>
   )
 
@@ -161,7 +156,7 @@ const DeployModal: React.FC = () => {
       <>
         <RunStatusIcon status={'succeeded'} size='lg' className='text-green mb-2' />
         <div id='snack_bar_message_workflow_deployed' className='font-semibold text-xl mb-2'>Workflow Deployed</div>
-        <div className='text-sm text-qrigray'>You're all set! Sit back and let the data flow.</div>
+        <div className='text-sm text-qrigray'>You&apos;re all set! Sit back and let the data flow.</div>
       </>
     )
   }
@@ -178,7 +173,7 @@ const DeployModal: React.FC = () => {
 
   const showButton = ['deployed', 'failed'].includes(deployStatus)
   let buttonText = 'Done'
-  let buttonType = 'primary'
+  let buttonType: ButtonType = 'primary'
 
   if (deployStatus === 'failed') {
     buttonText = 'Close'

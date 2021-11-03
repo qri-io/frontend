@@ -1,28 +1,26 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from "react-redux";
-import { trackGoal } from "../analytics/analytics";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux"
+import { trackGoal } from "../analytics/analytics"
+import { Link } from "react-router-dom"
 
-import NavBar from "../navbar/NavBar";
-import ContentBox from "../../chrome/ContentBox";
-import TextInput from "../../chrome/forms/TextInput";
-import Button from "../../chrome/Button";
-import { showModal } from "../app/state/appActions";
-import { ModalType } from "../app/state/appState";
-import { fetchPasswordForgot } from "./state/sessionActions";
-import { selectIsSessionLoading, selectResetError, selectResetSent } from "./state/sessionState";
-import Spinner from "../../chrome/Spinner";
-import PasswordForgotBgImage from "./PasswordForgotBgImage";
+import NavBar from "../navbar/NavBar"
+import ContentBox from "../../chrome/ContentBox"
+import TextInput from "../../chrome/forms/TextInput"
+import Button from "../../chrome/Button"
+import { showModal } from "../app/state/appActions"
+import { ModalType } from "../app/state/appState"
+import { fetchPasswordForgot } from "./state/sessionActions"
+import { selectIsSessionLoading, selectResetError, selectResetSent } from "./state/sessionState"
+import Spinner from "../../chrome/Spinner"
+import PasswordForgotBgImage from "./PasswordForgotBgImage"
 
 const ForgotPassword: React.FC = () => {
-
-  const [identifier, setIdentifier] = useState('');
+  const [identifier, setIdentifier] = useState('')
 
   const dispatch = useDispatch()
   const loading = useSelector(selectIsSessionLoading)
   const sent = useSelector(selectResetSent)
   const error = useSelector(selectResetError)
-
 
   const handleSignUpClick = () => {
     // general-click-sign-up event
@@ -36,8 +34,8 @@ const ForgotPassword: React.FC = () => {
 
   const returnHashedString = (value: string): string => {
     let hashedString: string = ''
-    for (let i=0; i<value.length; i++) {
-      if (i === 0 || i === value.length -1) {
+    for (let i = 0; i < value.length; i++) {
+      if (i === 0 || i === value.length - 1) {
         hashedString += value[i]
       } else {
         hashedString += '*'
@@ -46,10 +44,10 @@ const ForgotPassword: React.FC = () => {
     return hashedString
   }
 
-  const hashIdentifier = ():string => {
+  const hashIdentifier = (): string => {
     if (identifier.includes('@')) {
       const splitEmail = identifier.split('@')
-      return returnHashedString(splitEmail[0])+'@'+returnHashedString(splitEmail[1])
+      return returnHashedString(splitEmail[0]) + '@' + returnHashedString(splitEmail[1])
     }
     return identifier
   }
@@ -59,27 +57,28 @@ const ForgotPassword: React.FC = () => {
       <NavBar />
       <PasswordForgotBgImage />
       <ContentBox className='absolute top-60 left-12 md:left-64 z-30 ' paddingClassName='p-11'>
-        <h1 style={{lineHeight: '36px', width: 276}} className='font-extrabold text-3xl w-60 leading-10 mb-4 whitespace-pre-line'>
-          {sent ? 'Password \n Reset Sent' :
-          'Forgot your Password?'}</h1>
-        {sent ?
-          <div>
-            <p style={{width: 276}} className='mb-8'>If an account exists for <b>{hashIdentifier()}</b>,
+        <h1 style={{ lineHeight: '36px', width: 276 }} className='font-extrabold text-3xl w-60 leading-10 mb-4 whitespace-pre-line'>
+          {sent
+            ? 'Password \n Reset Sent'
+            : 'Forgot your Password?'}</h1>
+        {sent
+          ? <div>
+            <p style={{ width: 276 }} className='mb-8'>If an account exists for <b>{hashIdentifier()}</b>,
             you will get an email with a link to reset your password.
-            If it doesn't arrive, be sure to check your spam folder.</p>
+            If it doesn&apos;t arrive, be sure to check your spam folder.</p>
             <Link to='/login'><Button type='secondary' block>Back to Log In</Button></Link>
-          </div> :
-          <form>
-            <div className='mb-8' style={{width: 276}}>
+          </div>
+          : <form>
+            <div className='mb-8' style={{ width: 276 }}>
               <TextInput
                 name='username'
                 error={error}
                 value={identifier}
-                onChange={(value) => setIdentifier(value)}
+                onChange={(value) => { setIdentifier(value) }}
                 placeholder='Username or Email'
               />
             </div>
-            <Button type='secondary' className='mb-6' onClick={handleSubmitClick}  block>
+            <Button type='secondary' className='mb-6' onClick={handleSubmitClick} block>
               {loading ? <Spinner color='#fff' size={6} /> : 'Send Password Reset'}
             </Button>
             <div onClick={handleSignUpClick} className='cursor-pointer text-center text-black text-xs font-bold'>
@@ -92,4 +91,4 @@ const ForgotPassword: React.FC = () => {
   )
 }
 
-export default ForgotPassword;
+export default ForgotPassword

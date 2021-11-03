@@ -1,16 +1,17 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { Story, Meta } from '@storybook/react';
-import { ConnectedRouter } from 'connected-react-router';
+import React from 'react'
+import { Provider } from 'react-redux'
+import { Story, Meta } from '@storybook/react'
+import { ConnectedRouter } from 'connected-react-router'
 
-import Workflow from "../Workflow";
-import { configureStore, history } from '../../../store/store';
+import Workflow from "../Workflow"
+import { configureStore, history } from '../../../store/store'
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 export default {
   title: 'Workflow/Workflow',
   component: Workflow,
-  argTypes: {},
-} as Meta;
+  argTypes: {}
+} as Meta
 
 const Template: Story<any> = (args) => (
   <Provider store={configureStore()}>
@@ -18,11 +19,11 @@ const Template: Story<any> = (args) => (
       <Workflow {...args} />
     </ConnectedRouter>
   </Provider>
-);
+)
 
 export const Basic = Template.bind({})
 Basic.args = {
-  label: 'Basic',
+  label: 'Basic'
 }
 
 // const initialState: WorkflowProps = {

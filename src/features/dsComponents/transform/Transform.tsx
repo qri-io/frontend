@@ -11,7 +11,6 @@ export interface TransformProps {
 export const TransformComponent: React.FunctionComponent<TransformProps> = ({
   data
 }) => {
-
   return (
     <div className='rounded-lg overflow-hidden h-full '>
       <MonacoEditor

@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import Icon from '../../chrome/Icon'
-import {CronTrigger as CronTriggerType, WorkflowTrigger} from '../../qrimatic/workflow'
+import { CronTrigger as CronTriggerType, WorkflowTrigger } from '../../qrimatic/workflow'
 import { parseHourlyStart, parseDailyStart } from './util'
-import CronTriggerEditor from "./CronTriggerEditor";
-import { changeWorkflowTrigger, deleteWorkflowTrigger } from "../workflow/state/workflowActions";
+import CronTriggerEditor from "./CronTriggerEditor"
+import { changeWorkflowTrigger, deleteWorkflowTrigger } from "../workflow/state/workflowActions"
 
 export interface CronTriggerProps {
   trigger: WorkflowTrigger
@@ -35,7 +35,6 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
     setIsEditable(false)
     onCreateDelete()
     dispatch(deleteWorkflowTrigger(0))
-
   }
 
   const handleTriggerChange = (t: WorkflowTrigger) => {
@@ -45,7 +44,6 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
   // split the ISO8601 repeating interval (R/{starttime}/{interval})
   const cronTrigger = triggers[0] as CronTriggerType
   const [, startTime, interval] = cronTrigger.periodicity.split('/')
-
 
   let displayInterval, displayStartTime
 
@@ -67,7 +65,7 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
   }
 
   const onEdit = () => {
-    if(!isEditable){
+    if (!isEditable) {
       setIsEditable(true)
     }
   }
@@ -77,7 +75,7 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
       <div className='flex w-full items-center'>
         <div className='flex-grow flex items-center'>
           <div id='cron_trigger_schedule' className='text-sm font-semibold mr-2.5 text-black'>Schedule</div>
-          {!isEditable &&<div className='text-qrigray-400 text-xs flex items-center'>
+          {!isEditable && <div className='text-qrigray-400 text-xs flex items-center'>
             <Icon icon='calendar' size='sm' className='mr-1 pt-1' />
             <div id='cron_trigger_interval_text'>{displayInterval} {displayStartTime}</div>
           </div>}

@@ -6,7 +6,7 @@ const composeHeadData = require('./util').composeHeadData
 const composeJSONLD = require('./util').composeJSONLD
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:2503'
-const PORT = process.env.PORT || 3000 
+const PORT = process.env.PORT || 3000
 
 const app = express()
 
@@ -39,7 +39,7 @@ const reservedUsernames = [
   'issues',
   'follow',
   'unpublish'
-] 
+]
 
 
 // reservedNames are a list of words that may be mistaken for dataset names
@@ -56,7 +56,7 @@ fs.access(indexPath, fs.constants.F_OK, (err) => {
     console.error(`File ${indexPath} does not exist: ${err}.\nApp must be built before attempting to host it.`)
     server.close(() => {
       process.exit(1)
-    }) 
+    })
   }
 })
 

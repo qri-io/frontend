@@ -38,21 +38,21 @@ const BodyHeader: React.FC<BodyHeaderProps> = ({
             TODO (boandriy): Once the preview row count is filtered by fetch pagination -
             use global filtering variable instead of hardcoded 100
           */}
-          {loading ?
-            <ContentLoader height='13' width='117'>
+          {loading
+            ? <ContentLoader height='13' width='117'>
               <rect y='0' x='1' width="95" height="12" fill="#D5DADD"/>
-            </ContentLoader>:
-            <>
+            </ContentLoader>
+            : <>
               {numeral(structure?.entries).value() > 100 ? 'Previewing 100 of' : 'Showing all'} {entries} rows
             </>}
         </div>
         <div className='body_header_columns_text mr-4 flex items-center'>
           <Icon icon='columns' size='2xs' className='mr-1'/>
-          {loading ?
-            <ContentLoader height='13' width='117'>
+          {loading
+            ? <ContentLoader height='13' width='117'>
               <rect y='0' x='1' width="95" height="12" fill="#D5DADD"/>
-            </ContentLoader>:
-            <>
+            </ContentLoader>
+            : <>
               {numeral(headers.length).format('0,0')} columns
             </>}
         </div>

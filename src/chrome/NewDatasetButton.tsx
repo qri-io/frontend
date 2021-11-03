@@ -7,10 +7,10 @@ import { trackGoal } from '../features/analytics/analytics'
 
 interface NewDatasetButtonProps {
   mini?: boolean
-  id: string | undefined;
+  id: string | undefined
 }
 
-const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini,id }) => (
+const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini, id }) => (
   <Link
     id={id}
     to={{

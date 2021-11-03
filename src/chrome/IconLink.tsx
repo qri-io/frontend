@@ -16,9 +16,9 @@ interface IconLinkProps {
 const IconLink: React.FC<IconLinkProps> = ({
   icon,
   link,
-  size='sm',
+  size = 'sm',
   className,
-  colorClassName='text-black hover:text-qripink-600',
+  colorClassName = 'text-black hover:text-qripink-600',
   onClick,
   title
 }) => {

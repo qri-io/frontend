@@ -33,8 +33,8 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
           onClick={text === 'My Datasets'
             ? () => {
               // general-click-my-datasets event
-              trackGoal('LKV9RUBF', 0)
-            }
+                trackGoal('LKV9RUBF', 0)
+              }
             : () => {}
           }
         >

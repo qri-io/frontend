@@ -4,9 +4,9 @@ import { Link as RouterLink } from 'react-router-dom'
 
 interface LinkProps {
   to?: string
-  className?: string,
-  colorClassName?: string,
-  onClick?: () => void,
+  className?: string
+  colorClassName?: string
+  onClick?: () => void
   id?: string
 }
 

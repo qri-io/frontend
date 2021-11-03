@@ -22,7 +22,7 @@ const DatasetEditor: React.FC<{}> = () => {
   useEffect(() => {
     dispatch(loadEditingDatasetHead(newQriRef({
       username: qriRef.username,
-      name: qriRef.name,
+      name: qriRef.name
     })))
   }, [dispatch, qriRef.username, qriRef.name])
 
@@ -30,7 +30,7 @@ const DatasetEditor: React.FC<{}> = () => {
     const ref = newQriRef({
       name: qriRef.name,
       username: qriRef.username,
-      selector: field,
+      selector: field
     })
     dispatch(editDataset(ref, value))
   }
@@ -56,4 +56,4 @@ const DatasetEditor: React.FC<{}> = () => {
   )
 }
 
-export default DatasetEditor;
+export default DatasetEditor

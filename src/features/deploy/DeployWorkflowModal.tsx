@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,7 +19,7 @@ const DeployWorkflowModal: React.FC = () => {
       actionButtonText='Deploy!'
       action={() => { dispatch(deployWorkflow(workflow)) }}
     >
-      <p className='mb-4'>After deployment, Qrimatic will run your job according the triggers you've defined.</p>
+      <p className='mb-4'>After deployment, Qrimatic will run your job according the triggers you&apos;ve defined.</p>
       <p><input type='checkbox' checked disabled /> Run &amp; save before deploying</p>
     </ModalLayout>
   )

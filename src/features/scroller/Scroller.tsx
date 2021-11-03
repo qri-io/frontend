@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectScrollerPos } from './state/scrollerState'
 import { resetScroller } from './state/scrollerActions'
 
-
 export interface ScrollerProps {
   // optional className to pass in styling
   className?: string
@@ -18,7 +17,7 @@ export interface ScrollerProps {
 // element, will update the state to say where it should be positioned
 // The `Scroller` will pick up on that position change and `scrollTo` the
 // given position
-const Scroller: React.FC<ScrollerProps> = ({className, children})=> {
+const Scroller: React.FC<ScrollerProps> = ({ className, children }) => {
   const ref = useRef<HTMLDivElement>(null)
   const pos = useSelector(selectScrollerPos)
   const dispatch = useDispatch()

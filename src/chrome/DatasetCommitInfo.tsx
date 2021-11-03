@@ -24,9 +24,9 @@ interface DatasetCommitInfoProps {
 
 const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
   dataset,
-  small=false,
-  inRow=false,
-  automated=false
+  small = false,
+  inRow = false,
+  automated = false
 }) => {
   return (
   <div className={classNames('truncate', {
@@ -60,11 +60,11 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
       {/* end username icon */}
 
       {/* relative timestamp icon */}
-      <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit?.timestamp)} />
+      {dataset.commit?.timestamp && <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit.timestamp)} />}
       {/* end relative timestamp icon */}
 
       {/* commit icon */}
-      {dataset.path &&  (
+      {dataset.path && (
         <div className='flex items-center leading-tight' title={dataset.path}>
           <Icon icon='commit' size={small ? 'xs' : 'sm'} className='-ml-2' />
           <div>{commitishFromPath(dataset.path)}</div>
@@ -74,7 +74,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
     </div>
     {/* end second row */}
   </div>
-)}
-
+  )
+}
 
 export default DatasetCommitInfo

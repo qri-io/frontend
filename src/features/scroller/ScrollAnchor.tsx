@@ -19,7 +19,7 @@ export interface ScrollAnchorProps {
 // for this element, it will set the `scrollPos` state to the given location
 // The `name` must be unique
 const ScrollAnchor: React.FC<ScrollAnchorProps> = ({
-  id, 
+  id,
   scrollOffset = SCROLLER_DEFAULT_TOP_OFFSET,
   children
 }) => {

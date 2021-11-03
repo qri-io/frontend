@@ -1,6 +1,6 @@
 import React from 'react'
 
-import LogInModal from './modal/LogInModal';
+import LogInModal from './modal/LogInModal'
 
 const Login: React.FC<{}> = () => (
   <div className='flex flex-col h-full bg-gray-100'>
@@ -12,4 +12,4 @@ const Login: React.FC<{}> = () => (
   </div>
 )
 
-export default Login;
+export default Login

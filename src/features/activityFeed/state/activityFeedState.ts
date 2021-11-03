@@ -1,18 +1,17 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store';
-import { QriRef, humanRef, refStringFromQriRef } from '../../../qri/ref';
-import { LogItem } from '../../../qri/log';
+import { RootState } from '../../../store/store'
+import { QriRef, humanRef, refStringFromQriRef } from '../../../qri/ref'
+import { LogItem } from '../../../qri/log'
 import { ApiErr, NewApiErr } from '../../../store/api'
 
-
-export function newDatasetLogsSelector(qriRef: QriRef): (state: RootState) => LogItem[] {
+export function newDatasetLogsSelector (qriRef: QriRef): (state: RootState) => LogItem[] {
   return (state: RootState) => {
     return state.activityFeed.datasetLogs[refStringFromQriRef(qriRef)] || []
   }
 }
 
-export function selectLogCount(qriRef: QriRef): (state: RootState) => number {
+export function selectLogCount (qriRef: QriRef): (state: RootState) => number {
   qriRef = humanRef(qriRef)
   return (state: RootState) => {
     return state.activityFeed.datasetLogs[refStringFromQriRef(qriRef)]?.length
@@ -20,7 +19,7 @@ export function selectLogCount(qriRef: QriRef): (state: RootState) => number {
 }
 
 export interface ActivityFeedState {
-  datasetLogs: Record<string,LogItem[]>
+  datasetLogs: Record<string, LogItem[]>
   loading: boolean
   error: ApiErr
 }
@@ -44,5 +43,5 @@ export const activityFeedReducer = createReducer(initialState, {
   'API_DATASET_ACTIVITY_RUNS_FAILURE': (state, action) => {
     state.loading = false
     state.error = action.payload.err
-  },
+  }
 })

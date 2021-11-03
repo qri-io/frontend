@@ -121,8 +121,9 @@ export function chainSuccess (
   return (thunk: ApiActionThunk) => {
     return async (action: AnyAction) => {
       if (getActionType(action) === 'success') {
-        return thunk(dispatch, getState)
+        return await thunk(dispatch, getState)
       }
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw action
     }
   }
@@ -140,7 +141,7 @@ async function getJSON<T> (url: string, options: FetchOptions): Promise<T> {
   const r = await fetch(url, options)
   const res = await r.json()
   if (res.meta.code !== 200) {
-    var err: ApiError = { code: res.meta.code, message: mapError(res.meta.error) }
+    let err: ApiError = { code: res.meta.code, message: mapError(res.meta.error) }
     throw err // eslint-disable-line
   }
   return res as T
@@ -159,11 +160,11 @@ function apiUrl (endpoint: string, segments?: QriRef, query?: ApiQuery, pageInfo
     if (segments.name) {
       url = addToUrl(url, segments.name)
     }
-    if (segments.peerID || segments.path) {
+    if (segments.profileId || segments.path) {
       url = addToUrl(url, 'at')
     }
-    if (segments.peerID) {
-      url = addToUrl(url, segments.peerID)
+    if (segments.profileId) {
+      url = addToUrl(url, segments.profileId)
     }
     if (segments.path) {
       url = addToUrl(url, segments.path)
@@ -202,11 +203,12 @@ async function getAPIJSON<T> (
   query?: ApiQuery,
   pageInfo?: ApiPagination,
   body?: object|[],
-  form?: object,
+  form?: Record<string, any>,
   token?: string
 ): Promise<T> {
   const [url, err] = apiUrl(endpoint, segments, query, pageInfo)
   if (err) {
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw err
   }
   const options: FetchOptions = {
@@ -227,7 +229,7 @@ async function getAPIJSON<T> (
   // if form exists, build a FormData object and set it to options.body
   if (form) {
     const formData = new FormData()
-    Object.keys(form).forEach((key) => { formData.append(key, form[key])})
+    Object.keys(form).forEach((key) => { formData.append(key, form[key]) })
     options.body = formData
   }
 
@@ -238,7 +240,7 @@ async function getAPIJSON<T> (
     }
   }
 
-  return getJSON(url, options)
+  return await getJSON(url, options)
 }
 
 export interface TokenClaims {
@@ -283,7 +285,6 @@ export const apiMiddleware: Middleware = ({ dispatch, getState }) => (next: Disp
       segments
     })
 
-
     try {
       token = await maybeRefreshToken(token, refreshToken, dispatch)
       data = await getAPIJSON(endpoint, method, segments, query, pageInfo, body, form, token)
@@ -326,12 +327,12 @@ export const apiMiddleware: Middleware = ({ dispatch, getState }) => (next: Disp
 // TODO(chrishwong): if there are multiple simultaneous API calls, there will be
 // multiple calls to refresh the token. We should add some handling to pause
 // subsequent requests while the refresh is happening
-export const maybeRefreshToken = async (token: string, refreshToken: string, dispatch): Promise<any> => {
+export const maybeRefreshToken = async (token: string, refreshToken: string, dispatch: Dispatch<AnyAction>): Promise<any> => {
   try {
     if (token) {
-      var decoded: TokenClaims = jwtDecode(token)
-      var exp = decoded.exp
-      var now = Math.floor(Date.now() / 1000) // in seconds
+      let decoded: TokenClaims = jwtDecode(token)
+      let exp = decoded.exp
+      let now = Math.floor(Date.now() / 1000) // in seconds
       if ((exp - now) < 300) { // we preemptively refresh up to 5 min early for smoother operation
         let res = await refreshSession(token, refreshToken)
 
@@ -341,23 +342,23 @@ export const maybeRefreshToken = async (token: string, refreshToken: string, dis
           token: res.data.access_token
         })
 
-        return Promise.resolve(res.data.access_token)
+        return await Promise.resolve(res.data.access_token)
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(`error refreshing token - ${error.message}`)
     // logOut immediately if there is any error parsing the token or refreshing
     dispatch({ type: 'LOGOUT_SUCCESS' })
-    return Promise.reject(error)
+    return await Promise.reject(error)
   }
-  return Promise.resolve(token)
+  return await Promise.resolve(token)
 }
 
 // fetch a new token
 const refreshSession = async (token: string, refreshToken: string): Promise<any> => {
   try {
     if (token !== undefined && refreshToken !== undefined) {
-      const response = await getAPIJSON(
+      const response: Record<string, any> = await getAPIJSON(
         'oauth/token',
         'POST',
         undefined,
@@ -366,7 +367,7 @@ const refreshSession = async (token: string, refreshToken: string): Promise<any>
         undefined,
         {
           grant_type: 'refresh_token',
-          refresh_token: refreshToken,
+          refresh_token: refreshToken
         },
         token
       )
@@ -378,12 +379,12 @@ const refreshSession = async (token: string, refreshToken: string): Promise<any>
         response.data = undefined
       }
 
-      return Promise.resolve(response)
+      return await Promise.resolve(response)
     } else {
-      return Promise.reject(new Error('no token/refresh token present'))
+      return await Promise.reject(new Error('no token/refresh token present'))
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(`error refreshing token - ${error.message}`)
-    return Promise.reject(error)
+    return await Promise.reject(error)
   }
 }

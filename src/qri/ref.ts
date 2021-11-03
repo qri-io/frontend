@@ -52,7 +52,7 @@ export interface QriRef {
   selector?: string[]
 }
 
-export function newQriRef(d: Record<string,any>): QriRef {
+export function newQriRef (d: Record<string, any>): QriRef {
   let path = d.path
   if (!path && d.fs && d.hash !== "") {
     path = `/${d.fs}/${d.hash}`
@@ -69,12 +69,12 @@ export function newQriRef(d: Record<string,any>): QriRef {
     name: d.name,
     path,
     component: d.component,
-    selector,
+    selector
   }
 }
 
 // TODO(b5): this function should be applied to the selector field of QriRef
-export function selectorFromLocationHash(location: Record<string,any>): string {
+export function selectorFromLocationHash (location: Record<string, any>): ComponentName {
   if (location?.hash) {
     const hashValue = location.hash.split('#')[1]
     // only set component if it's a valid qri component name
@@ -88,7 +88,7 @@ export function selectorFromLocationHash(location: Record<string,any>): string {
 // parses the selected component from the location hash and appends it to params
 // params can be any object that would normally be passed to newQriRef
 // location is the result of useLocation
-export function refParamsFromLocation(params: Record<string,any>, location: Record<string,any>): Record<string,any> {
+export function refParamsFromLocation (params: Record<string, any>, location: Record<string, any>): Record<string, any> {
   return {
     ...params,
     component: selectorFromLocationHash(location)
@@ -137,7 +137,7 @@ export function refStringFromQriRef (qriRef: QriRef, useAtSymbol?: boolean): str
 export function qriRefFromString (refString: string): QriRef {
   let parts = refString.split('/')
   if (parts.length === 0) {
-    return { username: '', name: '', }
+    return { username: '', name: '' }
   }
   if (parts[0] === '/') {
     parts = parts.slice(1)
@@ -152,7 +152,7 @@ export function qriRefFromString (refString: string): QriRef {
   if (refString.includes('/at/') && parts.length === 5) {
     return { username: parts[0], name: parts[1], path: `/${parts[3]}/${parts[4]}` }
   }
-  return { username: '', name: '', }
+  return { username: '', name: '' }
 }
 
 // checks if qriRef has location, username, and name
@@ -168,8 +168,8 @@ export function qriRefIsSameDataset (a: QriRef, b: QriRef): boolean {
 
 // humanRef creates a new qri ref with only the username/name part of a refence
 // dropping any path or identifier data
-export function humanRef(ref: QriRef): QriRef {
-  return newQriRef({ username : ref.username, name: ref.name })
+export function humanRef (ref: QriRef): QriRef {
+  return newQriRef({ username: ref.username, name: ref.name })
 }
 
 // // selectedComponentFromQriRef takes a qriRef and gets the selected component

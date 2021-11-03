@@ -1,14 +1,14 @@
-import { RootState } from '../../../store/store';
+import { RootState } from '../../../store/store'
 import { createReducer } from '@reduxjs/toolkit'
-import { newVersionInfo, VersionInfo } from '../../../qri/versionInfo';
-import { CALL_API } from "../../../store/api";
-import { runEndTime } from '../../../utils/runEndTime';
+import { newVersionInfo, VersionInfo } from '../../../qri/versionInfo'
+import { CALL_API } from "../../../store/api"
+import { runEndTime } from '../../../utils/runEndTime'
 import {
   LogbookWriteAction,
   RemoveCollectionItemAction,
   ResetCollectionStateAction,
   TransformAction
-} from './collectionActions';
+} from './collectionActions'
 
 export const LOGBOOK_WRITE_COMMIT = 'LOGBOOK_WRITE_COMMIT'
 export const LOGBOOK_WRITE_RUN = 'LOGBOOK_WRITE_RUN'
@@ -20,15 +20,15 @@ export const RESET_COLLECTION_STATE = 'RESET_COLLECTION_STATE'
 export const selectCollection = (state: RootState): VersionInfo[] => {
   const { collection } = state.collection
 
-  var ordered: VersionInfo[] = Object.keys(collection).map((id: string) => collection[id])
+  let ordered: VersionInfo[] = Object.keys(collection).map((id: string) => collection[id])
 
-  return ordered.sort((a,b) => {
+  return ordered.sort((a, b) => {
     let aTime: Date
     let bTime: Date
     if (a.runStart && a.runDuration) {
       aTime = runEndTime(a.runStart, a.runDuration)
     } else if (!a.commitTime) {
-     return 0
+      return 0
     } else {
       aTime = new Date(a.commitTime)
     }
@@ -40,13 +40,12 @@ export const selectCollection = (state: RootState): VersionInfo[] => {
     } else {
       bTime = new Date(b.commitTime)
     }
-    if (aTime === bTime) { return 0 }
-    else if (aTime > bTime) { return -1 }
+    if (aTime === bTime) { return 0 } else if (aTime > bTime) { return -1 }
     return 1
   })
 }
 
-export const selectVersionInfo = ( initId: string): (state: RootState) => VersionInfo =>
+export const selectVersionInfo = (initId: string): (state: RootState) => VersionInfo =>
   (state) => state.collection.collection[initId]
 
 export const selectIsCollectionLoading = (state: RootState): boolean => state.collection.collectionLoading
@@ -65,7 +64,7 @@ const initialState: CollectionState = {
   collection: {},
   listedIDs: new Set<string>(),
   pendingIDs: [],
-  collectionLoading: true,
+  collectionLoading: true
 }
 
 export const collectionReducer = createReducer(initialState, {
@@ -73,7 +72,7 @@ export const collectionReducer = createReducer(initialState, {
     state.collectionLoading = true
   },
   'API_COLLECTION_SUCCESS': (state, action) => {
-    const listedIDs:Set<string> = new Set()
+    const listedIDs: Set<string> = new Set()
     action.payload.data.forEach((d: VersionInfo) => {
       state.collection[d.initID] = d
       listedIDs.add(d.initID)
@@ -84,11 +83,11 @@ export const collectionReducer = createReducer(initialState, {
   'API_COLLECTION_FAILURE': (state, action) => {
     state.collectionLoading = false
   },
-  'API_VERSIONINFO_REQUEST' : (state, action) => {
+  'API_VERSIONINFO_REQUEST': (state, action) => {
     state.pendingIDs.push(action[CALL_API].body.initID)
   },
-  'API_VERSIONINFO_SUCCESS':(state, action) => {
-    const versionInfo: VersionInfo = action.payload.data;
+  'API_VERSIONINFO_SUCCESS': (state, action) => {
+    const versionInfo: VersionInfo = action.payload.data
     state.pendingIDs = state.pendingIDs.filter(id => id !== versionInfo.initID)
     state.collection[versionInfo.initID] = newVersionInfo(versionInfo)
   },
@@ -96,13 +95,13 @@ export const collectionReducer = createReducer(initialState, {
   TRANSFORM_CANCELED: transformCanceled,
   LOGBOOK_WRITE_RUN: logbookWriteRun,
   LOGBOOK_WRITE_COMMIT: logbookWriteCommit,
-  REMOVE_COLLECTION_ITEM:removeCollectionItem,
+  REMOVE_COLLECTION_ITEM: removeCollectionItem,
   RESET_COLLECTION_STATE: (state: CollectionState, action: ResetCollectionStateAction) => {
     return initialState
-  },
+  }
 })
 
-function transformStart(state: CollectionState, action: TransformAction) {
+function transformStart (state: CollectionState, action: TransformAction) {
   const { collection } = state
   const { mode, initID, runID } = action.lc
 
@@ -113,16 +112,16 @@ function transformStart(state: CollectionState, action: TransformAction) {
   collection[initID].runCount++
 }
 
-function transformCanceled(state: CollectionState, action: TransformAction) {
+function transformCanceled (state: CollectionState, action: TransformAction) {
   const { collection } = state
   const { mode, initID } = action.lc
 
   if (mode === 'apply' || !collection[initID]) return
-  
+
   collection[initID].runStatus = "failed"
 }
 
-function logbookWriteRun(state: CollectionState, action: LogbookWriteAction) {
+function logbookWriteRun (state: CollectionState, action: LogbookWriteAction) {
   const { collection } = state
   const { initID, runID, runStatus, runDuration, runStart } = action.vi
 
@@ -134,10 +133,10 @@ function logbookWriteRun(state: CollectionState, action: LogbookWriteAction) {
   collection[initID].runStart = runStart
 }
 
-function removeCollectionItem(state: CollectionState, action: RemoveCollectionItemAction) {
-  let deleteItemInitId:string = '';
+function removeCollectionItem (state: CollectionState, action: RemoveCollectionItemAction) {
+  let deleteItemInitId: string = ''
   Object.keys(state.collection).forEach(key => {
-    if(state.collection[key].username === action.username && state.collection[key].name === action.name){
+    if (state.collection[key].username === action.username && state.collection[key].name === action.name) {
       deleteItemInitId = state.collection[key].initID
     }
   })
@@ -146,7 +145,7 @@ function removeCollectionItem(state: CollectionState, action: RemoveCollectionIt
   }
 }
 
-function logbookWriteCommit(state: CollectionState, action: LogbookWriteAction) {
+function logbookWriteCommit (state: CollectionState, action: LogbookWriteAction) {
   const { collection } = state
   const { vi } = action
 

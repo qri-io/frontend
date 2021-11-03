@@ -19,12 +19,12 @@ interface PageControlProps {
   pageInfo: PageInfo
   queryParams: Record<string, any>
   showRange?: boolean
-  onPageChange: (o:PageChangeObject) => void
+  onPageChange: (o: PageChangeObject) => void
 }
 
 // pass in pageInfo prop to show pagination info and controls
 const PageControl: React.FC<PageControlProps> = ({
-  pageInfo = {},
+  pageInfo,
   queryParams,
   showRange = true,
   onPageChange

@@ -4,7 +4,7 @@ interface QriLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
 }
 
-const QriLogo: React.FC<QriLogoProps> = ({ size='md' }) => {
+const QriLogo: React.FC<QriLogoProps> = ({ size = 'md' }) => {
   let dimension = 44
   if (size === 'sm') {
     dimension = 33

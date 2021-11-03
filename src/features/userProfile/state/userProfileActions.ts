@@ -1,23 +1,23 @@
-import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
+import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
 
 import { NewSearchResult } from '../../../qri/search'
 import { UserProfileDatasetListParams } from '../../../qri/userProfile'
 
 export const searchPageSizeDefault = 25
 
-export function loadUserProfile(username: string): ApiActionThunk {
+export function loadUserProfile (username: string): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchUserProfile(username))
   }
 }
 
-export function loadUserProfileDatasets(username: string, userProfileParams: UserProfileDatasetListParams): ApiActionThunk {
+export function loadUserProfileDatasets (username: string, userProfileParams: UserProfileDatasetListParams): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchUserProfileDatasets(username, userProfileParams))
   }
 }
 
-export function loadUserProfileFollowing(username: string, userProfileParams: UserProfileDatasetListParams): ApiActionThunk {
+export function loadUserProfileFollowing (username: string, userProfileParams: UserProfileDatasetListParams): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchUserProfileFollowing(username, userProfileParams))
   }
@@ -28,7 +28,7 @@ function fetchUserProfile (username: string): ApiAction {
     type: 'userprofile',
     [CALL_API]: {
       endpoint: `identity/profile/${username}`,
-      method: 'GET',
+      method: 'GET'
     }
   }
 }
@@ -45,7 +45,6 @@ const mapFrontendParams = (frontendParams: UserProfileDatasetListParams) => {
 }
 
 function fetchUserProfileDatasets (username: string, userProfileParams: UserProfileDatasetListParams): ApiAction {
-
   return {
     type: 'userprofiledatasets',
     [CALL_API]: {

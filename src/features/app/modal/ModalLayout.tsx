@@ -10,22 +10,21 @@ interface modalTypeConfig {
   actionButtonType: ButtonType
 }
 
-function typeSettings(type: ModalLayoutType): modalTypeConfig {
+function typeSettings (type: ModalLayoutType): modalTypeConfig {
   switch (type) {
     case 'warning':
       return {
-        actionButtonType: 'warning',
+        actionButtonType: 'warning'
       }
-   case 'danger':
-     return {
-        actionButtonType: 'danger',
-     }
-   default:
-     return {
-        actionButtonType: 'primary',
-     }
+    case 'danger':
+      return {
+        actionButtonType: 'danger'
+      }
+    default:
+      return {
+        actionButtonType: 'primary'
+      }
   }
-
 }
 
 export type ModalLayoutType = 'info' | 'warning' | 'danger'
@@ -35,16 +34,16 @@ export interface ModalLayoutProps {
   type?: ModalLayoutType
   icon?: string
   actionButtonText: string
-  action: () => void
+  action?: () => void
   cancelButtonText?: string
 }
 
 const ModalLayout: React.FC<ModalLayoutProps> = ({
   title,
-  type='info',
+  type = 'info',
   actionButtonText,
   action,
-  cancelButtonText='Cancel',
+  cancelButtonText = 'Cancel',
   children
 }) => {
   const dispatch = useDispatch()
@@ -54,7 +53,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
   }
 
   const handleActionButtonClick = () => {
-    action()
+    action && action()
     dispatch(clearModal())
   }
 

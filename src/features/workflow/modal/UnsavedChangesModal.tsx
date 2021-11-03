@@ -2,7 +2,7 @@ import React from 'react'
 import ModalLayout from '../../app/modal/ModalLayout'
 
 interface UnsavedChangesModalProps {
-  action: () => void
+  action?: () => void
 }
 
 const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({ action }) => (
@@ -13,7 +13,7 @@ const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = ({ action }) => 
     cancelButtonText='Stay'
     action={action}
   >
-    <p className='mb-4'>It looks like you've made changes to this workflow that have not been deployed.  These changes will be lost if you leave this page. </p>
+    <p className='mb-4'>It looks like you&apos;ve made changes to this workflow that have not been deployed.  These changes will be lost if you leave this page. </p>
   </ModalLayout>
 )
 

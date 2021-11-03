@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"
 
 import classNames from 'classnames'
-import { RunStep } from '../../qri/run'
+import { RunStep, RunStatus } from '../../qri/run'
 import { TransformStep } from '../../qri/dataset'
 import CodeEditor from './CodeEditor'
 import Output from './output/Output'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowHeader from './WorkflowHeader'
 import WorkflowCellControls from './WorkflowCellControls'
-import { selectClearedCells, selectEditedCells } from "./state/workflowState";
-import { EventLogLine } from "../../qri/eventLog";
+import { selectClearedCells, selectEditedCells } from "./state/workflowState"
+import { EventLogLine } from "../../qri/eventLog"
 
 export interface WorkflowCellProps {
   active: boolean
@@ -52,12 +52,12 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   useEffect(() => {
     if ((run?.status === "succeeded" || run?.status === "failed") && run.output) {
       setOutput(run.output)
-    } else if ((run?.status === "succeeded" || run?.status === "failed") && !run.output?.length){
+    } else if ((run?.status === "succeeded" || run?.status === "failed") && !run.output?.length) {
       setOutput([])
     }
   }, [ run ])
 
-  const status = run?.status
+  const status = run?.status as RunStatus
   const isEdited = editedCells[index]
 
   let editor: React.ReactElement
@@ -72,7 +72,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
         onRun={onRun}
         disabled={disabled}
         standalone={!run?.output || clearedCells[index]} />
-      break;
+      break
     case 'qri':
       editor = <></>
       break
@@ -80,7 +80,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
       editor = <WorkflowHeader title={script} onChange={(v) => { onChangeScript(index, v) }} />
       break
     default:
-      editor = <p>unknown editor for '{syntax}' workflow step</p>
+      editor = <p>unknown editor for &apos;{syntax}&apos; workflow step</p>
   }
 
   const noColorStatus = !['succeeded', 'running', 'failed'].includes(status)
@@ -114,13 +114,13 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
             width: 'calc(100% - 225px)'
           }}
         >
-          {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift*/}
+          {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift */}
           <div
             className={classNames(
               `rounded-lg overflow-hidden flex-grow border box-content`,
               borderStyles,
               {
-              'border-transparent hover:border-qrigray-200': !active && (noColorStatus)
+                'border-transparent hover:border-qrigray-200': !active && (noColorStatus)
               }
             )}
           >
@@ -138,7 +138,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
         />
       <div
         onClick={() => onRowAdd(index, 'starlark')}
-        style={{width: 'calc(100% - 225px)'}}
+        style={{ width: 'calc(100% - 225px)' }}
         className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'
       >
         <div className='h-px bg-gray-300 flex-grow mr-2' />

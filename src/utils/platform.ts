@@ -1,5 +1,5 @@
-export function platform(): 'mac' | 'pc' {
-  if (navigator.platform.indexOf('Mac') > -1) {
+export function platform (): 'mac' | 'pc' {
+  if (navigator.platform.includes('Mac')) {
     return 'mac'
   }
   return 'pc'

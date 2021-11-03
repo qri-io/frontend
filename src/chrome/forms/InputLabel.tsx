@@ -14,7 +14,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
   label,
   tooltip,
   tooltipFor,
-  size = 'sm',
+  size = 'sm'
 }) => (
   <div className={classNames('input-label', { 'input-label-md': size === 'md' })}>
     {label}

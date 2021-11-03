@@ -18,4 +18,4 @@ const NotificationMenu: React.FC<any> = () => {
   )
 }
 
-export default NotificationMenu;
+export default NotificationMenu

@@ -60,7 +60,7 @@ const DEFAULT_PAGE = 1
 const DEFAULT_PAGESIZE = 25
 
 // returns a fully populated UserProfileDatasetListParams by adding defaults for undefined values
-export function NewUserProfileDatasetListParams(d: any): UserProfileDatasetListParams {
+export function NewUserProfileDatasetListParams (d: any): UserProfileDatasetListParams {
   return {
     sort: d.sort || DEFAULT_SORT,
     page: d.page || DEFAULT_PAGE,
@@ -69,8 +69,8 @@ export function NewUserProfileDatasetListParams(d: any): UserProfileDatasetListP
 }
 
 // returns only the non-default values, useful for excluding default values from query parameter strings
-export function CleanUserProfileDatasetListParams(d: UserProfileDatasetListParams): Record<string, any> {
-  const cleanParams:any = {}
+export function CleanUserProfileDatasetListParams (d: UserProfileDatasetListParams): Record<string, any> {
+  const cleanParams: any = {}
   if (d.sort !== DEFAULT_SORT) { cleanParams.sort = d.sort }
   if (d.page !== DEFAULT_PAGE) { cleanParams.page = d.page }
   if (d.pageSize !== DEFAULT_PAGESIZE) { cleanParams.pageSize = d.pageSize }

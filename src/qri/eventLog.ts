@@ -7,7 +7,7 @@ export enum EventLogLineType {
 
   ETPrint = "tf:Print",
   ETError = "tf:Error",
-  
+
   ETReference = "tf:Reference",
   ETDatasetPreview = "tf:DatasetPreview",
   ETChangeReport = "tf:ChangeReport",
@@ -27,10 +27,10 @@ export interface EventLogLine {
   type: EventLogLineType
   ts: number
   sessionID: string
-  data: Record<string,any>
+  data: Record<string, any>
 }
 
-export function NewEventLogLine(data: Record<string,any>): EventLogLine {
+export function NewEventLogLine (data: Record<string, any>): EventLogLine {
   return {
     type: data.type,
     ts: data.ts,
@@ -39,6 +39,6 @@ export function NewEventLogLine(data: Record<string,any>): EventLogLine {
   }
 }
 
-export function NewEventLogLines(data: Record<string,any>[]): EventLogLine[] {
+export function NewEventLogLines (data: Array<Record<string, any>>): EventLogLine[] {
   return data.map(NewEventLogLine)
 }

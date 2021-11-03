@@ -51,22 +51,22 @@ export const scheduleFromPeriodicity = (periodicity: string = ''): Schedule => {
       return {
         ...defaultScheduleUIConfig,
         periodicity: interval,
-        minutes: '00',
-      } as Schedule
+        minutes: '00'
+      }
     case 'P1H':
       return {
         ...defaultScheduleUIConfig,
         periodicity: interval,
         minutes: getTwoDigitMinutes(startTime)
-      } as Schedule
+      }
     case 'P1D':
       return {
         ...defaultScheduleUIConfig,
         periodicity: interval,
-        time: format(new Date(startTime), 'HH:mm'),
-      } as Schedule
-     default:
-       return defaultScheduleUIConfig
+        time: format(new Date(startTime), 'HH:mm')
+      }
+    default:
+      return defaultScheduleUIConfig
   }
 }
 
@@ -84,7 +84,7 @@ export interface Schedule {
 // time occuring in the future
 export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
   // convert the UI settings into a valid WorkflowTrigger
-  let periodicity
+  let periodicity = ''
   let startTime
   const today = new Date()
 
@@ -120,15 +120,15 @@ export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
 
       periodicity = `R/${startTime}/P1H`
       break
-     case 'P1D':
-       // time is in HH:MM format in local time (24 hour hours)
+    case 'P1D':
+      // time is in HH:MM format in local time (24 hour hours)
       const [hours, minutes] = schedule.time.split(':')
       const date = parseInt(hours) <= today.getHours() ? today.getDate() + 1 : today.getDate()
       // get ISO8601 string for today at the specified hours+minutes
       startTime = new Date(
         today.getFullYear(),
         today.getMonth(),
-        date, 
+        date,
         parseInt(hours),
         parseInt(minutes),
         0
@@ -141,15 +141,15 @@ export const triggerFromSchedule = (schedule: Schedule): CronTrigger => {
   return {
     type: 'cron',
     active: true,
-    periodicity,
+    periodicity
   }
 }
 
-// ensures that any cron triggers have a start time that occurs in the future 
+// ensures that any cron triggers have a start time that occurs in the future
 // it returns any other kinds of triggers unaltered
 export const prepareTriggersForDeploy = (wts: WorkflowTrigger[] | undefined): WorkflowTrigger[] | undefined => {
   if (!wts) {
-    return 
+    return
   }
   return wts.map((trigger: WorkflowTrigger) => {
     if (trigger.type === "cron") {

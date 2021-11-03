@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
@@ -19,6 +19,7 @@ import ManualTriggerButton from '../workflow/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 import { runEndTime } from '../../utils/runEndTime'
 import { trackGoal } from '../../features/analytics/analytics'
+import { NewCommit, NewDataset } from '../../qri/dataset'
 
 interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
@@ -67,7 +68,7 @@ export const customStyles = {
   tableWrapper: {
     style: {
       display: 'flex'
-    },
+    }
   },
   headRow: {
     style: {
@@ -83,7 +84,7 @@ export const customStyles = {
       fontSize: '1rem', // text-base
       lineHeight: '1.5rem', // text-base
       color: '#000000' // black
-    },
+    }
   },
   rows: {
     style: {
@@ -94,9 +95,9 @@ export const customStyles = {
   },
   expanderCell: {
     style: {
-      flex: '0 0 36px',
-    },
-  },
+      flex: '0 0 36px'
+    }
+  }
 }
 
 const CollectionTable: React.FC<CollectionTableProps> = ({
@@ -112,20 +113,21 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
   const columns = [
     {
       name: 'Name',
-      selector: (row: VersionInfo) => `${row['username']}/${row['name']}`,
+      selector: (row: VersionInfo) => `${row.username}/${row.name}`,
       sortable: true,
       grow: 1,
+      // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => (
         <div className='flex items-center truncate'>
 
           <div className='truncate'>
             <div className='mb-1'>
-              <Link to={pathToDatasetHeadPreview(row, { ignorePath: true })}>
-                <UsernameWithIcon username={`${row.username}/${row.name}`}  className='text-sm font-bold text-black ' />
+              <Link to={pathToDatasetHeadPreview(row)}>
+                <UsernameWithIcon username={`${row.username}/${row.name}`} className='text-sm font-bold text-black ' />
               </Link>
             </div>
             <div className='flex text-xs items-center overflow-y-hidden'>
-              <div className='mr-2 flex-shrink-0'  title={row.workflowID && 'This dataset has an automation script'}>
+              <div className='mr-2 flex-shrink-0' title={row.workflowID && 'This dataset has an automation script'}>
                 <Icon icon='automationFilled' size='2xs' className={classNames('text-qrigray-400', {
                   'visible': row.runID,
                   'invisible': !row.runID
@@ -145,6 +147,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       sortable: true,
       omit: simplified,
       width: '180px',
+      // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => {
         // TODO (ramfox): the activity feed expects more content than currently exists
         // in the VersionInfo. Once the backend supplies these values, we can rip
@@ -157,15 +160,15 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
           runID
         } = row
 
-        const dataset = {
+        const dataset = NewDataset({
           username,
-          commit: {
+          commit: NewCommit({
             title: commitTitle,
             timestamp: commitTime
-          },
+          }),
           path: path,
           runID
-        }
+        })
 
         const versionLink = `/${row.username}/${row.name}/at${row.path}/history`
         return (
@@ -181,6 +184,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       omit: simplified,
       sortable: true,
       width: '180px',
+      // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => {
         // TODO (ramfox): the activity feed expects more content than currently exists
         // in the VersionInfo. Once the backend supplies these values, we can rip
@@ -237,6 +241,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       },
       omit: simplified,
       width: '100px',
+      // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => (
         <div className='mx-auto text-qrigray-400'>
           {row.runID
@@ -301,7 +306,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
                         }
                       )
                     )
-                  },
+                  }
                 }
               ]}
             />
@@ -321,7 +326,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         overflow: 'hidden'
       }
     }
-  ];
+  ]
 
   // TODO(chriswhong): implement selectable rows and multi-row actions
   // uncomment `selectableRows` etc below

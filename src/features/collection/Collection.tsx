@@ -21,7 +21,7 @@ const Collection: React.FC<{}> = () => {
 
   const [ searchString, setSearchString ] = useState('')
 
-  const handleSearchChange = (q) => {
+  const handleSearchChange = (q: string) => {
     // collection-filter-by-text event
     trackGoal('ZAC6ZOWU', 0)
     setSearchString(q)
@@ -31,7 +31,7 @@ const Collection: React.FC<{}> = () => {
     dispatch(loadCollection())
   }, [dispatch])
 
-  const [tableContainer, { height: tableContainerHeight }] = useDimensions();
+  const [tableContainer, { height: tableContainerHeight }] = useDimensions()
 
   const collection = searchString ? filterVersionInfos(fullCollection, searchString) : fullCollection
 
@@ -44,7 +44,6 @@ const Collection: React.FC<{}> = () => {
         clearSelectedTrigger={false}
         onSelectedRowsChange={() => {}} // TODO(chriswhong): wire up selection state
         containerHeight={tableContainerHeight}
-        searchString={searchString}
       />
     </div>
   )
@@ -73,7 +72,7 @@ const Collection: React.FC<{}> = () => {
     resultsContent = (
       <div className='h-full w-full flex justify-center items-center text-qrigray-400'>
         <div className='text-center'>
-          You don't have any datasets!<br/> You can push datasets using <Link to='https://qri.io/docs/getting-started/qri-cli-quickstart'>qri CLI</Link>.
+          You don&apos;t have any datasets!<br/> You can push datasets using <Link to='https://qri.io/docs/getting-started/qri-cli-quickstart'>qri CLI</Link>.
         </div>
       </div>
     )
@@ -81,7 +80,7 @@ const Collection: React.FC<{}> = () => {
 
   return (
     <PageWithFooter>
-      <div className='h-full' style={{ backgroundColor: '#f3f4f6'}}>
+      <div className='h-full' style={{ backgroundColor: '#f3f4f6' }}>
         <div className='h-full w-9/12 mx-auto pt-7 pb-7 flex flex-col'>
           <header className='mb-7 flex text-black items-end'>
             <div className='flex-grow flex items-center justify-start'>

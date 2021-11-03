@@ -5,7 +5,6 @@ export const ERR_INVALID_USERNAME_CHARACTERS: ValidationError = 'Usernames may o
 export const ERR_INVALID_USERNAME_LENGTH: ValidationError = 'Username must be 50 characters or fewer'
 export const ERR_ENTER_USERNAME: ValidationError = 'Enter a username'
 
-
 // validators return an error message or null
 export const validateUsername = (username: string): ValidationError => {
   if (username) {

@@ -8,13 +8,12 @@ import {
   moveWorkflowTransformStepDown,
   moveWorkflowTransformStepUp,
   removeWorkflowTransformStep
-} from './state/workflowActions';
-import WorkflowCellControlButton from "./WorkflowCellControlButton";
-
+} from './state/workflowActions'
+import WorkflowCellControlButton from "./WorkflowCellControlButton"
 
 interface WorkflowCellControlsProps {
   index: number
-  setAnimatedCell: (i:number) => void
+  setAnimatedCell: (i: number) => void
   hide: boolean
   canBeDeleted: boolean
 }
@@ -22,7 +21,7 @@ interface WorkflowCellControlsProps {
 const WorkflowCellControls: React.FC<WorkflowCellControlsProps> = ({
   index,
   setAnimatedCell,
-  hide=false,
+  hide = false,
   canBeDeleted
 }) => {
   const dispatch = useDispatch()
@@ -33,7 +32,7 @@ const WorkflowCellControls: React.FC<WorkflowCellControlsProps> = ({
   }
 
   const onDuplicate = () => {
-    setAnimatedCell(index+1)
+    setAnimatedCell(index + 1)
     dispatch(duplicateWorkflowTransformStep(index))
   }
 
@@ -52,4 +51,4 @@ const WorkflowCellControls: React.FC<WorkflowCellControlsProps> = ({
   )
 }
 
-export default WorkflowCellControls;
+export default WorkflowCellControls

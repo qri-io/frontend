@@ -4,7 +4,7 @@ import { TriggerEditorProps } from './WorkflowTriggersEditor'
 import { CronTrigger } from '../../qrimatic/workflow'
 import { hourlyItems, scheduleFromPeriodicity, triggerFromSchedule } from './util'
 import Select from '../../chrome/Select'
-import Button from "../../chrome/Button";
+import Button from "../../chrome/Button"
 
 interface CronTriggerEditorProps extends TriggerEditorProps {
   trigger: CronTrigger
@@ -29,13 +29,13 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
             onChange={(value: string) => {
               onChange(triggerFromSchedule({
                 ...schedule,
-                periodicity: value,
+                periodicity: value
               }))
             }}
             options={[
               { value: 'PT10M', label: 'Every 10 Minutes' },
-              { value: 'P1H',   label: 'Every Hour' },
-              { value: 'P1D',   label: 'Every Day' },
+              { value: 'P1H', label: 'Every Hour' },
+              { value: 'P1D', label: 'Every Day' }
               // { value: 'P1W',   label: 'Every Week' },
               // { value: 'P1M',   label: 'Monthly' }
             ]}
@@ -51,7 +51,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
                 onChange={(value: string) => {
                   onChange(triggerFromSchedule({
                     ...schedule,
-                    minutes: value,
+                    minutes: value
                   }))
                 }}
                 options={hourlyItems}
@@ -72,7 +72,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
                 onChange={(e) => {
                   onChange(triggerFromSchedule({
                     ...schedule,
-                    time: e.target.value,
+                    time: e.target.value
                   }))
                 }}
               />

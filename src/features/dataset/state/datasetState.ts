@@ -1,11 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store';
-import Dataset, { NewDataset } from '../../../qri/dataset';
-import { qriRefFromString } from '../../../qri/ref';
-import { RenameDatasetAction, ResetDatasetStateAction } from './datasetActions';
-import { selectSessionUser } from '../../session/state/sessionState';
-import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo";
+import { RootState } from '../../../store/store'
+import Dataset, { NewDataset } from '../../../qri/dataset'
+import { qriRefFromString } from '../../../qri/ref'
+import { RenameDatasetAction, ResetDatasetStateAction } from './datasetActions'
+import { selectSessionUser } from '../../session/state/sessionState'
+import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
 
 export const RENAME_NEW_DATASET = 'RENAME_NEW_DATASET'
 
@@ -71,7 +71,7 @@ export const datasetReducer = createReducer(initialState, {
   'API_HEADER_FAILURE': (state) => {
     state.headerLoading = false
   },
-  SET_HEADER : (state, action) => {
+  SET_HEADER: (state, action) => {
     state.headerLoading = false
     state.header = action.payload
   },

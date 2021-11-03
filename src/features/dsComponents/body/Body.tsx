@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 // import { Action } from 'redux'
 
-import Dataset,  { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
+import Dataset, { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
 import BodyTable from './BodyTable'
 import BodyJson from './BodyJson'
 import { loadBody } from '../../dataset/state/datasetActions'
@@ -21,7 +21,7 @@ import { newQriRef } from '../../../qri/ref'
 export interface BodyProps {
   data: Dataset
   preview?: boolean
-  loading?:boolean
+  loading?: boolean
   // stats: IStatTypes[]
   // details: Details
   // pageInfo: PageInfo
@@ -62,7 +62,7 @@ const Body: React.FC<BodyProps> = ({
   // list out dependencies on dataset body individually for proper memoization
   useEffect(() => {
     if (preview) { return }
-    if (name  && username) {
+    if (name && username) {
       dispatch(loadBody(newQriRef({ path, name, username }), 1, 100))
     }
   }, [preview, dispatch, path, name, username])

@@ -2,11 +2,7 @@ import React from 'react'
 
 import Icon from '../../chrome/Icon'
 
-export interface SnackBarMessageProps {
-
-}
-
-const SnackBarMessage: React.FC<SnackBarMessageProps> = () => {
+const SnackBarMessage: React.FC<{}> = () => {
   return (
     <div className='flex shadow-sm bg-white'>
       <div className='w-2 bg-green-400' />

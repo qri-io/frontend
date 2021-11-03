@@ -2,17 +2,17 @@ import {
   SET_SCROLLER_POS,
   SET_SCROLL_ELEMENT,
   RESET_SCROLLER
-} from "./scrollerState";
+} from "./scrollerState"
 
 export interface SetScrollerPosAction {
   type: string
   scrollerPos: number
 }
 
-export function setScrollerPos(scrollerPos: number): SetScrollerPosAction {
+export function setScrollerPos (scrollerPos: number): SetScrollerPosAction {
   return {
     type: SET_SCROLLER_POS,
-    scrollerPos,
+    scrollerPos
   }
 }
 
@@ -21,14 +21,14 @@ export interface SetScrollAnchorAction {
   id: string
 }
 
- export function setScrollAnchor(id: string): SetScrollAnchorAction {
+export function setScrollAnchor (id: string): SetScrollAnchorAction {
   return {
     type: SET_SCROLL_ELEMENT,
     id
   }
 }
 
-export function resetScroller() {
+export function resetScroller () {
   return {
     type: RESET_SCROLLER
   }

@@ -13,9 +13,7 @@ import { ModalType } from '../../app/state/appState'
 import QriLogo from '../../../chrome/QriLogo'
 import Spinner from '../../../chrome/Spinner'
 
-
 const LogInModal: React.FC = () => {
-
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
   const [ loginError, setLoginError ] = useState('')
@@ -45,7 +43,7 @@ const LogInModal: React.FC = () => {
   }
 
   return (
-    <div className='bg-white py-9 px-5 text-center' style={{ width: '440px'}}>
+    <div className='bg-white py-9 px-5 text-center' style={{ width: '440px' }}>
       <div className='w-10 m-auto mb-4'>
         <QriLogo size='sm'/>
       </div>
@@ -56,14 +54,14 @@ const LogInModal: React.FC = () => {
             <TextInput
               name='username'
               value={username}
-              onChange={(value) => { setUsername(value)  }}
+              onChange={(value) => { setUsername(value) }}
               placeholder='Username'
             />
             <TextInput
               name='password'
               type='password'
               value={password}
-              onChange={(value) => { setPassword(value)  }}
+              onChange={(value) => { setPassword(value) }}
               placeholder='Password'
             />
             <Link to='/forgot-password' onClick={handleForgotPasswordRedirect}><div className='text-left text-black text-sm font-semibold'>Forgot your Password?</div></Link>
@@ -76,7 +74,7 @@ const LogInModal: React.FC = () => {
           </Button>
         </form>
         <div className='mb-3 text-qrigray-400 text-xs'>
-          By continuing, you agree to Qri's <Link to='https://qri.io/legal/tos'>Terms of Service</Link> & <Link to='https://qri.io/legal/privacy-policy'>Privacy Policy</Link>.
+          By continuing, you agree to Qri&apos;s <Link to='https://qri.io/legal/tos'>Terms of Service</Link> & <Link to='https://qri.io/legal/privacy-policy'>Privacy Policy</Link>.
         </div>
 
         <hr className='w-20 mx-auto mb-3'/>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
 
-import { newQriRef } from '../../qri/ref';
+import { newQriRef, QriRef } from '../../qri/ref'
 import { selectDsPreview, selectIsDsPreviewLoading } from './state/dsPreviewState'
 import { loadDsPreview } from './state/dsPreviewActions'
 import Spinner from '../../chrome/Spinner'
@@ -14,11 +14,11 @@ import BodyPreview from '../dsComponents/body/BodyPreview'
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
 import DeployingScreen from '../deploy/DeployingScreen'
 import Readme from '../dsComponents/readme/Readme'
-import { QriRef } from '../../qri/ref'
+
 import MetaChips from '../../chrome/MetaChips'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
-import DownloadDatasetButton from "../download/DownloadDatasetButton";
-import ContentBoxSubTitle from "../../chrome/ContentBoxSubTitle";
+import DownloadDatasetButton from "../download/DownloadDatasetButton"
+import ContentBoxSubTitle from "../../chrome/ContentBoxSubTitle"
 
 interface DatasetPreviewPageProps {
   qriRef: QriRef
@@ -31,7 +31,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   const dataset = useSelector(selectDsPreview)
   const loading = useSelector(selectIsDsPreviewLoading)
 
-  const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions();
+  const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions()
   const [expandReadme, setExpandReadme] = useState(false)
 
   let readmeContainerHeight = versionInfoContainerHeight || 'auto'
@@ -41,20 +41,20 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   }
 
   useEffect(() => {
-    const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
+    const ref = newQriRef({ username: qriRef.username, name: qriRef.name, path: qriRef.path })
     dispatch(loadDsPreview(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path ])
 
   return (
     <>
         {dataset?.username === ''
-        ? (<div className='w-full h-full p-4 flex justify-center items-center'>
+          ? (<div className='w-full h-full p-4 flex justify-center items-center'>
             <Spinner color='#43B3B2' />
           </div>)
-        : (
+          : (
             <DatasetScrollLayout contentClassName='max-w-screen-lg mx-auto'>
               <div className='flex -ml-2 -mr-3 mb-6'>
-                {dataset.readme && <div className='w-7/12 px-2 align-top' style={{ height: readmeContainerHeight}}>
+                {dataset.readme && <div className='w-7/12 px-2 align-top' style={{ height: readmeContainerHeight }}>
                   <ContentBox className='flex flex-col h-full'>
                     <div className='flex flex-col h-full overflow-hidden'>
                       <ContentBoxTitle title='Readme'/>
@@ -65,7 +65,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                     </div>
                   </ContentBox>
                 </div>}
-                <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-5/12' : 'w-full' } px-3 align-top`}>
+                <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-5/12' : 'w-full'} px-3 align-top`}>
                   <ContentBox>
                     <div className='flex items-center'>
                       <div className='flex-grow truncate'>
@@ -102,7 +102,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 </ContentBox>
               </div>
             </DatasetScrollLayout>
-          )}
+            )}
         <DeployingScreen qriRef={qriRef} />
         </>
   )

@@ -7,6 +7,7 @@ import Icon from '../../../chrome/Icon'
 export interface ColumnTypeProps {
   type: DataTypes | DataTypes[]
   // to make the ColumnType not editable, do not pass in an onClick
+  // @ts-expect-error
   onClick?: (e) => void
   active?: boolean
   expanded: boolean
@@ -48,10 +49,11 @@ const ColumnType: React.FunctionComponent<ColumnTypeProps> = ({
     onClick={onClick}
     tabIndex={0}
   >{typeof shownType === 'string' || !expanded
-      ? renderColType(shownType, 0)
-      : shownType.map((t: string, i) => {
-        return renderColType(t, i)
-      })}
+    // @ts-expect-error
+    ? renderColType(shownType, 0)
+    : shownType.map((t: string, i) => {
+      return renderColType(t, i)
+    })}
   </div>
 }
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { SearchResult } from '../../qri/search'
 
 interface FeaturedDatasetsType {
@@ -140,7 +141,7 @@ const featuredDatasets: FeaturedDatasets = {
         followStats: {
 
         }
-      },
+      }
     ]
   }
 }

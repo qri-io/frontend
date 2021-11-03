@@ -18,17 +18,17 @@ export const convertToDuration = (totalSeconds: number): string => {
   let dur = ``
   let seconds = totalSeconds
 
-  let days = Math.floor(seconds/SECONDS_IN_DAY)
+  let days = Math.floor(seconds / SECONDS_IN_DAY)
   dur += days ? `${days}d` : ``
   seconds -= days * SECONDS_IN_DAY
 
-  let hours = Math.floor(seconds/SECONDS_IN_HOUR)
+  let hours = Math.floor(seconds / SECONDS_IN_HOUR)
   if (dur || hours) {
     dur += dur ? ` ${hours}h` : `${hours}h`
   }
   seconds -= hours * SECONDS_IN_HOUR
 
-  let minutes = Math.floor(seconds/SECONDS_IN_MINUTE)
+  let minutes = Math.floor(seconds / SECONDS_IN_MINUTE)
   if (dur || minutes) {
     dur += dur ? ` ${minutes}m` : `${minutes}m`
   }
@@ -37,7 +37,6 @@ export const convertToDuration = (totalSeconds: number): string => {
   dur += dur ? ` ${normalizeSeconds(seconds)}s` : `${normalizeSeconds(seconds)}s`
   return dur
 }
-
 
 interface DurationFormatProps {
   seconds?: number

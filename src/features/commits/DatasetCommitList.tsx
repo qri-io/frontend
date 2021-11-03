@@ -1,24 +1,24 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router'
 
-import { newQriRef, QriRef } from '../../qri/ref';
-import DatasetCommitListItem from './DatasetCommitListItem';
-import { loadDatasetCommits } from './state/commitActions';
-import { newDatasetCommitsSelector, selectDatasetCommitsLoading } from './state/commitState';
-import { LogItem } from "../../qri/log";
+import { newQriRef, QriRef } from '../../qri/ref'
+import DatasetCommitListItem from './DatasetCommitListItem'
+import { loadDatasetCommits } from './state/commitActions'
+import { newDatasetCommitsSelector, selectDatasetCommitsLoading } from './state/commitState'
+import { NewLogItem } from "../../qri/log"
 
 export interface DatasetCommitsProps {
   qriRef: QriRef
 }
 
 const DatasetCommits: React.FC<DatasetCommitsProps> = ({
-  qriRef,
+  qriRef
 }) => {
   const dispatch = useDispatch()
   const commits = useSelector(newDatasetCommitsSelector(qriRef))
   const loading = useSelector(selectDatasetCommitsLoading)
-  let { fs, hash } = useParams()
+  let { fs, hash } = useParams<Record<string, any>>()
 
   // if there are no fs/hash in the URL, set it to the fs/hash of the latest commit
   if ((!fs && !hash) && commits.length) {
@@ -28,7 +28,6 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
   }
 
   const path = `/${fs}/${hash}`
-
 
   useEffect(() => {
     dispatch(loadDatasetCommits(newQriRef({ username: qriRef.username, name: qriRef.name })))
@@ -46,20 +45,19 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
           <HistorySearchBox />
           {editable && <NewVersionButton qriRef={qriRef} />}
         */}
-        {loading ?
-            Array(3).fill('').map((_,i) => (
+        {loading
+          ? Array(3).fill('').map((_, i) => (
             <DatasetCommitListItem
               key={i}
               loading={true}
-              logItem={{} as LogItem}
+              logItem={NewLogItem({})}
               active={i === 0}
               // first={i === 0 && !editable} (restore when there is <NewVersionButton> at the top of the list)
               first={i === 0}
               last={i === 2}
             />
           ))
-           :
-          commits.map((logItem, i) => (
+          : commits.map((logItem, i) => (
             <DatasetCommitListItem
               key={i}
               loading={false}
@@ -69,7 +67,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
               first={i === 0}
               last={i === (commits.length - 1)}
             />
-        ))}
+          ))}
       </ul>
     </div>
   )

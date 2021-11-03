@@ -15,7 +15,7 @@ const ContentBox: React.FC<ContentBoxProps> = ({
   className,
   paddingClassName = 'py-6 px-8',
   warning,
-  card=false,
+  card = false,
   children
 }) => (
   <div className={className}>

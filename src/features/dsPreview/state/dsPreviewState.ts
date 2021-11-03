@@ -6,7 +6,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
-import { Dataset, NewDataset } from '../../../qri/dataset'
+import { Dataset, NewDataset, NewReadme } from '../../../qri/dataset'
 import { ApiErr, NewApiErr } from '../../../store/api'
 
 export const selectDsPreview = (state: RootState): any => state.dsPreview.preview
@@ -63,11 +63,11 @@ export const dsPreviewReducer = createReducer(initialState, {
   },
 
   'API_PREVIEWREADME_SUCCESS': (state, action) => {
-    state.preview.readme = { script: atob(action.payload.data) }
+    state.preview.readme = NewReadme({ text: atob(action.payload.data) })
   },
   'API_PREVIEWREADME_FAILURE': (state, action) => {
   },
   'API_WORKFLOW_SUCCESS': (state, action) => {
     state.hasWorkflow = true
-  },
+  }
 })

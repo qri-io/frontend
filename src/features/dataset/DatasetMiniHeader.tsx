@@ -3,10 +3,10 @@ import classNames from 'classnames'
 
 import Link from '../../chrome/Link'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
-import { useSelector } from "react-redux";
-import { selectDatasetHeader } from "./state/datasetState";
-import { qriRefFromVersionInfo } from "../../qri/versionInfo";
-import { newWorkflowTitle } from "./DatasetHeader";
+import { useSelector } from "react-redux"
+import { selectDatasetHeader } from "./state/datasetState"
+import { qriRefFromVersionInfo } from "../../qri/versionInfo"
+import { newWorkflowTitle } from "./DatasetHeader"
 
 export interface DatasetMiniHeaderProps {
   isNew: boolean
@@ -16,7 +16,6 @@ export interface DatasetMiniHeaderProps {
 // DatasetHeader and DatasetMiniHeader now accept children which will be displayed
 // in the right side where the default buttons are located. This is useful for
 // overriding the download button with the dry run button in the workflow editor
-
 
 const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
   isNew,
@@ -46,7 +45,6 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
           </div>
         </div>
 
-
         <div className='flex items-center content-center'>
           {children || (
             <>
@@ -68,5 +66,4 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
   )
 }
 
-
-export default DatasetMiniHeader;
+export default DatasetMiniHeader

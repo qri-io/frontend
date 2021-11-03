@@ -41,15 +41,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   }, [debouncedValue, onChange, stateValue])
 
   React.useEffect(() => {
-    setStateValue(value)
+    if (value) {
+      setStateValue(value)
+    }
   }, [value])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
     setStateValue(e.target.value)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (onSubmit) {
       onSubmit(stateValue)
@@ -58,7 +59,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 
   const DEFAULT_HEIGHT = 34
   const LARGE_HEIGHT = 50
-
 
   return (
     <form className={classNames('relative flex focus-within:border-qripink-600 border rounded-lg w-full', {

@@ -17,7 +17,7 @@ const Splash: React.FC<{}> = () => {
 
   const [selectedFeaturedDatasetType, setSelectedFeaturedDatasetType] = useState('popular')
 
-  const handleSearchSubmit = (query:string) => {
+  const handleSearchSubmit = (query: string) => {
     const newParams = new URLSearchParams(`q=${query}`)
     history.push(`/search?${newParams.toString()}`)
   }
@@ -54,7 +54,7 @@ const Splash: React.FC<{}> = () => {
               </div>
             </div>
           </div>
-          <div className = 'flex flex-col flex-shrink-0' style={{ width: 510, }}>
+          <div className = 'flex flex-col flex-shrink-0' style={{ width: 510 }}>
             <NavBar minimal transparent noLogo />
             <div className='font-bold text-3xl mb-6 px-9'>Discover Datasets</div>
             <div className='mb-4 flex items-center px-9'>
@@ -69,7 +69,7 @@ const Splash: React.FC<{}> = () => {
                       type={id === selectedFeaturedDatasetType ? 'secondary-outline' : 'light'}
                       onClick={() => {
                         // home-click-featured-dataset-list-button event
-                        trackGoal('SRIJWHUA', 0);
+                        trackGoal('SRIJWHUA', 0)
                         setSelectedFeaturedDatasetType(id)
                       }}
                     >
@@ -106,7 +106,6 @@ const Splash: React.FC<{}> = () => {
       <SplashFooter />
     </div>
   )
-
 }
 
 export default Splash

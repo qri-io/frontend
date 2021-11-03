@@ -15,8 +15,6 @@ import { selectRun } from "../events/state/eventsState"
 import { trackGoal } from '../../features/analytics/analytics'
 import { selectSessionUser } from '../session/state/sessionState'
 
-
-
 export interface DatasetActivityFeedProps {
   qriRef: QriRef
 }
@@ -35,10 +33,9 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   const [tableContainer, { height: tableContainerHeight }] = useDimensions()
 
-
   useEffect(() => {
-    dispatch(loadDatasetLogs({username: qriRef.username, name: qriRef.name}))
-  },[dispatch, qriRef.username, qriRef.name, latestRun?.status])
+    dispatch(loadDatasetLogs({ username: qriRef.username, name: qriRef.name }))
+  }, [dispatch, qriRef.username, qriRef.name, latestRun?.status])
 
   const handleRunNowClick = () => {
     // runlog-run-now event
@@ -52,18 +49,17 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   useEffect(() => {
     if (latestRun.status === 'running') {
-      const runningLog:LogItem = NewLogItem({
+      const runningLog: LogItem = NewLogItem({
         timestamp: new Date().toString(),
         runStatus: "running",
         title: '--',
-        runID: latestRun.id,
+        runID: latestRun.id
       })
       const newLogs = [runningLog, ...logs]
       setDisplayLogs(newLogs)
     }
     // eslint-disable-next-line
   }, [ latestRun ])
-
 
   useEffect(() => {
     if (!displayLogs.length) {
@@ -73,7 +69,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   useEffect(() => {
     if (latestRun.status === "succeeded" || latestRun.status === "failed") {
-      setTimeout(() => setDisplayLogs(logs), 800) //setting timeout to make sure animation finishes
+      setTimeout(() => setDisplayLogs(logs), 800) // setting timeout to make sure animation finishes
     }
   }, [ logs, latestRun ])
 

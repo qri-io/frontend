@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { Workflow } from '../../qrimatic/workflow'
-import Dataset from "../../qri/dataset";
+import Dataset from "../../qri/dataset"
 
 // TODO (ramfox): need to formalize possible trigger & on completion types
 
@@ -22,7 +23,7 @@ def download(ctx):
     { syntax: 'starlark', category: 'transform', name: 'transform', script: `# shape & clean data
 def transform(ds, ctx):
   csv = ctx.download
-  ds.set_body(csv, parse_as='csv')`}
+  ds.set_body(csv, parse_as='csv')` }
   ],
   hooks: [
     { type: 'push', remote: 'https://registry.qri.cloud' }
@@ -109,7 +110,7 @@ workingDataset.body = newBody
 # the last step of every transform is always \`dataset.commit(Dataset)\`
 dataset.commit(workingDataset)
 `
-      },
+      }
     ]
   }
 }
@@ -179,6 +180,6 @@ export const Templates: Record<string, Workflow> = {
   'Blank': Blank
 }
 
-export function selectTemplate(id: string): Workflow {
+export function selectTemplate (id: string): Workflow {
   return Templates[id]
 }

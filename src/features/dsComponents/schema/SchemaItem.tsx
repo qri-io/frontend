@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 
 import DynamicEditField from './DynamicEditField'
@@ -26,7 +27,7 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
   data,
   editable = true
 }) => {
-  const [expanded, ] = React.useState(false)
+  const [expanded ] = React.useState(false)
 
   const handleDynamicEditChange = (name: string, value: string, e?: React.SyntheticEvent) => {
     const d = { ...data }
@@ -53,7 +54,7 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
     if (onChange) onChange(d, e)
   }
 
-  const handleTypePickerChange = (e: React.SyntheticEvent, value?: DataTypes | DataTypes[] ) => {
+  const handleTypePickerChange = (e: React.SyntheticEvent, value?: DataTypes | DataTypes[]) => {
     const d = { ...data }
     d.type = value || 'any'
     if (onChange) onChange(d, e)
@@ -61,7 +62,6 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
 
   const tdCellClassName = 'border-r border-b border-qrigray-200 break-words'
   const cellClassName = 'px-2 py-2 break-words'
-
 
   // TODO (ramfox): do we have max lengths for title, description?
   return (

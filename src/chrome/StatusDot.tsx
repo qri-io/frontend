@@ -1,9 +1,8 @@
 import React from 'react'
 import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ComponentStatus } from '../../models/store'
+import { ComponentStatus } from '../qri/dataset'
 import Icon from './Icon'
-
 
 export interface StatusDotProps {
   status: ComponentStatus

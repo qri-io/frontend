@@ -1,6 +1,6 @@
 import React from 'react'
 
-import SignUpModal from './modal/SignUpModal';
+import SignUpModal from './modal/SignUpModal'
 
 const Signup: React.FC<{}> = () => (
   <div className='flex flex-col h-full bg-gray-100'>
@@ -12,4 +12,4 @@ const Signup: React.FC<{}> = () => (
   </div>
 )
 
-export default Signup;
+export default Signup

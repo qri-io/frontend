@@ -9,7 +9,7 @@ export interface DatasetListProps {
   loading?: boolean
 }
 
-const DatasetList: React.FC<DatasetListProps> = ({ datasets, loading=false }) => {
+const DatasetList: React.FC<DatasetListProps> = ({ datasets, loading = false }) => {
   // if loading, return 5 searchResultItems in loading state
   if (loading) {
     return (

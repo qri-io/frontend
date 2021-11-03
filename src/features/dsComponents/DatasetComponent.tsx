@@ -12,8 +12,8 @@ import Structure from './structure/Structure'
 import Readme from './readme/Readme'
 import ContentBox from '../../chrome/ContentBox'
 import IconLink from '../../chrome/IconLink'
-import { useSelector } from "react-redux";
-import { selectIsBodyLoading, selectIsDatasetLoading } from "../dataset/state/datasetState";
+import { useSelector } from "react-redux"
+import { selectIsBodyLoading, selectIsDatasetLoading } from "../dataset/state/datasetState"
 
 export interface DatasetComponentProps {
   dataset: Dataset
@@ -64,7 +64,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
       component = <Structure data={dataset.structure}/>
       break
     case 'transform':
-      component = <Transform data={dataset.transform}/>
+      component = <>{ dataset.transform && <Transform data={dataset.transform}/> }</>
       break
     case 'readme':
       component = <Readme data={dataset.readme}/>
@@ -116,7 +116,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
               <ComponentHeader>
                 {componentHeader}
               </ComponentHeader>
-              <div style={{maxHeight: 'calc(100% - 92px)'}} className='overflow-auto flex-grow'>
+              <div style={{ maxHeight: 'calc(100% - 92px)' }} className='overflow-auto flex-grow'>
                 {component}
               </div>
             </ContentBox>

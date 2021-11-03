@@ -32,4 +32,4 @@ const Run: React.FC<any> = () => {
   )
 }
 
-export default Run;
+export default Run

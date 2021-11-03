@@ -204,7 +204,6 @@ export const workflowReducer = createReducer(initialState, {
     state.workflowBase.steps = action.dataset.transform?.steps
     state.editedCells = action.dataset.transform?.steps.map(s => false) || []
     state.clearedOutputCells = action.dataset.transform?.steps.map(s => false) || []
-    return
   },
   'RESET_WORKFLOW_STATE': (state: WorkflowState, action: SetTemplateAction) => {
     return initialState
@@ -218,7 +217,7 @@ export const workflowReducer = createReducer(initialState, {
   }
 })
 
-function calculateIsDirty(state: WorkflowState) {
+function calculateIsDirty (state: WorkflowState) {
   const workflowCompare = {
     triggers: state.workflow.triggers,
     steps: state.dataset.transform?.steps,
@@ -227,80 +226,76 @@ function calculateIsDirty(state: WorkflowState) {
   return !DeepEqual(workflowCompare, state.workflowBase)
 }
 
-function changeWorkflowTrigger(state: WorkflowState, action: WorkflowTriggerAction) {
+function changeWorkflowTrigger (state: WorkflowState, action: WorkflowTriggerAction) {
   // TODO(chriswhong): allow for more than one trigger
   state.workflow.triggers = [action.trigger]
   state.isDirty = calculateIsDirty(state)
-  return
 }
 
-function deleteWorkflowTrigger(state: WorkflowState, actions: WorkflowStepAction) {
-  state.workflow.triggers?.splice(actions.index,1)
+function deleteWorkflowTrigger (state: WorkflowState, actions: WorkflowStepAction) {
+  state.workflow.triggers?.splice(actions.index, 1)
   state.isDirty = calculateIsDirty(state)
-  return
 }
 
-function changeWorkflowTransformStep(state: WorkflowState, action: SetWorkflowStepAction) {
+function changeWorkflowTransformStep (state: WorkflowState, action: SetWorkflowStepAction) {
   if (state.dataset.transform?.steps) {
     state.dataset.transform.steps[action.index].script = action.script
     state.editedCells[action.index] = true
   }
 
   state.isDirty = calculateIsDirty(state)
-
-  return
 }
 
-function addWorkflowTransformStep(state: WorkflowState, action: AddWorkflowStepAction) {
+function addWorkflowTransformStep (state: WorkflowState, action: AddWorkflowStepAction) {
   if (state.dataset.transform?.steps) {
-    state.dataset.transform.steps.splice(action.index+1,0,
-      {script: '', category: action.syntax+'_'+new Date().valueOf(), name: action.syntax+'_'+new Date().valueOf(), syntax: action.syntax})
-    state.editedCells.splice(action.index+1, 0, true)
-    state.clearedOutputCells.splice(action.index+1, 0, true)
+    state.dataset.transform.steps.splice(
+      action.index + 1, 0,
+      {
+        script: '',
+        category: `${action.syntax}_${new Date().valueOf()}`,
+        name: `${action.syntax}_${new Date().valueOf()}`,
+        syntax: action.syntax
+      }
+    )
+    state.editedCells.splice(action.index + 1, 0, true)
+    state.clearedOutputCells.splice(action.index + 1, 0, true)
   }
 
   state.isDirty = calculateIsDirty(state)
-
-  return
 }
 
-function clearWorkflowTransformStepOutput(state: WorkflowState, actions: WorkflowStepAction) {
+function clearWorkflowTransformStepOutput (state: WorkflowState, actions: WorkflowStepAction) {
   state.clearedOutputCells[actions.index] = true
 }
 
-function removeWorkflowTransformStep(state: WorkflowState, action: WorkflowStepAction) {
+function removeWorkflowTransformStep (state: WorkflowState, action: WorkflowStepAction) {
   if (state.dataset.transform?.steps) {
-    state.dataset.transform.steps.splice(action.index,1)
-    state.editedCells.splice(action.index,1)
-    state.clearedOutputCells.splice(action.index,1)
+    state.dataset.transform.steps.splice(action.index, 1)
+    state.editedCells.splice(action.index, 1)
+    state.clearedOutputCells.splice(action.index, 1)
   }
-
-  return
 }
 
-function duplicateWorkflowTransformStep(state: WorkflowState, action: WorkflowStepAction) {
+function duplicateWorkflowTransformStep (state: WorkflowState, action: WorkflowStepAction) {
   if (state.dataset.transform?.steps) {
-    const duplicateStep = {...state.dataset.transform.steps[action.index]}
-    duplicateStep.name = duplicateStep.syntax+'_'+new Date().valueOf()
-    duplicateStep.category = duplicateStep.syntax+'_'+new Date().valueOf()
-    state.dataset.transform.steps.splice(action.index+1,0, duplicateStep)
-    state.editedCells.splice(action.index+1,0,true)
-    state.clearedOutputCells.splice(action.index+1,0,true)
+    const duplicateStep = { ...state.dataset.transform.steps[action.index] }
+    duplicateStep.name = `${duplicateStep.syntax}_${new Date().valueOf()}`
+    duplicateStep.category = `${duplicateStep.syntax}_${new Date().valueOf()}`
+    state.dataset.transform.steps.splice(action.index + 1, 0, duplicateStep)
+    state.editedCells.splice(action.index + 1, 0, true)
+    state.clearedOutputCells.splice(action.index + 1, 0, true)
   }
-
-  return
 }
 
 function moveWorkflowTransformStepUp (state: WorkflowState, action: WorkflowStepAction) {
-  if(state.dataset.transform?.steps && action.index > 0){
-    const movedElement = state.dataset.transform.steps.splice(action.index,1)[0]
-    state.dataset.transform.steps.splice(action.index-1,0,movedElement)
-    const movedEditCell = state.editedCells.splice(action.index,1)[0]
-    state.editedCells.splice(action.index-1,0,movedEditCell)
-    const movedClearedCell = state.clearedOutputCells.splice(action.index,1)[0]
-    state.clearedOutputCells.splice(action.index-1,0,movedClearedCell)
+  if (state.dataset.transform?.steps && action.index > 0) {
+    const movedElement = state.dataset.transform.steps.splice(action.index, 1)[0]
+    state.dataset.transform.steps.splice(action.index - 1, 0, movedElement)
+    const movedEditCell = state.editedCells.splice(action.index, 1)[0]
+    state.editedCells.splice(action.index - 1, 0, movedEditCell)
+    const movedClearedCell = state.clearedOutputCells.splice(action.index, 1)[0]
+    state.clearedOutputCells.splice(action.index - 1, 0, movedClearedCell)
   }
-  return
 }
 
 function workflowUndoChanges (state: WorkflowState, actions: UndoWorkflowChanges) {
@@ -312,13 +307,12 @@ function workflowUndoChanges (state: WorkflowState, actions: UndoWorkflowChanges
 }
 
 function moveWorkflowTransformStepDown (state: WorkflowState, action: WorkflowStepAction) {
-  if(state.dataset.transform?.steps && action.index < state.dataset.transform.steps.length){
-    const movedElement = state.dataset.transform.steps.splice(action.index,1)[0];
-    state.dataset.transform.steps.splice(action.index+1,0,movedElement)
-    const movedEditCell = state.editedCells.splice(action.index,1)[0]
-    state.editedCells.splice(action.index+1,0,movedEditCell)
-    const movedClearedCell = state.clearedOutputCells.splice(action.index,1)[0]
-    state.clearedOutputCells.splice(action.index+1,0,movedClearedCell)
+  if (state.dataset.transform?.steps && action.index < state.dataset.transform.steps.length) {
+    const movedElement = state.dataset.transform.steps.splice(action.index, 1)[0]
+    state.dataset.transform.steps.splice(action.index + 1, 0, movedElement)
+    const movedEditCell = state.editedCells.splice(action.index, 1)[0]
+    state.editedCells.splice(action.index + 1, 0, movedEditCell)
+    const movedClearedCell = state.clearedOutputCells.splice(action.index, 1)[0]
+    state.clearedOutputCells.splice(action.index + 1, 0, movedClearedCell)
   }
-  return
 }

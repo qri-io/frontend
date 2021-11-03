@@ -27,7 +27,7 @@ export interface ReadmeEditorProps {
   onDatasetChange: (field: string[], value: any) => void
 }
 
-const passEventToOpenExternal = (e: MouseEvent) => { 
+const passEventToOpenExternal = (e: MouseEvent) => {
   // openExternal(e, e.target.href)
 }
 
@@ -43,14 +43,14 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
   statusInfo = {},
   onDatasetChange
 }) => {
-  const [internalValue, setInternalValue] = useState(data)
+  const [internalValue, setInternalValue] = useState<string>(data)
   const [listenerAdded, setListenerAdded] = useState(false)
   const [debouncedValue] = useDebounce(internalValue, DEBOUNCE_TIMER)
 
   useEffect(() => {
     setInternalValue(data)
   }, [data])
-  
+
   // const onFocus = () => { setInternalValue(data) }
   // useEffect(() => {
   //   window.addEventListener('focus', onFocus)
@@ -59,6 +59,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
 
   useEffect(() => {
     if (debouncedValue !== data) {
+      // @ts-expect-error
       write(qriRef.username, qriRef.name, {
         readme: internalValue
       })
@@ -66,7 +67,6 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
   }, [debouncedValue, data, internalValue, qriRef.username, qriRef.name])
 
   const handleChange = (value: string) => { setInternalValue(value) }
-
 
   /**
    * TODO (ramfox): this func is getting to the point where it probably should
@@ -100,7 +100,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
           'Content-Type': 'application/json'
         }
       })
-        .then(async (res) => res.text())
+        .then(async (res) => await res.text())
         .then((render) => {
           preview.innerHTML = render
         })
@@ -111,6 +111,7 @@ export const ReadmeEditor: React.FC<ReadmeEditorProps> = ({
   if (loading) {
     return <Spinner />
   }
+  // @ts-expect-error
   if (hasParseError(statusInfo)) {
     return <ParseFileError component='readme' />
   }

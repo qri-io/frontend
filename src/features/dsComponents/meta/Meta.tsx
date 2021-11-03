@@ -100,9 +100,7 @@ const renderTable = (keys: string[], data: Meta) => {
 }
 
 export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
-
   if (!data) return null
-
 
   // TODO (b5) - this should happen at the point of ingest from the API
   const ignoreFields = ['qri', 'path']

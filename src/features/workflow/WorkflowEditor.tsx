@@ -2,26 +2,25 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Hotkeys from 'react-hot-keys'
 
-
 import {
   changeWorkflowTransformStep,
   applyWorkflowTransform,
-  addWorkflowTransformStep,
+  addWorkflowTransformStep
 } from './state/workflowActions'
 import WorkflowCell from './WorkflowCell'
 import WorkflowTriggersEditor from '../trigger/WorkflowTriggersEditor'
 import Hooks from './Hooks'
 import { NewRunStep, Run, RunStep } from '../../qri/run'
-import { Dataset } from '../../qri/dataset'
+import { Dataset, NewDataset } from '../../qri/dataset'
 import { selectLatestDryRunId, selectLatestRunId } from './state/workflowState'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
 import { QriRef } from '../../qri/ref'
-import { removeEvent } from "../events/state/eventsActions";
-import { selectDeployRunId } from "../deploy/state/deployState";
-import { deployResetRunId } from "../deploy/state/deployActions";
-import { selectSessionUserCanEditDataset } from "../dataset/state/datasetState";
+import { removeEvent } from "../events/state/eventsActions"
+import { selectDeployRunId } from "../deploy/state/deployState"
+import { deployResetRunId } from "../deploy/state/deployActions"
+import { selectSessionUserCanEditDataset } from "../dataset/state/datasetState"
 
 export interface WorkflowEditorProps {
   qriRef: QriRef
@@ -44,7 +43,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
 
   const [activeCell, setActiveCell] = useState<number>(-1)
   const [addedCell, setAddedCell] = useState<number>(-1)
-  const [collapseStates, setCollapseStates] = useState({} as Record<string, "all" | "collapsed" | "only-editor" | "only-output">)
+  const [collapseStates, setCollapseStates] = useState<Record<string, "all" | "collapsed" | "only-editor" | "only-output">>({})
 
   const isNew = !qriRef.username && !qriRef.name
 
@@ -102,24 +101,23 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
 
   // appends username, name, and meta.title to a dry run's preview, useful for
   // display of downstream components that expect these as part of a Dataset (e.g. fullscreen body)
-  const appendRefAndMeta = (dsPreview: Dataset) => {
+  const appendRefAndMeta = (dsPreview: Dataset | undefined) => {
     if (dsPreview) {
-      return {
-        peername: qriRef.username,
+      return NewDataset({
+        ...dsPreview,
+        username: qriRef.username,
         name: qriRef.name,
-        meta: dsPreview.meta || { title: 'Workflow Result' },
-        ...dsPreview
-      }
+        meta: dsPreview.meta || { title: 'Workflow Result' }
+      })
     }
 
     return dsPreview
   }
 
-  const addCell = (i:number,syntax: string) => {
+  const addCell = (i: number, syntax: string) => {
     dispatch(addWorkflowTransformStep(i, syntax))
     setAddedCell(i + 1)
   }
-
 
   // to deploy, the workflow must have a RunStatus of succeeded and isDirty = true
 
@@ -141,11 +139,11 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                 </div>
               </div>
               {dataset?.transform?.steps && dataset.transform.steps.map((step, i) => {
-                let r: RunStep
+                // eslint-disable-next-line no-undef-init
+                let r: RunStep | undefined = undefined
                 if (run) {
                   r = (run?.steps && run?.steps.length >= i) ? run.steps[i] : NewRunStep({ status: "waiting" })
-                  if (r)
-                    r.id = run.id
+                  if (r) { r.id = run.id }
                 }
                 return (
                   <WorkflowCell
@@ -165,8 +163,8 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                       setCollapseStates(update)
                     }}
                     isCellAdded={addedCell === i}
-                    onRowAdd={(i:number,syntax: string) => addCell(i, syntax)}
-                    onChangeScript={(i:number, script:string) => {
+                    onRowAdd={(i: number, syntax: string) => addCell(i, syntax)}
+                    onChangeScript={(i: number, script: string) => {
                       if (dataset?.transform?.steps) {
                         dispatch(changeWorkflowTransformStep(i, script))
                       }
@@ -183,7 +181,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
             <div className='text-base mb-2.5 text-qrigray-400'>Dry Run this transform and preview the next version of the dataset here</div>
 
             <ScrollAnchor id='result' />
-            <div style={{width: 'calc(100% - 32px)'}}>
+            <div style={{ width: 'calc(100% - 32px)' }}>
               <div className='flex' >
                 <div className='flex-grow min-w-0'>
                   <WorkflowDatasetPreview dataset={appendRefAndMeta(run?.dsPreview)}/>
@@ -195,7 +193,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
             </div>
 
           </div>
-          <div style={{width: 'calc(100% - 32px)'}} >
+          <div style={{ width: 'calc(100% - 32px)' }} >
             <Hooks />
           </div>
         </div>

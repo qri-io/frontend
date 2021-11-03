@@ -1,9 +1,9 @@
-import { EventLogLine } from "../../../qri/eventLog";
+import { EventLogLine } from "../../../qri/eventLog"
 
 import {
   REMOVE_EVENT,
   RUN_EVENT_LOG
-} from "./eventsState";
+} from "./eventsState"
 
 export interface EventLogAction {
   type: string
@@ -22,10 +22,9 @@ export function runEventLog (event: EventLogLine): EventLogAction {
   }
 }
 
-export function removeEvent(sessionID: string): RemoveEventAction {
+export function removeEvent (sessionID: string): RemoveEventAction {
   return {
     type: REMOVE_EVENT,
     sessionID: sessionID
   }
 }
-

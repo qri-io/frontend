@@ -1,11 +1,11 @@
-import React from "react";
+import React from "react"
 
-import { NewRunStep, Run } from "../../qri/run";
-import Dataset, { TransformStep } from "../../qri/dataset";
-import Icon from "../../chrome/Icon";
-import RunStatusIcon from "../run/RunStatusIcon";
-import { useSelector } from "react-redux";
-import { selectEditedCells } from "./state/workflowState";
+import { NewRunStep, Run } from "../../qri/run"
+import Dataset, { TransformStep } from "../../qri/dataset"
+import Icon from "../../chrome/Icon"
+import RunStatusIcon from "../run/RunStatusIcon"
+import { useSelector } from "react-redux"
+import { selectEditedCells } from "./state/workflowState"
 
 interface WorkflowCellsStatusProps {
   run?: Run
@@ -13,8 +13,8 @@ interface WorkflowCellsStatusProps {
 }
 
 const WorkflowCellsStatus: React.FC<WorkflowCellsStatusProps> = ({
- run,
- dataset
+  run,
+  dataset
 }) => {
   const editedCells = useSelector(selectEditedCells)
 

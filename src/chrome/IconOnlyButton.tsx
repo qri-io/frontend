@@ -26,13 +26,13 @@ export interface IconOnlyButtonProps {
 const IconOnlyButton: React.FC<IconOnlyButtonProps> = ({
   id,
   className,
-  type='primary',
+  type = 'primary',
   icon,
-  size='md',
+  size = 'md',
   submit = false,
   disabled = false,
   round = false,
-  onClick= () => {},
+  onClick = () => {}
 }) => {
   let dimension = 26
   let iconSize: IconSize = 'xs'
