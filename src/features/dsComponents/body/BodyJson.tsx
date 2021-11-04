@@ -6,7 +6,7 @@ import { Body } from '../../../qri/dataset'
 // import SpinnerWithIcon from './chrome/SpinnerWithIcon'
 
 interface BodyJsonProps {
-  data: Body
+  data?: Body
   // loading: boolean
   previewWarning?: boolean
 }

@@ -27,7 +27,7 @@ export const CommitComponent: React.FunctionComponent<CommitProps> = ({
   return (
     <div className='p-3 h-full w-full overflow-auto pb-8'>
       <div className='font-semibold mb-2'>{data.title}</div>
-      <div className='text-sm mb-2'>{format(parseISO(data.timestamp), 'MMMM Do yyyy, h:mm:ss a')}</div>
+      <div className='text-sm mb-2'>{data.timestamp && format(parseISO(data.timestamp), 'MMMM Do yyyy, h:mm:ss a')}</div>
       <div className='text-sm'>{data.message}</div>
     </div>
   )

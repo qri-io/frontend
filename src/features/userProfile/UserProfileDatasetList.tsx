@@ -1,7 +1,7 @@
 import React from 'react'
 import ContentLoader from 'react-content-loader'
 
-import PageControl from '../../chrome/PageControl'
+import PageControl, { PageChangeObject } from '../../chrome/PageControl'
 import DropdownMenu from '../../chrome/DropdownMenu'
 import DatasetList from '../../chrome/DatasetList'
 import Icon from '../../chrome/Icon'
@@ -10,7 +10,6 @@ import {
   CleanUserProfileDatasetListParams
 } from '../../qri/userProfile'
 import { PaginatedResults } from './state/userProfileState'
-import { PageChangeObject } from '../../chrome/PageControl'
 
 export interface UserProfileDatasetListProps {
   paginatedResults: PaginatedResults
@@ -31,7 +30,7 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
 
   const { page } = pageInfo
   const { sort } = userProfileParams
-  const totalPages = Math.ceil( pageInfo.resultCount / pageInfo.pageSize )
+  const totalPages = Math.ceil(pageInfo.resultCount / pageInfo.pageSize)
 
   // handle page change from PageControl
   const handlePageChange = ({ selected: pageIndex }: PageChangeObject) => {
@@ -52,16 +51,18 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
       <div className='flex items-center justify-between px-2.5 pb-2'>
         <div className='text-qrigray flex-grow'>
           {
-            loading ? (
+            loading
+              ? (
               <ContentLoader
                 width={100}
                 height={20}
               >
                 <rect y="0" width="100" height="18" rx="6"/>
               </ContentLoader>
-            ) : (
+                )
+              : (
               <>Page {page} of {totalPages || 1}</>
-            )
+                )
           }
 
         </div>
@@ -78,7 +79,7 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
               {
                 label: 'Recently Updated',
                 active: sort === 'recentlyupdated',
-                onClick: () => { handleSortChange('recentlyupdated') },
+                onClick: () => { handleSortChange('recentlyupdated') }
               }
             ]}
           />

@@ -18,10 +18,10 @@ export interface LabeledStatsProps {
   uppercase?: boolean
 }
 
-const LabeledStats: React.FC<LabeledStatsProps> = ( {
+const LabeledStats: React.FC<LabeledStatsProps> = ({
   data,
   color = 'dark',
-  size = 'sm',
+  size = 'sm'
 }) => {
   const stats = getStats(data)
   return (

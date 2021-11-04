@@ -1,12 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store';
+import { RootState } from '../../../store/store'
 import { SearchResult, PageInfo } from '../../../qri/search'
 
 export const selectSearchResults = (state: RootState): SearchResult[] => state.search.results
 export const selectSearchPageInfo = (state: RootState): PageInfo => state.search.pageInfo
 export const selectSearchLoading = (state: RootState): boolean => state.search.loading
-
 
 export interface SearchState {
   results: SearchResult[]
@@ -38,5 +37,5 @@ export const searchReducer = createReducer(initialState, {
   },
   'API_SEARCH_FAILURE': (state: SearchState) => {
     state.loading = false
-  },
+  }
 })

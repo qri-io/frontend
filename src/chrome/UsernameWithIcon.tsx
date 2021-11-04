@@ -23,7 +23,7 @@ const UsernameWithIcon: React.FunctionComponent<UsernameWithIconProps> = ({
        width: iconWidth,
        backgroundImage: 'url(https://qri-user-images.storage.googleapis.com/1570029763701.png)'
      }}/>
-     {!iconOnly &&  <p className='ml-1.5 truncate'>{username}</p>}
+     {!iconOnly && <p className='ml-1.5 truncate'>{username}</p>}
    </div>
 )
 

@@ -1,13 +1,13 @@
-import { RootState } from '../../../store/store';
+import { RootState } from '../../../store/store'
 import { createReducer } from '@reduxjs/toolkit'
-import { ModalAction, ModalLockedAction } from './appActions';
+import { ModalAction, ModalLockedAction } from './appActions'
 
 export const SET_MODAL = 'SET_MODAL'
 export const SET_MODAL_LOCKED = 'SET_MODAL_LOCKED'
 export const TOGGLE_NAV_EXPANDED = 'TOGGLE_NAV_EXPANDED'
 
 export const selectModal = (state: RootState): Modal => state.app.modal
-export const selectNavExpanded = (state: RootState) => state.app.navExpanded
+export const selectNavExpanded = (state: RootState): boolean => state.app.navExpanded
 
 export enum ModalType {
   none = '',
@@ -26,13 +26,13 @@ export interface Modal<P = {}> {
   type: ModalType
   // locked is used to block closing the modal when clicking outside of it or
   // when pressing 'esc'
-  locked: boolean
+  locked?: boolean
   props?: P
 }
 
 export interface AppState {
-  modal: Modal,
-  navExpanded: Boolean
+  modal: Modal
+  navExpanded: boolean
 }
 
 const initialState: AppState = {

@@ -13,7 +13,7 @@ const CollectionActivityFeed: React.FC<any> = () => {
         <header className='mb-8'>
           <h1 className='text-2xl font-extrabold'>Activity Feed</h1>
         </header>
-        <ActivityList log={activity as LogItem[]}/>
+        <ActivityList log={activity as LogItem[]} containerHeight={1000}/>
       </div>
     </Page>
   )

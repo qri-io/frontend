@@ -10,16 +10,16 @@ import {
   selectSearchPageInfo,
   selectSearchLoading
 } from './state/searchState'
-import NavBar from '../navbar/NavBar';
-import SearchBox from './SearchBox';
+import NavBar from '../navbar/NavBar'
+import SearchBox from './SearchBox'
 import PageControl, { PageChangeObject } from '../../chrome/PageControl'
 import Footer from '../footer/Footer'
-import { NewSearchParams } from '../../qri/search'
+import { NewSearchParams, CleanSearchParams } from '../../qri/search'
 import DatasetList from '../../chrome/DatasetList'
 import Link from '../../chrome/Link'
 import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
-import { CleanSearchParams } from '../../qri/search'
+
 import { trackGoal } from '../../features/analytics/analytics'
 
 const Search: React.FC<{}> = () => {
@@ -40,11 +40,10 @@ const Search: React.FC<{}> = () => {
   // if the query string ever changes, fetch new data
   useEffect(() => {
     dispatch(loadSearchResults(searchParams))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, page, sort])
 
   // handle new search term input
-  const handleSearchSubmit = (newQ:string) => {
+  const handleSearchSubmit = (newQ: string) => {
     // search-submit-search-string event
     trackGoal('WYBS8MYM', 0)
     updateQueryParams({ q: newQ })
@@ -114,7 +113,7 @@ const Search: React.FC<{}> = () => {
         </>
       )
     } else {
-      resultsContent = <div className='text-center'>No results found for '{q}'</div>
+      resultsContent = <div className='text-center'>No results found for &apos;{q}&apos;</div>
     }
   }
 
@@ -124,7 +123,7 @@ const Search: React.FC<{}> = () => {
   </div>
 
   return (
-    <div className='flex flex-col h-full w-full overflow-y-scroll' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6'}}>
+    <div className='flex flex-col h-full w-full overflow-y-scroll' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6' }}>
       <NavBar showSearch={false} />
       <div className='flex-grow w-full py-9'>
         <div className='w-4/5 max-w-screen-lg mx-auto'>
@@ -133,20 +132,23 @@ const Search: React.FC<{}> = () => {
             <SearchBox onSubmit={handleSearchSubmit} size='lg' placeholder='Search for Datasets' value={q}/>
           </div>
           <div className='flex items-center mb-4 h-8'>
-            {searchResults.length > 0 ? (
+            {searchResults.length > 0
+              ? (
               <>
                 <div className='flex-grow'>
                   <div className='text-qrigray-400 text-sm '>
-                    { loading ? (
+                    { loading
+                      ? (
                       <ContentLoader
                         width={300}
                         height={20}
                       >
                         <rect y="0" width="300" height="18" rx="6"/>
                       </ContentLoader>
-                    ) : (
-                      <>{pageInfo.resultCount} datasets found matching '{q}'</>
-                    )}
+                        )
+                      : (
+                      <>{pageInfo.resultCount} datasets found matching &apos;{q}&apos;</>
+                        )}
                   </div>
                 </div>
                 <div>
@@ -154,23 +156,24 @@ const Search: React.FC<{}> = () => {
                     icon={sortIcon}
                     className='ml-8'
                     items={[
-                        {
-                          label: 'Dataset Name',
-                          active: sort === 'name',
-                          onClick: () => { updateQueryParams({ sort: 'name' }) }
-                        },
-                        {
-                          label: 'Recently Updated',
-                          active: sort === 'recentlyupdated',
-                          onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
-                        }
-                      ]}
+                      {
+                        label: 'Dataset Name',
+                        active: sort === 'name',
+                        onClick: () => { updateQueryParams({ sort: 'name' }) }
+                      },
+                      {
+                        label: 'Recently Updated',
+                        active: sort === 'recentlyupdated',
+                        onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
+                      }
+                    ]}
                   />
                 </div>
               </>
-            ):(
+                )
+              : (
               <>&nbsp;</>
-            )}
+                )}
           </div>
         </div>
         <div className='w-4/5 max-w-screen-lg mx-auto'>
@@ -184,4 +187,4 @@ const Search: React.FC<{}> = () => {
   )
 }
 
-export default Search;
+export default Search

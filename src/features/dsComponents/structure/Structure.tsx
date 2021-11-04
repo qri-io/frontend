@@ -52,8 +52,7 @@ export const formatConfigOptions: { [key: string]: FormatConfigOption } = {
   }
 }
 
-export const StructureComponent: React.FunctionComponent<StructureProps> = ({data}) => {
-
+export const StructureComponent: React.FunctionComponent<StructureProps> = ({ data }) => {
   if (!data) return null
 
   // if (loading) {

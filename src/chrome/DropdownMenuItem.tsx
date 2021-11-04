@@ -30,7 +30,7 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   icon,
   element,
   onClick,
-  to,
+  to
 }) => {
   const containerClassName = classNames(dropdownBaseClass, {
     'hover:cursor-pointer text-qrigray-400 hover:bg-gray-100': !disabled,
@@ -40,7 +40,7 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   const colorClassName = 'text-qrigray-400'
 
   let dropdownMenuItemContent = (
-    <div className={classNames({'text-qripink-600 font-semibold': active })} style={{ fontSize: 11 }}>
+    <div className={classNames({ 'text-qripink-600 font-semibold': active })} style={{ fontSize: 11 }}>
       {icon && <Icon icon={icon} className='mr-2' size='sm' />}{label}
     </div>
   )
@@ -73,7 +73,6 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
       </div>
     )
   }
-
 }
 
 export default DropdownMenuItem

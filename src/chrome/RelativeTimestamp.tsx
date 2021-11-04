@@ -39,5 +39,4 @@ const RelativeTimestamp: React.FunctionComponent<RelativeTimestampProps> = ({
   )
 }
 
-
 export default RelativeTimestamp

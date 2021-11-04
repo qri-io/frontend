@@ -12,7 +12,7 @@ interface RelativeTimestampWithIconProps {
 const RelativeTimestampWithIcon: React.FC<RelativeTimestampWithIconProps> = ({
   timestamp,
   className
- }) => (
+}) => (
    <div className={classNames('flex items-center leading-tight tracking-wider', className)}>
      <Icon icon='clock' size='2xs' className='mr-0.5' />
      <RelativeTimestamp timestamp={timestamp} />

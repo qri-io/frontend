@@ -10,7 +10,7 @@ const errors: {[key: string]: string} = {
 }
 
 export default function mapError (err: string): string {
-  var errMessage = err
+  let errMessage = err
   if (err && err.includes('@')) {
     const start = err.indexOf('@')
     const errSlice = err.slice(start)

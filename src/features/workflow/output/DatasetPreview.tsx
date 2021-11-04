@@ -15,7 +15,7 @@ export const DatasetPreview: React.FC<DatasetPreviewProps> = ({ data }) => {
   })
 
   const tabs: Tab[] = []
-  ComponentNames.sort().forEach((component: string) => { 
+  ComponentNames.sort().forEach((component: string) => {
     if (component === 'stats') {
       return
     }
@@ -29,15 +29,15 @@ export const DatasetPreview: React.FC<DatasetPreviewProps> = ({ data }) => {
   let content: JSX.Element = <></>
 
   if (componentTab === 'body') {
-    content = <BodyDisplay 
+    content = <BodyDisplay
       structure={data.structure}
       body={data.body}
     />
   } else {
-    const component = getComponentFromDatasetByName(data, componentTab) || `No content for ${componentTab} could be found` 
+    const component = getComponentFromDatasetByName(data, componentTab) || `No content for ${componentTab} could be found`
     content = <div className='p-4 border'>
       <pre className='max-h-80 overflow-x-hidden overflow-y-auto'>
-        {typeof component === 'string'? component : JSON.stringify(component, null, 4)}
+        {typeof component === 'string' ? component : JSON.stringify(component, null, 4)}
       </pre>
     </div>
   }
@@ -51,4 +51,3 @@ export const DatasetPreview: React.FC<DatasetPreviewProps> = ({ data }) => {
     />
   </div>
 }
-

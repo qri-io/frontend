@@ -53,19 +53,19 @@ export function resetWorkflowState () {
   }
 }
 
-export function workflowResetDryRunId(): UndoWorkflowChanges {
+export function workflowResetDryRunId (): UndoWorkflowChanges {
   return {
     type: WORKFLOW_RESET_DRY_RUN_ID
   }
 }
 
-export function workflowUndoChanges(): UndoWorkflowChanges {
+export function workflowUndoChanges (): UndoWorkflowChanges {
   return {
     type: WORKFLOW_UNDO_CHANGES
   }
 }
 
-export function workflowResetEditedClearedCells() {
+export function workflowResetEditedClearedCells () {
   return {
     type: WORKFLOW_RESET_EDITED_CLEARED_CELLS
   }
@@ -170,13 +170,13 @@ export function changeWorkflowTrigger (index: number, trigger: WorkflowTrigger):
 export function deleteWorkflowTrigger (index: number): WorkflowStepAction {
   return {
     type: WORKFLOW_DELETE_TRIGGER,
-    index,
+    index
   }
 }
 
 export function applyWorkflowTransform (w: Workflow, d: Dataset): ApiActionThunk {
   return async (dispatch, getState) => {
-    var qriRef = qriRefFromDataset(d)
+    let qriRef = qriRefFromDataset(d)
     return dispatch({
       type: 'apply',
       [CALL_API]: {
@@ -195,7 +195,7 @@ export function applyWorkflowTransform (w: Workflow, d: Dataset): ApiActionThunk
   }
 }
 
-export function cancelRun(runID: string): ApiActionThunk {
+export function cancelRun (runID: string): ApiActionThunk {
   return async (dispatch) => {
     return dispatch({
       type: 'cancel',

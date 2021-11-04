@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import classNames from 'classnames'
 
@@ -24,7 +25,6 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   showLoadingState = true,
   children
 }) => {
-
   let dataset = ds
 
   if (!ds || isDatasetEmpty(ds)) {

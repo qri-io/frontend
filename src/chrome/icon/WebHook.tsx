@@ -8,4 +8,3 @@ const WebHook: React.FC<CustomIconProps> = (props) => (
 )
 
 export default WebHook
-

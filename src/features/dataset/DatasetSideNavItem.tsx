@@ -10,7 +10,7 @@ export interface DatasetSideNavItemProps {
   icon: string
   label: string
   to: string
-  expanded: boolean
+  expanded?: boolean
   tooltip?: React.ReactNode
   number?: number
   disabled?: boolean
@@ -23,15 +23,14 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   icon,
   label,
   to,
-  expanded=true,
+  expanded = true,
   tooltip,
   number,
   disabled = false,
   isLink = true,
-  exact = false,
+  exact = false
 }) => {
-  const { pathname } = useLocation();
-
+  const { pathname } = useLocation()
 
   const isActive = (): boolean => {
     if (exact) {
@@ -47,7 +46,7 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
       return false
     }
     if (splitToUrl[0] === splitPathUrl[0] && splitToUrl[1] === splitPathUrl[1] &&
-      splitToUrl[splitToUrl.length - 1] === splitPathUrl[splitPathUrl.length - 1]){
+      splitToUrl[splitToUrl.length - 1] === splitPathUrl[splitPathUrl.length - 1]) {
       return true
     }
     return false
@@ -112,13 +111,13 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   return (
     <>
       <div className='mb-4 inline-block h-6'>
-        {isLink ?
-          <Link id={id+'_link'} to={to} className={classNames('font-medium text-black transition-100 transition-all hover:text-qripink-600', {
+        {isLink
+          ? <Link id={id + '_link'} to={to} className={classNames('font-medium text-black transition-100 transition-all hover:text-qripink-600', {
             'text-qripink-600': isActive()
           })}>
             {content}
-          </Link> :
-          <span id={id+'_link'} className={classNames('cursor-pointer font-medium text-black transition-100 transition-all hover:text-qripink-600', {
+          </Link>
+          : <span id={id + '_link'} className={classNames('cursor-pointer font-medium text-black transition-100 transition-all hover:text-qripink-600', {
             'text-qripink-600': isActive()
           })}>
             {content}

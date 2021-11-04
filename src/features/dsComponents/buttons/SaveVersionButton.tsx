@@ -16,11 +16,11 @@ const SaveVersionButton: React.FC<SaveVersionButtonProps> = ({
   const dispatch = useDispatch()
 
   return (
-    <Button 
+    <Button
       className='bg-green'
       onClick={() => {
         if (dataset) {
-          dispatch(saveDataset(dataset))
+          saveDataset(dataset)(dispatch)
             .then(() => {
               dispatch(loadDatasetCommits(qriRefFromDataset(dataset)))
             })

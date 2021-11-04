@@ -2,7 +2,7 @@ import React from 'react'
 import ReactTooltip from 'react-tooltip'
 import classNames from 'classnames'
 
-import Icon from '../../chrome/Icon'
+import Icon, { IconSize } from '../../chrome/Icon'
 
 export interface DatasetInfoItemProps {
   icon: string | JSX.Element
@@ -19,11 +19,10 @@ const DatasetInfoItem: React.FC<DatasetInfoItemProps> = ({
   iconClassName = '',
   size = 'md'
 }) => {
-
-  let iconSize = 'xs'
+  let iconSize: IconSize = 'xs'
   if (size === 'sm') {
     iconSize = '2xs'
-  } else if (size === 'lg'){
+  } else if (size === 'lg') {
     iconSize = 'sm'
   }
 

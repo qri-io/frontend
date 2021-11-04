@@ -6,7 +6,6 @@ import { loadCollection } from '../collection/state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from '../collection/state/collectionState'
 import Page from '../app/Page'
 import CollectionTable from '../collection/CollectionTable'
-import { WorkflowInfo } from '../../qrimatic/workflow'
 import Button from '../../chrome/Button'
 import ActivityList from '../activityFeed/ActivityList'
 import { LogItem } from '../../qri/log'
@@ -20,7 +19,7 @@ const Dashboard: React.FC<any> = () => {
   const loading = useSelector(selectIsCollectionLoading)
 
   useEffect(() => {
-    loadCollection(dispatch, 1,50)
+    loadCollection()
   }, [dispatch])
 
   return (
@@ -39,7 +38,7 @@ const Dashboard: React.FC<any> = () => {
           <div className='my-2 px-2 w-1/2 overflow-hidden'>
           <div className='text-xl font-semibold mb-2'>Getting started</div>
           <div className='border p-4 mb-3 bg-blue-100 rounded mb-8'>
-            <p className='mb-2'>Welcome to Qrimatic!  We've built a platform for quickly creating automated dataset workflows. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent rutrum varius turpis id laoreet. Morbi a sem at dui congue elementum ut at neque. Pellentesque fermentum orci odio, quis lobortis eros vulputate imperdiet. </p>
+            <p className='mb-2'>Welcome to Qrimatic!  We&apos;ve built a platform for quickly creating automated dataset workflows. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent rutrum varius turpis id laoreet. Morbi a sem at dui congue elementum ut at neque. Pellentesque fermentum orci odio, quis lobortis eros vulputate imperdiet. </p>
             <ul className='list-disc ml-4'>
               <li>Use our scripting environment to craft a workflow that updates a dataset</li>
               <li>Schedule your workflow to run as often as you need it to</li>
@@ -54,13 +53,13 @@ const Dashboard: React.FC<any> = () => {
               { loading
                 ? <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
                 : <CollectionTable
-                    filteredWorkflows={collection.slice(0,4)}
+                    filteredWorkflows={collection.slice(0, 4)}
                     // When the clearSelectedTrigger changes value, it triggers the ReactDataTable
                     // to its internal the selections
                     clearSelectedTrigger={false}
-                    onRowClicked={(row: WorkflowInfo) => {}}
                     onSelectedRowsChange={() => {}}
                     simplified
+                    containerHeight={1000}
                   />
               }
             </div>
@@ -76,7 +75,7 @@ const Dashboard: React.FC<any> = () => {
           <div className='rounded shadow border px-4 mb-4'>
             { loading
               ? <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
-              : <ActivityList log={activity as LogItem[]}/>
+              : <ActivityList log={activity as LogItem[]} containerHeight={1000} />
             }
           </div>
           <div className='text-right'>

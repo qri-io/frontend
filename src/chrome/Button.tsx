@@ -4,35 +4,35 @@ import classNames from 'classnames'
 import Icon, { IconSize } from './Icon'
 
 export type ButtonType = 'primary' // light blue button with white text
-  | 'primary-outline' // light blue outline button, thick border
-  | 'secondary' // pink button with white text
-  | 'secondary-outline' //pink outline button, thick border
-  | 'warning' // yellow button with dark text
-  | 'danger' // red button with white text
-  | 'light' // gray outline and text, thin border, e.g. cancel button for modal
-  | 'dark' // dark outline and text, thin border, e.g. follow button
+| 'primary-outline' // light blue outline button, thick border
+| 'secondary' // pink button with white text
+| 'secondary-outline' // pink outline button, thick border
+| 'warning' // yellow button with dark text
+| 'danger' // red button with white text
+| 'light' // gray outline and text, thin border, e.g. cancel button for modal
+| 'dark' // dark outline and text, thin border, e.g. follow button
 
-  // tailwind classes for each type to be used in classNames()
-  export function generateButtonTypeClasses(type: ButtonType, disabled: boolean): object {
-    return  {
-      'text-white bg-qritile hover:bg-qritile-600': (type === 'primary'),
-      'text-qritile hover:text-qritile-600 border border-qritile hover:border-qritile-600 box-border': (type === 'primary-outline'),
-      'text-white bg-qripink-600 hover:bg-qripink-700': (type === 'secondary'),
-      'text-qripink-600 hover:text-qripink-700 border border-qripink-600 hover:border-qripink-700 box-border': (type === 'secondary-outline'),
-      'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
-      'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
-      'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),
-      'text-qrigray-900 hover:text-qripink-600 border border-qrigray-900 hover:border-qripink-600': (type === 'dark'),
-      'cursor-default text-white bg-qrigray-400 hover:bg-qrigray-400': (type === 'primary' && disabled),
-      'text-qrigray-400 border border-qrigray-400 box-border hover:text-qrigray-400 hover:border-qrigray-400': (type === 'primary-outline' && disabled),
-      'text-white bg-qrigray-400 hover:bg-qrigray-400': ((type === 'secondary' || type === 'danger') && disabled),
-      'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400 box-border': (type === 'secondary-outline' && disabled),
-      'text-qrigray-400 bg-qrigray-400 hover:bg-qrigray-400': (type === 'warning' && disabled),
-      'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400': (type === 'light' && disabled),
-      'text-qrigray-400 hover:text-qripink-600 border border-qrigray-400 hover:border-qrigray-400': (type === 'dark' && disabled),
-      'cursor-default': disabled
-    }
+// tailwind classes for each type to be used in classNames()
+export function generateButtonTypeClasses (type: ButtonType, disabled: boolean): object {
+  return {
+    'text-white bg-qritile hover:bg-qritile-600': (type === 'primary'),
+    'text-qritile hover:text-qritile-600 border border-qritile hover:border-qritile-600 box-border': (type === 'primary-outline'),
+    'text-white bg-qripink-600 hover:bg-qripink-700': (type === 'secondary'),
+    'text-qripink-600 hover:text-qripink-700 border border-qripink-600 hover:border-qripink-700 box-border': (type === 'secondary-outline'),
+    'text-qrigray-900 bg-warningyellow hover:bg-warningyellow-600': (type === 'warning'),
+    'text-white bg-dangerred hover:bg-dangerred-600': (type === 'danger'),
+    'text-qrigray-400 hover:text-qrigray-600 border border-qrigray-400 hover:border-qrigray-600': (type === 'light'),
+    'text-qrigray-900 hover:text-qripink-600 border border-qrigray-900 hover:border-qripink-600': (type === 'dark'),
+    'cursor-default text-white bg-qrigray-400 hover:bg-qrigray-400': (type === 'primary' && disabled),
+    'text-qrigray-400 border border-qrigray-400 box-border hover:text-qrigray-400 hover:border-qrigray-400': (type === 'primary-outline' && disabled),
+    'text-white bg-qrigray-400 hover:bg-qrigray-400': ((type === 'secondary' || type === 'danger') && disabled),
+    'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400 box-border': (type === 'secondary-outline' && disabled),
+    'text-qrigray-400 bg-qrigray-400 hover:bg-qrigray-400': (type === 'warning' && disabled),
+    'text-qrigray-400 hover:text-qrigray-400 border border-qrigray-400 hover:border-qrigray-400': (type === 'light' && disabled),
+    'text-qrigray-400 hover:text-qripink-600 border border-qrigray-400 hover:border-qrigray-400': (type === 'dark' && disabled),
+    'cursor-default': disabled
   }
+}
 
 export interface ButtonProps {
   id?: string
@@ -53,21 +53,21 @@ export interface ButtonProps {
   // caret will add a small caretRight icon to the right of the children
   caret?: boolean
   // onClick is a function that will fire when the button is clicked
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => void
 }
 
 const Button: React.FC<ButtonProps> = ({
   id,
   className,
-  type='primary',
+  type = 'primary',
   icon,
-  size='md',
+  size = 'md',
   submit = false,
   disabled = false,
   block = false,
   caret = false,
-  onClick= () => {},
-  children,
+  onClick = () => {},
+  children
 }) => {
   let height = 32
   let sizeClassName = 'rounded-md px-2.5'
@@ -133,7 +133,5 @@ const Button: React.FC<ButtonProps> = ({
     </button>
   )
 }
-
-
 
 export default Button

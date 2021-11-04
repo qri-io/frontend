@@ -1,5 +1,5 @@
 
-// ChangeStatus enumerates the all possible state shifts in dataset components 
+// ChangeStatus enumerates the all possible state shifts in dataset components
 // between two versions of a dataset
 export enum ChangeStatus {
   nonexistant = 0,
@@ -9,8 +9,8 @@ export enum ChangeStatus {
   modified = 4
 }
 
-// info about a dataset component as compared the same component in previous 
-//commit
+// info about a dataset component as compared the same component in previous
+// commit
 export interface StatusInfo {
   filepath: string
   status: ComponentStatus

@@ -1,5 +1,5 @@
-import { BodyDataFormat } from "./dataset";
-import { RunStatus } from "./run";
+import { BodyDataFormat } from "./dataset"
+import { RunStatus } from "./run"
 
 // TODO (ramfox): when "VersionInfo" contains commit title, message, runID, runDuration, and runStatus
 // this field can be removed
@@ -26,7 +26,7 @@ export interface LogItem {
   changeAmount: number
 }
 
-export function NewLogItem(d: Record<string,any>): LogItem {
+export function NewLogItem (d: Record<string, any>): LogItem {
   return {
     timestamp: d.timestamp || d.commitTime,
     title: d.title || d.commitTitle,
@@ -46,6 +46,7 @@ export function NewLogItem(d: Record<string,any>): LogItem {
 
     bodySize: d.bodySize,
     bodyRows: d.bodyRows,
-    changeAmount: d.changeAmount,
+    bodyFormat: d.bodyFormat,
+    changeAmount: d.changeAmount
   }
 }

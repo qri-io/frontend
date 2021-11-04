@@ -26,7 +26,7 @@ import CustomMetaEditor from './CustomMetaEditor'
 // import ParseError from '../ParseError'
 // import { connectComponentToProps } from '../../../utils/connectComponentToProps'
 
-interface MetaEditorProps  {
+interface MetaEditorProps {
   data?: Meta
   onDatasetChange: (field: string[], value: any) => void
   // statusInfo: StatusInfo
@@ -55,67 +55,67 @@ const fields = [
     inputType: 'tags',
     title: 'Theme',
     description: 'The main category or categories of the dataset',
-    placeholder: '',
+    placeholder: ''
   },
   {
     field: 'keywords',
     inputType: 'tags',
     title: 'Keywords',
     description: 'Keywords or tags describing the dataset (more specific than theme)',
-    placeholder: 'Add a new keyword',
+    placeholder: 'Add a new keyword'
   },
-//  {/*
-//    Dropdown Input uses react-select, which likes option that have 'label'
-//    and 'value' keys/ To keep it generic, we map our options to meet the
-//    requirements, and unmap them again on the way back out
-//    */}
-//  <DropdownInput
-//    name='license'
-//    label='License'
-//    labelTooltip='A legal document under which the resource is made available'
-//    value={
-//      data.license
-//        ? { label: data.license.type, value: data.license.url }
-//        : null
-//    }
-//    placeHolder='Add a license'
-//    options={licenseOptions.map((option) => ({
-//      value: option.url,
-//      label: option.type
-//    }))}
-//    onChange={(selectedOption) => {
-//      let newValue = null
-//      if (selectedOption) {
-//        const { label: type, value: url } = selectedOption
-//        newValue = {
-//          type,
-//          url
-//        }
-//      }
-//      handleWrite(null, 'license', newValue)
-//    }}
-//  />
-//  <MetadataMultiInput
-//    name='contributors'
-//    label='Contributors'
-//    labelTooltip='Users who have contributed to the dataset'
-//    value={data.contributors}
-//    placeHolder='Add a contributor'
-//    onWrite={handleWrite}
-//  />
-//  <MetadataMultiInput
-//    name='citations'
-//    label='Citations'
-//    labelTooltip='Works cited for the dataset'
-//    value={data.citations}
-//    placeHolder='Add a citation'
-//    onWrite={handleWrite}
-//  />
+  //  {/*
+  //    Dropdown Input uses react-select, which likes option that have 'label'
+  //    and 'value' keys/ To keep it generic, we map our options to meet the
+  //    requirements, and unmap them again on the way back out
+  //    */}
+  //  <DropdownInput
+  //    name='license'
+  //    label='License'
+  //    labelTooltip='A legal document under which the resource is made available'
+  //    value={
+  //      data.license
+  //        ? { label: data.license.type, value: data.license.url }
+  //        : null
+  //    }
+  //    placeHolder='Add a license'
+  //    options={licenseOptions.map((option) => ({
+  //      value: option.url,
+  //      label: option.type
+  //    }))}
+  //    onChange={(selectedOption) => {
+  //      let newValue = null
+  //      if (selectedOption) {
+  //        const { label: type, value: url } = selectedOption
+  //        newValue = {
+  //          type,
+  //          url
+  //        }
+  //      }
+  //      handleWrite(null, 'license', newValue)
+  //    }}
+  //  />
+  //  <MetadataMultiInput
+  //    name='contributors'
+  //    label='Contributors'
+  //    labelTooltip='Users who have contributed to the dataset'
+  //    value={data.contributors}
+  //    placeHolder='Add a contributor'
+  //    onWrite={handleWrite}
+  //  />
+  //  <MetadataMultiInput
+  //    name='citations'
+  //    label='Citations'
+  //    labelTooltip='Works cited for the dataset'
+  //    value={data.citations}
+  //    placeHolder='Add a citation'
+  //    onWrite={handleWrite}
+  //  />
   {
     field: 'accessURL',
     type: 'text',
     title: 'Access URL',
-    description: 'A URL of the resource that gives access to a distribution of the dataset',
+    description: 'A URL of the resource that gives access to a distribution of the dataset'
   },
   {
     field: 'downloadURL',
@@ -129,24 +129,24 @@ const fields = [
     title: 'Home URL',
     description: 'A URL for the dataset homepage'
   },
-//       <MultiTextInput
-//         name='language'
-//         label='Language'
-//         labelTooltip='Languages of the dataset.<br/>This refers to the natural language<br/> used for textual metadata of a dataset or<br/>the textual values of a dataset distribution'
-//         value={data.language}
-//         placeHolder='Add a language'
-//         onArrayChange={handleWrite}
-//       />
-//       <TextInput
-//         name='accrualPeriodicity'
-//         label='Accrual Periodicity'
-//         labelTooltip='The frequency at which dataset is published'
-//         type='text'
-//         value={data.accrualPeriodicity}
-//         placeHolder='Add Accrual Periodicity'
-//         onBlur={handleWrite}
-//         maxLength={600}
-//       />
+  //       <MultiTextInput
+  //         name='language'
+  //         label='Language'
+  //         labelTooltip='Languages of the dataset.<br/>This refers to the natural language<br/> used for textual metadata of a dataset or<br/>the textual values of a dataset distribution'
+  //         value={data.language}
+  //         placeHolder='Add a language'
+  //         onArrayChange={handleWrite}
+  //       />
+  //       <TextInput
+  //         name='accrualPeriodicity'
+  //         label='Accrual Periodicity'
+  //         labelTooltip='The frequency at which dataset is published'
+  //         type='text'
+  //         value={data.accrualPeriodicity}
+  //         placeHolder='Add Accrual Periodicity'
+  //         onBlur={handleWrite}
+  //         maxLength={600}
+  //       />
   {
     field: 'version',
     type: 'text',
@@ -164,38 +164,37 @@ const fields = [
 const MetaEditor: React.FC<MetaEditorProps> = ({
   data,
   loading = false,
-  statusInfo,
   onDatasetChange
 }) => {
   if (loading) {
     return <Spinner />
   }
-//   if (hasParseError(statusInfo)) {
-//     return <ParseError component='meta' />
-//   }
+  //   if (hasParseError(statusInfo)) {
+  //     return <ParseError component='meta' />
+  //   }
 
-//   const licenseOptions = [
-//     {
-//       url: 'http://opendatacommons.org/licenses/by/1.0/',
-//       type: 'Open Data Commons Attribution License (ODC-By)'
-//     },
-//     {
-//       url: 'http://opendatacommons.org/licenses/odbl/1.0/',
-//       type: 'Open Data Commons Open Database License (ODbL)'
-//     },
-//     {
-//       url: 'https://creativecommons.org/licenses/by/4.0/',
-//       type: 'Creative Commons Attribution (CC BY)'
-//     },
-//     {
-//       url: 'https://creativecommons.org/licenses/by-sa/4.0/',
-//       type: 'Creative Commons Attribution-ShareAlike (CC BY-SA)'
-//     },
-//     {
-//       url: 'http://www.gnu.org/licenses/fdl-1.3.en.html',
-//       type: 'GNU Free Documentation License'
-//     }
-//   ]
+  //   const licenseOptions = [
+  //     {
+  //       url: 'http://opendatacommons.org/licenses/by/1.0/',
+  //       type: 'Open Data Commons Attribution License (ODC-By)'
+  //     },
+  //     {
+  //       url: 'http://opendatacommons.org/licenses/odbl/1.0/',
+  //       type: 'Open Data Commons Open Database License (ODbL)'
+  //     },
+  //     {
+  //       url: 'https://creativecommons.org/licenses/by/4.0/',
+  //       type: 'Creative Commons Attribution (CC BY)'
+  //     },
+  //     {
+  //       url: 'https://creativecommons.org/licenses/by-sa/4.0/',
+  //       type: 'Creative Commons Attribution-ShareAlike (CC BY-SA)'
+  //     },
+  //     {
+  //       url: 'http://www.gnu.org/licenses/fdl-1.3.en.html',
+  //       type: 'GNU Free Documentation License'
+  //     }
+  //   ]
 
   const handleWrite = (name: string, value: any) => {
     onDatasetChange(['meta', name], value)
@@ -235,7 +234,10 @@ const MetaEditor: React.FC<MetaEditorProps> = ({
               value={data[field.field]}
               placeholder={field.placeholder}
               maxLength={field.maxLength}
-              onChange={(e: React.FormEvent) => { handleWrite(field.field, e.target.value) }}
+              onChange={(e: React.FormEvent) => {
+                const target = e.target as HTMLInputElement
+                handleWrite(field.field, target.value)
+              }}
             />)
           case 'tags':
             return (<TagInput

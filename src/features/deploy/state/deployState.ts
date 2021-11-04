@@ -13,16 +13,15 @@ export const DEPLOY_SAVEDATASET_START = 'DEPLOY_SAVEDATASET_START'
 export const DEPLOY_SAVEDATASET_END = 'DEPLOY_SAVEDATASET_END'
 export const DEPLOY_RESET_RUN_ID = 'DEPLOY_RESET_RUN_ID'
 
-
-export function newDeployStatusSelector(workflowID: string): (state: RootState) => DeployStatus {
+export function newDeployStatusSelector (workflowID: string): (state: RootState) => DeployStatus {
   return (state: RootState): DeployStatus => (state.deploy.status[workflowID] || 'undeployed')
 }
 
-export function selectAllDeployStatuses(): (state: RootState) => Record<string,DeployStatus>  {
-  return (state: RootState): Record<string,DeployStatus>  => (state.deploy.status)
+export function selectAllDeployStatuses (): (state: RootState) => Record<string, DeployStatus> {
+  return (state: RootState): Record<string, DeployStatus> => (state.deploy.status)
 }
 
-export function selectDeployStatus(qriRef: QriRef): (state: RootState) => DeployStatus {
+export function selectDeployStatus (qriRef: QriRef): (state: RootState) => DeployStatus {
   return (state: RootState): DeployStatus => (state.deploy.status[`${qriRef.username}/${qriRef.name}`])
 }
 
@@ -31,7 +30,7 @@ export const selectDeployRunId = (state: RootState): string => {
 }
 
 export interface DeployState {
-  status: Record<string,DeployStatus>
+  status: Record<string, DeployStatus>
   runId: string // runID of deploying dataset, empty string means no deploying run
 }
 

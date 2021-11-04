@@ -60,4 +60,4 @@ const TemplateList: React.FC<any> = () => {
   )
 }
 
-export default TemplateList;
+export default TemplateList

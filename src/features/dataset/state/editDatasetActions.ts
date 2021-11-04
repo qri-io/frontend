@@ -1,8 +1,8 @@
-import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
-import { newQriRef, QriRef } from "../../../qri/ref";
-import { mapDataset } from "./datasetActions";
-import { EDIT_DATASET } from "./editDatasetState";
-import Dataset from "../../../qri/dataset";
+import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
+import { newQriRef, QriRef } from "../../../qri/ref"
+import { mapDataset } from "./datasetActions"
+import { EDIT_DATASET } from "./editDatasetState"
+import Dataset from "../../../qri/dataset"
 
 export interface EditDatasetAction {
   type: string
@@ -10,19 +10,19 @@ export interface EditDatasetAction {
   value: any
 }
 
-export function editDataset(ref: QriRef, value: any): EditDatasetAction {
+export function editDataset (ref: QriRef, value: any): EditDatasetAction {
   return {
     type: EDIT_DATASET,
     ref,
-    value,
+    value
   }
 }
 
-export function loadEditingDatasetHead(ref: QriRef): ApiActionThunk {
+export function loadEditingDatasetHead (ref: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     ref = newQriRef({
       username: ref.username,
-      name: ref.name,
+      name: ref.name
       // TODO(b5) - should provide initID
     })
     // TODO (b5) - check state before making a network request
@@ -30,7 +30,7 @@ export function loadEditingDatasetHead(ref: QriRef): ApiActionThunk {
   }
 }
 
-function fetchEditingDatasetHead(ref: QriRef): ApiAction {
+function fetchEditingDatasetHead (ref: QriRef): ApiAction {
   return {
     type: 'editing_dataset_head',
     ref,
@@ -43,7 +43,7 @@ function fetchEditingDatasetHead(ref: QriRef): ApiAction {
   }
 }
 
-export function saveDataset(ds: Dataset): ApiActionThunk {
+export function saveDataset (ds: Dataset): ApiActionThunk {
   const ref = newQriRef({ username: ds.peername, name: ds.name })
   return async (dispatch, getState) => {
     return dispatch({

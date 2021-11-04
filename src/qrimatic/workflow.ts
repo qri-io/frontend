@@ -5,7 +5,7 @@ export type RunStatus =
   | 'running'
   | 'succeeded'
   | 'failed'
-  | ''          // empty status indicates a manual change
+  | '' // empty status indicates a manual change
 
 export interface Workflow {
   id: string
@@ -13,8 +13,10 @@ export interface Workflow {
   ownerID?: string
   created?: string
   active: boolean
-  triggers?: WorkflowTrigger[]
+  triggers?: Array<(WorkflowTrigger | CronTrigger)>
   hooks?: WorkflowHook[]
+  steps?: TransformStep[]
+  disabled?: boolean
 }
 
 // stores only the things we need to track to compute dirty/drafting state
@@ -24,7 +26,7 @@ export interface WorkflowBase {
   hooks?: WorkflowHook[]
 }
 
-export function NewWorkflow(data: Record<string,any>): Workflow {
+export function NewWorkflow (data: Record<string, any>): Workflow {
   return {
     id: data.id || '',
     initID: data.initID,
@@ -32,7 +34,7 @@ export function NewWorkflow(data: Record<string,any>): Workflow {
     created: data.created,
     active: data.active,
     triggers: data.triggers && data.triggers.map(NewWorkflowTrigger),
-    hooks: data.hooks && data.hooks.map(NewWorkflowHook),
+    hooks: data.hooks && data.hooks.map(NewWorkflowHook)
   }
 }
 
@@ -43,29 +45,25 @@ export interface CronTrigger extends WorkflowTrigger {
 }
 
 export interface WorkflowTrigger {
-  id: string
-  active?:  boolean,
-  type: WorkflowTriggerType,
-  nextRunStart: string
+  active?: boolean
+  type: WorkflowTriggerType
 }
 
-export function NewWorkflowTrigger(data: Record<string,any>): WorkflowTrigger {
+export function NewWorkflowTrigger (data: Record<string, any>): WorkflowTrigger {
   return {
-    id: data.id || '',
     active: data.active || true,
     type: data.type,
-    nextRunStart: data.nextRunStart,
     ...data
   }
 }
 
 export interface WorkflowHook {
   type: string
-  value?: string | Record<string,any>
+  value?: string | Record<string, any>
   [key: string]: any
 }
 
-export function NewWorkflowHook(data: Record<string,any>): WorkflowHook {
+export function NewWorkflowHook (data: Record<string, any>): WorkflowHook {
   return {
     type: data.type,
     value: data.value,
@@ -73,7 +71,7 @@ export function NewWorkflowHook(data: Record<string,any>): WorkflowHook {
   }
 }
 
-export function workflowScriptString(w: Workflow): string {
+export function workflowScriptString (w: Workflow): string {
   if (!w.steps) {
     return ''
   }
@@ -94,7 +92,7 @@ export type DeployStatus =
   | 'paused'
   | 'failed'
 
-export function workflowDeployStatus(w?: Workflow): DeployStatus {
+export function workflowDeployStatus (w?: Workflow): DeployStatus {
   if (!w) {
     return 'undeployed'
   } else if (w.id === '') {
@@ -118,12 +116,13 @@ export interface WorkflowInfo extends VersionInfo {
   status: WorkflowStatus
 }
 
-export function datasetAliasFromWorkflowInfo(wfi: WorkflowInfo): string {
+export function datasetAliasFromWorkflowInfo (wfi: WorkflowInfo): string {
   return `${wfi.username}/${wfi.name}`
 }
 
-export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
+export function newWorkflowInfo (data: Record<string, any>): WorkflowInfo {
   return {
+    initID: data.initID,
     username: data.username || '',
     profileId: data.profileId || '',
     name: data.name || '',
@@ -149,37 +148,12 @@ export function newWorkflowInfo(data: Record<string,any>): WorkflowInfo {
     id: data.id,
     latestStart: data.latestStart,
     latestEnd: data.latestEnd,
-    status: data.status
-  }
-}
+    status: data.status,
 
-export function workflowInfoFromWorkflow(wf: Workflow): WorkflowInfo {
-  return {
-    username: wf.versionInfo?.username || '',
-    profileId: wf.versionInfo?.profileId || '',
-    name: wf.versionInfo?.name || '',
-    path: wf.versionInfo?.path || '',
-
-    fsiPath: wf.versionInfo?.fsiPath || '',
-    foreign: wf.versionInfo?.foreign,
-    published: wf.versionInfo?.published,
-
-    metaTitle: wf.versionInfo?.metaTitle || '',
-    themeList: wf.versionInfo?.themeList || '',
-
-    bodyFormat: wf.versionInfo?.bodyFormat || '-',
-    bodySize: wf.versionInfo?.bodySize,
-    bodyRows: wf.versionInfo?.bodyRows,
-    numErrors: wf.versionInfo?.numErrors,
-
-    commitTitle: wf.versionInfo?.commitTitle,
-    commitMessage: wf.versionInfo?.commitMessage,
-    commitTime: wf.versionInfo?.commitTime,
-    numVersions: wf.versionInfo?.numVersions,
-
-    id: wf.id,
-    latestStart: wf.latestStart,
-    latestEnd: wf.latestEnd,
-    status: wf.status
+    runCount: data.runCount,
+    commitCount: data.commitCount,
+    downloadCount: data.downloadCount,
+    followerCount: data.followerCount,
+    openIssueCount: data.openIssueCount
   }
 }

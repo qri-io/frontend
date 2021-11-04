@@ -23,7 +23,7 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
   const [editing, setEditing] = useState(false)
   const [edit, setEdit] = useState(value)
 
-  const inputEl = useRef(null)
+  const inputEl = useRef<HTMLInputElement>(null)
 
   // if a new value prop is passed in, update local state
   useEffect(() => {
@@ -47,7 +47,6 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
     } else {
       window.removeEventListener('keydown', close)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editing])
 
   const handleLabelClick = () => {
@@ -89,7 +88,7 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
         onBlur={handleBlur}
         autoFocus
       />
-    : <h3 className={classNames({ 'cursor-pointer whitespace-nowrap' : !readOnly })} onClick={handleLabelClick}>{value}</h3>
+    : <h3 className={classNames({ 'cursor-pointer whitespace-nowrap': !readOnly })} onClick={handleLabelClick}>{value}</h3>
   )
 }
 

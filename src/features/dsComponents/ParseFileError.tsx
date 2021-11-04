@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 interface ParseFileErrorProps {
   component: string
   filename?: string
@@ -8,7 +7,7 @@ interface ParseFileErrorProps {
 
 const ParseFileError: React.FC<ParseFileErrorProps> = ({
   component,
-  filename,
+  filename
 }) => {
   return (
     <div className='unlinked-dataset margin'>

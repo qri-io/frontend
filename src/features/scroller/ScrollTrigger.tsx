@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux"
 import { setScrollAnchor } from "./state/scrollerActions"
 import { trackGoal } from '../../features/analytics/analytics'
 
-
 export interface ScrollTriggerProps {
   // the id of the component this trigger will cause the
   // app to scroll to
@@ -23,10 +22,10 @@ const ScrollTrigger: React.FC<ScrollTriggerProps> = ({ target, children }) => {
     className='hover:cursor-pointer'
     onClick={() => {
       // workflow-click-outline event
-      trackGoal('5LPYSXDH', 0);
+      trackGoal('5LPYSXDH', 0)
       new Promise(() => {
         dispatch(setScrollAnchor(target))
-      }).then (() =>
+      }).then(() =>
         dispatch(setScrollAnchor(''))
       )
     }}>

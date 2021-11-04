@@ -9,4 +9,3 @@ const Unlock: React.FC<CustomIconProps> = (props) => (
 )
 
 export default Unlock
-

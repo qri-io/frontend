@@ -2,28 +2,27 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import TemplateList from './features/template/TemplateList';
-import ChangeReport from './features/changes/ChangeReport';
-import Search from './features/search/Search';
-import CollectionActivityFeed from './features/activityFeed/CollectionActivityFeed';
-import NotificationList from './features/notification/NotificationList';
-import NotificationSettings from './features/notification/NotificationSettings';
-import Login from './features/session/Login';
-import Signup from './features/session/Signup';
-import Splash from './features/splash/Splash';
-import ForgotPassword from './features/session/ForgotPassword';
-import Run from './features/run/Run';
-import Collection from './features/collection/Collection';
-import Dashboard from './features/dashboard/Dashboard';
-import DatasetRoutes from './features/dataset/DatasetRoutes';
+import TemplateList from './features/template/TemplateList'
+import ChangeReport from './features/changes/ChangeReport'
+import Search from './features/search/Search'
+import CollectionActivityFeed from './features/activityFeed/CollectionActivityFeed'
+import NotificationList from './features/notification/NotificationList'
+import NotificationSettings from './features/notification/NotificationSettings'
+import Login from './features/session/Login'
+import Signup from './features/session/Signup'
+import Splash from './features/splash/Splash'
+import ForgotPassword from './features/session/ForgotPassword'
+import Run from './features/run/Run'
+import Collection from './features/collection/Collection'
+import Dashboard from './features/dashboard/Dashboard'
+import DatasetRoutes from './features/dataset/DatasetRoutes'
 import { AnonUser, selectSessionUser } from './features/session/state/sessionState'
 import UserProfile from './features/userProfile/UserProfile'
 import WorkflowPage from './features/workflow/WorkflowPage'
 import DatasetWrapper from './features/dsComponents/DatasetWrapper'
-import PasswordReset from "./features/session/PasswordReset";
+import PasswordReset from "./features/session/PasswordReset"
 
-
-const PrivateRoute: React.FC<any>  = ({ path, children }) => {
+const PrivateRoute: React.FC<any> = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
   return (
     <Route path={path}>

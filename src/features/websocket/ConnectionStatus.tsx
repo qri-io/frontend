@@ -38,7 +38,7 @@ const ConnectionStatus: React.FC<{}> = () => {
 
 export default ConnectionStatus
 
-function componentStatusFromWSConnectionStatus(s: WSConnectionStatus): ComponentStatus {
+function componentStatusFromWSConnectionStatus (s: WSConnectionStatus): ComponentStatus {
   switch (s) {
     case WSConnectionStatus.disconnected:
       return 'removed'

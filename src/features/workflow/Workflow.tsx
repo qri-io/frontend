@@ -18,8 +18,8 @@ import { QriRef } from '../../qri/ref'
 import WorkflowEditor from './WorkflowEditor'
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
-import { selectRun } from "../events/state/eventsState";
-import { resetDatasetState } from "../dataset/state/datasetActions";
+import { selectRun } from "../events/state/eventsState"
+import { resetDatasetState } from "../dataset/state/datasetActions"
 
 interface WorkflowLocationState {
   template: string
@@ -49,13 +49,13 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
 
     if (location.state?.template) {
       const template = selectTemplate(location.state.template)
+      // @ts-expect-error
       dispatch(setTemplate(template))
     }
 
     if (location.state?.showSplashModal) {
       dispatch(showModal(ModalType.workflowSplash))
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleBlockedNavigation = (nextLocation: Location) => {

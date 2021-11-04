@@ -7,10 +7,10 @@ export interface TextareaInputProps {
   labelTooltip?: string
   name: string
   value: any
-  maxLength: number
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void | undefined
+  maxLength?: number
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => {} | undefined
   onChange?: (e: React.ChangeEvent) => void
-  onBlur?: (event: React.FocusEvent<HTMLTextareaElement>) => void
+  onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void
   placeholder?: string
   rows?: number
   white?: boolean
@@ -29,7 +29,6 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   rows = 3,
   tooltipFor
 }) => {
-
   const handleOnChange = (e: React.ChangeEvent) => {
     if (onChange) onChange(e)
   }

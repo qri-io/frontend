@@ -36,7 +36,6 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
       dispatch(loadWorkflowByDatasetRef(qriRef))
       dispatch(loadDatasetLogs(qriRef))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ qriRef.username, qriRef.name])
 
   let content = (
@@ -58,4 +57,4 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
   )
 }
 
-export default DatasetWrapper;
+export default DatasetWrapper

@@ -3,8 +3,8 @@ import { JSONSchema7 } from "json-schema"
 import { QriRef } from "./ref"
 import fileSize, { abbreviateNumber } from '../utils/fileSize'
 
-
 export interface Dataset {
+  peername?: string
   username: string
   name: string
   path: string
@@ -21,7 +21,7 @@ export interface Dataset {
 
 export default Dataset
 
-export function qriRefFromDataset(dataset: Dataset): QriRef {
+export function qriRefFromDataset (dataset: Dataset): QriRef {
   return {
     username: dataset.peername || dataset.username,
     name: dataset.name,
@@ -29,7 +29,7 @@ export function qriRefFromDataset(dataset: Dataset): QriRef {
   }
 }
 
-export function isDatasetEmpty(ds: Dataset): boolean {
+export function isDatasetEmpty (ds: Dataset): boolean {
   return (
     !ds.username &&
     !ds.name &&
@@ -45,7 +45,7 @@ export function isDatasetEmpty(ds: Dataset): boolean {
     !ds.viz)
 }
 
-export function NewDataset(d: Record<string,any>): Dataset {
+export function NewDataset (d: Record<string, any>): Dataset {
   const dataset: Dataset = {
     username: d.peername || d.username || '',
     name: d.name || '',
@@ -91,7 +91,7 @@ export type ComponentName =
  | 'viz'
  | 'stats'
 
- export type ComponentStatus =
+export type ComponentStatus =
  | 'modified'
  | 'unmodified'
  | 'removed'
@@ -103,17 +103,17 @@ export interface Component {
   qri: string
 }
 
-export function datasetComponents(d: Dataset): Component[] {
-  return ComponentNames.reduce((acc, name) => {
+export function datasetComponents (d: Dataset): Component[] {
+  return ComponentNames.reduce<Component[]>((acc, name) => {
     const comp = getComponentFromDatasetByName(d, name)
     if (comp) {
       acc.push(comp)
     }
     return acc
-  }, [] as Component[])
+  }, [])
 }
 
-export function getComponentFromDatasetByName(d: Dataset, component: string): Component | undefined {
+export function getComponentFromDatasetByName (d: Dataset, component: string): Component | BodyComponent | undefined {
   if (!ComponentNames.includes(component)) {
     return
   }
@@ -129,7 +129,7 @@ export function getComponentFromDatasetByName(d: Dataset, component: string): Co
       return {
         qri: 'bd:0',
         body: d.body
-      } as BodyComponent
+      }
     case 'readme':
       return d.readme
     case 'transform':
@@ -145,12 +145,12 @@ export interface Commit extends Component {
   author?: string
   message?: string
   path?: string
-  timestamp?: Date
+  timestamp?: string
   title?: string
   count?: number // commit chain height
 }
 
-export function NewCommit(d: Record<string,any>): Commit {
+export function NewCommit (d: Record<string, any>): Commit {
   return {
     qri: d.qri || 'cm:0',
     author: d.author,
@@ -181,10 +181,9 @@ export interface Meta extends Component {
   [key: string]: any
 }
 
-export function NewMeta(d: Record<string,any>): Meta {
+export function NewMeta (d: Record<string, any>): Meta {
   return Object.assign({ qri: 'md:0' }, d)
 }
-
 
 export const standardFieldNames = [
   'accessUrl',
@@ -266,9 +265,9 @@ export type BodyDataFormat =
 | "json"
 | "csv"
 | "xlsx"
-| ""         // unknown format
+| "" // unknown format
 
-export function NewStructure(d: Record<string,any>): Structure {
+export function NewStructure (d: Record<string, any>): Structure {
   return {
     qri: d.qri || 'st:0',
     depth: d.depth,
@@ -277,7 +276,7 @@ export function NewStructure(d: Record<string,any>): Structure {
     length: d.length,
     errCount: d.errCount,
     formatConfig: d.formatConfig,
-    schema: d.schema,
+    schema: d.schema
   }
 }
 
@@ -313,11 +312,11 @@ export interface Stats extends Component {
   stats: IStatTypes[]
 }
 
-export function NewStats(d: Record<string,any>): Stats {
+export function NewStats (d: Record<string, any>): Stats {
   return {
     qri: d.qri || 'sa:0',
     path: d.path,
-    stats: d.stats,
+    stats: d.stats
   }
 }
 
@@ -366,10 +365,10 @@ export interface INumericStats {
 export interface Transform extends Component {
   bodyBytes?: string
   steps: TransformStep[]
-  syntaxes?: Record<string,string>
+  syntaxes?: Record<string, string>
 }
 
-export function NewTransform(d: Record<string,any>): Transform {
+export function NewTransform (d: Record<string, any>): Transform {
   return {
     qri: d.qri || 'tf:0',
     bodyBytes: d.bodyBytes,
@@ -384,7 +383,7 @@ export interface TransformStep {
   script: string
 }
 
-export function NewTransformStep(data: Record<string,any>): TransformStep {
+export function NewTransformStep (data: Record<string, any>): TransformStep {
   return {
     name: data.name,
     syntax: data.syntax,
@@ -393,7 +392,7 @@ export function NewTransformStep(data: Record<string,any>): TransformStep {
   }
 }
 
-export function scriptFromTransform(t: Transform): string {
+export function scriptFromTransform (t: Transform): string {
   if (t && t.steps) {
     return t.steps.reduce((acc: string, step: TransformStep, i: number) => {
       if (step.script && step.script !== "") {
@@ -410,7 +409,7 @@ export interface Readme extends Component {
   text: string
 }
 
-export function NewReadme(d: Record<string,any>): Readme {
+export function NewReadme (d: Record<string, any>): Readme {
   return {
     qri: d.qri || 'rm:0',
     scriptPath: d.scriptPath,
@@ -427,7 +426,7 @@ export interface Viz extends Component {
   script?: string
 }
 
-export function NewViz(d: Record<string,any>): Viz {
+export function NewViz (d: Record<string, any>): Viz {
   return {
     qri: d.qri || 'vz:0',
     scriptPath: d.scriptPath,
@@ -448,13 +447,14 @@ function isJSONSchema7 (x: any): x is JSONSchema7 {
   return (x as JSONSchema7).type !== undefined
 }
 
-export function extractColumnHeaders (structure: Structure, value: any[]): ColumnProperties[] {
+export function extractColumnHeaders (structure: Structure | undefined, value: Body | undefined): ColumnProperties[] {
   if (!structure || !value) {
     return []
   }
   const schema = structure.schema
 
   if (!schema) {
+    // @ts-expect-error
     const firstRow = value && value[0]
     if (!firstRow) return []
     return firstRow.map((d: any, i: number) => `field_${i + 1}`)

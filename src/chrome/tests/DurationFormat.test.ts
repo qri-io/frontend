@@ -14,9 +14,9 @@ describe('converToDuration tests', () => {
     expect(convertToDuration(60 * 60)).toBe('1h 0m 00s')
   })
   test('check one day', () => {
-    expect(convertToDuration(60*60*24)).toBe('1d 0h 0m 00s')
+    expect(convertToDuration(60 * 60 * 24)).toBe('1d 0h 0m 00s')
   })
   test('check duration with multiple parts', () => {
-    expect(convertToDuration((60*60*24)+(60*60)+(60)+1)).toBe('1d 1h 1m 01s')
+    expect(convertToDuration((60 * 60 * 24) + (60 * 60) + (60) + 1)).toBe('1d 1h 1m 01s')
   })
 })

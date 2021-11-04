@@ -24,7 +24,7 @@ interface ExportButtonProps extends RouteProps {
 const ExportButton: React.FC<ExportButtonProps> = ({
   qriRef,
   showIcon = true,
-  size = 'md',
+  size = 'md'
   // setModal
 }) => (<ActionButton
   id='export-button'

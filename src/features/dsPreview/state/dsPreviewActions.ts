@@ -1,7 +1,7 @@
-import { QriRef } from "../../../qri/ref";
-import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api";
+import { QriRef } from "../../../qri/ref"
+import { ApiAction, ApiActionThunk, CALL_API } from "../../../store/api"
 
-export function loadDsPreview(ref: QriRef): ApiActionThunk {
+export function loadDsPreview (ref: QriRef): ApiActionThunk {
   return async (dispatch, getState) => {
     dispatch({ type: 'DS_PREVIEW_REQUEST' })
 
@@ -17,10 +17,10 @@ export function loadDsPreview(ref: QriRef): ApiActionThunk {
         type: 'DS_PREVIEW_SUCCESS',
         ref
       })
-    } catch (e) {
+    } catch (e: any) {
       return dispatch({
         type: 'DS_PREVIEW_FAILURE',
-        error: e.toString(),
+        error: e.toString()
       })
     }
   }
@@ -56,7 +56,7 @@ function fetchDsPreviewBody (ref: QriRef, page: number = 1, pageSize: number = b
         name: ref.name,
         path: ref.path,
         selector: ['body']
-      },
+      }
     }
   }
 }

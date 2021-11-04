@@ -3,13 +3,12 @@ import { Dataset } from './dataset'
 
 export type RunStatus =
   | 'waiting'
-  | 'queued'
   | 'running'
   | 'succeeded'
   | 'failed'
   | 'unchanged'
   | 'skipped'
-  | ''          // empty status indicates a manual change
+  | '' // empty status indicates a manual change
 
 export interface Run {
   id: string
@@ -22,7 +21,7 @@ export interface Run {
   dsPreview?: Dataset
 }
 
-export function NewRun(data: Record<string,any>): Run {
+export function NewRun (data: Record<string, any>): Run {
   return {
     id: data.id || '',
     status: data.status || 'waiting',
@@ -30,7 +29,7 @@ export function NewRun(data: Record<string,any>): Run {
   }
 }
 
-export function NewRunFromEventLog(runID: string, log: EventLogLine[]): Run {
+export function NewRunFromEventLog (runID: string, log: EventLogLine[]): Run {
   return log.reduce(runAddLogStep, NewRun({ id: runID }))
 }
 
@@ -45,7 +44,7 @@ export interface RunStep {
   output?: EventLogLine[]
 }
 
-export function NewRunStep(data: Record<string, any>): RunStep {
+export function NewRunStep (data: Record<string, any>): RunStep {
   return {
     id: data.sessionID,
     name: data.name,
@@ -58,8 +57,7 @@ export function NewRunStep(data: Record<string, any>): RunStep {
   }
 }
 
-
-export function runAddLogStep(run: Run, line: EventLogLine): Run {
+export function runAddLogStep (run: Run, line: EventLogLine): Run {
   if (run.id !== line.sessionID) {
     return run
   }
@@ -70,12 +68,12 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
       run.initID = line.data.initID
       run.startTime = new Date(line.ts / 1000)
       run.steps = []
-      break;
+      break
     case EventLogLineType.ETTransformStop:
       run.initID = line.data.initID
       run.status = line.data.status || 'failed'
       run.stopTime = new Date(line.ts / 1000)
-      break;
+      break
 
     case EventLogLineType.ETTransformStepStart:
       if (run.steps === undefined) {
@@ -85,20 +83,20 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
       s.status = 'running'
       s.startTime = new Date(line.ts / 1000)
       run.steps.push(s)
-      break;
+      break
     case EventLogLineType.ETTransformStepStop:
       const step = lastStep(run)
       if (step) {
         step.stopTime = new Date(line.ts / 1000)
         step.status = line.data.status || 'failed'
       }
-      break;
+      break
     case EventLogLineType.ETTransformStepSkip:
       if (run.steps === undefined) {
         run.steps = []
       }
       run.steps.push(NewRunStep(line.data))
-      break;
+      break
 
     case EventLogLineType.ETPrint:
     case EventLogLineType.ETError:
@@ -109,23 +107,22 @@ export function runAddLogStep(run: Run, line: EventLogLine): Run {
     case EventLogLineType.ETHttpRequestStop:
     case EventLogLineType.ETVersionPulled:
       appendStepOutputLog(run, line)
-      break;
+      break
 
     case EventLogLineType.ETDatasetPreview:
       run.dsPreview = line.data as Dataset
-
   }
   return run
 }
 
-function lastStep(run: Run): RunStep | undefined {
-  if (run.steps && run.steps.length > 0)  {
+function lastStep (run: Run): RunStep | undefined {
+  if (run.steps && run.steps.length > 0) {
     return run.steps[run.steps.length - 1]
   }
   return undefined
 }
 
-function appendStepOutputLog(run: Run, line: EventLogLine) {
+function appendStepOutputLog (run: Run, line: EventLogLine) {
   const step = lastStep(run)
   if (step) {
     step.output ? step.output.push(line) : step.output = [line]

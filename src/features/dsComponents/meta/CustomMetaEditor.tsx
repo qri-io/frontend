@@ -3,10 +3,10 @@ import { Meta, standardFieldNames } from '../../../qri/dataset'
 
 export interface CustomMetaEditorProps {
   data: Meta
-  onDatasetChange: (field: string[], value: any) => void
+  onDatasetChange: (field: string, value: any) => void
 }
 
-const ignore = standardFieldNames.concat(['qri','path'])
+const ignore = standardFieldNames.concat(['qri', 'path'])
 
 const CustomMetaEditor: React.FC<CustomMetaEditorProps> = ({
   data,

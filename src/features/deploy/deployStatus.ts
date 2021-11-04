@@ -10,7 +10,7 @@ export interface DeployStatusInfo {
   buttonText: string
 }
 
-export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
+export const deployStatusInfoMap: Record<DeployStatus, DeployStatusInfo> = {
   'undeployed': {
     statusIcon: 'deployCircle',
     statusText: 'Not Deployed',
@@ -18,13 +18,13 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     message: 'This workflow is not deployed yet. Edit your script & use Dry Run to confirm that it is working, then Deploy it!',
     buttonIcon: 'playCircle',
     buttonClass: 'bg-qritile-600 hover:bg-qritile-700',
-    buttonText: 'Deploy Workflow',
+    buttonText: 'Deploy Workflow'
   },
   'deployed': {
     statusIcon: 'deployCircle',
     color: 'text-qrigreen',
     statusText: 'Deployed',
-    message : 'This workflow is deployed and will run based on the triggers you’ve defined.',
+    message: 'This workflow is deployed and will run based on the triggers you’ve defined.',
     buttonIcon: 'pauseCircle',
     buttonClass: 'bg-gray-500 hover:bg-gray-400',
     buttonText: 'Pause Workflow'
@@ -33,10 +33,10 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     statusIcon: 'loader',
     color: 'text-black',
     statusText: 'Deploying',
-    message : '',
+    message: '',
     buttonIcon: 'pauseCircle',
     buttonClass: 'bg-gray-500 hover:bg-gray-400',
-    buttonText: 'Cancel',
+    buttonText: 'Cancel'
   },
   'drafting': {
     statusIcon: 'deployCircle',
@@ -45,13 +45,13 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     message: 'This version is deployed, but drafted changes to this script are not yet live.',
     buttonIcon: 'playCircle',
     buttonClass: 'bg-qritile-600 hover:bg-qritile-700',
-    buttonText: 'Deploy Changes',
+    buttonText: 'Deploy Changes'
   },
   'paused': {
     statusIcon: 'deployCircle',
     color: 'text-qrigray-400',
     statusText: 'Paused',
-    message : 'This workflow is paused. All triggers will be ignored until resumed',
+    message: 'This workflow is paused. All triggers will be ignored until resumed',
     buttonIcon: 'pauseCircle',
     buttonClass: 'bg-gray-500 hover:bg-gray-400',
     buttonText: 'Resume Workflow'
@@ -60,7 +60,7 @@ export const deployStatusInfoMap: Record<DeployStatus,DeployStatusInfo> = {
     statusIcon: 'deployCircle',
     color: 'text-dangerred',
     statusText: 'Paused',
-    message : 'This workflow is paused. All triggers will be ignored until resumed',
+    message: 'This workflow is paused. All triggers will be ignored until resumed',
     buttonIcon: 'pauseCircle',
     buttonClass: 'bg-gray-500 hover:bg-gray-400',
     buttonText: 'Resume Workflow'

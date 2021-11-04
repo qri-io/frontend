@@ -16,7 +16,7 @@ const ComponentChangeIndicatorGroup: React.FC<ComponentChangeIndicatorGroupProps
           'bg-gray-400': (v === ChangeStatus.unchanged),
           'bg-green-500': (v === ChangeStatus.added),
           'bg-red-500': (v === ChangeStatus.removed),
-          'bg-yellow-500': (v === ChangeStatus.modified),
+          'bg-yellow-500': (v === ChangeStatus.modified)
         })}>&nbsp;</div>
     ))}
   </div>

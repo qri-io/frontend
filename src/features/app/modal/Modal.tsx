@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { ModalType, selectModal } from '../state/appState'
-import DeployWorkflowModal from '../../deploy/DeployWorkflowModal'
 import RemoveDatasetModal, { RemoveDatasetModalProps } from '../../dataset/modal/RemoveDatasetModal'
 import ScheduleModal from '../../workflow/modal/ScheduleModal'
 import UnsavedChangesModal from '../../workflow/modal/UnsavedChangesModal'
@@ -65,21 +64,19 @@ const Modal: React.FC<any> = () => {
               case ModalType.schedulePicker:
                 return <ScheduleModal {...modal.props} />
               case ModalType.unsavedChanges:
-                  return <UnsavedChangesModal {...modal.props} />
-              case ModalType.deployWorkflow:
-                  return <DeployWorkflowModal {...modal.props} />
+                return <UnsavedChangesModal {...modal.props} />
               case ModalType.removeDataset:
-                  return <RemoveDatasetModal {...modal.props as RemoveDatasetModalProps} />
+                return <RemoveDatasetModal {...modal.props as RemoveDatasetModalProps} />
               case ModalType.logIn:
-                  return <LogInModal {...modal.props} />
+                return <LogInModal {...modal.props} />
               case ModalType.signUp:
-                  return <SignUpModal {...modal.props} />
+                return <SignUpModal {...modal.props} />
               case ModalType.workflowSplash:
-                  return <WorkflowSplashModal {...modal.props} />
+                return <WorkflowSplashModal {...modal.props} />
               case ModalType.deploy:
-                  return <DeployModal {...modal.props} />
+                return <DeployModal {...modal.props} />
               case ModalType.addTrigger:
-                  return <AddTriggerModal {...modal.props} />
+                return <AddTriggerModal {...modal.props} />
               default:
                 return null
             }

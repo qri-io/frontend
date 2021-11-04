@@ -7,7 +7,7 @@ import Icon from '../../../chrome/Icon'
 import Button from '../../../chrome/Button'
 import { clearModal } from '../../app/state/appActions'
 import CronTriggerEditor from '../../trigger/CronTriggerEditor'
-import { WorkflowTrigger, WorkflowTriggerType } from '../../../qrimatic/workflow'
+import { WorkflowTrigger, WorkflowTriggerType, CronTrigger } from '../../../qrimatic/workflow'
 import { changeWorkflowTrigger } from '../../workflow/state/workflowActions'
 
 export interface AddTriggerModalProps {
@@ -29,7 +29,7 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
 
   // this will be the default cron trigger setting when the user chooses "schedule"
   // from the list of available triggers
-  const defaultCronTrigger: WorkflowTrigger = {
+  const defaultCronTrigger: CronTrigger = {
     type: 'cron',
     periodicity: 'R/2021-01-01T02:00:00.000Z/P1D'
   }
@@ -74,21 +74,22 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
       buttonLabel: 'Schedule',
       description: 'run your workflow at a specific interval (e.g. daily at 11pm)',
       label: 'Schedule Trigger',
-      content: ( <CronTriggerEditor trigger={triggers[0]} onChange={handleTriggerChange} /> )
+      // @ts-expect-error
+      content: (<CronTriggerEditor trigger={triggers[0]} onChange={handleTriggerChange} />)
     },
     {
       id: 'webhook',
       buttonLabel: 'Webhook',
       description: 'trigger your script from an external environment',
       disabled: true,
-      label: 'Webhook Triggers',
+      label: 'Webhook Triggers'
     },
     {
       id: 'dataset',
       buttonLabel: 'Upstream Dataset',
       description: 'set an upstream dataset to listen for changes',
       disabled: true,
-      label: 'Upstream Dataset Triggers',
+      label: 'Upstream Dataset Triggers'
     }
   ]
 
@@ -112,7 +113,7 @@ const AddTriggerModal: React.FC<AddTriggerModalProps> = ({
             return (
               <div
                 key={id}
-                id={'trigger_modal_'+id}
+                id={'trigger_modal_' + id}
                 className={classNames('w-full py-4 px-4 rounded flex border items-center mb-4', {
                   'cursor-pointer': !disabled
                 })}

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 import { Action } from 'redux'
 import classNames from 'classnames'

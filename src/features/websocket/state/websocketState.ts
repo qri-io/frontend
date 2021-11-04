@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store';
-import { WebsocketAction } from './websocketActions';
+import { RootState } from '../../../store/store'
+import { WebsocketAction } from './websocketActions'
 
 export const WS_CONNECT = 'WS_CONNECT'
 export const WS_DISCONNECT = 'WS_DISCONNECT'
@@ -11,18 +11,18 @@ export const selectWebsocketState = (state: RootState): WebsocketState => state.
 
 export enum WSConnectionStatus {
   disconnected, // no connection
-  connecting,   // constructing connection
-  connected,    // OK
-  interrupted,  // disconnected, but want a connection
+  connecting, // constructing connection
+  connected, // OK
+  interrupted, // disconnected, but want a connection
 }
 
 export interface WebsocketState {
-  status: WSConnectionStatus,
-  reconnectTime?: Date, // when disconnected, the time to wait until reconnecting
+  status: WSConnectionStatus
+  reconnectTime?: Date // when disconnected, the time to wait until reconnecting
   reconnectAttemptsRemaining?: number
 }
 
-export function NewWebsocketState(status: WSConnectionStatus, reconnectAttemptsRemaining?: number, reconnectTime?: Date): WebsocketState {
+export function NewWebsocketState (status: WSConnectionStatus, reconnectAttemptsRemaining?: number, reconnectTime?: Date): WebsocketState {
   return {
     status,
     reconnectTime,

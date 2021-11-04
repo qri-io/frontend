@@ -97,7 +97,7 @@ const TypePicker: React.FunctionComponent<TypePickerProps> = ({
         if (val === 'any') {
           val = undefined
         }
-        onPickType(e, val,)
+        onPickType(e, val)
       }
     }
   }

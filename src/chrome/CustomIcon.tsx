@@ -10,8 +10,8 @@ export interface CustomIconProps {
 
 const CustomIcon: React.FunctionComponent<CustomIconProps> = ({
   className,
-  size='md',
-  spin=false,
+  size = 'md',
+  spin = false,
   children,
   rotation
 }) => {

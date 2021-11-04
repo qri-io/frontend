@@ -15,7 +15,7 @@ import {
   selectUserProfileLoading,
   selectUserProfileError,
   selectUserProfileDatasets,
-  selectUserProfileFollowing,
+  selectUserProfileFollowing
 } from './state/userProfileState'
 import NavBar from '../navbar/NavBar'
 import Footer from '../footer/Footer'
@@ -44,13 +44,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
   const { ref: stickyHeaderTriggerRef, inView } = useInView({
     threshold: 0.6,
     initialInView: true
-  });
+  })
 
   const paginatedDatasetResults = useSelector(selectUserProfileDatasets)
   const paginatedFollowingResults = useSelector(selectUserProfileFollowing)
 
   const scrollContainer = useRef<HTMLDivElement>(null)
-  const { username: usernameParam } = useParams()
+  const { username: usernameParam } = useParams<Record<string, any>>()
 
   const { search } = useLocation()
   const userProfileParams: UserProfileDatasetListParams = NewUserProfileDatasetListParams(queryString.parse(search))
@@ -60,7 +60,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
     dispatch(loadUserProfile(usernameParam))
     dispatch(loadUserProfileDatasets(usernameParam, userProfileParams))
     dispatch(loadUserProfileFollowing(usernameParam, userProfileParams))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, search])
 
   // merges new query params with existing params, updates history
@@ -97,7 +96,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
       link: `/${usernameParam}`,
       numberDecorator: paginatedDatasetResults.pageInfo.resultCount,
       selected: path === '/'
-    },
+    }
     // TODO (boandriy): Hiding temporarily to match new design
     // {
     //   name: 'Following',
@@ -157,11 +156,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
   }
 
   return (
-    <div className='flex flex-col h-full w-full' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6'}}>
+    <div className='flex flex-col h-full w-full' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6' }}>
       <NavBar />
       {content}
     </div>
   )
 }
 
-export default UserProfile;
+export default UserProfile

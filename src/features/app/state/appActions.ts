@@ -1,4 +1,4 @@
-import { Modal, ModalType, SET_MODAL, SET_MODAL_LOCKED, TOGGLE_NAV_EXPANDED,  } from "./appState";
+import { Modal, ModalType, SET_MODAL, SET_MODAL_LOCKED, TOGGLE_NAV_EXPANDED } from "./appState"
 
 export interface ModalAction {
   type: string
@@ -11,7 +11,7 @@ export interface ModalLockedAction {
   locked: boolean
 }
 
-export function showModal<P = {}>(type: ModalType, props?: P, locked?: boolean = false): ModalAction {
+export function showModal<P = {}> (type: ModalType, props?: P): ModalAction {
   return {
     type: SET_MODAL,
     modal: {
@@ -21,22 +21,22 @@ export function showModal<P = {}>(type: ModalType, props?: P, locked?: boolean =
   }
 }
 
-export function clearModal(): ModalAction {
+export function clearModal (): ModalAction {
   return {
     type: SET_MODAL,
     modal: { type: ModalType.none }
   }
 }
 
-export function setModalLocked(locked: boolean): ModalLockedAction {
+export function setModalLocked (locked: boolean): ModalLockedAction {
   return {
     type: SET_MODAL_LOCKED,
     locked
   }
 }
 
-export function toggleNavExpanded() {
+export function toggleNavExpanded () {
   return {
-    type: TOGGLE_NAV_EXPANDED,
+    type: TOGGLE_NAV_EXPANDED
   }
 }

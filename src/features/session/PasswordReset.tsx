@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useLocation } from "react-router-dom"
 
-import NavBar from "../navbar/NavBar";
-import PasswordForgotBgImage from "./PasswordResetBgImage";
-import ContentBox from "../../chrome/ContentBox";
-import TextInput from "../../chrome/forms/TextInput";
-import Button from "../../chrome/Button";
-import Spinner from "../../chrome/Spinner";
-import { selectIsSessionLoading, selectResetError } from "./state/sessionState";
-import { resetPassword } from "./state/sessionActions";
-import { validatePassword } from "./state/formValidation";
+import NavBar from "../navbar/NavBar"
+import PasswordForgotBgImage from "./PasswordResetBgImage"
+import ContentBox from "../../chrome/ContentBox"
+import TextInput from "../../chrome/forms/TextInput"
+import Button from "../../chrome/Button"
+import Spinner from "../../chrome/Spinner"
+import { selectIsSessionLoading, selectResetError } from "./state/sessionState"
+import { resetPassword } from "./state/sessionActions"
+import { validatePassword } from "./state/formValidation"
 
 const PasswordReset: React.FC = () => {
   const [password, setPassword] = useState('')
   const [rePassword, setRePassword] = useState('')
-  const [inputError, setInputError] = useState('');
+  const [inputError, setInputError] = useState('')
 
   const location = useLocation()
   const error = useSelector(selectResetError)
   const dispatch = useDispatch()
   const loading = useSelector(selectIsSessionLoading)
-
 
   const handleSubmitClick = () => {
     setInputError('')
@@ -43,10 +42,10 @@ const PasswordReset: React.FC = () => {
       <NavBar />
       <PasswordForgotBgImage />
       <ContentBox className='absolute top-60 right-12 md:right-64 z-30 ' paddingClassName='p-11'>
-        <h1 style={{lineHeight: '36px', width: 276}} className='font-extrabold text-3xl w-60 leading-10 mb-8 whitespace-pre-line'>Reset <br/> your
+        <h1 style={{ lineHeight: '36px', width: 276 }} className='font-extrabold text-3xl w-60 leading-10 mb-8 whitespace-pre-line'>Reset <br/> your
           Password</h1>
         <form>
-          <div className='mb-8' style={{width: 276}}>
+          <div className='mb-8' style={{ width: 276 }}>
             <TextInput
               type='password'
               name='password'
@@ -65,7 +64,7 @@ const PasswordReset: React.FC = () => {
             />
           </div>
 
-          <Button type='secondary' className='mb-6' onClick={handleSubmitClick}  block>
+          <Button type='secondary' className='mb-6' onClick={handleSubmitClick} block>
             {loading ? <Spinner color='#fff' size={6} /> : 'Reset Password'}
           </Button>
         </form>

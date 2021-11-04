@@ -1,7 +1,7 @@
 // TODO(chriswhong): BodyPreview and Body should be combined since they share a lot of the same logic
 import React from 'react'
 
-import Dataset,  { Structure, schemaToColumns, ColumnProperties } from '../../../qri/dataset'
+import Dataset, { extractColumnHeaders } from '../../../qri/dataset'
 import BodyTable from './BodyTable'
 import BodyJson from './BodyJson'
 import BodyHeader from './BodyHeader'
@@ -13,28 +13,13 @@ export interface BodyProps {
   loading: boolean
 }
 
-const extractColumnHeaders = (structure: Structure, value: any[]): ColumnProperties[] => {
-  if (!structure || !value) {
-    return []
-  }
-  const schema = structure.schema
-
-  if (!schema) {
-    const firstRow = value && value[0]
-    if (!firstRow) return []
-    return firstRow.map((d: any, i: number) => `field_${i + 1}`)
-  }
-
-  return schemaToColumns(schema)
-}
-
 const Body: React.FC<BodyProps> = ({
   dataset,
   loading
 }) => {
   const {
     body,
-    structure,
+    structure
   } = dataset
 
   if (!body) {
@@ -66,7 +51,7 @@ const Body: React.FC<BodyProps> = ({
         (structure.format === 'csv' && Array.isArray(body))
           ? <BodyTable
               headers={headers}
-              body={body.slice(0, 100)} //TODO(chriswhong): fetch previews/paginated body properly so we aren't rendering extremely large tables
+              body={body.slice(0, 100)} // TODO(chriswhong): fetch previews/paginated body properly so we aren't rendering extremely large tables
             />
           : <BodyJson
               data={body}

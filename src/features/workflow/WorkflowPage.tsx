@@ -8,7 +8,7 @@ import { QriRef } from '../../qri/ref'
 import Workflow from './Workflow'
 import RunBar from './RunBar'
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
-import { selectRun } from "../events/state/eventsState";
+import { selectRun } from "../events/state/eventsState"
 
 interface WorkflowPageProps {
   qriRef: QriRef
@@ -23,24 +23,21 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   // if qriRef is empty, this is a new workflow
   const isNew = qriRef.username === '' && qriRef.name === ''
 
-
   // don't fetch the dataset if this is a new workflow
   useEffect(() => {
     // ensures that workflowDataset username and name match the route
     dispatch(setWorkflowRef(qriRef))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />
 
   return (
     <>
-      {dataset || isNew ?
-        (<DatasetScrollLayout isNew={isNew} headerChildren={runBar} useScroller>
+      {dataset || isNew
+        ? (<DatasetScrollLayout isNew={isNew} headerChildren={runBar} useScroller>
           <Workflow qriRef={qriRef} />
         </DatasetScrollLayout>)
-      :
-        (<div className='w-full h-full p-4 flex justify-center items-center'>
+        : (<div className='w-full h-full p-4 flex justify-center items-center'>
           <Spinner color='#43B3B2' />
         </div>)}
     </>

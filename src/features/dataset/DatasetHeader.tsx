@@ -1,17 +1,16 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
-import ContentLoader from "react-content-loader";
+import ContentLoader from "react-content-loader"
 
 import EditableLabel from '../../chrome/EditableLabel'
 import { renameDataset } from './state/datasetActions'
 import DatasetInfoItem from './DatasetInfoItem'
 import Link from '../../chrome/Link'
 import { validateDatasetName } from '../session/state/formValidation'
-import { selectDatasetHeader, selectIsHeaderLoading } from "./state/datasetState";
-import { qriRefFromVersionInfo } from "../../qri/versionInfo";
-import fileSize from "../../utils/fileSize";
-
+import { selectDatasetHeader, selectIsHeaderLoading } from "./state/datasetState"
+import { qriRefFromVersionInfo } from "../../qri/versionInfo"
+import fileSize from "../../utils/fileSize"
 
 export interface DatasetHeaderProps {
   isNew: boolean
@@ -28,7 +27,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   isNew,
   border = false,
   editable = false,
-  children,
+  children
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
@@ -36,7 +35,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   const loading = useSelector(selectIsHeaderLoading)
   const qriRef = qriRefFromVersionInfo(header)
 
-  const handleRename = (_:string, value:string) => {
+  const handleRename = (_: string, value: string) => {
     renameDataset(qriRef, { username: header.username, name: value })(dispatch)
       .then(({ type }) => {
         if (type === 'API_RENAME_SUCCESS') {
@@ -53,12 +52,12 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
           {/* don't show the username/name when creating a new dataset with the workflow editor */}
           { !isNew && (
             <div className='text-base text-qrigray-400 relative flex items-center group hover:text font-mono'>
-              {loading ?
-                <ContentLoader height='20.8'>
+              {loading
+                ? <ContentLoader height='20.8'>
                   <rect width="100" y='4' height="16" rx="1" fill="#D5DADD"/>
                   <rect width="180" y='4' x='110' height="16" rx="1" fill="#D5DADD"/>
-                </ContentLoader> :
-                <>
+                </ContentLoader>
+                : <>
                   <Link to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</Link>/
                   <EditableLabel
                     readOnly={!editable}
@@ -71,11 +70,11 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             </div>
           )}
 
-          {loading && !isNew ?
-            <ContentLoader height='29.6'>
+          {loading && !isNew
+            ? <ContentLoader height='29.6'>
               <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
-            </ContentLoader> :
-            <div className='text-2xl text-black-500 font-bold group hover:text'>
+            </ContentLoader>
+            : <div className='text-2xl text-black-500 font-bold group hover:text'>
               {isNew ? newWorkflowTitle : header.name}
             </div>}
           {!isNew && (
@@ -101,7 +100,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
               </Button>
               <Icon icon='ellipsesVertical' size='lg' className='ml-2' />
               */}
-              {/*<DownloadDatasetButton qriRef={qriRef} type='primary' />*/}
+              {/* <DownloadDatasetButton qriRef={qriRef} type='primary' /> */}
             </>
           )}
         </div>
@@ -111,8 +110,8 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   )
 }
 
-export default DatasetHeader;
+export default DatasetHeader
 
-function getLabel(count: number, label: string) {
+function getLabel (count: number, label: string) {
   return `${count} ${label}${count === 1 ? '' : 's'}`
 }

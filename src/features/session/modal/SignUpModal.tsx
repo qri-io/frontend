@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { AnyAction } from '@reduxjs/toolkit';
+import { useDispatch, useSelector } from 'react-redux'
+import { AnyAction } from '@reduxjs/toolkit'
 
-import { ACTION_FAILURE, getActionType } from '../../../store/api';
+import { ACTION_FAILURE, getActionType } from '../../../store/api'
 import Link from '../../../chrome/Link'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
@@ -11,11 +11,10 @@ import { ModalType } from '../../app/state/appState'
 import { signUp } from '../state/sessionActions'
 import { selectIsSessionLoading } from '../state/sessionState'
 import { validateEmail, validateUsername, validatePassword, ValidationError } from '../state/formValidation'
-import QriLogo from '../../../chrome/QriLogo';
-import Spinner from '../../../chrome/Spinner';
+import QriLogo from '../../../chrome/QriLogo'
+import Spinner from '../../../chrome/Spinner'
 
 const SignUpModal: React.FC = () => {
-
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState<ValidationError>(null)
 
@@ -29,7 +28,6 @@ const SignUpModal: React.FC = () => {
 
   const dispatch = useDispatch()
   const loading = useSelector(selectIsSessionLoading)
-
 
   const handleLogInClick = () => {
     dispatch(showModal(ModalType.logIn))
@@ -61,7 +59,7 @@ const SignUpModal: React.FC = () => {
   }
 
   return (
-    <div className='bg-white py-9 px-5 text-center' style={{ width: '440px'}}>
+    <div className='bg-white py-9 px-5 text-center' style={{ width: '440px' }}>
       <div className='w-10 m-auto mb-4'>
         <QriLogo size='sm'/>
       </div>
@@ -73,14 +71,14 @@ const SignUpModal: React.FC = () => {
               name='email'
               placeholder='Email'
               value={email}
-              onChange={(value) => { setEmail(value)  }}
+              onChange={(value) => { setEmail(value) }}
               error={emailError}
             />
             <TextInput
               name='username'
               placeholder='Username'
               value={username}
-              onChange={(value) => { setUsername(value)  }}
+              onChange={(value) => { setUsername(value) }}
               error={usernameError}
             />
             <TextInput
@@ -88,17 +86,17 @@ const SignUpModal: React.FC = () => {
               type='password'
               placeholder='Password'
               value={password}
-              onChange={(value) => { setPassword(value)  }}
+              onChange={(value) => { setPassword(value) }}
               error={passwordError}
             />
           </div>
           {signupError && <div className='text-xs text-red-500 text-left mb-2'>{signupError}</div>}
           <Button className='mb-6' onClick={handleButtonClick} submit block>
-            {loading ? <Spinner color='#fff' size='6' /> : 'Continue'}
+            {loading ? <Spinner color='#fff' size={6} /> : 'Continue'}
           </Button>
         </form>
         <div className='mb-3 text-qrigray-400 text-xs'>
-          By continuing, you agree to Qri's <Link to='https://qri.io/legal/tos'>Terms of Service</Link> & <Link to='https://qri.io/legal/privacy-policy'>Privacy Policy</Link>.
+          By continuing, you agree to Qri&apos;s <Link to='https://qri.io/legal/tos'>Terms of Service</Link> & <Link to='https://qri.io/legal/privacy-policy'>Privacy Policy</Link>.
         </div>
 
         <hr className='w-20 mx-auto mb-3'/>

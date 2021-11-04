@@ -32,16 +32,16 @@ const Footer: React.FC<{}> = () => (
       {
         [
           { icon: 'github',
-            link: 'https://github.com/qri-io',
+            link: 'https://github.com/qri-io'
           },
           { icon: 'youtube',
-            link: 'https://www.youtube.com/channel/UC7E3_hURgFO2mVCLDwPSyOQ',
+            link: 'https://www.youtube.com/channel/UC7E3_hURgFO2mVCLDwPSyOQ'
           },
           { icon: 'twitter',
-            link: 'https://twitter.com/qri_io',
+            link: 'https://twitter.com/qri_io'
           },
           { icon: 'discord',
-            link: 'https://discordapp.com/invite/thkJHKj',
+            link: 'https://discordapp.com/invite/thkJHKj'
           }
         ].map(({ icon, link }, i) => (
           <IconLink
@@ -57,6 +57,5 @@ const Footer: React.FC<{}> = () => (
     </div>
   </div>
 )
-
 
 export default Footer

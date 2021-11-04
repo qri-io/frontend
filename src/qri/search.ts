@@ -20,7 +20,7 @@ const DEFAULT_SORT = 'recentlyupdated'
 const DEFAULT_PAGE = 1
 const DEFAULT_PAGESIZE = 25
 
-export function NewSearchParams(d: Record<string,any>): SearchParams {
+export function NewSearchParams (d: Record<string, any>): SearchParams {
   return {
     q: d.q || '',
     sort: d.sort || DEFAULT_SORT,
@@ -29,8 +29,8 @@ export function NewSearchParams(d: Record<string,any>): SearchParams {
   }
 }
 
-export function CleanSearchParams(d: SearchParams): Record<string, any> {
-  const cleanParams:any = {
+export function CleanSearchParams (d: SearchParams): Record<string, any> {
+  const cleanParams: any = {
     q: d.q
   }
   if (d.sort !== DEFAULT_SORT) { cleanParams.sort = d.sort }
@@ -51,7 +51,7 @@ export interface SearchResult extends Dataset {
   }
 }
 
-export function NewSearchResult(d: Record<string,any>): SearchResult {
+export function NewSearchResult (d: Record<string, any>): SearchResult {
   // search results store the dataset under `value`, but this is used for
   // listings on user profile pages which have the dataset at the top level
   const dv = d.value || d
@@ -62,6 +62,7 @@ export function NewSearchResult(d: Record<string,any>): SearchResult {
 
   if (dv.stats) {
     stats = {
+      // @ts-expect-error
       downloadCount: dv.stats.download_count,
       pullCount: dv.stats.pull_count,
       viewCount: dv.stats.view_count

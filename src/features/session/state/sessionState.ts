@@ -1,11 +1,10 @@
-import { createReducer, Action } from '@reduxjs/toolkit'
-import { RootState } from '../../../store/store';
+import { createReducer } from '@reduxjs/toolkit'
+import { RootState } from '../../../store/store'
 
 interface SessionTokens {
   token: string
   refreshToken: string
 }
-
 
 export const RESET_FORGOT_STATE = 'RESET_FORGOT_STATE'
 
@@ -45,16 +44,16 @@ export const AnonUser: User = {
   username: 'new'
 }
 
-function getAuthState(): SessionState {
+function getAuthState (): SessionState {
   try {
-    const token = JSON.parse(localStorage.getItem('state.auth.token')) || '';
-    const refreshToken = JSON.parse(localStorage.getItem('state.auth.refreshToken')) || '';
-    const user = JSON.parse(localStorage.getItem('state.auth.user')) || AnonUser;
+    const token = localStorage.getItem('state.auth.token') || ''
+    const refreshToken = localStorage.getItem('state.auth.refreshToken') || ''
+    const user = localStorage.getItem('state.auth.user') || AnonUser
 
     return {
-      token,
-      refreshToken,
-      user,
+      token: JSON.parse(token),
+      refreshToken: JSON.parse(refreshToken),
+      user: typeof user === 'string' ? JSON.parse(user) : user,
       loading: false,
       resetSent: false,
       resetError: ''
@@ -67,15 +66,20 @@ function getAuthState(): SessionState {
       loading: false,
       resetSent: false,
       resetError: ''
-    };
+    }
   }
 }
 
-
 const initialState: SessionState = getAuthState()
 
+interface AuthAction {
+  user: User
+  token: string
+  refreshToken: string
+}
+
 // same state changes on successful login or signup
-const loginOrSignupSuccess = (state: SessionState, action: Action) => {
+const loginOrSignupSuccess = (state: SessionState, action: AuthAction) => {
   const {
     name,
     profile,
@@ -137,7 +141,7 @@ export const sessionReducer = createReducer(initialState, {
     state.resetError = action.error
   },
   // called after accessToken refresh
-  'SET_TOKEN': (state: SessionState, action: Action) => {
+  'SET_TOKEN': (state: SessionState, action: AuthAction) => {
     state.token = action.token
   },
   RESET_FORGOT_STATE: (state: SessionState) => {
@@ -146,7 +150,7 @@ export const sessionReducer = createReducer(initialState, {
   }
 })
 
-const cleanErrorMessage = (err: string):string => {
+const cleanErrorMessage = (err: string): string => {
   if (err.includes('404:')) {
     return err.replace('404: ', '')
   }

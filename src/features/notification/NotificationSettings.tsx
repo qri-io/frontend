@@ -1,11 +1,11 @@
 import React from 'react'
-import NotificationMenu from './NotificationMenu';
+import NotificationMenu from './NotificationMenu'
 
 const NotificationSettings: React.FC<any> = () => {
   return (
     <div>
     <h1>Notification Settings</h1>
-    <div> 
+    <div>
       <h1>Sidebar</h1>
       <NotificationMenu />
     </div>
@@ -28,4 +28,4 @@ const NotificationSettings: React.FC<any> = () => {
   )
 }
 
-export default NotificationSettings;
+export default NotificationSettings

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 
 import Dataset, { ComponentName } from '../../qri/dataset'
@@ -18,7 +19,7 @@ export const TabbedComponentEditor: React.FC<TabbedComponentViewerProps> = ({
   loading,
   selectedComponent,
   setSelectedComponent,
-  onDatasetChange,
+  onDatasetChange
 }) => {
   if (loading) {
     return (

@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { WorkflowTrigger } from '../../qrimatic/workflow'
+import { WorkflowTrigger, CronTrigger as CronTriggerType } from '../../qrimatic/workflow'
 
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import Block from '../workflow/Block'
 import CronTrigger from './CronTrigger'
-import { CronTrigger as CronTriggerType } from '../../qrimatic/workflow'
+
 import ContentBox from '../../chrome/ContentBox'
 import IconOnlyButton from '../../chrome/IconOnlyButton'
-import WorkflowCellControlButton from "../workflow/WorkflowCellControlButton";
+import WorkflowCellControlButton from "../workflow/WorkflowCellControlButton"
 
 export interface WorkflowTriggersEditorProps {
   triggers?: WorkflowTrigger[]
@@ -26,16 +26,13 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
 }) => {
   const dispatch = useDispatch()
 
-  const [ showControls, setShowControls ] = useState(false);
+  const [ showControls, setShowControls ] = useState(false)
   const [ createTrigger, setCreateTrigger ] = useState(false)
 
   const defaultCronTrigger: CronTriggerType = {
     type: 'cron',
-    periodicity: 'R/2021-01-01T02:00:00.000Z/P1D',
-    id: '',
-    nextRunStart: ''
+    periodicity: 'R/2021-01-01T02:00:00.000Z/P1D'
   }
-
 
   const handleAddClick = () => {
     setShowControls(false)
@@ -48,7 +45,7 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
   }
   return (
     <div className='flex'>
-      <div style={{width: 'calc(100% - 225px)'}} className='min-w-0'>
+      <div style={{ width: 'calc(100% - 225px)' }} className='min-w-0'>
         <ScrollAnchor id='triggers'/>
         <div className='flex'>
           <div className='flex-grow'>
@@ -74,7 +71,7 @@ const WorkflowTriggersEditor: React.FC<WorkflowTriggersEditorProps> = ({
                 case 'cron':
                   return <CronTrigger key={i} trigger={trigger} onCreateDelete={() => setCreateTrigger(false)} />
                 default:
-                  return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker))}} />
+                  return <Block {...trigger} key={i} onClick={() => { dispatch(showModal(ModalType.schedulePicker)) }} />
               }
             })}
             {createTrigger && <CronTrigger trigger={defaultCronTrigger} editMode={true} onCreateDelete={() => setCreateTrigger(false)}/>}

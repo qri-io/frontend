@@ -163,21 +163,21 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
         onPaste={(e) => {
           e.preventDefault()
           e.stopPropagation()
-          var paste = stripHtml(e.clipboardData.getData('text')).result
+          let paste = stripHtml(e.clipboardData.getData('text')).result
 
           // we currently don't allow new lines in the description
           paste = paste.replace(/[\r\n]/gm, " ")
 
           // the selection is where we want to paste over/into
-          var sel = window.getSelection()
+          let sel = window.getSelection()
           if (!sel) {
             return
           }
           // get the start of the selection
           // get the end of the selection
-          var text = e.currentTarget.innerText
-          var start = sel.anchorOffset
-          var end = sel.focusOffset
+          let text = e.currentTarget.innerText
+          let start = sel.anchorOffset
+          let end = sel.focusOffset
           if (!text) {
             text = ''
             start = 0
@@ -186,7 +186,7 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
 
           // if start is after end, switch them
           if (start - end > 0) {
-            var temp = start
+            let temp = start
             start = end
             end = temp
           }
@@ -199,7 +199,7 @@ const DynamicEditField: React.FunctionComponent<DynamicEditFieldProps> = ({
           handleChange(e)
 
           // adjust the selection range to cover the pasted content
-          var range = sel.getRangeAt(0)
+          let range = sel.getRangeAt(0)
 
           if (!e.currentTarget.firstChild) {
             return

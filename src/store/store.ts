@@ -1,32 +1,32 @@
 import { combineReducers, applyMiddleware, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import { ThunkAction, Action } from '@reduxjs/toolkit';
+import { ThunkAction, Action } from '@reduxjs/toolkit'
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router'
 import { createBrowserHistory, History } from 'history'
 
-import transfersReducer from '../features/transfer/state/transferState';
-import { apiMiddleware } from './api';
-import { RemoteEvents, websocketMiddleware } from '../features/websocket/middleware/websocket';
-import { workflowReducer, WorkflowState } from '../features/workflow/state/workflowState';
-import { AppState, appReducer } from '../features/app/state/appState';
-import { CollectionState, collectionReducer } from '../features/collection/state/collectionState';
-import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState';
-import { dsPreviewReducer, DsPreviewState } from '../features/dsPreview/state/dsPreviewState';
-import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState';
-import { searchReducer, SearchState } from '../features/search/state/searchState';
-import { deployReducer, DeployState } from '../features/deploy/state/deployState';
-import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState';
-import { sessionReducer, SessionState, AnonUser } from '../features/session/state/sessionState';
-import { commitsReducer, CommitsState } from '../features/commits/state/commitState';
-import { datasetEditsReducer, DatasetEditsState } from '../features/dataset/state/editDatasetState';
-import { WebsocketState, websocketReducer } from '../features/websocket/state/websocketState';
+import transfersReducer from '../features/transfer/state/transferState'
+import { apiMiddleware } from './api'
+import { RemoteEvents, websocketMiddleware } from '../features/websocket/middleware/websocket'
+import { workflowReducer, WorkflowState } from '../features/workflow/state/workflowState'
+import { AppState, appReducer } from '../features/app/state/appState'
+import { CollectionState, collectionReducer } from '../features/collection/state/collectionState'
+import { datasetReducer, DatasetState } from '../features/dataset/state/datasetState'
+import { dsPreviewReducer, DsPreviewState } from '../features/dsPreview/state/dsPreviewState'
+import { scrollerReducer, ScrollerState } from '../features/scroller/state/scrollerState'
+import { searchReducer, SearchState } from '../features/search/state/searchState'
+import { deployReducer, DeployState } from '../features/deploy/state/deployState'
+import { activityFeedReducer, ActivityFeedState } from '../features/activityFeed/state/activityFeedState'
+import { sessionReducer, SessionState, AnonUser } from '../features/session/state/sessionState'
+import { commitsReducer, CommitsState } from '../features/commits/state/commitState'
+import { datasetEditsReducer, DatasetEditsState } from '../features/dataset/state/editDatasetState'
+import { WebsocketState, websocketReducer } from '../features/websocket/state/websocketState'
 import { UserProfileState, userProfileReducer } from '../features/userProfile/state/userProfileState'
-import { eventsReducer, EventsState } from "../features/events/state/eventsState";
+import { eventsReducer, EventsState } from "../features/events/state/eventsState"
 
 export const history = createBrowserHistory()
 
 export interface RootState {
-  activityFeed: ActivityFeedState,
+  activityFeed: ActivityFeedState
   app: AppState
   collection: CollectionState
   commits: CommitsState
@@ -68,27 +68,25 @@ const rootReducer = (h: History) => combineReducers({
   websocket: websocketReducer
 })
 
-function setAuthState(state: any) {
+function setAuthState (state: any) {
   try {
     if (state.session.token) {
-      localStorage.setItem('state.auth.token', JSON.stringify((state.session || {}).token));
-      localStorage.setItem('state.auth.refreshToken', JSON.stringify((state.session || {}).refreshToken));
-
+      localStorage.setItem('state.auth.token', JSON.stringify((state.session || {}).token))
+      localStorage.setItem('state.auth.refreshToken', JSON.stringify((state.session || {}).refreshToken))
     } else {
       localStorage.removeItem('state.auth.token')
       localStorage.removeItem('state.auth.refreshToken')
     }
 
-
     if (state.session.token && (state.session.token !== AnonUser)) {
-      localStorage.setItem('state.auth.user', JSON.stringify((state.session || {}).user));
+      localStorage.setItem('state.auth.user', JSON.stringify((state.session || {}).user))
     } else {
       localStorage.removeItem('state.auth.user')
     }
-  } catch (err) { return undefined; }
+  } catch (err) { return undefined }
 }
 
-export function configureStore(preloadedState?: any) {
+export function configureStore (preloadedState?: any) {
   const composeEnhancer: typeof compose = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
   const store = createStore(
     rootReducer(history),
@@ -98,15 +96,15 @@ export function configureStore(preloadedState?: any) {
         thunk,
         routerMiddleware(history),
         apiMiddleware,
-        websocketMiddleware as any,
-      ),
-    ),
+        websocketMiddleware as any
+      )
+    )
   )
 
   // automatically sync store.session.token with localstorage
   store.subscribe(() => {
     setAuthState(store.getState())
-  });
+  })
 
   // // Hot reloading
   // if (module.hot) {
@@ -120,9 +118,10 @@ export function configureStore(preloadedState?: any) {
 }
 
 // export type RootState = ReturnType<typeof store.getState>;
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+ReturnType,
+RootState,
+unknown,
+Action<string>
+>

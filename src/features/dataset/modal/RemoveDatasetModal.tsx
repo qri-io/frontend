@@ -7,8 +7,8 @@ import { loadCollection, removeCollectionItem } from '../../collection/state/col
 import ModalLayout from '../../app/modal/ModalLayout'
 
 export interface RemoveDatasetModalProps {
-  username: string,
-  name: string,
+  username: string
+  name: string
   onDsRemove: () => void
   afterRemove: () => void
 }
@@ -19,7 +19,7 @@ const RemoveDatasetModal: React.FC<RemoveDatasetModalProps> = ({ username, name,
   const onRemove = () => {
     // TODO (ramfox): we are thinking of ways to adjust this syntax: https://github.com/qri-io/qrimatic/issues/98
     onDsRemove()
-    removeDataset({username, name})(dispatch)
+    removeDataset({ username, name })(dispatch)
       .then((action: AnyAction) => {
         if (action.type.includes('SUCCESS')) {
           setTimeout(() => {

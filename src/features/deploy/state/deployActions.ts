@@ -1,4 +1,4 @@
-import { CALL_API, ApiActionThunk} from '../../../store/api'
+import { CALL_API, ApiActionThunk } from '../../../store/api'
 import { QriRef, refStringFromQriRef } from '../../../qri/ref'
 import { Workflow, workflowScriptString } from '../../../qrimatic/workflow'
 import { Dataset } from '../../../qri/dataset'
@@ -9,7 +9,7 @@ import {
   DEPLOY_SAVEWORKFLOW_END,
   DEPLOY_SAVEDATASET_START,
   DEPLOY_SAVEDATASET_END,
-  DEPLOY_RESET_RUN_ID,
+  DEPLOY_RESET_RUN_ID
 } from './deployState'
 import { prepareWorkflowForDeploy } from '../../workflow/utils/prepareWorkflowForDeploy'
 
@@ -31,7 +31,7 @@ export interface ResetRunIdAction {
   type: string
 }
 
-export function deployWorkflow(qriRef: QriRef, w: Workflow, d: Dataset, run: boolean): ApiActionThunk {
+export function deployWorkflow (qriRef: QriRef, w: Workflow, d: Dataset, run: boolean): ApiActionThunk {
   const workflow = prepareWorkflowForDeploy(w)
   // this is where we strip the steps from the workflow and add them to dataset
   return async (dispatch, getState) => {
@@ -49,22 +49,22 @@ export function deployWorkflow(qriRef: QriRef, w: Workflow, d: Dataset, run: boo
             name: qriRef.name,
             transform: {
               scriptBytes: btoa(workflowScriptString(w)),
-              steps: d.transform.steps
+              steps: d.transform?.steps
             }
           }
-        },
+        }
       }
     })
   }
 }
 
-export function deployResetRunId(): ResetRunIdAction {
+export function deployResetRunId (): ResetRunIdAction {
   return {
     type: DEPLOY_RESET_RUN_ID
   }
 }
 
-export function deployStarted(data: DeployEvent, sessionID: string): DeployEventAction {
+export function deployStarted (data: DeployEvent, sessionID: string): DeployEventAction {
   return {
     type: DEPLOY_START,
     data,
@@ -72,7 +72,7 @@ export function deployStarted(data: DeployEvent, sessionID: string): DeployEvent
   }
 }
 
-export function deployEnded(data: DeployEvent, sessionID: string): DeployEventAction {
+export function deployEnded (data: DeployEvent, sessionID: string): DeployEventAction {
   return {
     type: DEPLOY_END,
     data,
@@ -80,7 +80,7 @@ export function deployEnded(data: DeployEvent, sessionID: string): DeployEventAc
   }
 }
 
-export function deploySaveWorkflowStarted(data: DeployEvent, sessionID: string): DeployEventAction {
+export function deploySaveWorkflowStarted (data: DeployEvent, sessionID: string): DeployEventAction {
   return {
     type: DEPLOY_SAVEWORKFLOW_START,
     data,
@@ -88,7 +88,7 @@ export function deploySaveWorkflowStarted(data: DeployEvent, sessionID: string):
   }
 }
 
-export function deploySaveWorkflowEnded(data: DeployEvent, sessionID: string): DeployEventAction {
+export function deploySaveWorkflowEnded (data: DeployEvent, sessionID: string): DeployEventAction {
   return {
     type: DEPLOY_SAVEWORKFLOW_END,
     data,
@@ -96,7 +96,7 @@ export function deploySaveWorkflowEnded(data: DeployEvent, sessionID: string): D
   }
 }
 
-export function deploySaveDatasetStarted(data: DeployEvent, sessionID: string): DeployEventAction {
+export function deploySaveDatasetStarted (data: DeployEvent, sessionID: string): DeployEventAction {
   return {
     type: DEPLOY_SAVEDATASET_START,
     data,
@@ -104,7 +104,7 @@ export function deploySaveDatasetStarted(data: DeployEvent, sessionID: string): 
   }
 }
 
-export function deploySaveDatasetEnded(data: DeployEvent, sessionID: string): DeployEventAction {
+export function deploySaveDatasetEnded (data: DeployEvent, sessionID: string): DeployEventAction {
   return {
     type: DEPLOY_SAVEDATASET_END,
     data,

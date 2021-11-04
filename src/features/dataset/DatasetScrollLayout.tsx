@@ -12,14 +12,14 @@ import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
 import Scroller from '../scroller/Scroller'
 
 interface DatasetScrollLayoutProps {
-  isNew: boolean
+  isNew?: boolean
   headerChildren?: JSX.Element
   contentClassName?: string
   useScroller?: boolean
 }
 
 const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
-  isNew,
+  isNew = false,
   headerChildren,
   contentClassName = '',
   useScroller = false,
@@ -41,7 +41,7 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
   const { ref: stickyHeaderTriggerRef, inView } = useInView({
     threshold: 0.6,
     initialInView: true
-  });
+  })
 
   const content = (
     <>
@@ -73,7 +73,5 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
     </div>
   )
 }
-
-
 
 export default DatasetScrollLayout

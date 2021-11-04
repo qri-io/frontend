@@ -35,7 +35,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ tabs }) => (
               (
                 <div className={classNames('text-white rounded px-2 ml-2', {
                   'bg-qripink-600': selected,
-                  'bg-qrigray-400': !selected,
+                  'bg-qrigray-400': !selected
                 })}>
                   {numberDecorator}
                 </div>
@@ -62,7 +62,7 @@ export const ContentTabs: React.FC<ContentTabsProps> = ({ tabs }) => (
               'bg-gray-200': !selected,
               'text-gray-400': disabled,
               'text-black': !disabled,
-              'hover:cursor-pointer': !disabled,
+              'hover:cursor-pointer': !disabled
             })}
           >
             {tabContent}

@@ -8,33 +8,31 @@ import {
   TRANSFORM_CANCELED,
   TRANSFORM_START
 } from "./collectionState"
-import { RootState } from "../../../store/store";
+import { RootState } from "../../../store/store"
 import { ThunkDispatch } from 'redux-thunk'
 import { QriRef } from '../../../qri/ref'
 import { TransformLifecycle } from "../../../qri/events"
-
 
 function mapVersionInfo (data: object | []): VersionInfo[] {
   if (!data) { return [] }
   return (data as []).map((data) => newVersionInfo(data))
 }
 
-export function loadCollection() {
-  return async (dispatch, getState) => {
+export function loadCollection (): ApiActionThunk {
+  return async (dispatch) => {
     return dispatch(fetchCollection())
   }
 }
 
-export function loadVersionInfo(initID: string) {
+export function loadVersionInfo (initID: string) {
   return async (dispatch: ThunkDispatch<any, any, any>, getState: () => RootState) => {
-    const state = getState();
+    const state = getState()
     if (state.collection.collection[initID]) {
       return state.collection.collection[initID]
     } else if (!state.collection.pendingIDs.includes(initID)) {
       return dispatch(fetchVersionInfo(initID))
-    } else return
+    }
   }
-
 }
 
 function fetchCollection (): ApiAction {
@@ -60,7 +58,7 @@ function fetchVersionInfo (initID: string): ApiAction {
       method: 'POST',
       body: {
         initID: initID
-      },
+      }
     }
   }
 }
@@ -96,21 +94,21 @@ export interface RemoveCollectionItemAction {
   name: string
 }
 
-export function logbookWriteCommitEvent(vi: VersionInfo): LogbookWriteAction {
+export function logbookWriteCommitEvent (vi: VersionInfo): LogbookWriteAction {
   return {
     type: LOGBOOK_WRITE_COMMIT,
     vi
   }
 }
 
-export function logbookWriteRunEvent(vi: VersionInfo): LogbookWriteAction {
+export function logbookWriteRunEvent (vi: VersionInfo): LogbookWriteAction {
   return {
     type: LOGBOOK_WRITE_RUN,
     vi
   }
 }
 
-export function removeCollectionItem(username: string, name: string): RemoveCollectionItemAction {
+export function removeCollectionItem (username: string, name: string): RemoveCollectionItemAction {
   return {
     type: REMOVE_COLLECTION_ITEM,
     username: username,
@@ -127,21 +125,21 @@ export interface ResetCollectionStateAction {
   type: string
 }
 
-export function transformStartEvent(lc: TransformLifecycle): TransformAction {
+export function transformStartEvent (lc: TransformLifecycle): TransformAction {
   return {
     type: TRANSFORM_START,
     lc
   }
 }
 
-export function transformCanceledEvent(lc: TransformLifecycle): TransformAction {
+export function transformCanceledEvent (lc: TransformLifecycle): TransformAction {
   return {
     type: TRANSFORM_CANCELED,
     lc
   }
 }
 
-export function resetCollectionState() {
+export function resetCollectionState () {
   return {
     type: RESET_COLLECTION_STATE
   }

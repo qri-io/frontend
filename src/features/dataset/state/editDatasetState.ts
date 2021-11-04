@@ -1,8 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store';
-import Dataset, { NewDataset } from '../../../qri/dataset';
-import { EditDatasetAction } from './editDatasetActions';
+import { RootState } from '../../../store/store'
+import Dataset, { NewDataset } from '../../../qri/dataset'
+import { EditDatasetAction } from './editDatasetActions'
 
 export const EDIT_DATASET = 'EDIT_DATASET'
 
@@ -26,15 +26,15 @@ const initialState: DatasetEditsState = {
 
 export const datasetEditsReducer = createReducer(initialState, {
   'EDIT_DATASET': (state: DatasetEditsState, action: EditDatasetAction) => {
-    let field = action.ref.selector?.slice(0,-1).reduce((acc, f) => {
+    let field = action.ref.selector?.slice(0, -1).reduce((acc, f) => {
       if (!acc[f]) {
-        throw(new Error(`bad selector: ${action.ref.selector?.join('/')}. ${f} does not exist`))
+        throw (new Error(`bad selector: ${action.ref.selector?.join('/')}. ${f} does not exist`))
       }
       return acc[f]
-    }, state.dataset as Record<string,any>)
+    }, state.dataset as Record<string, any>)
 
     if (field && action.ref.selector?.length) {
-      field[action.ref.selector[action.ref.selector.length-1]] = action.value
+      field[action.ref.selector[action.ref.selector.length - 1]] = action.value
     }
     state.hasEdits = true
   },

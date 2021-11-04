@@ -41,7 +41,7 @@ export interface ResizableProps {
  * onResize and onReset event and update the width prop accordingly.
  */
 export default class Resizable extends React.Component<ResizableProps, {}> {
-  public static defaultProps: IResizableProps = {
+  public static defaultProps: ResizableProps = {
     width: 250,
     maximumWidth: 350,
     minimumWidth: 150

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import MonacoEditor, { EditorConstructionOptions } from 'react-monaco-editor'
-import { KeyMod, KeyCode } from "monaco-editor/esm/vs/editor/editor.api";
-import { RunStatus } from "../../qri/run";
+import { KeyMod, KeyCode } from "monaco-editor/esm/vs/editor/editor.api"
+import { RunStatus } from "../../qri/run"
 
 export interface CodeEditorProps {
   active: boolean
@@ -40,7 +40,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   script,
   onChange,
   onRun = () => {},
-  disabled,
+  disabled
 }) => {
   const ref = useRef<MonacoEditor>(null)
 
@@ -56,13 +56,13 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleEditorWillMount = (monaco: any) => {
     monaco?.editor?.defineTheme("qri-theme", {
-        base: 'vs',
-        inherit: true,
-        rules: [],
-        colors: {
-          'editor.background': '#fff',
-      	}
-    });
+      base: 'vs',
+      inherit: true,
+      rules: [],
+      colors: {
+        'editor.background': '#fff'
+      }
+    })
   }
 
   useEffect(() => {
@@ -99,8 +99,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
-  });
+    window.addEventListener('resize', handleResize)
+  })
 
   return (
     <MonacoEditor
@@ -116,7 +116,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       }}
       language='python'
       theme='qri-theme'
-      options={{...MONACO_EDITOR_OPTIONS, readOnly: disabled}}
+      options={{ ...MONACO_EDITOR_OPTIONS, readOnly: disabled }}
       editorDidMount={handleEditorDidMount}
       editorWillMount={handleEditorWillMount}
     />

@@ -1,9 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import NotificationMenu from './NotificationMenu';
+import NotificationMenu from './NotificationMenu'
 import Page from '../app/Page'
-
 
 const NotificationList: React.FC<any> = () => (
   <Page>
@@ -39,4 +38,4 @@ const NotificationList: React.FC<any> = () => (
   </Page>
 )
 
-export default NotificationList;
+export default NotificationList

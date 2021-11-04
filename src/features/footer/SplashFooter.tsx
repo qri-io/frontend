@@ -6,10 +6,9 @@ import QriLogo from '../../chrome/QriLogo'
 import { trackGoal } from '../../features/analytics/analytics'
 
 const SplashFooter = () => {
-
   const fireAnalyticsEvent = () => {
     // home-click-footer-link event
-    trackGoal('RUURNI2W', 0);
+    trackGoal('RUURNI2W', 0)
   }
 
   return (

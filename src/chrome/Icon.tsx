@@ -71,12 +71,12 @@ import Tags from './icon/Tags'
 import Twitter from './icon/Twitter'
 import Unlock from './icon/Unlock'
 import Youtube from './icon/Youtube'
-import TrashBin from "./icon/TrashBin";
-import Duplicate from "./icon/Duplicate";
-import UpArrow from "./icon/UpArrow";
-import Dataset from "./icon/Dataset";
-import WebHook from "./icon/WebHook";
-import Deploy from "./icon/Deploy";
+import TrashBin from "./icon/TrashBin"
+import Duplicate from "./icon/Duplicate"
+import UpArrow from "./icon/UpArrow"
+import Dataset from "./icon/Dataset"
+import WebHook from "./icon/WebHook"
+import Deploy from "./icon/Deploy"
 
 interface IconProps {
   // name of the icon

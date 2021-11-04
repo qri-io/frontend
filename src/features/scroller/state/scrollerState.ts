@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store';
-import { SetScrollerPosAction, SetScrollAnchorAction } from './scrollerActions';
+import { RootState } from '../../../store/store'
+import { SetScrollerPosAction, SetScrollAnchorAction } from './scrollerActions'
 
 // SCROLLER_DEFAULT_TOP_OFFSET how far from the top of the scroller
 // to place the scrolled element by default
@@ -23,7 +23,6 @@ export interface ScrollerState {
 export const selectScrollerPos = (state: RootState): number => state.scroller.scrollerPos
 
 export const selectScrollAnchorID = (state: RootState): string => state.scroller.scrollAnchorID
-
 
 const initialState: ScrollerState = {
   scrollerPos: 0,

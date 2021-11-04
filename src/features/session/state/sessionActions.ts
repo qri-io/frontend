@@ -1,5 +1,5 @@
-import { ApiAction, ApiActionThunk, CALL_API} from '../../../store/api'
-import { RESET_FORGOT_STATE } from "./sessionState";
+import { ApiAction, ApiActionThunk, CALL_API } from '../../../store/api'
+import { RESET_FORGOT_STATE } from "./sessionState"
 
 // logIn will get a token from the API, then use that token to immediately get User data
 export function logIn (username: string, password: string): ApiActionThunk {
@@ -41,7 +41,7 @@ export function logIn (username: string, password: string): ApiActionThunk {
         token,
         refreshToken
       })
-    } catch (e) {
+    } catch (e: any) {
       return dispatch({
         type: 'LOGIN_FAILURE',
         error: e.toString()
@@ -49,7 +49,6 @@ export function logIn (username: string, password: string): ApiActionThunk {
     }
   }
 }
-
 
 export function logOut (): ApiActionThunk {
   return async (dispatch) => {
@@ -88,7 +87,7 @@ export function signUp (email: string, username: string, password: string): ApiA
         user,
         token
       })
-    } catch (e) {
+    } catch (e: any) {
       return dispatch({
         type: 'SIGNUP_FAILURE',
         error: e.toString()
@@ -97,7 +96,7 @@ export function signUp (email: string, username: string, password: string): ApiA
   }
 }
 
-export function resetPassword(id: string, password: string): ApiActionThunk  {
+export function resetPassword (id: string, password: string): ApiActionThunk {
   return async (dispatch) => {
     dispatch({
       type: 'RESET_REQUEST'
@@ -132,7 +131,7 @@ export function resetPassword(id: string, password: string): ApiActionThunk  {
         token,
         refreshToken
       })
-    } catch (e) {
+    } catch (e: any) {
       return dispatch({
         type: 'RESET_FAILURE',
         error: e.toString()
@@ -141,7 +140,7 @@ export function resetPassword(id: string, password: string): ApiActionThunk  {
   }
 }
 
-export function fetchSignup(email: string, username: string, password: string): ApiAction {
+export function fetchSignup (email: string, username: string, password: string): ApiAction {
   return {
     type: 'signup',
     [CALL_API]: {
@@ -156,7 +155,7 @@ export function fetchSignup(email: string, username: string, password: string): 
   }
 }
 
-export function fetchPasswordForgot(identifier: string): ApiAction {
+export function fetchPasswordForgot (identifier: string): ApiAction {
   return {
     type: 'forgot',
     [CALL_API]: {
@@ -169,7 +168,7 @@ export function fetchPasswordForgot(identifier: string): ApiAction {
   }
 }
 
-export function fetchPasswordReset(id: string, password: string): ApiAction {
+export function fetchPasswordReset (id: string, password: string): ApiAction {
   return {
     type: 'reset',
     [CALL_API]: {
@@ -183,7 +182,7 @@ export function fetchPasswordReset(id: string, password: string): ApiAction {
   }
 }
 
-export function fetchToken(username: string, password: string): ApiAction {
+export function fetchToken (username: string, password: string): ApiAction {
   return {
     type: 'token',
     [CALL_API]: {
@@ -197,7 +196,7 @@ export function fetchToken(username: string, password: string): ApiAction {
   }
 }
 
-export function fetchUserProfile(accessToken: string): ApiAction {
+export function fetchUserProfile (accessToken: string): ApiAction {
   return {
     type: 'profile',
     [CALL_API]: {
@@ -212,7 +211,7 @@ export interface ResetForgotStateAction {
   type: string
 }
 
-export function resetForgotState():ResetForgotStateAction {
+export function resetForgotState (): ResetForgotStateAction {
   return {
     type: RESET_FORGOT_STATE
   }

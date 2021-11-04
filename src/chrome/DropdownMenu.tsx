@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 
 import Icon from './Icon'
-import DropdownMenuItem, { DropdownMenuItemProps } from './DropdownMenuItem';
+import DropdownMenuItem, { DropdownMenuItemProps } from './DropdownMenuItem'
 
 interface DropdownMenuProps {
   alignLeft?: boolean
@@ -22,12 +22,12 @@ export const Divider = () => (<hr className='mb-2'/>)
 // children
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   icon,
-  alignLeft=false,
-  className='',
+  alignLeft = false,
+  className = '',
   items,
-  dropUp=false,
-  oneItem=false,
-  fullWidth=false
+  dropUp = false,
+  oneItem = false,
+  fullWidth = false
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)

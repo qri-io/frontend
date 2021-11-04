@@ -17,17 +17,17 @@ import {
   selectEditedCells
 } from './state/workflowState'
 import { platform } from '../../utils/platform'
-import DeployButton from "../deploy/DeployButton";
-import { newQriRef } from "../../qri/ref";
-import { useParams } from "react-router";
-import { removeEvent } from "../events/state/eventsActions";
-import { selectDeployRunId } from "../deploy/state/deployState";
+import DeployButton from "../deploy/DeployButton"
+import { newQriRef } from "../../qri/ref"
+import { useParams } from "react-router"
+import { removeEvent } from "../events/state/eventsActions"
+import { selectDeployRunId } from "../deploy/state/deployState"
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 import { trackGoal } from '../../features/analytics/analytics'
 import { selectIsLoggedIn } from '../session/state/sessionState'
 
 export interface RunBarProps {
- status: RunStatus
+  status: RunStatus
 }
 
 const RunBar: React.FC<RunBarProps> = ({
@@ -47,12 +47,9 @@ const RunBar: React.FC<RunBarProps> = ({
   const isLoggedIn = useSelector(selectIsLoggedIn)
 
   const removeRunEvents = () => {
-    if (latestDryRunId)
-      dispatch(removeEvent(latestDryRunId))
-    if (latestRunId)
-      dispatch(removeEvent(latestRunId))
-    if (latestDeployRunId)
-      dispatch(removeEvent(latestDeployRunId))
+    if (latestDryRunId) { dispatch(removeEvent(latestDryRunId)) }
+    if (latestRunId) { dispatch(removeEvent(latestRunId)) }
+    if (latestDeployRunId) { dispatch(removeEvent(latestDeployRunId)) }
   }
 
   const handleRun = () => {
@@ -67,7 +64,7 @@ const RunBar: React.FC<RunBarProps> = ({
 
   const isMac = (platform() === 'mac')
 
-  const isNew = (qriRef.username === '' && qriRef.name === '') ||  (!qriRef.username && !qriRef.name)
+  const isNew = (qriRef.username === '' && qriRef.name === '') || (!qriRef.username && !qriRef.name)
 
   let displayStatus = status
   // we already have RunStatusIcon to show the status of the run, so we
@@ -102,9 +99,9 @@ const RunBar: React.FC<RunBarProps> = ({
         id='dry-run'
         effect='solid'
       >
-        {canEdit || (isNew && isLoggedIn) ?
-          `Try this script and preview the results without saving (${isMac ? '⌘' : 'Ctrl'}+↵)` :
-          'Only the dataset owner can run this script'
+        {canEdit || (isNew && isLoggedIn)
+          ? `Try this script and preview the results without saving (${isMac ? '⌘' : 'Ctrl'}+↵)`
+          : 'Only the dataset owner can run this script'
         }
       </ReactTooltip>
     </div>

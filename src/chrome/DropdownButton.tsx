@@ -27,13 +27,13 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
     <button id={id} className='relative rounded-md bg-qritile'>
       <div
         className='float-right p-3 pt-0 pb-2 rounded-tr-md rounded-br-md hover:bg-qritile-500 bg-qritile-600'
-        onClick={() => {setOpen(!open)}}
+        onClick={() => { setOpen(!open) }}
       >
-        <Icon color='light' icon='sortDown'/>
+        <Icon icon='sortDown'/>
       </div>
       <div
         className='p-1 pr-16 pl-5 hover:bg-qritile-400 rounded-md font-bold text-white'
-        onClick={() => {onClick(value)}}
+        onClick={() => { onClick(value) }}
       >
         {value.title}
       </div>

@@ -71,10 +71,10 @@ const SessionUserMenu: React.FC<{}> = () => {
               </div>
 
             </div>
-          ),
+          )
         },
         {
-          element: <Divider />,
+          element: <Divider />
         },
         {
           label: 'Profile',
@@ -82,7 +82,7 @@ const SessionUserMenu: React.FC<{}> = () => {
         },
         {
           label: 'Send Feedback',
-          to:'https://qri.io/contact'
+          to: 'https://qri.io/contact'
         },
         {
           label: 'Log Out',

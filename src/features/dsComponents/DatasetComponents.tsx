@@ -20,13 +20,12 @@ const DatasetComponents: React.FC<{}> = () => {
   const loading = useSelector(selectIsDatasetLoading)
 
   useEffect(() => {
-    const ref = newQriRef({username: qriRef.username, name: qriRef.name, path: qriRef.path})
+    const ref = newQriRef({ username: qriRef.username, name: qriRef.name, path: qriRef.path })
     dispatch(setBodyLoading())
     if (ref.username && ref.name) {
       dispatch(loadDataset(ref))
     }
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
-
 
   return (
     <DatasetFixedLayout headerChildren={<></>}>
@@ -46,4 +45,4 @@ const DatasetComponents: React.FC<{}> = () => {
   )
 }
 
-export default DatasetComponents;
+export default DatasetComponents

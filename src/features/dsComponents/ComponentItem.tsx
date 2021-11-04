@@ -34,7 +34,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
 }) => {
   const tabContent = (
     <>
-      {icon && <Icon icon={icon} size='2xs' className='mr-2' color={disabled ? 'medium' : color} />}
+      {icon && <Icon icon={icon} size='2xs' className='mr-2' />}
       <div>
         <div className='font-bold' style={{ fontSize: 12 }}>{displayName}</div>
         <div>{filename}</div>
@@ -55,7 +55,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
 
   const enabledColorClasses = {
     'text-qripink-600': selected,
-    'text-black': !selected,
+    'text-black': !selected
   }
 
   const disabledClasses = 'text-qrigray-400 bg-qrigray-200'
