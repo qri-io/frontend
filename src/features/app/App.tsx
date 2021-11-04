@@ -21,7 +21,7 @@ const App: React.FC<any> = () => {
   }, [dispatch, tokens.token])
 
   return (
-    <div id='app' className='flex flex-col h-screen w-screen max-w-full' style={{ minWidth: '1100px' }}>
+    <div id='app' className='flex flex-col h-screen w-screen max-w-full'>
       <ConnectedRouter history={history}>
         <Modal />
         <Routes />

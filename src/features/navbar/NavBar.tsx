@@ -17,13 +17,16 @@ export interface NavBarProps {
   transparent?: boolean
   // noLogo hides the logo, used on homepage
   noLogo?: boolean
+  // absolute places the header at the top of the container so it can appear on top of other divs, used on homepage
+  absolute?: boolean
 }
 
 const NavBar: React.FC<NavBarProps> = ({
   minimal = false,
   showSearch = true,
   transparent = false,
-  noLogo = false
+  noLogo = false,
+  absolute = false
 }) => {
   const expanded = useSelector(selectNavExpanded)
   const user = useSelector(selectSessionUser)
@@ -44,8 +47,9 @@ const NavBar: React.FC<NavBarProps> = ({
   }
 
   return (
-    <div className={classNames('text-black text-bold flex items-center pr-8 font-medium', {
-      'bg-white': !transparent
+    <div className={classNames('text-black text-bold flex items-center pr-8 font-medium w-full', {
+      'bg-white': !transparent,
+      'absolute top-0': absolute
     })} style={{
       paddingTop: 14,
       paddingBottom: 14

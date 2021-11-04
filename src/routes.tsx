@@ -35,48 +35,46 @@ export default function Routes () {
   const user = useSelector(selectSessionUser)
 
   return (
-    <div className='route-content h-full w-full'>
-      <Switch>
-        <Route path='/login'><Login /></Route>
-        <Route path='/signup'><Signup /></Route>
-        <Route path='/forgot-password'><ForgotPassword /></Route>
-        <Route path='/reset'>
-          {
+    <Switch>
+      <Route path='/login'><Login /></Route>
+      <Route path='/signup'><Signup /></Route>
+      <Route path='/forgot-password'><ForgotPassword /></Route>
+      <Route path='/reset'>
+        {
             user !== AnonUser ? <Redirect to='/collection' /> : <PasswordReset />
           }
-        </Route>
+      </Route>
 
-        <PrivateRoute path='/dashboard'><Dashboard /></PrivateRoute>
-        <PrivateRoute path='/collection'><Collection /></PrivateRoute>
-        <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
+      <PrivateRoute path='/dashboard'><Dashboard /></PrivateRoute>
+      <PrivateRoute path='/collection'><Collection /></PrivateRoute>
+      <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
-        <Route path='/workflow/new'>
-          <DatasetWrapper fetchData={false}>
-            <WorkflowPage qriRef={{ username: '', name: '' }} />
-          </DatasetWrapper>
-        </Route>
+      <Route path='/workflow/new'>
+        <DatasetWrapper fetchData={false}>
+          <WorkflowPage qriRef={{ username: '', name: '' }} />
+        </DatasetWrapper>
+      </Route>
 
-        <Route path='/new'><TemplateList /></Route>
+      <Route path='/new'><TemplateList /></Route>
 
-        <Route path='/run'><Run /></Route>
-        <Route path='/changes'><ChangeReport /></Route>
+      <Route path='/run'><Run /></Route>
+      <Route path='/changes'><ChangeReport /></Route>
 
-        <Route path='/search'><Search /></Route>
+      <Route path='/search'><Search /></Route>
 
-        <Route path='/notifications'><NotificationList /></Route>
-        <Route path='/notification_settings'><NotificationSettings /></Route>
+      <Route path='/notifications'><NotificationList /></Route>
+      <Route path='/notification_settings'><NotificationSettings /></Route>
 
-        <Route path='/:username' exact><UserProfile /></Route>
-        <Route path='/:username/following'><UserProfile path='/following' /></Route>
+      <Route path='/:username' exact><UserProfile /></Route>
+      <Route path='/:username/following'><UserProfile path='/following' /></Route>
 
-        <Route path='/:username/:name'><DatasetRoutes /></Route>
+      <Route path='/:username/:name'><DatasetRoutes /></Route>
 
-        <Route path='/'>
-          {
+      <Route path='/'>
+        {
             user !== AnonUser ? <Redirect to='/collection' /> : <Splash />
           }
-        </Route>
-      </Switch>
-    </div>
+      </Route>
+    </Switch>
   )
 }
