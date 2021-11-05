@@ -28,7 +28,8 @@ const ForgotPassword: React.FC = () => {
     dispatch(showModal(ModalType.signUp))
   }
 
-  const handleSubmitClick = () => {
+  const handleSubmitClick = (e: React.MouseEvent) => {
+    e.preventDefault()
     dispatch(fetchPasswordForgot(identifier))
   }
 
@@ -78,7 +79,7 @@ const ForgotPassword: React.FC = () => {
                 placeholder='Username or Email'
               />
             </div>
-            <Button type='secondary' className='mb-6' onClick={handleSubmitClick} block>
+            <Button type='secondary' className='mb-6' onClick={handleSubmitClick} submit block>
               {loading ? <Spinner color='#fff' size={6} /> : 'Send Password Reset'}
             </Button>
             <div onClick={handleSignUpClick} className='cursor-pointer text-center text-black text-xs font-bold'>

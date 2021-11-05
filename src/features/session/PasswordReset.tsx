@@ -22,7 +22,8 @@ const PasswordReset: React.FC = () => {
   const dispatch = useDispatch()
   const loading = useSelector(selectIsSessionLoading)
 
-  const handleSubmitClick = () => {
+  const handleSubmitClick = (e: React.MouseEvent) => {
+    e.preventDefault()
     setInputError('')
     const error = validatePassword(password)
     if (password !== rePassword) {
@@ -64,7 +65,7 @@ const PasswordReset: React.FC = () => {
             />
           </div>
 
-          <Button type='secondary' className='mb-6' onClick={handleSubmitClick} block>
+          <Button type='secondary' className='mb-6' onClick={handleSubmitClick} submit block>
             {loading ? <Spinner color='#fff' size={6} /> : 'Reset Password'}
           </Button>
         </form>
