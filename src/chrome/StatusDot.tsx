@@ -31,11 +31,11 @@ export const StatusDot: React.FC<StatusDotProps> = ({
       break
     case 'parse error':
       return (<FontAwesomeIcon
-        icon={faExclamation}
-        className='parse-error'
-        style={{ color: '#e04f4f' }}
-        data-tip='Parsing Error'
-        size='sm' />)
+      icon={faExclamation}
+      className='parse-error'
+      style={{ color: '#e04f4f' }}
+      data-tip='Parsing Error'
+      size='sm' />)
     default:
       if (showNoChanges) {
         return <div>No Changes</div>

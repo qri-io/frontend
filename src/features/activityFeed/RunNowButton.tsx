@@ -24,10 +24,10 @@ const RunNowButton: React.FC<RunNowButtonProps> = ({
 
   return (
     <div data-tip={isDatasetOwner ? '' : 'Only the dataset owner can trigger a run'}>
-    <Button type='primary' icon={ status === 'running' ? 'loader' : 'play'} disabled={!isDatasetOwner || status === 'running'} onClick={status === 'running' ? onCancel : onClick}>
-      {text}
-    </Button>
-    <ReactTooltip/>
+      <Button type='primary' icon={ status === 'running' ? 'loader' : 'play'} disabled={!isDatasetOwner || status === 'running'} onClick={status === 'running' ? onCancel : onClick}>
+        {text}
+      </Button>
+      <ReactTooltip/>
     </div>
   )
 }

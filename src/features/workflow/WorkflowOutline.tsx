@@ -49,7 +49,7 @@ const WorkflowOutline: React.FC<WorkflowOutlineProps> = ({
             <ScrollTrigger target='script'>
               <div className='font-bold text-black mb-2 text-base'>
                 Script {run && <div className='float-right'>
-                <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : run.status} />
+                  <RunStatusIcon status={areCellsEdited.includes(true) ? 'waiting' : run.status} />
                 </div>}
               </div>
             </ScrollTrigger>

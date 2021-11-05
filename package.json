@@ -127,7 +127,10 @@
       "object-curly-newline": "off",
       "prefer-const": "off",
       "quote-props": "off",
-      "react/prop-types": "off"
+      "react/prop-types": [0],
+      "no-use-before-define": "off",
+      "@typescript-eslint/no-use-before-define": ["error"],
+      "react/jsx-indent": ["error", 2]
     },
     "settings": {
       "react": {
@@ -159,6 +162,7 @@
     "@storybook/react": "6.1.15",
     "@types/react-router-dom": "5.1.6",
     "@typescript-eslint/eslint-plugin": "4.0.1",
+    "@typescript-eslint/parser": "4.0.1",
     "eslint": "7.12.1",
     "eslint-config-standard-with-typescript": "21.0.1",
     "eslint-plugin-import": "2.22.1",

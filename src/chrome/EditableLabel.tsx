@@ -79,15 +79,15 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
 
   return (editing
     ? <input
-        ref={inputEl}
-        type='text'
-        className='border-qrigray-400 focus:ring-0 block w-full rounded-lg bg-transparent'
-        value={edit}
-        onKeyPress={handleKeyPress}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        autoFocus
-      />
+      ref={inputEl}
+      type='text'
+      className='border-qrigray-400 focus:ring-0 block w-full rounded-lg bg-transparent'
+      value={edit}
+      onKeyPress={handleKeyPress}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      autoFocus
+    />
     : <h3 className={classNames({ 'cursor-pointer whitespace-nowrap': !readOnly })} onClick={handleLabelClick}>{value}</h3>
   )
 }

@@ -27,7 +27,7 @@ const IconLink: React.FC<IconLinkProps> = ({
   if (link) {
     return (
       <div title={title} className={classNames('ml-2', className)} onClick={onClick}>
-          <Link to={link} className={linkClassNames} colorClassName={colorClassName}>
+        <Link to={link} className={linkClassNames} colorClassName={colorClassName}>
           <Icon icon={icon} size={size} />
         </Link>
       </div>

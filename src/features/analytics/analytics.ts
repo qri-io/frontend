@@ -1,4 +1,6 @@
+// eslint-disable-next-line
 declare global {
+  // eslint-disable-next-line
   interface Window {
     fathom: any
   }

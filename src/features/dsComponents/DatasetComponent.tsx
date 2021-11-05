@@ -95,34 +95,34 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
         {componentContent}
       </div>
 
-    {/* full screen component view functions as a modal */}
-    { expanded && (
-        <div className="fixed top-0 right-0 bottom-0 left-0 inset-0 transition-opacity z-20" aria-hidden="true">
-          <div className="absolute inset-0 bg-gray-200 p-4 flex">
-            <ContentBox className='flex-grow flex flex-col'>
-              <div className='flex'>
-                <div className='flex-grow'>
-                  <div className='text-sm text-qrigray-400 font-mono'>
-                    {dataset.username}/{dataset.name}
-                  </div>
-                  <div className='text-xl text-black font-semibold'>
-                    {dataset.meta?.title || dataset.name}
-                  </div>
+      {/* full screen component view functions as a modal */}
+      { expanded && (
+      <div className="fixed top-0 right-0 bottom-0 left-0 inset-0 transition-opacity z-20" aria-hidden="true">
+        <div className="absolute inset-0 bg-gray-200 p-4 flex">
+          <ContentBox className='flex-grow flex flex-col'>
+            <div className='flex'>
+              <div className='flex-grow'>
+                <div className='text-sm text-qrigray-400 font-mono'>
+                  {dataset.username}/{dataset.name}
                 </div>
-                <div>
-                  <IconLink icon='close' onClick={handleToggleExpanded} />
+                <div className='text-xl text-black font-semibold'>
+                  {dataset.meta?.title || dataset.name}
                 </div>
               </div>
-              <ComponentHeader>
-                {componentHeader}
-              </ComponentHeader>
-              <div style={{ maxHeight: 'calc(100% - 92px)' }} className='overflow-auto flex-grow'>
-                {component}
+              <div>
+                <IconLink icon='close' onClick={handleToggleExpanded} />
               </div>
-            </ContentBox>
-          </div>
+            </div>
+            <ComponentHeader>
+              {componentHeader}
+            </ComponentHeader>
+            <div style={{ maxHeight: 'calc(100% - 92px)' }} className='overflow-auto flex-grow'>
+              {component}
+            </div>
+          </ContentBox>
         </div>
-    )}
+      </div>
+      )}
     </div>
   )
 }

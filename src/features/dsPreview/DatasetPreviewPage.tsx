@@ -47,64 +47,64 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
 
   return (
     <>
-        {dataset?.username === ''
-          ? (<div className='w-full h-full p-4 flex justify-center items-center'>
-            <Spinner color='#43B3B2' />
-          </div>)
-          : (
-            <DatasetScrollLayout contentClassName='max-w-screen-lg mx-auto'>
-              <div className='flex -ml-2 -mr-3 mb-6'>
-                {dataset.readme && <div className='w-7/12 px-2 align-top' style={{ height: readmeContainerHeight }}>
-                  <ContentBox className='flex flex-col h-full'>
-                    <div className='flex flex-col h-full overflow-hidden'>
-                      <ContentBoxTitle title='Readme'/>
-                      <div className='flex-grow overflow-hidden'>
-                        <Readme data={dataset.readme} />
-                      </div>
-                      {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+      {dataset?.username === ''
+        ? (<div className='w-full h-full p-4 flex justify-center items-center'>
+          <Spinner color='#43B3B2' />
+        </div>)
+        : (
+          <DatasetScrollLayout contentClassName='max-w-screen-lg mx-auto'>
+            <div className='flex -ml-2 -mr-3 mb-6'>
+              {dataset.readme && <div className='w-7/12 px-2 align-top' style={{ height: readmeContainerHeight }}>
+                <ContentBox className='flex flex-col h-full'>
+                  <div className='flex flex-col h-full overflow-hidden'>
+                    <ContentBoxTitle title='Readme'/>
+                    <div className='flex-grow overflow-hidden'>
+                      <Readme data={dataset.readme} />
                     </div>
-                  </ContentBox>
+                    {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+                  </div>
+                </ContentBox>
                 </div>}
-                <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-5/12' : 'w-full'} px-3 align-top`}>
-                  <ContentBox>
-                    <div className='flex items-center'>
-                      <div className='flex-grow truncate'>
-                        <div className='flex items-center justify-between'>
-                          <div className='flex-grow min-w-0 pr-6'>
-                            <ContentBoxTitle title='Latest Version' />
-                            <DatasetCommitInfo dataset={dataset} small />
-                          </div>
-                          <div className='flex flex-shrink-0'>
-                            <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' hideIcon={true} type='primary' qriRef={qriRef} />
-                          </div>
+              <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-5/12' : 'w-full'} px-3 align-top`}>
+                <ContentBox>
+                  <div className='flex items-center'>
+                    <div className='flex-grow truncate'>
+                      <div className='flex items-center justify-between'>
+                        <div className='flex-grow min-w-0 pr-6'>
+                          <ContentBoxTitle title='Latest Version' />
+                          <DatasetCommitInfo dataset={dataset} small />
+                        </div>
+                        <div className='flex flex-shrink-0'>
+                          <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' hideIcon={true} type='primary' qriRef={qriRef} />
                         </div>
                       </div>
                     </div>
-                  </ContentBox>
-                  <ContentBox className='mt-6'>
-                    {/* Bottom of the box */}
-                    <ContentBoxTitle title='Metadata' />
-                    <ContentBoxSubTitle title='Description' />
-                    <div className='text-qrigray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
-                    <ContentBoxSubTitle title='Keywords' />
-                    {dataset.meta?.keywords && <MetaChips words={dataset.meta.keywords} />}
-                  </ContentBox>
-                </div>
-              </div>
-              <div className='overflow-hidden' style={{
-                height: 'calc(100vh - 215px)'
-              }}>
-                <ContentBox className='h-full overflow-hidden flex flex-col'>
-                  <div className='flex flex-col h-full overflow-hidden'>
-                    <ContentBoxTitle title='Data' />
-                    <BodyPreview dataset={dataset} loading={loading} />
                   </div>
                 </ContentBox>
+                <ContentBox className='mt-6'>
+                  {/* Bottom of the box */}
+                  <ContentBoxTitle title='Metadata' />
+                  <ContentBoxSubTitle title='Description' />
+                  <div className='text-qrigray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
+                  <ContentBoxSubTitle title='Keywords' />
+                  {dataset.meta?.keywords && <MetaChips words={dataset.meta.keywords} />}
+                </ContentBox>
               </div>
-            </DatasetScrollLayout>
-            )}
-        <DeployingScreen qriRef={qriRef} />
-        </>
+            </div>
+            <div className='overflow-hidden' style={{
+              height: 'calc(100vh - 215px)'
+            }}>
+              <ContentBox className='h-full overflow-hidden flex flex-col'>
+                <div className='flex flex-col h-full overflow-hidden'>
+                  <ContentBoxTitle title='Data' />
+                  <BodyPreview dataset={dataset} loading={loading} />
+                </div>
+              </ContentBox>
+            </div>
+          </DatasetScrollLayout>
+          )}
+      <DeployingScreen qriRef={qriRef} />
+    </>
   )
 }
 
