@@ -72,25 +72,25 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       height: size === 'lg' ? LARGE_HEIGHT : DEFAULT_HEIGHT
     }}>
       <input
-      className={classNames('focus:ring-transparent border-0 bg-transparent block rounded-lg w-full placeholder-opacity-50 p-0', {
-        'placeholder-black': dark,
-        'placeholder-qrigray-300': !dark,
-        'text-sm': size === 'md',
-        'text-base': size === 'lg',
-        'cursor-pointer': disabled
-      })}
-      id='search'
-      name='search'
-      type='text'
-      placeholder={placeholder}
-      value={stateValue || ''}
-      onChange={handleChange}
-      style={{
-        padding: size === 'lg' ? '0 45px 0 20px' : '0 20px 0 10px',
-        lineHeight: size === 'lg' ? LARGE_HEIGHT : DEFAULT_HEIGHT
-      }}
-      disabled={disabled}
-    />
+        className={classNames('focus:ring-transparent border-0 bg-transparent block rounded-lg w-full p-0', {
+          'placeholder-black': dark,
+          'placeholder-qrigray-300': !dark,
+          'text-sm': size === 'md',
+          'text-base': size === 'lg',
+          'cursor-pointer': disabled
+        })}
+        id='search'
+        name='search'
+        type='text'
+        placeholder={placeholder}
+        value={stateValue || ''}
+        onChange={handleChange}
+        style={{
+          padding: size === 'lg' ? '0 45px 0 20px' : '0 20px 0 10px',
+          lineHeight: size === 'lg' ? LARGE_HEIGHT : DEFAULT_HEIGHT
+        }}
+        disabled={disabled}
+      />
       <div className={classNames('flex items-center absolute right-0 h-full px-3', {
         'text-qrigray-300': !dark,
         'text-black': dark

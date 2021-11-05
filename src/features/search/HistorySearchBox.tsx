@@ -12,7 +12,7 @@ const HistorySearchBox: React.FC<{}> = () => {
   return (
     <form className="relative rounded-md shadow-sm w-full mb-5" >
       <input
-        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-xs border-gray-400 rounded-lg tracking-wider placeholder-gray-600 placeholder-opacity-50 bg-transparent"
+        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-xs border-gray-400 rounded-lg tracking-wider placeholder-gray-600 bg-transparent"
         style={{
           padding: '8px 8px 10px 32px'
         }}
