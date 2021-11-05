@@ -8,7 +8,10 @@ export interface ReadmeProps {
 }
 
 export const ReadmeComponent: React.FC<ReadmeProps> = ({ data }) => {
-  const md = new MarkdownIt()
+  const md = new MarkdownIt({
+    html: true,
+    typographer: true
+  })
 
   // overrides the default rendering of markdown-it to make sure links open in a new window
   const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
