@@ -7,5 +7,7 @@ declare global {
 window.fathom = window.fathom || {}
 
 export function trackGoal (id: string, cents: number): void {
-  window?.fathom?.trackGoal(id, cents)
+  if (window?.fathom?.trackGoal) {
+    window?.fathom?.trackGoal(id, cents)
+  }
 }
