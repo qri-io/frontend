@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import classNames from 'classnames'
 import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
 
@@ -54,17 +55,23 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
           : (
             <DatasetScrollLayout contentClassName='max-w-screen-lg mx-auto'>
               <div className='flex -ml-2 -mr-3 mb-6'>
-                {dataset.readme && <div className='w-7/12 px-2 align-top' style={{ height: readmeContainerHeight }}>
-                  <ContentBox className='flex flex-col h-full'>
-                    <div className='flex flex-col h-full overflow-hidden'>
-                      <ContentBoxTitle title='Readme'/>
-                      <div className='flex-grow overflow-hidden'>
-                        <Readme data={dataset.readme} />
+                {dataset.readme && (
+                  <div className='flex-grow w-7/12 relative'>
+                    <div className={classNames('px-2 align-top w-full', {
+                      'absolute': !expandReadme
+                    })} style={{ height: readmeContainerHeight }}>
+                    <ContentBox className='flex flex-col h-full'>
+                      <div className='flex flex-col h-full overflow-hidden'>
+                        <ContentBoxTitle title='Readme'/>
+                        <div className='flex-grow overflow-hidden'>
+                          <Readme data={dataset.readme} />
+                        </div>
+                        {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                       </div>
-                      {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
-                    </div>
-                  </ContentBox>
-                </div>}
+                    </ContentBox>
+                  </div>
+                </div>
+                )}
                 <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-5/12' : 'w-full'} px-3 align-top`}>
                   <ContentBox>
                     <div className='flex items-center'>
