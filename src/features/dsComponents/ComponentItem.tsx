@@ -72,7 +72,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
     <Link
       id={`${displayName.toLowerCase()}-status`}
       className={classNames(tabClasses, enabledClasses)}
-      colorClassName={classNames('flex items-center', enabledColorClasses)}
+      colorClassName={classNames('flex items-center justify-center h-full w-full', enabledColorClasses)}
       to={`#${name}`}
       onClick={() => {
         // dataset-click-dataset-tab event
