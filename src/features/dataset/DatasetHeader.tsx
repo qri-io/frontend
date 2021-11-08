@@ -82,7 +82,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 
   const onTitleClick = () => {
     if (!isNew) {
-      const left = location.pathname === `/${header.username}/${header.name}` ? '-167px' : '153px'
+      const left = location.pathname === `/${header.username}/${header.name}` ? '-206px' : '153px'
       const top = location.pathname === `/${header.username}/${header.name}` ? '67px' : '65px'
       const position = location.pathname === `/${header.username}/${header.name}` ? 'relative' : 'absolute'
       dispatch(resetDatasetTitleError())
@@ -120,11 +120,13 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 
           {(headerLoading || datasetLoading) && !isNew
             ? <ContentLoader height='29.6'>
-                <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
+              <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
             </ContentLoader>
             : <div onClick={onTitleClick} className={classNames({ 'cursor-pointer whitespace-nowrap': !isNew }, 'flex items-center group hover:text')}>
               <h3 className='text-2xl font-bold'>{isNew ? newWorkflowTitle : dataset.meta?.title ? dataset.meta?.title : header.name}</h3>
-              <Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' />
+              {
+                editable && <Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' />
+              }
             </div>
           }
           {!isNew && (
