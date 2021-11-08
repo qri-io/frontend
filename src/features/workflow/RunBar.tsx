@@ -84,12 +84,12 @@ const RunBar: React.FC<RunBarProps> = ({
         <div className='flex'>
           {(status === "running")
             ? (
-                <Button type='secondary-outline' icon='circleX' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>Cancel</Button>
+              <Button type='secondary-outline' icon='circleX' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>Cancel</Button>
               )
             : (
-                <div data-tip data-for='dry-run'>
-                  <Button disabled={!((isNew && isLoggedIn) || canEdit)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
-                </div>
+              <div data-tip data-for='dry-run'>
+                <Button disabled={!((isNew && isLoggedIn) || canEdit)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
+              </div>
               )
           }
           <DeployButton isNew={isNew} disabled={!((isNew || canEdit) && isDirty) } />

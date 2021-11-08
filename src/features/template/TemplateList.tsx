@@ -48,7 +48,7 @@ const TemplateList: React.FC<any> = () => {
                   state: { template: id }
                 }}>
                   <div className='border border-gray-300 hover:border-blue-500 rounded bg-white text-sm px-10 py-16 text-center'>
-                      <div className='font-semibold text-lg'>{name}</div>
+                    <div className='font-semibold text-lg'>{name}</div>
                   </div>
                 </Link>
               </div>

@@ -9,9 +9,9 @@ const CircleWarning: React.FC<CustomIconProps> = (props) => (
       <path d="M12 15.9995L11.9906 15.9995" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round"/>
     </g>
     <defs>
-    <clipPath id="clip0">
-      <rect width="24" height="24" fill="white" transform="translate(24 24) rotate(-180)"/>
-    </clipPath>
+      <clipPath id="clip0">
+        <rect width="24" height="24" fill="white" transform="translate(24 24) rotate(-180)"/>
+      </clipPath>
     </defs>
   </CustomIcon>
 )

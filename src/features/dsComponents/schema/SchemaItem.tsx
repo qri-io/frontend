@@ -105,8 +105,8 @@ const SchemaItem: React.FunctionComponent<SchemaItemProps> = ({
               minWidth={100}
               editable={editable}
             />
-          </div>
-        </td>
+        </div>
+      </td>
     </tr>
   )
 }

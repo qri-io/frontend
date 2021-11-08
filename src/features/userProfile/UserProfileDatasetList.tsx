@@ -53,15 +53,15 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
           {
             loading
               ? (
-              <ContentLoader
+                <ContentLoader
                 width={100}
                 height={20}
               >
-                <rect y="0" width="100" height="18" rx="6"/>
-              </ContentLoader>
+                  <rect y="0" width="100" height="18" rx="6"/>
+                </ContentLoader>
                 )
               : (
-              <>Page {page} of {totalPages || 1}</>
+                <>Page {page} of {totalPages || 1}</>
                 )
           }
 

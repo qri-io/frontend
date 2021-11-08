@@ -26,13 +26,13 @@ const WorkflowDatasetPreview: React.FC<WorkflowDatasetPreviewProps> = ({
           />
           )
         : (
-            <TabbedComponentViewer
+          <TabbedComponentViewer
               dataset={NewDataset({})}
             >
-              <div id='workflow_dataset_preview_empty_text' className='h-full w-full flex justify-center items-center text-qrigray-400 text-center'>
-                Dry run your code!<br/>If everything is working, you&apos;ll see a preview of the next version of this dataset here.
-              </div>
-            </TabbedComponentViewer>
+            <div id='workflow_dataset_preview_empty_text' className='h-full w-full flex justify-center items-center text-qrigray-400 text-center'>
+              Dry run your code!<br/>If everything is working, you&apos;ll see a preview of the next version of this dataset here.
+            </div>
+          </TabbedComponentViewer>
           )}
     </div>
   )

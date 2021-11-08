@@ -65,8 +65,8 @@ const ForgotPassword: React.FC = () => {
         {sent
           ? <div>
             <p style={{ width: 276 }} className='mb-8'>If an account exists for <b>{hashIdentifier()}</b>,
-            you will get an email with a link to reset your password.
-            If it doesn&apos;t arrive, be sure to check your spam folder.</p>
+              you will get an email with a link to reset your password.
+              If it doesn&apos;t arrive, be sure to check your spam folder.</p>
             <Link to='/login'><Button type='secondary' block>Back to Log In</Button></Link>
           </div>
           : <form>

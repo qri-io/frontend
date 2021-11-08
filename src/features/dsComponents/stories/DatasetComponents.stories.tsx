@@ -16,10 +16,10 @@ export default {
 
 const Template: Story<any> = (args) => {
   return (<Provider store={configureStore()}>
-      <ConnectedRouter history={history}>
-        <DatasetComponents />
-      </ConnectedRouter>
-    </Provider>)
+    <ConnectedRouter history={history}>
+      <DatasetComponents />
+    </ConnectedRouter>
+  </Provider>)
 }
 
 export const Basic = Template.bind({})

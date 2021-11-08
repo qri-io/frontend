@@ -35,15 +35,15 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
 
   const content = loading
     ? (
-    <ContentLoader height='38.6' width='177.5'>
-      <rect width="145" height="11" y='2' fill="#D5DADD"/>
-      <rect width="20" y='24' height="11" rx="1" fill="#D5DADD"/>
-      <rect x="26" y='24' width="30" height="11" rx="1" fill="#D5DADD"/>
-      <rect x="66" y='24' width="60" height="11" rx="1" fill="#D5DADD"/>
-    </ContentLoader>
+      <ContentLoader height='38.6' width='177.5'>
+        <rect width="145" height="11" y='2' fill="#D5DADD"/>
+        <rect width="20" y='24' height="11" rx="1" fill="#D5DADD"/>
+        <rect x="26" y='24' width="30" height="11" rx="1" fill="#D5DADD"/>
+        <rect x="66" y='24' width="60" height="11" rx="1" fill="#D5DADD"/>
+      </ContentLoader>
       )
     : (
-        <DatasetCommitInfo dataset={dataset} small automated={!!logItem.runID} />
+      <DatasetCommitInfo dataset={dataset} small automated={!!logItem.runID} />
       )
 
   const containerClassNames = classNames('block rounded-md px-3 py-3 mb-6 w-full overflow-x-hidden', active && 'bg-white', !active && 'text-qrigray-400 border border-qrigray-300')

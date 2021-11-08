@@ -39,7 +39,7 @@ const WorkflowCellControlButton: React.FC<WorkflowCellControlButtonProps> = ({
         rotation={flipIcon ? 180 : undefined}
         size='2xs'
         icon={icon}/>
-        {label}
+      {label}
     </button>
   )
 }

@@ -108,29 +108,29 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
 
   let content = (
     <>
-    <div className='flex-grow w-full overflow-y-scroll'>
-      {/* begin sticky header */}
-      <div className={classNames('sticky bg-white  border border-qrigray-200 z-10', {
-        'invisible -top-16 h-0': inView,
-        'visible top-0 transition-all': !inView
-      })}>
-        <div className='px-8 pt-4 pb-3 flex'>
-          <div className='flex items-center'>
-            <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
-              height: '30px',
-              width: '30px',
-              backgroundImage: `url(${profile.profile})`
-            }}/>
-            <div>
-              <div className='text-black text-sm font-semibold'>{profile.name}</div>
-              <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
+      <div className='flex-grow w-full overflow-y-scroll'>
+        {/* begin sticky header */}
+        <div className={classNames('sticky bg-white  border border-qrigray-200 z-10', {
+          'invisible -top-16 h-0': inView,
+          'visible top-0 transition-all': !inView
+        })}>
+          <div className='px-8 pt-4 pb-3 flex'>
+            <div className='flex items-center'>
+              <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
+                height: '30px',
+                width: '30px',
+                backgroundImage: `url(${profile.profile})`
+              }}/>
+              <div>
+                <div className='text-black text-sm font-semibold'>{profile.name}</div>
+                <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {/* end sticky header */}
-      <div className='mx-auto flex py-9' style={{ maxWidth: '1040px' }}>
-        <div className='flex-auto'>
+        {/* end sticky header */}
+        <div className='mx-auto flex py-9' style={{ maxWidth: '1040px' }}>
+          <div className='flex-auto'>
             <div className='w-full' ref={stickyHeaderTriggerRef}>
               <UserProfileHeader profile={profile} loading={loading} />
             </div>
@@ -143,7 +143,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
               onParamsUpdate={updateQueryParams}
             />
           </div>
-      </div>
+        </div>
       </div>
       <div className='bg-white flex-shrink-0'>
         <Footer />

@@ -89,7 +89,7 @@ const ModalLayout: React.FC<ModalLayoutProps> = ({
             className='ml-4'
             size='lg'
           >
-           {cancelButtonText}
+            {cancelButtonText}
           </Button>
         </div>
       </div>

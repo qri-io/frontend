@@ -127,32 +127,32 @@ const Search: React.FC<{}> = () => {
       <NavBar showSearch={false} />
       <div className='flex-grow w-full py-9'>
         <div className='w-4/5 max-w-screen-lg mx-auto'>
-        <div className='text-black text-3xl font-black mb-4'>Dataset Search</div>
+          <div className='text-black text-3xl font-black mb-4'>Dataset Search</div>
           <div className='mb-4'>
             <SearchBox onSubmit={handleSearchSubmit} size='lg' placeholder='Search for Datasets' value={q}/>
           </div>
           <div className='flex items-center mb-4 h-8'>
             {searchResults.length > 0
               ? (
-              <>
-                <div className='flex-grow'>
-                  <div className='text-qrigray-400 text-sm '>
-                    { loading
-                      ? (
-                      <ContentLoader
+                <>
+                  <div className='flex-grow'>
+                    <div className='text-qrigray-400 text-sm '>
+                      { loading
+                        ? (
+                          <ContentLoader
                         width={300}
                         height={20}
                       >
-                        <rect y="0" width="300" height="18" rx="6"/>
-                      </ContentLoader>
-                        )
-                      : (
-                      <>{pageInfo.resultCount} datasets found matching &apos;{q}&apos;</>
-                        )}
+                            <rect y="0" width="300" height="18" rx="6"/>
+                          </ContentLoader>
+                          )
+                        : (
+                          <>{pageInfo.resultCount} datasets found matching &apos;{q}&apos;</>
+                          )}
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <DropdownMenu
+                  <div>
+                    <DropdownMenu
                     icon={sortIcon}
                     className='ml-8'
                     items={[
@@ -168,11 +168,11 @@ const Search: React.FC<{}> = () => {
                       }
                     ]}
                   />
-                </div>
-              </>
+                  </div>
+                </>
                 )
               : (
-              <>&nbsp;</>
+                <>&nbsp;</>
                 )}
           </div>
         </div>

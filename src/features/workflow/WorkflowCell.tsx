@@ -104,8 +104,8 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
 
   return (
     <div id={`${name}-cell`} className={`w-full workflow-cell relative  ${isCellAdded && 'animate-appear'}`} onClick={onClick}>
-        <ScrollAnchor id={name} />
-        <div
+      <ScrollAnchor id={name} />
+      <div
           className={classNames(`border rounded-lg ${active && borderStyles}`, {
             'border-transparent': !active
           })}
@@ -114,8 +114,8 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
             width: 'calc(100% - 225px)'
           }}
         >
-          {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift */}
-          <div
+        {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift */}
+        <div
             className={classNames(
               `rounded-lg overflow-hidden flex-grow border box-content`,
               borderStyles,
@@ -124,13 +124,13 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
               }
             )}
           >
-            {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-            {(collapseState === 'all' || collapseState === 'only-output') && (output.length > 0 || run?.status === 'running') &&
+          {(collapseState === 'all' || collapseState === 'only-editor') && editor}
+          {(collapseState === 'all' || collapseState === 'only-output') && (output.length > 0 || run?.status === 'running') &&
             !clearedCells[index] &&
             <Output data={output} status={run?.status} wasEdited={editedCells[index]} />}
-          </div>
         </div>
-        <WorkflowCellControls
+      </div>
+      <WorkflowCellControls
           index={index}
           setAnimatedCell={setAnimatedCell}
           canBeDeleted={canBeDeleted}

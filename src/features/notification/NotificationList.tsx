@@ -15,9 +15,9 @@ const NotificationList: React.FC<any> = () => (
         <NotificationMenu />
       </div>
       <div> Main
-      <div>
-        [-] Selected | Select All | Mark as read | Delete ||| [Filter Notifications: ______________________ ] ||| Group By: [Dataset / Date]
-      </div>
+        <div>
+          [-] Selected | Select All | Mark as read | Delete ||| [Filter Notifications: ______________________ ] ||| Group By: [Dataset / Date]
+        </div>
         <div>
           <Link to='/job/id_1234_2'>
             <h5>[ ] |success| - job/dataset_name (id_1234_2, 01/01/2021 13:03:46)</h5>

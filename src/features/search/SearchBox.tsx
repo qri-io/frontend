@@ -71,7 +71,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
       boxShadow: shadow ? '0px 0px 8px rgba(0, 0, 0, 0.1)' : '',
       height: size === 'lg' ? LARGE_HEIGHT : DEFAULT_HEIGHT
     }}>
-    <input
+      <input
       className={classNames('focus:ring-transparent border-0 bg-transparent block rounded-lg w-full placeholder-opacity-50 p-0', {
         'placeholder-black': dark,
         'placeholder-qrigray-300': !dark,

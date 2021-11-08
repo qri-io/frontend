@@ -29,51 +29,51 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
   automated = false
 }) => {
   return (
-  <div className={classNames('truncate', {
-    'text-base': !small,
-    'text-sm': small
-  })}>
-    {/* first row (commit title) */}
-    <div className={classNames('text-black flex justify-between items-center mb-2', {
-      'font-semibold': !inRow
+    <div className={classNames('truncate', {
+      'text-base': !small,
+      'text-sm': small
     })}>
-      <div className={classNames(`dataset_commit_info_text truncate flex-grow`, {
+      {/* first row (commit title) */}
+      <div className={classNames('text-black flex justify-between items-center mb-2', {
+        'font-semibold': !inRow
+      })}>
+        <div className={classNames(`dataset_commit_info_text truncate flex-grow`, {
 
-      })} title={dataset.commit?.title}>{dataset.commit?.title}</div>
+        })} title={dataset.commit?.title}>{dataset.commit?.title}</div>
+      </div>
+      {/* end first row */}
+
+      {/* second row (icons) */}
+      <div className={classNames('flex items-center text-qrigray-400', {
+        'text-xs': small
+      })}>
+        {/* automation icon */}
+        {automated && (
+          <div className='flex-grow-0 mr-2' title='version created by this dataset&apos;s transform script'>
+            <Icon icon='automationFilled' size={small ? '2xs' : 'xs'}/>
+          </div>
+        )}
+        {/* end automation icon */}
+
+        {/* username icon */}
+        <UsernameWithIcon username={dataset.username} tooltip className='mr-2' iconWidth={small ? 12 : 18} iconOnly={small} />
+        {/* end username icon */}
+
+        {/* relative timestamp icon */}
+        {dataset.commit?.timestamp && <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit.timestamp)} />}
+        {/* end relative timestamp icon */}
+
+        {/* commit icon */}
+        {dataset.path && (
+          <div className='flex items-center leading-tight' title={dataset.path}>
+            <Icon icon='commit' size={small ? 'xs' : 'sm'} className='-ml-2' />
+            <div>{commitishFromPath(dataset.path)}</div>
+          </div>
+        )}
+        {/* end commit icon */}
+      </div>
+      {/* end second row */}
     </div>
-    {/* end first row */}
-
-    {/* second row (icons) */}
-    <div className={classNames('flex items-center text-qrigray-400', {
-      'text-xs': small
-    })}>
-      {/* automation icon */}
-      {automated && (
-        <div className='flex-grow-0 mr-2' title='version created by this dataset&apos;s transform script'>
-          <Icon icon='automationFilled' size={small ? '2xs' : 'xs'}/>
-        </div>
-      )}
-      {/* end automation icon */}
-
-      {/* username icon */}
-      <UsernameWithIcon username={dataset.username} tooltip className='mr-2' iconWidth={small ? 12 : 18} iconOnly={small} />
-      {/* end username icon */}
-
-      {/* relative timestamp icon */}
-      {dataset.commit?.timestamp && <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit.timestamp)} />}
-      {/* end relative timestamp icon */}
-
-      {/* commit icon */}
-      {dataset.path && (
-        <div className='flex items-center leading-tight' title={dataset.path}>
-          <Icon icon='commit' size={small ? 'xs' : 'sm'} className='-ml-2' />
-          <div>{commitishFromPath(dataset.path)}</div>
-        </div>
-      )}
-      {/* end commit icon */}
-    </div>
-    {/* end second row */}
-  </div>
   )
 }
 

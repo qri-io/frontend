@@ -84,7 +84,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
           // }
 
           return (
-              <ComponentItem
+            <ComponentItem
                 key={name}
                 name={name}
                 displayName={displayName}
@@ -97,7 +97,7 @@ const ComponentList: React.FC<ComponentListProps> = ({
           )
         }
         return (
-            <ComponentItem
+          <ComponentItem
               key={name}
               name={name}
               displayName={displayName}

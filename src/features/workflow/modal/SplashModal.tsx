@@ -38,30 +38,30 @@ const SignUpModal: React.FC = () => {
         showThumbs={false}
         showIndicators
       >
-         <div className='my-12 px-8 flex'>
-           <div className='text-2xl font-bold mr-3 leading-tight'>
-             1.
-           </div>
-           <div className='text-md text-left leading-tight'>
-             Qri binds code to data, teaching datasets to update themselves
-           </div>
-         </div>
-         <div className='my-12 px-8 flex'>
-           <div className='text-2xl font-bold mr-3 leading-tight'>
-             2.
-           </div>
-           <div className='text-md text-left leading-tight'>
-             Triggers kick off workflows, completions run when datasets update
-           </div>
-         </div>
-         <div className='my-12 px-8 flex'>
-           <div className='text-2xl font-bold mr-3 leading-tight'>
-             3.
-           </div>
-           <div className='text-md text-left leading-tight'>
-             Edit code, dry run to test, then hit deploy!
-           </div>
-         </div>
+        <div className='my-12 px-8 flex'>
+          <div className='text-2xl font-bold mr-3 leading-tight'>
+            1.
+          </div>
+          <div className='text-md text-left leading-tight'>
+            Qri binds code to data, teaching datasets to update themselves
+          </div>
+        </div>
+        <div className='my-12 px-8 flex'>
+          <div className='text-2xl font-bold mr-3 leading-tight'>
+            2.
+          </div>
+          <div className='text-md text-left leading-tight'>
+            Triggers kick off workflows, completions run when datasets update
+          </div>
+        </div>
+        <div className='my-12 px-8 flex'>
+          <div className='text-2xl font-bold mr-3 leading-tight'>
+            3.
+          </div>
+          <div className='text-md text-left leading-tight'>
+            Edit code, dry run to test, then hit deploy!
+          </div>
+        </div>
       </Carousel>
 
       <Button id='splash_modal_workflow_button' className='mt-2' onClick={handleClose} submit block>

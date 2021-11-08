@@ -28,24 +28,24 @@ const Dashboard: React.FC<any> = () => {
         <header className='mb-8 flex'>
           <h1 className='text-2xl font-extrabold w-1/2'>Dashboard</h1>
           <div className='w-1/2 text-right'>
-          <Link to='/new'>
-            <Button icon='plus'>New Dataset</Button>
-          </Link>
+            <Link to='/new'>
+              <Button icon='plus'>New Dataset</Button>
+            </Link>
           </div>
         </header>
 
         <div className='w-full mb-8 flex flex-wrap -mx-2 overflow-hidden'>
           <div className='my-2 px-2 w-1/2 overflow-hidden'>
-          <div className='text-xl font-semibold mb-2'>Getting started</div>
-          <div className='border p-4 mb-3 bg-blue-100 rounded mb-8'>
-            <p className='mb-2'>Welcome to Qrimatic!  We&apos;ve built a platform for quickly creating automated dataset workflows. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent rutrum varius turpis id laoreet. Morbi a sem at dui congue elementum ut at neque. Pellentesque fermentum orci odio, quis lobortis eros vulputate imperdiet. </p>
-            <ul className='list-disc ml-4'>
-              <li>Use our scripting environment to craft a workflow that updates a dataset</li>
-              <li>Schedule your workflow to run as often as you need it to</li>
-              <li>Set up notifications and other actions we should take when your script runs</li>
-              <li>Check out this dashboard to see how your script has performed</li>
-            </ul>
-          </div>
+            <div className='text-xl font-semibold mb-2'>Getting started</div>
+            <div className='border p-4 mb-3 bg-blue-100 rounded mb-8'>
+              <p className='mb-2'>Welcome to Qrimatic!  We&apos;ve built a platform for quickly creating automated dataset workflows. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent rutrum varius turpis id laoreet. Morbi a sem at dui congue elementum ut at neque. Pellentesque fermentum orci odio, quis lobortis eros vulputate imperdiet. </p>
+              <ul className='list-disc ml-4'>
+                <li>Use our scripting environment to craft a workflow that updates a dataset</li>
+                <li>Schedule your workflow to run as often as you need it to</li>
+                <li>Set up notifications and other actions we should take when your script runs</li>
+                <li>Check out this dashboard to see how your script has performed</li>
+              </ul>
+            </div>
           </div>
           <div className='my-2 px-2 w-1/2 overflow-hidden'>
             <div className='text-xl font-semibold mb-2'>Recently Edited Datasets</div>
@@ -69,8 +69,8 @@ const Dashboard: React.FC<any> = () => {
               </Link>
             </div>
           </div>
-          </div>
-          <div>
+        </div>
+        <div>
           <div className='text-xl font-semibold mb-3'>Recent Activity</div>
           <div className='rounded shadow border px-4 mb-4'>
             { loading
@@ -84,7 +84,7 @@ const Dashboard: React.FC<any> = () => {
             </Link>
           </div>
         </div>
-        </div>
+      </div>
 
     </Page>
   )

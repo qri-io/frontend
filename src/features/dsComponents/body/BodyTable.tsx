@@ -142,29 +142,28 @@ export default class BodyTable extends React.Component<BodyTableProps> {
             })}
           </tr>
         )
-      }
-      )
+      })
       : body.map((row, i) => {
         return (
-        <tr key={i} className=''>
-          <td key={0}className='bg-white text-center border-r border-b border-qrigray-200'>
-            <div className={classNames(cellClasses, 'text-black-500')} style={{ fontSize: 11 }}>
-              {
+          <tr key={i} className=''>
+            <td key={0}className='bg-white text-center border-r border-b border-qrigray-200'>
+              <div className={classNames(cellClasses, 'text-black-500')} style={{ fontSize: 11 }}>
+                {
                 // TODO (ramfox): when we add back pageInfo/fetching
                 // we should use the page number, page size, and the row index (i)
                 // to determine the row number
                 i + 1
               }
-            </div>
-          </td>
-          {row.map((d: any, j: number) => {
-            return (
-              <td key={j + 1} className='border-r border-b border-qrigray-200'>
-                <div className={classNames(cellClasses, 'text-qrigray-400')} style={{ fontSize: 11 }}>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
-              </td>
-            )
-          })}
-        </tr>
+              </div>
+            </td>
+            {row.map((d: any, j: number) => {
+              return (
+                <td key={j + 1} className='border-r border-b border-qrigray-200'>
+                  <div className={classNames(cellClasses, 'text-qrigray-400')} style={{ fontSize: 11 }}>{typeof d === 'boolean' ? JSON.stringify(d) : d}</div>
+                </td>
+              )
+            })}
+          </tr>
         )
       })
     if (!body.length && !loading) return null
@@ -185,11 +184,11 @@ export default class BodyTable extends React.Component<BodyTableProps> {
               {loading
                 ? loadingHeaderColumns.map((svgComponent, j) => {
                   return (
-                  <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-qrigray-200'>
-                    <ContentLoader width={svgComponent.width} height={38}>
-                      {svgComponent.component}
-                    </ContentLoader>
-                  </th>
+                    <th key={j} className=' h-6 bg-white font-medium text-left p-0 p-0 border-t border-r border-b border-qrigray-200'>
+                      <ContentLoader width={svgComponent.width} height={38}>
+                        {svgComponent.component}
+                      </ContentLoader>
+                    </th>
                   )
                 })
                 : headers && headers.map((d: any, j: number) => {

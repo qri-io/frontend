@@ -32,13 +32,13 @@ const DatasetFixedLayout: React.FC<DatasetFixedLayoutProps> = ({
 
   return (
     <>
-        <div className='flex flex-col flex-grow overflow-hidden p-7'>
-          <DatasetHeader editable={editable} isNew={isNew}>
-            {headerChildren}
-          </DatasetHeader>
-          {children}
-        </div>
-        <DeployingScreen qriRef={qriRef} />
+      <div className='flex flex-col flex-grow overflow-hidden p-7'>
+        <DatasetHeader editable={editable} isNew={isNew}>
+          {headerChildren}
+        </DatasetHeader>
+        {children}
+      </div>
+      <DeployingScreen qriRef={qriRef} />
     </>
   )
 }
