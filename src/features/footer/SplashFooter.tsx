@@ -22,25 +22,24 @@ const SplashFooter = () => {
           <div className='mr-16 mb-5'>
             <h5 className='text-qritile-600 font-bold mb-5'>Download</h5>
             <ul>
-              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='/download'>Qri Desktop</Link></li>
               <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://github.com/qri-io/qri/releases'>Qri CLI</Link></li>
             </ul>
           </div>
           <div className='mr-16 mb-5'>
             <h5 className='text-qritile-600 font-bold mb-5'>Learn</h5>
             <ul>
-              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='/docs'>Tutorials</Link></li>
-              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='/docs'>Docs</Link></li>
-              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='/faq'>FAQs</Link></li>
+              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://qri.io/docs'>Tutorials</Link></li>
+              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://qri.io/docs'>Docs</Link></li>
+              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://qri.io/docs/faq'>FAQs</Link></li>
             </ul>
           </div>
           <div className='mr-16'>
             <h5 className='text-qritile-600 font-bold mb-5'>Company</h5>
             <ul>
-              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='/about'>About</Link></li>
+              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://qri.io/about'>About</Link></li>
               <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://medium.com/qri-io'>Blog</Link></li>
-              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='/jobs'>Jobs</Link></li>
-              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='/contact'>Contact</Link></li>
+              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://jobs.lever.co/Qri'>Jobs</Link></li>
+              <li className='text-sm mb-3'><Link onClick={fireAnalyticsEvent} colorClassName='text-white' to='https://qri.io/contact'>Contact</Link></li>
             </ul>
           </div>
           <div>
