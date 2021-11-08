@@ -116,7 +116,7 @@ const Button: React.FC<ButtonProps> = ({
       type={submit ? 'submit' : 'button'}
       style={{
         height,
-        lineHeight: height
+        lineHeight: height.toString() + 'px'
       }}
       className={classNames(
         'px-2.5 inline-flex items-center justify-center shadow-sm bg-transparent font-semibold focus:outline-none focus:ring-none mt-0 transition-all duration-100',
