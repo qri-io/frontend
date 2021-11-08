@@ -15,9 +15,9 @@ export const CALL_API = Symbol('CALL_API')
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:2503'
 
 // API_BASE_CLOUD_URL is only used if we are NOT in `ExecutionMode.CLOUD`
-// TODO(ramfox): hack - eventually the `identity` endpoints will be routed
+// TODO(ramfox): hack - eventually the cloud endpoints will be routed
 // through qri core, until then we need to check for possible fetch to
-// the `identity` endpoints, and use this endpoint instead
+// the cloud endpoints, and use this endpoint instead
 export const API_BASE_CLOUD_URL = process.env.REACT_APP_API_BASE_CLOUD_URL || 'https://rosebud-api.qri.cloud'
 
 export interface ApiErr {
@@ -163,11 +163,11 @@ function apiUrl (endpoint: string, segments?: QriRef, query?: ApiQuery, pageInfo
 
   let url = API_BASE_URL + `/${endpoint}`
 
-  // TODO (ramfox): hack - eventually the `identity` endpoints will be routed through
+  // TODO (ramfox): hack - eventually the cloud endpoints will be routed through
   // the core registry endpoints & we will pick up the registry url there. However,
   // until then, we must ensure we are fetching from the cloud url when fetching
   // from the identity endpoints in the DESKTOP or LOCAL execution modes
-  if (endpoint.includes('identity/') && APP_EXEC_MODE !== ExecutionMode.CLOUD) {
+  if (isCloudEndpoint(endpoint) && APP_EXEC_MODE !== ExecutionMode.CLOUD) {
     url = API_BASE_CLOUD_URL + `/${endpoint}`
   }
 
@@ -405,4 +405,12 @@ const refreshSession = async (token: string, refreshToken: string): Promise<any>
     console.log(`error refreshing token - ${error.message}`)
     return await Promise.reject(error)
   }
+}
+
+// TODO(ramfox): isCloudEndpoint is a hack to ensure the endpoint is a cloud only
+// endpoint. these endpoints will eventally be routed through core as
+// registry endpoints. Until then, this hack ensure we catch the cloud
+// specific endpoints and fetch from the correct place
+function isCloudEndpoint (endpoint: string): boolean {
+  return endpoint.includes('identity/') || endpoint.includes('dataset_summary') || endpoint.includes('follow')
 }
