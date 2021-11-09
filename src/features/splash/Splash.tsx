@@ -27,17 +27,19 @@ const Splash: React.FC<{}> = () => {
     <div className='flex flex-col ' style = {{
       backgroundImage: 'url(/img/splash/dot.svg)'
     }}>
-      <div className='md:h-screen' style={{
+      <div className='md:h-screen relative' style={{
         minHeight: 720
       }}>
         <NavBar minimal transparent noLogo absolute />
 
+        {/* begin svg container */}
         <div className='flex h-full w-full absolute flex-grow'>
           <div className='w-7/12 lg:w-1/2 relative overflow-hidden'>
             {<div className='hidden md:block'><BigCircle /></div>}
           </div>
         </div>
-        <div className='flex h-full flex-col md:flex-row mx-auto' style = {{
+        {/* end svg container */}
+        <div className='flex h-full flex-col md:flex-row mx-auto relative z-10' style = {{
           maxWidth: 1284
         }}>
           <div className='w-full md:h-full md:w-auto flex-grow flex-shrink-0 md:flex-shrink relative overflow-hidden px-5 md:px-10 lg:px-20 md:pr-28 py-40 md:py-20'>
