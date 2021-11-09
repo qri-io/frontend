@@ -42,7 +42,7 @@ const SessionUserMenu: React.FC<{}> = () => {
       style={{
         height: '30px',
         width: '30px',
-        backgroundImage: `url(${user.profile})`
+        backgroundImage: `url(${user.photo})`
       }}
     />
   )

@@ -119,7 +119,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
               <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
                 height: '30px',
                 width: '30px',
-                backgroundImage: `url(${profile.profile})`
+                backgroundImage: `url(${profile.photo})`
               }}/>
               <div>
                 <div className='text-black text-sm font-semibold'>{profile.name}</div>

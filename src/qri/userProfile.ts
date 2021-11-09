@@ -12,7 +12,7 @@ export interface UserProfile {
   home_url: string
   color: string
   thumb: string
-  profile: string
+  photo: string
   poster: string
   twitter: string
   PeerIDs: string[]
@@ -37,7 +37,7 @@ export const NewUserProfile = () => {
     home_url: '',
     color: '',
     thumb: '',
-    profile: '',
+    photo: '',
     poster: '',
     twitter: '',
     PeerIDs: [],

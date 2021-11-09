@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
+import { UserProfile } from '../../../qri/userProfile'
 import { RootState } from '../../../store/store'
 
 interface SessionTokens {
@@ -8,7 +9,7 @@ interface SessionTokens {
 
 export const RESET_FORGOT_STATE = 'RESET_FORGOT_STATE'
 
-export const selectSessionUser = (state: RootState): User => state.session.user
+export const selectSessionUser = (state: RootState): UserProfile => state.session.user
 
 export const selectSessionTokens = (state: RootState): SessionTokens => {
   return {
@@ -23,16 +24,8 @@ export const selectResetError = (state: RootState): string => state.session.rese
 
 export const selectResetSent = (state: RootState): boolean => state.session.resetSent
 
-export interface User {
-  name?: string
-  profile?: string
-  username: string
-  description?: string
-  email?: string
-}
-
 export interface SessionState {
-  user: User
+  user: UserProfile
   loading: boolean
   token: string
   refreshToken: string
@@ -40,20 +33,41 @@ export interface SessionState {
   resetError: string
 }
 
-export const AnonUser: User = {
-  username: 'new'
+export const AnonUser: UserProfile = {
+  username: 'new',
+  profile_id: '',
+  PrivKey: '',
+  created: 0,
+  updated: 0,
+  type: '',
+  email: '',
+  name: '',
+  description: '',
+  home_url: '',
+  color: '',
+  thumb: '',
+  photo: '',
+  poster: '',
+  twitter: '',
+  PeerIDs: [],
+  NetworkAddrs: [],
+  id: '',
+  currentKey: '',
+  EmailConfirmed: false,
+  isAdmin: false
 }
 
 function getAuthState (): SessionState {
   try {
     const token = localStorage.getItem('state.auth.token') || ''
     const refreshToken = localStorage.getItem('state.auth.refreshToken') || ''
-    const user = localStorage.getItem('state.auth.user') || AnonUser
+    const userStr = localStorage.getItem('state.auth.user') || ''
+    const user = userStr === '' ? AnonUser : JSON.parse(userStr)
 
     return {
       token: JSON.parse(token),
       refreshToken: JSON.parse(refreshToken),
-      user: typeof user === 'string' ? JSON.parse(user) : user,
+      user: user,
       loading: false,
       resetSent: false,
       resetError: ''
@@ -73,28 +87,14 @@ function getAuthState (): SessionState {
 const initialState: SessionState = getAuthState()
 
 interface AuthAction {
-  user: User
+  user: UserProfile
   token: string
   refreshToken: string
 }
 
 // same state changes on successful login or signup
 const loginOrSignupSuccess = (state: SessionState, action: AuthAction) => {
-  const {
-    name,
-    profile,
-    username,
-    description,
-    email
-  } = action.user
-
-  state.user = {
-    name,
-    profile,
-    username,
-    description,
-    email
-  }
+  state.user = action.user
   state.loading = false
 
   state.token = action.token

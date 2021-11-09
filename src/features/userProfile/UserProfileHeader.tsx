@@ -6,8 +6,6 @@ import ContentLoader from 'react-content-loader'
 import ContentBox from '../../chrome/ContentBox'
 
 import { UserProfile } from '../../qri/userProfile'
-import { useSelector } from "react-redux"
-import { selectSessionUser } from "../session/state/sessionState"
 
 export interface UserProfileHeaderProps {
   profile: UserProfile
@@ -18,9 +16,9 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ profile, loading 
   const {
     name,
     username,
-    created
+    created,
+    photo
   } = profile
-  const user = useSelector(selectSessionUser)
 
   return (
     <ContentBox paddingClassName='w-full ' className='flex h-20 mt-8 mb-6 w-full'>
@@ -28,7 +26,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ profile, loading 
         <div className='rounded-full inline-block bg-cover absolute -top-8' style={{
           height: '100px',
           width: '100px',
-          backgroundImage: `url(${user.profile})`
+          backgroundImage: `url(${photo})`
         }}/>
       </div>
       <div className='flex-grow ml-32'>
