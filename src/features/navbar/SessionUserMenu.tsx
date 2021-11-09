@@ -10,6 +10,7 @@ import Button from '../../chrome/Button'
 import Link from '../../chrome/Link'
 import { resetCollectionState } from "../collection/state/collectionActions"
 import { trackGoal } from '../../features/analytics/analytics'
+import { DEFAULT_PROFILE_PHOTO_URL } from '../..'
 
 const SessionUserMenu: React.FC<{}> = () => {
   const user = useSelector(selectSessionUser)
@@ -42,7 +43,7 @@ const SessionUserMenu: React.FC<{}> = () => {
       style={{
         height: '30px',
         width: '30px',
-        backgroundImage: `url(${user.photo})`
+        backgroundImage: `url(${user.photo || DEFAULT_PROFILE_PHOTO_URL})`
       }}
     />
   )

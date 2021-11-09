@@ -123,7 +123,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
           <div className='truncate'>
             <div className='mb-1'>
               <Link to={pathToDatasetHeadPreview(row)}>
-                <UsernameWithIcon username={`${row.username}/${row.name}`} className='text-sm font-bold text-black transition-colors group-hover:text-qripink-600 group-hover:underline' />
+                <UsernameWithIcon text={`${row.username}/${row.name}`} username={row.username} className='text-sm font-bold text-black transition-colors group-hover:text-qripink-600 group-hover:underline' />
               </Link>
             </div>
             <div className='flex text-xs items-center overflow-y-hidden'>

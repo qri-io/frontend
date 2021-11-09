@@ -10,6 +10,10 @@ import { getAppExecMode } from './execution/execution'
 
 // API_EXEC_MODE is a global, unique constant for determining which "execution mode" the app is running under (local, desktop, or cloud)
 export const APP_EXEC_MODE = getAppExecMode(process.env.APP_EXEC_MODE || "LOCAL")
+// DEFAULT_PHOTO_URL is the default profile photo.
+// TODO(ramfox): this should be replaced with a component that generates
+// an icon based on a username
+export const DEFAULT_PROFILE_PHOTO_URL = 'https://qri-user-images.storage.googleapis.com/1570029763701.png'
 
 ReactDOM.render(
   <React.StrictMode>

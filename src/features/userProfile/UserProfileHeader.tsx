@@ -6,6 +6,7 @@ import ContentLoader from 'react-content-loader'
 import ContentBox from '../../chrome/ContentBox'
 
 import { UserProfile } from '../../qri/userProfile'
+import { DEFAULT_PROFILE_PHOTO_URL } from '../..'
 
 export interface UserProfileHeaderProps {
   profile: UserProfile
@@ -26,7 +27,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ profile, loading 
         <div className='rounded-full inline-block bg-cover absolute -top-8' style={{
           height: '100px',
           width: '100px',
-          backgroundImage: `url(${photo})`
+          backgroundImage: `url(${photo || DEFAULT_PROFILE_PHOTO_URL})`
         }}/>
       </div>
       <div className='flex-grow ml-32'>
