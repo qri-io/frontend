@@ -18,7 +18,11 @@ import {
 
 import { selectNavExpanded } from '../app/state/appState'
 import { toggleNavExpanded } from '../app/state/appActions'
-import { selectRunCount, selectCommitCount } from "./state/datasetState"
+import {
+  selectRunCount,
+  selectCommitCount,
+  selectSessionUserCanEditDataset
+} from "./state/datasetState"
 import { selectWorkflow } from "../workflow/state/workflowState"
 
 export interface DatasetNavSidebarProps {
@@ -30,6 +34,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const versionCount = useSelector(selectCommitCount)
   const logCount = useSelector(selectRunCount)
   const workflow = useSelector(selectWorkflow)
+  const canEdit = useSelector(selectSessionUserCanEditDataset)
   const dispatch = useDispatch()
 
   const toggleExpanded = () => {
@@ -112,6 +117,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           isLink={!isNewWorkflow}
           to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
           expanded={expanded}
+          disabled={!canEdit}
           tooltip={
             <TooltipContent
               text='Workflow Editor'

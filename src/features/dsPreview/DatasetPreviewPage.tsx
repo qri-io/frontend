@@ -94,7 +94,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                   <ContentBoxSubTitle title='Description' />
                   <div className='text-qrigray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
                   <ContentBoxSubTitle title='Keywords' />
-                  {dataset.meta?.keywords && <MetaChips words={dataset.meta.keywords} />}
+                  {dataset.meta?.keywords
+                    ? <MetaChips words={dataset.meta.keywords} />
+                    : <div className='text-qrigray-400 text-xs tracking-wider mb-2'>
+                      No Keywords
+                    </div>}
                 </ContentBox>
               </div>
             </div>
