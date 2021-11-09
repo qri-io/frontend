@@ -6,28 +6,34 @@ import { useParams, useHistory, useLocation } from 'react-router-dom'
 import queryString from 'query-string'
 
 import {
-  loadUserProfile,
   loadUserProfileDatasets,
   loadUserProfileFollowing
 } from './state/userProfileActions'
 import {
-  selectUserProfile,
-  selectUserProfileLoading,
-  selectUserProfileError,
   selectUserProfileDatasets,
   selectUserProfileFollowing
 } from './state/userProfileState'
+import {
+  selectUserProfile,
+  selectUserProfileLoading,
+  selectUserProfileError
+} from '../users/state/usersState'
+import {
+  loadUser
+} from '../users/state/usersActions'
 import NavBar from '../navbar/NavBar'
 import Footer from '../footer/Footer'
 import {
   UserProfileDatasetListParams,
   NewUserProfileDatasetListParams,
-  CleanUserProfileDatasetListParams
+  CleanUserProfileDatasetListParams,
+  NewUserProfile
 } from '../../qri/userProfile'
 import { ContentTabs, Tab } from '../../chrome/ContentTabs'
 import UserProfileHeader from './UserProfileHeader'
 import UserProfileDatasetList from './UserProfileDatasetList'
 import NotFoundPage from '../notFound/NotFoundPage'
+import { DEFAULT_PROFILE_PHOTO_URL } from '../..'
 
 interface UserProfileProps {
   path?: '/' | '/following'
@@ -37,9 +43,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const profile = useSelector(selectUserProfile)
-  const loading = useSelector(selectUserProfileLoading)
-  const error = useSelector(selectUserProfileError)
+  const { search } = useLocation()
+  const userProfileParams: UserProfileDatasetListParams = NewUserProfileDatasetListParams(queryString.parse(search))
+
+  const { username: usernameParam } = useParams<Record<string, any>>()
+
+  const profile = useSelector(selectUserProfile(usernameParam)) || NewUserProfile()
+  const loading = useSelector(selectUserProfileLoading(usernameParam))
+  const error = useSelector(selectUserProfileError(usernameParam))
 
   const { ref: stickyHeaderTriggerRef, inView } = useInView({
     threshold: 0.6,
@@ -50,14 +61,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
   const paginatedFollowingResults = useSelector(selectUserProfileFollowing)
 
   const scrollContainer = useRef<HTMLDivElement>(null)
-  const { username: usernameParam } = useParams<Record<string, any>>()
-
-  const { search } = useLocation()
-  const userProfileParams: UserProfileDatasetListParams = NewUserProfileDatasetListParams(queryString.parse(search))
 
   // if the query string ever changes, fetch new data
   useEffect(() => {
-    dispatch(loadUserProfile(usernameParam))
+    dispatch(loadUser(usernameParam))
     dispatch(loadUserProfileDatasets(usernameParam, userProfileParams))
     dispatch(loadUserProfileFollowing(usernameParam, userProfileParams))
   }, [dispatch, search])
@@ -151,7 +158,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
     </>
   )
 
-  if (error.message === '404: Not Found') {
+  if (error && error.message === '404: Not Found') {
     content = (<NotFoundPage/>)
   }
 

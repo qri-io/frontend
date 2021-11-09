@@ -2,11 +2,8 @@ import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
 import { PageInfo, SearchResult } from '../../../qri/search'
-import { UserProfile, NewUserProfile } from '../../../qri/userProfile'
 import { ApiErr, NewApiErr } from '../../../store/api'
 
-export const selectUserProfile = (state: RootState): UserProfile => state.userProfile.profile
-export const selectUserProfileLoading = (state: RootState): boolean => state.userProfile.loading
 export const selectUserProfileError = (state: RootState): ApiErr => state.userProfile.error
 export const selectUserProfileDatasets = (state: RootState): PaginatedResults => state.userProfile.datasets
 export const selectUserProfileFollowing = (state: RootState): PaginatedResults => state.userProfile.following
@@ -33,7 +30,6 @@ const NewPaginatedResults = () => {
 }
 
 export interface UserProfileState {
-  profile: UserProfile
   loading: boolean
   error: ApiErr
   datasets: {
@@ -49,7 +45,6 @@ export interface UserProfileState {
 }
 
 const initialState: UserProfileState = {
-  profile: NewUserProfile(),
   loading: false,
   error: NewApiErr(),
   datasets: NewPaginatedResults(),
@@ -57,19 +52,6 @@ const initialState: UserProfileState = {
 }
 
 export const userProfileReducer = createReducer(initialState, {
-  'API_USERPROFILE_REQUEST': (state: UserProfileState, action) => {
-    state.loading = true
-    state.error = NewApiErr()
-  },
-  'API_USERPROFILE_SUCCESS': (state: UserProfileState, action) => {
-    state.profile = action.payload.data
-    state.loading = false
-  },
-  'API_USERPROFILE_FAILURE': (state: UserProfileState, action) => {
-    state.loading = false
-    state.error = action.payload.err
-  },
-
   'API_USERPROFILEDATASETS_REQUEST': (state: UserProfileState, action) => {
     state.datasets.loading = true
   },

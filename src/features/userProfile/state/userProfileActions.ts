@@ -5,12 +5,6 @@ import { UserProfileDatasetListParams } from '../../../qri/userProfile'
 
 export const searchPageSizeDefault = 25
 
-export function loadUserProfile (username: string): ApiActionThunk {
-  return async (dispatch, getState) => {
-    return dispatch(fetchUserProfile(username))
-  }
-}
-
 export function loadUserProfileDatasets (username: string, userProfileParams: UserProfileDatasetListParams): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchUserProfileDatasets(username, userProfileParams))
@@ -20,16 +14,6 @@ export function loadUserProfileDatasets (username: string, userProfileParams: Us
 export function loadUserProfileFollowing (username: string, userProfileParams: UserProfileDatasetListParams): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch(fetchUserProfileFollowing(username, userProfileParams))
-  }
-}
-
-function fetchUserProfile (username: string): ApiAction {
-  return {
-    type: 'userprofile',
-    [CALL_API]: {
-      endpoint: `identity/profile/${username}`,
-      method: 'GET'
-    }
   }
 }
 

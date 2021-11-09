@@ -1,4 +1,3 @@
-
 export interface UserProfile {
   profile_id: string
   PrivKey: string
@@ -46,6 +45,45 @@ export const NewUserProfile = () => {
     currentKey: '',
     EmailConfirmed: false,
     isAdmin: false
+  }
+}
+
+export const mapProfile = (obj: Record<string, any>): UserProfile => {
+  return {
+    profile_id: obj.profile_id,
+    PrivKey: obj.PrivKey,
+    username: obj.peername || obj.username,
+    created: ensureDateIsUnixTimestamp(obj.created),
+    updated: ensureDateIsUnixTimestamp(obj.updated),
+    type: obj.type,
+    email: obj.email,
+    name: obj.name,
+    description: obj.description,
+    home_url: obj.home_url,
+    color: obj.color,
+    thumb: obj.thumb,
+    photo: obj.photo,
+    poster: obj.poster,
+    twitter: obj.twitter,
+    PeerIDs: obj.PeerIDs,
+    NetworkAddrs: obj.NetworkAddrs,
+    id: obj.id,
+    currentKey: obj.currentKey,
+    EmailConfirmed: obj.EmailConfirmed,
+    isAdmin: obj.isAdmin
+  }
+}
+
+const ensureDateIsUnixTimestamp = (d: string | number): number => {
+  if (typeof d === 'number') {
+    return d
+  }
+  try {
+    const date = new Date(d)
+    return Math.floor(date.getTime() / 1000)
+  } catch (err) {
+    console.log(`Error getting unix timestamp from date ${d}`)
+    return 0
   }
 }
 
