@@ -118,12 +118,12 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       grow: 1,
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => (
-        <div className='flex items-center truncate'>
+        <div className='flex items-center truncate group'>
 
           <div className='truncate'>
             <div className='mb-1'>
               <Link to={pathToDatasetHeadPreview(row)}>
-                <UsernameWithIcon username={`${row.username}/${row.name}`} className='text-sm font-bold text-black ' />
+                <UsernameWithIcon username={`${row.username}/${row.name}`} className='text-sm font-bold text-black transition-colors group-hover:text-qripink-600 group-hover:underline' />
               </Link>
             </div>
             <div className='flex text-xs items-center overflow-y-hidden'>
@@ -173,7 +173,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         const versionLink = `/${row.username}/${row.name}/at${row.path}/history`
         return (
           <Link to={versionLink} className='min-w-0 flex-grow'>
-            <DatasetCommitInfo dataset={dataset} small inRow automated={!!runID}/>
+            <DatasetCommitInfo dataset={dataset} hover small inRow automated={!!runID}/>
           </Link>
         )
       }
@@ -206,7 +206,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         const runLogLink = `/${row.username}/${row.name}/runs`
 
         return (
-          <Link to={runLogLink}>
+          <Link className='group' to={runLogLink}>
             <div className='flex flex-col'>
               <div className='flex items-center'>
                 <div className='text-sm mr-2'>{runStatus === 'running' ? '-' : `#${runCount}`}</div>
