@@ -14,6 +14,8 @@ import { LogItem, NewLogItem } from "../../qri/log"
 import { selectRun } from "../events/state/eventsState"
 import { trackGoal } from '../../features/analytics/analytics'
 import { selectSessionUser } from '../session/state/sessionState'
+import { selectDatasetHeader } from "../dataset/state/datasetState"
+import { setHeader } from "../dataset/state/datasetActions"
 
 export interface DatasetActivityFeedProps {
   qriRef: QriRef
@@ -26,6 +28,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   const latestRunId = useSelector(selectLatestRunId)
   const latestRun = useSelector(selectRun(latestRunId))
   const user = useSelector(selectSessionUser)
+  const header = useSelector(selectDatasetHeader)
   const isDatasetOwner = user.username === qriRef.username
   const dispatch = useDispatch()
 
@@ -41,25 +44,20 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
     // runlog-run-now event
     trackGoal('GHUGYPYM', 0)
     dispatch(runNow(qriRef))
+    const runningLog: LogItem = NewLogItem({
+      timestamp: new Date().toString(),
+      runStatus: "running",
+      title: '--',
+      runID: latestRun.id
+    })
+    const newLogs = [runningLog, ...logs]
+    setDisplayLogs(newLogs)
+    dispatch(setHeader({ ...header, runCount: header.runCount + 1 }))
   }
 
   const handleCancelRun = () => {
     dispatch(cancelRun(latestRun.id))
   }
-
-  useEffect(() => {
-    if (latestRun.status === 'running') {
-      const runningLog: LogItem = NewLogItem({
-        timestamp: new Date().toString(),
-        runStatus: "running",
-        title: '--',
-        runID: latestRun.id
-      })
-      const newLogs = [runningLog, ...logs]
-      setDisplayLogs(newLogs)
-    }
-    // eslint-disable-next-line
-  }, [ latestRun ])
 
   useEffect(() => {
     if (!displayLogs.length) {
@@ -68,10 +66,10 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   }, [ logs, displayLogs ])
 
   useEffect(() => {
-    if (latestRun.status === "succeeded" || latestRun.status === "failed") {
-      setTimeout(() => setDisplayLogs(logs), 800) // setting timeout to make sure animation finishes
+    if (logs.length && displayLogs.length && logs.length === displayLogs.length && displayLogs[0].runStatus === 'running') {
+      setTimeout(() => setDisplayLogs(logs), 600) // setting timeout to make sure animation finishes
     }
-  }, [ logs, latestRun ])
+  }, [ logs, displayLogs ])
 
   return (
     <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} isDatasetOwner={isDatasetOwner} />}>
