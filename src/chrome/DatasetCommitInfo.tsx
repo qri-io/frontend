@@ -20,16 +20,19 @@ interface DatasetCommitInfoProps {
   // determines whether or not to show the automated icon.  This should be included in dataset, but our responses
   // are inconsistent, so this prop allows us to turn it on manually wherever we know it should appear
   automated?: boolean
+  // determines if the status text will have a hover effect.
+  hover?: boolean
 }
 
 const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
   dataset,
   small = false,
   inRow = false,
-  automated = false
+  automated = false,
+  hover = false
 }) => {
   return (
-    <div className={classNames('truncate', {
+    <div className={classNames('truncate group', {
       'text-base': !small,
       'text-sm': small
     })}>
@@ -37,7 +40,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
       <div className={classNames('text-black flex justify-between items-center mb-2', {
         'font-semibold': !inRow
       })}>
-        <div className={classNames(`dataset_commit_info_text truncate flex-grow`, {
+        <div className={classNames(`dataset_commit_info_text truncate transition-colors flex-grow ${hover && 'group-hover:underline group-hover:text-qripink-600'}`, {
 
         })} title={dataset.commit?.title}>{dataset.commit?.title}</div>
       </div>
