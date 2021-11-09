@@ -76,7 +76,7 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
         <div className='flex-grow flex items-center'>
           <div id='cron_trigger_schedule' className='text-sm font-semibold mr-2.5 text-black'>Schedule</div>
           {!isEditable && <div className='text-qrigray-400 text-xs flex items-center'>
-            <Icon icon='calendar' size='sm' className='mr-1 pt-1' />
+            <Icon icon='calendar' size='sm' className='mr-1' />
             <div id='cron_trigger_interval_text'>{displayInterval} {displayStartTime}</div>
           </div>}
         </div>
