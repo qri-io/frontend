@@ -10,6 +10,7 @@ import NavBar from '../navbar/NavBar'
 import SplashFooter from '../footer/SplashFooter'
 import featuredDatasets from './featuredDatasets'
 import BigCircle from './BigCircle'
+import BigCircleMobile from './BigCircleMobile'
 import { trackGoal } from '../../features/analytics/analytics'
 
 const Splash: React.FC<{}> = () => {
@@ -26,21 +27,31 @@ const Splash: React.FC<{}> = () => {
     <div className='flex flex-col ' style = {{
       backgroundImage: 'url(/img/splash/dot.svg)'
     }}>
-      <div className='h-screen' style={{
-        minHeight: 700
+      <div className='md:h-screen' style={{
+        minHeight: 720
       }}>
-        <div className='flex h-full'>
-          <div className='flex-grow relative overflow-hidden relative pl-20 pr-28 py-20'>
-            <BigCircle />
-            <div className='relative z-10 flex items-center h-full'>
-              <div className='absolute top-0'>
+        <NavBar minimal transparent noLogo absolute />
+
+        <div className='flex h-full w-full absolute flex-grow'>
+          <div className='w-7/12 lg:w-1/2 relative overflow-hidden'>
+            {<div className='hidden md:block'><BigCircle /></div>}
+          </div>
+        </div>
+        <div className='flex h-full flex-col md:flex-row mx-auto' style = {{
+          maxWidth: 1284
+        }}>
+          <div className='w-full md:h-full md:w-auto flex-grow flex-shrink-0 md:flex-shrink relative overflow-hidden px-5 md:px-10 lg:px-20 md:pr-28 py-40 md:py-20'>
+            {<div className='md:hidden'><BigCircleMobile /></div>}
+            <div className='relative z-10 flex flex-col h-full'>
+              <div className='top-0'>
                 <div className='flex items-center'>
-                  <QriLogo size='xl'/>
-                  <div className='font-extrabold inline-block ml-6' style={{ fontSize: 52 }}>Qri</div>
+                  {<div className='md:hidden'><QriLogo size='lg'/></div>}
+                  {<div className='hidden md:block'><QriLogo size='xl'/></div>}
+                  <div className='font-extrabold inline-block ml-6 text-4xl md:text-6xl'>Qri</div>
                 </div>
               </div>
               <div className='mt-20'>
-                <div className='font-extrabold mb-2 text-3xl xl:text-6xl'>
+                <div className='font-extrabold mb-2 text-3xl lg:text-4xl xl:text-5xl'>
                   <div className='text-qritile-600'>Datasets that</div>
                   <div className='text-qripink-600'>Update Themselves</div>
                 </div>
@@ -53,11 +64,11 @@ const Splash: React.FC<{}> = () => {
                 </div>
               </div>
             </div>
+            <div className='my-16 md:hidden'>&nbsp;</div>
           </div>
-          <div className = 'flex flex-col flex-shrink-0' style={{ width: 510 }}>
-            <NavBar minimal transparent noLogo />
-            <div className='font-bold text-3xl mb-6 px-9'>Discover Datasets</div>
-            <div className='mb-4 flex items-center px-9'>
+          <div className = 'flex flex-col flex-shrink-0 md:mt-24 md:w-5/12 lg:w-1/2' style={{ maxWidth: 754 }}>
+            <div className='font-bold text-3xl mb-6 px-5 md:px-10 lg:px-20'>Discover Datasets</div>
+            <div className='mb-4 flex items-center px-5 md:px-10 lg:px-20'>
               {
                 Object.keys(featuredDatasets).map((key) => {
                   const { id, title } = featuredDatasets[key]
@@ -79,7 +90,7 @@ const Splash: React.FC<{}> = () => {
                 })
               }
             </div>
-            <div className='overflow-y-scroll hide-scrollbar pt-2 px-9 pb-8'>
+            <div className='md:overflow-y-scroll hide-scrollbar pt-2 pb-8 px-5 md:px-10 lg:px-20'>
               {
                 featuredDatasets[selectedFeaturedDatasetType].datasets.map((dataset, i) => {
                   return (

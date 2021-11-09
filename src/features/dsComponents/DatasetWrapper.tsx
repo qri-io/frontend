@@ -15,6 +15,7 @@ import { loadDatasetLogs } from '../activityFeed/state/activityFeedActions'
 import NavBar from '../navbar/NavBar'
 import DatasetNavSidebar from '../dataset/DatasetNavSidebar'
 import NotFoundPage from '../notFound/NotFoundPage'
+import WebAppLayout from '../layouts/WebAppLayout'
 
 interface DatasetWrapperProps {
   fetchData?: boolean
@@ -50,10 +51,12 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
   }
 
   return (
-    <div className='flex flex-col h-full w-full bg-qrigray-100'>
-      <NavBar />
-      {content}
-    </div>
+    <WebAppLayout>
+      <div className='flex flex-col h-full w-full bg-qrigray-100'>
+        <NavBar />
+        {content}
+      </div>
+    </WebAppLayout>
   )
 }
 
