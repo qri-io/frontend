@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
-import { useLocation } from "react-router-dom"
 import ContentLoader from "react-content-loader"
 
 import EditableLabel from '../../chrome/EditableLabel'
@@ -27,7 +26,7 @@ import { loadDatasetCommits } from "../commits/state/commitActions"
 import classNames from "classnames"
 import Icon from "../../chrome/Icon"
 import { clearModal, showModal } from "../app/state/appActions"
-import { ModalType } from "../app/state/appState"
+import { ModalType, selectNavExpanded } from "../app/state/appState"
 
 export interface DatasetHeaderProps {
   isNew: boolean
@@ -48,12 +47,21 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const location = useLocation()
+  // const location = useLocation()
+  const isExpanded = useSelector(selectNavExpanded)
   const header = useSelector(selectDatasetHeader)
   const dataset = useSelector(selectDataset)
   const headerLoading = useSelector(selectIsHeaderLoading)
   const datasetLoading = useSelector(selectIsDatasetLoading)
   const qriRef = qriRefFromVersionInfo(header)
+  const [ titleChangePosition, setTitleModalPosition ] = useState({ top: '0', left: '0' })
+  const measuredRef = useCallback(node => {
+    if (node !== null) {
+      const left: string = `${node.getBoundingClientRect().left - 25.5}px`
+      const top: string = `${node.getBoundingClientRect().top - 55.5}px`
+      setTitleModalPosition({ top, left })
+    }
+  }, [ isExpanded ])
 
   const handleRename = (_: string, value: string) => {
     renameDataset(qriRef, { username: header.username, name: value })(dispatch)
@@ -82,14 +90,11 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
 
   const onTitleClick = () => {
     if (!isNew) {
-      const left = location.pathname === `/${header.username}/${header.name}` ? '-206px' : '153px'
-      const top = location.pathname === `/${header.username}/${header.name}` ? '67px' : '65px'
-      const position = location.pathname === `/${header.username}/${header.name}` ? 'relative' : 'absolute'
       dispatch(resetDatasetTitleError())
       dispatch(showModal(ModalType.editDatasetTitle, {
         title: dataset.meta?.title ? dataset.meta?.title : header.name,
         onCommit: handleTitleChange
-      }, true, { top, left, position: position }))
+      }, true, { top: titleChangePosition.top.toString(), left: titleChangePosition.left.toString(), position: 'absolute' }))
     }
   }
 
@@ -122,7 +127,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             ? <ContentLoader height='29.6'>
               <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
             </ContentLoader>
-            : <div onClick={onTitleClick} className={classNames({ 'cursor-pointer whitespace-nowrap': !isNew }, 'flex items-center group hover:text')}>
+            : <div ref={measuredRef} onClick={onTitleClick} className={classNames({ 'cursor-pointer whitespace-nowrap': !isNew }, 'flex items-center group hover:text')}>
               <h3 className='text-2xl font-bold'>{isNew ? newWorkflowTitle : dataset.meta?.title ? dataset.meta?.title : header.name}</h3>
               {
                 editable && <Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' />

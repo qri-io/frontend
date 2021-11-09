@@ -8,8 +8,8 @@ import {
   SET_BODY_LOADING,
   SET_HEADER
 } from "./datasetState"
-
 import { VersionInfo } from "../../../qri/versionInfo"
+import { mapVersionInfo } from "../../collection/state/collectionActions"
 
 export const bodyPageSizeDefault = 50
 
@@ -66,8 +66,7 @@ export function renameDataset (current: QriRef, next: QriRef): ApiActionThunk {
           current: refStringFromQriRef(humanRef(current)),
           next: refStringFromQriRef(humanRef(next))
         },
-        // TODO(b5): this return value is a versionInfo
-        map: mapDataset
+        map: mapVersionInfo
       }
     }
 
@@ -152,7 +151,6 @@ export function commitDatasetTitle (qriRef: QriRef, title: string, commitTitle: 
         method: 'POST',
         body: {
           ref: `${qriRef.username}/${qriRef.name}`,
-          message: commitTitle,
           title: commitTitle,
           dataset: {
             meta: {
