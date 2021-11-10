@@ -7,6 +7,7 @@ import ContentLoader from 'react-content-loader'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import ContentBox from "../../chrome/ContentBox"
+import UsernameWithIcon from "../../chrome/UsernameWithIcon"
 
 import { SearchResult } from '../../qri/search'
 
@@ -54,6 +55,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading = 
           { followStats.followCount > 0 && <DatasetInfoItem size='md' icon='follower' label={`${followStats.followCount} follower${(followStats.followCount !== 1) ? 's' : ''}`} /> }
 
           <DatasetInfoItem size='md' icon='lock' label='public' />
+          <UsernameWithIcon username={username} />
         </div>
       </>
     )

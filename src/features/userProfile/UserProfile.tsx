@@ -28,6 +28,7 @@ import { ContentTabs, Tab } from '../../chrome/ContentTabs'
 import UserProfileHeader from './UserProfileHeader'
 import UserProfileDatasetList from './UserProfileDatasetList'
 import NotFoundPage from '../notFound/NotFoundPage'
+import assignUserIcon from '../../utils/assignUserIcon'
 
 interface UserProfileProps {
   path?: '/' | '/following'
@@ -106,6 +107,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
     // }
   ]
 
+  const userIcon = assignUserIcon(usernameParam)
+
   let content = (
     <>
       <div className='flex-grow w-full overflow-y-scroll'>
@@ -119,11 +122,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
               <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
                 height: '30px',
                 width: '30px',
-                backgroundImage: `url(${profile.photo})`
+                backgroundImage: `url(${userIcon})`
               }}/>
               <div>
-                <div className='text-black text-sm font-semibold'>{profile.name}</div>
-                <div className='text-qrigray-400 text-xs font-mono'>{profile.username}</div>
+                <div className='text-black text-sm font-semibold'>{profile.username}</div>
               </div>
             </div>
           </div>
