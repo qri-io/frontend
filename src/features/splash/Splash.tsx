@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux"
 
 import Button from '../../chrome/Button'
 import Link from '../../chrome/Link'
@@ -8,21 +9,33 @@ import SearchResultItem from '../search/SearchResultItem'
 import SearchBox from '../search/SearchBox'
 import NavBar from '../navbar/NavBar'
 import SplashFooter from '../footer/SplashFooter'
-import featuredDatasets from './featuredDatasets'
 import BigCircle from './BigCircle'
 import BigCircleMobile from './BigCircleMobile'
 import { trackGoal } from '../../features/analytics/analytics'
+import { loadSplashDatasets } from "./state/splashActions"
+import { selectSplashDatasets, selectSplashDatasetsLoading } from "./state/splashState"
 
 const Splash: React.FC<{}> = () => {
   const history = useHistory()
+  const dispatch = useDispatch()
+  const datasets = useSelector(selectSplashDatasets)
+  const loading = useSelector(selectSplashDatasetsLoading)
 
   const [selectedFeaturedDatasetType, setSelectedFeaturedDatasetType] = useState('popular')
+  useEffect(() => {
+    if (!datasets[Object.keys(datasets)[0]].length) {
+      loadSplashDatasets()(dispatch)
+    } else {
+      setSelectedFeaturedDatasetType(Object.keys(datasets)[0])
+    }
+  }, [ datasets ])
 
   const handleSearchSubmit = (query: string) => {
     const newParams = new URLSearchParams(`q=${query}`)
     history.push(`/search?${newParams.toString()}`)
   }
 
+  const dataset = datasets[selectedFeaturedDatasetType] ? datasets[selectedFeaturedDatasetType] : datasets[Object.keys(datasets)[0]]
   return (
     <div className='flex flex-col ' style = {{
       backgroundImage: 'url(/img/splash/dot.svg)'
@@ -72,18 +85,17 @@ const Splash: React.FC<{}> = () => {
             <div className='font-bold text-3xl mb-6 px-5 md:px-10 lg:px-20'>Discover Datasets</div>
             <div className='mb-4 flex items-center px-5 md:px-10 lg:px-20'>
               {
-                Object.keys(featuredDatasets).map((key) => {
-                  const { id, title } = featuredDatasets[key]
+                Object.keys(datasets).map((title) => {
                   return (
                     <Button
                       key={title}
-                      className='mr-3'
+                      className='mr-3 capitalize'
                       size = 'sm'
-                      type={id === selectedFeaturedDatasetType ? 'secondary-outline' : 'light'}
+                      type={title === selectedFeaturedDatasetType ? 'secondary-outline' : 'light'}
                       onClick={() => {
                         // home-click-featured-dataset-list-button event
                         trackGoal('SRIJWHUA', 0)
-                        setSelectedFeaturedDatasetType(id)
+                        setSelectedFeaturedDatasetType(title)
                       }}
                     >
                       {title}
@@ -94,25 +106,27 @@ const Splash: React.FC<{}> = () => {
             </div>
             <div className='md:overflow-y-scroll hide-scrollbar pt-2 pb-8 px-5 md:px-10 lg:px-20'>
               {
-                featuredDatasets[selectedFeaturedDatasetType].datasets.map((dataset, i) => {
-                  return (
-                    <div
-                      key={i}
-                      onClick={() => {
-                        // home-click-featured-dataset event
-                        trackGoal('0D5HYPFA', 0)
-                      }}
-                    >
-                      <SearchResultItem dataset={dataset} card />
-                    </div>
-                  )
-                })
+                loading
+                  ? new Array(5).fill('').map((_, index) => (
+                    <SearchResultItem loading={true} key={index} />))
+                  : dataset.map((dataset, i) => {
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => {
+                          // home-click-featured-dataset event
+                          trackGoal('0D5HYPFA', 0)
+                        }}
+                      >
+                        <SearchResultItem dataset={dataset} card />
+                      </div>
+                    )
+                  })
               }
               <Link to='/search'>
                 <Button type='secondary' size='lg' block>Explore More</Button>
               </Link>
             </div>
-
           </div>
         </div>
       </div>
