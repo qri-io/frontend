@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker'
 import { getAppExecMode } from './execution/execution'
 
 // API_EXEC_MODE is a global, unique constant for determining which "execution mode" the app is running under (local, desktop, or cloud)
-export const APP_EXEC_MODE = getAppExecMode(process.env.APP_EXEC_MODE || "LOCAL")
+export const APP_EXEC_MODE = getAppExecMode(process.env.REACT_APP_EXEC_MODE || "LOCAL")
 
 ReactDOM.render(
   <React.StrictMode>

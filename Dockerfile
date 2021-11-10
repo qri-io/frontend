@@ -6,8 +6,8 @@ ARG app_port
 
 ENV REACT_APP_API_BASE_URL=$api_base_url
 ENV REACT_APP_WS_BASE_URL=$ws_base_url
+ENV REACT_APP_EXEC_MODE="CLOUD"
 ENV PORT=$app_port
-ENV APP_EXEC_MODE="CLOUD"
 
 # create app directory
 WORKDIR /app
