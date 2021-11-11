@@ -34,7 +34,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
           </>
           : <>
             <div className='text-sm text-qrigray-400 font-semibold mb-2'>Version Info</div>
-            <DatasetVersionInfo dataset={dataset} />
+            <DatasetVersionInfo dataset={dataset} automated={dataset.commit.runID !== ''} />
           </>
           }
       </div>
