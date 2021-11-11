@@ -3,7 +3,8 @@ import React from 'react'
 import ContentLoader from "react-content-loader"
 
 import Dataset from '../../qri/dataset'
-import DatasetVersionInfo from '../../chrome/DatasetCommitInfo'
+import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
+import { newVersionInfoFromDataset } from '../../qri/versionInfo'
 
 export interface CommitSummaryHeaderProps {
   dataset: Dataset
@@ -34,7 +35,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
           </>
           : <>
             <div className='text-sm text-qrigray-400 font-semibold mb-2'>Version Info</div>
-            <DatasetVersionInfo dataset={dataset} automated={dataset.commit.runID !== ''} />
+            <DatasetCommitInfo item={newVersionInfoFromDataset(dataset)} />
           </>
           }
       </div>

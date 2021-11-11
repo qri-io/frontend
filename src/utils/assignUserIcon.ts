@@ -23,8 +23,12 @@ export default function assignUserIcon (username: string): string {
     'tile'
   ]
 
-  const hash = hashStr(username)
-  const index = hash % icons.length
-
+  let index = 0
+  try {
+    const hash = hashStr(username)
+    index = hash % icons.length
+  } catch (e) {
+    console.log(e)
+  }
   return `/img/user-icons/${icons[index]}.png`
 }
