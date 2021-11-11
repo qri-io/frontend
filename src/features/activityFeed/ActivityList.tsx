@@ -69,7 +69,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Commit',
-      selector: (row: LogItem) => row.message,
+      selector: (row: LogItem) => row.commitMessage,
       width: '180px',
       // eslint-disable-next-line react/display-name
       cell: (row: LogItem) => {
@@ -78,8 +78,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
           runID: row.runID,
           path: row.path,
           commit: NewCommit({
-            title: row.title,
-            timestamp: row.timestamp
+            title: row.commitTitle,
+            timestamp: row.commitTime
           })
         })
         if (!['failed', 'unchanged', 'running'].includes(row.runStatus)) {

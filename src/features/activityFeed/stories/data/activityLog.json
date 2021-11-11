@@ -1,7 +1,7 @@
 [
 	{
-		"timestamp": "2020-03-20T16:10:33.741276588-04:00",
-		"message": "no changes detected",
+		"commitTime": "2020-03-20T16:10:33.741276588-04:00",
+		"commitMessage": "no changes detected",
 
 		"username": "b5",
 		"name": "us_politicians_on_twitter",
@@ -9,19 +9,18 @@
 		"path": "",
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
 
-		"runNumber": 11,
+		"runCount": 11,
 		"runID": "b9d1211c-6a53-11eb-9439-0242ac130002",
 		"runStatus": "unchanged",
 		"runDuration": 58,
 
 		"bodySize": 282000,
 		"bodyRows": 2345678,
-		"bodyFormat": "csv",
-		"changeAmount": 0
+		"bodyFormat": "csv"
 	},
 	{
-		"timestamp": "2020-03-19T16:10:33.741276588-04:00",
-		"message": "body and meta changed",
+		"commitTime": "2020-03-19T16:10:33.741276588-04:00",
+		"commitMessage": "body and meta changed",
 
 		"username": "b5",
 		"name": "world_bank_population",
@@ -29,19 +28,18 @@
 		"path": "/ipfs/Qmebr6jDGqPViYe7pXtggNN3wJ6SiQehEpU8aZLg83AVpr",
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
 
-		"runNumber": 10,
+		"runCount": 10,
 		"runID": "b9d1211c-6a53-11eb-9439-0242ac130002",
 		"runStatus": "succeeded",
 		"runDuration": 128,
 
 		"bodySize": 282000,
 		"bodyRows": 2345678,
-		"bodyFormat": "csv",
-		"changeAmount": 0.45
+		"bodyFormat": "csv"
 	},
 	{
-		"timestamp": "2020-03-18T16:10:33.741276588-04:00",
-		"message": "http: no such host",
+		"commitTime": "2020-03-18T16:10:33.741276588-04:00",
+		"commitMessage": "http: no such host",
 
 		"initID": "u2gr5gy6a6s5jq7fhpiicpi5htnqd65ybey7r3pmaou7uwtqqisq",
 		"username": "b5",
@@ -49,19 +47,18 @@
 		"path": "/ipfs/Qmebr6jDGqPViYe7pXtggNN3wJ6SiQehEpU8aZLg83AVpr",
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
 
-		"runNumber": 9,
+		"runCount": 9,
 		"runID": "b9d1211c-6a53-11eb-9439-0242ac130002",
 		"runStatus": "failed",
 		"runDuration": 3638,
 
 		"bodySize": 282000,
 		"bodyRows": 2345678,
-		"bodyFormat": "csv",
-		"changeAmount": 0
+		"bodyFormat": "csv"
 	},
 	{
-		"timestamp": "2020-03-17T16:10:33.741276588-04:00",
-		"message": "update readme to new website URLS",
+		"commitTime": "2020-03-17T16:10:33.741276588-04:00",
+		"commitMessage": "update readme to new website URLS",
 
 		"initID": "u2gr5gy6a6s5jq7fhpiicpi5htnqd65ybey7r3pmaou7uwtqqisq",
 		"username": "b5",
@@ -70,13 +67,12 @@
 		"profileID": "QmSyDX5LYTiwQi861F5NAwdHrrnd1iRGsoEvCyzQMUyZ4W",
 
 		"runID": "",
-		"runNumber": -1,
+		"runCount": -1,
 		"runStatus": "",
 		"runDuration": 10500,
 
 		"bodySize": 3240000,
 		"bodyRows": 25678,
-		"bodyFormat": "csv",
-		"changeAmount": 0.12
+		"bodyFormat": "csv"
 	}
 ]

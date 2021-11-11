@@ -55,8 +55,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
               // first={i === 0 && !editable} (restore when there is <NewVersionButton> at the top of the list)
               first={i === 0}
               last={i === 2}
-            />
-          ))
+            />))
           : commits.map((logItem, i) => (
             <DatasetCommitListItem
               key={i}

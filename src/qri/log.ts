@@ -4,9 +4,9 @@ import { RunStatus } from "./run"
 // TODO (ramfox): when "VersionInfo" contains commit title, message, runID, runDuration, and runStatus
 // this field can be removed
 export interface LogItem {
-  timestamp: string
-  title: string
-  message: string
+  commitTime: string
+  commitTitle: string
+  commitMessage: string
 
   username: string
   name: string
@@ -15,7 +15,7 @@ export interface LogItem {
   path: string
 
   runID: string
-  runNumber: number
+  runCount: number
   runDuration: number
   runStatus: RunStatus
   runStart: string
@@ -23,14 +23,13 @@ export interface LogItem {
   bodySize: number
   bodyRows: number
   bodyFormat: BodyDataFormat
-  changeAmount: number
 }
 
 export function NewLogItem (d: Record<string, any>): LogItem {
   return {
-    timestamp: d.timestamp || d.commitTime,
-    title: d.title || d.commitTitle,
-    message: d.message || d.commitMessage,
+    commitTime: d.commitTime,
+    commitTitle: d.commitTitle,
+    commitMessage: d.commitMessage,
 
     username: d.username,
     name: d.name || "",
@@ -39,14 +38,13 @@ export function NewLogItem (d: Record<string, any>): LogItem {
     path: d.path,
 
     runID: d.runID,
-    runNumber: d.runNumber,
+    runCount: d.runCount,
     runDuration: d.runDuration,
     runStatus: d.runStatus,
     runStart: d.runStart,
 
     bodySize: d.bodySize,
     bodyRows: d.bodyRows,
-    bodyFormat: d.bodyFormat,
-    changeAmount: d.changeAmount
+    bodyFormat: d.bodyFormat
   }
 }

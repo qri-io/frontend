@@ -28,8 +28,8 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
     username: logItem.username,
     path: logItem.path,
     commit: NewCommit({
-      title: logItem.title,
-      timestamp: logItem.timestamp
+      title: logItem.commitTitle,
+      timestamp: logItem.commitTime
     })
   })
 

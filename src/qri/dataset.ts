@@ -4,6 +4,7 @@ import { QriRef } from "./ref"
 import fileSize, { abbreviateNumber } from '../utils/fileSize'
 
 export interface Dataset {
+  id?: string
   peername?: string
   username: string
   name: string
