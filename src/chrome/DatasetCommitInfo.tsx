@@ -5,10 +5,11 @@ import Icon from './Icon'
 import RelativeTimestampWithIcon from './RelativeTimestampWithIcon'
 import UsernameWithIcon from './UsernameWithIcon'
 import commitishFromPath from '../utils/commitishFromPath'
-import { Dataset } from '../qri/dataset'
+import { LogItem } from '../qri/log'
+import { VersionInfo } from '../qri/versionInfo'
 
 interface DatasetCommitInfoProps {
-  dataset: Dataset
+  item: LogItem | VersionInfo
   // small yields the same info with smaller text, used in collection, history list and run log
   small?: boolean
   // inRow will set the commit title to normal (instead of semibold) so it's less noisy when displayed in a row of other info
@@ -17,18 +18,14 @@ interface DatasetCommitInfoProps {
   preview?: boolean
   // sets the maxWidth, used for dynamic display in dataset preview page
   flex?: boolean
-  // determines whether or not to show the automated icon.  This should be included in dataset, but our responses
-  // are inconsistent, so this prop allows us to turn it on manually wherever we know it should appear
-  automated?: boolean
   // determines if the status text will have a hover effect.
   hover?: boolean
 }
 
 const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
-  dataset,
+  item,
   small = false,
   inRow = false,
-  automated = false,
   hover = false
 }) => {
   return (
@@ -42,7 +39,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
       })}>
         <div className={classNames(`dataset_commit_info_text truncate transition-colors flex-grow ${hover && 'group-hover:underline group-hover:text-qripink-600'}`, {
 
-        })} title={dataset.commit?.title}>{dataset.commit?.title}</div>
+        })} title={item?.commitTitle}>{item.commitTitle}</div>
       </div>
       {/* end first row */}
 
@@ -51,7 +48,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
         'text-xs': small
       })}>
         {/* automation icon */}
-        {automated && (
+        {item?.runID && item.runID !== '' && (
           <div className='flex-grow-0 mr-2' title='version created by this dataset&apos;s transform script'>
             <Icon icon='automationFilled' size={small ? '2xs' : 'xs'}/>
           </div>
@@ -59,18 +56,18 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
         {/* end automation icon */}
 
         {/* username icon */}
-        <UsernameWithIcon username={dataset.username} tooltip className='mr-2' iconWidth={small ? 12 : 18} iconOnly={small} />
+        <UsernameWithIcon username={item.username} tooltip className='mr-2' iconWidth={small ? 12 : 18} iconOnly={small} />
         {/* end username icon */}
 
         {/* relative timestamp icon */}
-        {dataset.commit?.timestamp && <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(dataset.commit.timestamp)} />}
+        {item?.commitTime && <RelativeTimestampWithIcon className='mr-3' timestamp={new Date(item?.commitTime)} />}
         {/* end relative timestamp icon */}
 
         {/* commit icon */}
-        {dataset.path && (
-          <div className='flex items-center leading-tight' title={dataset.path}>
+        {item.path && (
+          <div className='flex items-center leading-tight' title={item.path}>
             <Icon icon='commit' size={small ? 'xs' : 'sm'} className='-ml-2' />
-            <div>{commitishFromPath(dataset.path)}</div>
+            <div>{commitishFromPath(item.path)}</div>
           </div>
         )}
         {/* end commit icon */}

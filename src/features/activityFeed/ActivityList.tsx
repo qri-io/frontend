@@ -10,7 +10,6 @@ import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
 import { runEndTime } from '../../utils/runEndTime'
-import { NewDataset, NewCommit } from '../../qri/dataset'
 
 interface ActivityListProps {
   log: LogItem[]
@@ -73,20 +72,11 @@ const ActivityList: React.FC<ActivityListProps> = ({
       width: '180px',
       // eslint-disable-next-line react/display-name
       cell: (row: LogItem) => {
-        const dataset = NewDataset({
-          username: row.username,
-          runID: row.runID,
-          path: row.path,
-          commit: NewCommit({
-            title: row.commitTitle,
-            timestamp: row.commitTime
-          })
-        })
         if (!['failed', 'unchanged', 'running'].includes(row.runStatus)) {
           const versionLink = `/${row.username}/${row.name}/at${row.path}/history/body`
           return (
             <Link to={versionLink} className='min-w-0 flex-grow'>
-              <DatasetCommitInfo dataset={dataset} small inRow automated/>
+              <DatasetCommitInfo item={row} small inRow />
             </Link>
           )
         } else {
