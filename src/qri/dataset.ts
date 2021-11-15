@@ -4,6 +4,7 @@ import { QriRef } from "./ref"
 import fileSize, { abbreviateNumber } from '../utils/fileSize'
 
 export interface Dataset {
+  id?: string
   peername?: string
   username: string
   name: string
@@ -148,6 +149,7 @@ export interface Commit extends Component {
   timestamp?: string
   title?: string
   count?: number // commit chain height
+  runID?: string // if runID is populated, the commit was created using a transform
 }
 
 export function NewCommit (d: Record<string, any>): Commit {
@@ -158,7 +160,8 @@ export function NewCommit (d: Record<string, any>): Commit {
     path: d.path,
     timestamp: d.timestamp,
     title: d.title,
-    count: d.count
+    count: d.count,
+    runID: d.runID
   }
 }
 

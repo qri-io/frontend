@@ -19,7 +19,6 @@ import ManualTriggerButton from '../workflow/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 import { runEndTime } from '../../utils/runEndTime'
 import { trackGoal } from '../../features/analytics/analytics'
-import { NewCommit, NewDataset } from '../../qri/dataset'
 
 interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
@@ -149,31 +148,10 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       width: '180px',
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => {
-        // TODO (ramfox): the activity feed expects more content than currently exists
-        // in the VersionInfo. Once the backend supplies these values, we can rip
-        // out this section that mocks durations & timestamps for us
-        const {
-          username,
-          commitTime,
-          commitTitle,
-          path,
-          runID
-        } = row
-
-        const dataset = NewDataset({
-          username,
-          commit: NewCommit({
-            title: commitTitle,
-            timestamp: commitTime
-          }),
-          path: path,
-          runID
-        })
-
         const versionLink = `/${row.username}/${row.name}/at${row.path}/history`
         return (
           <Link to={versionLink} className='min-w-0 flex-grow'>
-            <DatasetCommitInfo dataset={dataset} hover small inRow automated={!!runID}/>
+            <DatasetCommitInfo item={row} hover small inRow />
           </Link>
         )
       }

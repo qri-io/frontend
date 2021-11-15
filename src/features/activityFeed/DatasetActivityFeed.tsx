@@ -45,7 +45,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
     trackGoal('GHUGYPYM', 0)
     dispatch(runNow(qriRef))
     const runningLog: LogItem = NewLogItem({
-      timestamp: new Date().toString(),
+      commitTime: new Date().toString(),
       runStatus: "running",
       title: '--',
       runID: latestRun.id

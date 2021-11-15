@@ -20,6 +20,7 @@ import MetaChips from '../../chrome/MetaChips'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import DownloadDatasetButton from "../download/DownloadDatasetButton"
 import ContentBoxSubTitle from "../../chrome/ContentBoxSubTitle"
+import { newVersionInfoFromDataset } from '../../qri/versionInfo'
 
 interface DatasetPreviewPageProps {
   qriRef: QriRef
@@ -79,7 +80,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                       <div className='flex items-center justify-between'>
                         <div className='flex-grow min-w-0 pr-6'>
                           <ContentBoxTitle title='Latest Version' />
-                          <DatasetCommitInfo dataset={dataset} small />
+                          <DatasetCommitInfo item={newVersionInfoFromDataset(dataset)} small />
                         </div>
                         <div className='flex flex-shrink-0'>
                           <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' hideIcon={true} type='primary' qriRef={qriRef} />

@@ -1,3 +1,4 @@
+import Dataset from "./dataset"
 import { QriRef } from "./ref"
 import { RunStatus } from './run'
 // VersionInfo pulls details from a dataset at a specific commit in a version
@@ -118,4 +119,25 @@ export function filterVersionInfos (collection: VersionInfo[], searchString: str
     d.path
   ].findIndex((f: string) => f.includes(searchString)) > -1
   )
+}
+
+export function newVersionInfoFromDataset (ds: Dataset): VersionInfo {
+  let theme: string | undefined
+  if (ds.meta?.theme) { theme = ds.meta.theme.join(",") }
+  return newVersionInfo({
+    initID: ds.id,
+    username: ds.username,
+    name: ds.name,
+    path: ds.path,
+    metaTitle: ds.meta?.title,
+    themeList: theme,
+    bodyFormat: ds.structure?.format,
+    bodySize: ds.structure?.length,
+    bodyRows: ds.structure?.entries,
+    numErrors: ds.structure?.errCount,
+    commitTitle: ds.commit?.title,
+    commitMessage: ds.commit?.message,
+    commitTime: ds.commit?.timestamp,
+    runID: ds.commit?.runID
+  })
 }

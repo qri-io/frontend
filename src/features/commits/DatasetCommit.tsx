@@ -7,7 +7,6 @@ import { LogItem } from '../../qri/log'
 import { newQriRef, refParamsFromLocation } from '../../qri/ref'
 import { pathToDatasetHistory } from '../dataset/state/datasetPaths'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
-import { NewDataset, NewCommit } from '../../qri/dataset'
 
 export interface DatasetCommitProps {
   logItem: LogItem
@@ -23,15 +22,6 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
   loading = false
 }) => {
   const location = useLocation()
-  // create a Dataset to pass into DatasetCommitInfo
-  const dataset = NewDataset({
-    username: logItem.username,
-    path: logItem.path,
-    commit: NewCommit({
-      title: logItem.title,
-      timestamp: logItem.timestamp
-    })
-  })
 
   const content = loading
     ? (
@@ -43,7 +33,7 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
       </ContentLoader>
       )
     : (
-      <DatasetCommitInfo dataset={dataset} small automated={!!logItem.runID} />
+      <DatasetCommitInfo item={logItem} small />
       )
 
   const containerClassNames = classNames('block rounded-md px-3 py-3 mb-6 w-full overflow-x-hidden', active && 'bg-white', !active && 'text-qrigray-400 border border-qrigray-300')
