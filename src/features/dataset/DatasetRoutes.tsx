@@ -18,6 +18,7 @@ import { newQriRef } from '../../qri/ref'
 import DatasetEditor from '../dsComponents/DatasetEditor'
 import DatasetWrapper from '../dsComponents/DatasetWrapper'
 import { loadDataset, loadHeader } from "./state/datasetActions"
+import { PrivateRoute } from '../../routes'
 
 const DatasetRoutes: React.FC<{}> = () => {
   // TODO(b5): this qriRef is missing all params after /:username/:name b/c
@@ -58,9 +59,9 @@ const DatasetRoutes: React.FC<{}> = () => {
         </Route>
 
         {/* dataset workflow */}
-        <Route path='/:username/:name/workflow'>
+        <PrivateRoute path='/:username/:name/workflow'>
           <WorkflowPage qriRef={qriRef} />
-        </Route>
+        </PrivateRoute>
 
         {/* dataset runs */}
         <Route path='/:username/:name/runs'>
@@ -74,9 +75,9 @@ const DatasetRoutes: React.FC<{}> = () => {
         }
 
         {process.env.REACT_APP_FEATURE_WIREFRAMES &&
-          <Route path='/:username/:name/edit'>
+          <PrivateRoute path='/:username/:name/edit'>
             <DatasetEditor />
-          </Route>
+          </PrivateRoute>
         }
 
       </Switch>
