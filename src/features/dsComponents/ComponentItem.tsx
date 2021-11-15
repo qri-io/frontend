@@ -19,6 +19,7 @@ export interface ComponentItemProps {
   tooltip?: string
   // for showing a gray border around the selected tab to contrast with white background
   border?: boolean
+  manualCreation?: boolean
 }
 
 export const ComponentItem: React.FC<ComponentItemProps> = ({
@@ -30,13 +31,14 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   icon,
   filename,
   color = 'dark',
-  border = false
+  border = false,
+  manualCreation = false
 }) => {
   const tabContent = (
     <>
       {icon && <Icon icon={icon} size='2xs' className='mr-2' />}
       <div>
-        <div className='font-bold' style={{ fontSize: 12 }}>{displayName}</div>
+        <div className='font-bold flex items-center' style={{ fontSize: 12 }}>{displayName}</div>
         <div>{filename}</div>
       </div>
       <StatusDot status={status} />

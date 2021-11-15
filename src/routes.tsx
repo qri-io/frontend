@@ -21,6 +21,7 @@ import UserProfile from './features/userProfile/UserProfile'
 import WorkflowPage from './features/workflow/WorkflowPage'
 import DatasetWrapper from './features/dsComponents/DatasetWrapper'
 import PasswordReset from "./features/session/PasswordReset"
+import ManualDatasetCreation from "./features/manualDatasetCreation/ManualDatasetCreation"
 
 export const PrivateRoute: React.FC<any> = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
@@ -52,6 +53,12 @@ export default function Routes () {
       <Route path='/workflow/new'>
         <DatasetWrapper fetchData={false}>
           <WorkflowPage qriRef={{ username: '', name: '' }} />
+        </DatasetWrapper>
+      </Route>
+
+      <Route path='/dataset/new'>
+        <DatasetWrapper fetchData={false}>
+          <ManualDatasetCreation />
         </DatasetWrapper>
       </Route>
 

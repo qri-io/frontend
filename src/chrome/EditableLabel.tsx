@@ -10,6 +10,8 @@ export interface EditableLabelProps {
   readOnly?: boolean
   validator?: (name: string) => ValidationError
   onChange: (name: string, value: string) => void
+  placeholder?: string
+  autoEditing?: boolean
 }
 
 const EditableLabel: React.FC<EditableLabelProps> = ({
@@ -18,9 +20,11 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
   size = 'md',
   readOnly = false,
   validator,
-  onChange
+  onChange,
+  placeholder,
+  autoEditing = false
 }) => {
-  const [editing, setEditing] = useState(false)
+  const [editing, setEditing] = useState(autoEditing)
   const [edit, setEdit] = useState(value)
 
   const inputEl = useRef<HTMLInputElement>(null)
@@ -77,18 +81,27 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
     setEditing(false)
   }
 
+  let sizeClassname = ''
+  switch (size) {
+    case "sm":
+      sizeClassname = 'h-6'
+      break
+  }
+
   return (editing
     ? <input
       ref={inputEl}
       type='text'
-      className='border-qrigray-400 focus:ring-0 block w-full rounded-lg bg-transparent'
+      className={`${sizeClassname} border-qrigray-400 focus:ring-0 block w-full rounded-lg bg-transparent`}
       value={edit}
       onKeyPress={handleKeyPress}
       onChange={handleChange}
+      placeholder={placeholder}
       onBlur={handleBlur}
       autoFocus
     />
-    : <h3 className={classNames({ 'cursor-pointer whitespace-nowrap': !readOnly })} onClick={handleLabelClick}>{value}</h3>
+    : <h3 className={classNames({ 'cursor-pointer whitespace-nowrap h-6': !readOnly })}
+          onClick={handleLabelClick}>{value || placeholder}</h3>
   )
 }
 

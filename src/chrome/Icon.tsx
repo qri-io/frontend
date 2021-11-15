@@ -78,6 +78,8 @@ import Dataset from "./icon/Dataset"
 import WebHook from "./icon/WebHook"
 import Deploy from "./icon/Deploy"
 import Edit from "./icon/Edit"
+import DashedCircle from "./icon/DashedCircle"
+import Face from "./icon/Face"
 
 interface IconProps {
   // name of the icon
@@ -121,6 +123,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     columns: <Columns {...props} />,
     commit: <Commit {...props} />,
     dashboard: <Dashboard {...props} />,
+    dashedCircle: <DashedCircle {...props} />,
     dataset: <Dataset {...props} />,
     deploy: <Deploy {...props} />,
     deployCircle: <DeployCircle {...props} />,
@@ -131,6 +134,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     edit: <Edit {...props} />,
     ellipsesVertical: <EllipsesVertical {...props} />,
     eye: <Eye {...props} />,
+    face: <Face {...props}/>,
     follower: <Follower {...props} />,
     fullScreen: <FullScreen {...props} />,
     github: <Github {...props} />,
