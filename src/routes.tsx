@@ -22,7 +22,7 @@ import WorkflowPage from './features/workflow/WorkflowPage'
 import DatasetWrapper from './features/dsComponents/DatasetWrapper'
 import PasswordReset from "./features/session/PasswordReset"
 
-const PrivateRoute: React.FC<any> = ({ path, children }) => {
+export const PrivateRoute: React.FC<any> = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
   return (
     <Route path={path}>
@@ -62,8 +62,8 @@ export default function Routes () {
 
       <Route path='/search'><Search /></Route>
 
-      <Route path='/notifications'><NotificationList /></Route>
-      <Route path='/notification_settings'><NotificationSettings /></Route>
+      <PrivateRoute path='/notifications'><NotificationList /></PrivateRoute>
+      <PrivateRoute path='/notification_settings'><NotificationSettings /></PrivateRoute>
 
       <Route path='/:username' exact><UserProfile /></Route>
       <Route path='/:username/following'><UserProfile path='/following' /></Route>
