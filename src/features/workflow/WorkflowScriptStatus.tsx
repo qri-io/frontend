@@ -4,7 +4,7 @@ import { Run } from '../../qri/run'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import Icon from "../../chrome/Icon"
 import ContentLoader from "react-content-loader"
-import { newVersionInfoFromDataset } from '../../qri/versionInfo'
+import { newVersionInfo, newVersionInfoFromDatasetAndRun, VersionInfo } from '../../qri/versionInfo'
 
 interface WorkflowScriptStatusProps {
   run?: Run
@@ -14,6 +14,11 @@ const WorkflowScriptStatus: React.FC<WorkflowScriptStatusProps> = ({
   run
 }) => {
   const dsPreview = run?.dsPreview
+  let vi: VersionInfo = newVersionInfo({})
+  if (dsPreview) {
+    vi = newVersionInfoFromDatasetAndRun(dsPreview, run)
+    vi.commitTitle = "Dry Run Successful"
+  }
 
   let classes = 'border-solid border-qrigray-200 border text-qrigray-400'
   if (run?.status === 'succeeded') {
@@ -33,7 +38,7 @@ const WorkflowScriptStatus: React.FC<WorkflowScriptStatusProps> = ({
           <rect x="72" y="30" width="25" height="10" rx="1" fill="#D5DADD"/>
         </ContentLoader>
         : dsPreview
-          ? <DatasetCommitInfo item={newVersionInfoFromDataset(dsPreview)} small />
+          ? <DatasetCommitInfo item={vi} small />
           : <>
             <div className='text-xs flex items-center'>
               <Icon icon='playCircle' className='mr-1' size='3xs'/>

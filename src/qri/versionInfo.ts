@@ -1,6 +1,7 @@
+import { runEndTime } from "../utils/runEndTime"
 import Dataset from "./dataset"
 import { QriRef } from "./ref"
-import { RunStatus } from './run'
+import { Run, RunStatus } from './run'
 // VersionInfo pulls details from a dataset at a specific commit in a version
 // history. It's flat, plain data representation of a dataset meant for listing.
 // VersionInfo is a superset of a Reference, embedding all fields a reference
@@ -140,4 +141,18 @@ export function newVersionInfoFromDataset (ds: Dataset): VersionInfo {
     commitTime: ds.commit?.timestamp,
     runID: ds.commit?.runID
   })
+}
+
+export function newVersionInfoFromDatasetAndRun (ds: Dataset, run: Run): VersionInfo {
+  const vi = newVersionInfoFromDataset(ds)
+  vi.runID = run.id
+  vi.runDuration = run.duration
+  if (run.startTime) {
+    vi.runStart = run.startTime.toString()
+    if (vi.runDuration) {
+      vi.commitTime = runEndTime(vi.runStart, vi.runDuration).toString()
+    }
+  }
+  vi.runStatus = run.status
+  return vi
 }
