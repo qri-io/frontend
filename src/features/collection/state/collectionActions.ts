@@ -13,7 +13,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { QriRef } from '../../../qri/ref'
 import { TransformLifecycle } from "../../../qri/events"
 
-function mapVersionInfo (data: object | []): VersionInfo[] {
+export function mapVersionInfo (data: object | []): VersionInfo[] {
   if (!data) { return [] }
   return (data as []).map((data) => newVersionInfo(data))
 }

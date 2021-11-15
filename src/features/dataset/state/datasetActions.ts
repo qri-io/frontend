@@ -4,11 +4,12 @@ import { ApiAction, ApiActionThunk, CALL_API, API_BASE_URL } from "../../../stor
 import {
   RENAME_NEW_DATASET,
   RESET_DATASET_STATE,
+  RESET_DATASET_TITLE_ERROR,
   SET_BODY_LOADING,
   SET_HEADER
 } from "./datasetState"
-
 import { VersionInfo } from "../../../qri/versionInfo"
+import { mapVersionInfo } from "../../collection/state/collectionActions"
 
 export const bodyPageSizeDefault = 50
 
@@ -41,6 +42,36 @@ function getExistingHeader (collection: Record<string, VersionInfo>, ref: QriRef
     }
   }
   return undefined
+}
+
+export function renameDataset (current: QriRef, next: QriRef): ApiActionThunk {
+  // if no path exists, assume a new dataset & client-side-only rename
+  // TODO(b5): once QriRefs have an initID field, use that as the proper check
+  // for "newness"
+  if (!current.path) {
+    return async () => ({
+      type: RENAME_NEW_DATASET,
+      current,
+      next
+    })
+  }
+
+  return async (dispatch) => {
+    const action = {
+      type: 'rename',
+      [CALL_API]: {
+        endpoint: 'ds/rename',
+        method: 'POST',
+        body: {
+          current: refStringFromQriRef(humanRef(current)),
+          next: refStringFromQriRef(humanRef(next))
+        },
+        map: mapVersionInfo
+      }
+    }
+
+    return dispatch(action)
+  }
 }
 
 // downloadLinkFromQriRef creates a download link
@@ -111,6 +142,29 @@ function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
   }
 }
 
+export function commitDatasetTitle (qriRef: QriRef, title: string, commitTitle: string): ApiActionThunk {
+  return async (dispatch) => {
+    const action = {
+      type: 'title',
+      [CALL_API]: {
+        endpoint: 'ds/save',
+        method: 'POST',
+        body: {
+          ref: `${qriRef.username}/${qriRef.name}`,
+          title: commitTitle,
+          dataset: {
+            meta: {
+              title: title
+            }
+          }
+        }
+      }
+    }
+
+    return dispatch(action)
+  }
+}
+
 export function removeDataset (ref: QriRef): ApiActionThunk {
   return async (dispatch) => {
     const action = {
@@ -157,33 +211,8 @@ export function setBodyLoading (): ResetDatasetStateAction {
   }
 }
 
-export function renameDataset (current: QriRef, next: QriRef): ApiActionThunk {
-  // if no path exists, assume a new dataset & client-side-only rename
-  // TODO(b5): once QriRefs have an initID field, use that as the proper check
-  // for "newness"
-  if (!current.path) {
-    return async () => ({
-      type: RENAME_NEW_DATASET,
-      current,
-      next
-    })
-  }
-
-  return async (dispatch) => {
-    const action = {
-      type: 'rename',
-      [CALL_API]: {
-        endpoint: 'ds/rename',
-        method: 'POST',
-        body: {
-          current: refStringFromQriRef(humanRef(current)),
-          next: refStringFromQriRef(humanRef(next))
-        },
-        // TODO(b5): this return value is a versionInfo
-        map: mapDataset
-      }
-    }
-
-    return dispatch(action)
+export function resetDatasetTitleError (): ResetDatasetStateAction {
+  return {
+    type: RESET_DATASET_TITLE_ERROR
   }
 }

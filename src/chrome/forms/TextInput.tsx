@@ -18,6 +18,8 @@ interface TextInputProps {
   white?: boolean
   tooltipFor?: string
   className?: string
+  inputClassName?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -32,7 +34,9 @@ const TextInput: React.FC<TextInputProps> = ({
   onBlur,
   onKeyDown,
   placeholder,
-  className
+  className,
+  inputClassName,
+  size = 'md'
 }) => {
   const [stateValue, setStateValue] = React.useState(value)
 
@@ -48,15 +52,18 @@ const TextInput: React.FC<TextInputProps> = ({
   }
 
   return (
-    <div className={`mb-2 ${className}`}>
-      <div className="mt-1 mb-2 relative rounded-md shadow-sm">
+    <div className={`${className}`}>
+      <div className="mt-2 mb-2 relative rounded-md shadow-sm">
         {label && <InputLabel
           label={label}
           tooltip={labelTooltip}
           tooltipFor={name}
         />}
         <input
-          className="focus:ring-transparent focus:border-qripink-600 block w-full px-2 text-sm border-qrigray-300 rounded-md placeholder-qrigray-400 rounded-lg"
+          className={`focus:ring-transparent focus:border-qripink-600 block w-full px-2 text-sm border-qrigray-300 rounded-md placeholder-qrigray-400 rounded-lg ${inputClassName}`}
+          style={{
+            height: (size === 'sm') ? 24 : ''
+          }}
           id={name}
           name={name}
           type={type}

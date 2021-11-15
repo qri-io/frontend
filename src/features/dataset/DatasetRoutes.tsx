@@ -17,7 +17,7 @@ import DatasetIssues from '../issues/DatasetIssues'
 import { newQriRef } from '../../qri/ref'
 import DatasetEditor from '../dsComponents/DatasetEditor'
 import DatasetWrapper from '../dsComponents/DatasetWrapper'
-import { loadHeader } from "./state/datasetActions"
+import { loadDataset, loadHeader } from "./state/datasetActions"
 
 const DatasetRoutes: React.FC<{}> = () => {
   // TODO(b5): this qriRef is missing all params after /:username/:name b/c
@@ -32,6 +32,9 @@ const DatasetRoutes: React.FC<{}> = () => {
   useEffect(() => {
     dispatch(loadHeader({ username: qriRef.username, name: qriRef.name, path: qriRef.path }))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
+  useEffect(() => {
+    dispatch(loadDataset(qriRef))
+  }, [dispatch, qriRef.username, qriRef.name])
 
   return (
     <DatasetWrapper>

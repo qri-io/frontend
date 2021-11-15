@@ -1,4 +1,4 @@
-import { Modal, ModalType, SET_MODAL, SET_MODAL_LOCKED, TOGGLE_NAV_EXPANDED } from "./appState"
+import { Modal, ModalPosition, ModalType, SET_MODAL, SET_MODAL_LOCKED, TOGGLE_NAV_EXPANDED } from "./appState"
 
 export interface ModalAction {
   type: string
@@ -11,12 +11,14 @@ export interface ModalLockedAction {
   locked: boolean
 }
 
-export function showModal<P = {}> (type: ModalType, props?: P): ModalAction {
+export function showModal<P = {}> (type: ModalType, props?: P, customWidth: boolean = false, position?: ModalPosition): ModalAction {
   return {
     type: SET_MODAL,
     modal: {
       type,
-      props
+      props,
+      customWidth,
+      position
     }
   }
 }

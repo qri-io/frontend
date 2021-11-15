@@ -52,6 +52,8 @@ export interface ButtonProps {
   block?: boolean
   // caret will add a small caretRight icon to the right of the children
   caret?: boolean
+  // style extends the button's style attribute. Useful for providing a static width when button contents will change
+  style?: Record<string, any>
   // onClick is a function that will fire when the button is clicked
   onClick?: (e: React.MouseEvent<Element, MouseEvent>) => void
 }
@@ -66,6 +68,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   block = false,
   caret = false,
+  style,
   onClick = () => {},
   children
 }) => {
@@ -116,7 +119,8 @@ const Button: React.FC<ButtonProps> = ({
       type={submit ? 'submit' : 'button'}
       style={{
         height,
-        lineHeight: height.toString() + 'px'
+        lineHeight: height.toString() + 'px',
+        ...style
       }}
       className={classNames(
         'px-2.5 inline-flex items-center justify-center shadow-sm bg-transparent font-semibold focus:outline-none focus:ring-none mt-0 transition-all duration-100',

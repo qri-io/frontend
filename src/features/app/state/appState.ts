@@ -15,11 +15,18 @@ export enum ModalType {
   unsavedChanges = 'unsavedChanges',
   deployWorkflow = 'deployWorkflow',
   removeDataset = 'removeDataset',
+  editDatasetTitle = 'editDatasetTitle',
   logIn = 'logIn',
   signUp = 'signUp',
   workflowSplash = 'workflowSplash',
   deploy = 'deploy',
   addTrigger = 'addTrigger'
+}
+
+export interface ModalPosition {
+  top: string
+  left: string
+  position: 'relative' | 'absolute'
 }
 
 export interface Modal<P = {}> {
@@ -28,6 +35,8 @@ export interface Modal<P = {}> {
   // when pressing 'esc'
   locked?: boolean
   props?: P
+  customWidth?: boolean
+  position?: ModalPosition
 }
 
 export interface AppState {
