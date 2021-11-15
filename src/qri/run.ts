@@ -1,5 +1,5 @@
 import { EventLogLine, EventLogLineType } from "./eventLog"
-import { Dataset } from './dataset'
+import { Dataset, NewDataset } from './dataset'
 
 export type RunStatus =
   | 'waiting'
@@ -15,7 +15,7 @@ export interface Run {
   status: RunStatus
   startTime?: Date
   stopTime?: Date
-  duration?: string
+  duration?: number // duration of the run in nanoseconds
   initID?: string
   steps: RunStep[]
   dsPreview?: Dataset
@@ -40,7 +40,7 @@ export interface RunStep {
   status: RunStatus
   startTime?: Date
   stopTime?: Date
-  duration?: string
+  duration?: number // duration of the step in nanoseconds
   output?: EventLogLine[]
 }
 
@@ -57,6 +57,14 @@ export function NewRunStep (data: Record<string, any>): RunStep {
   }
 }
 
+function toMilliFromNano (na: number): number {
+  return na / 1000000
+}
+
+function toNanoFromMilli (mi: number): number {
+  return mi * 1000000
+}
+
 export function runAddLogStep (run: Run, line: EventLogLine): Run {
   if (run.id !== line.sessionID) {
     return run
@@ -66,13 +74,16 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
     case EventLogLineType.ETTransformStart:
       run.status = 'running'
       run.initID = line.data.initID
-      run.startTime = new Date(line.ts / 1000)
+      run.startTime = new Date(toMilliFromNano(line.ts))
       run.steps = []
       break
     case EventLogLineType.ETTransformStop:
       run.initID = line.data.initID
       run.status = line.data.status || 'failed'
-      run.stopTime = new Date(line.ts / 1000)
+      run.stopTime = new Date(toMilliFromNano(line.ts))
+      if (run.startTime) {
+        run.duration = toNanoFromMilli(run.startTime?.getTime() - run.stopTime?.getTime())
+      }
       break
 
     case EventLogLineType.ETTransformStepStart:
@@ -81,14 +92,17 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
       }
       const s = NewRunStep(line.data)
       s.status = 'running'
-      s.startTime = new Date(line.ts / 1000)
+      s.startTime = new Date(line.ts)
       run.steps.push(s)
       break
     case EventLogLineType.ETTransformStepStop:
       const step = lastStep(run)
       if (step) {
-        step.stopTime = new Date(line.ts / 1000)
+        step.stopTime = new Date(line.ts)
         step.status = line.data.status || 'failed'
+        if (step.startTime) {
+          step.duration = toNanoFromMilli(step.stopTime.getTime() - step.startTime.getTime())
+        }
       }
       break
     case EventLogLineType.ETTransformStepSkip:
@@ -110,7 +124,7 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
       break
 
     case EventLogLineType.ETDatasetPreview:
-      run.dsPreview = line.data as Dataset
+      run.dsPreview = NewDataset(line.data)
   }
   return run
 }
