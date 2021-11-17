@@ -48,6 +48,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
       commitTime: new Date().toString(),
       runStatus: "running",
       title: '--',
+      runStart: new Date().toString(),
       runID: latestRun.id
     })
     const newLogs = [runningLog, ...logs]
