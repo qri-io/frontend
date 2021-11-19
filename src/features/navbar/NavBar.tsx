@@ -47,7 +47,7 @@ const NavBar: React.FC<NavBarProps> = ({
   }
 
   return (
-    <div className={classNames('text-black text-bold flex items-center pr-8 font-medium w-full z-20', {
+    <div className={classNames('text-black text-bold flex items-center pr-8 font-medium w-full z-40', {
       'bg-white': !transparent,
       'absolute top-0': absolute
     })} style={{
