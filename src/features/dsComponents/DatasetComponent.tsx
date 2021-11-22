@@ -18,7 +18,7 @@ import { selectIsBodyLoading, selectIsDatasetLoading } from "../dataset/state/da
 export interface DatasetComponentProps {
   dataset: Dataset
   componentName: ComponentName
-  // preview will cause the body component to render only what is in dataset and not fetch more data
+  // preview is used to change the display of the body table for previews vs history
   preview?: boolean
   showLoadingState?: boolean
 }
@@ -42,7 +42,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   switch (componentName) {
     case 'body':
       component = (
-        <Body loading={showLoadingState ? (loading || bodyLoading) : false} data={dataset} preview={preview} />
+        <Body loading={showLoadingState ? (loading || bodyLoading) : false} data={dataset} />
       )
       componentHeader = (
         <BodyHeader
@@ -97,7 +97,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
 
       {/* full screen component view functions as a modal */}
       { expanded && (
-      <div className="fixed top-0 right-0 bottom-0 left-0 inset-0 transition-opacity z-20" aria-hidden="true">
+      <div className="fixed top-0 right-0 bottom-0 left-0 inset-0 transition-opacity z-40" aria-hidden="true">
         <div className="absolute inset-0 bg-gray-200 p-4 flex">
           <ContentBox className='flex-grow flex flex-col'>
             <div className='flex'>
