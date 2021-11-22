@@ -89,7 +89,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   }
 
   const onTitleClick = () => {
-    if (!isNew) {
+    if (!isNew && editable) {
       dispatch(resetDatasetTitleError())
       dispatch(showModal(ModalType.editDatasetTitle, {
         title: dataset.meta?.title ? dataset.meta?.title : header.name,
