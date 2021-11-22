@@ -64,6 +64,8 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
     dispatch(loadDsPreview(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path ])
 
+  const readmeHeightLargerThanContainerHeight = readmeHeight >= readmeContainerHeight
+
   const location = useLocation()
 
   return (
@@ -88,10 +90,12 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                   <ContentBox className='flex flex-col h-full'>
                     <div style={{ minHeight: minReadmeHeight }} className='flex flex-col h-full overflow-hidden'>
                       <ContentBoxTitle title='Readme'/>
-                      <div className='flex-grow overflow-hidden'>
+                      <div className={classNames('flex-grow overflow-hidden relative', {
+                        'fade-bottom': readmeHeightLargerThanContainerHeight
+                      })}>
                         <Readme data={dataset.readme} />
                       </div>
-                      {!expandReadme && (readmeHeight >= readmeContainerHeight) && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+                      {!expandReadme && (readmeHeightLargerThanContainerHeight) && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-2' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                     </div>
                   </ContentBox>
                 </div>
