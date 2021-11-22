@@ -90,7 +90,7 @@ const Collection: React.FC<{}> = () => {
                   {collection.length}
                 </div>
               </div>
-              { loading && collection.length && (
+              { loading && collection.length > 0 && (
                 <div>
                   <Icon icon='loader' className='ml-2 text-qrigray-400'/>
                 </div>
