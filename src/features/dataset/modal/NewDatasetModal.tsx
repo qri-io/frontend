@@ -20,7 +20,7 @@ const NewDatasetModal: React.FC<{}> = () => {
         <h1 className='font-extrabold text-3xl mr-4' style={{ width: 356, lineHeight: '36px' }}>New Dataset</h1>
         <IconButton icon='close' onClick={() => dispatch(clearModal())} />
       </div>
-      <p className='text-qrigray-400 text-md mb-4'>You can create a Dataset throught different options</p>
+      <p className='text-qrigray-400 text-md mb-4'>Choose the type of dataset you would like to create</p>
       <Link
         id='new_dataset_modal_create_workflow'
         className='cursor-pointer mb-4 inline-block w-full'
@@ -38,16 +38,16 @@ const NewDatasetModal: React.FC<{}> = () => {
         }}
       >
         <div className='border rounded p-3 border-black text-sm'>
-          <h6 className='font-bold'>Create from Workflow</h6>
-          <p className='text-qrigray-400'>Create a new dataset from a workflow</p>
+          <h6 className='font-bold'>Automated Dataset</h6>
+          <p className='text-qrigray-400'>Write code to create an automated dataset that imports data from outside sources</p>
         </div>
       </Link>
       <span
         className='inline-block w-full'
       >
         <div className='border rounded p-3 border-qrigray-400 text-sm'>
-          <h6 className='font-bold text-qrigray-400'>Manual Upload</h6>
-          <p className='text-qrigray-400'>Upload a new dataset from a dataset that you already have</p>
+          <h6 className='font-bold text-qrigray-400'>Manual Dataset</h6>
+          <p className='text-qrigray-400'>Create a dataset by uploading a CSV or JSON file from your computer</p>
         </div>
       </span>
     </div>
