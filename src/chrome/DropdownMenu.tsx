@@ -11,6 +11,7 @@ interface DropdownMenuProps {
   items: DropdownMenuItemProps[]
   dropUp?: boolean
   oneItem?: boolean
+  id?: string
   fullWidth?: boolean
 }
 
@@ -27,7 +28,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   items,
   dropUp = false,
   oneItem = false,
-  fullWidth = false
+  fullWidth = false,
+  id
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
@@ -47,7 +49,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   }, [handleClickOutside])
 
   return (
-    <div ref={ref} className={classNames('relative inline-block text-left w-full', className)}>
+    <div id={id} ref={ref} className={classNames('relative inline-block text-left w-full', className)}>
       <div onClick={() => { setOpen(!open) }} className='cursor-pointer flex items-center'>
         {(typeof icon === 'string') ? <Icon icon={icon} /> : icon}
       </div>

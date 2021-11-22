@@ -86,7 +86,7 @@ const Collection: React.FC<{}> = () => {
             <div className='flex-grow flex items-center justify-start'>
               <h1 className='text-3xl font-extrabold mb-1'>My Datasets </h1>
               <div>
-                <div className='bg-qrigray-400 text-white rounded px-2 py-1 ml-2 leading-none flex-grow-0'>
+                <div id='collection_count' className='bg-qrigray-400 text-white rounded px-2 py-1 ml-2 leading-none flex-grow-0'>
                   {collection.length}
                 </div>
               </div>

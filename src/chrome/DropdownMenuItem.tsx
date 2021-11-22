@@ -54,7 +54,7 @@ const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
       <Link
         to={to}
         onClick={onClick}
-        className={containerClassName}
+        className={containerClassName + ' dropdown_menu_item'}
         colorClassName={colorClassName}
       >
         {dropdownMenuItemContent}

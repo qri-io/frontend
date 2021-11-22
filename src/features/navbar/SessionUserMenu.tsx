@@ -30,7 +30,7 @@ const SessionUserMenu: React.FC<{}> = () => {
     return (
       <>
         <Link id='user_menu_login_button' onClick={handleLogInClick}>Log In</Link>
-        <Button onClick={handleSignUpClick} size='lg' className='ml-8'>
+        <Button id='user_menu_sign_up_button' onClick={handleSignUpClick} size='lg' className='ml-8'>
           Sign Up
         </Button>
       </>
@@ -59,7 +59,7 @@ const SessionUserMenu: React.FC<{}> = () => {
           trackGoal('MN77WFUZ', 0)
         }}
       >Help</Link>
-      <DropdownMenu icon={userIcon} className='ml-8' items={[
+      <DropdownMenu icon={userIcon} className='ml-8 session_user_menu' items={[
         {
           element: (
             <div className='flex'>
