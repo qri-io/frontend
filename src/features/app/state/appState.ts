@@ -20,7 +20,8 @@ export enum ModalType {
   signUp = 'signUp',
   workflowSplash = 'workflowSplash',
   deploy = 'deploy',
-  addTrigger = 'addTrigger'
+  addTrigger = 'addTrigger',
+  newDataset = 'newDataset'
 }
 
 export interface ModalPosition {

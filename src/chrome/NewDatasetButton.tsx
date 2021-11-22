@@ -1,44 +1,34 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch } from "react-redux"
 
 import Button from './Button'
 import IconOnlyButton from './IconOnlyButton'
-import { trackGoal } from '../features/analytics/analytics'
+import { showModal } from "../features/app/state/appActions"
+import { ModalType } from "../features/app/state/appState"
 
 interface NewDatasetButtonProps {
   mini?: boolean
   id: string | undefined
 }
 
-const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini, id }) => (
-  <Link
-    id={id}
-    to={{
-      pathname: `/workflow/new`,
-      state: {
-        showSplashModal: true,
-        template: 'CSVDownload'
+const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini, id }) => {
+  const dispatch = useDispatch()
+  return (
+    <>
+      {
+        !mini && (
+          <Button id={id} onClick={() => dispatch(showModal(ModalType.newDataset))} type='secondary' icon='plus'>
+            New Dataset
+          </Button>
+        )
       }
-    }}
-    onClick={() => {
-      // general-click-new-dataset-button event
-      trackGoal('KHBCRTHJ', 0)
-    }}
-  >
-    {
-      !mini && (
-        <Button type='secondary' icon='plus'>
-          New Dataset
-        </Button>
-      )
-    }
-    {
-      mini && (
-        <IconOnlyButton type='secondary' size='lg' icon='plus' round />
-      )
-    }
-
-  </Link>
-)
+      {
+        mini && (
+          <IconOnlyButton id={id} type='secondary' size='lg' icon='plus' round />
+        )
+      }
+    </>
+  )
+}
 
 export default NewDatasetButton
