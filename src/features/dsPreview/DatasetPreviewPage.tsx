@@ -37,8 +37,23 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
 
   const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions()
   const [expandReadme, setExpandReadme] = useState(false)
+  const [minReadmeHeight, setMinReadmeHeight] = useState(0)
+  const [readmeHeight, setReadmeHeight] = useState(0)
 
   let readmeContainerHeight = versionInfoContainerHeight || 'auto'
+
+  useEffect(() => {
+    if (!isNaN(readmeContainerHeight)) {
+      setMinReadmeHeight(readmeContainerHeight - 42)// removing padding here
+    }
+  }, [ readmeContainerHeight ])
+
+  useEffect(() => {
+    const readmeComponent = document.getElementsByClassName('markdown-body')[0]
+    if (readmeComponent) {
+      setReadmeHeight(readmeComponent.clientHeight + 64) // adding pudding and see more button dimensions
+    }
+  }, [ dataset ])
 
   if (expandReadme) {
     readmeContainerHeight = 'auto'
@@ -71,12 +86,12 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                   'absolute': !expandReadme
                 })} style={{ height: readmeContainerHeight }}>
                   <ContentBox className='flex flex-col h-full'>
-                    <div className='flex flex-col h-full overflow-hidden'>
+                    <div style={{ minHeight: minReadmeHeight }} className='flex flex-col h-full overflow-hidden'>
                       <ContentBoxTitle title='Readme'/>
                       <div className='flex-grow overflow-hidden'>
                         <Readme data={dataset.readme} />
                       </div>
-                      {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+                      {!expandReadme && (readmeHeight >= readmeContainerHeight) && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-1' onClick={() => { setExpandReadme(true) }}>See More</div>)}
                     </div>
                   </ContentBox>
                 </div>
