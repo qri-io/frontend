@@ -20,7 +20,6 @@ import { newQriRef } from '../../../qri/ref'
 
 export interface BodyProps {
   data: Dataset
-  preview?: boolean
   loading?: boolean
   // stats: IStatTypes[]
   // details: Details
@@ -52,7 +51,6 @@ const extractColumnHeaders = (structure: Structure, value: any[]): ColumnPropert
 
 const Body: React.FC<BodyProps> = ({
   data,
-  preview = false,
   loading = false
 }) => {
   const dispatch = useDispatch()
@@ -61,11 +59,11 @@ const Body: React.FC<BodyProps> = ({
 
   // list out dependencies on dataset body individually for proper memoization
   useEffect(() => {
-    if (preview) { return }
+    if (data.body) { return }
     if (name && username) {
       dispatch(loadBody(newQriRef({ path, name, username }), 1, 100))
     }
-  }, [preview, dispatch, path, name, username])
+  }, [dispatch, path, name, username])
 
   if (loading) {
     return <BodyTable loading />
