@@ -51,7 +51,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   useEffect(() => {
     const readmeComponent = document.getElementsByClassName('markdown-body')[0]
     if (readmeComponent) {
-      setReadmeHeight(readmeComponent.clientHeight + 64) // adding pudding and see more button dimensions
+      setReadmeHeight(readmeComponent.clientHeight + 64) // adding padding and see more button dimensions
     }
   }, [ dataset ])
 
