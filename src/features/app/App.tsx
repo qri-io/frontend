@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { ConnectedRouter } from 'connected-react-router'
 import { useDispatch, useSelector } from 'react-redux'
 
+import Head from './Head'
 import { history } from '../../store/store'
 import Routes from '../../routes'
 import Modal from './modal/Modal'
@@ -22,6 +23,13 @@ const App: React.FC<any> = () => {
 
   return (
     <div id='app' className='flex flex-col h-screen w-screen max-w-full'>
+      <Head data={{
+        title: "Qri Cloud - Let's rethink what datasets can do",
+        description: "Dataset automation and publishing",
+        image: `https://qri.cloud/img/twitter_card_image.png`,
+        imageAlt: 'The Qri Logo',
+        pathname: '/'
+      }}/>
       <ConnectedRouter history={history}>
         <Modal />
         <Routes />

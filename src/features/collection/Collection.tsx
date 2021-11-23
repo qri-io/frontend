@@ -13,6 +13,7 @@ import Icon from '../../chrome/Icon'
 import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
 import { trackGoal } from '../../features/analytics/analytics'
+import Head from '../../features/app/Head'
 
 const Collection: React.FC<{}> = () => {
   const dispatch = useDispatch()
@@ -80,6 +81,9 @@ const Collection: React.FC<{}> = () => {
 
   return (
     <PageWithFooter>
+      <Head data={{
+        title: `My Datasets | Qri`
+      }}/>
       <div className='h-full' style={{ backgroundColor: '#f3f4f6' }}>
         <div className='h-full w-9/12 mx-auto pt-7 pb-7 flex flex-col'>
           <header className='mb-7 flex text-black items-end'>

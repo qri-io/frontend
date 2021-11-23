@@ -16,6 +16,7 @@ import { trackGoal } from '../../features/analytics/analytics'
 import { selectSessionUser } from '../session/state/sessionState'
 import { selectDatasetHeader } from "../dataset/state/datasetState"
 import { setHeader } from "../dataset/state/datasetActions"
+import Head from '../app/Head'
 
 export interface DatasetActivityFeedProps {
   qriRef: QriRef
@@ -74,6 +75,11 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   return (
     <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} isDatasetOwner={isDatasetOwner} />}>
+      <Head data={{
+        title: `${qriRef.username}/${qriRef.name} run log | Qri`,
+        pathname: location.pathname,
+        description: `Explore the automation run log for the Qri Dataset ${qriRef.username}/${qriRef.name}`
+      }}/>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
         <div className='rounded-none h-full'>
           <ActivityList

@@ -12,6 +12,7 @@ import TabbedComponentViewer from './TabbedComponentViewer'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
 import { loadDataset, setBodyLoading } from '../dataset/state/datasetActions'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
+import Head from '../app/Head'
 
 const DatasetComponents: React.FC<{}> = () => {
   const qriRef = newQriRef(refParamsFromLocation(useParams(), useLocation()))
@@ -29,6 +30,11 @@ const DatasetComponents: React.FC<{}> = () => {
 
   return (
     <DatasetFixedLayout headerChildren={<></>}>
+      <Head data={{
+        title: `${qriRef.username}/${qriRef.name} history | Qri`,
+        pathname: location.pathname,
+        description: dataset?.meta?.description || `Explore the history of commits for the Qri Dataset ${qriRef.username}/${qriRef.name}`
+      }}/>
       <div className='flex-grow flex overflow-hidden'>
         <DatasetCommitList qriRef={qriRef} />
         <div className='flex flex-col flex-grow overflow-hidden'>

@@ -13,6 +13,7 @@ import { fetchPasswordForgot } from "./state/sessionActions"
 import { selectIsSessionLoading, selectResetError, selectResetSent } from "./state/sessionState"
 import Spinner from "../../chrome/Spinner"
 import PasswordForgotBgImage from "./PasswordForgotBgImage"
+import Head from "../app/Head"
 
 const ForgotPassword: React.FC = () => {
   const [identifier, setIdentifier] = useState('')
@@ -55,6 +56,9 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <div className='flex flex-col min-h-full bg-qrigray-100'>
+      <Head data={{
+        title: `Forgot Password | Qri`
+      }}/>
       <NavBar />
       <PasswordForgotBgImage />
       <ContentBox className='absolute top-60 left-12 md:left-64 z-30 ' paddingClassName='p-11'>
