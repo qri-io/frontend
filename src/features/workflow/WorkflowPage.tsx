@@ -9,6 +9,7 @@ import Workflow from './Workflow'
 import RunBar from './RunBar'
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
 import { selectRun } from "../events/state/eventsState"
+import Head from '../app/Head'
 
 interface WorkflowPageProps {
   qriRef: QriRef
@@ -33,6 +34,9 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
 
   return (
     <>
+      <Head data={{
+        title: isNew ? ' New Automated Dataset ' : `${qriRef.username}/${qriRef.name} workflow editor | Qri`
+      }}/>
       {dataset || isNew
         ? (<DatasetScrollLayout isNew={isNew} headerChildren={runBar} useScroller>
           <Workflow qriRef={qriRef} />

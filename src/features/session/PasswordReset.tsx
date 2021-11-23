@@ -11,6 +11,7 @@ import Spinner from "../../chrome/Spinner"
 import { selectIsSessionLoading, selectResetError } from "./state/sessionState"
 import { resetPassword } from "./state/sessionActions"
 import { validatePassword } from "./state/formValidation"
+import Head from '../app/Head'
 
 const PasswordReset: React.FC = () => {
   const [password, setPassword] = useState('')
@@ -40,6 +41,9 @@ const PasswordReset: React.FC = () => {
 
   return (
     <div className='flex flex-col min-h-full bg-qrigray-100'>
+      <Head data={{
+        title: `Password Reset | Qri`
+      }}/>
       <NavBar />
       <PasswordForgotBgImage />
       <ContentBox className='absolute top-60 right-12 md:right-64 z-30 ' paddingClassName='p-11'>

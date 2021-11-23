@@ -19,6 +19,7 @@ import DatasetList from '../../chrome/DatasetList'
 import Link from '../../chrome/Link'
 import Icon from '../../chrome/Icon'
 import DropdownMenu from '../../chrome/DropdownMenu'
+import Head from '../app/Head'
 
 import { trackGoal } from '../../features/analytics/analytics'
 
@@ -124,6 +125,11 @@ const Search: React.FC<{}> = () => {
 
   return (
     <div className='flex flex-col h-full w-full overflow-y-scroll' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6' }}>
+      <Head data={{
+        title: `${q ? `Datasets matching '${q}'` : 'Dataset Search'} | Qri`,
+        pathname: '/search',
+        description: 'Search thousands of public versioned datasets on qri.cloud'
+      }}/>
       <NavBar showSearch={false} />
       <div className='flex-grow w-full py-9'>
         <div className='w-4/5 max-w-screen-lg mx-auto'>

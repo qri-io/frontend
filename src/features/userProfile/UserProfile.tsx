@@ -29,6 +29,8 @@ import UserProfileHeader from './UserProfileHeader'
 import UserProfileDatasetList from './UserProfileDatasetList'
 import NotFoundPage from '../notFound/NotFoundPage'
 import assignUserIcon from '../../utils/assignUserIcon'
+import Head from '../app/Head'
+import possessive from '../../utils/possessive'
 
 interface UserProfileProps {
   path?: '/' | '/following'
@@ -111,6 +113,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
 
   let content = (
     <>
+      <Head data={{
+        title: `${possessive(usernameParam)} public datasets | Qri`,
+        pathname: location.pathname,
+        description: `A list of public datasets for the Qri user ${usernameParam}`
+      }}/>
       <div className='flex-grow w-full overflow-y-scroll'>
         {/* begin sticky header */}
         <div className={classNames('sticky bg-white  border border-qrigray-200 z-10', {

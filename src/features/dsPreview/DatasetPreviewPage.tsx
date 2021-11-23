@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { useSelector, useDispatch } from 'react-redux'
 import useDimensions from 'react-use-dimensions'
+import { useLocation } from 'react-router-dom'
 
 import { newQriRef, QriRef } from '../../qri/ref'
 import { selectDsPreview, selectIsDsPreviewLoading } from './state/dsPreviewState'
@@ -21,6 +22,7 @@ import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import DownloadDatasetButton from "../download/DownloadDatasetButton"
 import ContentBoxSubTitle from "../../chrome/ContentBoxSubTitle"
 import { newVersionInfoFromDataset } from '../../qri/versionInfo'
+import Head from '../app/Head'
 
 interface DatasetPreviewPageProps {
   qriRef: QriRef
@@ -47,8 +49,15 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
     dispatch(loadDsPreview(ref))
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path ])
 
+  const location = useLocation()
+
   return (
     <>
+      <Head data={{
+        title: `${qriRef.username}/${qriRef.name} dataset preview | Qri`,
+        pathname: location.pathname,
+        description: dataset?.meta?.description || `Preview page for the Qri Dataset ${qriRef.username}/${qriRef.name}`
+      }}/>
       {dataset?.username === ''
         ? (<div className='w-full h-full p-4 flex justify-center items-center'>
           <Spinner color='#43B3B2' />

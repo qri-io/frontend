@@ -34,7 +34,7 @@ export interface DatasetHeaderProps {
   editable?: boolean
 }
 
-export const newWorkflowTitle: string = 'New Dataset from Workflow'
+export const newWorkflowTitle: string = 'New Automated Dataset'
 // DatasetHeader and DatasetMiniHeader now accept children which will be displayed
 // in the right side where the default buttons are located. This is useful for
 // overriding the download button with the dry run button in the workflow editor
