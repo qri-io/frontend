@@ -4111,7 +4111,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-helmet@^6.1.4":
+"@types/react-helmet@6.1.4":
   version "6.1.4"
   resolved "https://registry.yarnpkg.com/@types/react-helmet/-/react-helmet-6.1.4.tgz#3e54a3eb37ba7fb34ffafc64f425be4e68df03b9"
   integrity sha512-jyx50RNZXVaTGHY3MsoRPNpeiVk8b0XTPgD/O6KHF6COTDnG/+lRjPYvTK5nfWtR3xDOux0w6bHLAsaHo2ZLTA==
@@ -4168,7 +4168,7 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^17.0.33":
+"@types/react@17.0.33":
   version "17.0.33"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.33.tgz#e01ae3de7613dac1094569880bb3792732203ad5"
   integrity sha512-pLWntxXpDPaU+RTAuSGWGSEL2FRTNyRQOjSWDke/rxRg14ncsZvx8AKWMWZqvc1UOaJIAoObdZhAWvRaHFi5rw==
@@ -14957,7 +14957,7 @@ react-helmet-async@^1.0.2:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-helmet@^6.1.0:
+react-helmet@6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-6.1.0.tgz#a750d5165cb13cf213e44747502652e794468726"
   integrity sha512-4uMzEY9nlDlgxr61NL3XbKRy1hEkXmKNXhjbAIOVw5vcFrsdYbH2FEwcNyWvWinl103nXgzYNlns9ca+8kFiWw==

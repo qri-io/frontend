@@ -28,27 +28,15 @@ const Head: React.FunctionComponent<HeadProps> = ({ data = {}, children }) => {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Qri Cloud"/>
 
-        { title && (
-          <>
-            <title>{title}</title>
-            <meta name="twitter:title" content={title} />
-            <meta property="og:title" content={title} />
-          </>
-        )}
+        { title && <title>{title}</title> }
+        { title && <meta name="twitter:title" content={title} /> }
+        { title && <meta property="og:title" content={title} /> }
 
-        { description && (
-          <>
-            <meta name="twitter:description" content={description}/>
-            <meta property="og:description" content={description} />
-          </>
-        )}
+        { description && <meta name="twitter:description" content={description}/> }
+        { description && <meta property="og:description" content={description} /> }
 
-        { image && (
-          <>
-            <meta name="twitter:image" content={image} />
-            <meta property="og:image" content={image} />
-          </>
-        )}
+        { image && <meta name="twitter:image" content={image} /> }
+        { image && <meta property="og:image" content={image} /> }
 
         { imageAlt && <meta name="twitter:image-alt" content={imageAlt} />}
 
