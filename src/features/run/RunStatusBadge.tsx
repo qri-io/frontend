@@ -6,9 +6,10 @@ import RunStatusIcon from "./RunStatusIcon"
 
 interface RunStatusBadgeProps {
   status: RunStatus
+  statusText?: string
 }
 
-const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
+const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status, statusText }) => {
   let displayStatus = ''
   let colorClass = ''
 
@@ -42,7 +43,7 @@ const RunStatusBadge: React.FC<RunStatusBadgeProps> = ({ status }) => {
   return (
     <div className={classNames('text-sm font-semibold tracking-wider flex items-center transition-colors group-hover:underline group-hover:text-qripink-600', colorClass)}>
       <RunStatusIcon className='mr-1 group-hover:text-qripink-600' size={'2xs'} status={status}/>
-      {displayStatus}
+      {statusText || displayStatus}
     </div>
   )
 }

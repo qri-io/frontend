@@ -1,4 +1,5 @@
 export enum EventLogLineType {
+  ETTransformWaiting = 'tf:Waiting',
   ETTransformStart = "tf:Start",
   ETTransformStop = "tf:Stop",
   ETTransformStepStart = "tf:StepStart",

@@ -24,7 +24,7 @@ export interface Run {
 export function NewRun (data: Record<string, any>): Run {
   return {
     id: data.id || '',
-    status: data.status || 'waiting',
+    status: data.status || '',
     steps: data.steps && data.steps.map(NewRunStep)
   }
 }
@@ -71,6 +71,13 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
   }
 
   switch (line.type) {
+    case EventLogLineType.ETTransformWaiting:
+      run.status = 'waiting'
+      run.initID = line.data.id
+      run.id = line.data.id
+      run.startTime = new Date(line.ts)
+      run.steps = []
+      break
     case EventLogLineType.ETTransformStart:
       run.status = 'running'
       run.initID = line.data.initID
@@ -85,7 +92,6 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
         run.duration = toNanoFromMilli(run.startTime?.getTime() - run.stopTime?.getTime())
       }
       break
-
     case EventLogLineType.ETTransformStepStart:
       if (run.steps === undefined) {
         run.steps = []

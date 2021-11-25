@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify'
 
 import { Run, RunStatus } from '../../qri/run'
 import Toast from './Toast'
-import { selectRuns } from '../events/state/eventsState'
+import { selectRuns, selectWaitingEventId } from '../events/state/eventsState'
 import { loadVersionInfo } from "../collection/state/collectionActions"
 
 import 'react-toastify/dist/ReactToastify.css'
@@ -12,6 +12,7 @@ import { removeEvent } from "../events/state/eventsActions"
 
 const ToastRenderer: React.FC<{}> = () => {
   const runs = useSelector(selectRuns)
+  const waitingEventId = useSelector(selectWaitingEventId)
   const dispatch = useDispatch()
   // use a ref to store the workflow status so we can
   // determine when it changes and update an already visible toast
@@ -37,8 +38,22 @@ const ToastRenderer: React.FC<{}> = () => {
     // if deploying, make sure there is not already a toast showing for this workflowId,
     // then create a new toast
     switch (status) {
+      case "waiting":
+        if (!runsRef.current[id] && run.id === waitingEventId) {
+          runsRef.current[id] = status
+          toast(<Toast message={'Waiting to run'} initID={initID as string} type='waiting' />, {
+            toastId: id,
+            autoClose: false,
+            onClose: () => dispatch(removeEvent(id))
+          })
+        }
+        break
       case 'running':
         // only create a new toast if there's no record for this id in runsRef
+        if (runsRef.current[waitingEventId]) {
+          delete runsRef.current[waitingEventId]
+          toast.dismiss(waitingEventId)
+        }
         if (!runsRef.current[id]) {
           runsRef.current[id] = status
           toast(<Toast message={'Running Workflow...'} initID={initID as string} type='running' />, {

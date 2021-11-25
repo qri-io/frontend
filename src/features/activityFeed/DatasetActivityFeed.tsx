@@ -16,6 +16,7 @@ import { trackGoal } from '../../features/analytics/analytics'
 import { selectSessionUser } from '../session/state/sessionState'
 import { selectDatasetHeader } from "../dataset/state/datasetState"
 import { setHeader } from "../dataset/state/datasetActions"
+import { addWaitingEvent } from "../events/state/eventsActions"
 import Head from '../app/Head'
 
 export interface DatasetActivityFeedProps {
@@ -44,15 +45,17 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   const handleRunNowClick = () => {
     // runlog-run-now event
     trackGoal('GHUGYPYM', 0)
+    dispatch(addWaitingEvent('1'))
     dispatch(runNow(qriRef))
-    const runningLog: LogItem = NewLogItem({
+    console.log('HERE IN SETTING THE WAITING EVENT')
+    const waitingLog: LogItem = NewLogItem({
       commitTime: new Date().toString(),
-      runStatus: "running",
+      runStatus: "waiting",
       title: '--',
       runStart: new Date().toString(),
       runID: latestRun.id
     })
-    const newLogs = [runningLog, ...logs]
+    const newLogs = [waitingLog, ...logs]
     setDisplayLogs(newLogs)
     dispatch(setHeader({ ...header, runCount: header.runCount + 1 }))
   }
@@ -68,13 +71,28 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   }, [ logs, displayLogs ])
 
   useEffect(() => {
+    if (latestRun.status === 'running' && displayLogs[0].runStatus === 'waiting') {
+      const runningLog: LogItem = NewLogItem({
+        commitTime: new Date().toString(),
+        runStatus: "running",
+        title: '--',
+        runStart: new Date().toString(),
+        runID: latestRun.id
+      })
+      const filteredWaiting = displayLogs.filter(e => e.runStatus !== 'waiting')
+      const newLogs = [runningLog, ...filteredWaiting]
+      setDisplayLogs(newLogs)
+    }
+  }, [ latestRun, displayLogs ])
+
+  useEffect(() => {
     if (logs.length && displayLogs.length && logs.length === displayLogs.length && displayLogs[0].runStatus === 'running') {
-      setTimeout(() => setDisplayLogs(logs), 600) // setting timeout to make sure animation finishes
+      setTimeout(() => setDisplayLogs(logs), 100) // setting timeout to make sure animation finishes
     }
   }, [ logs, displayLogs ])
 
   return (
-    <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} isDatasetOwner={isDatasetOwner} />}>
+    <DatasetFixedLayout headerChildren={<RunNowButton status={displayLogs.length && displayLogs[0].runStatus === 'waiting' ? 'waiting' : latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} isDatasetOwner={isDatasetOwner} />}>
       <Head data={{
         title: `${qriRef.username}/${qriRef.name} run log | Qri`,
         pathname: location.pathname,

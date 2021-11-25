@@ -20,11 +20,13 @@ const RunNowButton: React.FC<RunNowButtonProps> = ({
   let text = 'Run Now'
   if (status === 'running') {
     text = 'Cancel'
+  } else if (status === 'waiting') {
+    text = 'Waiting'
   }
 
   return (
     <div data-tip={isDatasetOwner ? '' : 'Only the dataset owner can trigger a run'}>
-      <Button type='primary' icon={ status === 'running' ? 'loader' : 'play'} disabled={!isDatasetOwner || status === 'running'} onClick={status === 'running' ? onCancel : onClick}>
+      <Button type='primary' icon={ status === 'running' || status === 'waiting' ? 'loader' : 'play'} disabled={!isDatasetOwner || status === 'running' || status === 'waiting'} onClick={status === 'running' ? onCancel : onClick}>
         {text}
       </Button>
       <ReactTooltip/>

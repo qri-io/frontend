@@ -10,7 +10,7 @@ import { datasetAliasFromVersionInfo } from "../../qri/versionInfo"
 interface ToastProps {
   message: string
   initID: string
-  type: 'running' | 'succeeded' | 'failed'
+  type: 'running' | 'succeeded' | 'failed' | 'waiting'
 }
 
 const Toast: React.FC<ToastProps> = ({ message, initID, type }) => {
@@ -19,13 +19,18 @@ const Toast: React.FC<ToastProps> = ({ message, initID, type }) => {
   return (
     <div className='flex items-center'>
       <div className='px-3'>
-        {['running', 'succeeded', 'failed'].includes(type) && (
-          <RunStatusIcon status={type} className='text-black' />
+        {['running', 'succeeded', 'failed', 'waiting'].includes(type) && (
+          <RunStatusIcon status={type === 'waiting' ? 'running' : type} className={classNames('text-black', {
+            'text-qrigreen': type === 'succeeded',
+            'text-qrigray-400': type === 'waiting',
+            'text-dangerred': type === 'failed'
+          })} />
         )}
       </div>
       <div className='flex-grow'>
         <div className={classNames('text-black font-semibold flex-grow mt-0.5', {
           'text-qrigreen': type === 'succeeded',
+          'text-qrigray-400': type === 'waiting',
           'text-dangerred': type === 'failed'
         })}>{message}</div>
         <Link to={`/${ref}/runs`}
