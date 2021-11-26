@@ -7,6 +7,7 @@ import BodyJson from './BodyJson'
 import BodyHeader from './BodyHeader'
 import ComponentHeader from '../ComponentHeader'
 import Spinner from '../../../chrome/Spinner'
+import NoBody from './NoBody'
 
 export interface BodyProps {
   dataset: Dataset
@@ -22,13 +23,20 @@ const Body: React.FC<BodyProps> = ({
     structure
   } = dataset
 
-  if (!body) {
+  if (loading) {
     return (
       <div className='h-full w-full flex justify-center items-center'>
         <Spinner color='#43B3B2' />
       </div>
     )
   }
+
+  if (!body) {
+    return (
+      <NoBody />
+    )
+  }
+
   if (!structure) {
     return (
       <div className='h-full w-full flex justify-center items-center'>

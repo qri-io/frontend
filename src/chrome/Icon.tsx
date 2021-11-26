@@ -44,6 +44,7 @@ import Disk from './icon/Disk'
 import Download from './icon/Download'
 import EllipsesVertical from './icon/EllipsesVertical'
 import Eye from './icon/Eye'
+import FaceMeh from './icon/FaceMeh'
 import Follower from './icon/Follower'
 import FullScreen from './icon/FullScreen'
 import Github from './icon/Github'
@@ -137,6 +138,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     ellipsesVertical: <EllipsesVertical {...props} />,
     eye: <Eye {...props} />,
     face: <Face {...props}/>,
+    faceMeh: <FaceMeh {...props} />,
     follower: <Follower {...props} />,
     fullScreen: <FullScreen {...props} />,
     github: <Github {...props} />,
