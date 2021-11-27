@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { UserProfile } from '../../../qri/userProfile'
+import { NewUserProfile, UserProfile } from '../../../qri/userProfile'
 import { RootState } from '../../../store/store'
 
 interface SessionTokens {
@@ -33,29 +33,7 @@ export interface SessionState {
   resetError: string
 }
 
-export const AnonUser: UserProfile = {
-  username: 'new',
-  profile_id: '',
-  PrivKey: '',
-  created: 0,
-  updated: 0,
-  type: '',
-  email: '',
-  name: '',
-  description: '',
-  home_url: '',
-  color: '',
-  thumb: '',
-  photo: '',
-  poster: '',
-  twitter: '',
-  PeerIDs: [],
-  NetworkAddrs: [],
-  id: '',
-  currentKey: '',
-  EmailConfirmed: false,
-  isAdmin: false
-}
+export const AnonUser = NewUserProfile({ username: 'new' })
 
 function getAuthState (): SessionState {
   try {
@@ -94,7 +72,8 @@ interface AuthAction {
 
 // same state changes on successful login or signup
 const loginOrSignupSuccess = (state: SessionState, action: AuthAction) => {
-  state.user = action.user
+  const pro = NewUserProfile(action.user)
+  state.user = pro
   state.loading = false
 
   state.token = action.token
