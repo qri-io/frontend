@@ -92,6 +92,27 @@ export type ComponentName =
  | 'viz'
  | 'stats'
 
+// rankedComponentNames is a ranked list ranging from the components we deem
+// it most important that user see first, to the least important
+const rankedComponentNames = ['body', 'readme', 'transform', 'viz', 'meta', 'stats', 'commit', 'structure']
+
+export function getRankedComponentNames (dataset: Dataset): ComponentName[] {
+  return rankedComponentNames.reduce<ComponentName[]>((acc, name) => {
+    const comp = getComponentFromDatasetByName(dataset, name)
+    if (name === "body" && comp) {
+      const bodyComp = comp as BodyComponent
+      if (bodyComp.body) {
+        acc.push(name as ComponentName)
+      }
+      return acc
+    }
+    if (comp) {
+      acc.push(name as ComponentName)
+    }
+    return acc
+  }, [])
+}
+
 export type ComponentStatus =
  | 'modified'
  | 'unmodified'
