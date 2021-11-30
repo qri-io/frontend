@@ -4,12 +4,15 @@ import { RootState } from '../../../store/store'
 import { PageInfo, SearchResult } from '../../../qri/search'
 import { UserProfile, NewUserProfile } from '../../../qri/userProfile'
 import { ApiErr, NewApiErr } from '../../../store/api'
+import { UserProfileAction } from './userProfileActions'
 
 export const selectUserProfile = (state: RootState): UserProfile => state.userProfile.profile
 export const selectUserProfileLoading = (state: RootState): boolean => state.userProfile.loading
 export const selectUserProfileError = (state: RootState): ApiErr => state.userProfile.error
 export const selectUserProfileDatasets = (state: RootState): PaginatedResults => state.userProfile.datasets
 export const selectUserProfileFollowing = (state: RootState): PaginatedResults => state.userProfile.following
+
+export const USERPROFILE_SET = 'USERPROFILE_SET'
 
 export interface PaginatedResults {
   results: SearchResult[]
@@ -49,7 +52,7 @@ export interface UserProfileState {
 }
 
 const initialState: UserProfileState = {
-  profile: NewUserProfile(),
+  profile: NewUserProfile({}),
   loading: false,
   error: NewApiErr(),
   datasets: NewPaginatedResults(),
@@ -62,7 +65,7 @@ export const userProfileReducer = createReducer(initialState, {
     state.error = NewApiErr()
   },
   'API_USERPROFILE_SUCCESS': (state: UserProfileState, action) => {
-    state.profile = action.payload.data
+    state.profile = NewUserProfile(action.payload.data)
     state.loading = false
   },
   'API_USERPROFILE_FAILURE': (state: UserProfileState, action) => {
@@ -70,12 +73,17 @@ export const userProfileReducer = createReducer(initialState, {
     state.error = action.payload.err
   },
 
+  USERPROFILE_SET: (state: UserProfileState, action: UserProfileAction) => {
+    state.profile = action.user
+  },
+
   'API_USERPROFILEDATASETS_REQUEST': (state: UserProfileState, action) => {
     state.datasets.loading = true
   },
   'API_USERPROFILEDATASETS_SUCCESS': (state: UserProfileState, action) => {
     state.datasets.results = action.payload.data
-    state.datasets.pageInfo = action.payload.pagination
+    state.datasets.pageInfo = action.payload.request.pageInfo
+    state.datasets.pageInfo.resultCount = state.datasets.results.length
     state.datasets.loading = false
   },
   'API_USERPROFILEDATASETS_FAILURE': (state: UserProfileState) => {

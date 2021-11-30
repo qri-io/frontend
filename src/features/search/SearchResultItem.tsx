@@ -52,7 +52,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ dataset, loading = 
           {/* <DatasetInfoItem icon='automationFilled' label='automated' iconClassName='text-qrigreen' /> TODO(chriswhong): enable when we have automation info */}
           {/* <DatasetInfoItem icon='commit' label={`17 versions`} /> TODO(chriswhong): enable when we have commit info */}
           {/* stats?.downloadCount > 0 && <DatasetInfoItem size='md' icon='download' label={`${stats.downloadCount} download${(stats.downloadCount !== 1) ? 's' : ''}`} /> */}
-          { followStats.followCount > 0 && <DatasetInfoItem size='md' icon='follower' label={`${followStats.followCount} follower${(followStats.followCount !== 1) ? 's' : ''}`} /> }
+          { followStats && followStats.followCount > 0 && <DatasetInfoItem size='md' icon='follower' label={`${followStats.followCount} follower${(followStats.followCount !== 1) ? 's' : ''}`} /> }
 
           <DatasetInfoItem size='md' icon='lock' label='public' />
           <UsernameWithIcon username={username} />
