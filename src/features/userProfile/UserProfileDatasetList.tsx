@@ -48,7 +48,7 @@ const UserProfileDatasetList: React.FC<UserProfileDatasetListProps> = ({
 
   return (
     <>
-      <div className='flex items-center justify-between px-2.5 pb-2'>
+      <div className='flex items-center justify-between pb-2'>
         <div className='text-qrigray flex-grow'>
           {
             loading

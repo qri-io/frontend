@@ -10,6 +10,7 @@ import { selectSessionUserCanEditDataset } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
 import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
 import Scroller from '../scroller/Scroller'
+import MobileFooter from '../footer/MobileFooter'
 
 interface DatasetScrollLayoutProps {
   isNew?: boolean
@@ -48,7 +49,7 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
       <DatasetMiniHeader isNew={isNew} show={!inView} >
         {headerChildren}
       </DatasetMiniHeader>
-      <div className={classNames('dataset_fixed_layout p-7 w-full', contentClassName)}>
+      <div className={classNames('dataset_fixed_layout p-6 w-full', contentClassName)}>
         <div ref={stickyHeaderTriggerRef}>
           <DatasetHeader isNew={isNew} editable={editable}>
             {headerChildren}
@@ -70,6 +71,9 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
   return (
     <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
       {content}
+      <div className='bg-white flex-shrink-0 md:hidden'>
+        <MobileFooter />
+      </div>
     </div>
   )
 }

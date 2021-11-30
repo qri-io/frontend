@@ -31,7 +31,7 @@ export default function fileSize (l: number): string {
   if (l !== 1) {
     length.name += 's'
   }
-  return `${length.value}${length.name}`
+  return `${length.value} ${length.name}`
 }
 
 let SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E']

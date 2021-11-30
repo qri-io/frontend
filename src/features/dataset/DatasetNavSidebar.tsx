@@ -52,7 +52,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const isNewWorkflow = segments[segments.length - 1] === 'new'
 
   return (
-    <div className={`side-nav h-full bg-white relative py-9 flex flex-col flex-shrink-0 ${expanded ? 'w-44' : 'w-24'}`}>
+    <div className={`hidden md:flex side-nav h-full bg-white relative py-9 flex-col flex-shrink-0 ${expanded ? 'w-44' : 'w-24'}`}>
       <div className='mb-9 flex align-center items-center h-6 mx-auto'>
         <div
           className='text-qrigray-300 text-sm font-medium mr-3 leading-6 transition-all duration-700'

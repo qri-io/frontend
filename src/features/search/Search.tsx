@@ -10,10 +10,9 @@ import {
   selectSearchPageInfo,
   selectSearchLoading
 } from './state/searchState'
-import NavBar from '../navbar/NavBar'
 import SearchBox from './SearchBox'
 import PageControl, { PageChangeObject } from '../../chrome/PageControl'
-import Footer from '../footer/Footer'
+import ScrollLayout from '../layouts/ScrollLayout'
 import { NewSearchParams, CleanSearchParams } from '../../qri/search'
 import DatasetList from '../../chrome/DatasetList'
 import Link from '../../chrome/Link'
@@ -124,72 +123,72 @@ const Search: React.FC<{}> = () => {
   </div>
 
   return (
-    <div className='flex flex-col h-full w-full overflow-y-scroll' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6' }}>
-      <Head data={{
-        title: `${q ? `Datasets matching '${q}'` : 'Dataset Search'} | Qri`,
-        pathname: '/search',
-        description: 'Search thousands of public versioned datasets on qri.cloud'
-      }}/>
-      <NavBar showSearch={false} />
-      <div className='flex-grow w-full py-9'>
-        <div className='w-4/5 max-w-screen-lg mx-auto'>
-          <div className='text-black text-3xl font-black mb-4'>Dataset Search</div>
-          <div className='mb-4'>
-            <SearchBox onSubmit={handleSearchSubmit} size='lg' placeholder='Search for Datasets' value={q}/>
-          </div>
-          <div className='flex items-center mb-4 h-8'>
-            {searchResults.length > 0
-              ? (
-                <>
-                  <div className='flex-grow'>
-                    <div className='text-qrigray-400 text-sm '>
-                      { loading
-                        ? (
-                          <ContentLoader
-                        width={300}
-                        height={20}
-                      >
-                            <rect y="0" width="300" height="18" rx="6"/>
-                          </ContentLoader>
-                          )
-                        : (
-                          <>{pageInfo.resultCount} datasets found matching &apos;{q}&apos;</>
-                          )}
+    <ScrollLayout navBarProps={{
+      showSearch: false
+    }}>
+      <>
+        <Head data={{
+          title: `${q ? `Datasets matching '${q}'` : 'Dataset Search'} | Qri`,
+          pathname: '/search',
+          description: 'Search thousands of public versioned datasets on qri.cloud'
+        }}/>
+        <div className='flex-grow w-full py-9 px-6'>
+          <div className='w-full max-w-screen-lg mx-auto'>
+            <div className='text-black text-3xl font-black mb-4'>Dataset Search</div>
+            <div className='mb-5'>
+              <SearchBox onSubmit={handleSearchSubmit} size='lg' placeholder='Search for Datasets' value={q} border={false}/>
+            </div>
+            <div className='flex items-center mb-5 h-8'>
+              {searchResults.length > 0
+                ? (
+                  <>
+                    <div className='flex-grow'>
+                      <div className='text-qrigray-400 text-sm '>
+                        { loading
+                          ? (
+                            <ContentLoader
+                          width={300}
+                          height={20}
+                        >
+                              <rect y="0" width="300" height="18" rx="6"/>
+                            </ContentLoader>
+                            )
+                          : (
+                            <>{pageInfo.resultCount} datasets found matching &apos;{q}&apos;</>
+                            )}
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <DropdownMenu
-                    icon={sortIcon}
-                    className='ml-8'
-                    items={[
-                      {
-                        label: 'Dataset Name',
-                        active: sort === 'name',
-                        onClick: () => { updateQueryParams({ sort: 'name' }) }
-                      },
-                      {
-                        label: 'Recently Updated',
-                        active: sort === 'recentlyupdated',
-                        onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
-                      }
-                    ]}
-                  />
-                  </div>
-                </>
-                )
-              : (
-                <>&nbsp;</>
-                )}
+                    <div>
+                      <DropdownMenu
+                      icon={sortIcon}
+                      className='ml-8'
+                      items={[
+                        {
+                          label: 'Dataset Name',
+                          active: sort === 'name',
+                          onClick: () => { updateQueryParams({ sort: 'name' }) }
+                        },
+                        {
+                          label: 'Recently Updated',
+                          active: sort === 'recentlyupdated',
+                          onClick: () => { updateQueryParams({ sort: 'recentlyupdated' }) }
+                        }
+                      ]}
+                    />
+                    </div>
+                  </>
+                  )
+                : (
+                  <>&nbsp;</>
+                  )}
+            </div>
+          </div>
+          <div className='w-full max-w-screen-lg mx-auto overflow-hidden'>
+            { resultsContent }
           </div>
         </div>
-        <div className='w-4/5 max-w-screen-lg mx-auto'>
-          { resultsContent }
-        </div>
-      </div>
-      <div className='bg-white flex-shrink-0'>
-        <Footer />
-      </div>
-    </div>
+      </>
+    </ScrollLayout>
   )
 }
 

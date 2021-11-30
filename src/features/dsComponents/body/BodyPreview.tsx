@@ -46,7 +46,7 @@ const Body: React.FC<BodyProps> = ({
       <ComponentHeader border={false}>
         <BodyHeader dataset={dataset} showExpand={false} loading={loading} />
       </ComponentHeader>
-      <div className='overflow-auto flex-grow'>
+      <div className='overflow-auto flex-grow hide-scrollbar'>
         {
         (structure.format === 'csv' && Array.isArray(body))
           ? <BodyTable

@@ -51,8 +51,8 @@ const PageControl: React.FC<PageControlProps> = ({
   }
 
   return (
-    <div className='page-control mt-2 flex justify-between px-2.5 text-qrigray text-xs'>
-      { showRange && <div className='current-page-info flex items-center'>{numeral(lowItem).format('0,0')}-{numeral(highItem).format('0,0')} of {numeral(resultCount).format('0,0')}</div> }
+    <div className='page-control mt-2 flex flex-col md:flex-row items-center justify-between px-2.5 text-qrigray text-xs'>
+      { showRange && <div className='current-page-info flex items-center mb-2'>{numeral(lowItem).format('0,0')}-{numeral(highItem).format('0,0')} of {numeral(resultCount).format('0,0')}</div> }
       { pageCount > 1 && (
         <div className='text-right'>
           <ReactPaginate

@@ -49,7 +49,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   }, [handleClickOutside])
 
   return (
-    <div id={id} ref={ref} className={classNames('relative inline-block text-left w-full', className)}>
+    <div id={id} ref={ref} className={classNames('relative inline-block text-left', className)}>
       <div onClick={() => { setOpen(!open) }} className='cursor-pointer flex items-center'>
         {(typeof icon === 'string') ? <Icon icon={icon} /> : icon}
       </div>

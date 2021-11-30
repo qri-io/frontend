@@ -13,15 +13,15 @@ interface ContentBoxProps {
 
 const ContentBox: React.FC<ContentBoxProps> = ({
   className,
-  paddingClassName = 'py-6 px-8',
+  paddingClassName = 'p-6',
   warning,
   card = false,
   children
 }) => (
   <div className={className}>
     <div className={classNames('min-height-200 h-full bg-white', paddingClassName, {
-      'rounded-lg': !warning,
-      'rounded-t-lg': warning
+      'rounded-2xl': !warning,
+      'rounded-t-2xl': warning
     })} style={{
       boxShadow: card ? '0px 0px 8px rgba(0, 0, 0, 0.1)' : ''
     }}>
