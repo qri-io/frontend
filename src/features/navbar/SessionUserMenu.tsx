@@ -1,5 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
 
 import DropdownMenu, { Divider } from '../../chrome/DropdownMenu'
 import { AnonUser, selectSessionUser } from '../session/state/sessionState'
@@ -15,6 +16,7 @@ import assignUserIcon from '../../utils/assignUserIcon'
 const SessionUserMenu: React.FC<{}> = () => {
   const user = useSelector(selectSessionUser)
   const dispatch = useDispatch()
+  const history = useHistory()
 
   if (user === AnonUser) {
     const handleLogInClick = () => {
@@ -90,6 +92,7 @@ const SessionUserMenu: React.FC<{}> = () => {
           onClick: () => {
             dispatch(logOut())
             dispatch(resetCollectionState())
+            history.push('/')
           }
         }
       ]} />
