@@ -10,6 +10,7 @@ export interface DatasetCommitListItemProps {
   active?: boolean
   first?: boolean
   last?: boolean
+  isEditable?: boolean
 }
 
 const DatasetCommitListItem: React.FC<DatasetCommitListItemProps> = ({
@@ -17,7 +18,8 @@ const DatasetCommitListItem: React.FC<DatasetCommitListItemProps> = ({
   loading = false,
   active = false,
   first = false,
-  last = false
+  last = false,
+  isEditable = false
 }) => (
   <li className='flex items-stretch text-black tracking-wider'>
     <div className='relative w-4 mr-5 flex-shrink-0'>
@@ -27,7 +29,7 @@ const DatasetCommitListItem: React.FC<DatasetCommitListItemProps> = ({
         {!last && <div className='absolute top-11 bottom-0 w-full bg-gray-300 rounded'>&nbsp;</div>}
       </div>
     </div>
-    <DatasetCommit loading={loading} logItem={logItem} active={active} />
+    <DatasetCommit isEditable={isEditable} loading={loading} logItem={logItem} active={active} />
   </li>
 )
 

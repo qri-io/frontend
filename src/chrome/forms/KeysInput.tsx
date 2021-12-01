@@ -1,4 +1,5 @@
 import React, { createRef, useState } from "react"
+import Icon from "../Icon"
 
 interface KeysInputProps {
   value: string[]
@@ -45,8 +46,13 @@ const KeysInput: React.FC<KeysInputProps> = ({
         return (
           <div
             key={index}
-            className='border rounded border-black cursor-pointer px-2 py-1 text-xs m-1.5'
+            className='border rounded border-black cursor-pointer px-2 py-1 text-xs m-1.5 group relative'
             onClick={() => onKeyDelete(index)}>
+            <Icon
+              icon={'close'}
+              size={"3xs"}
+              className='opacity-0 absolute -top-1 -right-1.5 transition-opacity bg-white border border-white group-hover:opacity-100'
+            />
             {key}
           </div>
         )
@@ -56,7 +62,7 @@ const KeysInput: React.FC<KeysInputProps> = ({
         value={input}
         placeholder={placeholder}
         onChange={onInputChange}
-        className='text-sm placeholder-qrigray-400 border-none outline-none focus:ring-transparent focus:outline-none'
+        className='text-sm placeholder-qrigray-400 w-72 border-none outline-none focus:ring-transparent focus:outline-none'
         type="text"
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}

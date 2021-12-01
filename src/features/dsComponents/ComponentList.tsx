@@ -1,8 +1,10 @@
 import React from 'react'
+import { useSelector } from "react-redux"
 import classNames from 'classnames'
 
 import Dataset, { ComponentStatus, ComponentName } from '../../qri/dataset'
 import ComponentItem from './ComponentItem'
+import { selectIsDatasetEditable } from "../dataset/state/datasetState"
 
 // import { Status, SelectedComponent, ComponentStatus, RouteProps } from '../../models/store'
 // import { pathToDataset } from '../../paths'
@@ -74,12 +76,13 @@ const ComponentList: React.FC<ComponentListProps> = ({
   border = false,
   manualCreation = false
 }) => {
+  const isDatasetEditable = useSelector(selectIsDatasetEditable)
   const componentNames = Object.keys(dataset)
 
   return (
     <div className={classNames('flex w-full', { 'border-b-2': border })}>
       {componentsInfo.map(({ name, displayName, tooltip, icon }) => {
-        if (allowClickMissing || componentNames.includes(name) || (name === 'body' && dataset.bodyPath)) {
+        if (allowClickMissing || componentNames.includes(name) || (name === 'body' && dataset.bodyPath) || isDatasetEditable) {
           let fileStatus: ComponentStatus = 'unmodified'
           // if (status[name]) {
           //   fileStatus = status[name].status

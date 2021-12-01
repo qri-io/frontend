@@ -21,7 +21,7 @@ import { toggleNavExpanded } from '../app/state/appActions'
 import {
   selectRunCount,
   selectCommitCount,
-  selectSessionUserCanEditDataset
+  selectSessionUserCanEditDataset, selectIsDatasetEditable
 } from "./state/datasetState"
 import { selectWorkflow } from "../workflow/state/workflowState"
 
@@ -35,6 +35,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
   const logCount = useSelector(selectRunCount)
   const workflow = useSelector(selectWorkflow)
   const canEdit = useSelector(selectSessionUserCanEditDataset)
+  const isDatasetEditable = useSelector(selectIsDatasetEditable)
   const dispatch = useDispatch()
 
   const toggleExpanded = () => {
@@ -88,7 +89,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
               subtext='View an overview of this Dataset'
             />
           }
-          disabled={isNewWorkflow}
+          disabled={isNewWorkflow || isDatasetEditable}
         />
         <DatasetSideNavItem
           id='components'
@@ -103,7 +104,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
               subtext='Explore the version history of this Dataset'
             />
           }
-          disabled={isNewWorkflow}
+          disabled={isNewWorkflow || isDatasetEditable}
         />
         <DatasetSideNavItem
           id='workflow-editor'
@@ -112,7 +113,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
           isLink={!isNewWorkflow}
           to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
           expanded={expanded}
-          disabled={!canEdit}
+          disabled={!canEdit || isDatasetEditable}
           tooltip={
             <TooltipContent
               text='Workflow Editor'
@@ -133,7 +134,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
               subtext='Inspect recent job activity and updates'
             />
           }
-          disabled={isNewWorkflow || !workflow.id.length}
+          disabled={isNewWorkflow || !workflow.id.length || isDatasetEditable}
         />
         {process.env.REACT_APP_FEATURE_WIREFRAMES &&
           <DatasetSideNavItem
@@ -147,7 +148,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({ qriRef }) => {
                 subtext='Discuss this dataset'
               />
             }
-            disabled={isNewWorkflow}
+            disabled={isNewWorkflow || isDatasetEditable}
           />
         }
       </div>

@@ -1,4 +1,4 @@
-import Dataset, { NewDataset } from "../../../qri/dataset"
+import Dataset, { Meta, NewDataset, Readme } from "../../../qri/dataset"
 import { QriRef, refStringFromQriRef, humanRef } from "../../../qri/ref"
 import { ApiAction, ApiActionThunk, CALL_API, API_BASE_URL } from "../../../store/api"
 import {
@@ -6,6 +6,10 @@ import {
   RESET_DATASET_STATE,
   RESET_DATASET_TITLE_ERROR,
   SET_BODY_LOADING,
+  SET_DATASET_COMMIT_TITLE,
+  SET_DATASET_IS_EDITABLE,
+  SET_DATASET_META,
+  SET_DATASET_README,
   SET_HEADER
 } from "./datasetState"
 import { VersionInfo } from "../../../qri/versionInfo"
@@ -31,6 +35,12 @@ export function loadHeader (ref: QriRef): ApiActionThunk {
       if (existingHeader) { return dispatch(setHeader(existingHeader)) }
     }
     return dispatch(fetchHeader(ref))
+  }
+}
+
+export function commitDataset (ref: QriRef, title: string, dataset: Dataset): ApiActionThunk {
+  return async (dispatch) => {
+    return await commitDatasetUpdate(ref, title, dataset)(dispatch)
   }
 }
 
@@ -97,6 +107,24 @@ function fetchHeader (ref: QriRef) {
         ref: ref.username + '/' + ref.name
       }
     }
+  }
+}
+
+export function commitDatasetUpdate (qriRef: QriRef, commitTitle: string, dataset: Dataset): ApiActionThunk {
+  return async (dispatch) => {
+    const action = {
+      type: 'commit',
+      [CALL_API]: {
+        endpoint: 'ds/save',
+        method: 'POST',
+        body: {
+          ref: `${qriRef.username}/${qriRef.name}`,
+          title: commitTitle,
+          dataset: dataset
+        }
+      }
+    }
+    return dispatch(action)
   }
 }
 
@@ -188,6 +216,54 @@ export interface RenameDatasetAction {
 
 export interface ResetDatasetStateAction {
   type: string
+}
+
+export interface SetDatasetMetaAction {
+  type: string
+  meta: Meta
+}
+
+export interface SetDatasetReadmeAction {
+  type: string
+  readme: Readme
+}
+
+export interface SetDatasetEditableAction {
+  type: string
+  editable: boolean
+}
+
+export interface SetDatasetCommitTitleAction {
+  type: string
+  title: string
+}
+
+export function setDatasetCommitTitle (title: string): SetDatasetCommitTitleAction {
+  return {
+    type: SET_DATASET_COMMIT_TITLE,
+    title
+  }
+}
+
+export function setDatasetEditable (editable: boolean): SetDatasetEditableAction {
+  return {
+    type: SET_DATASET_IS_EDITABLE,
+    editable
+  }
+}
+
+export function setDatasetMeta (meta: Meta): SetDatasetMetaAction {
+  return {
+    type: SET_DATASET_META,
+    meta
+  }
+}
+
+export function setDatasetReadme (readme: Readme): SetDatasetReadmeAction {
+  return {
+    type: SET_DATASET_README,
+    readme
+  }
 }
 
 export function setHeader (header: VersionInfo) {

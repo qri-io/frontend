@@ -1,7 +1,11 @@
 import React, { useCallback } from 'react'
+import { useDispatch, useSelector } from "react-redux"
 import MarkdownIt from 'markdown-it'
+import SimpleMDE from 'react-simplemde-editor'
 
-import { Readme } from '../../../qri/dataset'
+import { NewReadme, Readme } from '../../../qri/dataset'
+import { selectEditableDatasetReadme, selectIsDatasetEditable } from "../../dataset/state/datasetState"
+import { setDatasetReadme } from "../../dataset/state/datasetActions"
 
 export interface ReadmeProps {
   data?: Readme
@@ -9,6 +13,15 @@ export interface ReadmeProps {
 
 export const ReadmeComponent: React.FC<ReadmeProps> = ({ data }) => {
   const md = new MarkdownIt()
+  const isDatasetEditable = useSelector(selectIsDatasetEditable)
+  const readme = useSelector(selectEditableDatasetReadme)
+  const dispatch = useDispatch()
+
+  const handleReadmeChange = (v: string) => {
+    const newReadme = NewReadme({ ...readme })
+    newReadme.text = v
+    dispatch(setDatasetReadme(newReadme))
+  }
 
   // overrides the default rendering of markdown-it to make sure links open in a new window
   const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
@@ -36,7 +49,36 @@ export const ReadmeComponent: React.FC<ReadmeProps> = ({ data }) => {
       el.innerHTML = md.render(markdown)
     }
   }, [markdown])
-
+  if (isDatasetEditable) {
+    return <SimpleMDE
+      id="readme-editor"
+      value={readme?.text || ''}
+      onChange={handleReadmeChange}
+      options={{
+        spellChecker: false,
+        sideBySideFullscreen: false,
+        toolbar: [
+          'preview',
+          'bold',
+          'italic',
+          'strikethrough',
+          'heading',
+          '|',
+          'code',
+          'quote',
+          '|',
+          'link',
+          'image',
+          'table',
+          '|',
+          'unordered-list',
+          'ordered-list'
+        ],
+        status: false,
+        placeholder: 'Start writing your readme here'
+      }}
+    />
+  }
   if (!markdown) {
     return (
       <div className='h-full w-full flex items-center'>
@@ -51,7 +93,7 @@ export const ReadmeComponent: React.FC<ReadmeProps> = ({ data }) => {
     <div className='h-full w-full'>
       <div
         // use "editor-preview" class to piggie-back off the simplemde styling
-        className="markdown-body"
+        className="markdown-body whitespace-pre-wrap"
         ref={refCallback}
       >loading...
       </div>
