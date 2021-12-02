@@ -1,4 +1,4 @@
-const composeHeadData = (dataset) => {
+const composeHeadTags = (dataset, url) => {
   const { peername, name, meta } = dataset
   // start with generic title and description
   let title = `${peername}/${name} | qri.cloud`
@@ -16,10 +16,19 @@ const composeHeadData = (dataset) => {
 
   const data = { title, description }
 
-  return `<head data=${JSON.stringify(data)}>`
+  return `
+    <title>${title}</title>
+    <meta name="twitter:title" content="${title}"/>
+    <meta property="og:title" content="${title}" />
+
+    <meta name="twitter:description" content="${description}"/>
+    <meta property="og:description" content="${description}" />
+
+    <meta property="og:url" content="https://qri.cloud/${peername}/${name}" />
+  `
 }
 
-exports.composeHeadData = composeHeadData
+exports.composeHeadTags = composeHeadTags
 
 const composeJSONLD = (dataset) => {
   const {

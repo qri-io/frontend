@@ -2,7 +2,7 @@ const express = require("express")
 const path = require('path')
 const fs = require('fs')
 const fetch = require('node-fetch')
-const composeHeadData = require('./util').composeHeadData
+const composeHeadTags = require('./util').composeHeadTags
 const composeJSONLD = require('./util').composeJSONLD
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:2503'
@@ -95,9 +95,13 @@ app.use('/:username/:name', async (req, res) => {
   }
 
   try {
-    const headData = composeHeadData(dataset)
+    // builds a <title> tag and various <meta> tags for title, description, and image 
+    const headTags = composeHeadTags(dataset)
+    // builds a <script> tag containing the JSON+LD data for the dataset
     const jld = composeJSONLD(dataset)
-    indexHTML = indexHTML.replace('<head>', headData+jld)
+    // add our new tags before the closing head tag
+    indexHTML = indexHTML.replace('</head>', `${headTags}${jld}</head>`)
+
   } catch (e) {
     console.log(`error composing dataset ${username/name} data into html tags: ${e}`)
     return res.sendFile(indexPath)
