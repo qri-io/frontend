@@ -68,7 +68,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   }, [ logs, displayLogs ])
 
   useEffect(() => {
-    if (logs.length && displayLogs.length && logs.length === displayLogs.length && displayLogs[0].runStatus === 'running') {
+    if (logs.length && displayLogs.length && (logs.length >= displayLogs.length) && displayLogs[0].runStatus === 'running') {
       setTimeout(() => setDisplayLogs(logs), 600) // setting timeout to make sure animation finishes
     }
   }, [ logs, displayLogs ])
