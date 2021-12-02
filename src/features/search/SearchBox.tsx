@@ -61,22 +61,25 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   const LARGE_HEIGHT = 50
 
   return (
-    <form className={classNames('relative flex focus-within:border-qripink-600 border rounded-lg w-full', {
+    <form className={classNames('relative flex focus-within:border-qripink-600 w-full', {
       'bg-transparent': transparent,
       'bg-white': !transparent,
-      'border-qrigray-300': !dark && border,
-      'border-black': dark && border,
+      'border border-qrigray-300': !dark && border,
+      'border border-black': dark && border,
+      'rounded-xl': size === 'lg',
+      'rounded-lg': size !== 'lg',
       'border-0': !border
     })} onSubmit={handleSubmit} style={{
       boxShadow: shadow ? '0px 0px 8px rgba(0, 0, 0, 0.1)' : '',
       height: size === 'lg' ? LARGE_HEIGHT : DEFAULT_HEIGHT
     }}>
       <input
-        className={classNames('focus:ring-transparent border-0 bg-transparent block rounded-lg w-full p-0', {
+        className={classNames('focus:ring-transparent border-0 bg-transparent block w-full p-0', {
           'placeholder-black': dark,
           'placeholder-qrigray-300': !dark,
           'text-sm': size === 'md',
-          'text-base': size === 'lg',
+          'text-base rounded-xl': size === 'lg',
+          'rounded-lg': size !== 'lg',
           'cursor-pointer': disabled
         })}
         id='search'

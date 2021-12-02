@@ -35,7 +35,8 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
   return (
     <>
       <Head data={{
-        title: isNew ? ' New Automated Dataset ' : `${qriRef.username}/${qriRef.name} workflow editor | Qri`
+        title: isNew ? ' New Automated Dataset ' : `${qriRef.username}/${qriRef.name} workflow editor | Qri`,
+        appView: true
       }}/>
       {dataset || isNew
         ? (<DatasetScrollLayout isNew={isNew} headerChildren={runBar} useScroller>

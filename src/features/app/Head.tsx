@@ -8,6 +8,8 @@ interface HeadProps {
     description?: string
     image?: string
     imageAlt?: string
+    // appView will set the viewport meta tag to a fixed width
+    appView?: boolean
   }
 }
 
@@ -17,7 +19,8 @@ const Head: React.FunctionComponent<HeadProps> = ({ data = {}, children }) => {
     pathname,
     description,
     image,
-    imageAlt
+    imageAlt,
+    appView = false
   } = data
 
   return (
@@ -40,7 +43,9 @@ const Head: React.FunctionComponent<HeadProps> = ({ data = {}, children }) => {
 
         { imageAlt && <meta name="twitter:image-alt" content={imageAlt} />}
 
-        {pathname && <meta property="og:url" content={`https://qri.cloud${pathname}`} />}
+        { pathname && <meta property="og:url" content={`https://qri.cloud${pathname}`} />}
+
+        { appView ? <meta name="viewport" content="width=1024" /> : <meta name="viewport" content="width=device-width, initial-scale=1" /> }
 
         {children}
       </Helmet>

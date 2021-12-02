@@ -4,7 +4,7 @@ import useDimensions from 'react-use-dimensions'
 
 import { loadCollection } from './state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from './state/collectionState'
-import PageWithFooter from '../app/PageWithFooter'
+import FixedLayout from '../layouts/FixedLayout'
 import CollectionTable from './CollectionTable'
 import Spinner from '../../chrome/Spinner'
 import Link from '../../chrome/Link'
@@ -80,9 +80,10 @@ const Collection: React.FC<{}> = () => {
   }
 
   return (
-    <PageWithFooter>
+    <FixedLayout>
       <Head data={{
-        title: `My Datasets | Qri`
+        title: `My Datasets | Qri`,
+        appView: true
       }}/>
       <div className='h-full' style={{ backgroundColor: '#f3f4f6' }}>
         <div className='h-full w-9/12 mx-auto pt-7 pb-7 flex flex-col'>
@@ -113,7 +114,7 @@ const Collection: React.FC<{}> = () => {
           </div>
         </div>
       </div>
-    </PageWithFooter>
+    </FixedLayout>
   )
 }
 

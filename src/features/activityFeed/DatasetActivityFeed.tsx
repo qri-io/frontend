@@ -78,7 +78,8 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
       <Head data={{
         title: `${qriRef.username}/${qriRef.name} run log | Qri`,
         pathname: location.pathname,
-        description: `Explore the automation run log for the Qri Dataset ${qriRef.username}/${qriRef.name}`
+        description: `Explore the automation run log for the Qri Dataset ${qriRef.username}/${qriRef.name}`,
+        appView: true
       }}/>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
         <div className='rounded-none h-full'>

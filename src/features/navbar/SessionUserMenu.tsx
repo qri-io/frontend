@@ -54,14 +54,14 @@ const SessionUserMenu: React.FC<{}> = () => {
     <div className="relative flex items-center font-medium">
       <Link
         to='https://qri.io/docs'
-        className='text-sm font-semibold'
+        className='text-sm font-semibold hidden md:block'
         colorClassName='text-black hover:text-qripink-600'
         onClick={() => {
           // general-click-help event
           trackGoal('MN77WFUZ', 0)
         }}
       >Help</Link>
-      <DropdownMenu icon={userIcon} className='ml-8 session_user_menu' items={[
+      <DropdownMenu icon={userIcon} className='ml-4 md:ml-8 session_user_menu' items={[
         {
           element: (
             <div className='flex'>

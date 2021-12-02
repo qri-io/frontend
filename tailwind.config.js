@@ -154,7 +154,8 @@ module.exports = {
         'md': '4.5px',
         'lg': '6px',
         'xl': '8px',
-        '2xl': '10px'
+        '2xl': '10px',
+        '3xl': '20px'
       },
       fontSize: {
         ...fontSize,
@@ -180,7 +181,7 @@ module.exports = {
       fontWeight: ['hover'],
       cursor: ['hover'],
       borderWidth: ['last'],
-      margin: ['last'],
+      margin: ['first', 'last'],
       padding: ['first', 'last']
     },
   },

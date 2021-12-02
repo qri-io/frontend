@@ -33,7 +33,8 @@ const DatasetComponents: React.FC<{}> = () => {
       <Head data={{
         title: `${qriRef.username}/${qriRef.name} history | Qri`,
         pathname: location.pathname,
-        description: dataset?.meta?.description || `Explore the history of commits for the Qri Dataset ${qriRef.username}/${qriRef.name}`
+        description: dataset?.meta?.description || `Explore the history of commits for the Qri Dataset ${qriRef.username}/${qriRef.name}`,
+        appView: true
       }}/>
       <div className='flex-grow flex overflow-hidden'>
         <DatasetCommitList qriRef={qriRef} />

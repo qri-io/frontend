@@ -91,7 +91,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
       <ComponentHeader border={!['body', 'structure', 'transform'].includes(componentName)}>
         {componentHeader}
       </ComponentHeader>
-      <div className='overflow-auto flex-grow'>
+      <div className='overflow-auto flex-grow hide-scrollbar'>
         {componentContent}
       </div>
 

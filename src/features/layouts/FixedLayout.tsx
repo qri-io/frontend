@@ -3,7 +3,7 @@ import React from 'react'
 import NavBar from '../navbar/NavBar'
 import Footer from '../footer/Footer'
 
-const Page: React.FC = ({ children }) => (
+const FixedLayout: React.FC = ({ children }) => (
   <div className='flex flex-col h-full'>
     <NavBar />
     <div className='flex-grow overflow-y-hidden bg-white'>
@@ -13,4 +13,4 @@ const Page: React.FC = ({ children }) => (
   </div>
 )
 
-export default Page
+export default FixedLayout

@@ -127,7 +127,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
             ? <ContentLoader height='29.6'>
               <rect width="320" y='5' height="20" rx="1" fill="#D5DADD"/>
             </ContentLoader>
-            : <div ref={measuredRef} onClick={onTitleClick} className={classNames({ 'cursor-pointer whitespace-nowrap': !isNew }, 'flex items-center group hover:text')}>
+            : <div ref={measuredRef} onClick={onTitleClick} className={classNames({ 'cursor-pointer': !isNew }, 'flex items-center group hover:text')}>
               <h3 className='text-2xl font-bold'>{isNew ? newWorkflowTitle : dataset.meta?.title ? dataset.meta?.title : header.name}</h3>
               {
                 editable && <Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' />

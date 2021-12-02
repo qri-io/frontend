@@ -68,6 +68,24 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
 
   const location = useLocation()
 
+  const readmeContent = (
+    <div className={classNames('px-3 align-top w-full', {
+      'absolute': !expandReadme
+    })} style={{ height: readmeContainerHeight }}>
+      <ContentBox className='flex flex-col h-full'>
+        <div style={{ minHeight: minReadmeHeight }} className='flex flex-col h-full overflow-hidden'>
+          <ContentBoxTitle title='Readme'/>
+          <div className={classNames('flex-grow overflow-hidden relative', {
+            'fade-bottom': readmeHeightLargerThanContainerHeight
+          })}>
+            <Readme data={dataset.readme} />
+          </div>
+          {!expandReadme && (readmeHeightLargerThanContainerHeight) && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-2' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+        </div>
+      </ContentBox>
+    </div>
+  )
+
   return (
     <>
       <Head data={{
@@ -81,27 +99,13 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
         </div>)
         : (
           <DatasetScrollLayout contentClassName='max-w-screen-lg mx-auto'>
-            <div className='flex -ml-2 -mr-3 mb-6'>
+            <div className='flex -mx-3 mb-6'>
               {dataset.readme && (
-              <div className='flex-grow w-7/12 relative'>
-                <div className={classNames('px-2 align-top w-full', {
-                  'absolute': !expandReadme
-                })} style={{ height: readmeContainerHeight }}>
-                  <ContentBox className='flex flex-col h-full'>
-                    <div style={{ minHeight: minReadmeHeight }} className='flex flex-col h-full overflow-hidden'>
-                      <ContentBoxTitle title='Readme'/>
-                      <div className={classNames('flex-grow overflow-hidden relative', {
-                        'fade-bottom': readmeHeightLargerThanContainerHeight
-                      })}>
-                        <Readme data={dataset.readme} />
-                      </div>
-                      {!expandReadme && (readmeHeightLargerThanContainerHeight) && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-2' onClick={() => { setExpandReadme(true) }}>See More</div>)}
-                    </div>
-                  </ContentBox>
-                </div>
+              <div className='flex-grow w-7/12 relative hidden md:block'>
+                {readmeContent}
               </div>
               )}
-              <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-5/12' : 'w-full'} px-3 align-top`}>
+              <div ref={versionInfoContainer} className={`${dataset.readme ? 'w-full md:w-5/12' : 'w-full'} px-3 align-top`}>
                 <ContentBox>
                   <div className='flex items-center'>
                     <div className='flex-grow truncate'>
@@ -111,12 +115,31 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                           <DatasetCommitInfo item={newVersionInfoFromDataset(dataset)} small />
                         </div>
                         <div className='flex flex-shrink-0'>
-                          <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' hideIcon={true} type='primary' qriRef={qriRef} />
+                          <div className='hidden md:block'>
+                            <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' hideIcon type='primary' qriRef={qriRef} />
+                          </div>
+                          <div className='block md:hidden'>
+                            <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' type='primary' qriRef={qriRef} small />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </ContentBox>
+                {/* Displays readme content box between version info and meta, shown only on smaller screen widths */}
+                {dataset.readme && (
+                  <ContentBox className='flex flex-col mt-6 block md:hidden'>
+                    <div className='flex flex-col h-full overflow-hidden'>
+                      <ContentBoxTitle title='Readme'/>
+                      <div className={classNames('flex-grow overflow-hidden relative', {
+                        'fade-bottom': readmeHeightLargerThanContainerHeight
+                      })} style={{ maxHeight: expandReadme ? '' : 256 }}>
+                        <Readme data={dataset.readme} />
+                      </div>
+                      {!expandReadme && (<div className='font-semibold text-qritile text-sm cursor-pointer mt-2' onClick={() => { setExpandReadme(true) }}>See More</div>)}
+                    </div>
+                  </ContentBox>
+                )}
                 <ContentBox className='mt-6'>
                   {/* Bottom of the box */}
                   <ContentBoxTitle title='Metadata' />

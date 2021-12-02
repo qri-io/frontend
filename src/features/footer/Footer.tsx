@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Link from '../../chrome/Link'
-import IconLink from '../../chrome/IconLink'
+import QriSocialLinks from './QriSocialLinks'
 
 const Footer: React.FC<{}> = () => (
   <div className='flex w-9/12 mx-auto text-black text-sm py-5 tracking-wide'>
@@ -28,33 +28,7 @@ const Footer: React.FC<{}> = () => (
         FAQs
       </Link>
     </div>
-    <div className='flex flex-grow justify-end'>
-      {
-        [
-          { icon: 'github',
-            link: 'https://github.com/qri-io'
-          },
-          { icon: 'youtube',
-            link: 'https://www.youtube.com/channel/UC7E3_hURgFO2mVCLDwPSyOQ'
-          },
-          { icon: 'twitter',
-            link: 'https://twitter.com/qri_io'
-          },
-          { icon: 'discord',
-            link: 'https://discordapp.com/invite/thkJHKj'
-          }
-        ].map(({ icon, link }, i) => (
-          <IconLink
-            key={i}
-            icon={icon}
-            size='md'
-            link={link}
-            className='ml-5'
-            colorClassName='text-black hover:text-qripink-600'
-          />
-        ))
-      }
-    </div>
+    <QriSocialLinks />
   </div>
 )
 

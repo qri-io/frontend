@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import SessionUserMenu from './SessionUserMenu'
 import SearchBox from '../search/SearchBox'
 import QriLogo from '../../chrome/QriLogo'
+import IconLink from '../../chrome/IconLink'
 import ButtonGroup from '../../chrome/ButtonGroup'
 import { selectNavExpanded } from '../app/state/appState'
 import { AnonUser, selectSessionUser } from '../session/state/sessionState'
@@ -47,7 +48,7 @@ const NavBar: React.FC<NavBarProps> = ({
   }
 
   return (
-    <div className={classNames('text-black text-bold flex items-center pr-8 font-medium w-full z-40', {
+    <div className={classNames('text-black text-bold flex items-center pr-6 font-medium w-full z-40', {
       'bg-white': !transparent,
       'absolute top-0': absolute
     })} style={{
@@ -56,16 +57,19 @@ const NavBar: React.FC<NavBarProps> = ({
     }}>
       {!noLogo && (
         <Link className='mr-5' to='/'>
-          <div className={`flex align-center items-center justify-center ${expanded ? 'w-44' : 'w-24'}`}>
+          <div className={`flex align-center items-center ml-6 md:ml-0 justify-start md:justify-center ${expanded ? 'w-44' : 'w-24'}`}>
             <QriLogo />
             <div className={`font-bold text-xl ml-2 ${expanded ? 'block' : 'hidden'}`} style={{ fontSize: 21 }}>Qri</div>
           </div>
         </Link>
       )}
-      <div className='w-48'>
-        {!minimal && showSearch && <SearchBox onSubmit={handleSearchSubmit} placeholder='Search for Datasets' />}
+      {!minimal && showSearch && (
+      <div className='w-48 hidden md:block'>
+        <SearchBox onSubmit={handleSearchSubmit} placeholder='Search for Datasets' />
       </div>
-      <div className='flex m-auto items-center'>
+      )}
+
+      <div className='m-auto items-center hidden md:flex'>
         {!minimal && (user !== AnonUser) && (
           <ButtonGroup
             items={buttonItems}
@@ -73,7 +77,15 @@ const NavBar: React.FC<NavBarProps> = ({
           />
         )}
       </div>
-      <SessionUserMenu />
+      <div className='flex-grow md:flex-grow-0'/>
+      {!minimal && showSearch && (
+      <div className='md:hidden'>
+        <IconLink icon='skinnySearch' size='lg' link='/search' />
+      </div>
+      )}
+      <div className='flex justify-end items-center'>
+        <SessionUserMenu />
+      </div>
     </div>
   )
 }

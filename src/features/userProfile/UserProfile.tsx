@@ -17,8 +17,8 @@ import {
   selectUserProfileDatasets,
   selectUserProfileFollowing
 } from './state/userProfileState'
-import NavBar from '../navbar/NavBar'
-import Footer from '../footer/Footer'
+import ScrollLayout from '../layouts/ScrollLayout'
+
 import {
   UserProfileDatasetListParams,
   NewUserProfileDatasetListParams,
@@ -118,44 +118,39 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
         pathname: location.pathname,
         description: `A list of public datasets for the Qri user ${usernameParam}`
       }}/>
-      <div className='flex-grow w-full overflow-y-scroll'>
-        {/* begin sticky header */}
-        <div className={classNames('sticky bg-white  border border-qrigray-200 z-10', {
-          'invisible -top-16 h-0': inView,
-          'visible top-0 transition-all': !inView
-        })}>
-          <div className='px-8 pt-4 pb-3 flex'>
-            <div className='flex items-center'>
-              <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
-                height: '30px',
-                width: '30px',
-                backgroundImage: `url(${userIcon})`
-              }}/>
-              <div>
-                <div className='text-black text-sm font-semibold'>{profile.username}</div>
-              </div>
+      {/* begin sticky header */}
+      <div className={classNames('sticky bg-white  border-t border-b border-qrigray-200 z-10', {
+        'invisible -top-16 h-0': inView,
+        'visible top-0 transition-all': !inView
+      })}>
+        <div className='px-8 pt-4 pb-3 flex'>
+          <div className='flex items-center'>
+            <div className='rounded-2xl inline-block bg-cover flex-shrink-0 mr-3' style={{
+              height: '30px',
+              width: '30px',
+              backgroundImage: `url(${userIcon})`
+            }}/>
+            <div>
+              <div className='text-black text-sm font-semibold'>{profile.username}</div>
             </div>
-          </div>
-        </div>
-        {/* end sticky header */}
-        <div className='mx-auto flex py-9' style={{ maxWidth: '1040px' }}>
-          <div className='flex-auto'>
-            <div className='w-full' ref={stickyHeaderTriggerRef}>
-              <UserProfileHeader profile={profile} loading={loading} />
-            </div>
-            <ContentTabs
-              tabs={tabs}
-            />
-            <UserProfileDatasetList
-              paginatedResults={path === '/' ? paginatedDatasetResults : paginatedFollowingResults}
-              userProfileParams={userProfileParams}
-              onParamsUpdate={updateQueryParams}
-            />
           </div>
         </div>
       </div>
-      <div className='bg-white flex-shrink-0'>
-        <Footer />
+      {/* end sticky header */}
+      <div className='mx-auto flex py-9 px-6 w-full' style={{ maxWidth: '1040px' }}>
+        <div className='flex-auto min-w-0'>
+          <div className='w-full' ref={stickyHeaderTriggerRef}>
+            <UserProfileHeader profile={profile} loading={loading} />
+          </div>
+          <ContentTabs
+            tabs={tabs}
+          />
+          <UserProfileDatasetList
+            paginatedResults={path === '/' ? paginatedDatasetResults : paginatedFollowingResults}
+            userProfileParams={userProfileParams}
+            onParamsUpdate={updateQueryParams}
+          />
+        </div>
       </div>
     </>
   )
@@ -165,10 +160,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ path = '/' }) => {
   }
 
   return (
-    <div className='flex flex-col h-full w-full' ref={scrollContainer} style={{ backgroundColor: '#f3f4f6' }}>
-      <NavBar />
+    <ScrollLayout>
       {content}
-    </div>
+    </ScrollLayout>
   )
 }
 

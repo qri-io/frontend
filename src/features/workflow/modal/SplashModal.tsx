@@ -17,7 +17,7 @@ const SignUpModal: React.FC = () => {
   }
 
   return (
-    <div className='bg-white p-8 text-left text-black' style={{ width: '440px' }}>
+    <div className='bg-white p-8 text-left text-black' style={{ width: 440 }}>
       <div className='flex'>
         <div className='flex-grow text-3xl font-black'>Welcome to the workflow editor!</div>
         <IconButton icon='close' className='ml-10' onClick={handleClose}/>
