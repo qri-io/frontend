@@ -28,3 +28,23 @@ function fetchDatasetLogs (qriRef: QriRef): ApiAction {
     }
   }
 }
+
+export function loadRunInfo (runId: string): ApiActionThunk {
+  return async (dispatch, getState) => {
+    return dispatch(fetchRunInfo(runId))
+  }
+}
+
+function fetchRunInfo (runId: string): ApiAction {
+  return {
+    type: 'dataset_activity_runinfo',
+    [CALL_API]: {
+      endpoint: `auto/runinfo`,
+      method: 'POST',
+      body: {
+        id: runId
+      },
+      requestID: runId
+    }
+  }
+}
