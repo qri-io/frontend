@@ -100,9 +100,11 @@ export const datasetReducer = createReducer(initialState, {
   'API_DATASET_SUCCESS': (state, action) => {
     state.dataset = action.payload.data as Dataset
     state.datasetLoading = false
+    state.bodyLoading = false
   },
   'API_DATASET_FAILURE': (state) => {
     state.datasetLoading = false
+    state.bodyLoading = false
   },
   'API_BODY_REQUEST': (state, action) => {
     state.bodyLoading = true
