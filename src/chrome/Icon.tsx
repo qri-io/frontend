@@ -24,6 +24,7 @@ import Calendar from './icon/Calendar'
 import CaretLeft from './icon/CaretLeft'
 import CaretRight from './icon/CaretRight'
 import CaretDown from './icon/CaretDown'
+import CaretUp from './icon/CaretUp'
 import Checkbox from './icon/Checkbox'
 import CheckboxChecked from './icon/CheckboxChecked'
 import Circle from './icon/Circle'
@@ -110,6 +111,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     caretLeft: <CaretLeft {...props} />,
     caretRight: <CaretRight {...props} />,
     caretDown: <CaretDown {...props} />,
+    caretUp: <CaretUp {...props} />,
     checkbox: <Checkbox {...props} />,
     checkboxChecked: <CheckboxChecked {...props} />,
     circle: <Circle {...props} />,
