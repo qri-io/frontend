@@ -47,8 +47,9 @@ const Workflow: React.FC<WorkflowProps> = ({ qriRef }) => {
       dispatch(resetDatasetState())
     }
 
-    if (location.state?.template) {
-      const template = selectTemplate(location.state.template)
+    // fetch a template if the workflow is empty
+    if (workflow.id === '') {
+      const template = selectTemplate('CSVDownload')
       // @ts-expect-error
       dispatch(setTemplate(template))
     }
