@@ -53,6 +53,8 @@ const Modal: React.FC<any> = () => {
     return null
   }
 
+  const modalPositionStyles = modal.position ? { position: modal.position.position, top: modal.position.top, left: modal.position.left } : {}
+
   return (
     <div className='fixed z-50 inset-0 overflow-y-auto'>
       <div className='flex items-center justify-center min-h-screen p-6 text-center sm:block sm:p-0 w-full'>
@@ -61,8 +63,8 @@ const Modal: React.FC<any> = () => {
         </div>
 
         <div
-          style={modal.position && { position: modal.position.position, top: modal.position.top, left: modal.position.left }}
-          className={`w-full inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle ${modal.customWidth ? '' : 'max-w-md'}`}
+          style={{ ...modalPositionStyles }}
+          className={`w-full md:w-auto inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle ${modal.customWidth ? '' : 'md:min-w-md max-w-xl'}`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"
