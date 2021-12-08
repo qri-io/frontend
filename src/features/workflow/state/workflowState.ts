@@ -162,11 +162,14 @@ export const workflowReducer = createReducer(initialState, {
   'API_PREVIEW_SUCCESS': (state, action) => {
     const d = action.payload.data as Dataset
     // TODO (b5) - this should check peername *and* confirm the loaded version is HEAD
-    state.dataset = d
+    // don't set workflow state unless transform exists
+    if (d.transform) {
+      state.dataset = d
 
-    // set the values to compare with and caclulate isDirty
-    state.workflowBase.steps = d.transform?.steps
-    state.isDirty = calculateIsDirty(state)
+      // set the values to compare with and caclulate isDirty
+      state.workflowBase.steps = d.transform?.steps
+      state.isDirty = calculateIsDirty(state)
+    }
   },
   'API_WORKFLOW_REQUEST': (state, action) => {
     // reset workflow and lastRunID to initialState values

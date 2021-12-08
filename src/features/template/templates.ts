@@ -42,73 +42,30 @@ export const CSVDownload: Dataset = {
     qri: '',
     steps: [
       {
-        name: 'intro-step',
-        syntax: 'starlark',
-        category: 'intro-step',
-        script: `# Welcome to the Qri Workflow Editor!
-# This script lives with your new dataset, and will be used to create new versions of the dataset
-# Start writing Starlark code here...
-
-print('Hello, World!')
-
-# To write your transform script, you need to do a few things:
-# - Import raw data from an http request, database connection, or another Qri Dataset
-# - Manipulate/Transform the data to get it into the shape you want
-# - Commit your transformed data to create a new version of this dataset
-
-# Lifelines:
-# Jump into our Discord Server to get live coding help
-# Starlark Documentation: qri.io/docs
-# Transform Code Snippet Library: qri.io/docs
-`
-      },
-      {
-        name: 'download-example',
+        name: 'download-template',
         syntax: 'starlark',
         category: 'download-example',
-        script: `# CSV Download Code Sample
-# This really works! Click 'Dry Run' to try it ↗
+        script: `# CSV Download Sample Code | click 'Dry Run' to try it ↗
 
 # import dependencies
-load("http.star", "http") # \`http\` lets us talk to the internets
-load("dataframe.star", "dataframe") # \`dataframe\` gives us powerful dataset manipulation capabilities
+load("http.star", "http")
+load("dataframe.star", "dataframe")
 
-# with dependencies loaded, download a CSV
-# this fetches a "popular baby names" dataset from the NYC Open Data Portal
-csvDownloadUrl = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"
-rawCSV = http.get(csvDownloadUrl).body()
+# download CSV file
+csv_download_url = "https://data.cityofnewyork.us/api/views/25th-nujf/rows.csv?accessType=DOWNLOAD"
+raw_csv = http.get(csv_download_url).body()
 
 # parse the CSV (string) into a qri DataFrame
-theData = dataframe.parse_csv(rawCSV)
-
-# we can do filtering of the DataFrame and assign it back to its original variable
-# filter for first names that start with 'V'
-theData = theData[[x.startswith('V') for x in theData["Child's First Name"]]]
-
-# each column in the DataFrame is a Series
-# make a new \`Series\` with only the unique values
-uniqueSeries = theData["Child's First Name"].unique()
-
-# iterate over the Series and convert each string to lowercase
-for idx, val in enumerate(uniqueSeries):
-    uniqueSeries[idx] = val.lower()
-
-# sort the Series alphabetically
-uniqueSeries = sorted(uniqueSeries)
-
-# make an empty DataFrame, assign our Series to be a column named 'firstname'
-# this will become the next version of our dataset's body
-newBody = dataframe.DataFrame()
-newBody['firstname'] = uniqueSeries
+the_data = dataframe.parse_csv(raw_csv)
 
 # get the previous version of this dataset
-workingDataset = dataset.latest()
-# set the body of the dataset to be our new body
-workingDataset.body = newBody
+working_dataset = dataset.latest()
 
-# finally, commit the changes
-# the last step of every transform is always \`dataset.commit(Dataset)\`
-dataset.commit(workingDataset)
+# set the body of the dataset to be our DataFrame
+working_dataset.body = the_data
+
+# commit the dataset
+dataset.commit(working_dataset)
 `
       }
     ]
