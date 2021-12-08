@@ -129,16 +129,17 @@ const ActivityList: React.FC<ActivityListProps> = ({
   }) => {
     const runState = useSelector(selectRunInfo(row.data.runID))
     let logs
-
     if (runState?.runLog) {
       logs = outputFromRunLog(runState.runLog)
+    } else if (runState?.error) {
+      logs = <div className='text-red-500'>Unable to retrieve logs</div>
     } else {
       logs = <div className='text-loading-ellipsis'>loading</div>
     }
 
     return (
       <div>
-        <pre className='p-8 font-mono bg-qrigray-1000 text-qrigray-100 max-h-screen overflow-y-scroll'>
+        <pre className='p-8 font-mono bg-qrigray-1000 text-qrigray-100 max-h-96 overflow-y-scroll'>
           {logs}
         </pre>
       </div>

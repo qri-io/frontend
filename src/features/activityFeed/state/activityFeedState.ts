@@ -111,7 +111,7 @@ export const activityFeedReducer = createReducer(initialState, {
   'API_DATASET_ACTIVITY_RUNINFO_FAILURE': (state, action) => {
     const runID = action.payload.requestID
     state.runInfo[runID] = {
-      error: action.payload.error
+      error: action.payload.err
     }
   }
 })
