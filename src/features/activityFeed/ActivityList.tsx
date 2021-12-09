@@ -29,7 +29,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       selector: (row: LogItem) => row.runStatus,
       width: '200px',
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => <RunStatusBadge status={row.runStatus} />
+      cell: (row: LogItem) => <RunStatusBadge statusText={row.runStatus === 'waiting' ? 'Waiting' : ''} status={row.runStatus === 'waiting' ? 'running' : row.runStatus} />
     },
     {
       name: 'name',
@@ -88,7 +88,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   const conditionalRowStyles = [
     {
-      when: (row: LogItem) => row.runStatus === 'running',
+      when: (row: LogItem) => row.runStatus === 'waiting',
       classNames: ['animate-appear', 'overflow-hidden', 'min-height-0-important'],
       style: {
         height: 58

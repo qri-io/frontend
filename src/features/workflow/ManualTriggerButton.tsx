@@ -9,6 +9,7 @@ import { VersionInfo } from '../../qri/versionInfo'
 import { selectRun } from '../events/state/eventsState'
 import { trackGoal } from '../../features/analytics/analytics'
 import { cancelRun } from './state/workflowActions'
+import { addWaitingEvent } from "../events/state/eventsActions"
 
 export interface ManualTriggerButtonProps {
   row: VersionInfo
@@ -24,6 +25,7 @@ const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ row }) => {
   const handleClick = () => {
     // collection-run-now event
     trackGoal('RXLAWMP8', 0)
+    dispatch(addWaitingEvent(runID || ''))
     dispatch(runNow({ username, name }, initID))
   }
 
@@ -31,14 +33,22 @@ const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ row }) => {
     dispatch(cancelRun(runID || ''))
   }
 
+  const handleRun = () => {
+    if (status === 'running') {
+      handleCancel()
+    } else if (status !== 'waiting') {
+      handleClick()
+    }
+  }
+
   return (
     <div
       className='mx-auto'
       data-for={id}
       data-tip
-      onClick={status === 'running' ? handleCancel : handleClick}
+      onClick={handleRun}
     >
-      <Icon icon={ status === 'running' ? 'circleX' : 'playCircle'} size='lg' className='text-qritile'/>
+      <Icon icon={ status === 'running' || status === 'waiting' ? 'circleX' : 'playCircle'} size='lg' className='text-qritile'/>
       <ReactTooltip
         id={id}
         place='bottom'

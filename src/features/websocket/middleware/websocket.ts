@@ -111,7 +111,6 @@ const middleware = () => {
   const onMessage = (dispatch: Dispatch) => (e: MessageEvent) => {
     try {
       const event = JSON.parse(e.data)
-
       if (event.type.startsWith("tf:")) {
         if (event.type === ETTransformStart) dispatch(transformStartEvent(NewTransformLifecycle(event.data)))
         if (event.type === ETTransformCancel) dispatch(transformCanceledEvent(NewTransformLifecycle(event.data)))

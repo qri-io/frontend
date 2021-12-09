@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import numeral from 'numeral'
 import ReactDataTable from 'react-data-table-component'
 import { Link } from 'react-router-dom'
@@ -19,6 +19,7 @@ import ManualTriggerButton from '../workflow/ManualTriggerButton'
 import DatasetInfoItem from '../dataset/DatasetInfoItem'
 import { runEndTime } from '../../utils/runEndTime'
 import { trackGoal } from '../../features/analytics/analytics'
+import { selectRun } from "../events/state/eventsState"
 
 interface CollectionTableProps {
   filteredWorkflows: VersionInfo[]
@@ -174,8 +175,13 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
           runCount
         } = row
         let runEndLabel = <span>-</span>
+        let displayStatus = runStatus
+        const { status } = useSelector(selectRun(row.runID || ''))
         if (runStatus !== 'running' && runStart && runDuration) {
           runEndLabel = <RelativeTimestamp timestamp={runEndTime(runStart, runDuration)} />
+        }
+        if (status === 'waiting') {
+          displayStatus = status
         }
         // if status is not defined, show nothing in this column
         if (runStatus === undefined) {
@@ -191,7 +197,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
                 <DatasetInfoItem icon='clock' label={runEndLabel}/>
               </div>
               <div className='text-gray-500 text-xs'>
-                <RunStatusBadge status={runStatus}/>
+                <RunStatusBadge statusText={displayStatus === 'waiting' ? 'waiting' : ''} status={displayStatus === 'waiting' ? 'running' : displayStatus || ''}/>
               </div>
             </div>
           </Link>
