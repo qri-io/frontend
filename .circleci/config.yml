@@ -262,6 +262,8 @@ workflows:
       - frontend-prod-deploy:
           requires:
             - frontend-prod-image-push
+            - frontend-test
+            - frontend-test-e2e
           filters:
             branches:
               only:
