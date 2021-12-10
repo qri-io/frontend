@@ -14,10 +14,6 @@ export const SET_MANUAL_DATASET_CREATION_META = 'SET_MANUAL_DATASET_CREATION_MET
 export const SET_MANUAL_DATASET_CREATION_FILE = 'SET_MANUAL_DATASET_CREATION_FILE'
 export const RESET_MANUAL_DATASET_CREATION_STATE = 'RESET_MANUAL_DATASET_CREATION_STATE'
 
-export const selectManualDatasetTitle = (state: RootState): string => state.manualDatasetCreation.datasetTitle
-
-export const selectManualDatasetCommitTitle = (state: RootState): string => state.manualDatasetCreation.commitTitle
-
 export const selectManualDatasetReadme = (state: RootState): string => state.manualDatasetCreation.readme
 
 export const selectManualDatasetMeta = (state: RootState): Meta => state.manualDatasetCreation.meta
@@ -31,8 +27,6 @@ export const selectManualDatasetUploadError = (state: RootState): string => stat
 export interface ManualDatasetCreationState {
   fileUploading: boolean
   meta: Meta
-  commitTitle: string
-  datasetTitle: string
   readme: string
   file?: File
   uploadError: string
@@ -41,20 +35,16 @@ export interface ManualDatasetCreationState {
 const initialState: ManualDatasetCreationState = {
   fileUploading: false,
   meta: {
-    qri: ''
+    qri: '',
+    title: 'Untitled Dataset'
   },
-  commitTitle: 'new.manual.dataset',
   readme: '',
-  datasetTitle: 'new-dataset',
   uploadError: ''
 }
 
 export const manualDatasetCreationReducer = createReducer(initialState, {
   SET_MANUAL_DATASET_CREATION_FILE: (state: ManualDatasetCreationState, action: ManualDatasetCreationSetFileAction) => {
     state.file = action.file
-  },
-  SET_MANUAL_DATASET_CREATION_COMMIT_TITLE: (state: ManualDatasetCreationState, action: ManualDatasetCreationSetTextAction) => {
-    state.commitTitle = action.text
   },
   SET_MANUAL_DATASET_CREATION_README: (state: ManualDatasetCreationState, action: ManualDatasetCreationSetTextAction) => {
     state.readme = action.text
@@ -63,7 +53,7 @@ export const manualDatasetCreationReducer = createReducer(initialState, {
     state.meta = action.meta
   },
   SET_MANUAL_DATASET_CREATION_TITLE: (state: ManualDatasetCreationState, action: ManualDatasetCreationSetTextAction) => {
-    state.datasetTitle = action.text
+    state.meta.title = action.text
   },
   'API_SAVEUPLOAD_REQUEST': (state: ManualDatasetCreationState, action) => {
     state.fileUploading = true

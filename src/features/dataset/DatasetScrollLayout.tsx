@@ -51,7 +51,7 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
       </DatasetMiniHeader>
       <div className={classNames('dataset_fixed_layout p-6 w-full', contentClassName)}>
         <div ref={stickyHeaderTriggerRef}>
-          <DatasetHeader isNew={isNew} editable={editable}>
+          <DatasetHeader editable={editable}>
             {headerChildren}
           </DatasetHeader>
         </div>
@@ -62,14 +62,14 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
 
   if (useScroller) {
     return (
-      <Scroller className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
+      <Scroller className='overflow-y-scroll overflow-x-hidden flex-grow relative bg-qrigray-100'>
         {content}
       </Scroller>
     )
   }
 
   return (
-    <div className='overflow-y-scroll overflow-x-hidden flex-grow relative'>
+    <div className='overflow-y-scroll overflow-x-hidden flex-grow relative bg-qrigray-100' style={{ borderTopLeftRadius: 20 }}>
       {content}
       <div className='bg-white flex-shrink-0 md:hidden'>
         <MobileFooter />

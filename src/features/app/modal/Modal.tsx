@@ -64,7 +64,7 @@ const Modal: React.FC<any> = () => {
 
         <div
           style={{ ...modalPositionStyles }}
-          className={`w-full md:w-auto inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle ${modal.customWidth ? '' : 'md:min-w-md max-w-xl'}`}
+          className={`inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"

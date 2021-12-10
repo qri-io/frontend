@@ -1,4 +1,5 @@
 import React from "react"
+import classNames from 'classnames'
 
 interface ManualCreationBodyWrapperProps {
   className?: string
@@ -8,7 +9,7 @@ const ManualCreationBodyWrapper: React.FC<ManualCreationBodyWrapperProps> = ({
   className,
   children
 }) => (
-  <div className={className} style={{ height: 'calc(100vh - 340px)' }}>
+  <div className={classNames(className, 'h-full')} >
     {children}
   </div>
 )

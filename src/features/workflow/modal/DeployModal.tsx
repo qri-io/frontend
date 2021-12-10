@@ -188,7 +188,7 @@ const DeployModal: React.FC = () => {
       })}>
         <div className='flex'>
           <div className='flex-grow text-3xl font-black mb-6'>{heading}</div>
-          <IconButton icon='close' className='ml-10' onClick={handleClose}/>
+          <IconButton icon='close' className='ml-10 mt-2' onClick={handleClose}/>
         </div>
         <div className='mb-6 flex-grow'>
           <div className='mb-3'>{subHeading}</div>

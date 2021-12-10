@@ -2,12 +2,11 @@ import { ApiActionThunk, CALL_API } from "../../../store/api"
 import {
   SET_MANUAL_DATASET_CREATION_META,
   SET_MANUAL_DATASET_CREATION_README,
-  SET_MANUAL_DATASET_CREATION_COMMIT_TITLE,
   SET_MANUAL_DATASET_CREATION_TITLE,
   SET_MANUAL_DATASET_CREATION_FILE,
   RESET_MANUAL_DATASET_CREATION_STATE
 } from "./manualDatasetCreationState"
-import { Meta } from "../../../qri/dataset"
+import { Meta, Dataset } from "../../../qri/dataset"
 import { QriRef } from "../../../qri/ref"
 
 export interface ResetManualDatasetCreationState {
@@ -27,13 +26,6 @@ export interface ManualDatasetCreationSetMetaAction {
 export interface ManualDatasetCreationSetFileAction {
   type: string
   file: File | undefined
-}
-
-export function setManualDatasetCreationCommitTitle (title: string): ManualDatasetCreationSetTextAction {
-  return {
-    type: SET_MANUAL_DATASET_CREATION_COMMIT_TITLE,
-    text: title
-  }
 }
 
 export function setManualDatasetCreationTitle (title: string): ManualDatasetCreationSetTextAction {
@@ -70,7 +62,7 @@ export function resetManualDatasetCreationState (): ResetManualDatasetCreationSt
   }
 }
 
-export function saveManualDataset (bodyFile: File, ref: QriRef, commitTitle: string): ApiActionThunk {
+export function saveManualDataset (ref: QriRef, bodyFile: File, dataset: Dataset, commitTitle: string): ApiActionThunk {
   return async (dispatch, getState) => {
     return dispatch({
       type: 'saveupload',
@@ -80,6 +72,7 @@ export function saveManualDataset (bodyFile: File, ref: QriRef, commitTitle: str
         form: {
           'ref': `${ref.username + '/' + ref.name}`,
           'body': bodyFile,
+          'dataset': JSON.stringify(dataset),
           'title': commitTitle
         },
         headers: {

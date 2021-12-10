@@ -52,7 +52,7 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
 
   return (
     <WebAppLayout>
-      <div className='flex flex-col h-full w-full bg-qrigray-100'>
+      <div className='flex flex-col h-full w-full'>
         <NavBar />
         {content}
       </div>

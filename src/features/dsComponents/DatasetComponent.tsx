@@ -104,7 +104,6 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
             <div
               onDragExit={setDragStateHandler(false)}
               onDragEnter={setDragStateHandler(true)}
-              style={{ height: 'calc(100vh - 340px)' }}
               className={`w-full flex h-full items-center justify-center border rounded ${dragging ? 'bg-qrigray-100' : ''}`}>
               <DropZone
                 subtitle='To generate a script we need you to add some data.'

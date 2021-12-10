@@ -1,27 +1,29 @@
-import classNames from 'classnames'
 import React, { useState, useEffect, useRef } from 'react'
+import classNames from 'classnames'
 
 import { ValidationError } from '../features/session/state/formValidation'
 
 export interface EditableLabelProps {
   name: string
-  value: string
+  value?: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
   readOnly?: boolean
   validator?: (name: string) => ValidationError
-  onChange: (name: string, value: string) => void
+  onChange?: (name: string, value: string) => void
   placeholder?: string
+  textClassName?: string
   autoEditing?: boolean
 }
 
 const EditableLabel: React.FC<EditableLabelProps> = ({
   name,
-  value,
+  value = '',
   size = 'md',
   readOnly = false,
   validator,
   onChange,
   placeholder,
+  textClassName = '',
   autoEditing = false
 }) => {
   const [editing, setEditing] = useState(autoEditing)
@@ -35,8 +37,6 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
   }, [value])
 
   useEffect(() => {
-    inputEl.current?.select()
-
     // escape key press
     const close = (e: KeyboardEvent) => {
       if (e.keyCode === 27) {
@@ -59,6 +59,7 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (!onChange) { return }
     // apply the change
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -77,31 +78,41 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
     }
   }
 
-  const handleBlur = (e: any) => {
+  const handleBlur = () => {
     setEditing(false)
+    if (!onChange) { return }
+    onChange(name, edit)
   }
 
-  let sizeClassname = ''
+  let sizeClassName = ''
   switch (size) {
     case "sm":
-      sizeClassname = 'h-6'
+      sizeClassName = 'h-6'
       break
   }
 
-  return (editing
-    ? <input
+  return (
+    <input
       ref={inputEl}
       type='text'
-      className={`${sizeClassname} border-qrigray-400 focus:ring-0 block w-full rounded-lg bg-transparent`}
+      className={classNames(`focus:border-transparent focus:ring-transparent block w-full rounded-lg bg-transparent px-1 py-0 transitions-all duration-100`,
+        sizeClassName,
+        textClassName,
+        {
+          'border-qripink-600 bg-white border focus:border-qripink-600': editing,
+          'border-transparent focus:border-transparent': !editing,
+          'px-1 py-0': size === 'md',
+          '-ml-2 px-2 pt-1.5 pb-1 leading-tight': size === 'lg',
+          'hover:border-qrigray-300': !readOnly
+        })}
       value={edit}
+      placeholder={placeholder}
+      disabled={readOnly}
       onKeyPress={handleKeyPress}
       onChange={handleChange}
-      placeholder={placeholder}
       onBlur={handleBlur}
-      autoFocus
+      onClick={handleLabelClick}
     />
-    : <h3 className={classNames({ 'cursor-pointer whitespace-nowrap h-6': !readOnly })}
-          onClick={handleLabelClick}>{value || placeholder}</h3>
   )
 }
 

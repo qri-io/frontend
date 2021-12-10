@@ -55,7 +55,7 @@ const DropZone: React.FunctionComponent<DropZoneProps> = (props) => {
       <div className='text-center mt-3.5'>
         {file
           ? <>
-            <p>Uploaded {file?.name}({humanFileSize(file?.size)})</p>
+            <p>Selected <span className='font-mono'>{file?.name}</span> ({humanFileSize(file?.size)})</p>
             <label htmlFor="upload">
               <input {...getInputProps()} className='hidden' id="upload" type="file" name="file"/>
             </label>

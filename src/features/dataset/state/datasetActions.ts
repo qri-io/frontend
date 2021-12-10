@@ -9,7 +9,6 @@ import {
   SET_HEADER
 } from "./datasetState"
 import { VersionInfo } from "../../../qri/versionInfo"
-import { mapVersionInfo } from "../../collection/state/collectionActions"
 
 export const bodyPageSizeDefault = 50
 
@@ -65,8 +64,7 @@ export function renameDataset (current: QriRef, next: QriRef): ApiActionThunk {
         body: {
           current: refStringFromQriRef(humanRef(current)),
           next: refStringFromQriRef(humanRef(next))
-        },
-        map: mapVersionInfo
+        }
       }
     }
 
