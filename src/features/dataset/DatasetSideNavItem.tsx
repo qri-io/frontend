@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import ReactTooltip from 'react-tooltip'
 import classNames from 'classnames'
+import numeral from 'numeral'
 
 import Icon from '../../chrome/Icon'
 
@@ -55,13 +56,20 @@ const DatasetSideNavItem: React.FC<DatasetSideNavItemProps> = ({
   let numberContent
 
   if (number && (number > 0)) {
+    let displayNumber: string = number.toString()
+
+    if (number > 1000) {
+      displayNumber = numeral(number).format('0.0a')
+    }
+
     numberContent = (
       <div
         className='text-center bg-qrigray-400 px-1 py-0.5 rounded-sm text-white leading-none absolute -top-0 right-1'
         style={{
           fontSize: 9
         }}
-      >{number}</div>
+        title={number > 1000 ? number.toString() : ''}
+      >{displayNumber}</div>
     )
   }
 
