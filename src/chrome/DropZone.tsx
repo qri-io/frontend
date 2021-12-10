@@ -1,29 +1,14 @@
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
+import IconLink from './IconLink'
+import Link from './Link'
+import fileSize from '../utils/fileSize'
+
 export interface DropZoneProps {
   onFileUpload: (file: File[]) => void
   subtitle?: string
   file?: File
-}
-
-function humanFileSize (bytes: number, dp = 1) {
-  const thresh = 1024
-
-  if (Math.abs(bytes) < thresh) {
-    return bytes.toString() + ' B'
-  }
-
-  const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-  let u = -1
-  const r = 10 ** dp
-
-  do {
-    bytes /= thresh
-    ++u
-  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1)
-
-  return bytes.toFixed(dp) + ' ' + units[u]
 }
 
 function getFileType (fileName: string) {
@@ -44,7 +29,22 @@ const DropZone: React.FunctionComponent<DropZoneProps> = (props) => {
     }
   }, [])
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop })
+  const clearFile = () => {
+    setUploadError('')
+    onFileUpload([])
+  }
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    noClick: true,
+    noKeyboard: true
+  })
+
+  const handleSelectClick = (e: any) => {
+    // prevents the file picker "double open" bug
+    e.stopPropagation()
+    open()
+  }
 
   return (<div {...getRootProps()} className='drag-drop h-full w-full flex items-center justify-center' id='drag-drop'>
     <div className='text-md text-qrigray-400 flex flex-col items-center'>
@@ -55,18 +55,14 @@ const DropZone: React.FunctionComponent<DropZoneProps> = (props) => {
       <div className='text-center mt-3.5'>
         {file
           ? <>
-            <p>Selected <span className='font-mono'>{file?.name}</span> ({humanFileSize(file?.size)})</p>
-            <label htmlFor="upload">
-              <input {...getInputProps()} className='hidden' id="upload" type="file" name="file"/>
-            </label>
+            <span className='font-mono'>{file?.name}</span> ({fileSize(file?.size)}) <IconLink icon='close' size='xs' className='inline-block' onClick={clearFile}/>
+            <input {...getInputProps()} className='hidden' id="upload" type="file" name="file"/>
             {uploadError && <p className='text-red-500 text-xs'>{uploadError}</p>}
           </>
           : <>
             {subtitle && <p>{subtitle}</p>}
-            <label htmlFor="upload">
-              <span className='cursor-pointer text-qritile-600'>Select </span>
-              <input accept=".csv" {...getInputProps()} className='hidden' id="upload" type="file" name="file"/>
-            </label>
+            <Link colorClassName='cursor-pointer text-qritile-600 hover:text-qritile-700' onClick={handleSelectClick}>Select </Link>
+            <input accept=".csv" {...getInputProps()} className='hidden' id="upload" type="file" name="file"/>
             or Drop your file here
             {uploadError && <p className='text-red-500 text-xs'>{uploadError}</p>}
           </>}

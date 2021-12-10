@@ -58,9 +58,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   const fileUploadHandler = (files: File[]) => {
-    if (files[0]) {
-      dispatch(setManualDatasetCreationFile(files[0]))
-    }
+    dispatch(setManualDatasetCreationFile(files[0] || null))
   }
 
   let component: JSX.Element

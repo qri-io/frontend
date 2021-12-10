@@ -19,7 +19,7 @@ function getLabel (count: number, label: string) {
   return `${count} ${label}${count === 1 ? '' : 's'}`
 }
 
-export interface DatasetHeaderRenderProps {
+export interface DatasetHeaderLayoutProps {
   // contains the username and dataset name
   qriRef: QriRef
   // contains the title
@@ -38,7 +38,7 @@ export interface DatasetHeaderRenderProps {
   onTitleChange?: (_: string, value: string) => void
 }
 
-const DatasetHeaderRender: React.FC<DatasetHeaderRenderProps> = ({
+const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
   qriRef,
   header,
   headerLoading = false,
@@ -119,4 +119,4 @@ const DatasetHeaderRender: React.FC<DatasetHeaderRenderProps> = ({
   </div>
 )
 
-export default DatasetHeaderRender
+export default DatasetHeaderLayout

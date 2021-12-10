@@ -16,12 +16,12 @@ import { ModalType, selectNavExpanded } from "../app/state/appState"
 import { QriRef, newQriRef } from "../../qri/ref"
 import { loadDatasetCommits } from "../commits/state/commitActions"
 
-export interface DatasetHeaderRenderProps {
+export interface DatasetHeaderLayoutProps {
   qriRef: QriRef
   title: string
 }
 
-const DatasetHeaderRender: React.FC<DatasetHeaderRenderProps> = ({
+const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
   qriRef,
   title,
   children
@@ -69,4 +69,4 @@ const DatasetHeaderRender: React.FC<DatasetHeaderRenderProps> = ({
   )
 }
 
-export default DatasetHeaderRender
+export default DatasetHeaderLayout

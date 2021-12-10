@@ -6,7 +6,7 @@ interface LinkProps {
   to?: string
   className?: string
   colorClassName?: string
-  onClick?: () => void
+  onClick?: (e: any) => void
   id?: string
 }
 

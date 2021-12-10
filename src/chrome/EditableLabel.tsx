@@ -12,7 +12,6 @@ export interface EditableLabelProps {
   onChange?: (name: string, value: string) => void
   placeholder?: string
   textClassName?: string
-  autoEditing?: boolean
 }
 
 const EditableLabel: React.FC<EditableLabelProps> = ({
@@ -23,10 +22,9 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
   validator,
   onChange,
   placeholder,
-  textClassName = '',
-  autoEditing = false
+  textClassName = ''
 }) => {
-  const [editing, setEditing] = useState(autoEditing)
+  const [editing, setEditing] = useState(false)
   const [edit, setEdit] = useState(value)
 
   const inputEl = useRef<HTMLInputElement>(null)

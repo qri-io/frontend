@@ -30,9 +30,7 @@ export const ComponentItem: React.FC<ComponentItemProps> = ({
   selected,
   icon,
   filename,
-  color = 'dark',
-  border = false,
-  manualCreation = false
+  border = false
 }) => {
   const tabContent = (
     <>

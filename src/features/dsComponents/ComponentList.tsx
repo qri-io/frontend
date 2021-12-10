@@ -87,7 +87,6 @@ const ComponentList: React.FC<ComponentListProps> = ({
 
           return (
             <ComponentItem
-              manualCreation
               key={name}
               name={name}
               displayName={displayName}
@@ -102,7 +101,6 @@ const ComponentList: React.FC<ComponentListProps> = ({
           return (
             <ComponentItem
               disabled={name !== 'body'}
-              manualCreation
               key={name}
               name={name}
               displayName={displayName}
@@ -114,7 +112,6 @@ const ComponentList: React.FC<ComponentListProps> = ({
         } else {
           return (
             <ComponentItem
-              manualCreation
               key={name}
               name={name}
               displayName={displayName}

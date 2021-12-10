@@ -56,6 +56,7 @@ export const manualDatasetCreationReducer = createReducer(initialState, {
     state.meta.title = action.text
   },
   'API_SAVEUPLOAD_REQUEST': (state: ManualDatasetCreationState, action) => {
+    state.uploadError = ''
     state.fileUploading = true
   },
   'API_SAVEUPLOAD_SUCCESS': (state: ManualDatasetCreationState, action) => {

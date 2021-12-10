@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
-import DatasetHeaderRender from './DatasetHeaderRender'
+import DatasetHeaderLayout from './DatasetHeaderLayout'
 import {
   renameDataset
 } from './state/datasetActions'
@@ -43,7 +43,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   }
 
   return (
-    <DatasetHeaderRender
+    <DatasetHeaderLayout
       qriRef={qriRef}
       header={header}
       headerLoading={headerLoading}
@@ -52,7 +52,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       editable={editable}
     >
       {children}
-    </DatasetHeaderRender>
+    </DatasetHeaderLayout>
   )
 }
 
