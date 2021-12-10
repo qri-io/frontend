@@ -56,7 +56,7 @@ const DatasetMiniHeader: React.FC<DatasetMiniHeaderProps> = ({
                   Share
                 </Button>
               */}
-              <DownloadDatasetButton title='Download the full dataset version as a zip file' qriRef={qriRef} type='primary' small />
+              <DownloadDatasetButton title='Download this version' qriRef={qriRef} type='primary' small />
             </>
           )}
         </div>

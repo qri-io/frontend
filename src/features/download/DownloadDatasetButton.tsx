@@ -29,7 +29,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
   small = false,
   type = 'primary-outline',
   asIconLink = false,
-  body = false,
+  body = true,
   hideIcon = false,
   title
 }) => {

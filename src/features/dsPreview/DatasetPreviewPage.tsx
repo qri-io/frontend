@@ -116,10 +116,10 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                         </div>
                         <div className='flex flex-shrink-0'>
                           <div className='hidden md:block'>
-                            <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' hideIcon type='primary' qriRef={qriRef} />
+                            <DownloadDatasetButton title='Download the latest version' hideIcon type='primary' qriRef={qriRef} />
                           </div>
                           <div className='block md:hidden'>
-                            <DownloadDatasetButton title='Download the latest version of this dataset as a zip file' type='primary' qriRef={qriRef} small />
+                            <DownloadDatasetButton title='Download the latest version' type='primary' qriRef={qriRef} small />
                           </div>
                         </div>
                       </div>
