@@ -18,6 +18,12 @@ export function selectLogCount (qriRef: QriRef): (state: RootState) => number {
   }
 }
 
+export function selectIsRunLogLoading (): (state: RootState) => boolean {
+  return (state: RootState) => {
+    return state.activityFeed.loading
+  }
+}
+
 export interface ActivityFeedState {
   datasetLogs: Record<string, LogItem[]>
   loading: boolean

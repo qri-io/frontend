@@ -5,7 +5,7 @@ import useDimensions from 'react-use-dimensions'
 
 import ActivityList from './ActivityList'
 import { loadDatasetLogs } from './state/activityFeedActions'
-import { newDatasetLogsSelector } from './state/activityFeedState'
+import { newDatasetLogsSelector, selectIsRunLogLoading } from './state/activityFeedState'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 import { cancelRun, runNow } from '../workflow/state/workflowActions'
 import { selectLatestRunId } from '../workflow/state/workflowState'
@@ -17,6 +17,7 @@ import { selectSessionUser } from '../session/state/sessionState'
 import { selectDatasetHeader } from "../dataset/state/datasetState"
 import { setHeader } from "../dataset/state/datasetActions"
 import Head from '../app/Head'
+import Spinner from '../../chrome/Spinner'
 
 export interface DatasetActivityFeedProps {
   qriRef: QriRef
@@ -30,6 +31,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   const latestRun = useSelector(selectRun(latestRunId))
   const user = useSelector(selectSessionUser)
   const header = useSelector(selectDatasetHeader)
+  const isLoading = useSelector(selectIsRunLogLoading())
   const isDatasetOwner = user.username === qriRef.username
   const dispatch = useDispatch()
 
@@ -73,6 +75,25 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
     }
   }, [ logs, displayLogs ])
 
+  let resultsContent = (
+    <div className='rounded-none h-full'>
+      <ActivityList
+        log={displayLogs}
+        showDatasetName={false}
+        containerHeight={tableContainerHeight}
+      />
+    </div>
+  )
+
+  // if loading  show a spinner
+  if (isLoading) {
+    resultsContent = (
+      <div className='h-full w-full flex justify-center items-center'>
+        <Spinner color='#43B3B2' />
+      </div>
+    )
+  }
+
   return (
     <DatasetFixedLayout headerChildren={<RunNowButton status={latestRun?.status} onClick={handleRunNowClick} onCancel={handleCancelRun} isDatasetOwner={isDatasetOwner} />}>
       <Head data={{
@@ -82,13 +103,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
         appView: true
       }}/>
       <div ref={tableContainer} className='overflow-y-hidden rounded-lg relative flex-grow bg-white'>
-        <div className='rounded-none h-full'>
-          <ActivityList
-            log={displayLogs}
-            showDatasetName={false}
-            containerHeight={tableContainerHeight}
-          />
-        </div>
+        {resultsContent}
       </div>
     </DatasetFixedLayout>
   )
