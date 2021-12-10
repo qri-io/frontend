@@ -17,6 +17,9 @@ module.exports = {
           '100%': {maxHeight: 'none'}
         }
       },
+      minWidth: {
+        'md': '28rem'
+      },
       colors: {
         qripink: {
           100: '#FFD9E5',
