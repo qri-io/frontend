@@ -57,7 +57,7 @@ const BodyHeader: React.FC<BodyHeaderProps> = ({
             </>}
         </div>
       </div>
-      {showDownload && <DownloadDatasetButton title="Download this version's body" qriRef={qriRefFromDataset(dataset)} asIconLink body />}
+      {showDownload && <DownloadDatasetButton title="Download data" qriRef={qriRefFromDataset(dataset)} asIconLink body />}
       {showExpand && <IconLink icon='fullScreen' onClick={onToggleExpanded} />}
     </div>
   )
