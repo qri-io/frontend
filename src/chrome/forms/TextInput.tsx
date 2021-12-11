@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import InputLabel from './InputLabel'
 
 interface TextInputProps {
@@ -40,16 +40,17 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
   const [stateValue, setStateValue] = React.useState(value)
 
-  React.useEffect(() => {
-    if (onChange) {
-      onChange(stateValue)
-    }
-  }, [stateValue, onChange])
-
   const handleOnChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement
     setStateValue(target.value)
+    if (onChange) {
+      onChange(target.value)
+    }
   }
+
+  useEffect(() => {
+    setStateValue(value)
+  }, [value])
 
   return (
     <div className={`${className}`}>

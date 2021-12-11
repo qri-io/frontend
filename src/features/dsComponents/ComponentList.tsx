@@ -60,6 +60,7 @@ export interface ComponentListProps {
   allowClickMissing?: boolean
   // for showing a gray border around the selected tab to contrast with white background
   border?: boolean
+  manualCreation?: boolean
 }
 
 const ComponentList: React.FC<ComponentListProps> = ({
@@ -70,7 +71,8 @@ const ComponentList: React.FC<ComponentListProps> = ({
   selectedComponent,
   // history
   allowClickMissing = false,
-  border = false
+  border = false,
+  manualCreation = false
 }) => {
   const componentNames = Object.keys(dataset)
 
@@ -85,19 +87,31 @@ const ComponentList: React.FC<ComponentListProps> = ({
 
           return (
             <ComponentItem
-                key={name}
-                name={name}
-                displayName={displayName}
-                icon={icon}
-                status={fileStatus}
-                selected={selectedComponent === name}
-                tooltip={tooltip}
-                border={border}
+              key={name}
+              name={name}
+              displayName={displayName}
+              icon={icon}
+              status={fileStatus}
+              selected={selectedComponent === name}
+              tooltip={tooltip}
+              border={border}
               />
           )
-        }
-        return (
-          <ComponentItem
+        } else if (manualCreation) {
+          return (
+            <ComponentItem
+              disabled={name !== 'body'}
+              key={name}
+              name={name}
+              displayName={displayName}
+              icon={icon}
+              selected={selectedComponent === name}
+              border={border}
+            />
+          )
+        } else {
+          return (
+            <ComponentItem
               key={name}
               name={name}
               displayName={displayName}
@@ -106,7 +120,8 @@ const ComponentList: React.FC<ComponentListProps> = ({
               border={border}
               disabled
             />
-        )
+          )
+        }
       })
       }
     </div>

@@ -15,6 +15,10 @@ module.exports = {
           '0%': {maxHeight: 0},
           '99%': {maxHeight: 1000},
           '100%': {maxHeight: 'none'}
+        },
+        'flyUp':{
+          '0%': {top: 40},
+          '100%': {top: 0}
         }
       },
       minWidth: {
@@ -150,7 +154,8 @@ module.exports = {
       animation: {
         'spin-slow': 'spin 3s linear infinite',
         'appear': 'appear 0.8s ease-in-out',
-        'disappear': 'appear 0.8s ease-in-out reverse'
+        'disappear': 'appear 0.8s ease-in-out reverse',
+        'flyUp': 'flyUp 0.5s ease-in-out'
       },
       borderRadius: {
         ...borderRadius,

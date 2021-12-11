@@ -10,6 +10,7 @@ import LogInModal from '../../session/modal/LogInModal'
 import SignUpModal from '../../session/modal/SignUpModal'
 import WorkflowSplashModal from '../../workflow/modal/SplashModal'
 import DeployModal from '../../workflow/modal/DeployModal'
+import ManualCreationModal, { ManualCreationModalProps } from '../../manualDatasetCreation/modal/ManualCreationModal'
 import AddTriggerModal from '../../trigger/modal/AddTriggerModal'
 import NewDatasetModal from "../../dataset/modal/NewDatasetModal"
 
@@ -64,7 +65,7 @@ const Modal: React.FC<any> = () => {
 
         <div
           style={{ ...modalPositionStyles }}
-          className={`w-full md:w-auto inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle ${modal.customWidth ? '' : 'md:min-w-md max-w-xl'}`}
+          className={`inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle`}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"
@@ -87,6 +88,8 @@ const Modal: React.FC<any> = () => {
                 return <WorkflowSplashModal {...modal.props} />
               case ModalType.deploy:
                 return <DeployModal {...modal.props} />
+              case ModalType.manualCreation:
+                return <ManualCreationModal {...modal.props as ManualCreationModalProps} />
               case ModalType.addTrigger:
                 return <AddTriggerModal {...modal.props} />
               case ModalType.newDataset:

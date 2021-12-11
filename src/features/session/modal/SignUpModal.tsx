@@ -59,7 +59,7 @@ const SignUpModal: React.FC = () => {
   }
 
   return (
-    <div className='bg-white py-9 px-5 text-center w-full rounded-2xl mx-auto' style={{ maxWidth: 440 }}>
+    <div className='bg-white py-9 px-5 sm:px-24 text-center w-full rounded-2xl mx-auto' style={{ maxWidth: 440 }}>
       <div className='w-10 m-auto mb-4'>
         <QriLogo size='sm'/>
       </div>
