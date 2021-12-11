@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import ReactDataTable from 'react-data-table-component'
 
 import DurationFormat from '../../chrome/DurationFormat'
 import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import Icon from '../../chrome/Icon'
+import IconLink from '../../chrome/IconLink'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import RunStatusBadge from '../run/RunStatusBadge'
 import { LogItem } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
 import { runEndTime } from '../../utils/runEndTime'
+
+import { loadRunInfo } from './state/activityFeedActions'
+import { selectRunInfo, outputFromRunLog } from './state/activityFeedState'
 
 interface ActivityListProps {
   log: LogItem[]
@@ -22,6 +27,9 @@ const ActivityList: React.FC<ActivityListProps> = ({
   showDatasetName = true,
   containerHeight
 }) => {
+  const [expandedRows, setExpandedRows] = useState<string[]>([])
+  const dispatch = useDispatch()
+
   // react-data-table column definitions
   const columns = [
     {
@@ -83,6 +91,26 @@ const ActivityList: React.FC<ActivityListProps> = ({
           return <div className='w-full'>--</div>
         }
       }
+    },
+    {
+      name: '',
+      grow: 1,
+      // eslint-disable-next-line react/display-name
+      cell: (row: LogItem) => {
+        const expanded = expandedRows.includes(row.runID)
+        return (
+          <div className='flex justify-end flex-grow' onClick={() => {
+            if (expanded) {
+              setExpandedRows(expandedRows.filter(d => d !== row.runID))
+            } else {
+              dispatch(loadRunInfo(row.runID))
+              setExpandedRows([...expandedRows, row.runID])
+            }
+          }}>
+            <IconLink icon={expanded ? 'caretUp' : 'caretDown'} colorClassName='text-qrigray-400 hover:text-qripink-600'/>
+          </div>
+        )
+      }
     }
   ]
 
@@ -96,6 +124,32 @@ const ActivityList: React.FC<ActivityListProps> = ({
     }
   ]
 
+  const ExpandableComponent = (row: {
+    data: LogItem
+  }) => {
+    const runState = useSelector(selectRunInfo(row.data.runID))
+    let logs
+    if (runState?.runLog) {
+      logs = outputFromRunLog(runState.runLog)
+    } else if (runState?.error) {
+      logs = <div className='text-red-500'>Unable to retrieve logs</div>
+    } else {
+      logs = <div className='text-loading-ellipsis'>loading</div>
+    }
+
+    return (
+      <div>
+        <pre className='p-8 font-mono bg-qrigray-1000 text-qrigray-100 max-h-96 overflow-y-scroll'>
+          {logs}
+        </pre>
+      </div>
+    )
+  }
+
+  interface LogItemWithExpanded extends LogItem {
+    expanded: boolean
+  }
+
   // borrows styles and icons from CollectionTable
   return (
     <ReactDataTable
@@ -103,6 +157,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
       data={log}
       customStyles={customStyles}
       fixedHeader
+      expandableRows
+      expandableRowExpanded={(row: LogItemWithExpanded) => {
+        return expandedRows.includes(row.runID)
+      }}
+      expandableRowsHideExpander
+      expandableRowsComponent={ExpandableComponent}
       conditionalRowStyles={conditionalRowStyles}
       fixedHeaderScrollHeight={`${String(containerHeight)}px`}
       noHeader

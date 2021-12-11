@@ -57,7 +57,7 @@ export function NewRunStep (data: Record<string, any>): RunStep {
   }
 }
 
-function toMilliFromNano (na: number): number {
+export function toMilliFromNano (na: number): number {
   return na / 1000000
 }
 
