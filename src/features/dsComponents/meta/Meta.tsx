@@ -1,25 +1,19 @@
 import React from 'react'
 import { useDispatch, useSelector } from "react-redux"
 
-// import Store, { RouteProps } from '../../../models/store'
 import { Meta, Citation, License, User, standardFieldNames, NewMeta } from '../../../qri/dataset'
-// import { QriRef, qriRefFromRoute } from '../../../models/qriRef'
-
-// import { connectComponentToProps } from '../../../utils/connectComponentToProps'
-
-// import { selectDataset, selectDatasetIsLoading } from '../../../selections'
 import Link from '../../../chrome/Link'
 import KeyValueTable from '../KeyValueTable'
 import MetaChips from '../../../chrome/MetaChips'
 import TextInput from "../../../chrome/forms/TextInput"
+import TextareaInput from "../../../chrome/forms/TextareaInput"
 import KeysInput from "../../../chrome/forms/KeysInput"
-import { selectEditableDatasetMeta, selectIsDatasetEditable } from "../../dataset/state/datasetState"
-import { setDatasetMeta } from "../../dataset/state/datasetActions"
-// import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
+import { selectDatasetEditorDataset } from "../../datasetEditor/state/datasetEditorState"
+import { setDatasetEditorMeta } from "../../datasetEditor/state/datasetEditorActions"
 
 interface MetaProps {
   data?: Meta
-  // loading: boolean
+  editor?: boolean
 }
 
 const renderValue = (value: string | string[] | object) => {
@@ -104,9 +98,12 @@ const renderTable = (keys: string[], data: Meta) => {
   )
 }
 
-export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
-  const editableMeta = useSelector(selectEditableDatasetMeta)
-  const isDatasetEditable = useSelector(selectIsDatasetEditable)
+export const MetaComponent: React.FunctionComponent<MetaProps> = ({
+  data,
+  editor
+}) => {
+  const dataset = useSelector(selectDatasetEditorDataset)
+  const { meta: editableMeta } = dataset
   const dispatch = useDispatch()
 
   const onTitleChange = (title: string) => {
@@ -124,7 +121,7 @@ export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
   const onMetaChange = (key: keyof Meta, value: string | string[]) => {
     const newMeta = NewMeta({ ...editableMeta })
     newMeta[key] = value
-    dispatch(setDatasetMeta(newMeta))
+    dispatch(setDatasetEditorMeta(newMeta))
   }
 
   let standard: string[] = []
@@ -139,14 +136,14 @@ export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
   }
   return (
     <div className='h-full w-full overflow-auto'>
-      {isDatasetEditable
+      {editor
         ? <>
           <div className='mb-5'>
             <h2 className='font-bold text-sm mb-6'>Standard Metadata</h2>
             <h5 className='text-xs text-qrigray-400 font-bold mb-2'>Title</h5>
             <TextInput className='mb-3' placeholder='Give your project a title' onChange={onTitleChange} name='title' value={editableMeta?.title || ''}/>
             <h5 className='text-xs text-qrigray-400 font-bold mb-2'>Description</h5>
-            <TextInput className='mb-3' placeholder='Write a description' name='title' onChange={onDescriptionChange} value={editableMeta?.description || ''}/>
+            <TextareaInput className='mb-3 w-full' placeholder='Write a description' name='title' onChange={onDescriptionChange} value={editableMeta?.description || ''}/>
             <h5 className='text-xs text-qrigray-400 font-bold mb-2'>Keywords</h5>
             <KeysInput placeholder={editableMeta?.keywords?.length ? '' : 'Type a keyword and press enter'} value={editableMeta?.keywords || []} onChange={onKeysChange} />
           </div>

@@ -19,10 +19,12 @@ import WebAppLayout from '../layouts/WebAppLayout'
 
 interface DatasetWrapperProps {
   fetchData?: boolean
+  editor?: boolean
 }
 
 const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
   fetchData = true,
+  editor = false,
   children
 }) => {
   const qriRef = newQriRef(useParams())
@@ -41,7 +43,7 @@ const DatasetWrapper: React.FC<DatasetWrapperProps> = ({
 
   let content = (
     <div className='flex overflow-hidden w-full flex-grow'>
-      <DatasetNavSidebar qriRef={qriRef} />
+      <DatasetNavSidebar qriRef={qriRef} editor={editor} />
       {children}
     </div>
   )

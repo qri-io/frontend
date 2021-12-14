@@ -1,11 +1,11 @@
 import React from "react"
 import classNames from 'classnames'
 
-interface ManualCreationBodyWrapperProps {
+interface DatasetEditorBodyWrapperProps {
   className?: string
 }
 
-const ManualCreationBodyWrapper: React.FC<ManualCreationBodyWrapperProps> = ({
+const DatasetEditorBodyWrapper: React.FC<DatasetEditorBodyWrapperProps> = ({
   className,
   children
 }) => (
@@ -14,4 +14,4 @@ const ManualCreationBodyWrapper: React.FC<ManualCreationBodyWrapperProps> = ({
   </div>
 )
 
-export default ManualCreationBodyWrapper
+export default DatasetEditorBodyWrapper

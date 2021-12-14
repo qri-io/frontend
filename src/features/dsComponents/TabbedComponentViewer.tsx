@@ -15,8 +15,8 @@ export interface TabbedComponentViewerProps {
   preview?: boolean
   // used to disable loading state when rendering the component viewer in the workflow
   showLoadingState?: boolean
-  // used to enable ds upload
-  manualCreation?: boolean
+  // renders the component tabs as editors
+  editor?: boolean
 }
 
 export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
@@ -26,7 +26,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
   preview = false,
   showLoadingState = true,
   children,
-  manualCreation = false
+  editor = false
 }) => {
   let dataset = ds
 
@@ -40,7 +40,7 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
         dataset={dataset}
         selectedComponent={selectedComponent}
         border={border}
-        manualCreation={manualCreation}
+        editor={editor}
       />
       <div
         className={classNames('rounded-md bg-white w-full overflow-auto rounded-tl-none rounded-tr-none flex-grow flex flex-col px-4', {
@@ -50,11 +50,11 @@ export const TabbedComponentViewer: React.FC<TabbedComponentViewerProps> = ({
         {
           children || (
             <DatasetComponent
-              manualCreation={manualCreation}
               dataset={dataset}
               componentName={selectedComponent}
               preview={preview}
               showLoadingState={showLoadingState}
+              editor={editor}
             />
           )
         }

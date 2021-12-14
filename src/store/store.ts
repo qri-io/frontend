@@ -24,9 +24,9 @@ import { UserProfileState, userProfileReducer } from '../features/userProfile/st
 import { eventsReducer, EventsState } from "../features/events/state/eventsState"
 import { splashReducer, SplashState } from "../features/splash/state/splashState"
 import {
-  manualDatasetCreationReducer,
-  ManualDatasetCreationState
-} from "../features/manualDatasetCreation/state/manualDatasetCreationState"
+  datasetEditorReducer,
+  DatasetEditorState
+} from "../features/datasetEditor/state/datasetEditorState"
 
 export const history = createBrowserHistory()
 
@@ -47,7 +47,7 @@ export interface RootState {
   userProfile: UserProfileState
   workflow: WorkflowState
   edits: DatasetEditsState
-  manualDatasetCreation: ManualDatasetCreationState
+  datasetEditor: DatasetEditorState
   events: EventsState
   websocket: WebsocketState
 }
@@ -72,7 +72,7 @@ const rootReducer = (h: History) => combineReducers({
   userProfile: userProfileReducer,
   workflow: workflowReducer,
   edits: datasetEditsReducer,
-  manualDatasetCreation: manualDatasetCreationReducer,
+  datasetEditor: datasetEditorReducer,
   events: eventsReducer,
   websocket: websocketReducer
 })

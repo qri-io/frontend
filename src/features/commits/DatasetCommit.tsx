@@ -13,15 +13,13 @@ export interface DatasetCommitProps {
   active?: boolean
   isLink?: boolean
   loading?: boolean
-  isEditable?: boolean
 }
 
 const DatasetCommit: React.FC<DatasetCommitProps> = ({
   logItem,
   active = false,
   isLink = true,
-  loading = false,
-  isEditable = false
+  loading = false
 }) => {
   const location = useLocation()
 
@@ -35,13 +33,13 @@ const DatasetCommit: React.FC<DatasetCommitProps> = ({
       </ContentLoader>
       )
     : (
-      <DatasetCommitInfo isEditable={isEditable} item={logItem} small />
+      <DatasetCommitInfo item={logItem} small />
       )
 
   const containerClassNames = classNames('block rounded-md px-3 py-3 mb-6 w-full overflow-x-hidden',
     active && 'bg-white', !active && 'text-qrigray-400 border border-qrigray-300')
 
-  if (isLink && !loading && !isEditable) {
+  if (isLink && !loading) {
     return (
       <Link
         className={containerClassNames}

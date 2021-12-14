@@ -21,7 +21,7 @@ import UserProfile from './features/userProfile/UserProfile'
 import WorkflowPage from './features/workflow/WorkflowPage'
 import DatasetWrapper from './features/dsComponents/DatasetWrapper'
 import PasswordReset from "./features/session/PasswordReset"
-import ManualDatasetCreation from "./features/manualDatasetCreation/ManualDatasetCreation"
+import NewDatasetEditor from "./features/datasetEditor/NewDatasetEditor"
 
 export const PrivateRoute: React.FC<any> = ({ path, children }) => {
   const user = useSelector(selectSessionUser)
@@ -51,14 +51,14 @@ export default function Routes () {
       <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
       <Route path='/workflow/new'>
-        <DatasetWrapper fetchData={false}>
+        <DatasetWrapper fetchData={false} editor>
           <WorkflowPage qriRef={{ username: '', name: '' }} />
         </DatasetWrapper>
       </Route>
 
       <Route path='/dataset/new'>
         <DatasetWrapper fetchData={false}>
-          <ManualDatasetCreation />
+          <NewDatasetEditor />
         </DatasetWrapper>
       </Route>
 

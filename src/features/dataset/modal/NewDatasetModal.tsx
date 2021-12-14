@@ -6,14 +6,14 @@ import IconButton from "../../../chrome/IconButton"
 import { clearModal } from "../../app/state/appActions"
 import { trackGoal } from "../../analytics/analytics"
 import { resetDatasetState } from "../state/datasetActions"
-import { resetManualDatasetCreationState } from "../../manualDatasetCreation/state/manualDatasetCreationActions"
+import { resetDatasetEditorState } from "../../datasetEditor/state/datasetEditorActions"
 
 const NewDatasetModal: React.FC<{}> = () => {
   const onLinkClick = (resetManualState?: boolean) => {
     dispatch(clearModal())
     dispatch(resetDatasetState())
     if (resetManualState) {
-      dispatch(resetManualDatasetCreationState())
+      dispatch(resetDatasetEditorState())
     }
   }
 

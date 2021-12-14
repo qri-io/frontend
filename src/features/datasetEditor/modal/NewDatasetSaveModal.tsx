@@ -10,23 +10,23 @@ import IconButton from '../../../chrome/IconButton'
 import { clearModal, setModalLocked } from '../../app/state/appActions'
 
 import {
-  selectManualDatasetFileUploading,
-  selectManualDatasetUploadError
-} from "../state/manualDatasetCreationState"
+  selectDatasetEditorLoading,
+  selectDatasetEditorError
+} from "../state/datasetEditorState"
 
-export interface ManualCreationModalProps {
+export interface NewDatasetSaveModalProps {
   username: string
   name: string
 }
 
-const ManualCreationModal: React.FC<ManualCreationModalProps> = ({
+const NewDatasetSaveModal: React.FC<NewDatasetSaveModalProps> = ({
   username,
   name
 }) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const fileUploading = useSelector(selectManualDatasetFileUploading)
-  const uploadError = useSelector(selectManualDatasetUploadError)
+  const fileUploading = useSelector(selectDatasetEditorLoading)
+  const uploadError = useSelector(selectDatasetEditorError)
 
   let message = {
     colorClassName: 'text-qritile-600',
@@ -77,7 +77,7 @@ const ManualCreationModal: React.FC<ManualCreationModalProps> = ({
 
   const handleGoToEditorClick = () => {
     dispatch(clearModal())
-    history.push(`/${username}/${name}/history`)
+    history.push(`/${username}/${name}/edit#meta`)
   }
 
   return (
@@ -122,4 +122,4 @@ const ManualCreationModal: React.FC<ManualCreationModalProps> = ({
   )
 }
 
-export default ManualCreationModal
+export default NewDatasetSaveModal

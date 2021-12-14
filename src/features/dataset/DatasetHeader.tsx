@@ -48,8 +48,8 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
       header={header}
       headerLoading={headerLoading}
       border={border}
-      onRename={handleRename}
-      editable={editable}
+      onNameChange={handleRename}
+      userCanEditDataset={editable}
     >
       {children}
     </DatasetHeaderLayout>

@@ -234,9 +234,8 @@ const MetaEditor: React.FC<MetaEditorProps> = ({
               value={data[field.field]}
               placeholder={field.placeholder}
               maxLength={field.maxLength}
-              onChange={(e: React.FormEvent) => {
-                const target = e.target as HTMLInputElement
-                handleWrite(field.field, target.value)
+              onChange={(d: string) => {
+                handleWrite(field.field, d)
               }}
             />)
           case 'tags':

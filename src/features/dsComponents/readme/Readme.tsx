@@ -4,23 +4,26 @@ import MarkdownIt from 'markdown-it'
 import SimpleMDE from 'react-simplemde-editor'
 
 import { NewReadme, Readme } from '../../../qri/dataset'
-import { selectEditableDatasetReadme, selectIsDatasetEditable } from "../../dataset/state/datasetState"
-import { setDatasetReadme } from "../../dataset/state/datasetActions"
+import { selectDatasetEditorDataset } from "../../datasetEditor/state/datasetEditorState"
+import { setDatasetEditorReadme } from "../../datasetEditor/state/datasetEditorActions"
 
 export interface ReadmeProps {
   data?: Readme
+  editor?: boolean
 }
 
-export const ReadmeComponent: React.FC<ReadmeProps> = ({ data }) => {
+export const ReadmeComponent: React.FC<ReadmeProps> = ({
+  data,
+  editor
+}) => {
   const md = new MarkdownIt()
-  const isDatasetEditable = useSelector(selectIsDatasetEditable)
-  const readme = useSelector(selectEditableDatasetReadme)
+  const { readme } = useSelector(selectDatasetEditorDataset)
   const dispatch = useDispatch()
 
   const handleReadmeChange = (v: string) => {
     const newReadme = NewReadme({ ...readme })
     newReadme.text = v
-    dispatch(setDatasetReadme(newReadme))
+    dispatch(setDatasetEditorReadme(newReadme))
   }
 
   // overrides the default rendering of markdown-it to make sure links open in a new window
@@ -49,7 +52,7 @@ export const ReadmeComponent: React.FC<ReadmeProps> = ({ data }) => {
       el.innerHTML = md.render(markdown)
     }
   }, [markdown])
-  if (isDatasetEditable) {
+  if (editor) {
     return <SimpleMDE
       id="readme-editor"
       value={readme?.text || ''}

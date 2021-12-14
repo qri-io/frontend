@@ -20,15 +20,13 @@ interface DatasetCommitInfoProps {
   flex?: boolean
   // determines if the status text will have a hover effect.
   hover?: boolean
-  isEditable?: boolean
 }
 
 const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
   item,
   small = false,
   inRow = false,
-  hover = false,
-  isEditable = false
+  hover = false
 }) => {
   return (
     <div className={classNames('truncate group', {
@@ -39,7 +37,7 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
       <div className={classNames('text-black flex justify-between items-center mb-2', {
         'font-semibold': !inRow
       })}>
-        <div className={classNames(`dataset_commit_info_text truncate transition-colors flex-grow ${isEditable ? 'text-qrigray-400' : ''} ${hover && 'group-hover:underline group-hover:text-qripink-600'}`, {
+        <div className={classNames(`dataset_commit_info_text truncate transition-colors flex-grow ${hover && 'group-hover:underline group-hover:text-qripink-600'}`, {
         })} title={item?.commitTitle}>{item.commitTitle}</div>
       </div>
       {/* end first row */}
