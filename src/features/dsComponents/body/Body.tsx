@@ -7,6 +7,7 @@ import BodyTable from './BodyTable'
 import BodyJson from './BodyJson'
 import { loadBody } from '../../dataset/state/datasetActions'
 import { newQriRef } from '../../../qri/ref'
+import NoBody from './NoBody'
 // import { ApiActionThunk } from '../../../store/api'
 // import { DetailsType, StatsDetails, Details } from '../../../models/details'
 // import { RouteProps } from '../../../models/store'
@@ -68,6 +69,11 @@ const Body: React.FC<BodyProps> = ({
   if (loading) {
     return <BodyTable loading />
   }
+
+  if (!body) {
+    return <NoBody />
+  }
+
   if (!structure) {
     return (
       <div className='h-full w-full flex justify-center items-center'>
