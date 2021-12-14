@@ -73,14 +73,14 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
   switch (line.type) {
     case EventLogLineType.ETTransformStart:
       run.status = 'running'
-      run.initID = line.data.initID
-      run.startTime = new Date(toMilliFromNano(line.ts))
+      run.initID = line.payload.initID
+      run.startTime = new Date(toMilliFromNano(line.timestamp))
       run.steps = []
       break
     case EventLogLineType.ETTransformStop:
-      run.initID = line.data.initID
-      run.status = line.data.status || 'failed'
-      run.stopTime = new Date(toMilliFromNano(line.ts))
+      run.initID = line.payload.initID
+      run.status = line.payload.status || 'failed'
+      run.stopTime = new Date(toMilliFromNano(line.timestamp))
       if (run.startTime) {
         run.duration = toNanoFromMilli(run.startTime?.getTime() - run.stopTime?.getTime())
       }
@@ -90,16 +90,16 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
       if (run.steps === undefined) {
         run.steps = []
       }
-      const s = NewRunStep(line.data)
+      const s = NewRunStep(line.payload)
       s.status = 'running'
-      s.startTime = new Date(line.ts)
+      s.startTime = new Date(line.timestamp)
       run.steps.push(s)
       break
     case EventLogLineType.ETTransformStepStop:
       const step = lastStep(run)
       if (step) {
-        step.stopTime = new Date(line.ts)
-        step.status = line.data.status || 'failed'
+        step.stopTime = new Date(line.timestamp)
+        step.status = line.payload.status || 'failed'
         if (step.startTime) {
           step.duration = toNanoFromMilli(step.stopTime.getTime() - step.startTime.getTime())
         }
@@ -109,7 +109,7 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
       if (run.steps === undefined) {
         run.steps = []
       }
-      run.steps.push(NewRunStep(line.data))
+      run.steps.push(NewRunStep(line.payload))
       break
 
     case EventLogLineType.ETPrint:
@@ -124,7 +124,7 @@ export function runAddLogStep (run: Run, line: EventLogLine): Run {
       break
 
     case EventLogLineType.ETDatasetPreview:
-      run.dsPreview = NewDataset(line.data)
+      run.dsPreview = NewDataset(line.payload)
   }
   return run
 }

@@ -25,17 +25,17 @@ export enum EventLogLineType {
 
 export interface EventLogLine {
   type: EventLogLineType
-  ts: number
+  timestamp: number
   sessionID: string
-  data: Record<string, any>
+  payload: Record<string, any>
 }
 
 export function NewEventLogLine (data: Record<string, any>): EventLogLine {
   return {
     type: data.type,
-    ts: data.ts,
+    timestamp: data.timestamp,
     sessionID: data.sessionID,
-    data: data.data
+    payload: data.payload
   }
 }
 

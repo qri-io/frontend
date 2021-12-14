@@ -14,7 +14,7 @@ export const selectRuns = (state: RootState): Run[] => {
   const unique = Array.from(new Set(events.map(d => d.sessionID))).filter(id => id !== runId)
 
   return unique.map((d) => {
-    return NewRunFromEventLog(d, events.filter(e => e.data.mode !== 'apply'))
+    return NewRunFromEventLog(d, events.filter(e => e.payload.mode !== 'apply'))
   })
 }
 
@@ -36,7 +36,7 @@ export const eventsReducer = createReducer(initialState, {
 
 function addRunEvent (state: EventsState, action: EventLogAction) {
   state.events.push(action.data)
-  state.events.sort((a, b) => a.ts - b.ts)
+  state.events.sort((a, b) => a.timestamp - b.timestamp)
 }
 
 function removeEvent (state: EventsState, action: RemoveEventAction) {

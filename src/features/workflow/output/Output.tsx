@@ -42,7 +42,7 @@ const Output: React.FC<OutputProps> = ({ data, status, wasEdited }) => {
             case EventLogLineType.ETError:
               return <LogLinePrint key={i} line={line} />
             case EventLogLineType.ETDatasetPreview:
-              return <DatasetPreview key={i} data={line.data as Dataset}/>
+              return <DatasetPreview key={i} data={line.payload as Dataset} />
             default:
               return <p key={i}>{JSON.stringify(line, undefined, 2)}</p>
           }
