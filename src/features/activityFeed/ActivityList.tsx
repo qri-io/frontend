@@ -7,12 +7,14 @@ import RelativeTimestamp from '../../chrome/RelativeTimestamp'
 import Icon from '../../chrome/Icon'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import RunStatusBadge from '../run/RunStatusBadge'
-import { LogItem } from '../../qri/log'
+import { VersionInfo } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
 import { runEndTime } from '../../utils/runEndTime'
+import { useSelector } from 'react-redux'
+import { selectQueuedRunID } from '../runQueue/state/runQueueState'
 
 interface ActivityListProps {
-  log: LogItem[]
+  log: VersionInfo[]
   showDatasetName?: boolean
   containerHeight: number
 }
@@ -26,18 +28,21 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const columns = [
     {
       name: 'Status',
-      selector: (row: LogItem) => row.runStatus,
+      selector: (row: VersionInfo) => row.runStatus,
       width: '200px',
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => <RunStatusBadge statusText={row.runStatus === 'waiting' ? 'Waiting' : ''} status={row.runStatus === 'waiting' ? 'running' : row.runStatus} />
+      cell: (row: VersionInfo) => {
+        const queuedRunID = useSelector(selectQueuedRunID(row.initID))
+        return <RunStatusBadge statusText={row.runStatus === 'waiting' ? 'Waiting' : ''} status={row.runStatus === 'waiting' ? 'running' : row.runStatus} />
+      }
     },
     {
       name: 'name',
-      selector: (row: LogItem) => row.name,
+      selector: (row: VersionInfo) => row.name,
       grow: 2,
       omit: !showDatasetName,
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => {
+      cell: (row: VersionInfo) => {
         const { username, name } = row
         return (
           <div className='hover:text-qrilightblue hover:underline'>
@@ -48,10 +53,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Time',
-      selector: (row: LogItem) => row.runStart,
+      selector: (row: VersionInfo) => row.runStart,
       width: '180px',
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => {
+      cell: (row: VersionInfo) => {
         const runEnd = runEndTime(row.runStart, row.runDuration)
         return (
           <div className='text-qrigray-400 flex flex-col text-sm'>
@@ -68,10 +73,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Commit',
-      selector: (row: LogItem) => row.commitMessage,
+      selector: (row: VersionInfo) => row.commitMessage,
       width: '180px',
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => {
+      cell: (row: VersionInfo) => {
         if (!['failed', 'unchanged', 'running'].includes(row.runStatus)) {
           const versionLink = `/${row.username}/${row.name}/at${row.path}/history/body`
           return (
@@ -88,7 +93,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   const conditionalRowStyles = [
     {
-      when: (row: LogItem) => row.runStatus === 'waiting',
+      when: (row: VersionInfo) => row.runStatus === 'waiting',
       classNames: ['animate-appear', 'overflow-hidden', 'min-height-0-important'],
       style: {
         height: 58

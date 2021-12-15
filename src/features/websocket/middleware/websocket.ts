@@ -31,6 +31,8 @@ import {
   ETAutomationDeploySaveDatasetEnd,
   ETAutomationDeploySaveWorkflowStart,
   ETAutomationDeploySaveWorkflowEnd,
+  ETAutomationRunQueuePush,
+  ETAutomationRunQueuePop,
   ETTransformStart,
   WSSubscribeRequest,
   WSUnsubscribeRequest,
@@ -171,6 +173,12 @@ const middleware = () => {
           break
         case ETAutomationDeploySaveDatasetStart:
           dispatch(deploySaveDatasetStarted(event.data, event.sessionID))
+          break
+        case ETAutomationRunQueuePush:
+          dispatch(runQueuePush(event.sessionID, event.data))
+          break
+        case ETAutomationRunQueuePop:
+          dispatch(runQueuePop(event.sessionID, event.data))
           break
         case ETAutomationDeploySaveDatasetEnd:
           dispatch(deploySaveDatasetEnded(event.data, event.sessionID))

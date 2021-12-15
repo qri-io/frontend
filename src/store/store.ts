@@ -23,6 +23,7 @@ import { WebsocketState, websocketReducer } from '../features/websocket/state/we
 import { UserProfileState, userProfileReducer } from '../features/userProfile/state/userProfileState'
 import { eventsReducer, EventsState } from "../features/events/state/eventsState"
 import { splashReducer, SplashState } from "../features/splash/state/splashState"
+import { runQueueReducer, RunQueueState } from '../features/runQueue/state/runQueueState'
 
 export const history = createBrowserHistory()
 
@@ -35,6 +36,7 @@ export interface RootState {
   dsPreview: DsPreviewState
   deploy: DeployState
   router: RouterState
+  runQueue: RunQueueState
   scroller: ScrollerState
   search: SearchState
   session: SessionState
@@ -59,6 +61,7 @@ const rootReducer = (h: History) => combineReducers({
   // https://github.com/reduxjs/redux-toolkit/issues/506#issuecomment-614295927
   // router: connectRouter(h) as any as Reducer<RouterState>,
   router: connectRouter(h),
+  runQueue: runQueueReducer,
   scroller: scrollerReducer,
   search: searchReducer,
   session: sessionReducer,

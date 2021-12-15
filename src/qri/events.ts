@@ -69,6 +69,16 @@ export const ETAutomationDeploySaveWorkflowEnd = "automation:DeploySaveWorkflowE
 export const ETAutomationDeploySaveDatasetStart = "automation:DeploySaveDatasetStart"
 export const ETAutomationDeploySaveDatasetEnd = "automation:DeploySaveDatasetEnd"
 
+// ETAutomationRunQueuePush signals the run is queued to execute
+// Payload will be a initID
+// SessionID will be a runID
+export const ETAutomationRunQueuePush = "automation:RunQueuePush"
+
+// ETAutomationRunQueuePop signals the run is queued to execute
+// Payload will be a initID
+// SessionID will be a runID
+export const ETAutomationRunQueuePop = "automation:RunQueuePop"
+
 // Websocket message types describe the different types of messages that can be
 // sent over the websocket connection to establish the authentication handshake
 export const WSSubscribeRequest = "subscribe:request"

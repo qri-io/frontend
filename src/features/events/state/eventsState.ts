@@ -4,14 +4,12 @@ import { EventLogLine } from "../../../qri/eventLog"
 import { NewRunFromEventLog, Run } from "../../../qri/run"
 import { RootState } from "../../../store/store"
 import {
-  AddWaitingEventAction,
   EventLogAction,
   RemoveEventAction
 } from "./eventsActions"
 
 export const RUN_EVENT_LOG = 'RUN_EVENT_LOG'
 export const REMOVE_EVENT = 'REMOVE_EVENT'
-export const RUN_EVENT_ADD_WAITING = 'RUN_EVENT_ADD_WAITING'
 
 export const selectRuns = (state: RootState): Run[] => {
   const { events } = state.events
@@ -26,8 +24,6 @@ export const selectRuns = (state: RootState): Run[] => {
 export const selectRun = (sessionId: string): (state: RootState) => Run =>
   (state: RootState) => NewRunFromEventLog(sessionId, state.events.events)
 
-export const selectWaitingEventId = (state: RootState): string => state.events.waitingEventId
-
 export interface EventsState {
   events: EventLogLine[]
   waitingEventId: string
@@ -40,14 +36,8 @@ const initialState: EventsState = {
 
 export const eventsReducer = createReducer(initialState, {
   RUN_EVENT_LOG: addRunEvent,
-  RUN_EVENT_ADD_WAITING: addWaitingRunEvent,
   REMOVE_EVENT: removeEvent
 })
-
-function addWaitingRunEvent (state: EventsState, action: AddWaitingEventAction) {
-  state.events.push(action.data)
-  state.waitingEventId = action.id
-}
 
 function addRunEvent (state: EventsState, action: EventLogAction) {
   state.events = state.events.filter(e => e.type !== 'tf:Waiting')

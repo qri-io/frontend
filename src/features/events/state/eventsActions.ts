@@ -1,7 +1,7 @@
-import { EventLogLine, EventLogLineType } from "../../../qri/eventLog"
+import { EventLogLine } from "../../../qri/eventLog"
 
 import {
-  REMOVE_EVENT, RUN_EVENT_ADD_WAITING,
+  REMOVE_EVENT,
   RUN_EVENT_LOG
 } from "./eventsState"
 
@@ -17,20 +17,6 @@ export interface RemoveEventAction {
 
 export interface AddWaitingEventAction extends EventLogAction{
   id: string
-}
-
-export function addWaitingEvent (id: string): AddWaitingEventAction {
-  const data: EventLogLine = {
-    type: EventLogLineType.ETTransformWaiting,
-    ts: 0,
-    sessionID: id,
-    data: { status: 'waiting', id }
-  }
-  return {
-    type: RUN_EVENT_ADD_WAITING,
-    data: data,
-    id
-  }
 }
 
 export function runEventLog (event: EventLogLine): EventLogAction {
