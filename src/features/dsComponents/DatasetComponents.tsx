@@ -5,12 +5,18 @@ import { useLocation } from 'react-router-dom'
 
 import { ComponentName, getRankedComponentNames } from '../../qri/dataset'
 import { newQriRef, refParamsFromLocation } from '../../qri/ref'
-import { selectDataset, selectIsDatasetLoading } from '../dataset/state/datasetState'
+import {
+  selectDataset,
+  selectIsDatasetLoading
+} from '../dataset/state/datasetState'
 import DatasetCommitList from '../commits/DatasetCommitList'
 import CommitSummaryHeader from '../commits/CommitSummaryHeader'
 import TabbedComponentViewer from './TabbedComponentViewer'
 import DownloadDatasetButton from '../download/DownloadDatasetButton'
-import { loadDataset, setBodyLoading } from '../dataset/state/datasetActions'
+import {
+  loadDataset,
+  setBodyLoading
+} from '../dataset/state/datasetActions'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 import Head from '../app/Head'
 import { pathToDatasetHistory } from '../dataset/state/datasetPaths'

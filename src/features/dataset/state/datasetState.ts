@@ -1,9 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
-import Dataset, { NewDataset } from '../../../qri/dataset'
+import Dataset, { Meta, NewDataset } from '../../../qri/dataset'
 import { qriRefFromString } from '../../../qri/ref'
-import { RenameDatasetAction, ResetDatasetStateAction } from './datasetActions'
+import {
+  RenameDatasetAction,
+  ResetDatasetStateAction
+} from './datasetActions'
 import { selectSessionUser } from '../../session/state/sessionState'
 import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
 import { ApiResponseAction } from "../../../store/api"
@@ -32,7 +35,7 @@ export const selectIsBodyLoading = (state: RootState): boolean => state.dataset.
 
 export const selectIsHeaderLoading = (state: RootState): boolean => state.dataset.headerLoading
 
-export const selectTitleError = (state: RootState): string => state.dataset.titleError
+export const selectDatasetMeta = (state: RootState): Meta | undefined => state.dataset.dataset.meta
 
 export const selectSessionUserCanEditDataset = (state: RootState): boolean => {
   const u = selectSessionUser(state)

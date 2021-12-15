@@ -1,20 +1,19 @@
 import React from 'react'
+import { useDispatch, useSelector } from "react-redux"
 
-// import Store, { RouteProps } from '../../../models/store'
-import { Meta, Citation, License, User, standardFieldNames } from '../../../qri/dataset'
-// import { QriRef, qriRefFromRoute } from '../../../models/qriRef'
-
-// import { connectComponentToProps } from '../../../utils/connectComponentToProps'
-
-// import { selectDataset, selectDatasetIsLoading } from '../../../selections'
+import { Meta, Citation, License, User, standardFieldNames, NewMeta } from '../../../qri/dataset'
 import Link from '../../../chrome/Link'
 import KeyValueTable from '../KeyValueTable'
 import MetaChips from '../../../chrome/MetaChips'
-// import SpinnerWithIcon from '../../chrome/SpinnerWithIcon'
+import TextInput from "../../../chrome/forms/TextInput"
+import TextareaInput from "../../../chrome/forms/TextareaInput"
+import KeysInput from "../../../chrome/forms/KeysInput"
+import { selectDatasetEditorDataset } from "../../datasetEditor/state/datasetEditorState"
+import { setDatasetEditorMeta } from "../../datasetEditor/state/datasetEditorActions"
 
 interface MetaProps {
   data?: Meta
-  // loading: boolean
+  editor?: boolean
 }
 
 const renderValue = (value: string | string[] | object) => {
@@ -99,25 +98,64 @@ const renderTable = (keys: string[], data: Meta) => {
   )
 }
 
-export const MetaComponent: React.FunctionComponent<MetaProps> = ({ data }) => {
-  if (!data) return null
+export const MetaComponent: React.FunctionComponent<MetaProps> = ({
+  data,
+  editor
+}) => {
+  const dataset = useSelector(selectDatasetEditorDataset)
+  const { meta: editableMeta } = dataset
+  const dispatch = useDispatch()
 
-  // TODO (b5) - this should happen at the point of ingest from the API
-  const ignoreFields = ['qri', 'path']
-  const standard = standardFieldNames.filter((key) => !!data[key])
-  const extra = Object.keys(data).filter((key) => {
-    return !(~standardFieldNames.findIndex((sKey) => (key === sKey)) || ~ignoreFields.findIndex((iKey) => (key === iKey)))
-  })
+  const onTitleChange = (title: string) => {
+    onMetaChange('title', title)
+  }
 
+  const onDescriptionChange = (description: string) => {
+    onMetaChange('description', description)
+  }
+
+  const onKeysChange = (keywords: string[]) => {
+    onMetaChange('keywords', keywords)
+  }
+
+  const onMetaChange = (key: keyof Meta, value: string | string[]) => {
+    const newMeta = NewMeta({ ...editableMeta })
+    newMeta[key] = value
+    dispatch(setDatasetEditorMeta(newMeta))
+  }
+
+  let standard: string[] = []
+  let extra: string[] = []
+  if (data) {
+    // TODO (b5) - this should happen at the point of ingest from the API
+    const ignoreFields = ['qri', 'path']
+    standard = standardFieldNames.filter((key) => !!data[key])
+    extra = Object.keys(data).filter((key) => {
+      return !(~standardFieldNames.findIndex((sKey) => (key === sKey)) || ~ignoreFields.findIndex((iKey) => (key === iKey)))
+    })
+  }
   return (
     <div className='h-full w-full overflow-auto'>
-      <div className='text-xl font-normal text-black font-medium mb-2'>Standard Metadata</div>
-      {renderTable(standard, data)}
-
-      {(extra.length > 0) && <div>
-        <h4 className='text-xl font-normal text-black font-medium mb-2'>Additional Metadata</h4>
-        {renderTable(extra, data)}
-      </div>}
+      {editor
+        ? <>
+          <div className='mb-5'>
+            <h2 className='font-bold text-sm mb-6'>Standard Metadata</h2>
+            <h5 className='text-xs text-qrigray-400 font-bold mb-2'>Title</h5>
+            <TextInput className='mb-3' placeholder='Give your project a title' onChange={onTitleChange} name='title' value={editableMeta?.title || ''}/>
+            <h5 className='text-xs text-qrigray-400 font-bold mb-2'>Description</h5>
+            <TextareaInput className='mb-3 w-full' placeholder='Write a description' name='title' onChange={onDescriptionChange} value={editableMeta?.description || ''}/>
+            <h5 className='text-xs text-qrigray-400 font-bold mb-2'>Keywords</h5>
+            <KeysInput placeholder={editableMeta?.keywords?.length ? '' : 'Type a keyword and press enter'} value={editableMeta?.keywords || []} onChange={onKeysChange} />
+          </div>
+        </>
+        : <>
+          <div className='text-xl font-normal text-black font-medium mb-2'>Standard Metadata</div>
+          {data && renderTable(standard, data)}
+          {data && (extra.length > 0) && <div>
+            <h4 className='text-xl font-normal text-black font-medium mb-2'>Additional Metadata</h4>
+            {renderTable(extra, data)}
+          </div>}
+        </>}
     </div>
   )
 }

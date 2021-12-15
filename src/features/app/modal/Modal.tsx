@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { ModalType, selectModal } from '../state/appState'
 import RemoveDatasetModal, { RemoveDatasetModalProps } from '../../dataset/modal/RemoveDatasetModal'
-import EditDatasetTitleModal, { EditDatasetTitleModalProps } from "../../dataset/modal/EditDatasetTitleModal"
 import ScheduleModal from '../../workflow/modal/ScheduleModal'
 import UnsavedChangesModal from '../../workflow/modal/UnsavedChangesModal'
 import LogInModal from '../../session/modal/LogInModal'
 import SignUpModal from '../../session/modal/SignUpModal'
 import WorkflowSplashModal from '../../workflow/modal/SplashModal'
 import DeployModal from '../../workflow/modal/DeployModal'
-import ManualCreationModal, { ManualCreationModalProps } from '../../manualDatasetCreation/modal/ManualCreationModal'
+import NewDatasetSaveModal, { NewDatasetSaveModalProps } from '../../datasetEditor/modal/NewDatasetSaveModal'
 import AddTriggerModal from '../../trigger/modal/AddTriggerModal'
 import NewDatasetModal from "../../dataset/modal/NewDatasetModal"
 
@@ -78,8 +77,6 @@ const Modal: React.FC<any> = () => {
                 return <UnsavedChangesModal {...modal.props} />
               case ModalType.removeDataset:
                 return <RemoveDatasetModal {...modal.props as RemoveDatasetModalProps} />
-              case ModalType.editDatasetTitle:
-                return <EditDatasetTitleModal {...modal.props as EditDatasetTitleModalProps} />
               case ModalType.logIn:
                 return <LogInModal {...modal.props} />
               case ModalType.signUp:
@@ -88,8 +85,8 @@ const Modal: React.FC<any> = () => {
                 return <WorkflowSplashModal {...modal.props} />
               case ModalType.deploy:
                 return <DeployModal {...modal.props} />
-              case ModalType.manualCreation:
-                return <ManualCreationModal {...modal.props as ManualCreationModalProps} />
+              case ModalType.newDatasetSave:
+                return <NewDatasetSaveModal {...modal.props as NewDatasetSaveModalProps} />
               case ModalType.addTrigger:
                 return <AddTriggerModal {...modal.props} />
               case ModalType.newDataset:

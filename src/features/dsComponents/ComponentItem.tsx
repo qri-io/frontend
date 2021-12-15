@@ -19,7 +19,6 @@ export interface ComponentItemProps {
   tooltip?: string
   // for showing a gray border around the selected tab to contrast with white background
   border?: boolean
-  manualCreation?: boolean
 }
 
 export const ComponentItem: React.FC<ComponentItemProps> = ({

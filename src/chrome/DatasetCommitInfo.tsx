@@ -38,7 +38,6 @@ const DatasetCommitInfo: React.FC<DatasetCommitInfoProps> = ({
         'font-semibold': !inRow
       })}>
         <div className={classNames(`dataset_commit_info_text truncate transition-colors flex-grow ${hover && 'group-hover:underline group-hover:text-qripink-600'}`, {
-
         })} title={item?.commitTitle}>{item.commitTitle}</div>
       </div>
       {/* end first row */}

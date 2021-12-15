@@ -20,7 +20,7 @@ export enum ModalType {
   signUp = 'signUp',
   workflowSplash = 'workflowSplash',
   deploy = 'deploy',
-  manualCreation = 'manualCreation',
+  newDatasetSave = 'newDatasetSave',
   addTrigger = 'addTrigger',
   newDataset = 'newDataset'
 }

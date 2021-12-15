@@ -7,6 +7,7 @@
 
 import React, { useEffect } from 'react'
 import { Route, Switch, useParams } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { useDispatch } from "react-redux"
 
 import WorkflowPage from '../workflow/WorkflowPage'
@@ -15,10 +16,10 @@ import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed'
 import DatasetPreviewPage from '../dsPreview/DatasetPreviewPage'
 import DatasetIssues from '../issues/DatasetIssues'
 import { newQriRef } from '../../qri/ref'
-import DatasetEditor from '../dsComponents/DatasetEditor'
 import DatasetWrapper from '../dsComponents/DatasetWrapper'
 import { loadDataset, loadHeader } from "./state/datasetActions"
 import { PrivateRoute } from '../../routes'
+import ExistingDatasetEditor from "../../features/datasetEditor/ExistingDatasetEditor"
 
 const DatasetRoutes: React.FC<{}> = () => {
   // TODO(b5): this qriRef is missing all params after /:username/:name b/c
@@ -29,6 +30,8 @@ const DatasetRoutes: React.FC<{}> = () => {
   // bugs
   const qriRef = newQriRef(useParams())
   const dispatch = useDispatch()
+  const { pathname } = useLocation()
+  const isEditor = pathname.includes('/edit')
 
   useEffect(() => {
     dispatch(loadHeader({ username: qriRef.username, name: qriRef.name, path: qriRef.path }))
@@ -38,7 +41,7 @@ const DatasetRoutes: React.FC<{}> = () => {
   }, [dispatch, qriRef.username, qriRef.name])
 
   return (
-    <DatasetWrapper>
+    <DatasetWrapper editor={isEditor}>
       <Switch>
         {/* dataset preview */}
         <Route path='/:username/:name' exact>
@@ -68,16 +71,14 @@ const DatasetRoutes: React.FC<{}> = () => {
           <DatasetActivityFeed qriRef={qriRef} />
         </Route>
 
+        <Route path='/:username/:name/edit'>
+          <ExistingDatasetEditor />
+        </Route>
+
         {process.env.REACT_APP_FEATURE_WIREFRAMES &&
           <Route path='/:username/:name/issues'>
             <DatasetIssues qriRef={qriRef} />
           </Route>
-        }
-
-        {process.env.REACT_APP_FEATURE_WIREFRAMES &&
-          <PrivateRoute path='/:username/:name/edit'>
-            <DatasetEditor />
-          </PrivateRoute>
         }
 
       </Switch>

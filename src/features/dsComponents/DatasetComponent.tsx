@@ -14,14 +14,12 @@ import Readme from './readme/Readme'
 import ContentBox from '../../chrome/ContentBox'
 import IconLink from '../../chrome/IconLink'
 import { selectIsBodyLoading, selectIsDatasetLoading } from "../dataset/state/datasetState"
-import DropZone from "../../chrome/DropZone"
-import ManualDatasetMeta from "../manualDatasetCreation/ManualDatasetMeta"
-import ManualDatasetReadMe from "../manualDatasetCreation/ManualDatasetReadMe"
-import ManualCreationBodyWrapper from "../manualDatasetCreation/ManualCreationBodyWrapper"
 import {
-  setManualDatasetCreationFile
-} from "../manualDatasetCreation/state/manualDatasetCreationActions"
-import { selectManualDatasetFile } from "../manualDatasetCreation/state/manualDatasetCreationState"
+  setDatasetEditorFile
+} from "../datasetEditor/state/datasetEditorActions"
+import { selectDatasetEditorFile } from "../datasetEditor/state/datasetEditorState"
+import DatasetEditorBodyWrapper from '../datasetEditor/DatasetEditorBodyWrapper'
+import DropZone from '../../chrome/DropZone'
 
 export interface DatasetComponentProps {
   dataset: Dataset
@@ -29,7 +27,7 @@ export interface DatasetComponentProps {
   // preview is used to change the display of the body table for previews vs history
   preview?: boolean
   showLoadingState?: boolean
-  manualCreation?: boolean
+  editor: boolean
 }
 
 const DatasetComponent: React.FC<DatasetComponentProps> = ({
@@ -37,14 +35,14 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   componentName,
   preview = false,
   showLoadingState = true,
-  manualCreation = false
+  editor = false
 }) => {
   const [ expanded, setExpanded ] = useState(false)
   const [ dragging, setDragging ] = useState(false)
   const dispatch = useDispatch()
   const loading = useSelector(selectIsDatasetLoading)
   const bodyLoading = useSelector(selectIsBodyLoading)
-  const file = useSelector(selectManualDatasetFile)
+  const file = useSelector(selectDatasetEditorFile)
 
   const setDragStateHandler = (dragState: boolean) => {
     return (e: React.SyntheticEvent) => {
@@ -58,97 +56,61 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   }
 
   const fileUploadHandler = (files: File[]) => {
-    dispatch(setManualDatasetCreationFile(files[0] || null))
+    dispatch(setDatasetEditorFile(files[0] || null))
   }
 
   let component: JSX.Element
   let componentHeader: JSX.Element | null = null
-  if (manualCreation) {
-    switch (componentName) {
-      case "body":
-        component = (
-          <ManualCreationBodyWrapper>
-            <div
-              onDragExit={setDragStateHandler(false)}
-              onDragEnter={setDragStateHandler(true)}
-              className={`w-full flex h-full items-center justify-center border rounded ${dragging ? 'bg-qrigray-100' : ''}`}>
-              <DropZone file={file} onFileUpload={fileUploadHandler}/>
-            </div>
-          </ManualCreationBodyWrapper>
-        )
-        componentHeader = null
-        break
-      case 'meta':
-        component = <ManualDatasetMeta/>
-        break
-      case 'structure':
-        component = (
-          <ManualCreationBodyWrapper>
-            <div
-              onDragExit={setDragStateHandler(false)}
-              onDragEnter={setDragStateHandler(true)}
-              className={`w-full flex h-full items-center justify-center border rounded ${dragging ? 'bg-qrigray-100' : ''}`}>
-              <DropZone
-                subtitle='To generate a structure we need you to add some data.'
-                file={file}
-                onFileUpload={fileUploadHandler} />
-            </div>
-          </ManualCreationBodyWrapper>
-        )
-        break
-      case 'transform':
-        component = (
-          <ManualCreationBodyWrapper>
-            <div
-              onDragExit={setDragStateHandler(false)}
-              onDragEnter={setDragStateHandler(true)}
-              className={`w-full flex h-full items-center justify-center border rounded ${dragging ? 'bg-qrigray-100' : ''}`}>
-              <DropZone
-                subtitle='To generate a script we need you to add some data.'
-                onFileUpload={fileUploadHandler}/>
-            </div>
-          </ManualCreationBodyWrapper>)
-        break
-      case 'readme':
-        component = <ManualDatasetReadMe/>
-        break
-      default:
-        component = <div>Unknown component</div>
-    }
-  } else {
-    switch (componentName) {
-      case 'body':
-        component = (
-          <Body loading={showLoadingState ? (loading || bodyLoading) : false} data={dataset} />
-        )
-        componentHeader = (
-          <BodyHeader
+
+  switch (componentName) {
+    case 'body':
+      component = (
+        <Body loading={showLoadingState ? (loading || bodyLoading) : false} data={dataset} />
+      )
+
+      componentHeader = (
+        <BodyHeader
             loading={ showLoadingState ? (loading || bodyLoading) : false }
             dataset={dataset}
             onToggleExpanded={handleToggleExpanded}
             showDownload={!preview}
             showExpand={!expanded}
           />
+      )
+
+      if (editor) {
+        component = (
+          <DatasetEditorBodyWrapper>
+            <div
+              onDragExit={setDragStateHandler(false)}
+              onDragEnter={setDragStateHandler(true)}
+              className={`w-full flex h-full items-center justify-center border rounded ${dragging ? 'bg-qrigray-100' : ''}`}>
+              <DropZone file={file} onFileUpload={fileUploadHandler}/>
+            </div>
+          </DatasetEditorBodyWrapper>
         )
-        break
-      case 'meta':
-        component = <Meta data={dataset.meta}/>
-        break
-      case 'commit':
-        component = <Commit data={dataset.commit}/>
-        break
-      case 'structure':
-        component = <Structure data={dataset.structure}/>
-        break
-      case 'transform':
-        component = <>{ dataset.transform && <Transform data={dataset.transform}/> }</>
-        break
-      case 'readme':
-        component = <Readme data={dataset.readme}/>
-        break
-      default:
-        component = <div>Unknown component</div>
-    }
+
+        componentHeader = null
+      }
+
+      break
+    case 'meta':
+      component = <Meta data={dataset.meta} editor={editor} />
+      break
+    case 'commit':
+      component = <Commit data={dataset.commit}/>
+      break
+    case 'structure':
+      component = <Structure data={dataset.structure}/>
+      break
+    case 'transform':
+      component = <>{ dataset.transform && <Transform data={dataset.transform}/> }</>
+      break
+    case 'readme':
+      component = <Readme data={dataset.readme} editor={editor}/>
+      break
+    default:
+      component = <div>Unknown component</div>
   }
 
   let componentContent = (
@@ -158,7 +120,7 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   )
 
   // exclude the default padding for some components
-  if (['body', 'structure', 'transform'].includes(componentName) || manualCreation) {
+  if (['body', 'structure', 'transform'].includes(componentName)) {
     componentContent = component
   }
 

@@ -1,6 +1,6 @@
 // rendering component for dataset headers
 // this was split from `DatasetHeader` which contains all of the selectors and actions for
-// working with the 'active dataset'.  This component is used directly by ManualDatasetCreation,
+// working with the 'active dataset'.  This component is used directly by DatasetEditorLayout
 // elsewhere it is downstream of DatasetHeader
 import React from 'react'
 import ContentLoader from "react-content-loader"
@@ -28,14 +28,16 @@ export interface DatasetHeaderLayoutProps {
   headerLoading?: boolean
   // whether to show a bottom border
   border?: boolean
-  // editable reflects whether the user owns this dataset and thus can edit the name and title
-  editable?: boolean
-  // affects the behavior of the title. if true, the user can edit the title inline
-  manualCreation?: boolean
+  // allows editing the name, which will call onNameChange
+  nameEditable?: boolean
   // fires when the user renames the dataset
-  onRename?: (_: string, value: string) => void
+  onNameChange?: (_: string, value: string) => void
+  // allows editing the title, which will call onTitleChange
+  titleEditable?: boolean
   // fires when the user changes the dataset title
   onTitleChange?: (_: string, value: string) => void
+  // whether the user can edit the dataset
+  userCanEditDataset?: boolean
 }
 
 const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
@@ -43,10 +45,11 @@ const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
   header,
   headerLoading = false,
   border = false,
-  editable = false,
-  manualCreation = false,
-  onRename,
+  nameEditable = false,
+  onNameChange,
+  titleEditable = false,
   onTitleChange,
+  userCanEditDataset,
   children
 }) => (
   <div className="w-full">
@@ -61,9 +64,9 @@ const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
             : <>
               <Link to={`/${qriRef.username}`} className='whitespace-nowrap' colorClassName='text-qrigray-400 hover:text-qrigray-800'>{qriRef.username}</Link><span className='ml-1'>/</span>
               <EditableLabel
-                  readOnly={!editable}
+                  readOnly={!nameEditable}
                   name='name'
-                  onChange={onRename}
+                  onChange={onNameChange}
                   value={qriRef.name}
                   validator={validateDatasetName}
                 />
@@ -75,16 +78,16 @@ const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
           </ContentLoader>
           : <div className='flex items-center group hover:text'>
             <EditableLabel
-                readOnly={!manualCreation}
-                name='name'
-                onChange={onTitleChange}
-                textClassName='text-2xl font-bold'
-                value={header?.metaTitle || header?.name}
-                size='lg'
-              />
+              readOnly={!titleEditable}
+              name='title'
+              onChange={onTitleChange}
+              textClassName='text-2xl font-bold'
+              value={header?.metaTitle || header?.name}
+              size='lg'
+            />
             {
-                editable && <Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' />
-              }
+              userCanEditDataset && <Link to={`/${qriRef.username}/${qriRef.name}/edit#meta`}><Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' /></Link>
+            }
           </div>
           }
         {(!!header.runID || !!header.bodySize || !!header.downloadCount || !!header.followerCount) && (
