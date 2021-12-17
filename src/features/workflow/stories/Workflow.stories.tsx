@@ -3,20 +3,20 @@ import { Provider } from 'react-redux'
 import { Story, Meta } from '@storybook/react'
 import { ConnectedRouter } from 'connected-react-router'
 
-import Workflow from "../Workflow"
+import WorkflowEditor from "../WorkflowEditor"
 import { configureStore, history } from '../../../store/store'
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 export default {
   title: 'Workflow/Workflow',
-  component: Workflow,
+  component: WorkflowEditor,
   argTypes: {}
 } as Meta
 
 const Template: Story<any> = (args) => (
   <Provider store={configureStore()}>
     <ConnectedRouter history={history}>
-      <Workflow {...args} />
+      <WorkflowEditor {...args} />
     </ConnectedRouter>
   </Provider>
 )

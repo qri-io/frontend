@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router'
 import { useLocation } from 'react-router-dom'
 
-import { ComponentName, getRankedComponentNames } from '../../qri/dataset'
+import { ComponentName } from '../../qri/dataset'
 import { newQriRef, refParamsFromLocation } from '../../qri/ref'
 import {
   selectDataset,
@@ -19,14 +19,12 @@ import {
 } from '../dataset/state/datasetActions'
 import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 import Head from '../app/Head'
-import { pathToDatasetHistory } from '../dataset/state/datasetPaths'
 
 const DatasetComponents: React.FC<{}> = () => {
   const qriRef = newQriRef(refParamsFromLocation(useParams(), useLocation()))
   const dispatch = useDispatch()
   const dataset = useSelector(selectDataset)
   const loading = useSelector(selectIsDatasetLoading)
-  const history = useHistory()
 
   useEffect(() => {
     const ref = newQriRef({ username: qriRef.username, name: qriRef.name, path: qriRef.path })
@@ -35,26 +33,6 @@ const DatasetComponents: React.FC<{}> = () => {
       dispatch(loadDataset(ref))
     }
   }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
-
-  useEffect(() => {
-    if (!dataset) {
-      return
-    }
-
-    const rankedComponents = getRankedComponentNames(dataset)
-    if (rankedComponents.length === 0) {
-      // this should never happen as a dataset should always have at least
-      // one component
-      return
-    }
-
-    if (!qriRef.component || !rankedComponents.includes(qriRef.component)) {
-      // if there is no component specified, or if the specified component
-      // does not exist on this dataset, choose the first available component
-      const ref = newQriRef({ ...qriRef, component: rankedComponents[0] })
-      history.push(pathToDatasetHistory(ref))
-    }
-  }, [history, qriRef.component, dataset])
 
   return (
     <DatasetFixedLayout headerChildren={<></>}>

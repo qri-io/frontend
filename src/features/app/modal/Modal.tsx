@@ -8,7 +8,7 @@ import UnsavedChangesModal from '../../workflow/modal/UnsavedChangesModal'
 import LogInModal from '../../session/modal/LogInModal'
 import SignUpModal from '../../session/modal/SignUpModal'
 import WorkflowSplashModal from '../../workflow/modal/SplashModal'
-import DeployModal from '../../workflow/modal/DeployModal'
+import DeployModal, { DeployModalProps } from '../../workflow/modal/DeployModal'
 import NewDatasetSaveModal, { NewDatasetSaveModalProps } from '../../datasetEditor/modal/NewDatasetSaveModal'
 import AddTriggerModal from '../../trigger/modal/AddTriggerModal'
 import NewDatasetModal from "../../dataset/modal/NewDatasetModal"
@@ -84,7 +84,7 @@ const Modal: React.FC<any> = () => {
               case ModalType.workflowSplash:
                 return <WorkflowSplashModal {...modal.props} />
               case ModalType.deploy:
-                return <DeployModal {...modal.props} />
+                return <DeployModal {...modal.props as DeployModalProps}/>
               case ModalType.newDatasetSave:
                 return <NewDatasetSaveModal {...modal.props as NewDatasetSaveModalProps} />
               case ModalType.addTrigger:

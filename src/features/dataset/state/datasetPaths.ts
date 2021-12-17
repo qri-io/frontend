@@ -34,9 +34,9 @@ export function pathToDatasetEditor (ref: QriRef): string {
 
 export function pathToWorkflowEditor (username: string, name: string): string {
   if (username && name) {
-    return `/${username}/${name}/workflow`
+    return `/${username}/${name}/automation`
   }
-  return '/workflow/new'
+  return '/automation/new'
 }
 
 export function pathToDatasetRuns (username: string, name: string): string {

@@ -31,10 +31,6 @@ def transform(ds, ctx):
 }
 
 export const CSVDownload: Dataset = {
-  meta: {
-    qri: '',
-    title: 'New Automated Dataset'
-  },
   username: '',
   name: '',
   path: '',

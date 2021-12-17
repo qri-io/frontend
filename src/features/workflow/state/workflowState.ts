@@ -9,10 +9,11 @@ import {
   SetTemplateAction,
   AddWorkflowStepAction,
   WorkflowStepAction,
-  UndoWorkflowChanges
+  UndoWorkflowChanges,
+  SetWorkflowDatasetStringAction
 } from './workflowActions'
 import { Workflow, WorkflowBase } from '../../../qrimatic/workflow'
-import { Dataset, NewDataset, qriRefFromDataset } from '../../../qri/dataset'
+import { Dataset, NewDataset, qriRefFromDataset, NewMeta } from '../../../qri/dataset'
 import { QriRef } from '../../../qri/ref'
 
 export const WORKFLOW_CHANGE_TRIGGER = 'WORKFLOW_CHANGE_TRIGGER'
@@ -31,6 +32,8 @@ export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
 export const SET_RUN_MODE = 'SET_RUN_MODE'
 export const WORKFLOW_RESET_DRY_RUN_ID = 'WORKFLOW_RESET_DRY_RUN_ID'
 export const WORKFLOW_RESET_EDITED_CLEARED_CELLS = 'WORKFLOW_RESET_EDITED_CLEARED_CELLS'
+export const SET_WORKFLOW_DATASET_NAME = 'SET_WORKFLOW_DATASET_NAME'
+export const SET_WORKFLOW_DATASET_TITLE = 'SET_WORKFLOW_DATASET_TITLE'
 
 // temp action used to work around the api, auto sets the events
 // of the workflow without having to have a working api
@@ -217,6 +220,15 @@ export const workflowReducer = createReducer(initialState, {
   WORKFLOW_RESET_EDITED_CLEARED_CELLS: (state: WorkflowState, actions: UndoWorkflowChanges) => {
     state.editedCells = state.editedCells.map(c => false)
     state.clearedOutputCells = state.clearedOutputCells.map(c => false)
+  },
+  SET_WORKFLOW_DATASET_NAME: (state: WorkflowState, action: SetWorkflowDatasetStringAction) => {
+    state.dataset.name = action.value
+  },
+  SET_WORKFLOW_DATASET_TITLE: (state: WorkflowState, action: SetWorkflowDatasetStringAction) => {
+    state.dataset.meta = NewMeta({
+      ...state.dataset.meta,
+      title: action.value
+    })
   }
 })
 

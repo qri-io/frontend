@@ -13,6 +13,12 @@ interface DropdownMenuProps {
   oneItem?: boolean
   id?: string
   fullWidth?: boolean
+  // optional classes for the dropdown menu
+  menuClassName?: string
+  // manually open the dropdown
+  openMenu?: boolean
+  // fired when the menu closes
+  onClose?: () => void
 }
 
 // pass this as an item's element property to make a divider
@@ -29,6 +35,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   dropUp = false,
   oneItem = false,
   fullWidth = false,
+  menuClassName = 'p-2.5',
+  openMenu = false,
+  onClose,
   id
 }) => {
   const ref = useRef<HTMLDivElement>(null)
@@ -48,8 +57,22 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     }
   }, [handleClickOutside])
 
+  useEffect(() => {
+    if (openMenu) {
+      setOpen(true)
+    }
+  }, [openMenu])
+
+  useEffect(() => {
+    if (!open && onClose) {
+      onClose()
+    }
+  }, [open])
+
   return (
-    <div id={id} ref={ref} className={classNames('relative inline-block text-left', className)}>
+    <div id={id} ref={ref} className={classNames('relative inline-block text-left', className, {
+      'w-full': fullWidth
+    })}>
       <div onClick={() => { setOpen(!open) }} className='cursor-pointer flex items-center'>
         {(typeof icon === 'string') ? <Icon icon={icon} /> : icon}
       </div>
@@ -70,7 +93,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         aria-labelledby="options-menu"
         style={oneItem ? { minWidth: '9rem', top: -8, right: 30 } : { minWidth: '9rem' }}
       >
-        <div className="p-2.5 flex flex-col" onClick={ () => setOpen(false) }>
+        <div className={classNames('flex flex-col', menuClassName)} onClick={ () => setOpen(false) }>
           {items.map((props, i) => <DropdownMenuItem key={i} {...props} />)}
         </div>
       </div>

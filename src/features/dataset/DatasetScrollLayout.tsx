@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import { newQriRef } from '../../qri/ref'
 import { selectSessionUser } from '../session/state/sessionState'
-import { selectSessionUserCanEditDataset } from './state/datasetState'
+import { selectSessionUserCanEditDataset, selectDatasetHeader } from './state/datasetState'
 import DatasetHeader from './DatasetHeader'
 import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
 import Scroller from '../scroller/Scroller'
@@ -29,6 +29,7 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
   const qriRef = newQriRef(useParams())
   const user = useSelector(selectSessionUser)
   const editable = useSelector(selectSessionUserCanEditDataset)
+  const header = useSelector(selectDatasetHeader)
 
   // This covers the case where a user created a new workflow before logging in.
   // If they login while working on the workflow, the `user` will change, but the
@@ -46,7 +47,7 @@ const DatasetScrollLayout: React.FC<DatasetScrollLayoutProps> = ({
 
   const content = (
     <>
-      <DatasetMiniHeader isNew={isNew} show={!inView} >
+      <DatasetMiniHeader qriRef={qriRef} header={header} show={!inView} >
         {headerChildren}
       </DatasetMiniHeader>
       <div className={classNames('dataset_fixed_layout p-6 w-full', contentClassName)}>

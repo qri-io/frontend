@@ -89,7 +89,7 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({
           tooltip={
             <TooltipContent
               text='Preview'
-              subtext='View an overview of this Dataset'
+              subtext='See an overview of this Dataset'
             />
           }
           disabled={isNewWorkflow || editor}
@@ -112,15 +112,15 @@ const DatasetNavSidebar: React.FC<DatasetNavSidebarProps> = ({
         <DatasetSideNavItem
           id='workflow-editor'
           icon='code'
-          label='Workflow'
+          label='Automation'
           isLink={!isNewWorkflow}
           to={pathToWorkflowEditor(qriRef.username, qriRef.name)}
           expanded={expanded}
           disabled={!canEdit || editor}
           tooltip={
             <TooltipContent
-              text='Workflow Editor'
-              subtext='Automate updates to this dataset'
+              text='Automation'
+              subtext='Write code to keep this Dataset fresh'
             />
           }
         />

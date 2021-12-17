@@ -21,9 +21,9 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
   const schedule = scheduleFromPeriodicity(trigger.periodicity)
 
   return (
-    <div className='flex items-center'>
-      <div className='flex flex-wrap -mx-1 flex-grow'>
-        <div className='my-1 px-1 w-1/2'>
+    <div className=''>
+      <div className=''>
+        <div className='mb-2'>
           <Select
             value={schedule.periodicity}
             onChange={(value: string) => {
@@ -32,6 +32,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
                 periodicity: value
               }))
             }}
+            size='sm'
             options={[
               { value: 'PT10M', label: 'Every 10 Minutes' },
               { value: 'P1H', label: 'Every Hour' },
@@ -42,7 +43,7 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
             fullWidth
           />
         </div>
-        <div className='my-1 px-1 w-1/2'>
+        <div className='mb-2'>
           {
             // show minutes selector
             schedule.periodicity === 'P1H' && (
@@ -54,7 +55,9 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
                     minutes: value
                   }))
                 }}
+                size='sm'
                 options={hourlyItems}
+                fullWidth
               />
             )
           }
@@ -62,10 +65,11 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
             // show a time selector
             schedule.periodicity === 'P1D' && (
               <input
-                className='border border-qrigray-300 rounded-lg text-qrigray-400 text-xs font-normal px-2 w-full focus:border-qripink-600 focus:ring-transparent'
+                className='border border-qrigray-300 rounded text-qrigray-400 text-xs font-normal px-2 w-full focus:border-qripink-600 focus:ring-transparent'
                 style={{
-                  paddingTop: 3.8,
-                  paddingBottom: 3.8
+                  paddingTop: 0.8,
+                  paddingBottom: 0.8,
+                  fontSize: 8
                 }}
                 type='time'
                 value={schedule.time}
@@ -80,8 +84,14 @@ const CronTriggerEditor: React.FC<CronTriggerEditorProps> = ({
           }
         </div>
       </div>
-      <Button onClick={onDelete} className='ml-14 mr-2' type='light'>Delete</Button>
-      <Button id='add_trigger_save_button' onClick={onSave} type='secondary'>Complete</Button>
+      <div className='flex mt-3'>
+        <div className='flex-grow mr-1'>
+          <Button onClick={onDelete} className='w-full' type='light' size='xs' >Delete</Button>
+        </div>
+        <div className='flex-grow ml-1'>
+          <Button id='add_trigger_save_button' className='w-full' onClick={onSave} type='primary' size='xs' >Complete</Button>
+        </div>
+      </div>
     </div>
   )
 }

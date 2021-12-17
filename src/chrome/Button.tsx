@@ -42,8 +42,9 @@ export interface ButtonProps {
   // if icon is present, the button will be slightly taller than normal and will
   // have an icon to the left of the children
   icon?: string
-  // there are three sizes of button, default is 'md'
-  size?: 'sm' | 'md' | 'lg'
+  // default is 'md'
+  // 'xs' is the button used in the automation sidebar
+  size?: 'xs' | 'sm' | 'md' | 'lg'
   // submit makes it a form submit button
   submit?: boolean
   // disabled will make the button "grayed out", no pointer on hover, onClick will do nothing
@@ -76,7 +77,11 @@ const Button: React.FC<ButtonProps> = ({
   let sizeClassName = 'rounded-md px-2.5'
   let caretSize: IconSize = '2xs'
 
-  if (size === 'sm') {
+  if (size === 'xs') {
+    height = 30
+    sizeClassName = 'rounded px-2.5 text-xs'
+    caretSize = '3xs'
+  } else if (size === 'sm') {
     height = 30
     sizeClassName = 'rounded px-2.5'
     caretSize = '3xs'
@@ -89,7 +94,9 @@ const Button: React.FC<ButtonProps> = ({
   // when block is true, the heights and border radii are modified
   if (block) {
     sizeClassName = 'w-full rounded-xl'
-    if (size === 'sm') {
+    if (size === 'xs') {
+      sizeClassName = 'w-full'
+    } else if (size === 'sm') {
       height = 26
     } else if (size === 'md') {
       height = 36

@@ -18,7 +18,9 @@ import {
   WORKFLOW_UNDO_CHANGES,
   WORKFLOW_RESET_DRY_RUN_ID,
   WORKFLOW_CLEAR_TRANSFORM_STEP_OUTPUT,
-  WORKFLOW_RESET_EDITED_CLEARED_CELLS
+  WORKFLOW_RESET_EDITED_CLEARED_CELLS,
+  SET_WORKFLOW_DATASET_NAME,
+  SET_WORKFLOW_DATASET_TITLE
 } from './workflowState'
 import { AnyAction } from 'redux'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
@@ -174,16 +176,22 @@ export function deleteWorkflowTrigger (index: number): WorkflowStepAction {
   }
 }
 
-export function applyWorkflowTransform (w: Workflow, d: Dataset): ApiActionThunk {
+export function applyWorkflowTransform (w: Workflow, d: Dataset, isNew?: boolean): ApiActionThunk {
   return async (dispatch, getState) => {
     let qriRef = qriRefFromDataset(d)
+    let ref = ''
+
+    if (!isNew) {
+      ref = `${qriRef.username}/${qriRef.name}`
+    }
+
     return dispatch({
       type: 'apply',
       [CALL_API]: {
         endpoint: 'auto/apply',
         method: 'POST',
         body: {
-          ref: (qriRef.username && qriRef.name) ? `${qriRef.username}/${qriRef.name}` : '',
+          ref,
           wait: false,
           transform: {
             scriptBytes: btoa(workflowScriptString(w)),
@@ -271,4 +279,23 @@ export function setWorkflowRef (qriRef: QriRef): SetWorkflowRefAction {
 export interface WorkflowInfoAction extends AnyAction {
   type: string
   data: WorkflowInfo
+}
+
+export interface SetWorkflowDatasetStringAction {
+  type: string
+  value: string
+}
+
+export function setWorkflowDatasetName (name: string): SetWorkflowDatasetStringAction {
+  return {
+    type: SET_WORKFLOW_DATASET_NAME,
+    value: name
+  }
+}
+
+export function setWorkflowDatasetTitle (title: string): SetWorkflowDatasetStringAction {
+  return {
+    type: SET_WORKFLOW_DATASET_TITLE,
+    value: title
+  }
 }

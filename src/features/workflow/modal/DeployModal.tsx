@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactCanvasConfetti from 'react-canvas-confetti'
 import classNames from 'classnames'
 
-import Button, { ButtonType } from '../../../chrome/Button'
-import Icon from '../../../chrome/Icon'
+import Button from '../../../chrome/Button'
 import { clearModal, setModalLocked } from '../../app/state/appActions'
-import IconButton from '../../../chrome/IconButton'
-import TextInput from '../../../chrome/forms/TextInput'
-import Checkbox from '../../../chrome/forms/Checkbox'
+
 import { deployWorkflow } from '../../deploy/state/deployActions'
-import { workflowResetDryRunId, setWorkflowRef, workflowResetEditedClearedCells } from '../state/workflowActions'
+import { workflowResetDryRunId, workflowResetEditedClearedCells } from '../state/workflowActions'
 import {
   selectWorkflow,
   selectWorkflowQriRef,
@@ -19,17 +16,23 @@ import {
   selectLatestDryRunId,
   selectLatestRunId
 } from '../state/workflowState'
-import { validateDatasetName } from '../../session/state/formValidation'
 import RunStatusIcon from '../../run/RunStatusIcon'
 import { selectDeployRunId, selectDeployStatus } from '../../deploy/state/deployState'
-import { selectSessionUser } from '../../session/state/sessionState'
-import WarningDialog from '../WarningDialog'
 import { removeEvent } from "../../events/state/eventsActions"
-import { useDebounce } from "use-debounce"
 
-const DEBOUNCE_TIMER = 500
+export interface DeployModalProps {
+  username: string
+  name: string
+  runNow: boolean
+  isNew: boolean
+}
 
-const DeployModal: React.FC = () => {
+const DeployModal: React.FC<DeployModalProps> = ({
+  username,
+  name,
+  runNow,
+  isNew
+}) => {
   const dispatch = useDispatch()
   const latestDryRunId = useSelector(selectLatestDryRunId)
   const latestRunId = useSelector(selectLatestRunId)
@@ -40,38 +43,15 @@ const DeployModal: React.FC = () => {
   const workflow = useSelector(selectWorkflow)
   const dataset = useSelector(selectWorkflowDataset)
   const deployStatus = useSelector(selectDeployStatus(qriRef))
-  const { username } = useSelector(selectSessionUser)
-
-  // determine if the workflow is new by reading /new at the end of the pathname
-  const segments = useLocation().pathname.split('/')
-  const isNew = segments[2] === 'new'
-
-  // local state
-  const [ dsName, setDsName ] = useState('')
-  const [debouncedDsName] = useDebounce(dsName, DEBOUNCE_TIMER)
-  const [ dsNameError, setDsNameError ] = useState<string | null>(null)
-  const [ runNow, setRunNow ] = useState(false)
-  const [ canBeDeployed, setCanBeDeployed ] = useState(!isNew)
-  const [ deploying, setDeploying ] = useState(false)
-
-  useEffect(() => {
-    // when user edits dataset name, make sure it gets written to the workflow's qriref
-    if (isNew) {
-      dispatch(setWorkflowRef({
-        username,
-        name: dsName
-      }))
-    }
-  }, [ dsName, dispatch, username ])
 
   // listen for deployStatus changes
   useEffect(() => {
     // the moment of triumph!
     if (deployStatus === 'deployed') {
-      dispatch(setModalLocked(false))
+      dispatch(setModalLocked(true))
       // navigate to the new dataset's workflow!
       history.push({
-        pathname: `/${qriRef.username}/${qriRef.name}/workflow`
+        pathname: `/${qriRef.username}/${qriRef.name}/automation`
       })
     }
 
@@ -84,18 +64,7 @@ const DeployModal: React.FC = () => {
     dispatch(clearModal())
   }
 
-  const handleDsNameChange = (value: string) => {
-    setDsName(value)
-  }
-
   useEffect(() => {
-    if (isNew) {
-      setCanBeDeployed(false)
-    }
-  }, [ isNew ])
-
-  const handleDeployClick = () => {
-    setDeploying(true)
     dispatch(workflowResetEditedClearedCells())
     dispatch(workflowResetDryRunId())
     if (latestDryRunId) {
@@ -108,55 +77,55 @@ const DeployModal: React.FC = () => {
       dispatch(removeEvent(latestDeployId))
     }
     dispatch(setModalLocked(true))
+
     dispatch(deployWorkflow(qriRef, workflow, dataset, runNow))
-  }
-
-  useEffect(() => {
-    if (isNew) {
-      // validate the dataset name
-      const err = validateDatasetName(debouncedDsName)
-      setDsNameError(err)
-      setCanBeDeployed(debouncedDsName.length > 0 && err === null)
-    }
-  }, [ debouncedDsName, isNew ])
-
-  let heading = 'You\'re almost there!'
-  let subHeading = 'We need one more thing before you can deploy'
-
-  let content = (
-    <div className='text-sm mb-4'>
-      <div className='text-black font-semibold mb-1'>Dataset name *</div>
-      <div className='text-qrigray-400 mb-2'>Give your dataset a descriptive, machine-friendly name</div>
-      <TextInput
-        name='dsName'
-        value={dsName}
-        onChange={handleDsNameChange}
-        error={dsNameError}
-      />
-    </div>
-  )
-
-  // if not new, we don't need to ask for a rename
-  if (!isNew) {
-    heading = 'Ready to Deploy!'
-    subHeading = 'Confirm your settings and mash that deploy button'
-    content = <></>
-  }
+  }, [])
 
   let deployingContent = (
     <>
       <RunStatusIcon status={'running'} size='lg' className='text-black mb-2' />
-      <div className='font-semibold text-xl mb-2'>Deploying Workflow</div>
+      <div className='font-semibold text-xl mb-2'>Committing Changes</div>
       <div className='text-sm text-qrigray'>Standby... this won&apos;t take long.</div>
     </>
   )
+
+  const handleGoToPreviewClick = () => {
+    dispatch(clearModal())
+    history.push(`/${username}/${name}`)
+  }
+
+  const handleGoToEditorClick = () => {
+    dispatch(clearModal())
+    history.push(`/${username}/${name}/edit#meta`)
+  }
+
+  let buttonContent
+
+  let successText = 'Changes committed!'
+  let successSubtext = 'You\'re all set! Sit back and let the data flow.'
+
+  if (isNew) {
+    successText = 'Dataset Created!'
+    successSubtext = 'Add some metadata or a readme to improve your Dataset'
+  }
 
   if (deployStatus === 'deployed') {
     deployingContent = (
       <>
         <RunStatusIcon status={'succeeded'} size='lg' className='text-green mb-2' />
-        <div id='snack_bar_message_workflow_deployed' className='font-semibold text-xl mb-2'>Workflow Deployed</div>
-        <div className='text-sm text-qrigray'>You&apos;re all set! Sit back and let the data flow.</div>
+        <div id='snack_bar_message_workflow_deployed' className='font-semibold text-xl mb-2'>{successText}</div>
+        <div className='text-sm text-qrigray'>{successSubtext}</div>
+      </>
+    )
+
+    buttonContent = (
+      <>
+        <Button type='primary-outline' className='mr-5' onClick={handleGoToEditorClick} block>
+          Edit Metadata
+        </Button>
+        <Button onClick={handleGoToPreviewClick} block>
+          Go to Preview
+        </Button>
       </>
     )
   }
@@ -169,70 +138,40 @@ const DeployModal: React.FC = () => {
         <div className='text-sm text-qrigray'>Sorry, something went wrong...</div>
       </>
     )
-  }
-
-  const showButton = ['deployed', 'failed'].includes(deployStatus)
-  let buttonText = 'Done'
-  let buttonType: ButtonType = 'primary'
-
-  if (deployStatus === 'failed') {
-    buttonText = 'Close'
-    buttonType = 'light'
+    buttonContent = (
+      <Button id='deploy_modal_done_button' type='light' block className={classNames('mt-2')} onClick={handleClose} submit>
+        Close
+      </Button>
+    )
   }
 
   return (
     <div style={{ width: 440, height: 510 }}>
-      <div className={classNames('absolute w-full h-full bg-white p-8 transition-all duration-300 bg-white p-8 text-left text-black flex flex-col z-10', {
-        'left-0': !deploying,
-        '-left-full': deploying
-      })}>
-        <div className='flex'>
-          <div className='flex-grow text-3xl font-black mb-6'>{heading}</div>
-          <IconButton icon='close' className='ml-10 mt-2' onClick={handleClose}/>
-        </div>
-        <div className='mb-6 flex-grow'>
-          <div className='mb-3'>{subHeading}</div>
-
-          {content}
-          {/* TODO(chriswhong): add other predeployment checks like triggers and completion tasks */}
-          <Checkbox label='Run on Deploy' value={runNow} onChange={() => { setRunNow(!runNow) }} />
-        </div>
-        <Button
-          id='deploy_modal_deploy_button'
-          type='secondary'
-          className='mt-2'
-          block
-          onClick={handleDeployClick}
-          submit
-          disabled={!canBeDeployed}>
-          <Icon icon='rocket' className='mr-2' /> Deploy
-        </Button>
-        {workflow.triggers?.length === 0 && (
-          <WarningDialog text='This workflow does not have any triggers defined.  Once deployed, it will only run when triggered manually.'/>
-        )}
-      </div>
-
       <div className='flex flex-col h-full w-full p-8'>
         <div className='flex-grow flex items-center mx-auto'>
           <div className='text-center'>
             {deployingContent}
           </div>
         </div>
-        <ReactCanvasConfetti
-          // set the styles as for a usual react component
-          style={{
-            position: 'fixed',
-            width: '100%',
-            height: '100%',
-            zIndex: -1
-          }}
-          fire={deployStatus === 'deployed'}
-        />
-        <Button id='deploy_modal_done_button' type={buttonType} block className={classNames('mt-2', {
-          'invisible': !showButton
-        })} onClick={handleClose} submit>
-          {buttonText}
-        </Button>
+        {
+          isNew && (
+            <ReactCanvasConfetti
+              // set the styles as for a usual react component
+              style={{
+                position: 'fixed',
+                width: '100%',
+                height: '100%',
+                zIndex: -1
+              }}
+              fire={deployStatus === 'deployed'}
+            />
+          )
+        }
+        <div className={classNames('flex', {
+          'hidden': !buttonContent
+        })}>
+          {buttonContent}
+        </div>
       </div>
     </div>
   )

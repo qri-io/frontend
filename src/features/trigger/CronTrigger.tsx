@@ -71,24 +71,27 @@ const CronTrigger: React.FC<CronTriggerProps> = ({
   }
 
   return (
-    <div onClick={onEdit} className='w-full cursor-pointer'>
+    <div onClick={onEdit} className='w-full cursor-pointer bg-white p-2.5 rounded'>
       <div className='flex w-full items-center'>
-        <div className='flex-grow flex items-center'>
-          <div id='cron_trigger_schedule' className='text-sm font-semibold mr-2.5 text-black'>Schedule</div>
-          {!isEditable && <div className='text-qrigray-400 text-xs flex items-center'>
-            <Icon icon='calendar' size='sm' className='mr-1' />
+        <div className='flex-grow'>
+          <div id='cron_trigger_schedule' className='text-xs font-bold mr-2.5 text-black mb-1'>Schedule</div>
+          {!isEditable && <div className='text-qrigray-400 flex items-center' style={{
+            fontSize: 8
+          }}>
+            <Icon icon='calendar' size='xs' className='mr-1' />
             <div id='cron_trigger_interval_text'>{displayInterval} {displayStartTime}</div>
           </div>}
         </div>
       </div>
       {isEditable &&
       <div className='w-full'>
-        <div className='text-qrigray-700 text-xs'>Repeat</div>
+        <div className='text-qrigray-700 mb-1' style={{ fontSize: 8 }}>Repeat</div>
         <CronTriggerEditor
           trigger={cronTrigger}
           onChange={handleTriggerChange}
           onSave={handleSaveTrigger}
-          onDelete={handleTriggerDelete}/>
+          onDelete={handleTriggerDelete}
+        />
       </div>}
     </div>
   )

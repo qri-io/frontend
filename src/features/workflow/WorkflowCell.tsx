@@ -8,7 +8,6 @@ import CodeEditor from './CodeEditor'
 import Output from './output/Output'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowHeader from './WorkflowHeader'
-import WorkflowCellControls from './WorkflowCellControls'
 import { selectClearedCells, selectEditedCells } from "./state/workflowState"
 import { EventLogLine } from "../../qri/eventLog"
 
@@ -18,15 +17,9 @@ export interface WorkflowCellProps {
   step: TransformStep
   run?: RunStep
   disabled: boolean
-  collapseState: 'collapsed' | 'only-editor' | 'only-output' | 'all'
-  onChangeCollapse: (v: 'collapsed' | 'only-editor' | 'only-output' | 'all') => void
   onChangeScript: (index: number, script: string) => void
   onRun: () => void
-  setAnimatedCell: (i: number) => void
-  isCellAdded: boolean
-  onRowAdd: (index: number, syntax: string) => void
   onClick: () => void
-  canBeDeleted: boolean
 }
 
 const WorkflowCell: React.FC<WorkflowCellProps> = ({
@@ -34,15 +27,10 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   index,
   step,
   run,
-  collapseState,
   disabled,
   onChangeScript,
-  onRowAdd,
   onRun,
-  isCellAdded,
-  setAnimatedCell,
-  onClick,
-  canBeDeleted
+  onClick
 }) => {
   const { syntax, name, script } = step
   const editedCells = useSelector(selectEditedCells)
@@ -103,15 +91,14 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   }
 
   return (
-    <div id={`${name}-cell`} className={`w-full workflow-cell relative  ${isCellAdded && 'animate-appear'}`} onClick={onClick}>
+    <div id={`${name}-cell`} className={`w-full workflow-cell relative`} onClick={onClick}>
       <ScrollAnchor id={name} />
       <div
-          className={classNames(`border rounded-lg ${active && borderStyles}`, {
+          className={classNames(`border rounded-lg w-full ${active && borderStyles}`, {
             'border-transparent': !active
           })}
           style={{
-            borderRadius: 7,
-            width: 'calc(100% - 225px)'
+            borderRadius: 7
           }}
         >
         {/* ^^ this wrapping div allows us to use two different borders.  Active cell shows both, allowing for a thicker border without causing content to shift */}
@@ -124,25 +111,11 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
               }
             )}
           >
-          {(collapseState === 'all' || collapseState === 'only-editor') && editor}
-          {(collapseState === 'all' || collapseState === 'only-output') && (output.length > 0 || run?.status === 'running') &&
+          {editor}
+          {(output.length > 0 || run?.status === 'running') &&
             !clearedCells[index] &&
             <Output data={output} status={run?.status} wasEdited={editedCells[index]} />}
         </div>
-      </div>
-      <WorkflowCellControls
-          index={index}
-          setAnimatedCell={setAnimatedCell}
-          canBeDeleted={canBeDeleted}
-          hide={!active}
-        />
-      <div
-        onClick={() => onRowAdd(index, 'starlark')}
-        style={{ width: 'calc(100% - 225px)' }}
-        className='mt-2 mb-2 cursor-pointer opacity-0 hover:opacity-100 transition-opacity flex items-center'
-      >
-        <div className='h-px bg-gray-300 flex-grow mr-2' />
-        <button className='text-xs border-none flex-shrink-0 bg-white rounded py-1 pr-2 pl-1 font-semibold '>+ Code</button>
       </div>
     </div>
   )

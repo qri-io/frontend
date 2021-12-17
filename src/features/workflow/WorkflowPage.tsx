@@ -1,51 +1,156 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Prompt, Redirect } from 'react-router'
+import classNames from 'classnames'
+import { useInView } from 'react-intersection-observer'
+import { Location } from 'history'
 
 import Spinner from '../../chrome/Spinner'
-import { selectLatestDeployOrDryRunId, selectWorkflowDataset } from '../workflow/state/workflowState'
-import { setWorkflowRef } from './state/workflowActions'
 import { QriRef } from '../../qri/ref'
-import Workflow from './Workflow'
+import WorkflowEditor from './WorkflowEditor'
 import RunBar from './RunBar'
-import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
+import { qriRefFromDataset } from "../../qri/dataset"
+import EditorLayout from '../layouts/EditorLayout'
 import { selectRun } from "../events/state/eventsState"
-import Head from '../app/Head'
+import DatasetHeaderLayout from "../dataset/DatasetHeaderLayout"
+import DatasetMiniHeader from '../dataset/DatasetMiniHeader'
+import { newVersionInfoFromDataset } from "../../qri/versionInfo"
+import { showModal } from '../app/state/appActions'
+import { ModalType } from '../app/state/appState'
+
+import {
+  setWorkflowRef,
+  workflowUndoChanges,
+  setWorkflowDatasetName,
+  setWorkflowDatasetTitle
+} from './state/workflowActions'
+
+import {
+  selectWorkflow,
+  selectWorkflowIsDirty,
+  selectWorkflowDataset,
+  selectLatestDeployOrDryRunId
+} from './state/workflowState'
 
 interface WorkflowPageProps {
   qriRef: QriRef
+  isNew?: boolean
 }
 
-const WorkflowPage: React.FC<WorkflowPageProps> = ({ qriRef }) => {
+const WorkflowPage: React.FC<WorkflowPageProps> = ({
+  qriRef,
+  isNew = false
+}) => {
   const dispatch = useDispatch()
+
+  const [ runNow, setRunNow ] = useState(isNew)
+
   let dataset = useSelector(selectWorkflowDataset)
   const latestDryRunDeployId = useSelector(selectLatestDeployOrDryRunId)
   const latestRun = useSelector(selectRun(latestDryRunDeployId))
+  const isDirty = useSelector(selectWorkflowIsDirty)
+  const workflow = useSelector(selectWorkflow)
 
-  // if qriRef is empty, this is a new workflow
-  const isNew = qriRef.username === '' && qriRef.name === ''
+  const [redirectTo, setRedirectTo] = useState('')
 
-  // don't fetch the dataset if this is a new workflow
   useEffect(() => {
     // ensures that workflowDataset username and name match the route
     dispatch(setWorkflowRef(qriRef))
   }, [])
 
-  const runBar = <RunBar status={latestRun ? latestRun.status : "waiting" } />
+  const { ref: stickyHeaderTriggerRef, inView } = useInView({
+    threshold: 0.6,
+    initialInView: true
+  })
+
+  const handleBlockedNavigation = (nextLocation: Location) => {
+    if (redirectTo) { return true }
+    // do nothing if user clicks the link for the active route
+    if (nextLocation.pathname === location.pathname) {
+      return true
+    }
+
+    if (isDirty) {
+      dispatch(showModal(ModalType.unsavedChanges, {
+        action: () => {
+          dispatch(workflowUndoChanges())
+          setRedirectTo(nextLocation.pathname)
+        }
+      }))
+      return false
+    }
+    return true
+  }
+
+  const headerChildren = <RunBar status={latestRun ? latestRun.status : "waiting" } isNew />
+
+  let commitBarContent = <>Save script changes</>
+
+  if (isNew) {
+    commitBarContent = <>Committing will create your new dataset and run this script</>
+  }
+
+  const handleCommit = () => {
+    dispatch(showModal(ModalType.deploy, {
+      username: dataset.username,
+      name: dataset.name,
+      runNow,
+      isNew
+    }))
+  }
 
   return (
-    <>
-      <Head data={{
-        title: isNew ? ' New Automated Dataset ' : `${qriRef.username}/${qriRef.name} workflow editor | Qri`,
-        appView: true
-      }}/>
-      {dataset || isNew
-        ? (<DatasetScrollLayout isNew={isNew} headerChildren={runBar} useScroller>
-          <Workflow qriRef={qriRef} />
-        </DatasetScrollLayout>)
-        : (<div className='w-full h-full p-4 flex justify-center items-center'>
-          <Spinner color='#43B3B2' />
-        </div>)}
-    </>
+    <EditorLayout
+      commitBarContent={commitBarContent}
+      commitLoading={false}
+      commitTitle={isNew ? 'created dataset' : 'updated script'}
+      onCommitTitleChange={() => {}}
+      onCommit={handleCommit}
+      showCommitBar
+      showRunNow={!isNew}
+      runNow={runNow}
+      onRunNowChange={() => { setRunNow(!runNow) }}
+      scroll
+    >
+      <Prompt
+        when
+        message={handleBlockedNavigation}
+      />
+      <DatasetMiniHeader
+        qriRef={qriRefFromDataset(dataset)}
+        header={newVersionInfoFromDataset(dataset)}
+        show={!inView}
+      >
+        {headerChildren}
+      </DatasetMiniHeader>
+      <div className={classNames('dataset_fixed_layout p-6 w-full')}>
+        <div ref={stickyHeaderTriggerRef}>
+          <DatasetHeaderLayout
+            qriRef={qriRefFromDataset(dataset)}
+            header={newVersionInfoFromDataset(dataset)}
+            nameEditable={isNew}
+            onNameChange={(_, d: string) => { dispatch(setWorkflowDatasetName(d)) }}
+            titleEditable={isNew}
+            onTitleChange={(_, d: string) => { dispatch(setWorkflowDatasetTitle(d)) }}
+          >
+            {headerChildren}
+          </DatasetHeaderLayout>
+        </div>
+        <div className='flex flex-grow'>
+          {dataset || isNew
+            ? (
+              <WorkflowEditor
+                qriRef={qriRef}
+                workflow={workflow}
+              />
+              )
+            : (<div className='w-full h-full p-4 flex justify-center items-center'>
+              <Spinner color='#43B3B2' />
+            </div>)}
+        </div>
+      </div>
+      {redirectTo && <Redirect to={redirectTo} />}
+    </EditorLayout>
   )
 }
 

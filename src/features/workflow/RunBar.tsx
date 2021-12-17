@@ -11,15 +11,11 @@ import {
   selectWorkflow,
   selectWorkflowDataset,
   selectApplyStatus,
-  selectWorkflowIsDirty,
   selectLatestDryRunId,
   selectLatestRunId,
   selectEditedCells
 } from './state/workflowState'
 import { platform } from '../../utils/platform'
-import DeployButton from "../deploy/DeployButton"
-import { newQriRef } from "../../qri/ref"
-import { useParams } from "react-router"
 import { removeEvent } from "../events/state/eventsActions"
 import { selectDeployRunId } from "../deploy/state/deployState"
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
@@ -28,21 +24,21 @@ import { selectIsLoggedIn } from '../session/state/sessionState'
 
 export interface RunBarProps {
   status: RunStatus
+  isNew?: boolean
 }
 
 const RunBar: React.FC<RunBarProps> = ({
-  status
+  status,
+  isNew = false
 }) => {
   const dispatch = useDispatch()
   const canEdit = useSelector(selectSessionUserCanEditDataset)
   const workflow = useSelector(selectWorkflow)
   const workflowDataset = useSelector(selectWorkflowDataset)
   const applyStatus = useSelector(selectApplyStatus)
-  const isDirty = useSelector(selectWorkflowIsDirty)
   const latestDryRunId = useSelector(selectLatestDryRunId)
   const latestRunId = useSelector(selectLatestRunId)
   const latestDeployRunId = useSelector(selectDeployRunId)
-  const qriRef = newQriRef(useParams())
   const areCellsEdited = useSelector(selectEditedCells)
   const isLoggedIn = useSelector(selectIsLoggedIn)
 
@@ -57,14 +53,12 @@ const RunBar: React.FC<RunBarProps> = ({
     trackGoal('AN0WUIY6', 0)
     removeRunEvents()
     dispatch(deployResetRunId())
-    dispatch(applyWorkflowTransform(workflow, workflowDataset))
+    dispatch(applyWorkflowTransform(workflow, workflowDataset, isNew))
   }
 
   const handleCancel = () => { dispatch(cancelRun(latestDryRunId)) }
 
   const isMac = (platform() === 'mac')
-
-  const isNew = (qriRef.username === '' && qriRef.name === '') || (!qriRef.username && !qriRef.name)
 
   let displayStatus = status
   // we already have RunStatusIcon to show the status of the run, so we
@@ -84,15 +78,14 @@ const RunBar: React.FC<RunBarProps> = ({
         <div className='flex'>
           {(status === "running")
             ? (
-              <Button type='secondary-outline' icon='circleX' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>Cancel</Button>
+              <Button type='primary-outline' icon='circleX' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleCancel() }}>Cancel</Button>
               )
             : (
               <div data-tip data-for='dry-run'>
-                <Button disabled={!((isNew && isLoggedIn) || canEdit)} type='secondary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
+                <Button disabled={!((isNew && isLoggedIn) || canEdit)} type='primary-outline' icon='playCircle' className='run_bar_run_button justify-items-start mr-2' onClick={() => { handleRun() }}>Dry Run</Button>
               </div>
               )
           }
-          <DeployButton isNew={isNew} disabled={!((isNew || canEdit) && isDirty) } />
         </div>
       </div>
       <ReactTooltip

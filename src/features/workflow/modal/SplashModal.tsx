@@ -19,7 +19,7 @@ const SignUpModal: React.FC = () => {
   return (
     <div className='bg-white p-8 text-left text-black' style={{ width: 440 }}>
       <div className='flex'>
-        <div className='flex-grow text-3xl font-black'>Welcome to the workflow editor!</div>
+        <div className='flex-grow text-3xl font-black'>Let&apos;s make an Automated Dataset!</div>
         <IconButton icon='close' className='ml-10' onClick={handleClose}/>
       </div>
 
@@ -43,7 +43,7 @@ const SignUpModal: React.FC = () => {
             1.
           </div>
           <div className='text-md text-left leading-tight'>
-            Qri binds code to data, teaching datasets to update themselves
+            Write Starlark Code to download, transform, and save data for your new dataset. <br/><br/> Click Dry Run to try your code. Edit code, repeat.
           </div>
         </div>
         <div className='my-12 px-8 flex'>
@@ -51,7 +51,7 @@ const SignUpModal: React.FC = () => {
             2.
           </div>
           <div className='text-md text-left leading-tight'>
-            Triggers kick off workflows, completions run when datasets update
+            Once your code works, add a schedule trigger. Qri will run your automation script for you!
           </div>
         </div>
         <div className='my-12 px-8 flex'>
@@ -59,13 +59,13 @@ const SignUpModal: React.FC = () => {
             3.
           </div>
           <div className='text-md text-left leading-tight'>
-            Edit code, dry run to test, then hit deploy!
+            When you&apos;re ready, <i>Commit</i> your changes. <br/><br/>A new dataset is born!
           </div>
         </div>
       </Carousel>
 
       <Button id='splash_modal_workflow_button' className='mt-2' onClick={handleClose} submit block>
-        Go to Workflow!
+        Got it!  Let&apos;s go!
       </Button>
     </div>
   )
