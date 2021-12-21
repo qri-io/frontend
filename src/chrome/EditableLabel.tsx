@@ -12,6 +12,7 @@ export interface EditableLabelProps {
   onChange?: (name: string, value: string) => void
   placeholder?: string
   textClassName?: string
+  showOutline?: boolean
 }
 
 const EditableLabel: React.FC<EditableLabelProps> = ({
@@ -22,7 +23,8 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
   validator,
   onChange,
   placeholder,
-  textClassName = ''
+  textClassName = '',
+  showOutline = false
 }) => {
   const [editing, setEditing] = useState(false)
   const [edit, setEdit] = useState(value)
@@ -101,7 +103,8 @@ const EditableLabel: React.FC<EditableLabelProps> = ({
           'border-transparent focus:border-transparent': !editing,
           'px-1 py-0': size === 'md',
           '-ml-2 px-2 pt-1.5 pb-1 leading-tight': size === 'lg',
-          'hover:border-qrigray-300': !readOnly
+          'hover:border-qrigray-300': !readOnly,
+          'border-qrigray-300': showOutline
         })}
       value={edit}
       placeholder={placeholder}

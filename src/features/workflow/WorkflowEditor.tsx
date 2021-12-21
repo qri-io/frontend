@@ -4,7 +4,7 @@ import Hotkeys from 'react-hot-keys'
 
 import WorkflowCell from './WorkflowCell'
 import { NewRunStep, RunStep } from '../../qri/run'
-import { Dataset, NewDataset } from '../../qri/dataset'
+import { Dataset, NewDataset, TransformStep } from '../../qri/dataset'
 import { Workflow } from '../../qrimatic/workflow'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowDatasetPreview from './WorkflowDatasetPreview'
@@ -29,6 +29,25 @@ import WorkflowSidebar from './WorkflowSidebar'
 export interface WorkflowEditorProps {
   qriRef: QriRef
   workflow: Workflow
+}
+
+// combines the `script` text for multiple steps into one step
+// we moved to a single step in the UI but need to be compatible with older multistep transforms
+const mergeSteps = (steps: TransformStep[] | undefined) => {
+  if (!steps || steps.length < 2) {
+    return steps
+  }
+
+  const merged: TransformStep[] = steps.reduce((acc: TransformStep[], curr, i) => {
+    if (i === 0) {
+      acc[0] = { ...curr }
+    } else {
+      acc[0].script = `${acc[0].script}\n\n${curr.script}`
+    }
+    return acc
+  }, [])
+
+  return merged
 }
 
 const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
@@ -85,6 +104,8 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
     }
   }
 
+  const displaySteps = mergeSteps(dataset.transform?.steps)
+
   // appends username, name, and meta.title to a dry run's preview, useful for
   // display of downstream components that expect these as part of a Dataset (e.g. fullscreen body)
   const appendRefAndMeta = (dsPreview: Dataset | undefined) => {
@@ -119,7 +140,7 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({
                       <div className='text-base text-qrigray-400 mb-3'>Use code to download source data, transform it, and commit the next version of this dataset</div>
                     </div>
                   </div>
-                  {dataset?.transform?.steps && dataset.transform.steps.map((step, i) => {
+                  {displaySteps && displaySteps.map((step, i) => {
                     // eslint-disable-next-line no-undef-init
                     let r: RunStep | undefined = undefined
                     if (run) {

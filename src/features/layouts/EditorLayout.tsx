@@ -18,6 +18,8 @@ interface EditorLayoutProps {
   onRunNowChange?: () => void
   // toggles scroller content (automationEditor) vs fixed-height content (datasetEditor)
   scroll?: boolean
+  // whether the commit button is disabled
+  commitDisabled?: boolean
 }
 
 const EditorLayout: React.FC<EditorLayoutProps> = ({
@@ -31,6 +33,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
   showRunNow,
   runNow = true,
   onRunNowChange = () => {},
+  commitDisabled = false,
   children
 }) => (
   /* top level div is a clone of DatasetFixedLayout, but we didn't use it because we need a different Header */
@@ -51,6 +54,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
         showRunNow={showRunNow}
         runNow={runNow}
         onRunNowChange={onRunNowChange}
+        disabled={commitDisabled}
       />
     }
   </div>

@@ -20,14 +20,14 @@ import RunStatusIcon from '../../run/RunStatusIcon'
 import { selectDeployRunId, selectDeployStatus } from '../../deploy/state/deployState'
 import { removeEvent } from "../../events/state/eventsActions"
 
-export interface DeployModalProps {
+export interface AutomationCommitModalProps {
   username: string
   name: string
   runNow: boolean
   isNew: boolean
 }
 
-const DeployModal: React.FC<DeployModalProps> = ({
+const AutomationCommitModal: React.FC<AutomationCommitModalProps> = ({
   username,
   name,
   runNow,
@@ -177,4 +177,4 @@ const DeployModal: React.FC<DeployModalProps> = ({
   )
 }
 
-export default DeployModal
+export default AutomationCommitModal

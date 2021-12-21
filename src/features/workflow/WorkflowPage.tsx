@@ -18,6 +18,8 @@ import { newVersionInfoFromDataset } from "../../qri/versionInfo"
 import { showModal } from '../app/state/appActions'
 import { ModalType } from '../app/state/appState'
 
+import { DEFAULT_AUTOMATED_DATASET_NAME } from './NewAutomationEditor'
+
 import {
   setWorkflowRef,
   workflowUndoChanges,
@@ -35,11 +37,13 @@ import {
 interface WorkflowPageProps {
   qriRef: QriRef
   isNew?: boolean
+  commitTitle?: string
 }
 
 const WorkflowPage: React.FC<WorkflowPageProps> = ({
   qriRef,
-  isNew = false
+  isNew = false,
+  commitTitle = ''
 }) => {
   const dispatch = useDispatch()
 
@@ -86,12 +90,21 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
 
   let commitBarContent = <>Save script changes</>
 
+  let commitDisabled = false
+
+  let nameUnchanged = dataset.name === DEFAULT_AUTOMATED_DATASET_NAME
+
   if (isNew) {
     commitBarContent = <>Committing will create your new dataset and run this script</>
+
+    if (nameUnchanged) {
+      commitDisabled = true
+      commitBarContent = <>Enter a machine-friendly descriptive name to proceed</>
+    }
   }
 
   const handleCommit = () => {
-    dispatch(showModal(ModalType.deploy, {
+    dispatch(showModal(ModalType.automationCommit, {
       username: dataset.username,
       name: dataset.name,
       runNow,
@@ -103,9 +116,10 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
     <EditorLayout
       commitBarContent={commitBarContent}
       commitLoading={false}
-      commitTitle={isNew ? 'created dataset' : 'updated script'}
+      commitTitle={commitTitle}
       onCommitTitleChange={() => {}}
       onCommit={handleCommit}
+      commitDisabled={commitDisabled}
       showCommitBar
       showRunNow={!isNew}
       runNow={runNow}
@@ -132,6 +146,7 @@ const WorkflowPage: React.FC<WorkflowPageProps> = ({
             onNameChange={(_, d: string) => { dispatch(setWorkflowDatasetName(d)) }}
             titleEditable={isNew}
             onTitleChange={(_, d: string) => { dispatch(setWorkflowDatasetTitle(d)) }}
+            showInputOutlines={isNew}
           >
             {headerChildren}
           </DatasetHeaderLayout>

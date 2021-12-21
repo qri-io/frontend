@@ -9,7 +9,13 @@ import IconButton from '../../../chrome/IconButton'
 // import styles for react-responsive-carousel, used in workflow splash modal
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
-const SignUpModal: React.FC = () => {
+export interface AutomationSplashModalProps {
+  title: string
+}
+
+const AutomationSplashModal: React.FC<AutomationSplashModalProps> = ({
+  title = 'Let\'s make an Automated Dataset!'
+}) => {
   const dispatch = useDispatch()
 
   const handleClose = () => {
@@ -19,7 +25,7 @@ const SignUpModal: React.FC = () => {
   return (
     <div className='bg-white p-8 text-left text-black' style={{ width: 440 }}>
       <div className='flex'>
-        <div className='flex-grow text-3xl font-black'>Let&apos;s make an Automated Dataset!</div>
+        <div className='flex-grow text-3xl font-black'>{title}</div>
         <IconButton icon='close' className='ml-10' onClick={handleClose}/>
       </div>
 
@@ -71,4 +77,4 @@ const SignUpModal: React.FC = () => {
   )
 }
 
-export default SignUpModal
+export default AutomationSplashModal

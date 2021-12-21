@@ -14,7 +14,6 @@ import ContentBoxTitle from '../../chrome/ContentBoxTitle'
 import BodyPreview from '../dsComponents/body/BodyPreview'
 
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
-import DeployingScreen from '../deploy/DeployingScreen'
 import Readme from '../dsComponents/readme/Readme'
 
 import MetaChips from '../../chrome/MetaChips'
@@ -166,7 +165,6 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
             </div>
           </DatasetScrollLayout>
           )}
-      <DeployingScreen qriRef={qriRef} />
     </>
   )
 }

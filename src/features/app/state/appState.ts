@@ -18,8 +18,8 @@ export enum ModalType {
   editDatasetTitle = 'editDatasetTitle',
   logIn = 'logIn',
   signUp = 'signUp',
-  workflowSplash = 'workflowSplash',
-  deploy = 'deploy',
+  automationSplash = 'automationSplash',
+  automationCommit = 'automationCommit',
   newDatasetSave = 'newDatasetSave',
   addTrigger = 'addTrigger',
   newDataset = 'newDataset'

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { useLocation } from 'react-router-dom'
 
 import { ComponentName } from '../../qri/dataset'

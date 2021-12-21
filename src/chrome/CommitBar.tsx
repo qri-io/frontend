@@ -22,6 +22,8 @@ interface CommitBarProps {
   runNow?: boolean
   // fired when the Run now checkbox is changed
   onRunNowChange?: () => void
+  // whether the button is disabled
+  disabled?: boolean
 }
 
 const CommitBar: React.FC<CommitBarProps> = ({
@@ -32,7 +34,8 @@ const CommitBar: React.FC<CommitBarProps> = ({
   onCommit,
   showRunNow,
   runNow = true,
-  onRunNowChange = () => {}
+  onRunNowChange = () => {},
+  disabled
 }) => (
   <div className='relative animate-flyUp flex items-center justify-between w-full bg-qrigray-1000 py-1 px-3'>
     <p className='text-sm text-white'>{commitBarContent}</p>
@@ -55,7 +58,7 @@ const CommitBar: React.FC<CommitBarProps> = ({
         size='sm'
         placeholder='commit message'
       />
-      <Button onClick={onCommit} style={{ height: '32px' }} icon='commit' size='sm' type="secondary">
+      <Button onClick={onCommit} style={{ height: '32px' }} icon='commit' size='sm' type="secondary" disabled={disabled}>
         {commitLoading ? <Spinner color='#fff' size={6} /> : 'Commit'}
       </Button>
     </div>

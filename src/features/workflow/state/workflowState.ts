@@ -10,6 +10,7 @@ import {
   AddWorkflowStepAction,
   WorkflowStepAction,
   UndoWorkflowChanges,
+  SetWorkflowDatasetAction,
   SetWorkflowDatasetStringAction
 } from './workflowActions'
 import { Workflow, WorkflowBase } from '../../../qrimatic/workflow'
@@ -32,6 +33,7 @@ export const SET_WORKFLOW_REF = 'SET_WORKFLOW_REF'
 export const SET_RUN_MODE = 'SET_RUN_MODE'
 export const WORKFLOW_RESET_DRY_RUN_ID = 'WORKFLOW_RESET_DRY_RUN_ID'
 export const WORKFLOW_RESET_EDITED_CLEARED_CELLS = 'WORKFLOW_RESET_EDITED_CLEARED_CELLS'
+export const SET_WORKFLOW_DATASET = 'SET_WORKFLOW_DATASET'
 export const SET_WORKFLOW_DATASET_NAME = 'SET_WORKFLOW_DATASET_NAME'
 export const SET_WORKFLOW_DATASET_TITLE = 'SET_WORKFLOW_DATASET_TITLE'
 
@@ -159,21 +161,6 @@ export const workflowReducer = createReducer(initialState, {
     state.dataset.username = action.qriRef.username
     state.dataset.name = action.qriRef.name
   },
-  // listen for dataset fetching actions, if the reference of the fetched dataset
-  // matches the ref the workbench reducer is tuned to, load the transform script
-  // into the workbench
-  'API_PREVIEW_SUCCESS': (state, action) => {
-    const d = action.payload.data as Dataset
-    // TODO (b5) - this should check peername *and* confirm the loaded version is HEAD
-    // don't set workflow state unless transform exists
-    if (d.transform) {
-      state.dataset = d
-
-      // set the values to compare with and caclulate isDirty
-      state.workflowBase.steps = d.transform?.steps
-      state.isDirty = calculateIsDirty(state)
-    }
-  },
   'API_WORKFLOW_REQUEST': (state, action) => {
     // reset workflow and lastRunID to initialState values
     state.workflow = initialState.workflow
@@ -220,6 +207,12 @@ export const workflowReducer = createReducer(initialState, {
   WORKFLOW_RESET_EDITED_CLEARED_CELLS: (state: WorkflowState, actions: UndoWorkflowChanges) => {
     state.editedCells = state.editedCells.map(c => false)
     state.clearedOutputCells = state.clearedOutputCells.map(c => false)
+  },
+  SET_WORKFLOW_DATASET: (state: WorkflowState, action: SetWorkflowDatasetAction) => {
+    const dataset = action.value
+    state.dataset = dataset
+    state.workflowBase.steps = dataset.transform?.steps
+    state.isDirty = calculateIsDirty(state)
   },
   SET_WORKFLOW_DATASET_NAME: (state: WorkflowState, action: SetWorkflowDatasetStringAction) => {
     state.dataset.name = action.value

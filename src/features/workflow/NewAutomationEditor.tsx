@@ -21,6 +21,8 @@ interface ExistingAutomationEditorProps {
   qriRef: QriRef
 }
 
+export const DEFAULT_AUTOMATED_DATASET_NAME = 'untitled-automated-dataset'
+
 const ExistingAutomationEditor: React.FC<ExistingAutomationEditorProps> = ({ qriRef }) => {
   const dispatch = useDispatch()
   const user = useSelector(selectSessionUser)
@@ -32,12 +34,9 @@ const ExistingAutomationEditor: React.FC<ExistingAutomationEditorProps> = ({ qri
     dispatch(setTemplate(NewDataset({
       ...template,
       username: user.username,
-      name: 'untitled-automated-dataset',
-      meta: {
-        title: 'Untitled Automated Dataset'
-      }
+      name: DEFAULT_AUTOMATED_DATASET_NAME
     })))
-    dispatch(showModal(ModalType.workflowSplash))
+    dispatch(showModal(ModalType.automationSplash))
   }, [])
 
   return (
@@ -46,7 +45,7 @@ const ExistingAutomationEditor: React.FC<ExistingAutomationEditorProps> = ({ qri
         title: `${qriRef.username}/${qriRef.name} workflow editor | Qri`,
         appView: true
       }}/>
-      <WorkflowPage qriRef={qriRef} isNew />
+      <WorkflowPage qriRef={qriRef} isNew commitTitle='created automated dataset' />
     </>
   )
 }

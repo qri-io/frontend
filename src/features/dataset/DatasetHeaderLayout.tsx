@@ -38,6 +38,8 @@ export interface DatasetHeaderLayoutProps {
   onTitleChange?: (_: string, value: string) => void
   // whether the user can edit the dataset
   userCanEditDataset?: boolean
+  // whether editable inputs should show their outlines
+  showInputOutlines?: boolean
 }
 
 const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
@@ -50,12 +52,13 @@ const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
   titleEditable = false,
   onTitleChange,
   userCanEditDataset,
+  showInputOutlines = false,
   children
 }) => (
   <div className="w-full">
     <div className='flex mb-5'>
       <div className='flex-grow'>
-        <div className='text-base text-qrigray-400 relative flex items-center group hover:text font-mono'>
+        <div className='text-base text-qrigray-400 relative flex items-center group hover:text font-mono mb-1'>
           {headerLoading
             ? <ContentLoader height='20.8'>
               <rect width="100" y='4' height="16" rx="1" fill="#D5DADD"/>
@@ -83,7 +86,9 @@ const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
               onChange={onTitleChange}
               textClassName='text-2xl font-bold'
               value={header?.metaTitle || header?.name}
+              placeholder='Enter a Title for your dataset'
               size='lg'
+              showOutline={showInputOutlines}
             />
             {
               userCanEditDataset && <Link to={`/${qriRef.username}/${qriRef.name}/edit#meta`}><Icon size='sm' className='text-qrigray-300 ml-4 opacity-0 group-hover:opacity-100 transition-opacity' icon='edit' /></Link>
@@ -100,7 +105,7 @@ const DatasetHeaderLayout: React.FC<DatasetHeaderLayoutProps> = ({
         </div>
         )}
       </div>
-      <div className='flex items-center content-center pl-6'>
+      <div className='flex items-center justify-end pl-6' style={{ minWidth: 295 }}>
         {children || (
         <>
           {/*
