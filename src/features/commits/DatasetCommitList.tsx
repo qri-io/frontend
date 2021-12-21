@@ -50,6 +50,8 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
           <HistorySearchBox />
           {editable && <NewVersionButton qriRef={qriRef} />}
         */}
+
+        {userCanEditDataset && (
         <li className='flex items-stretch text-black tracking-wider'>
           <div className='relative w-4 mr-5 flex-shrink-0'>
             <div className={classNames('absolute top-2.5 w-4 h-4 rounded-3xl border border-qritile-600')}>&nbsp;</div>
@@ -57,14 +59,14 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
               <div className='absolute -bottom-2 w-full h-11 bg-gray-300 rounded'>&nbsp;</div>
             </div>
           </div>
-          {userCanEditDataset && (
-            <div className='w-full'>
-              <Link to={`/${qriRef.username}/${qriRef.name}/edit`}>
-                <Button className='mb-6' block disabled={loading || (commits.length ? path !== commits[0].path : false)} type='primary-outline' icon='edit'>Edit</Button>
-              </Link>
-            </div>
-          )}
+          <div className='w-full'>
+            <Link to={`/${qriRef.username}/${qriRef.name}/edit`}>
+              <Button className='mb-6' block disabled={loading || (commits.length ? path !== commits[0].path : false)} type='primary-outline' icon='edit'>Edit</Button>
+            </Link>
+          </div>
         </li>
+        )}
+
         {loading
           ? Array(3).fill('').map((_, i) => (
             <DatasetCommitListItem
