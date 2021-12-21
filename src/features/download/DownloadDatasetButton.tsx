@@ -50,7 +50,7 @@ const DownloadDatasetButton: React.FC<DownloadDatasetButtonProps> = ({
     if (user.username === 'new') {
       return <IconLink title={title} icon='download' onClick={handleDownloadClick} />
     } else {
-      return <IconLink title={title} icon='download' link={downloadLink} onClick={() => {
+      return <IconLink title={title} icon='download' to={downloadLink} onClick={() => {
         // preview-download-body
         trackGoal('MUBGTLL9', 0)
       }} />

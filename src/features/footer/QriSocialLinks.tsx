@@ -22,7 +22,7 @@ const QriSocialLinks = () => (
           key={i}
           icon={icon}
           size='md'
-          link={link}
+          to={link}
           className='ml-5 first:ml-0'
           colorClassName='text-black hover:text-qripink-600'
         />
