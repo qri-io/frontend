@@ -10,18 +10,16 @@ import { loadDsPreview } from './state/dsPreviewActions'
 import Spinner from '../../chrome/Spinner'
 import ContentBox from '../../chrome/ContentBox'
 import ContentBoxTitle from '../../chrome/ContentBoxTitle'
-
 import BodyPreview from '../dsComponents/body/BodyPreview'
-
 import DatasetScrollLayout from '../dataset/DatasetScrollLayout'
 import Readme from '../dsComponents/readme/Readme'
-
 import MetaChips from '../../chrome/MetaChips'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import DownloadDatasetButton from "../download/DownloadDatasetButton"
 import ContentBoxSubTitle from "../../chrome/ContentBoxSubTitle"
 import { newVersionInfoFromDataset } from '../../qri/versionInfo'
 import Head from '../app/Head'
+import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
 
 interface DatasetPreviewPageProps {
   qriRef: QriRef
@@ -33,6 +31,7 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
   const dispatch = useDispatch()
   const dataset = useSelector(selectDsPreview)
   const loading = useSelector(selectIsDsPreviewLoading)
+  const userCanEditDataset = useSelector(selectSessionUserCanEditDataset)
 
   const [versionInfoContainer, { height: versionInfoContainerHeight }] = useDimensions()
   const [expandReadme, setExpandReadme] = useState(false)
@@ -73,7 +72,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
     })} style={{ height: readmeContainerHeight }}>
       <ContentBox className='flex flex-col h-full'>
         <div style={{ minHeight: minReadmeHeight }} className='flex flex-col h-full overflow-hidden'>
-          <ContentBoxTitle title='Readme'/>
+          <ContentBoxTitle
+            title='Readme'
+            editLink={userCanEditDataset ? `/${qriRef.username}/${qriRef.name}/edit#readme` : ''}
+            editTitle='edit readme'
+          />
           <div className={classNames('flex-grow overflow-hidden relative', {
             'fade-bottom': readmeHeightLargerThanContainerHeight
           })}>
@@ -129,7 +132,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 {dataset.readme && (
                   <ContentBox className='flex flex-col mt-6 block md:hidden'>
                     <div className='flex flex-col h-full overflow-hidden'>
-                      <ContentBoxTitle title='Readme'/>
+                      <ContentBoxTitle
+                        title='Readme'
+                        editLink={userCanEditDataset ? `/${qriRef.username}/${qriRef.name}/edit#readme` : ''}
+                        editTitle='edit readme'
+                      />
                       <div className={classNames('flex-grow overflow-hidden relative', {
                         'fade-bottom': readmeHeightLargerThanContainerHeight
                       })} style={{ maxHeight: expandReadme ? '' : 256 }}>
@@ -141,7 +148,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
                 )}
                 <ContentBox className='mt-6'>
                   {/* Bottom of the box */}
-                  <ContentBoxTitle title='Metadata' />
+                  <ContentBoxTitle
+                    title='Metadata'
+                    editLink={userCanEditDataset ? `/${qriRef.username}/${qriRef.name}/edit#meta` : ''}
+                    editTitle='edit metadata'
+                  />
                   <ContentBoxSubTitle title='Description' />
                   <div className='text-qrigray-400 text-xs tracking-wider mb-2 break-words'>{(dataset.meta?.description) || 'No Description'}</div>
                   <ContentBoxSubTitle title='Keywords' />
@@ -158,7 +169,11 @@ const DatasetPreviewPage: React.FC<DatasetPreviewPageProps> = ({
             }}>
               <ContentBox className='h-full overflow-hidden flex flex-col'>
                 <div className='flex flex-col h-full overflow-hidden'>
-                  <ContentBoxTitle title='Data' />
+                  <ContentBoxTitle
+                    title='Data'
+                    editLink={userCanEditDataset ? `/${qriRef.username}/${qriRef.name}/edit` : ''}
+                    editTitle='edit data'
+                  />
                   <BodyPreview dataset={dataset} loading={loading} />
                 </div>
               </ContentBox>

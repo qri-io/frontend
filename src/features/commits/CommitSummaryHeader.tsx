@@ -23,7 +23,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
 
   return (
     <div className='min-height-200 py-4 px-8 rounded-lg bg-white flex'>
-      <div className='commit_summary_header_container'>
+      <div className='commit_summary_header_container flex-shrink overflow-ellipsis min-w-0 pr-3'>
         { loading
           ? <>
             <div className='text-sm text-qrigray-400 font-semibold mb-2'>Version Info</div>
@@ -39,7 +39,7 @@ const CommitSummaryHeader: React.FC<CommitSummaryHeaderProps> = ({
           </>
           }
       </div>
-      <div className='flex-grow flex items-center justify-end'>
+      <div className='flex-grow flex-shrink-0 flex items-center justify-end'>
         {children}
       </div>
     </div>

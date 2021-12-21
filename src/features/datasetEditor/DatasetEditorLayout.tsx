@@ -23,6 +23,7 @@ interface DatasetEditorLayoutProps {
   onCommitTitleChange: (commitTitle: string) => void
   onCommit: () => void
   onClose?: () => void
+  commitButtonDisabled?: boolean
 }
 
 const DatasetEditorLayout: React.FC<DatasetEditorLayoutProps> = ({
@@ -37,7 +38,8 @@ const DatasetEditorLayout: React.FC<DatasetEditorLayoutProps> = ({
   onTitleChange,
   onCommitTitleChange,
   onCommit,
-  onClose
+  onClose,
+  commitButtonDisabled = false
 }) => {
   // used to parse the selected tab
   const qriRef = newQriRef(refParamsFromLocation(useParams(), useLocation()))
@@ -60,7 +62,7 @@ const DatasetEditorLayout: React.FC<DatasetEditorLayoutProps> = ({
         >
           <IconLink icon='close' size='lg' className='pb-6' onClick={handleCloseClick} />
         </DatasetHeaderLayout>
-        <div className='flex flex-grow'>
+        <div className='flex flex-grow min-h-0'>
           <TabbedComponentViewer
             preview
             showLoadingState={false}
@@ -76,6 +78,7 @@ const DatasetEditorLayout: React.FC<DatasetEditorLayoutProps> = ({
         commitTitle={commitTitle}
         onCommitTitleChange={onCommitTitleChange}
         onCommit={onCommit}
+        disabled={commitButtonDisabled}
       />}
     </div>
   )

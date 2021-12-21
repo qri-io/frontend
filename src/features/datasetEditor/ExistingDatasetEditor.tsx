@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useHistory } from 'react-router'
 import { useDispatch, useSelector } from "react-redux"
+import { useLocation } from 'react-router-dom'
 
 import DatasetEditorLayout from './DatasetEditorLayout'
 import { loadDataset } from '../dataset/state/datasetActions'
@@ -16,11 +17,12 @@ import { newQriRef } from '../../qri/ref'
 import { NewDataset } from '../../qri/dataset'
 import Head from '../app/Head'
 
-const DEFAULT_DATASET_COMMIT_TITLE = 'manually updated dataset'
+const DEFAULT_DATASET_COMMIT_TITLE = ''
 
 const ExistingDatasetEditor: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const location = useLocation()
 
   const dataset = useSelector(selectDatasetEditorDataset)
   const isLoading = useSelector(selectDatasetEditorLoading)
@@ -56,6 +58,15 @@ const ExistingDatasetEditor: React.FC<{}> = () => {
     <>Edit your dataset here and press Commit</>
   )
 
+  let commitButtonDisabled = false
+
+  if (commitTitle === DEFAULT_DATASET_COMMIT_TITLE) {
+    commitBarContent = (
+      <>Enter a message to commit your changes</>
+    )
+    commitButtonDisabled = true
+  }
+
   if (error) {
     commitBarContent = (
       <span className='text-warningyellow'>{error}</span>
@@ -67,7 +78,7 @@ const ExistingDatasetEditor: React.FC<{}> = () => {
   }
 
   const handleClose = () => {
-    history.push(`/${dataset.username}/${dataset.name}/history`)
+    history.push(`/${dataset.username}/${dataset.name}/history${location.hash}`)
   }
 
   return (
@@ -86,6 +97,7 @@ const ExistingDatasetEditor: React.FC<{}> = () => {
         onCommitTitleChange={(commitTitle: string) => { setCommitTitle(commitTitle) }}
         onCommit={handleCommit}
         onClose={handleClose}
+        commitButtonDisabled={commitButtonDisabled}
       />
     </>
   )

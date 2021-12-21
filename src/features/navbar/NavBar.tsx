@@ -80,7 +80,7 @@ const NavBar: React.FC<NavBarProps> = ({
       <div className='flex-grow md:flex-grow-0'/>
       {!minimal && showSearch && (
       <div className='md:hidden'>
-        <IconLink icon='skinnySearch' size='lg' link='/search' />
+        <IconLink icon='skinnySearch' size='lg' to='/search' />
       </div>
       )}
       <div className='flex justify-end items-center'>

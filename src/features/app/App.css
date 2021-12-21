@@ -117,3 +117,16 @@ html {
   75%  { content: '...'; }
   100% { content: ''; }
 }
+
+/* Override default behavior of simplemede-markdown-editor */
+/* Makes readme editor 100% height with overflow-scrolling textarea */
+
+#readme-editor-wrapper,
+.EasyMDEContainer,
+.CodeMirror-scroll {
+  height: 100%;
+}
+
+.EasyMDEContainer .CodeMirror {
+  height: calc(100% - 49px);
+}
