@@ -118,20 +118,33 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
       {component}
     </div>
   )
+  let componentHeaderBorder = true
+  let overflowScroll = true
 
   // exclude the default padding for some components
   if (['body', 'structure', 'transform'].includes(componentName)) {
     componentContent = component
+    componentHeaderBorder = false
+  }
+
+  // no padding on readme editor
+  if (editor && (componentName === 'readme')) {
+    componentContent = component
+    componentHeaderBorder = false
+    overflowScroll = false
   }
 
   return (
     <div
       className={classNames('rounded-md bg-white h-full w-full overflow-auto rounded-tl-none rounded-tr-none flex flex-col pb-4', {})}
     >
-      <ComponentHeader border={!['body', 'structure', 'transform'].includes(componentName)}>
+      <ComponentHeader border={componentHeaderBorder}>
         {componentHeader}
       </ComponentHeader>
-      <div className='overflow-auto flex-grow'>
+      <div className={classNames({
+        'flex-grow overflow-auto': overflowScroll,
+        'h-full overflow-hidden': !overflowScroll
+      })}>
         {componentContent}
       </div>
 

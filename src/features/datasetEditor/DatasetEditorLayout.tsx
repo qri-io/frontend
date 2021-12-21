@@ -60,7 +60,7 @@ const DatasetEditorLayout: React.FC<DatasetEditorLayoutProps> = ({
         >
           <IconLink icon='close' size='lg' className='pb-6' onClick={handleCloseClick} />
         </DatasetHeaderLayout>
-        <div className='flex flex-grow'>
+        <div className='flex flex-grow min-h-0'>
           <TabbedComponentViewer
             preview
             showLoadingState={false}
