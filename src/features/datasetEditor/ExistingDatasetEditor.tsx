@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useHistory } from 'react-router'
 import { useDispatch, useSelector } from "react-redux"
+import { useLocation } from 'react-router-dom'
 
 import DatasetEditorLayout from './DatasetEditorLayout'
 import { loadDataset } from '../dataset/state/datasetActions'
@@ -21,6 +22,7 @@ const DEFAULT_DATASET_COMMIT_TITLE = ''
 const ExistingDatasetEditor: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const location = useLocation()
 
   const dataset = useSelector(selectDatasetEditorDataset)
   const isLoading = useSelector(selectDatasetEditorLoading)
@@ -76,7 +78,7 @@ const ExistingDatasetEditor: React.FC<{}> = () => {
   }
 
   const handleClose = () => {
-    history.push(`/${dataset.username}/${dataset.name}/history`)
+    history.push(`/${dataset.username}/${dataset.name}/history${location.hash}`)
   }
 
   return (
