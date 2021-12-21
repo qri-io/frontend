@@ -18,7 +18,7 @@ import Dashboard from './features/dashboard/Dashboard'
 import DatasetRoutes from './features/dataset/DatasetRoutes'
 import { AnonUser, selectSessionUser } from './features/session/state/sessionState'
 import UserProfile from './features/userProfile/UserProfile'
-import WorkflowPage from './features/workflow/WorkflowPage'
+import NewAutomationEditor from './features/workflow/NewAutomationEditor'
 import DatasetWrapper from './features/dsComponents/DatasetWrapper'
 import PasswordReset from "./features/session/PasswordReset"
 import NewDatasetEditor from "./features/datasetEditor/NewDatasetEditor"
@@ -50,9 +50,9 @@ export default function Routes () {
       <PrivateRoute path='/collection'><Collection /></PrivateRoute>
       <PrivateRoute path='/activity'><CollectionActivityFeed /></PrivateRoute>
 
-      <Route path='/workflow/new'>
+      <Route path='/automation/new'>
         <DatasetWrapper fetchData={false} editor>
-          <WorkflowPage qriRef={{ username: '', name: '' }} />
+          <NewAutomationEditor qriRef={{ username: '', name: '' }} />
         </DatasetWrapper>
       </Route>
 

@@ -10,7 +10,7 @@ import { Route, Switch, useParams } from 'react-router'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from "react-redux"
 
-import WorkflowPage from '../workflow/WorkflowPage'
+import ExistingAutomationEditor from '../workflow/ExistingAutomationEditor'
 import DatasetComponents from '../dsComponents/DatasetComponents'
 import DatasetActivityFeed from '../activityFeed/DatasetActivityFeed'
 import DatasetPreviewPage from '../dsPreview/DatasetPreviewPage'
@@ -62,8 +62,8 @@ const DatasetRoutes: React.FC<{}> = () => {
         </Route>
 
         {/* dataset workflow */}
-        <PrivateRoute path='/:username/:name/workflow'>
-          <WorkflowPage qriRef={qriRef} />
+        <PrivateRoute path='/:username/:name/automation'>
+          <ExistingAutomationEditor qriRef={qriRef} />
         </PrivateRoute>
 
         {/* dataset runs */}

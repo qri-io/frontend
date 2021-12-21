@@ -35,7 +35,7 @@ const IconOnlyButton: React.FC<IconOnlyButtonProps> = ({
   onClick = () => {}
 }) => {
   let dimension = 26
-  let iconSize: IconSize = 'xs'
+  let iconSize: IconSize = '3xs'
   let borderRadius = round ? 56.5 : 4.5
 
   if (size === 'md') {

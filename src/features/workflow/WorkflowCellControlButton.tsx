@@ -32,7 +32,7 @@ const WorkflowCellControlButton: React.FC<WorkflowCellControlButtonProps> = ({
     <button
       id={id}
       disabled={disabled}
-      className={`flex items-center text-sm h-5 mt-2.5 focus:outline-none ${classes}`}
+      className={`flex items-center text-sm h-5 mb-2.5 last:mb-0 px-2 focus:outline-none ${classes}`}
       onClick={handleClick}>
       <Icon
         className='mr-2'

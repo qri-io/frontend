@@ -24,7 +24,7 @@ const NewDatasetButton: React.FC<NewDatasetButtonProps> = ({ mini, id }) => {
       }
       {
         mini && (
-          <IconOnlyButton id={id} type='secondary' size='lg' icon='plus' round />
+          <IconOnlyButton id={id} onClick={() => dispatch(showModal(ModalType.newDataset))} type='secondary' size='lg' icon='plus' round />
         )
       }
     </>

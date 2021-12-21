@@ -29,7 +29,7 @@ const NewDatasetModal: React.FC<{}> = () => {
         id='new_dataset_modal_create_workflow'
         className='cursor-pointer mb-4 inline-block w-full'
         to={{
-          pathname: `/workflow/new`,
+          pathname: `/automation/new`,
           state: {
             showSplashModal: true,
             template: 'CSVDownload'

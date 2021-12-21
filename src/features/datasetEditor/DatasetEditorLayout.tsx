@@ -5,15 +5,10 @@ import { useParams } from 'react-router'
 import TabbedComponentViewer from "../dsComponents/TabbedComponentViewer"
 import { Dataset, qriRefFromDataset, ComponentName } from "../../qri/dataset"
 import { newQriRef, refParamsFromLocation } from '../../qri/ref'
-
 import { newVersionInfoFromDataset } from "../../qri/versionInfo"
-
-import TextInput from "../../chrome/forms/TextInput"
-import Button from "../../chrome/Button"
 import IconLink from "../../chrome/IconLink"
+import CommitBar from "../../chrome/CommitBar"
 import DatasetHeaderLayout from "../dataset/DatasetHeaderLayout"
-
-import Spinner from "../../chrome/Spinner"
 
 interface DatasetEditorLayoutProps {
   dataset: Dataset
@@ -75,23 +70,13 @@ const DatasetEditorLayout: React.FC<DatasetEditorLayoutProps> = ({
           />
         </div>
       </div>
-      { showCommitBar && <div className='relative animate-flyUp flex items-center justify-between w-full bg-qrigray-1000 py-1 px-3'>
-        <p className='text-sm text-white'>{commitBarContent}</p>
-        <div className='flex items-center'>
-          <TextInput
-            onChange={(value: string) => onCommitTitleChange(value)}
-            className='mr-3 w-80'
-            inputClassName='p-4'
-            name='title'
-            value={commitTitle}
-            size='sm'
-            placeholder='commit message'
-          />
-          <Button onClick={onCommit} style={{ height: '32px' }} icon='commit' size='sm' type="secondary">
-            {commitLoading ? <Spinner color='#fff' size={6} /> : 'Commit'}
-          </Button>
-        </div>
-      </div>}
+      { showCommitBar && <CommitBar
+        commitBarContent={commitBarContent}
+        commitLoading={commitLoading}
+        commitTitle={commitTitle}
+        onCommitTitleChange={onCommitTitleChange}
+        onCommit={onCommit}
+      />}
     </div>
   )
 }

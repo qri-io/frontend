@@ -7,8 +7,8 @@ import ScheduleModal from '../../workflow/modal/ScheduleModal'
 import UnsavedChangesModal from '../../workflow/modal/UnsavedChangesModal'
 import LogInModal from '../../session/modal/LogInModal'
 import SignUpModal from '../../session/modal/SignUpModal'
-import WorkflowSplashModal from '../../workflow/modal/SplashModal'
-import DeployModal from '../../workflow/modal/DeployModal'
+import AutomationSplashModal, { AutomationSplashModalProps } from '../../workflow/modal/AutomationSplashModal'
+import AutomationCommitModal, { AutomationCommitModalProps } from '../../workflow/modal/AutomationCommitModal'
 import NewDatasetSaveModal, { NewDatasetSaveModalProps } from '../../datasetEditor/modal/NewDatasetSaveModal'
 import AddTriggerModal from '../../trigger/modal/AddTriggerModal'
 import NewDatasetModal from "../../dataset/modal/NewDatasetModal"
@@ -81,10 +81,10 @@ const Modal: React.FC<any> = () => {
                 return <LogInModal {...modal.props} />
               case ModalType.signUp:
                 return <SignUpModal {...modal.props} />
-              case ModalType.workflowSplash:
-                return <WorkflowSplashModal {...modal.props} />
-              case ModalType.deploy:
-                return <DeployModal {...modal.props} />
+              case ModalType.automationSplash:
+                return <AutomationSplashModal {...modal.props as AutomationSplashModalProps} />
+              case ModalType.automationCommit:
+                return <AutomationCommitModal {...modal.props as AutomationCommitModalProps}/>
               case ModalType.newDatasetSave:
                 return <NewDatasetSaveModal {...modal.props as NewDatasetSaveModalProps} />
               case ModalType.addTrigger:
