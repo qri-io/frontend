@@ -161,7 +161,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
       selector: (row: VersionInfo) => row.commitTime,
       omit: simplified,
       sortable: true,
-      width: '180px',
+      width: '130px',
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => {
         // TODO (ramfox): the activity feed expects more content than currently exists
@@ -218,7 +218,7 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
         flexShrink: 0
       },
       omit: simplified,
-      width: '100px',
+      width: '88px',
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo) => (
         <div className='mx-auto text-qrigray-400'>
@@ -230,19 +230,16 @@ const CollectionTable: React.FC<CollectionTableProps> = ({
     },
     {
       name: '',
-      style: {
-        flexShrink: 0
-      },
       omit: simplified,
-      width: '60px',
+      width: '10px',
       // eslint-disable-next-line react/display-name
       cell: (row: VersionInfo, i: number) => {
         const isLastRow = (i === (filteredWorkflows.length - 1) && filteredWorkflows.length !== 1)
         return (
-          <div className='mx-auto text-qrigray-400'>
+          <div className='mx-auto text-qrigray-400 flex items-center'>
             <DropdownMenu
               id={row.name}
-              icon={<Icon icon='more' />}
+              icon={<Icon icon='moreVertical' size='sm'/>}
               dropUp={isLastRow}
               oneItem={filteredWorkflows.length === 1}
               items={[

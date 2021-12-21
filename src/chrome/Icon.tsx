@@ -55,6 +55,7 @@ import Info from './icon/Info'
 import Integer from './icon/Integer'
 import Lock from './icon/Lock'
 import More from './icon/More'
+import MoreVertical from './icon/MoreVertical'
 import MyDatasets from './icon/MyDatasets'
 import Null from './icon/Null'
 import Number from './icon/Number'
@@ -149,6 +150,7 @@ const Icon: React.FunctionComponent<IconProps> = (props) => {
     loader: <Loader {...props} />,
     lock: <Lock {...props} />,
     more: <More {...props} />,
+    moreVertical: <MoreVertical {...props} />,
     myDatasets: <MyDatasets {...props} />,
     null: <Null {...props} />,
     number: <Number {...props} />,
