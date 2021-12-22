@@ -60,7 +60,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   }
 
   const handleCancelRun = () => {
-    dispatch(cancelRun(latestRun.id))
+    dispatch(cancelRun('', latestRun.id))
   }
 
   useEffect(() => {

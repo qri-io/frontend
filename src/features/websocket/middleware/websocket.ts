@@ -6,6 +6,7 @@ import { RootState } from '../../../store/store'
 import { trackVersionTransfer, completeVersionTransfer, removeVersionTransfer } from '../../transfer/state/transferActions'
 import { runEventLog } from '../../events/state/eventsActions'
 import { logbookWriteCommitEvent, logbookWriteRunEvent, transformStartEvent, transformCanceledEvent } from '../../collection/state/collectionActions'
+import { runQueueAdd, runQueueRemove } from '../../runQueue/state/runQueueActions'
 import {
   deployStarted,
   deployEnded,
@@ -31,6 +32,8 @@ import {
   ETAutomationDeploySaveDatasetEnd,
   ETAutomationDeploySaveWorkflowStart,
   ETAutomationDeploySaveWorkflowEnd,
+  ETAutomationRunQueuePush,
+  ETAutomationRunQueuePop,
   ETTransformStart,
   WSSubscribeRequest,
   WSUnsubscribeRequest,
@@ -175,6 +178,12 @@ const middleware = () => {
           break
         case ETAutomationDeploySaveDatasetEnd:
           dispatch(deploySaveDatasetEnded(event.data, event.sessionID))
+          break
+        case ETAutomationRunQueuePush:
+          dispatch(runQueueAdd(event.data, event.sessionID))
+          break
+        case ETAutomationRunQueuePop:
+          dispatch(runQueueRemove(event.data))
           break
         case ETLogbookWriteCommit:
           dispatch(logbookWriteCommitEvent(newVersionInfo(event.data)))

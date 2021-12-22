@@ -56,7 +56,7 @@ const RunBar: React.FC<RunBarProps> = ({
     dispatch(applyWorkflowTransform(workflow, workflowDataset, isNew))
   }
 
-  const handleCancel = () => { dispatch(cancelRun(latestDryRunId)) }
+  const handleCancel = () => { dispatch(cancelRun('', latestDryRunId)) }
 
   const isMac = (platform() === 'mac')
 

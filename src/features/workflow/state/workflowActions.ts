@@ -1,3 +1,4 @@
+import { ThunkDispatch } from 'redux-thunk'
 import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qri/eventLog'
 import { NewWorkflow, Workflow, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
@@ -24,6 +25,7 @@ import {
   SET_WORKFLOW_DATASET_TITLE
 } from './workflowState'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
+import { RootState } from '../../../store/store'
 
 export function mapWorkflow (d: object | []): Workflow {
   const data = (d as Record<string, any>)
@@ -203,15 +205,20 @@ export function applyWorkflowTransform (w: Workflow, d: Dataset, isNew?: boolean
   }
 }
 
-export function cancelRun (runID: string): ApiActionThunk {
-  return async (dispatch) => {
+export function cancelRun (initID: string, runID: string) {
+  return async (dispatch: ThunkDispatch<any, any, any>, getState: () => RootState) => {
+    let queuedRunID = ''
+    if (runID === '' && initID !== '') {
+      const state = getState()
+      queuedRunID = state.runQueue.runs[initID] || ''
+    }
     return dispatch({
       type: 'cancel',
       [CALL_API]: {
         endpoint: 'auto/cancel',
         method: 'POST',
         body: {
-          runID
+          runID: runID || queuedRunID
         }
       }
     })
