@@ -9,15 +9,15 @@ import Icon from '../../chrome/Icon'
 import IconLink from '../../chrome/IconLink'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
 import RunStatusBadge from '../run/RunStatusBadge'
-import { LogItem } from '../../qri/log'
 import { customStyles, customSortIcon } from '../../features/collection/CollectionTable'
 import { runEndTime } from '../../utils/runEndTime'
 
 import { loadRunInfo } from './state/activityFeedActions'
 import { selectRunInfo, outputFromRunLog } from './state/activityFeedState'
+import { VersionInfo } from '../../qri/versionInfo'
 
 interface ActivityListProps {
-  log: LogItem[]
+  log: VersionInfo[]
   showDatasetName?: boolean
   containerHeight: number
 }
@@ -34,18 +34,18 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const columns = [
     {
       name: 'Status',
-      selector: (row: LogItem) => row.runStatus,
+      selector: (row: VersionInfo) => row.runStatus,
       width: '200px',
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => <RunStatusBadge status={row.runStatus} />
+      cell: (row: VersionInfo) => <RunStatusBadge status={row.runStatus} />
     },
     {
       name: 'name',
-      selector: (row: LogItem) => row.name,
+      selector: (row: VersionInfo) => row.name,
       grow: 2,
       omit: !showDatasetName,
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => {
+      cell: (row: VersionInfo) => {
         const { username, name } = row
         return (
           <div className='hover:text-qrilightblue hover:underline'>
@@ -56,10 +56,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Time',
-      selector: (row: LogItem) => row.runStart,
+      selector: (row: VersionInfo) => row.runStart,
       width: '180px',
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => {
+      cell: (row: VersionInfo) => {
         const runEnd = runEndTime(row.runStart, row.runDuration)
         return (
           <div className='text-qrigray-400 flex flex-col text-sm'>
@@ -76,10 +76,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
     },
     {
       name: 'Commit',
-      selector: (row: LogItem) => row.commitMessage,
+      selector: (row: VersionInfo) => row.commitMessage,
       width: '180px',
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => {
+      cell: (row: VersionInfo) => {
         if (!['failed', 'unchanged', 'running'].includes(row.runStatus)) {
           const versionLink = `/${row.username}/${row.name}/at${row.path}/history/body`
           return (
@@ -96,7 +96,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
       name: '',
       grow: 1,
       // eslint-disable-next-line react/display-name
-      cell: (row: LogItem) => {
+      cell: (row: VersionInfo) => {
         const expanded = expandedRows.includes(row.runID)
         return (
           <div className='flex justify-end flex-grow' onClick={() => {
@@ -116,7 +116,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   const conditionalRowStyles = [
     {
-      when: (row: LogItem) => row.runStatus === 'running',
+      when: (row: VersionInfo) => row.runStatus === 'running',
       classNames: ['animate-appear', 'overflow-hidden', 'min-height-0-important'],
       style: {
         height: 58
@@ -125,7 +125,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   ]
 
   const ExpandableComponent = (row: {
-    data: LogItem
+    data: VersionInfo
   }) => {
     const runState = useSelector(selectRunInfo(row.data.runID))
     let logs
@@ -146,7 +146,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
     )
   }
 
-  interface LogItemWithExpanded extends LogItem {
+  interface LogItemWithExpanded extends VersionInfo {
     expanded: boolean
   }
 

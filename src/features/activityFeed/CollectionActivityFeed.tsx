@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { LogItem } from '../../qri/log'
 import Page from '../app/Page'
+import { mapVersionInfo } from '../collection/state/collectionActions'
 import ActivityList from './ActivityList'
 
 import activity from './stories/data/activityLog.json'
@@ -13,7 +13,7 @@ const CollectionActivityFeed: React.FC<any> = () => {
         <header className='mb-8'>
           <h1 className='text-2xl font-extrabold'>Activity Feed</h1>
         </header>
-        <ActivityList log={activity as LogItem[]} containerHeight={1000}/>
+        <ActivityList log={mapVersionInfo(activity)} containerHeight={1000}/>
       </div>
     </Page>
   )

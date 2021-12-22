@@ -2,13 +2,12 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { loadCollection } from '../collection/state/collectionActions'
+import { loadCollection, mapVersionInfo } from '../collection/state/collectionActions'
 import { selectCollection, selectIsCollectionLoading } from '../collection/state/collectionState'
 import Page from '../app/Page'
 import CollectionTable from '../collection/CollectionTable'
 import Button from '../../chrome/Button'
 import ActivityList from '../activityFeed/ActivityList'
-import { LogItem } from '../../qri/log'
 import Spinner from '../../chrome/Spinner'
 
 import activity from '../activityFeed/stories/data/activityLog.json'
@@ -75,7 +74,7 @@ const Dashboard: React.FC<any> = () => {
           <div className='rounded shadow border px-4 mb-4'>
             { loading
               ? <div className='h-full w-full flex justify-center items-center'><Spinner /></div>
-              : <ActivityList log={activity as LogItem[]} containerHeight={1000} />
+              : <ActivityList log={mapVersionInfo(activity)} containerHeight={1000} />
             }
           </div>
           <div className='text-right'>

@@ -7,10 +7,10 @@ import { newQriRef, QriRef } from '../../qri/ref'
 import DatasetCommitListItem from './DatasetCommitListItem'
 import { loadDatasetCommits } from './state/commitActions'
 import { newDatasetCommitsSelector, selectDatasetCommitsLoading } from './state/commitState'
-import { NewLogItem } from "../../qri/log"
 import Button from "../../chrome/Button"
 import Link from "../../chrome/Link"
 import { selectSessionUserCanEditDataset } from '../dataset/state/datasetState'
+import { newVersionInfo } from '../../qri/versionInfo'
 
 export interface DatasetCommitsProps {
   qriRef: QriRef
@@ -72,7 +72,7 @@ const DatasetCommits: React.FC<DatasetCommitsProps> = ({
             <DatasetCommitListItem
               key={i}
               loading={true}
-              logItem={NewLogItem({})}
+              logItem={newVersionInfo({})}
               active={i === 0}
               first={i === 0}
               last={i === 2}

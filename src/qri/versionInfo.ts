@@ -35,10 +35,10 @@ export interface VersionInfo {
   workflowID?: string // workflow identifier
   workflowTriggerDescription?: string
 
-  runID?: string
-  runStatus?: RunStatus
-  runDuration?: number // duration of the run in nanoseconds
-  runStart?: string
+  runID: string
+  runStatus: RunStatus
+  runDuration: number // duration of the run in nanoseconds
+  runStart: string
 
   // TODO (boandriy): These fields are only temporarily living on `VersionInfo`.
   // When we get more user feedback and settle what info
@@ -79,10 +79,10 @@ export function newVersionInfo (data: Record<string, any>): VersionInfo {
     workflowID: data.workflowID,
     workflowTriggerDescription: data.workflowTriggerDescription,
 
-    runID: data.runID,
-    runStatus: data.runStatus,
-    runDuration: data.runDuration,
-    runStart: data.runStart,
+    runID: data.runID || '',
+    runStatus: data.runStatus || '',
+    runDuration: data.runDuration || 0,
+    runStart: data.runStart || '',
 
     // TODO(boandriy): the following fields are likely to be removed from the VersionInfo
     // type in the future
@@ -139,14 +139,14 @@ export function newVersionInfoFromDataset (ds: Dataset): VersionInfo {
     commitTitle: ds.commit?.title,
     commitMessage: ds.commit?.message,
     commitTime: ds.commit?.timestamp,
-    runID: ds.commit?.runID
+    runID: ds.commit?.runID || ''
   })
 }
 
 export function newVersionInfoFromDatasetAndRun (ds: Dataset, run: Run): VersionInfo {
   const vi = newVersionInfoFromDataset(ds)
   vi.runID = run.id
-  vi.runDuration = run.duration
+  vi.runDuration = run.duration || 0
   if (run.startTime) {
     vi.runStart = run.startTime.toString()
     if (vi.runDuration) {

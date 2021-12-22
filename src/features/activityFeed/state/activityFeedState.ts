@@ -2,12 +2,12 @@ import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
 import { QriRef, humanRef, refStringFromQriRef } from '../../../qri/ref'
-import { LogItem } from '../../../qri/log'
 import { Run } from '../../../qri/run'
 import { ApiErr, NewApiErr } from '../../../store/api'
 import formatRunLogTimestamp from '../../../utils/formatRunLogTimestamp'
+import { VersionInfo } from '../../../qri/versionInfo'
 
-export function newDatasetLogsSelector (qriRef: QriRef): (state: RootState) => LogItem[] {
+export function newDatasetLogsSelector (qriRef: QriRef): (state: RootState) => VersionInfo[] {
   return (state: RootState) => {
     return state.activityFeed.datasetLogs[refStringFromQriRef(qriRef)] || []
   }
@@ -38,7 +38,7 @@ export interface RunLogInfoState {
 }
 
 export interface ActivityFeedState {
-  datasetLogs: Record<string, LogItem[]>
+  datasetLogs: Record<string, VersionInfo[]>
   loading: boolean
   error: ApiErr
   runInfo: Record<string, RunLogInfoState>
@@ -58,30 +58,32 @@ export function outputFromRunLog (runLog: Run): string {
   logOutput += `[started    ] ${runLog.startTime}\n`
   logOutput += `[ended      ] ${runLog.stopTime}\n`
   logOutput += `[status     ] ${runLog.status}\n`
-  logOutput += `[steps      ] ${runLog.steps.length} total\n`
-  logOutput += runLog.steps.reduce((acc, step, i) => {
-    let stepString = acc
+  if (runLog.steps) {
+    logOutput += `[steps      ] ${runLog.steps.length} total\n`
+    logOutput += runLog.steps.reduce((acc, step, i) => {
+      let stepString = acc
 
-    stepString += `[step ${i}     ]\n`
-    stepString += `[name       ] '${step.name}'\n`
-    stepString += `[started    ] ${step.startTime}\n`
-    stepString += `[ended      ] ${step.stopTime}\n`
-    stepString += `[status     ] ${step.status}\n`
+      stepString += `[step ${i}     ]\n`
+      stepString += `[name       ] '${step.name}'\n`
+      stepString += `[started    ] ${step.startTime}\n`
+      stepString += `[ended      ] ${step.stopTime}\n`
+      stepString += `[status     ] ${step.status}\n`
 
-    if (step.output) {
-      stepString += step.output.reduce((acc, output) => {
-        let outputString = acc
-        // TODO(chriswhong): calls to /auto/runinfo are returning Timestamp and Type keys, this needs to be fixed on the backend
-        // @ts-expect-error
-        outputString += `[${formatRunLogTimestamp(output.Timestamp)}][${output.Type}] ${output.Type === 'tf:DatasetPreview' ? 'created dataset preview' : output.Payload.msg}\n`
-        return outputString
-      }, '')
-    } else {
-      stepString += 'no output for this step'
-    }
+      if (step.output) {
+        stepString += step.output.reduce((acc, output) => {
+          let outputString = acc
+          // TODO(chriswhong): calls to /auto/runinfo are returning Timestamp and Type keys, this needs to be fixed on the backend
+          // @ts-expect-error
+          outputString += `[${formatRunLogTimestamp(output.Timestamp)}][${output.Type}] ${output.Type === 'tf:DatasetPreview' ? 'created dataset preview' : output.Payload.msg}\n`
+          return outputString
+        }, '')
+      } else {
+        stepString += 'no output for this step'
+      }
 
-    return stepString
-  }, `---\n`)
+      return stepString
+    }, `---\n`)
+  }
   return logOutput
 }
 

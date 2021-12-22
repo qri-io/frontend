@@ -5,11 +5,10 @@ import Icon from './Icon'
 import RelativeTimestampWithIcon from './RelativeTimestampWithIcon'
 import UsernameWithIcon from './UsernameWithIcon'
 import commitishFromPath from '../utils/commitishFromPath'
-import { LogItem } from '../qri/log'
 import { VersionInfo } from '../qri/versionInfo'
 
 interface DatasetCommitInfoProps {
-  item: LogItem | VersionInfo
+  item: VersionInfo | VersionInfo
   // small yields the same info with smaller text, used in collection, history list and run log
   small?: boolean
   // inRow will set the commit title to normal (instead of semibold) so it's less noisy when displayed in a row of other info

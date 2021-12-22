@@ -1,6 +1,6 @@
 import { QriRef } from '../../../qri/ref'
 import { EventLogLine } from '../../../qri/eventLog'
-import { NewWorkflow, Workflow, WorkflowInfo, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
+import { NewWorkflow, Workflow, workflowScriptString, WorkflowTrigger } from '../../../qrimatic/workflow'
 import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
 import {
   WORKFLOW_CHANGE_TRIGGER,
@@ -23,7 +23,6 @@ import {
   SET_WORKFLOW_DATASET_NAME,
   SET_WORKFLOW_DATASET_TITLE
 } from './workflowState'
-import { AnyAction } from 'redux'
 import { Dataset, qriRefFromDataset } from '../../../qri/dataset'
 
 export function mapWorkflow (d: object | []): Workflow {
@@ -275,11 +274,6 @@ export function setWorkflowRef (qriRef: QriRef): SetWorkflowRefAction {
     type: SET_WORKFLOW_REF,
     qriRef
   }
-}
-
-export interface WorkflowInfoAction extends AnyAction {
-  type: string
-  data: WorkflowInfo
 }
 
 export interface SetWorkflowDatasetAction {

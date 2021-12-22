@@ -1,5 +1,4 @@
 import { TransformStep } from "../qri/dataset"
-import { VersionInfo } from "../qri/versionInfo"
 
 export type RunStatus =
   | 'running'
@@ -108,52 +107,3 @@ export type WorkflowStatus =
 | 'succeeded'
 | 'failed'
 | 'unchanged'
-
-export interface WorkflowInfo extends VersionInfo {
-  id: string
-  latestStart?: string
-  latestEnd?: string
-  status: WorkflowStatus
-}
-
-export function datasetAliasFromWorkflowInfo (wfi: WorkflowInfo): string {
-  return `${wfi.username}/${wfi.name}`
-}
-
-export function newWorkflowInfo (data: Record<string, any>): WorkflowInfo {
-  return {
-    initID: data.initID,
-    username: data.username || '',
-    profileId: data.profileId || '',
-    name: data.name || '',
-    path: data.path || '',
-
-    fsiPath: data.fsiPath || '',
-    foreign: data.foreign,
-    published: data.published,
-
-    metaTitle: data.metaTitle || '',
-    themeList: data.themeList || '',
-
-    bodyFormat: data.bodyFormat || '-',
-    bodySize: data.bodySize,
-    bodyRows: data.bodyRows,
-    numErrors: data.numErrors,
-
-    commitTitle: data.commitTitle,
-    commitMessage: data.commitMessage,
-    commitTime: data.commitTime,
-    numVersions: data.numVersions,
-
-    id: data.id,
-    latestStart: data.latestStart,
-    latestEnd: data.latestEnd,
-    status: data.status,
-
-    runCount: data.runCount,
-    commitCount: data.commitCount,
-    downloadCount: data.downloadCount,
-    followerCount: data.followerCount,
-    openIssueCount: data.openIssueCount
-  }
-}

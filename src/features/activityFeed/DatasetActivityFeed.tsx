@@ -10,7 +10,6 @@ import DatasetFixedLayout from '../dataset/DatasetFixedLayout'
 import { cancelRun, runNow } from '../workflow/state/workflowActions'
 import { selectLatestRunId } from '../workflow/state/workflowState'
 import RunNowButton from './RunNowButton'
-import { LogItem, NewLogItem } from "../../qri/log"
 import { selectRun } from "../events/state/eventsState"
 import { trackGoal } from '../../features/analytics/analytics'
 import { selectSessionUser } from '../session/state/sessionState'
@@ -18,6 +17,7 @@ import { selectDatasetHeader } from "../dataset/state/datasetState"
 import { setHeader } from "../dataset/state/datasetActions"
 import Head from '../app/Head'
 import Spinner from '../../chrome/Spinner'
+import { newVersionInfo, VersionInfo } from '../../qri/versionInfo'
 
 export interface DatasetActivityFeedProps {
   qriRef: QriRef
@@ -35,7 +35,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   const isDatasetOwner = user.username === qriRef.username
   const dispatch = useDispatch()
 
-  const [displayLogs, setDisplayLogs] = useState<LogItem[]>(logs)
+  const [displayLogs, setDisplayLogs] = useState<VersionInfo[]>(logs)
 
   const [tableContainer, { height: tableContainerHeight }] = useDimensions()
 
@@ -47,7 +47,7 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
     // runlog-run-now event
     trackGoal('GHUGYPYM', 0)
     dispatch(runNow(qriRef))
-    const runningLog: LogItem = NewLogItem({
+    const runningLog: VersionInfo = newVersionInfo({
       commitTime: new Date().toString(),
       runStatus: "running",
       title: '--',

@@ -2,10 +2,10 @@ import { createReducer } from '@reduxjs/toolkit'
 
 import { RootState } from '../../../store/store'
 import { humanRef, QriRef, refStringFromQriRef } from '../../../qri/ref'
-import { LogItem } from '../../../qri/log'
 import { ApiErr, NewApiErr } from '../../../store/api'
+import { VersionInfo } from '../../../qri/versionInfo'
 
-export function newDatasetCommitsSelector (qriRef: QriRef): (state: RootState) => LogItem[] {
+export function newDatasetCommitsSelector (qriRef: QriRef): (state: RootState) => VersionInfo[] {
   qriRef = humanRef(qriRef)
   return (state: RootState) => {
     return state.commits.commits[refStringFromQriRef(qriRef)] || []
@@ -24,7 +24,7 @@ export function selectDatasetCommitsLoading (state: RootState): boolean {
 }
 
 export interface CommitsState {
-  commits: Record<string, LogItem[]>
+  commits: Record<string, VersionInfo[]>
   loading: boolean
   error: ApiErr
 }

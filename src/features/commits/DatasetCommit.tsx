@@ -3,13 +3,13 @@ import { Link, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import ContentLoader from "react-content-loader"
 
-import { LogItem } from '../../qri/log'
 import { newQriRef, refParamsFromLocation } from '../../qri/ref'
 import { pathToDatasetHistory } from '../dataset/state/datasetPaths'
 import DatasetCommitInfo from '../../chrome/DatasetCommitInfo'
+import { VersionInfo } from '../../qri/versionInfo'
 
 export interface DatasetCommitProps {
-  logItem: LogItem
+  logItem: VersionInfo
   active?: boolean
   isLink?: boolean
   loading?: boolean

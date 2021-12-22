@@ -1,11 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { LogItem } from '../../qri/log'
 import DatasetCommit from './DatasetCommit'
+import { VersionInfo } from '../../qri/versionInfo'
 
 export interface DatasetCommitListItemProps {
-  logItem: LogItem
+  logItem: VersionInfo
   loading?: boolean
   active?: boolean
   first?: boolean

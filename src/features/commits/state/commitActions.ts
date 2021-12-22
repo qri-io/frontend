@@ -1,9 +1,9 @@
 import { QriRef } from '../../../qri/ref'
+import { newVersionInfo, VersionInfo } from '../../../qri/versionInfo'
 import { CALL_API, ApiActionThunk, ApiAction } from '../../../store/api'
-import { LogItem, NewLogItem } from '../../../qri/log'
 
-export function mapCommits (d: object | []): LogItem[] {
-  return (d as Array<Record<string, any>>).map(NewLogItem)
+export function mapCommits (d: object | []): VersionInfo[] {
+  return (d as Array<Record<string, any>>).map(newVersionInfo)
 }
 
 export function loadDatasetCommits (qriRef: QriRef): ApiActionThunk {
