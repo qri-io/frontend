@@ -1,27 +1,20 @@
 import { RUN_QUEUE_ADD, RUN_QUEUE_REMOVE } from "./runQueueState"
 
-interface RunQueueAddAction {
+export interface RunQueueAction {
   type: string
-  initID: string
   runID: string
 }
 
-interface RunQueueRemoveAction {
-  type: string
-  initID: string
-}
-
-export const runQueueAdd = (initID: string, runID: string): RunQueueAddAction => {
+export const runQueueAdd = (runID: string): RunQueueAction => {
   return {
     type: RUN_QUEUE_ADD,
-    initID,
     runID
   }
 }
 
-export const runQueueRemove = (initID: string): RunQueueRemoveAction => {
+export const runQueueRemove = (runID: string): RunQueueAction => {
   return {
     type: RUN_QUEUE_REMOVE,
-    initID
+    runID
   }
 }

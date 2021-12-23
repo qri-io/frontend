@@ -28,7 +28,7 @@ const ManualTriggerButton: React.FC<ManualTriggerButtonProps> = ({ row }) => {
   }
 
   const handleCancel = () => {
-    dispatch(cancelRun(initID, runID || ''))
+    dispatch(cancelRun(runID || ''))
   }
 
   return (

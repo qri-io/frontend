@@ -205,20 +205,15 @@ export function applyWorkflowTransform (w: Workflow, d: Dataset, isNew?: boolean
   }
 }
 
-export function cancelRun (initID: string, runID: string) {
+export function cancelRun (runID: string) {
   return async (dispatch: ThunkDispatch<any, any, any>, getState: () => RootState) => {
-    let queuedRunID = ''
-    if (runID === '' && initID !== '') {
-      const state = getState()
-      queuedRunID = state.runQueue.runs[initID] || ''
-    }
     return dispatch({
       type: 'cancel',
       [CALL_API]: {
         endpoint: 'auto/cancel',
         method: 'POST',
         body: {
-          runID: runID || queuedRunID
+          runID
         }
       }
     })

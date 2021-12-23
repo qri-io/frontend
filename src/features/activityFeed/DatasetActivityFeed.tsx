@@ -18,15 +18,32 @@ import { setHeader } from "../dataset/state/datasetActions"
 import Head from '../app/Head'
 import Spinner from '../../chrome/Spinner'
 import { newVersionInfo, VersionInfo } from '../../qri/versionInfo'
+import { NewRun, Run } from '../../qri/run'
 
 export interface DatasetActivityFeedProps {
   qriRef: QriRef
+}
+
+const runToRunningLog = (vi: VersionInfo, run: Run): VersionInfo => {
+  if (!vi) {
+    vi = newVersionInfo({})
+  }
+  vi.runDuration = run.duration || 0
+  vi.runID = run.id
+  vi.runStart = run.startTime ? run.startTime.toString() : ''
+  vi.runStatus = run.status
+  return vi
 }
 
 const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
   qriRef
 }) => {
   const logs = useSelector(newDatasetLogsSelector(qriRef))
+  // TODO(ramfox): we pull this from the workflow. If we've ran the workflow &
+  // already have a `latestRunID`, from a previous run, we will get strange
+  // results here. Should think about pulling some of the run stuff from the
+  // Workflow state tree and maybe into it's own state that we can have finer
+  // control over
   const latestRunId = useSelector(selectLatestRunId)
   const latestRun = useSelector(selectRun(latestRunId))
   const user = useSelector(selectSessionUser)
@@ -39,53 +56,71 @@ const DatasetActivityFeed: React.FC<DatasetActivityFeedProps> = ({
 
   const [tableContainer, { height: tableContainerHeight }] = useDimensions()
 
+  const [runningLog, setRunningLog] = useState<VersionInfo>()
+
   useEffect(() => {
     dispatch(loadDatasetLogs({ username: qriRef.username, name: qriRef.name }))
-  }, [dispatch, qriRef.username, qriRef.name, latestRun?.status])
+  }, [dispatch, qriRef.username, qriRef.name])
+
+  useEffect(() => {
+    if (latestRun.initID === header.initID) {
+      let rl = runningLog || newVersionInfo({
+        commitTime: new Date().toString(),
+        runStatus: "waiting",
+        title: '--',
+        runStart: new Date().toString(),
+        initID: header.initID
+      })
+      const vi = runToRunningLog(rl, latestRun)
+      if (vi.runStatus !== "waiting" && vi.runStatus !== "running") {
+        setDisplayLogs([vi, ...displayLogs])
+        setRunningLog(undefined)
+        return
+      }
+      setRunningLog(vi)
+    }
+  }, [latestRun])
 
   const handleRunNowClick = () => {
     // runlog-run-now event
     trackGoal('GHUGYPYM', 0)
     dispatch(runNow(qriRef))
-    const runningLog: VersionInfo = newVersionInfo({
+    const vi = runToRunningLog(newVersionInfo({
       commitTime: new Date().toString(),
-      runStatus: "running",
+      runStatus: "waiting",
       title: '--',
       runStart: new Date().toString(),
-      runID: latestRun.id
-    })
-    const newLogs = [runningLog, ...logs]
-    setDisplayLogs(newLogs)
+      initID: header.initID
+    }), NewRun({}))
+    setRunningLog(vi)
     dispatch(setHeader({ ...header, runCount: header.runCount + 1 }))
   }
 
   const handleCancelRun = () => {
-    dispatch(cancelRun('', latestRun.id))
+    dispatch(cancelRun(latestRun.id))
   }
 
   useEffect(() => {
-    if (!displayLogs.length) {
+    if (logs.length && !displayLogs.length) {
       setDisplayLogs(logs)
+      return
     }
-  }, [ logs, displayLogs ])
-
-  useEffect(() => {
-    if (logs.length && displayLogs.length && (logs.length >= displayLogs.length) && displayLogs[0].runStatus === 'running') {
-      setTimeout(() => setDisplayLogs(logs), 600) // setting timeout to make sure animation finishes
+    if (logs.length && displayLogs.length && (logs.length >= displayLogs.length)) {
+      setDisplayLogs(logs)
     }
   }, [ logs, displayLogs ])
 
   let resultsContent = (
     <div className='rounded-none h-full'>
       <ActivityList
-        log={displayLogs}
+        log={runningLog ? [runningLog, ...displayLogs] : displayLogs}
         showDatasetName={false}
         containerHeight={tableContainerHeight}
       />
     </div>
   )
 
-  // if loading  show a spinner
+  // if loading, show a spinner
   if (isLoading) {
     resultsContent = (
       <div className='h-full w-full flex justify-center items-center'>

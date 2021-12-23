@@ -33,7 +33,6 @@ import {
   ETAutomationDeploySaveWorkflowStart,
   ETAutomationDeploySaveWorkflowEnd,
   ETAutomationRunQueuePush,
-  ETAutomationRunQueuePop,
   ETTransformStart,
   WSSubscribeRequest,
   WSUnsubscribeRequest,
@@ -116,7 +115,14 @@ const middleware = () => {
       const event = JSON.parse(e.data)
 
       if (event.type.startsWith("tf:")) {
-        if (event.type === ETTransformStart) dispatch(transformStartEvent(NewTransformLifecycle(event.data)))
+        if (event.type === ETTransformStart) {
+          new Promise<void>(resolve => {
+            dispatch(transformStartEvent(NewTransformLifecycle(event.data)))
+            resolve()
+          }).then(() => {
+            runQueueRemove(event.sessionID)
+          })
+        }
         if (event.type === ETTransformCancel) dispatch(transformCanceledEvent(NewTransformLifecycle(event.data)))
         dispatch(runEventLog(NewEventLogLine(event)))
         return
@@ -180,10 +186,7 @@ const middleware = () => {
           dispatch(deploySaveDatasetEnded(event.data, event.sessionID))
           break
         case ETAutomationRunQueuePush:
-          dispatch(runQueueAdd(event.data, event.sessionID))
-          break
-        case ETAutomationRunQueuePop:
-          dispatch(runQueueRemove(event.data))
+          dispatch(runQueueAdd(event.data))
           break
         case ETLogbookWriteCommit:
           dispatch(logbookWriteCommitEvent(newVersionInfo(event.data)))

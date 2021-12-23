@@ -70,11 +70,8 @@ export const ETAutomationDeploySaveDatasetStart = "automation:DeploySaveDatasetS
 export const ETAutomationDeploySaveDatasetEnd = "automation:DeploySaveDatasetEnd"
 
 // ETAutomationRunQueuePush occurs when a run has been added to the queue
-// the sessionID is the runID and the payload is the initID
+// payload is the runID
 export const ETAutomationRunQueuePush = "automation:RunQueuePush"
-// ETAutomationRunQueuePop occurs when a run has been removed from the queue
-// the sessionID is the runID and the payload is the initID
-export const ETAutomationRunQueuePop = "automation:RunQueuePop"
 
 // Websocket message types describe the different types of messages that can be
 // sent over the websocket connection to establish the authentication handshake
