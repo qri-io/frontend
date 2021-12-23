@@ -1,14 +1,6 @@
-// All dataset routes share DatasetWrapper, which handles the rendering of the
-// dataset menu and fetches dsPreview (the latest version of the dataset)
-// All routes use dsPreview to render the dataset header, so it is always needed
-// regardless of th other dataset content being displayed
-
-// DatasetPreviewPage fetches the other necessary parts of the preview (body + readme)
-
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Route, Switch, useParams } from 'react-router'
 import { useLocation } from 'react-router-dom'
-import { useDispatch } from "react-redux"
 
 import ExistingAutomationEditor from '../workflow/ExistingAutomationEditor'
 import DatasetComponents from '../dsComponents/DatasetComponents'
@@ -17,7 +9,6 @@ import DatasetPreviewPage from '../dsPreview/DatasetPreviewPage'
 import DatasetIssues from '../issues/DatasetIssues'
 import { newQriRef } from '../../qri/ref'
 import DatasetWrapper from '../dsComponents/DatasetWrapper'
-import { loadDataset, loadHeader } from "./state/datasetActions"
 import { PrivateRoute } from '../../routes'
 import ExistingDatasetEditor from "../../features/datasetEditor/ExistingDatasetEditor"
 
@@ -29,19 +20,11 @@ const DatasetRoutes: React.FC<{}> = () => {
   // ref. Move all ref constructino into container components to avoid potential
   // bugs
   const qriRef = newQriRef(useParams())
-  const dispatch = useDispatch()
   const { pathname } = useLocation()
   const isEditor = pathname.includes('/edit')
 
-  useEffect(() => {
-    dispatch(loadHeader({ username: qriRef.username, name: qriRef.name, path: qriRef.path }))
-  }, [dispatch, qriRef.username, qriRef.name, qriRef.path])
-  useEffect(() => {
-    dispatch(loadDataset(qriRef))
-  }, [dispatch, qriRef.username, qriRef.name])
-
   return (
-    <DatasetWrapper editor={isEditor}>
+    <DatasetWrapper qriRef={qriRef} editor={isEditor}>
       <Switch>
         {/* dataset preview */}
         <Route path='/:username/:name' exact>
