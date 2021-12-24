@@ -67,7 +67,7 @@ const Body: React.FC<BodyProps> = ({
   }, [dispatch, path, name, username])
 
   if (loading) {
-    return <BodyTable loading />
+    return <BodyTable rowCount={0} loading qriRef={newQriRef({ path, name, username })} />
   }
 
   if (!body) {
@@ -126,8 +126,9 @@ const Body: React.FC<BodyProps> = ({
 
   return (structure.format === 'csv' && Array.isArray(body))
     ? <BodyTable
+        rowCount={structure.entries}
         headers={extractColumnHeaders(structure, body)}
-        body={body.slice(0, 100)} // TODO(chriswhong): fetch previews/paginated body properly so we aren't rendering extremely large tables
+        qriRef={newQriRef({ path, name, username })}
       />
     : <BodyJson
         data={body}

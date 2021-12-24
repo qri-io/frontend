@@ -2,7 +2,7 @@
 import React from 'react'
 
 import Dataset, { extractColumnHeaders } from '../../../qri/dataset'
-import BodyTable from './BodyTable'
+import BodyPreviewTable from './BodyPreviewTable'
 import BodyJson from './BodyJson'
 import BodyHeader from './BodyHeader'
 import ComponentHeader from '../ComponentHeader'
@@ -52,12 +52,12 @@ const Body: React.FC<BodyProps> = ({
   return (
     <>
       <ComponentHeader border={false}>
-        <BodyHeader dataset={dataset} showExpand={false} loading={loading} />
+        <BodyHeader dataset={dataset} showExpand={false} loading={loading} isPreview />
       </ComponentHeader>
       <div className='overflow-auto flex-grow hide-scrollbar'>
         {
         (structure.format === 'csv' && Array.isArray(body))
-          ? <BodyTable
+          ? <BodyPreviewTable
               headers={headers}
               body={body.slice(0, 100)} // TODO(chriswhong): fetch previews/paginated body properly so we aren't rendering extremely large tables
             />
