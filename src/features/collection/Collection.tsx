@@ -14,6 +14,8 @@ import SearchBox from '../search/SearchBox'
 import { filterVersionInfos } from '../../qri/versionInfo'
 import { trackGoal } from '../../features/analytics/analytics'
 import Head from '../../features/app/Head'
+import { showModal } from "../../features/app/state/appActions"
+import { ModalType } from "../../features/app/state/appState"
 
 const Collection: React.FC<{}> = () => {
   const dispatch = useDispatch()
@@ -73,7 +75,7 @@ const Collection: React.FC<{}> = () => {
     resultsContent = (
       <div className='h-full w-full flex justify-center items-center text-qrigray-400'>
         <div className='text-center'>
-          You don&apos;t have any datasets!<br/> You can push datasets using <Link to='https://qri.io/docs/getting-started/qri-cli-quickstart'>qri CLI</Link>.
+          You don&apos;t have any datasets!<br/> <Link onClick={() => dispatch(showModal(ModalType.newDataset))}>Create a New Dataset</Link>, or push one using <Link to='https://qri.io/docs/guides/qri-cli/push-a-dataset-to-qri-cloud'>Qri CLI</Link>.
         </div>
       </div>
     )
