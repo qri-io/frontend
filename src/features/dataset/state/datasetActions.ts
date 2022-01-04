@@ -10,7 +10,7 @@ import {
 } from "./datasetState"
 import { VersionInfo } from "../../../qri/versionInfo"
 
-export const bodyPageSizeDefault = 50
+export const DEFAULT_BODY_PAGE_SIZE = 100
 
 export function mapDataset (d: object | []): Dataset {
   return NewDataset((d as Record<string, any>))
@@ -113,22 +113,22 @@ function fetchDataset (ref: QriRef): ApiAction {
   }
 }
 
-export function loadBody (ref: QriRef, page: number = 1, pageSize: number = bodyPageSizeDefault): ApiActionThunk {
+export function loadBody (ref: QriRef, offset: number = 0, limit: number = DEFAULT_BODY_PAGE_SIZE): ApiActionThunk {
   return async (dispatch) => {
-    return dispatch(fetchBody(ref, page, pageSize))
+    return dispatch(fetchBody(ref, offset, limit))
   }
 }
 
-function fetchBody (ref: QriRef, page: number, pageSize: number): ApiAction {
+function fetchBody (ref: QriRef, offset: number, limit: number): ApiAction {
   return {
     type: 'body',
     ref,
     [CALL_API]: {
       endpoint: 'ds/get',
       method: 'GET',
-      pageInfo: {
-        page,
-        pageSize
+      query: {
+        limit: limit.toString(),
+        offset: offset.toString()
       },
       segments: {
         username: ref.username,

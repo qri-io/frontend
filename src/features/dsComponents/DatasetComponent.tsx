@@ -13,7 +13,7 @@ import Structure from './structure/Structure'
 import Readme from './readme/Readme'
 import ContentBox from '../../chrome/ContentBox'
 import IconLink from '../../chrome/IconLink'
-import { selectIsBodyLoading, selectIsDatasetLoading } from "../dataset/state/datasetState"
+import { selectIsDatasetLoading } from "../dataset/state/datasetState"
 import {
   setDatasetEditorFile
 } from "../datasetEditor/state/datasetEditorActions"
@@ -41,7 +41,6 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   const [ dragging, setDragging ] = useState(false)
   const dispatch = useDispatch()
   const loading = useSelector(selectIsDatasetLoading)
-  const bodyLoading = useSelector(selectIsBodyLoading)
   const file = useSelector(selectDatasetEditorFile)
 
   const setDragStateHandler = (dragState: boolean) => {
@@ -65,12 +64,12 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   switch (componentName) {
     case 'body':
       component = (
-        <Body loading={showLoadingState ? (loading || bodyLoading) : false} data={dataset} />
+        <Body loading={showLoadingState ? (loading) : false} data={dataset} />
       )
 
       componentHeader = (
         <BodyHeader
-            loading={ showLoadingState ? (loading || bodyLoading) : false }
+            loading={ showLoadingState ? (loading) : false }
             dataset={dataset}
             onToggleExpanded={handleToggleExpanded}
             showDownload={!preview}
@@ -125,6 +124,10 @@ const DatasetComponent: React.FC<DatasetComponentProps> = ({
   if (['body', 'structure', 'transform'].includes(componentName)) {
     componentContent = component
     componentHeaderBorder = false
+  }
+
+  if (componentName === 'body') {
+    overflowScroll = false
   }
 
   // no padding on readme editor

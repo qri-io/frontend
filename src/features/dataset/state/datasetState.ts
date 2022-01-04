@@ -9,7 +9,7 @@ import {
 } from './datasetActions'
 import { selectSessionUser } from '../../session/state/sessionState'
 import { newVersionInfo, VersionInfo } from "../../../qri/versionInfo"
-import { ApiResponseAction } from "../../../store/api"
+import { ApiResponseAction, CALL_API } from "../../../store/api"
 
 export const RENAME_NEW_DATASET = 'RENAME_NEW_DATASET'
 
@@ -31,11 +31,11 @@ export const selectRunCount = (state: RootState): number => state.dataset.header
 
 export const selectIsDatasetLoading = (state: RootState): boolean => state.dataset.datasetLoading
 
-export const selectIsBodyLoading = (state: RootState): boolean => state.dataset.bodyLoading
-
 export const selectIsHeaderLoading = (state: RootState): boolean => state.dataset.headerLoading
 
 export const selectDatasetMeta = (state: RootState): Meta | undefined => state.dataset.dataset.meta
+
+export const selectDatasetVirtualizedBody = (state: RootState): Record<number, any[]> | undefined => state.dataset.virtualizedBody
 
 export const selectSessionUserCanEditDataset = (state: RootState): boolean => {
   const u = selectSessionUser(state)
@@ -56,7 +56,7 @@ export interface DatasetState {
   header: VersionInfo
   datasetLoading: boolean
   headerLoading: boolean
-  bodyLoading: boolean
+  virtualizedBody: Record<number, any[]>
   titleError: string
 }
 
@@ -65,7 +65,7 @@ const initialState: DatasetState = {
   header: newVersionInfo({}),
   datasetLoading: true,
   headerLoading: true,
-  bodyLoading: true,
+  virtualizedBody: {},
   titleError: ''
 }
 
@@ -98,26 +98,30 @@ export const datasetReducer = createReducer(initialState, {
   },
   'API_DATASET_REQUEST': (state) => {
     state.dataset = NewDataset({})
+    state.virtualizedBody = {}
     state.datasetLoading = true
   },
   'API_DATASET_SUCCESS': (state, action) => {
     state.dataset = action.payload.data as Dataset
     state.datasetLoading = false
-    state.bodyLoading = false
   },
   'API_DATASET_FAILURE': (state) => {
     state.datasetLoading = false
-    state.bodyLoading = false
   },
   'API_BODY_REQUEST': (state, action) => {
-    state.bodyLoading = true
   },
   'API_BODY_SUCCESS': (state, action) => {
-    state.dataset.body = action.payload.data as Body
-    state.bodyLoading = false
+    const startIndex = parseInt(action[CALL_API].query.offset)
+    const newRows: Record<number, any> = {}
+    action.payload.data.forEach((row: any[], i: number) => {
+      newRows[startIndex + i] = row
+    })
+    state.virtualizedBody = {
+      ...state.virtualizedBody,
+      ...newRows
+    }
   },
   'API_BODY_FAILURE': (state, action) => {
-    state.bodyLoading = false
   },
   'API_REMOVE_SUCCESS': (state, action) => {
     const ref = qriRefFromString(action.payload.data.ref)
@@ -133,9 +137,6 @@ export const datasetReducer = createReducer(initialState, {
   },
   RENAME_NEW_DATASET: (state: DatasetState, action: RenameDatasetAction) => {
     state.header.name = action.next.name
-  },
-  SET_BODY_LOADING: (state: DatasetState, action: ResetDatasetStateAction) => {
-    state.bodyLoading = true
   },
   RESET_DATASET_TITLE_ERROR: (state: DatasetState, action: ResetDatasetStateAction) => {
     state.titleError = ''
