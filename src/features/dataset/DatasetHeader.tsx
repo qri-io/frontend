@@ -10,6 +10,7 @@ import {
   selectIsHeaderLoading
 } from "./state/datasetState"
 import { qriRefFromVersionInfo } from "../../qri/versionInfo"
+import { AppDispatch } from '../../store/api'
 
 export interface DatasetHeaderProps {
   border?: boolean
@@ -26,14 +27,14 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = ({
   editable = false,
   children
 }) => {
-  const dispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch()
   const history = useHistory()
   const header = useSelector(selectDatasetHeader)
   const headerLoading = useSelector(selectIsHeaderLoading)
   const qriRef = qriRefFromVersionInfo(header)
 
   const handleRename = (_: string, value: string) => {
-    renameDataset(qriRef, { username: header.username, name: value })(dispatch)
+    dispatch(renameDataset(qriRef, { username: header.username, name: value }))
       .then(({ type }) => {
         if (type === 'API_RENAME_SUCCESS') {
           const newPath = history.location.pathname.replace(header.name, value)

@@ -36,7 +36,7 @@ const PasswordReset: React.FC = () => {
       return
     }
     const id: string = new URLSearchParams(location.search).get("token") || ''
-    resetPassword(id, password)(dispatch)
+    dispatch(resetPassword(id, password))
   }
 
   return (

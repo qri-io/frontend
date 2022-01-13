@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AnyAction } from '@reduxjs/toolkit'
 
-import { ACTION_FAILURE, getActionType } from '../../../store/api'
+import { ACTION_FAILURE, AppDispatch, getActionType } from '../../../store/api'
 import Link from '../../../chrome/Link'
 import Button from '../../../chrome/Button'
 import TextInput from '../../../chrome/forms/TextInput'
@@ -18,7 +18,7 @@ const LogInModal: React.FC = () => {
   const [ password, setPassword ] = useState('')
   const [ loginError, setLoginError ] = useState('')
 
-  const dispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch()
   const loading = useSelector(selectIsSessionLoading)
 
   const handleSignUpClick = () => {
@@ -27,7 +27,7 @@ const LogInModal: React.FC = () => {
 
   const handleButtonClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    logIn(username, password)(dispatch)
+    dispatch(logIn(username, password))
       .then((action: AnyAction) => {
         if (getActionType(action) === ACTION_FAILURE) {
           setLoginError(action.error)

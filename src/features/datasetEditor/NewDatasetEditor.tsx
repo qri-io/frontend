@@ -80,7 +80,7 @@ const NewDatasetEditor: React.FC<{}> = () => {
         username: user.username,
         name: datasetName
       }))
-      commitDataset(qriRef, dataset, commitTitle, file)(dispatch)
+      dispatch(commitDataset(qriRef, dataset, commitTitle, file))
     }
   }
 

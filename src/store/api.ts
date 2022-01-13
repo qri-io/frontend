@@ -116,15 +116,17 @@ export interface ApiResponseAction {
 // either a SUCCESS or FAILURE action. This allows callers to chain
 // .then(action) to perform additional work after an API call has completed
 export type ApiActionThunk = (
-  dispatch: ThunkDispatch<any, any, any>,
+  dispatch: ThunkDispatch<RootState, any, AnyAction>,
   getState?: () => RootState
 ) => Promise<AnyAction>
+
+export type AppDispatch = ThunkDispatch<RootState, any, AnyAction>
 
 // chainSuccess wires together successive ApiActions in a ThunkAction.
 // call it with dispatch & getState to get a function that accepts actions,
 // and chain it a .then() call off another api response
 export function chainSuccess (
-  dispatch: ThunkDispatch<any, any, any>,
+  dispatch: ThunkDispatch<RootState, any, AnyAction>,
   getState: () => RootState) {
   return (thunk: ApiActionThunk) => {
     return async (action: AnyAction) => {
