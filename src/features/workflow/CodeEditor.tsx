@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import MonacoEditor, { EditorConstructionOptions } from 'react-monaco-editor'
-import { KeyMod, KeyCode } from "monaco-editor/esm/vs/editor/editor.api"
-import { RunStatus } from "../../qri/run"
+import MonacoEditor, { EditorConstructionOptions, monaco } from 'react-monaco-editor'
+import { KeyMod, KeyCode } from 'monaco-editor/esm/vs/editor/editor.api'
+import { RunStatus } from '../../qri/run'
 
 export interface CodeEditorProps {
   active: boolean
@@ -13,6 +13,7 @@ export interface CodeEditorProps {
   isEdited: boolean
   onRun?: () => void
   status?: RunStatus
+  lineToReveal: number
 }
 
 const LINE_HEIGHT = 21
@@ -40,10 +41,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   script,
   onChange,
   onRun = () => {},
-  disabled
+  disabled,
+  lineToReveal
 }) => {
   const ref = useRef<MonacoEditor>(null)
-
+  let decorator: string[] = []
   const [lineCount, setLineCount] = useState(MIN_LINE_COUNT)
   const [theEditor, setTheEditor] = useState<MonacoEditor['editor']>()
 
@@ -79,6 +81,12 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }, [theEditor])
 
   useEffect(() => {
+    if (lineToReveal !== -1) {
+      theEditor?.revealLine(lineToReveal)
+    }
+  }, [theEditor, lineToReveal])
+
+  useEffect(() => {
     theEditor?.addAction({
       id: "executeCurrentAndAdvance",
       label: "Execute Block and Advance",
@@ -88,7 +96,16 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         onRun()
       }
     })
-  }, [theEditor, onRun])
+    if (theEditor && lineToReveal !== -1) {
+      decorator = theEditor.deltaDecorations(decorator, [{
+        range: new monaco.Range(lineToReveal, 1, lineToReveal, 1),
+        options: {
+          isWholeLine: true,
+          className: 'redDecorator'
+        }
+      }])
+    }
+  }, [theEditor, onRun, lineToReveal])
 
   const handleEditorDidMount = (editor: MonacoEditor['editor']) => {
     setTheEditor(editor)

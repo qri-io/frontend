@@ -1162,3 +1162,7 @@ code {
 .pagination_controls{
   padding-bottom: 6px;
 }
+
+.redDecorator {
+  background-color: rgba(255, 0, 0, 0.2);
+}

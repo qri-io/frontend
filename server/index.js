@@ -95,7 +95,7 @@ app.use('/:username/:name', async (req, res) => {
   }
 
   try {
-    // builds a <title> tag and various <meta> tags for title, description, and image 
+    // builds a <title> tag and various <meta> tags for title, description, and image
     const headTags = composeHeadTags(dataset)
     // builds a <script> tag containing the JSON+LD data for the dataset
     const jld = composeJSONLD(dataset)

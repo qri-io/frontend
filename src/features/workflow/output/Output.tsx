@@ -12,9 +12,10 @@ export interface OutputProps {
   data: EventLogLine[]
   status?: RunStatus
   wasEdited: boolean
+  scrollToError: (v: Record<string, any>) => void
 }
 
-const Output: React.FC<OutputProps> = ({ data, status, wasEdited }) => {
+const Output: React.FC<OutputProps> = ({ data, status, wasEdited, scrollToError }) => {
   let borderColorClass = 'border-qrigreen'
 
   if (wasEdited) {
@@ -40,7 +41,7 @@ const Output: React.FC<OutputProps> = ({ data, status, wasEdited }) => {
           switch (line.type) {
             case EventLogLineType.ETPrint:
             case EventLogLineType.ETError:
-              return <LogLinePrint key={i} line={line} />
+              return <LogLinePrint key={i} line={line} scrollToError={scrollToError} />
             case EventLogLineType.ETDatasetPreview:
               return <DatasetPreview key={i} data={line.data as Dataset}/>
             default:
