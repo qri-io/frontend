@@ -14,6 +14,11 @@ export const APP_EXEC_MODE = getAppExecMode(process.env.REACT_APP_EXEC_MODE || "
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={configureStore()}>
+      <div className='z-20 bg-qrinavy-900' style={{ padding: 10, paddingLeft: 18 }}>
+        <div style={{ margin: 'auto' }}>
+          <a href="https://qri.io/winding_down" style={{ color: '#efefef', fontWeight: 'bold' }}>Qri is winding down.</a>
+        </div>
+      </div>
       <App />
     </Provider>
   </React.StrictMode>,
