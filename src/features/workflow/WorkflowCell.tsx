@@ -9,7 +9,7 @@ import Output from './output/Output'
 import ScrollAnchor from '../scroller/ScrollAnchor'
 import WorkflowHeader from './WorkflowHeader'
 import { selectClearedCells, selectEditedCells } from "./state/workflowState"
-import { EventLogLine } from "../../qri/eventLog"
+import { EventLogLine, EventLogLineType } from '../../qri/eventLog'
 
 export interface WorkflowCellProps {
   active: boolean
@@ -36,14 +36,25 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
   const editedCells = useSelector(selectEditedCells)
   const clearedCells = useSelector(selectClearedCells)
   const [output, setOutput] = useState<EventLogLine[]>(run?.output || [])
+  const [lineError, setLineError] = useState<number>(-1)
 
   useEffect(() => {
     if ((run?.status === "succeeded" || run?.status === "failed") && run.output) {
       setOutput(run.output)
+      checkForError(run.output)
     } else if ((run?.status === "succeeded" || run?.status === "failed") && !run.output?.length) {
       setOutput([])
     }
   }, [ run ])
+
+  const checkForError = (data: EventLogLine[]) => {
+    // eslint-disable-next-line array-callback-return
+    data.map((line) => {
+      if (line.type === EventLogLineType.ETError) {
+        return findLineWithError(line.data)
+      }
+    })
+  }
 
   const status = run?.status as RunStatus
   const isEdited = editedCells[index]
@@ -59,7 +70,8 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
         onChange={(v) => { onChangeScript(index, v) }}
         onRun={onRun}
         disabled={disabled}
-        standalone={!run?.output || clearedCells[index]} />
+        standalone={!run?.output || clearedCells[index]}
+        lineToReveal={lineError} />
       break
     case 'qri':
       editor = <></>
@@ -90,6 +102,19 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
     borderStyles = 'border-qritile'
   }
 
+  const scrollToError = () => {
+    const editor = document.getElementById('download-example-cell')
+    editor?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const findLineWithError = (error: Record<string, any>) => {
+    const searchQuery = '.star:'
+    const fromIndex = +error.msg.indexOf(searchQuery) + searchQuery.length
+    const toIndex = error.msg.indexOf(':', fromIndex)
+    const lineNumber = +error.msg.slice(fromIndex, toIndex)
+    setLineError(lineNumber)
+  }
+
   return (
     <div id={`${name}-cell`} className={`w-full workflow-cell relative`} onClick={onClick}>
       <ScrollAnchor id={name} />
@@ -114,7 +139,7 @@ const WorkflowCell: React.FC<WorkflowCellProps> = ({
           {editor}
           {(output.length > 0 || run?.status === 'running') &&
             !clearedCells[index] &&
-            <Output data={output} status={run?.status} wasEdited={editedCells[index]} />}
+            <Output data={output} status={run?.status} wasEdited={editedCells[index]} scrollToError={scrollToError} />}
         </div>
       </div>
     </div>
