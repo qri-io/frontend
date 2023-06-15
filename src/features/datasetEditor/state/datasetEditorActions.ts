@@ -69,7 +69,7 @@ export function resetDatasetEditorState (): ResetDatasetEditorState {
 
 export function commitDataset (ref: QriRef, dataset: Dataset, commitTitle: string, bodyFile?: File): ApiActionThunk {
   return async (dispatch) => {
-    return await commitDatasetUpdate(ref, dataset, commitTitle, bodyFile)(dispatch)
+    return await dispatch(commitDatasetUpdate(ref, dataset, commitTitle, bodyFile))
   }
 }
 

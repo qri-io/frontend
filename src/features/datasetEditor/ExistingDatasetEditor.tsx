@@ -16,11 +16,12 @@ import { setDatasetEditorTitle, commitDataset } from './state/datasetEditorActio
 import { newQriRef } from '../../qri/ref'
 import { NewDataset } from '../../qri/dataset'
 import Head from '../app/Head'
+import { AppDispatch } from "../../store/api"
 
 const DEFAULT_DATASET_COMMIT_TITLE = ''
 
 const ExistingDatasetEditor: React.FC<{}> = () => {
-  const dispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch()
   const history = useHistory()
   const location = useLocation()
 
@@ -42,7 +43,7 @@ const ExistingDatasetEditor: React.FC<{}> = () => {
       readme: dataset.readme
     })
 
-    commitDataset(qriRef, theDataset, commitTitle, file)(dispatch)
+    dispatch(commitDataset(qriRef, theDataset, commitTitle, file))
       .then(res => {
         if (res.type === 'API_COMMIT_SUCCESS') {
           const ref = newQriRef({ username: qriRef.username, name: qriRef.name, path: qriRef.path })
